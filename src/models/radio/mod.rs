@@ -57,7 +57,7 @@ impl RadioConfig {
     pub fn sort_scores(recordings: Vec<(Decimal, RecordingMBID)>) -> Vec<RecordingMBID> {
         let conf = Config::load_or_panic();
 
-        #[allow(clippy::clone_on_copy)] // Borrow checker doesn't like the implicit copy of score
+        #[expect(clippy::clone_on_copy)] // Borrow checker doesn't like the implicit copy of score
         recordings
             .into_iter()
             .map(|(score, recording)| (score * conf.bumps.get_multiplier(&recording), recording))
@@ -69,7 +69,7 @@ impl RadioConfig {
     pub fn sort_scores2(recordings: Vec<(Decimal, Recording)>) -> Vec<Recording> {
         let conf = Config::load_or_panic();
 
-        #[allow(clippy::clone_on_copy)] // Borrow checker doesn't like the implicit copy of score
+        #[expect(clippy::clone_on_copy)] // Borrow checker doesn't like the implicit copy of score
         recordings
             .into_iter()
             .map(|(score, recording)| {

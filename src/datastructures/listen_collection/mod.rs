@@ -1,3 +1,6 @@
+use core::cmp::Reverse;
+
+use itertools::Itertools;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub struct ListenCollection {
@@ -12,6 +15,13 @@ impl ListenCollection {
     /// Returns the latest listen in the collection.
     pub fn get_latest_listen(&self) -> Option<&Listen> {
         self.data.iter().max_by_key(|listen| listen.listened_at)
+    }
+
+    pub fn get_latest_listens(&self, limit: usize) -> Self {
+        let mut slice = self.data.clone();
+        slice.sort_by_key(|listen| Reverse(listen.listened_at));
+
+        Self::from(slice.into_iter().enumerate().filter(|(i, _)| i >= &limit).map(|(_, l)| l).collect_vec())
     }
 
     /// Returns the oldest listen in the collection.
@@ -33,6 +43,19 @@ impl ListenCollection {
 
     pub fn first(&self) -> Option<&Listen> {
         self.data.first()
+    }
+
+    /// Merge two collections into one, removing duplicate listens by the index (`listened_at`, `recording_msid`, `user`)
+    pub fn merge_by_index(&mut self, other: Self) {
+        for new_listen in other.data {
+            if !self.data.iter().any(|listen| {
+                listen.listened_at == new_listen.listened_at
+                    && listen.recording_msid == new_listen.recording_msid
+                    && listen.user == new_listen.user
+            }) {
+                self.data.push(new_listen);
+            }
+        }
     }
 }
 

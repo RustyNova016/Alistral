@@ -2,3 +2,4 @@
 /.vscode
 debug_db.db
 .env
+/migrations

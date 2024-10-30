@@ -1,6 +1,10 @@
+use core::fmt::Display;
+
+use chrono::DateTime;
+use chrono::Duration;
+use chrono::Utc;
 use clap::ValueEnum;
 use derive_more::IsVariant;
-use std::fmt::Display;
 
 #[derive(ValueEnum, Clone, Debug, Copy, Default, IsVariant)]
 pub enum SortListensBy {
@@ -61,4 +65,29 @@ pub enum ConfigBool {
     Toggle,
     True,
     False,
+}
+
+#[derive(ValueEnum, Clone, Debug, Copy, Default, IsVariant)]
+pub enum Timeframe {
+    /// Uses the last 30 days from now
+    #[default]
+    Last30Days,
+
+    /// Uses the last 30 days from now    
+    Last90Days,
+
+    /// Uses the last 365 days from now    
+    Last365Days,
+}
+
+impl Timeframe {
+    pub fn get_start_date(&self) -> DateTime<Utc>{
+        let now = Utc::now();
+
+        match self {
+            Self::Last30Days => now - Duration::days(30),
+            Self::Last90Days => now - Duration::days(90),
+            Self::Last365Days => now - Duration::days(365),
+        }
+    }
 }

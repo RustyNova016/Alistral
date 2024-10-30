@@ -52,7 +52,7 @@ impl BumpList {
         let values = self
             .0
             .iter()
-            .filter(|b| &b.recording.as_str() == &recording_mbid && b.expiration_date > Utc::now())
+            .filter(|b| b.recording.as_str() == recording_mbid && b.expiration_date > Utc::now())
             .map(|b| b.value);
         let mut res = Decimal::one();
 

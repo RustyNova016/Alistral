@@ -7,7 +7,7 @@ impl Recording {
         self.length.and_then(|length| {
             Duration::new(
                 length.div_euclid(1000).into(),
-                length.rem_euclid(1000) as u32,
+                length.rem_euclid(1000),
             )
         })
     }
