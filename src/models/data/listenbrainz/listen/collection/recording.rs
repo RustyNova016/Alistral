@@ -22,7 +22,4 @@ impl ListenCollection {
             .collect()
     }
 
-    pub fn get_latest_listen_of_recording(&self, recording: &RecordingMBID) -> Option<Arc<Listen>> {
-        self.get_listens_of_recording(recording).get_latest_listen()
-    }
 }
