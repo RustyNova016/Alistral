@@ -1,7 +1,6 @@
 pub mod checks;
 mod converters;
 pub mod filters;
-pub mod listen_rate;
 pub mod recording;
 use std::sync::Arc;
 
@@ -15,7 +14,6 @@ use crate::models::data::musicbrainz::recording::mbid::RecordingMBID;
 
 use super::Listen;
 
-pub mod stats;
 mod underrated;
 
 /// Wrapper for a vector of listens

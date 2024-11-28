@@ -103,15 +103,7 @@ impl RecordingIDWithListens {
         !self.listens.is_empty()
     }
 
-    pub async fn underated_score_single(&self) -> color_eyre::Result<Decimal> {
-        Ok(self
-            .listens()
-            .get_underrated_recordings()
-            .await?
-            .first()
-            .expect("Recording should have a score")
-            .0)
-    }
+
 
     pub fn overdue_score(&self) -> Decimal {
         Decimal::from_i64(self.overdue_by().num_seconds()).unwrap()

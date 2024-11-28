@@ -12,42 +12,6 @@ use crate::models::cli::common::{GroupByTarget, SortSorterBy};
 use crate::models::data::listenbrainz::listen::collection::ListenCollection;
 use crate::models::data::musicbrainz::recording::mbid::RecordingMBID;
 
-impl ListenCollection {
-    pub async fn get_underrated_recordings(
-        &self,
-    ) -> color_eyre::Result<Vec<(Decimal, RecordingMBID)>> {
-        let unique_recordings = self.get_listened_recordings_mbids().await?;
-        let recording_stats = self
-            .get_statistics_of(GroupByTarget::Recording)
-            .await
-            .context("Couldn't calculate recording statistics")?
-            .into_sorted_vec(SortSorterBy::Count)
-            .into_iter()
-            .enumerate()
-            .map(|data| (data.0, data.1 .0, data.1 .1))
-            .collect_vec();
-
-        let counts_for_recordings = get_listen_counts_for_recordings(&unique_recordings)
-            .await
-            .context("Error while getting batch recording global listen counts")?;
-
-        let mut scored_recordings = Vec::new();
-        for recording in unique_recordings {
-            scored_recordings.push((
-                get_recording_score_from_id(
-                    recording.clone(),
-                    &recording_stats,
-                    &counts_for_recordings,
-                ),
-                recording,
-            ));
-        }
-
-        scored_recordings.sort_by_key(|data| data.0);
-        scored_recordings.reverse();
-        Ok(scored_recordings)
-    }
-}
 
 async fn get_listen_counts_for_recordings(
     recordings: &[RecordingMBID],

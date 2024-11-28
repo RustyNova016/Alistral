@@ -86,7 +86,6 @@ lto = "thin"
 [lints.rust]
 unsafe_code = "forbid"
 async_fn_in_trait = { level = "allow", priority = 1 }
-deprecated = { level = "allow", priority = 1 }
 
 [lints.clippy]
 #pedantic = "deny"
