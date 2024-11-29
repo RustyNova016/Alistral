@@ -11,8 +11,6 @@ use crate::models::data::musicbrainz::recording::mbid::RecordingMBID;
 
 use super::Listen;
 
-mod underrated;
-
 /// Wrapper for a vector of listens
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Deref, DerefMut, IntoIterator)]
 #[deprecated]
