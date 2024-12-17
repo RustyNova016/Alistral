@@ -1,3 +1,5 @@
+use core::pin::Pin;
+
 use chrono::Duration;
 use futures::{stream, StreamExt};
 
@@ -7,10 +9,14 @@ use crate::datastructures::radio::filters::cooldown::cooldown_filter;
 use crate::datastructures::radio::filters::min_listens::min_listen_filter;
 use crate::datastructures::radio::filters::timeouts::timeout_filter;
 use crate::datastructures::radio::seeders::listens::ListenSeeder;
-use crate::datastructures::radio::sorters::overdue::{overdue_factor_sorter, overdue_sorter};
+use crate::datastructures::radio::sorters::overdue::overdue_factor_sorter;
+use crate::datastructures::radio::sorters::overdue::overdue_factor_sorter_cumulative;
+use crate::datastructures::radio::sorters::overdue::overdue_sorter;
 use crate::models::playlist_stub::PlaylistStub;
 use crate::utils::println_cli;
 
+//TODO: Refactor Radios params into structs
+#[expect(clippy::too_many_arguments)]
 pub async fn overdue_radio(
     conn: &mut sqlx::SqliteConnection,
     seeder: ListenSeeder,
@@ -19,6 +25,7 @@ pub async fn overdue_radio(
     cooldown: u64,
     overdue_factor: bool,
     collector: RadioCollector,
+    at_listening_time: bool,
 ) -> color_eyre::Result<()> {
     let username = seeder.username().clone();
 
@@ -34,17 +41,23 @@ pub async fn overdue_radio(
     println_cli("[Filter] Filtering listen timeouts");
     let recordings = timeout_filter(recordings);
 
-    let recordings: Vec<RecordingWithListens> = if !overdue_factor {
+    let recordings = if !overdue_factor {
         println_cli("[Sorting] Sorting listen by overdue duration");
-        overdue_sorter(recordings.collect().await)
-    } else {
+        Box::pin(stream::iter(overdue_sorter(recordings.collect().await)))
+            as Pin<Box<dyn futures::Stream<Item = RecordingWithListens>>>
+    } else if !at_listening_time {
         println_cli("[Sorting] Sorting listen by overdue factor");
-        overdue_factor_sorter(recordings.collect().await)
+        Box::pin(stream::iter(overdue_factor_sorter(
+            recordings.collect().await,
+        ))) as Pin<Box<dyn futures::Stream<Item = RecordingWithListens>>>
+    } else {
+        println_cli("[Sorting] Sorting listen by overdue factor at listen time");
+        Box::pin(overdue_factor_sorter_cumulative(recordings.collect().await))
     };
 
     println_cli("[Finalising] Creating radio playlist");
     let collected = collector
-        .collect(stream::iter(recordings).map(|r| r.recording().clone()))
+        .collect(recordings.map(|r| r.recording().clone()))
         .await;
 
     println_cli("[Sending] Sending radio playlist to listenbrainz");
@@ -75,6 +88,7 @@ pub async fn overdue_radio(
 //             .count_default()
 //             .duration_default()
 //             .build(),
+//             true
 //     )
 //     .await
 //     .unwrap();

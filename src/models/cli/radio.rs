@@ -174,6 +174,12 @@ pub enum RadioSubcommands {
         /// Instead of sorting by date, the listens are sorted by how many estimated listens should have happened by now (Time elapsed since last listen / Average time per listens)
         #[arg(short, long, default_value_t = false)]
         overdue_factor: bool,
+
+        /// Makes `overdue_factor` more accurate by calculating the score at the time the listen will be listened at instead of now.
+        ///
+        /// This may slowdown the playlist creation by a lot!
+        #[arg(short, long, default_value_t = false)]
+        at_listening_time: bool,
     },
 }
 
@@ -232,6 +238,7 @@ impl RadioSubcommands {
                 min,
                 cooldown,
                 overdue_factor: delay_factor,
+                at_listening_time,
             } => {
                 overdue_radio(
                     conn,
@@ -241,6 +248,7 @@ impl RadioSubcommands {
                     *cooldown,
                     *delay_factor,
                     command.get_collector(),
+                    *at_listening_time,
                 )
                 .await?;
             }

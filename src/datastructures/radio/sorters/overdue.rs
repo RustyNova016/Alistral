@@ -1,5 +1,9 @@
 use core::cmp::Reverse;
 
+use async_fn_stream::fn_stream;
+use chrono::Duration;
+use chrono::Utc;
+use futures::Stream;
 use rust_decimal::Decimal;
 
 use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
@@ -37,4 +41,45 @@ pub fn overdue_factor_sorter(
     });
 
     recordings
+}
+
+pub fn overdue_factor_sorter_cumulative(
+    mut recordings: Vec<RecordingWithListens>,
+) -> impl Stream<Item = RecordingWithListens> {
+    let conf = Config::load_or_panic();
+
+    fn_stream(|emitter| async move {
+        let mut curr_time = Utc::now();
+        while !recordings.is_empty() {
+            let top_recording = recordings
+                .iter()
+                .enumerate()
+                .max_by_key(|r| {
+                    let score = r.1.overdue_factor_at(&curr_time) + Decimal::ONE;
+                    score
+                        * conf
+                            .read_or_panic()
+                            .bumps
+                            .get_multiplier(&r.1.recording().mbid)
+                })
+                .expect("There should be at least one recording");
+
+            let top_recording = recordings.remove(top_recording.0);
+
+            let score = (top_recording.overdue_factor_at(&curr_time) + Decimal::ONE)
+                * conf
+                    .read_or_panic()
+                    .bumps
+                    .get_multiplier(&top_recording.recording().mbid);
+
+            println!("{}: {score}", top_recording.recording().title);
+
+            curr_time += top_recording
+                .recording()
+                .length_as_duration()
+                .unwrap_or(Duration::zero());
+
+            emitter.emit(top_recording).await;
+        }
+    })
 }
