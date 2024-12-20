@@ -20,3 +20,24 @@ pub impl Relation<Recording, Artist> {
             && self.direction == "backward"
     }
 }
+
+#[ext]
+pub impl Recording {
+    async fn is_remix(&self, conn: &mut sqlx::SqliteConnection) -> Result<bool, crate::Error> {
+        let recording_rels = self.get_artist_relations(conn).await?;
+        for relation in recording_rels {
+            if relation.is_remixer_rel(self) {
+                return Ok(true);
+            }
+        }
+
+        let artist_relations = self.get_recording_relations(conn).await?;
+        for relation in artist_relations {
+            if relation.is_remix_of_rel(self) {
+                return Ok(true);
+            }
+        }
+
+        Ok(false)
+    }
+}
