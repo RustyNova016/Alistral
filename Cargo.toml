@@ -62,6 +62,7 @@ zip = "2.2.2"
 indoc = "2.0.5"
 strsim = "0.11.1"
 strum_macros = "0.26.4"
+google-youtube3 = "6.0.0"
 
 # The profile that 'cargo dist' will build with
 [profile.dist]
