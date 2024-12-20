@@ -1,3 +1,3 @@
-pub mod clients;
 pub mod listenbrainz;
+pub mod musicbrainz;
 pub mod youtube;
