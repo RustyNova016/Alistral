@@ -11,6 +11,7 @@ use crate::datastructures::clippy::missing_remix_rel::MissingRemixRelLint;
 use crate::datastructures::clippy::missing_remixer_rel::MissingRemixerRelLint;
 use crate::datastructures::clippy::missing_work::MissingWorkLint;
 use crate::datastructures::clippy::soundtrack_without_disambiguation::SoundtrackWithoutDisambiguationLint;
+use crate::datastructures::clippy::suspicious_remix::SuspiciousRemixLint;
 use crate::models::clippy::MbClippyLint;
 use crate::utils::cli::await_next;
 use crate::utils::cli::display::MainEntityExt;
@@ -45,6 +46,7 @@ pub async fn mb_clippy(start_mbid: &str, new_first: bool, filter: &WhitelistBlac
 
         check_lint::<MissingWorkLint>(&mut conn, &mut entity, filter).await;
         check_lint::<MissingBarcodeLint>(&mut conn, &mut entity, filter).await;
+        check_lint::<SuspiciousRemixLint>(&mut conn, &mut entity, filter).await;
         check_lint::<MissingRemixRelLint>(&mut conn, &mut entity, filter).await;
         check_lint::<MissingRemixerRelLint>(&mut conn, &mut entity, filter).await;
         check_lint::<SoundtrackWithoutDisambiguationLint>(&mut conn, &mut entity, filter).await;
