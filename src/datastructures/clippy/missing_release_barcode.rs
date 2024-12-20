@@ -1,6 +1,7 @@
 use musicbrainz_db_lite::models::musicbrainz::main_entities::MainEntity;
 use musicbrainz_db_lite::models::musicbrainz::release::Release;
 
+use crate::models::clippy::lint_severity::LintSeverity;
 use crate::models::clippy::{MbClippyLint, MbClippyLintLink};
 use crate::utils::cli::display::ReleaseExt;
 
@@ -71,5 +72,9 @@ impl MbClippyLint for MissingBarcodeLint {
         // TODO: Harmony hint
 
         Ok(hints)
+    }
+
+    fn get_severity(&self) -> crate::models::clippy::lint_severity::LintSeverity {
+        LintSeverity::MissingData
     }
 }

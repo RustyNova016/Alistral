@@ -3,6 +3,7 @@ use clap::Subcommand;
 
 use crate::models::config::Config;
 use crate::tools::listens::mapper::listen_mapper_convert_mbids;
+use crate::tools::listens::wrong_mapping::wrong_mapping;
 use crate::utils::cli::read_mbid_from_input;
 
 #[derive(Parser, Debug, Clone)]
@@ -34,6 +35,11 @@ pub enum ListenSubcommands {
         /// Your account token
         token: Option<String>,
     },
+
+    WrongMapping {
+        /// Your username
+        username: Option<String>,
+    },
 }
 
 impl ListenSubcommands {
@@ -54,6 +60,9 @@ impl ListenSubcommands {
                     &Config::check_token(&Config::check_username(username), token),
                 )
                 .await;
+            }
+            Self::WrongMapping { username } => {
+                wrong_mapping(conn, Config::check_username(username)).await;
             }
         }
     }

@@ -1,7 +1,10 @@
 use std::fmt::Display;
 
 use color_eyre::owo_colors::OwoColorize;
+use lint_severity::LintSeverity;
 use musicbrainz_db_lite::models::musicbrainz::main_entities::MainEntity;
+
+pub mod lint_severity;
 
 pub trait MbClippyLint: Sized {
     async fn check(
@@ -25,6 +28,8 @@ pub trait MbClippyLint: Sized {
         &self,
         conn: &mut sqlx::SqliteConnection,
     ) -> Result<Vec<MbClippyLintHint>, crate::Error>;
+
+    fn get_severity(&self) -> LintSeverity;
 }
 
 pub struct MbClippyLintLink {

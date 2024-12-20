@@ -1,5 +1,6 @@
 use musicbrainz_db_lite::models::musicbrainz::{main_entities::MainEntity, recording::Recording};
 
+use crate::models::clippy::lint_severity::LintSeverity;
 use crate::models::clippy::MbClippyLintHint;
 use crate::models::clippy::{MbClippyLint, MbClippyLintLink};
 use crate::utils::cli::display::RecordingExt;
@@ -79,5 +80,9 @@ impl MbClippyLint for MissingWorkLint {
 
         // TODO: Remix hint
         Ok(hints)
+    }
+
+    fn get_severity(&self) -> crate::models::clippy::lint_severity::LintSeverity {
+        LintSeverity::MissingData
     }
 }

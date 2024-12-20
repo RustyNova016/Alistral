@@ -3,6 +3,8 @@ use color_eyre::owo_colors::OwoColorize;
 use indicatif::{MultiProgress, ProgressBar};
 use std::fmt::Display;
 
+use super::extensions::owo_colors_ext::AlistralColors as _;
+
 pub struct Logger {
     print_override: Option<MultiProgress>, //TODO: Keep bar all the time?
     bar_count: u32,
@@ -58,7 +60,7 @@ impl Logger {
     }
 
     pub fn println_cli<T: Display>(&self, string: T) {
-        self.print(format!("{} {}", "[Alistral]".green(), string));
+        self.print(format!("{} {}", "[Alistral]".alistral_green(), string));
     }
 
     pub fn println_lis<T: Display>(&self, string: T) {

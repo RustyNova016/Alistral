@@ -81,67 +81,46 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install minimal toolchain
-        uses: actions-rs/toolchain@v1
+      # Install minimal toolchain
+      - name: Install minimal stable toolchain
+        uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
-          override: true
-          profile: minimal
           components: clippy
 
       - uses: Swatinem/rust-cache@v2
 
       - name: Run clippy
-        uses: actions-rs/cargo@v1
-        with:
-          command: clippy
-          args: -- -D warnings
+        run: cargo clippy -- -D warnings
 
   docs:
-    env: 
-      SQLX_OFFLINE: true
+    name: Documentation
     runs-on: ubuntu-latest
+    env:
+      SQLX_OFFLINE: true
+      RUSTDOCFLAGS: -Dwarnings
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install minimal toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
-          profile: minimal
-
+      - uses: dtolnay/rust-toolchain@nightly
       - uses: Swatinem/rust-cache@v2
-
-      - name: Run rustdoc
-        env:
-          RUSTDOCFLAGS: -D warnings
-        uses: actions-rs/cargo@v1
-        with:
-          command: doc
-          args: --no-deps --document-private-items
+      - uses: dtolnay/install@cargo-docs-rs
+      - run: cargo doc --no-deps --document-private-items
 
   fmt:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install minimal toolchain
-        uses: actions-rs/toolchain@v1
+      # Install minimal toolchain
+      - name: Install minimal stable toolchain
+        uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
-          override: true
-          profile: minimal
           components: rustfmt
 
-      - uses: Swatinem/rust-cache@v2
-
       - name: Run rustfmt
-        uses: actions-rs/cargo@v1
-        with:
-          command: fmt
-          args: --all --check
+        run: cargo fmt --all --check
 
+  # This is just a curtesy check to tell whether it should be breaking changes or not
+  # If CI fail because of this, just bump the version
   msrv:
     env: 
       SQLX_OFFLINE: true
@@ -149,5 +128,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: Swatinem/rust-cache@v2
-    - uses: taiki-e/install-action@cargo-hack
-    - run: cargo hack check --rust-version --workspace --all-targets --ignore-private
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+    - name: Install cargo-msrv
+      run: cargo install cargo-msrv --all-features
+    - name: Run cargo-msrv
+      run: cargo msrv verify --output-format json
+    - name: Run cargo-msrv on verification failure
+      if: ${{ failure() }}
+      run: cargo msrv find --output-format json

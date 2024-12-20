@@ -7,13 +7,19 @@ use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 
 use crate::database::get_conn;
 use crate::datastructures::clippy::missing_release_barcode::MissingBarcodeLint;
+use crate::datastructures::clippy::missing_remix_rel::MissingRemixRelLint;
+use crate::datastructures::clippy::missing_remixer_rel::MissingRemixerRelLint;
 use crate::datastructures::clippy::missing_work::MissingWorkLint;
+use crate::datastructures::clippy::soundtrack_without_disambiguation::SoundtrackWithoutDisambiguationLint;
+use crate::datastructures::clippy::suspicious_remix::SuspiciousRemixLint;
 use crate::models::clippy::MbClippyLint;
 use crate::utils::cli::await_next;
 use crate::utils::cli::display::MainEntityExt;
+use crate::utils::extensions::owo_colors_ext::AlistralColors;
 use crate::utils::println_cli;
+use crate::utils::whitelist_blacklist::WhitelistBlacklist;
 
-pub async fn mb_clippy(start_mbid: &str, new_first: bool) {
+pub async fn mb_clippy(start_mbid: &str, new_first: bool, filter: &WhitelistBlacklist<String>) {
     let mut conn = get_conn().await;
 
     let start_node = Recording::fetch_and_save(&mut conn, start_mbid)
@@ -38,8 +44,12 @@ pub async fn mb_clippy(start_mbid: &str, new_first: bool) {
             .await
             .expect("Couldn't fetch entity");
 
-        check_lint::<MissingWorkLint>(&mut conn, &mut entity).await;
-        check_lint::<MissingBarcodeLint>(&mut conn, &mut entity).await;
+        check_lint::<MissingWorkLint>(&mut conn, &mut entity, filter).await;
+        check_lint::<MissingBarcodeLint>(&mut conn, &mut entity, filter).await;
+        check_lint::<SuspiciousRemixLint>(&mut conn, &mut entity, filter).await;
+        check_lint::<MissingRemixRelLint>(&mut conn, &mut entity, filter).await;
+        check_lint::<MissingRemixerRelLint>(&mut conn, &mut entity, filter).await;
+        check_lint::<SoundtrackWithoutDisambiguationLint>(&mut conn, &mut entity, filter).await;
 
         println!(
             "Checked {}",
@@ -68,7 +78,16 @@ fn get_new_element(queue: &mut VecDeque<MainEntity>, new_first: bool) -> Option<
     }
 }
 
-async fn check_lint<L: MbClippyLint>(conn: &mut sqlx::SqliteConnection, entity: &mut MainEntity) {
+async fn check_lint<L: MbClippyLint>(
+    conn: &mut sqlx::SqliteConnection,
+    entity: &mut MainEntity,
+    filter: &WhitelistBlacklist<String>,
+) {
+    // Check if the lint is allowed
+    if !filter.is_allowed(&L::get_name().to_string()) {
+        return;
+    }
+
     let Some(lint) = L::check(conn, entity)
         .await
         .expect("Error while processing lint")
@@ -76,7 +95,13 @@ async fn check_lint<L: MbClippyLint>(conn: &mut sqlx::SqliteConnection, entity: 
         return;
     };
 
-    println!("{}", format!("\n {} ", L::get_name()).on_yellow().black());
+    println!(
+        "{}",
+        format!("\n {} ", L::get_name())
+            .on_truecolor_tup(lint.get_severity().get_color())
+            .black()
+            .bold()
+    );
     println!();
     println!(
         "{}",
@@ -164,9 +189,15 @@ async fn get_new_nodes(
 // #[cfg(test)]
 // mod tests {
 //     use crate::tools::musicbrainz::clippy::mb_clippy;
+//     use crate::utils::whitelist_blacklist::WhitelistBlacklist;
 
 //     #[tokio::test]
 //     async fn mb_clippy_test() {
-//         mb_clippy("543bb836-fb00-470a-8a27-25941fe0294c", false).await;
+//         mb_clippy(
+//             "b67fae1f-3037-4c01-bff9-b5e877220267",
+//             false,
+//             &WhitelistBlacklist::default(),
+//         )
+//         .await;
 //     }
 // }

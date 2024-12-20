@@ -1,3 +1,4 @@
+pub mod whitelisted_wrong_mappings;
 use bumps::BumpList;
 use clap::CommandFactory;
 use config_guard::ConfigGuard;
