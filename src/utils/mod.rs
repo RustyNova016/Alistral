@@ -10,6 +10,7 @@ use crate::api::clients::ALISTRAL_CLIENT;
 
 pub mod cli;
 pub mod cli_paging;
+pub mod constants;
 pub mod data_file;
 pub mod entities;
 pub mod env;
