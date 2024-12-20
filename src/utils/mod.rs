@@ -1,3 +1,4 @@
+pub mod streams;
 use std::fmt::Display;
 use std::sync::{Arc, Mutex};
 

@@ -135,13 +135,21 @@ impl RecordingWithListens {
     }
 
     pub fn overdue_by(&self) -> Duration {
+        self.overdue_by_at(&Utc::now())
+    }
+
+    pub fn overdue_by_at(&self, date: &DateTime<Utc>) -> Duration {
         self.estimated_date_of_next_listen()
-            .map(|next_listen| Utc::now() - next_listen)
+            .map(|next_listen| *date - next_listen)
             .unwrap_or_else(Duration::zero)
     }
 
     pub fn overdue_factor(&self) -> Decimal {
-        Decimal::from_i64(self.overdue_by().num_seconds())
+        self.overdue_factor_at(&Utc::now())
+    }
+
+    pub fn overdue_factor_at(&self, date: &DateTime<Utc>) -> Decimal {
+        Decimal::from_i64(self.overdue_by_at(date).num_seconds())
             .unwrap()
             .checked_div(
                 Decimal::from_i64(self.average_duration_between_listens().num_seconds()).unwrap(),
