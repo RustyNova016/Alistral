@@ -8,6 +8,7 @@ use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use tracing::info;
 
 use crate::api::clients::ALISTRAL_CLIENT;
+use crate::datastructures::clippy::dash_eti::DashETILint;
 use crate::datastructures::clippy::missing_release_barcode::MissingBarcodeLint;
 use crate::datastructures::clippy::missing_remix_rel::MissingRemixRelLint;
 use crate::datastructures::clippy::missing_remixer_rel::MissingRemixerRelLint;
@@ -47,6 +48,7 @@ pub async fn mb_clippy(
             .await
             .expect("Couldn't fetch entity");
 
+        check_lint::<DashETILint>(conn, &mut entity, filter).await;
         check_lint::<MissingWorkLint>(conn, &mut entity, filter).await;
         check_lint::<MissingBarcodeLint>(conn, &mut entity, filter).await;
         check_lint::<SuspiciousRemixLint>(conn, &mut entity, filter).await;
