@@ -2030,7 +2030,7 @@ dependencies = [
 [[package]]
 name = "musicbrainz_rs_nova"
 version = "0.8.0"
-source = "git+https://github.com/RustyNova016/musicbrainz_rs_nova.git?branch=develop#cbdab4414f4f8680cf580e32a198e63bc4146b25"
+source = "git+https://github.com/RustyNova016/musicbrainz_rs_nova.git?branch=develop#427152ebca991f807e86a8be2d23ddbc338cbc98"
 dependencies = [
  "chrono",
  "glob",
