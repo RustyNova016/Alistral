@@ -1,3 +1,4 @@
+pub mod label_with_listens;
 pub mod artist_with_listens;
 pub mod messyrecording_with_listens;
 pub mod recording_with_listens;
