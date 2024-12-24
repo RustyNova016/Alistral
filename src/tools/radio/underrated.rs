@@ -9,7 +9,9 @@ use crate::datastructures::entity_with_listens::recording_with_listens::Recordin
 use crate::datastructures::radio::collector::RadioCollector;
 use crate::datastructures::radio::seeders::listens::ListenSeeder;
 use crate::datastructures::radio::sorters::underrated::underrated_sorter;
+use crate::models::data_storage::DataStorage;
 use crate::models::playlist_stub::PlaylistStub;
+use crate::utils::data_file::DataFile as _;
 use crate::utils::println_cli;
 
 pub async fn underrated_mix(
@@ -57,8 +59,9 @@ pub async fn underrated_mix(
         .await;
 
     println_cli("[Sending] Sending radio playlist to listenbrainz");
+    let counter = DataStorage::load().expect("Couldn't load data storage");
     PlaylistStub::new(
-        "Radio: Underrated recordings".to_string(),
+        format!("Radio: Underrated recordings #{}", counter.write().unwrap().incr_playlist_count()),
         Some(username.to_string()),
         true,
         collected
