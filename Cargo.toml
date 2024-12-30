@@ -41,7 +41,7 @@ indicatif = { version = "0.17.8", features = [
 ] }
 tokio = { version = "1.42.0", features = ["full"] }
 rayon = "1.10.0"
-reqwest = { version = "0.12.8", features = ["json"] }
+reqwest = { version = "0.12.11", features = ["json"] }
 rand = "0.8.5"
 thiserror = "2.0.9"
 derive_more = { version = "1.0.0", features = ["full"] }
