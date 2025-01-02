@@ -11,8 +11,10 @@ use rand::thread_rng;
 use crate::database::get_db_client;
 use crate::datastructures::radio::collector::RadioCollector;
 use crate::datastructures::radio::seeders::listens::ListenSeeder;
+use crate::models::data_storage::DataStorage;
 use crate::models::playlist_stub::PlaylistStub;
 use crate::utils::cli::display::ArtistExt;
+use crate::utils::data_file::DataFile as _;
 use crate::utils::println_cli;
 
 pub async fn create_radio_mix(
@@ -45,8 +47,12 @@ pub async fn create_radio_mix(
         .await
         .expect("Error while generating the playlist");
 
+    let counter = DataStorage::load().expect("Couldn't load data storage");
     PlaylistStub::new(
-        "Radio: Circles".to_string(),
+        format!(
+            "Radio: Circles #{}",
+            counter.write().unwrap().incr_playlist_count()
+        ),
         Some(username.to_string()),
         false,
         collected.into_iter().map(|r| r.mbid).collect(),

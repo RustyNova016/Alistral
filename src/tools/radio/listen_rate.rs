@@ -8,7 +8,9 @@ use crate::datastructures::radio::filters::min_listens::min_listen_filter;
 use crate::datastructures::radio::filters::timeouts::timeout_filter;
 use crate::datastructures::radio::seeders::listens::ListenSeeder;
 use crate::datastructures::radio::sorters::listen_rate::listen_rate_sorter;
+use crate::models::data_storage::DataStorage;
 use crate::models::playlist_stub::PlaylistStub;
+use crate::utils::data_file::DataFile as _;
 use crate::utils::println_cli;
 
 pub async fn listen_rate_radio(
@@ -42,8 +44,12 @@ pub async fn listen_rate_radio(
         .await;
 
     println_cli("[Sending] Sending radio playlist to listenbrainz");
+    let counter = DataStorage::load().expect("Couldn't load data storage");
     PlaylistStub::new(
-        "Radio: Listen Rate".to_string(),
+        format!(
+            "Radio: Listen Rate #{}",
+            counter.write().unwrap().incr_playlist_count()
+        ),
         Some(username.to_string()),
         true,
         collected.into_iter().map(|r| r.mbid).collect(),
