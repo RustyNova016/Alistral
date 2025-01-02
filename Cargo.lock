@@ -1828,14 +1828,14 @@ checksum = "78b3ae25bc7c8c38cec158d1f2757ee79e9b3740fbc7ccf0e59e4b08d793fa89"
 
 [[package]]
 name = "listenbrainz"
-version = "0.8.0"
+version = "0.8.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "494ea0177e1c7d97e3e9d8d4a097337b62a8e3faa70b789e76682a3cf289afa3"
+checksum = "1fd685ff956be01182a38cb22fb4ba75646caa3ae226befdb7fd31d379cebcc7"
 dependencies = [
  "attohttpc",
  "serde",
  "serde_json",
- "thiserror 1.0.69",
+ "thiserror 2.0.9",
 ]
 
 [[package]]
