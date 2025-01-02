@@ -17,7 +17,7 @@ musicbrainz-db-lite = { branch = "develop", git = "https://github.com/RustyNova0
 
 derive_builder = "0.20.2"
 inquire = "0.7.5"
-itertools = "0.13.0"
+itertools = "0.14.0"
 color-eyre = "0.6.3"
 rust_decimal = "1.36.0"
 rust_decimal_macros = "1.36.0"
