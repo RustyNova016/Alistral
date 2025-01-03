@@ -3,9 +3,7 @@ use std::path::PathBuf;
 use std::sync::LazyLock;
 
 use directories::BaseDirs;
-use google_youtube3::yup_oauth2;
-use google_youtube3::yup_oauth2::ApplicationSecret;
-use google_youtube3::yup_oauth2::ConsoleApplicationSecret;
+
 use once_cell::sync::Lazy;
 
 use crate::utils::constants::CONFIG_DIR;
@@ -15,19 +13,36 @@ pub static YT_SECRET_FILE: Lazy<PathBuf> = Lazy::new(|| {
 
     path.push("youtube_credentials.json");
 
+    println!("path: {}", path.display());
     path
 });
 
-pub async fn get_youtube_auth() -> Result<(), crate::Error> {
-    let secret = yup_oauth2::read_application_secret(YT_SECRET_FILE).await?;
+#[cfg(test)]
+mod test {
+    use std::path::Path;
 
-    yup_oauth2::InstalledFlowAuthenticator::builder(
-        secret,
-        yup_oauth2::InstalledFlowReturnMethod::HTTPRedirect,
-    )
-    .build()
-    .await
-    .unwrap();
+    use youtube_brainz::models::messy_recording::MessyRecording;
+    use youtube_brainz::Client;
 
-    Ok(())
+    use crate::api::youtube::YT_SECRET_FILE;
+    use crate::utils::constants::CONFIG_DIR;
+
+    #[tokio::test]
+    pub async fn should_request_video_id() {
+        let client = Client::new(&YT_SECRET_FILE, &CONFIG_DIR).await.unwrap();
+        let recording = MessyRecording {
+            title: "Midnight Runners".to_string(),
+            artist_credits: "DirtyPhonics".to_string(),
+            release: "Magnetic".to_string(),
+        };
+
+        println!("Before send");
+        let res = client
+            .get_recording_yt_id(recording)
+            .await
+            .unwrap()
+            .unwrap();
+        println!("after send");
+        println!("res: {res}");
+    }
 }

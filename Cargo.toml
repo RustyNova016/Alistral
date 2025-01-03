@@ -15,6 +15,8 @@ listenbrainz = "0.8.1"
 musicbrainz-db-lite = { branch = "develop", git = "https://github.com/RustyNova016/musicbrainz_db_lite.git" }
 #musicbrainz-db-lite = { version = "0.1.0", path = "../musicbrainz-db-lite" }
 
+youtube_brainz = { path = "./youtube_brainz" }
+
 derive_builder = "0.20.2"
 inquire = "0.7.5"
 itertools = "0.14.0"
@@ -62,7 +64,6 @@ zip = "2.2.2"
 indoc = "2.0.5"
 strsim = "0.11.1"
 strum_macros = "0.26.4"
-google-youtube3 = "6.0.0"
 
 # The profile that 'cargo dist' will build with
 [profile.dist]
@@ -115,3 +116,9 @@ map_unwrap_or = { level = "allow", priority = 1 }
 # ]
 # # Publish jobs to run in CI
 # pr-run-mode = "plan"
+
+[workspace]
+
+members = [
+    "youtube_brainz",
+]

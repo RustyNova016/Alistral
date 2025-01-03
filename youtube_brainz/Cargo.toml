@@ -1,0 +1,10 @@
+[package]
+name = "youtube_brainz"
+version = "0.1.0"
+edition = "2021"
+description = "Bunch of utilities to link metabrainz data to youtube"
+
+[dependencies]
+google-youtube3 = "6.0.0"
+musicbrainz_rs_nova = "0.8.0"
+thiserror = "2.0.0"
