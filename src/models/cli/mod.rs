@@ -47,6 +47,9 @@ pub struct Cli {
     #[arg(long = "generate", value_enum)]
     generator: Option<Shell>,
 
+    #[arg(long, default_value_t = false)]
+    no_cleanup: bool,
+
     #[command(subcommand)]
     pub command: Option<Commands>,
 }
@@ -69,7 +72,7 @@ impl Cli {
             command.run(conn).await?;
         }
 
-        Ok(true)
+        Ok(!self.no_cleanup)
     }
 
     fn print_completions<G: Generator>(gen: G, cmd: &mut Command) {
