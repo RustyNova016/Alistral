@@ -11,10 +11,10 @@ use crate::datastructures::listen_collection::ListenCollection;
 use super::SeederSettings;
 
 /// A querry to generate a list of seed recording using the user's listens
-#[derive(Debug, Builder, Getters)]
+#[derive(Debug, Builder, Getters, Clone)]
 pub struct ListenSeeder {
     #[builder(Default=!)]
-    username: String,
+    pub username: String,
 
     #[builder(Default=!)]
     settings: SeederSettings,
