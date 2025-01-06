@@ -24,15 +24,7 @@ impl FreshReleaseRequest {
         )
     }
 
-    pub async fn fetch(&self) -> Result<Vec<FreshReleaseResponse>, crate::Error> {
-        let response = reqwest::get(format!(
-            "https://api.listenbrainz.org/1/explore/fresh-releases/{}",
-            self.get_parameters()
-        ))
-        .await?;
-
-        println!("{:#?}", response.text().await.unwrap());
-
+    pub async fn fetch(&self) -> Result<FreshReleaseResponse, crate::Error> {
         let response = reqwest::get(format!(
             "https://api.listenbrainz.org/1/explore/fresh-releases/{}",
             self.get_parameters()
@@ -57,12 +49,23 @@ impl Default for FreshReleaseRequest {
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct FreshReleaseResponse {
+    pub payload: FreshReleasePayload,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct FreshReleasePayload {
+    pub releases: Vec<FreshReleaseRelease>,
+    pub total_count: u32,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct FreshReleaseRelease {
     pub artist_credit_name: String,
     pub artist_mbids: Vec<String>,
 
     pub release_date: String,
     pub release_group_mbid: String,
-    pub release_group_primary_type: String,
+    pub release_group_primary_type: Option<String>,
     pub release_mbid: String,
     pub release_name: String,
 }
