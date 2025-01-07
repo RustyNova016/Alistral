@@ -12,12 +12,12 @@ use crate::datastructures::listen_collection::ListenCollection;
 use super::recording_with_listens::RecordingWithListens;
 
 #[derive(Debug, Clone, PartialEq, Eq, Getters)]
-pub struct WorkWithListens {
+pub struct WorkWithRecordingListens {
     work: Work,
     listens: Vec<RecordingWithListens>,
 }
 
-impl WorkWithListens {
+impl WorkWithRecordingListens {
     pub async fn from_listencollection(
         conn: &mut sqlx::SqliteConnection,
         listens: ListenCollection,
