@@ -5,6 +5,8 @@ use std::fs::remove_file;
 use std::io;
 use std::path::Path;
 
+pub mod refresh_data;
+
 pub fn delete_database(path: &Path) -> Result<(), crate::Error> {
     delete_or_not_found(path)?;
     delete_or_not_found(format!("{}-wal", path.to_string_lossy()))?;
