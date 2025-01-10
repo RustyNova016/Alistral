@@ -1,8 +1,8 @@
-use listenbrainz::raw::Client;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::listenbrainz::messybrainz_submission::MessybrainzSubmission;
 use musicbrainz_db_lite::models::musicbrainz::user::User;
 
+use crate::api::listenbrainz::LISTENBRAINZ_CLIENT;
 use crate::database::listenbrainz::listens::ListenFetchQuery;
 use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
 use crate::utils::listenbrainz_api::map_msid_to_mbid;
@@ -14,8 +14,6 @@ pub async fn listen_mapper_convert_mbids(
     username: &str,
     token: &str,
 ) {
-    let lb_client = Client::new();
-
     ListenFetchQuery::builder()
         .fetch_recordings_redirects(true)
         .returns(ListenFetchQueryReturn::None)
@@ -44,7 +42,7 @@ pub async fn listen_mapper_convert_mbids(
         if let Some(listen) = listens.first() {
             Listen::fetch_listen_by_id(
                 conn,
-                &lb_client,
+                &LISTENBRAINZ_CLIENT,
                 listen.listened_at,
                 &listen.user,
                 &listen.recording_msid,
