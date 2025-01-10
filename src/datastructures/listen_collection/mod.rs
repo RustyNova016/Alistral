@@ -69,13 +69,18 @@ impl ListenCollection {
     /// Merge two collections into one, removing duplicate listens by the index (`listened_at`, `recording_msid`, `user`)
     pub fn merge_by_index(&mut self, other: Self) {
         for new_listen in other.data {
-            if !self.data.iter().any(|listen| {
-                listen.listened_at == new_listen.listened_at
-                    && listen.recording_msid == new_listen.recording_msid
-                    && listen.user == new_listen.user
-            }) {
-                self.data.push(new_listen);
-            }
+            self.push_unique(new_listen);
+        }
+    }
+
+    /// Push the listen if it isn't already in the collection
+    pub fn push_unique(&mut self, new_listen: Listen) {
+        if !self.data.iter().any(|listen| {
+            listen.listened_at == new_listen.listened_at
+                && listen.recording_msid == new_listen.recording_msid
+                && listen.user == new_listen.user
+        }) {
+            self.data.push(new_listen);
         }
     }
 }
