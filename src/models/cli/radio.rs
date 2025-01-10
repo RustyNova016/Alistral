@@ -13,6 +13,7 @@ use crate::models::config::Config;
 use crate::tools::radio::circles::create_radio_mix;
 use crate::tools::radio::listen_rate::listen_rate_radio;
 use crate::tools::radio::overdue::overdue_radio;
+use crate::tools::radio::shared::shared_radio;
 use crate::tools::radio::underrated::underrated_mix;
 //use crate::tools::radio::underrated::underrated_mix;
 
@@ -181,6 +182,28 @@ pub enum RadioSubcommands {
         #[arg(short, long, default_value_t = false)]
         at_listening_time: bool,
     },
+
+    /// Generate playlists based on the listened recordings of two users
+    Shared {
+        username_a: String,
+
+        username_b: String,
+
+        /// Your user token.
+        ///
+        /// You can find it at <https://listenbrainz.org/settings/>.
+        /// If it's set in the config file, you can ignore this argument
+        #[arg(short, long)]
+        token: Option<String>,
+
+        /// Minimum listen count
+        #[arg(long)]
+        min: Option<u64>,
+
+        /// The amount of hours needed to wait after a recording have been given before it is re-suggested
+        #[arg(short, long, default_value_t = 0)]
+        cooldown: u64,
+    },
 }
 
 impl RadioSubcommands {
@@ -249,6 +272,25 @@ impl RadioSubcommands {
                     *delay_factor,
                     command.get_collector(),
                     *at_listening_time,
+                )
+                .await?;
+            }
+
+            Self::Shared {
+                username_a,
+                username_b,
+                token,
+                min,
+                cooldown,
+            } => {
+                shared_radio(
+                    conn,
+                    command.get_listen_seeder(&Some(username_a.to_string())),
+                    username_b.to_string(),
+                    *min,
+                    *cooldown,
+                    command.get_collector(),
+                    &Config::check_token(&Config::check_username(&None), token),
                 )
                 .await?;
             }
