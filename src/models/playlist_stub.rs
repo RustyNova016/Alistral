@@ -4,8 +4,9 @@ use listenbrainz::raw::request::PlaylistCreatePlaylistExtension;
 use listenbrainz::raw::request::PlaylistCreatePlaylistExtensionInner;
 use listenbrainz::raw::request::PlaylistCreatePlaylistTrack;
 use listenbrainz::raw::response::PlaylistCreateResponse;
-use listenbrainz::raw::Client;
 use macon::Builder;
+
+use crate::api::listenbrainz::LISTENBRAINZ_CLIENT;
 
 #[derive(Clone, Builder)]
 pub struct PlaylistStub {
@@ -62,6 +63,6 @@ impl PlaylistStub {
     }
 
     pub async fn send(self, token: &str) -> Result<PlaylistCreateResponse, crate::Error> {
-        Ok(Client::new().playlist_create(token, self.into_jspf())?)
+        Ok(LISTENBRAINZ_CLIENT.playlist_create(token, self.into_jspf())?)
     }
 }

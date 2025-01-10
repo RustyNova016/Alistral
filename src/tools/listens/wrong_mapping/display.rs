@@ -1,12 +1,12 @@
 use color_eyre::owo_colors::OwoColorize as _;
 use inquire::InquireError;
 use inquire::Select;
-use listenbrainz::raw::Client;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::listenbrainz::messybrainz_submission::MessybrainzSubmission;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use strsim::sorensen_dice;
 
+use crate::api::listenbrainz::LISTENBRAINZ_CLIENT;
 use crate::models::config::whitelisted_wrong_mappings::WhilistedWrongMappings;
 use crate::utils::cli::display::RecordingExt as _;
 use crate::utils::cli::hyperlink_rename;
@@ -75,10 +75,9 @@ pub(super) async fn display_wrong_mapping(
 
     match choice() {
         Choice::Next => {
-            let lb_client = Client::new();
             Listen::fetch_listen_by_id(
                 conn,
-                &lb_client,
+                &LISTENBRAINZ_CLIENT,
                 listen.listened_at,
                 &listen.user,
                 &listen.recording_msid,

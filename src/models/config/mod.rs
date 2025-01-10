@@ -37,6 +37,9 @@ pub struct Config {
     pub bumps: BumpList,
 
     pub artist_listened_to: Option<Decimal>,
+
+    #[serde(default = "default_lb_url")]
+    pub listenbrainz_url: String,
 }
 
 impl Config {
@@ -112,6 +115,11 @@ impl Default for Config {
             listens: Default::default(),
             default_user: Default::default(),
             bumps: Default::default(),
+            listenbrainz_url: default_lb_url(),
         }
     }
+}
+
+fn default_lb_url() -> String {
+    "https://api.listenbrainz.org/1/".to_string()
 }
