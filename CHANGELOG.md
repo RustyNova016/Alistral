@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
+No changelog for now as git cliff is broken :(
+
 ## [0.4.2] - 2024-12-20
 
 ### 🚀 Features
