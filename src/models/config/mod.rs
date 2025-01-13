@@ -6,6 +6,7 @@ use config_trait::ConfigFile;
 use derive_getters::Getters;
 use listen_config::ListenConfig;
 use mapper::MapperConfig;
+use rust_decimal::Decimal;
 use serde::Deserialize;
 use serde::Serialize;
 use std::collections::HashMap;
@@ -20,7 +21,7 @@ pub mod listen_config;
 pub mod mapper;
 pub mod recording_timeout;
 
-#[derive(Debug, Serialize, Deserialize, Getters, Default)]
+#[derive(Debug, Serialize, Deserialize, Getters)]
 pub struct Config {
     /// Saved usertokens
     tokens: HashMap<String, String>,
@@ -34,6 +35,11 @@ pub struct Config {
 
     #[serde(default)]
     pub bumps: BumpList,
+
+    pub artist_listened_to: Option<Decimal>,
+
+    #[serde(default = "default_lb_url")]
+    pub listenbrainz_url: String,
 }
 
 impl Config {
@@ -87,10 +93,33 @@ impl Config {
             }
         }
     }
+
+    pub fn get_artist_listened_to_threshold(&self) -> Decimal {
+        self.artist_listened_to
+            .unwrap_or_else(|| Decimal::new(2, 0))
+    }
 }
 
 impl ConfigFile for Config {
     fn file_name() -> &'static str {
         "config.json"
     }
+}
+
+impl Default for Config {
+    fn default() -> Self {
+        Self {
+            artist_listened_to: Some(Decimal::new(2, 0)),
+            tokens: Default::default(),
+            mapper: Default::default(),
+            listens: Default::default(),
+            default_user: Default::default(),
+            bumps: Default::default(),
+            listenbrainz_url: default_lb_url(),
+        }
+    }
+}
+
+fn default_lb_url() -> String {
+    "https://api.listenbrainz.org/1/".to_string()
 }

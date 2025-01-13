@@ -43,23 +43,23 @@ pub async fn stats_command(
         StatsTarget::Work => {
             work::stats_works(conn, listens).await;
         }
+        StatsTarget::WorkRecursive => {
+            work::stats_works_recursive(conn, listens).await;
+        }
     }
 }
 
 // #[cfg(test)]
 // mod tests {
-//     // use crate::utils::println_cli_info;
-
-//     // use super::*;
+//     use crate::database::get_conn;
+//     use crate::models::cli::common::StatsTarget;
+//     use crate::tools::stats::stats_command;
+//     use crate::tools::stats::SortSorterBy;
 
 //     #[tokio::test]
 //     #[serial_test::serial]
 //     async fn stats_command_recordings() {
-//         //let mut clog = colog::default_builder();
-//         //clog.filter(None, log::LevelFilter::Trace);
-//         //clog.init();
-
-//         // println_cli_info("--- Starting test ---");
-//         // stats_command("RustyNova", GroupByTarget::Recording, SortSorterBy::Count).await;
+//          let mut conn = get_conn().await;
+//         stats_command(&mut conn, "RustyNova", StatsTarget::WorkRecursive, SortSorterBy::Count).await;
 //     }
 // }

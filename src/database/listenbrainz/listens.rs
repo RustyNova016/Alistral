@@ -1,10 +1,10 @@
 use chrono::{DateTime, Utc};
-use listenbrainz::raw::Client;
 use macon::Builder;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use sqlx::SqliteConnection;
 
+use crate::api::listenbrainz::LISTENBRAINZ_CLIENT;
 use crate::datastructures::listen_collection::ListenCollection;
 use crate::utils::cli::progress_bar::global_progress_bar::PG_FETCHING;
 use crate::utils::env::in_offline_mode;
@@ -20,8 +20,6 @@ pub async fn fetch_latest_listens_of_user(
         .map(|v| v.listened_at);
     let mut pull_ts = Some(Utc::now().timestamp());
 
-    let lb_client = Client::new();
-
     // This loop has two possible states.
     // - Fresh dump:
     //     `latest_listen_ts` is none. We loop until `save_listen_payload_in_transaction` tell us it's over
@@ -36,7 +34,8 @@ pub async fn fetch_latest_listens_of_user(
             DateTime::from_timestamp(pull_ts.unwrap(), 0).unwrap(),
             pull_ts.unwrap(),
         ));
-        pull_ts = Listen::execute_listen_fetch(conn, &lb_client, user, pull_ts.unwrap()).await?;
+        pull_ts = Listen::execute_listen_fetch(conn, &LISTENBRAINZ_CLIENT, user, pull_ts.unwrap())
+            .await?;
     }
 
     Ok(())

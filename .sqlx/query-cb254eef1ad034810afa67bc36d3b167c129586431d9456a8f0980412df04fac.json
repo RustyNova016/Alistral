@@ -1,0 +1,20 @@
+{
+  "db_name": "SQLite",
+  "query": "\n            SELECT DISTINCT\n                recordings.mbid\n            FROM\n                listens\n                INNER JOIN msid_mapping ON listens.recording_msid = msid_mapping.recording_msid\n                INNER JOIN recordings_gid_redirect ON msid_mapping.recording_mbid = recordings_gid_redirect.gid\n                INNER JOIN recordings ON recordings_gid_redirect.new_id = recordings.id\n                INNER JOIN users ON listens.user = users.name\n            WHERE\n                msid_mapping.user = users.id\n                AND LOWER(users.name) = LOWER(?)\n                AND `full_update_date` < ?\n            ORDER BY `full_update_date` DESC\n            LIMIT ?",
+  "describe": {
+    "columns": [
+      {
+        "name": "mbid",
+        "ordinal": 0,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 3
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "cb254eef1ad034810afa67bc36d3b167c129586431d9456a8f0980412df04fac"
+}

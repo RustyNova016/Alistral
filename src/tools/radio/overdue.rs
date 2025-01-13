@@ -12,7 +12,9 @@ use crate::datastructures::radio::seeders::listens::ListenSeeder;
 use crate::datastructures::radio::sorters::overdue::overdue_factor_sorter;
 use crate::datastructures::radio::sorters::overdue::overdue_factor_sorter_cumulative;
 use crate::datastructures::radio::sorters::overdue::overdue_sorter;
+use crate::models::data_storage::DataStorage;
 use crate::models::playlist_stub::PlaylistStub;
+use crate::utils::data_file::DataFile;
 use crate::utils::println_cli;
 
 //TODO: Refactor Radios params into structs
@@ -61,8 +63,12 @@ pub async fn overdue_radio(
         .await;
 
     println_cli("[Sending] Sending radio playlist to listenbrainz");
+    let counter = DataStorage::load().expect("Couldn't load data storage");
     PlaylistStub::new(
-        "Radio: Overdue listens".to_string(),
+        format!(
+            "Radio: Overdue listens #{}",
+            counter.write().unwrap().incr_playlist_count()
+        ),
         Some(username.to_string()),
         true,
         collected.into_iter().map(|r| r.mbid).collect(),

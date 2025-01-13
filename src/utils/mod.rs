@@ -1,3 +1,4 @@
+pub mod data_file;
 pub mod streams;
 use std::fmt::Display;
 use std::sync::{Arc, Mutex};
@@ -10,6 +11,8 @@ use once_cell::sync::Lazy;
 
 use logger::Logger;
 
+use crate::api::listenbrainz::LISTENBRAINZ_CLIENT;
+
 pub mod cli;
 pub mod cli_paging;
 pub mod entities;
@@ -19,7 +22,6 @@ pub mod listenbrainz_api;
 pub mod logger;
 pub mod radio;
 pub mod regex;
-pub mod tokio;
 pub mod traits;
 pub mod whitelist_blacklist;
 
@@ -89,8 +91,7 @@ impl Iterator for ListenAPIReader {
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.page.is_empty() {
-            let client = Client::new();
-            let page = self.paginator.next(&client).unwrap();
+            let page = self.paginator.next(&LISTENBRAINZ_CLIENT).unwrap();
             self.page.extend(page.payload.listens);
         }
 

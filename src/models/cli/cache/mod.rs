@@ -2,9 +2,11 @@ use std::path::PathBuf;
 
 use crate::database::get_conn;
 use crate::database::DB_LOCATION;
+use crate::models::config::Config;
 //use crate::models::config::Config;
 use crate::tools::cache::copy_to_debug;
 use crate::tools::cache::delete_database;
+use crate::tools::cache::refresh_data::refresh_data;
 //use crate::tools::listens::import::import_listen_dump;
 use clap::ValueEnum;
 use clap::{Parser, Subcommand};
@@ -26,6 +28,11 @@ pub enum CacheSubcommands {
     /// ⚠️ If there is migrations, do `cargo sqlx migrate run` next
     #[cfg(debug_assertions)]
     CopyToDebug,
+
+    /// Wipe the cache's data
+    ///
+    /// This is useful if you need disk space, or need to manually rebuild in case of corruption
+    Clear,
 
     /// Clear all the listens from the database
     ClearListens {
@@ -54,10 +61,19 @@ pub enum CacheSubcommands {
         username: Option<String>,
     },
 
-    /// Wipe the cache's data
-    ///
-    /// This is useful if you need disk space, or need to manually rebuild in case of corruption
-    Clear,
+    RefreshData {
+        /// Name of the user to refresh the data
+        #[arg(short, long)]
+        username: Option<String>,
+
+        /// How many entities to refresh
+        #[arg(short, long)]
+        limit: Option<i64>,
+
+        /// Only refresh older than timestamp
+        #[arg(short, long)]
+        max_ts: Option<i64>,
+    },
 }
 
 impl CacheCommand {
@@ -104,6 +120,20 @@ impl CacheCommand {
                         .expect("Couldn't delete listens");
                 }
             },
+
+            CacheSubcommands::RefreshData {
+                username,
+                limit,
+                max_ts,
+            } => {
+                refresh_data(
+                    conn,
+                    &Config::check_username(username),
+                    limit.unwrap_or(i64::MAX),
+                    max_ts.unwrap_or(i64::MAX),
+                )
+                .await;
+            }
         }
 
         Ok(())

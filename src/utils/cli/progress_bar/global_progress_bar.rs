@@ -102,6 +102,10 @@ impl<'a> SubmitterTask<'a> {
     pub fn inc(&self, delta: u64) {
         self.bar.inc(delta);
     }
+
+    pub fn set_count(&self, count: u64) {
+        self.bar.pg.set_length(count);
+    }
 }
 
 pub struct SubmitterGuard<'pg>(pub(self) Arc<SubmitterTask<'pg>>);

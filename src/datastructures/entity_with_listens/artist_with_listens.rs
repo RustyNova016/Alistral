@@ -6,6 +6,7 @@ use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::artist::Artist;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use musicbrainz_db_lite::RowId;
+use rust_decimal::Decimal;
 
 use crate::database::listenbrainz::prefetching::fetch_recordings_as_complete;
 use crate::datastructures::listen_collection::traits::ListenCollectionLike;
@@ -52,6 +53,20 @@ impl ArtistWithListens {
 
     pub fn push(&mut self, value: RecordingWithListens) {
         self.listens.push(value);
+    }
+
+    /// Return the number of recordings that have been listened
+    pub fn listened_recording_count(&self) -> usize {
+        self.listens
+            .iter()
+            .filter(|r| r.listen_count() != 0)
+            .collect_vec()
+            .len()
+    }
+
+    /// Return the average listens count per each recording listened by the user
+    pub fn average_listen_per_recordings_listened(&self) -> Decimal {
+        Decimal::from(self.listen_count()) / Decimal::from(self.listened_recording_count())
     }
 }
 

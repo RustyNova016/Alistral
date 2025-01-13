@@ -66,14 +66,6 @@ pub fn overdue_factor_sorter_cumulative(
 
             let top_recording = recordings.remove(top_recording.0);
 
-            let score = (top_recording.overdue_factor_at(&curr_time) + Decimal::ONE)
-                * conf
-                    .read_or_panic()
-                    .bumps
-                    .get_multiplier(&top_recording.recording().mbid);
-
-            println!("{}: {score}", top_recording.recording().title);
-
             curr_time += top_recording
                 .recording()
                 .length_as_duration()
