@@ -1,10 +1,10 @@
 use core::cmp::Reverse;
 
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
+use alistral_core::datastructures::listen_collection::ListenCollection;
 use itertools::Itertools;
 
 use crate::datastructures::entity_with_listens::artist_with_listens::ArtistWithListens;
-use crate::datastructures::listen_collection::traits::ListenCollectionLike;
-use crate::datastructures::listen_collection::ListenCollection;
 use crate::utils::cli::display::ArtistExt;
 use crate::utils::cli_paging::CLIPager;
 

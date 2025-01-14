@@ -18,11 +18,6 @@ impl ListenCollection {
         Self { data }
     }
 
-    /// Returns the latest listen in the collection.
-    pub fn get_latest_listen(&self) -> Option<&Listen> {
-        self.data.iter().max_by_key(|listen| listen.listened_at)
-    }
-
     /// Return the latest X listens in the collection.
     pub fn get_latest_listens(&self, limit: usize) -> Self {
         let mut slice = self.data.clone();
@@ -36,11 +31,6 @@ impl ListenCollection {
                 .map(|(_, l)| l)
                 .collect_vec(),
         )
-    }
-
-    /// Returns the oldest listen in the collection.
-    pub fn get_oldest_listen(&self) -> Option<&Listen> {
-        self.data.iter().min_by_key(|listen| listen.listened_at)
     }
 
     pub fn push(&mut self, listen: Listen) {
@@ -82,6 +72,12 @@ impl ListenCollection {
         }) {
             self.data.push(new_listen);
         }
+    }
+}
+
+impl From<Listen> for ListenCollection {
+    fn from(value: Listen) -> Self {
+        Self { data: vec![value] }
     }
 }
 

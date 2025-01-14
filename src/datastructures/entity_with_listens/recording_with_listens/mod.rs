@@ -1,5 +1,7 @@
 use std::collections::HashMap;
 
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
+use alistral_core::datastructures::listen_collection::ListenCollection;
 use chrono::{DateTime, Duration, Utc};
 use collection::RecordingWithListensCollection;
 use derive_getters::Getters;
@@ -13,8 +15,6 @@ use serde::Serialize;
 
 use crate::api::listenbrainz::global_listen_counts::get_global_listen_counts;
 use crate::database::listenbrainz::prefetching::prefetch_recordings_of_listens;
-use crate::datastructures::listen_collection::traits::ListenCollectionLike;
-use crate::datastructures::listen_collection::ListenCollection;
 
 use super::impl_entity_with_listens;
 
@@ -208,7 +208,7 @@ impl RecordingWithListens {
 
 impl_entity_with_listens!(RecordingWithListens);
 
-impl ListenCollectionLike for RecordingWithListens {
+impl ListenCollectionReadable for RecordingWithListens {
     fn iter_listens(&self) -> impl Iterator<Item = &Listen> {
         self.listens.iter_listens()
     }
