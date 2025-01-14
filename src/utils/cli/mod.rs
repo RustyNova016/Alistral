@@ -8,7 +8,6 @@ use super::regex::is_string_mbid;
 use crate::models::cli::Cli;
 use crate::utils::regex::get_raw_mbid_from_url;
 
-pub mod constants;
 pub mod display;
 pub mod navigation;
 pub mod parsing;
