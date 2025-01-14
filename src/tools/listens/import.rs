@@ -23,6 +23,8 @@ pub async fn import_listen_dump(
     let zip_file = File::open(dump_path).expect("Couldn't access zip file.");
     let mut archive = zip::ZipArchive::new(zip_file).expect("Couldn't read zip file.");
 
+    let mut import_trans = conn.begin().await.expect("Couldn't start transaction");
+
     // We read the zip file
     for i in 0..archive.len() {
         let file = archive.by_index(i).unwrap();
@@ -52,12 +54,20 @@ pub async fn import_listen_dump(
 
         // Then save the content
         let mut count = 0;
-        let mut trans = conn.begin().await.expect("Couldn't start transaction");
+        let mut trans = import_trans
+            .begin()
+            .await
+            .expect("Couldn't start transaction");
         for line in content {
             let line = line.expect("Couldn't read line");
             //println!("{line}");
-            let data: ImportListen =
-                serde_json::from_str(&line).expect("Couldn't convert line from JSON");
+            let data: ImportListen = serde_json::from_str(&line).unwrap_or_else(|err| {
+                panic!(
+                    "Couldn't convert line #{} of {}. Error: {err}",
+                    count + 1,
+                    outpath.display()
+                )
+            });
 
             data.save(&mut trans, username)
                 .await
@@ -68,8 +78,13 @@ pub async fn import_listen_dump(
 
         println_cli_info(format!("Loaded {count} listens"));
     }
+    import_trans
+        .commit()
+        .await
+        .expect("Couldn't save transaction");
 }
 
+//TODO: #449 Move ImportListen to models
 #[derive(Debug, Deserialize, Serialize)]
 struct ImportListen {
     listened_at: i64,
@@ -83,6 +98,25 @@ struct ImportListenMetaData {
     release_name: Option<String>,
     recording_msid: String,
     additional_info: HashMap<String, serde_json::Value>,
+    mbid_mapping: Option<ImportListenMapping>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+struct ImportListenMapping {
+    caa_id: Option<u64>,
+    caa_release_mbid: Option<String>,
+    artists: Vec<ImportListenMappingArtists>,
+    artist_mbids: Vec<String>,
+    release_mbid: Option<String>,
+    recording_mbid: String,
+    recording_name: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+struct ImportListenMappingArtists {
+    artist_mbid: String,
+    join_phrase: String,
+    artist_credit_name: String,
 }
 
 impl ImportListen {
@@ -109,12 +143,11 @@ impl ImportListen {
 
         messybrainz.insert_or_ignore(&mut *conn).await.unwrap();
 
-        // Check if we have a recording MBID. If so, we can map it
-        let additional_info = &self.track_metadata.additional_info;
-
-        if let Some(serde_json::Value::String(recording)) = additional_info.get("recording_mbid") {
+        if let Some(mapping) = self.track_metadata.mbid_mapping {
             // First insert the mbid
-            Recording::add_redirect_mbid(conn, recording).await.unwrap();
+            Recording::add_redirect_mbid(conn, &mapping.recording_mbid)
+                .await
+                .unwrap();
 
             let user = User::find_by_name(&mut *conn, user_name)
                 .await?
@@ -124,10 +157,9 @@ impl ImportListen {
                 &mut *conn,
                 user.id,
                 self.track_metadata.recording_msid.clone(),
-                recording.to_string(),
+                mapping.recording_mbid.to_string(),
             )
-            .await
-            .unwrap();
+            .await?;
         }
 
         let listen = Listen {
@@ -146,22 +178,29 @@ impl ImportListen {
 
 #[cfg(test)]
 mod tests {
-    // use std::path::PathBuf;
-    // use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
-    // use crate::database::get_conn;
-    // use crate::tools::listens::import::import_listen_dump;
+    use crate::database::get_conn;
+    use crate::tools::listens::import::import_listen_dump;
+    use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
+    use std::path::PathBuf;
 
-    // #[tokio::test]
-    // async fn load_listen_dump_test() {
-    //     import_listen_dump(
-    //         &PathBuf::from("tests/data/listen_dump.zip".to_string()),
-    //         "TestNova",
-    //     )
-    //     .await;
-    //
-    //     let conn = &mut *get_conn().await;
-    //
-    //     let listen = sqlx::query_as!(Listen, "SELECT * FROM listens WHERE listened_at = 1705054374").fetch_one(&mut *conn).await.expect("This listen should exist");
-    //     listen.get_recording_or_fetch(conn).await.expect("The listen should be mapped");
-    // }
+    #[sqlx::test]
+    async fn load_listen_dump_test() {
+        let conn = &mut *get_conn().await;
+        import_listen_dump(
+            conn,
+            &PathBuf::from("tests/data/listen_dump.zip".to_string()),
+            "TestNova",
+        )
+        .await;
+
+        //TODO: #451 Make sqlx prepare query macros in tests + Convert the queries
+        let listen: Listen = sqlx::query_as("SELECT * FROM listens WHERE listened_at = 1705054374")
+            .fetch_one(&mut *conn)
+            .await
+            .expect("This listen should exist");
+        listen
+            .get_recording_or_fetch(conn)
+            .await
+            .expect("The listen should be mapped");
+    }
 }
