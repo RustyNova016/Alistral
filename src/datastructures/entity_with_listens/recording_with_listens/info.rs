@@ -10,15 +10,15 @@ use crate::models::config::Config;
 use crate::utils::extensions::chrono_ext::DateTimeUtcExt;
 use crate::utils::extensions::chrono_ext::DurationExt;
 
-use super::collection::RecordingWithListensCollection;
-use super::RecordingWithListens;
+use super::collection::RecordingWithListensCollectionOld;
+use super::RecordingWithListensOld;
 
-impl RecordingWithListens {
+impl RecordingWithListensOld {
     /// Generate a formated string with all the informations to display in reports
     pub async fn get_lookup_report(
         &self,
         conn: &mut sqlx::SqliteConnection,
-        other_listens: &RecordingWithListensCollection,
+        other_listens: &RecordingWithListensCollectionOld,
     ) -> Result<String, crate::Error> {
         if self.is_empty() {
             return self.generate_empty_report(conn).await;
@@ -42,7 +42,7 @@ impl RecordingWithListens {
     async fn generate_full_report(
         &self,
         conn: &mut sqlx::SqliteConnection,
-        other_listens: &RecordingWithListensCollection,
+        other_listens: &RecordingWithListensCollectionOld,
     ) -> Result<String, crate::Error> {
         let conf = Config::load_or_panic();
         let global_count = self.get_global_listen_count().await?;
@@ -105,7 +105,7 @@ impl RecordingWithListens {
     }
 }
 
-fn get_overdue_line(recording_info: &RecordingWithListens) -> String {
+fn get_overdue_line(recording_info: &RecordingWithListensOld) -> String {
     let time = recording_info.overdue_by();
 
     if time <= Duration::zero() {

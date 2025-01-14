@@ -4,7 +4,7 @@ use alistral_core::datastructures::listen_collection::traits::ListenCollectionRe
 use alistral_core::datastructures::listen_collection::ListenCollection;
 use itertools::Itertools;
 
-use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
+use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListensOld;
 use crate::datastructures::entity_with_listens::work_with_listens::WorkWithListens;
 use crate::datastructures::entity_with_listens::work_with_listens::WorkWithRecordingListens;
 use crate::utils::cli::display::WorkExt as _;
@@ -42,7 +42,7 @@ pub async fn stats_works(conn: &mut sqlx::SqliteConnection, listens: ListenColle
 }
 
 pub async fn stats_works_recursive(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
-    let recordings = RecordingWithListens::from_listencollection(conn, listens)
+    let recordings = RecordingWithListensOld::from_listencollection(conn, listens)
         .await
         .expect("Error while fetching recordings");
 

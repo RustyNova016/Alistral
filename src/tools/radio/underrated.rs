@@ -5,7 +5,7 @@ use itertools::Itertools;
 use crate::api::listenbrainz::global_listen_counts::get_global_listen_counts;
 use crate::database::listenbrainz::listens::ListenFetchQuery;
 use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
-use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
+use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListensOld;
 use crate::datastructures::radio::collector::RadioCollector;
 use crate::datastructures::radio::seeders::listens::ListenSeeder;
 use crate::datastructures::radio::sorters::underrated::underrated_sorter;
@@ -36,7 +36,7 @@ pub async fn underrated_mix(
         .await
         .expect("Couldn't fetch the new listens");
 
-    let user_listens = RecordingWithListens::from_listencollection(conn, user_listens).await?;
+    let user_listens = RecordingWithListensOld::from_listencollection(conn, user_listens).await?;
 
     // Get the global listen count
     println_cli("[Seeding] Getting global listen counts");

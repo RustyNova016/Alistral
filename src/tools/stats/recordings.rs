@@ -3,13 +3,13 @@ use core::cmp::Reverse;
 use alistral_core::datastructures::listen_collection::ListenCollection;
 use itertools::Itertools;
 
-use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
+use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListensOld;
 use crate::utils::cli::display::RecordingExt;
 use crate::utils::cli_paging::CLIPager;
 use crate::utils::extensions::chrono_ext::DurationExt;
 
 pub async fn stats_recording(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
-    let mut groups = RecordingWithListens::from_listencollection(conn, listens)
+    let mut groups = RecordingWithListensOld::from_listencollection(conn, listens)
         .await
         .expect("Error while fetching recordings")
         .into_values()
@@ -36,7 +36,7 @@ pub async fn stats_recording(conn: &mut sqlx::SqliteConnection, listens: ListenC
 }
 
 pub async fn stats_recording_time(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
-    let mut groups = RecordingWithListens::from_listencollection(conn, listens)
+    let mut groups = RecordingWithListensOld::from_listencollection(conn, listens)
         .await
         .expect("Error while fetching recordings")
         .into_values()

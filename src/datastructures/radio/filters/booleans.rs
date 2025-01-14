@@ -2,12 +2,12 @@ use core::future::ready;
 
 use futures::StreamExt;
 
-use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
+use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListensOld;
 
 pub fn and_filter(
-    radio: impl StreamExt<Item = RecordingWithListens>,
-    other: Vec<RecordingWithListens>,
-) -> impl StreamExt<Item = RecordingWithListens> {
+    radio: impl StreamExt<Item = RecordingWithListensOld>,
+    other: Vec<RecordingWithListensOld>,
+) -> impl StreamExt<Item = RecordingWithListensOld> {
     radio.filter(move |track| {
         ready(
             other

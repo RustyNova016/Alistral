@@ -12,12 +12,12 @@ use rust_decimal::Decimal;
 
 use crate::database::listenbrainz::prefetching::fetch_recordings_as_complete;
 
-use super::recording_with_listens::RecordingWithListens;
+use super::recording_with_listens::RecordingWithListensOld;
 
 #[derive(Debug, Clone, PartialEq, Eq, Getters)]
 pub struct ArtistWithListens {
     artist: Artist,
-    listens: Vec<RecordingWithListens>,
+    listens: Vec<RecordingWithListensOld>,
 }
 
 impl ArtistWithListens {
@@ -26,7 +26,7 @@ impl ArtistWithListens {
         listens: ListenCollection,
     ) -> Result<HashMap<i64, Self>, crate::Error> {
         // Convert Recordings
-        let recordings = RecordingWithListens::from_listencollection(conn, listens).await?;
+        let recordings = RecordingWithListensOld::from_listencollection(conn, listens).await?;
 
         let recording_refs = recordings.iter_recordings().collect_vec();
         fetch_recordings_as_complete(conn, &recording_refs).await?;
@@ -51,7 +51,7 @@ impl ArtistWithListens {
         Ok(out)
     }
 
-    pub fn push(&mut self, value: RecordingWithListens) {
+    pub fn push(&mut self, value: RecordingWithListensOld) {
         self.listens.push(value);
     }
 

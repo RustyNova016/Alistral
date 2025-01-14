@@ -3,7 +3,7 @@ use core::pin::Pin;
 use chrono::Duration;
 use futures::{stream, StreamExt};
 
-use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
+use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListensOld;
 use crate::datastructures::radio::collector::RadioCollector;
 use crate::datastructures::radio::filters::cooldown::cooldown_filter;
 use crate::datastructures::radio::filters::min_listens::min_listen_filter;
@@ -46,12 +46,12 @@ pub async fn overdue_radio(
     let recordings = if !overdue_factor {
         println_cli("[Sorting] Sorting listen by overdue duration");
         Box::pin(stream::iter(overdue_sorter(recordings.collect().await)))
-            as Pin<Box<dyn futures::Stream<Item = RecordingWithListens>>>
+            as Pin<Box<dyn futures::Stream<Item = RecordingWithListensOld>>>
     } else if !at_listening_time {
         println_cli("[Sorting] Sorting listen by overdue factor");
         Box::pin(stream::iter(overdue_factor_sorter(
             recordings.collect().await,
-        ))) as Pin<Box<dyn futures::Stream<Item = RecordingWithListens>>>
+        ))) as Pin<Box<dyn futures::Stream<Item = RecordingWithListensOld>>>
     } else {
         println_cli("[Sorting] Sorting listen by overdue factor at listen time");
         Box::pin(overdue_factor_sorter_cumulative(recordings.collect().await))

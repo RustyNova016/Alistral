@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use alistral_core::datastructures::listen_collection::ListenCollection;
 use chrono::{DateTime, Duration, Utc};
-use collection::RecordingWithListensCollection;
+use collection::RecordingWithListensCollectionOld;
 use derive_getters::Getters;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
@@ -17,18 +17,20 @@ use crate::api::listenbrainz::global_listen_counts::get_global_listen_counts;
 use crate::database::listenbrainz::prefetching::prefetch_recordings_of_listens;
 
 use super::impl_entity_with_listens;
+use super::EntityWithListens;
 
 pub mod collection;
 pub mod info;
 pub mod radios;
 
+#[deprecated]
 #[derive(Debug, Clone, PartialEq, Eq, Getters, Deserialize, Serialize)]
-pub struct RecordingWithListens {
+pub struct RecordingWithListensOld {
     pub(self) recording: Recording,
     listens: ListenCollection,
 }
 
-impl RecordingWithListens {
+impl RecordingWithListensOld {
     pub fn new(recording: Recording, listens: ListenCollection) -> Self {
         Self { listens, recording }
     }
@@ -36,7 +38,7 @@ impl RecordingWithListens {
     pub async fn from_listencollection(
         conn: &mut sqlx::SqliteConnection,
         listens: ListenCollection,
-    ) -> Result<RecordingWithListensCollection, crate::Error> {
+    ) -> Result<RecordingWithListensCollectionOld, crate::Error> {
         // If empty, early return
         if listens.is_empty() {
             return Ok(Default::default());
@@ -206,7 +208,17 @@ impl RecordingWithListens {
     }
 }
 
-impl_entity_with_listens!(RecordingWithListens);
+impl_entity_with_listens!(RecordingWithListensOld);
+
+impl ListenCollectionReadable for RecordingWithListensOld {
+    fn iter_listens(&self) -> impl Iterator<Item = &Listen> {
+        self.listens.iter_listens()
+    }
+}
+
+pub type RecordingWithListens = EntityWithListens<Recording, ListenCollection>;
+
+impl RecordingWithListens {}
 
 impl ListenCollectionReadable for RecordingWithListens {
     fn iter_listens(&self) -> impl Iterator<Item = &Listen> {

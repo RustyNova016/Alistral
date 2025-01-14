@@ -1,11 +1,13 @@
 use chrono::Duration;
 use rust_decimal::Decimal;
 
-use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
+use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListensOld;
 use crate::models::config::Config;
 
 /// Sort listens based on the rate of listens of a recording
-pub fn listen_rate_sorter(mut recordings: Vec<RecordingWithListens>) -> Vec<RecordingWithListens> {
+pub fn listen_rate_sorter(
+    mut recordings: Vec<RecordingWithListensOld>,
+) -> Vec<RecordingWithListensOld> {
     let conf = Config::load_or_panic();
 
     recordings.sort_by_cached_key(|r| {

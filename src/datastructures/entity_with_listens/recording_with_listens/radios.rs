@@ -2,20 +2,23 @@ use alistral_core::datastructures::listen_collection::traits::ListenCollectionRe
 use rust_decimal::Decimal;
 use rust_decimal_macros::dec;
 
-use super::collection::RecordingWithListensCollection;
-use super::RecordingWithListens;
+use super::collection::RecordingWithListensCollectionOld;
+use super::RecordingWithListensOld;
 
-impl RecordingWithListens {
+impl RecordingWithListensOld {
     pub fn get_underated_score(
         &self,
-        user_listens: &RecordingWithListensCollection,
+        user_listens: &RecordingWithListensCollectionOld,
         global_listen_count: u64,
     ) -> Decimal {
         self.get_underrated_rank_score(user_listens)
             + self.get_underrated_listen_score(user_listens, global_listen_count)
     }
 
-    fn get_underrated_rank_score(&self, user_listens: &RecordingWithListensCollection) -> Decimal {
+    fn get_underrated_rank_score(
+        &self,
+        user_listens: &RecordingWithListensCollectionOld,
+    ) -> Decimal {
         // Retrive the rank of the recording in the user listens
         let rank = user_listens.get_rank(&self.recording.mbid).unwrap_or(9999);
 
@@ -27,7 +30,7 @@ impl RecordingWithListens {
 
     fn get_underrated_listen_score(
         &self,
-        user_listens: &RecordingWithListensCollection,
+        user_listens: &RecordingWithListensCollectionOld,
         global_listen_count: u64,
     ) -> Decimal {
         // Retrieve the all time listen count of the recording for the user

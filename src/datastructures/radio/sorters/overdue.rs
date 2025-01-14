@@ -6,10 +6,12 @@ use chrono::Utc;
 use futures::Stream;
 use rust_decimal::Decimal;
 
-use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
+use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListensOld;
 use crate::models::config::Config;
 
-pub fn overdue_sorter(mut recordings: Vec<RecordingWithListens>) -> Vec<RecordingWithListens> {
+pub fn overdue_sorter(
+    mut recordings: Vec<RecordingWithListensOld>,
+) -> Vec<RecordingWithListensOld> {
     let conf = Config::load_or_panic();
 
     recordings.sort_by_cached_key(|r| {
@@ -25,8 +27,8 @@ pub fn overdue_sorter(mut recordings: Vec<RecordingWithListens>) -> Vec<Recordin
 }
 
 pub fn overdue_factor_sorter(
-    mut recordings: Vec<RecordingWithListens>,
-) -> Vec<RecordingWithListens> {
+    mut recordings: Vec<RecordingWithListensOld>,
+) -> Vec<RecordingWithListensOld> {
     let conf = Config::load_or_panic();
 
     recordings.sort_by_cached_key(|r| {
@@ -44,8 +46,8 @@ pub fn overdue_factor_sorter(
 }
 
 pub fn overdue_factor_sorter_cumulative(
-    mut recordings: Vec<RecordingWithListens>,
-) -> impl Stream<Item = RecordingWithListens> {
+    mut recordings: Vec<RecordingWithListensOld>,
+) -> impl Stream<Item = RecordingWithListensOld> {
     let conf = Config::load_or_panic();
 
     fn_stream(|emitter| async move {

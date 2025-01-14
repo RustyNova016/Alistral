@@ -1,16 +1,16 @@
 use core::cmp::Reverse;
 
-use crate::datastructures::entity_with_listens::recording_with_listens::collection::RecordingWithListensCollection;
-use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
+use crate::datastructures::entity_with_listens::recording_with_listens::collection::RecordingWithListensCollectionOld;
+use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListensOld;
 use crate::models::data::listenbrainz::popularity::PopularityRecordingResponseItem;
 use crate::utils::cli::progress_bar::ProgressBarCli;
 
 /// Sort listens based on the rate of listens of a recording
 pub fn underrated_sorter(
-    mut recordings: Vec<RecordingWithListens>,
-    user_listens: &RecordingWithListensCollection,
+    mut recordings: Vec<RecordingWithListensOld>,
+    user_listens: &RecordingWithListensCollectionOld,
     global_listen_counts: Vec<PopularityRecordingResponseItem>,
-) -> Vec<RecordingWithListens> {
+) -> Vec<RecordingWithListensOld> {
     let progress = ProgressBarCli::new((recordings.len()) as u64, Some("Sorting recordings"));
     recordings.sort_by_cached_key(|r| {
         let global_count = global_listen_counts

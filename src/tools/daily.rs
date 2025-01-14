@@ -17,6 +17,7 @@ use crate::database::listenbrainz::listens::ListenFetchQuery;
 use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
 use crate::database::musicbrainz::anniversaries::get_recordings_aniversaries;
 use crate::datastructures::entity_with_listens::artist_with_listens::ArtistWithListens;
+use crate::datastructures::entity_with_listens::recording_with_listens::collection::RecordingWithListensCollection;
 use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
 use crate::models::config::Config;
 use crate::utils::cli::display::RecordingExt as _;
@@ -32,7 +33,7 @@ pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
         .await
         .expect("Couldn't fetch the new listens");
 
-    let recordings = RecordingWithListens::from_listencollection(conn, listens.clone())
+    let recordings = RecordingWithListensCollection::from_listencollection(conn, listens.clone())
         .await
         .expect("Couldn't get listen's recordings");
 

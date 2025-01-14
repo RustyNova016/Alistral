@@ -1,10 +1,12 @@
 use std::collections::HashMap;
 
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
+use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::RowId;
 
 use crate::utils::traits::mergable::Mergable;
 
+use super::recording_with_listens::RecordingWithListens;
 use super::EntityWithListens;
 
 #[derive(Debug, Clone)]
@@ -22,6 +24,15 @@ where
         Self(HashMap::new())
     }
 
+    // --- Getters ---
+
+    pub fn get_by_id(&self, id: i64) -> Option<&EntityWithListens<Ent, Lis>> {
+        self.0.get(&id)
+    }
+
+    // --- Inserts ---
+
+    /// Insert a EntityWithListens, and merge if it doesn't exists
     pub fn insert_or_merge(&mut self, value: EntityWithListens<Ent, Lis>)
     where
         EntityWithListens<Ent, Lis>: Mergable + Clone,
@@ -30,6 +41,14 @@ where
             .entry(value.get_row_id())
             .and_modify(|val| val.merge(value.clone()))
             .or_insert(value);
+    }
+
+    pub fn insert_or_merge_listen(&mut self, entity: Ent, listen: Listen)
+    where
+        EntityWithListens<Ent, Lis>: Mergable + Clone,
+        Lis: From<Listen>
+    {
+        self.insert_or_merge(EntityWithListens { entity, listens: listen.into() });
     }
 }
 

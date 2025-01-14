@@ -5,8 +5,8 @@ use macon::Builder;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 
 use crate::database::listenbrainz::listens::fetch_latest_listens_of_user;
-use crate::datastructures::entity_with_listens::recording_with_listens::collection::RecordingWithListensCollection;
-use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
+use crate::datastructures::entity_with_listens::recording_with_listens::collection::RecordingWithListensCollectionOld;
+use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListensOld;
 
 use super::SeederSettings;
 
@@ -24,7 +24,7 @@ impl ListenSeeder {
     pub async fn seed(
         self,
         conn: &mut sqlx::SqliteConnection,
-    ) -> Result<RecordingWithListensCollection, crate::Error> {
+    ) -> Result<RecordingWithListensCollectionOld, crate::Error> {
         // Get the listens
         fetch_latest_listens_of_user(conn, &self.username).await?;
 
@@ -71,7 +71,7 @@ impl ListenSeeder {
         .await?
         .into();
 
-        let mut recordings = RecordingWithListens::from_listencollection(conn, listens).await?;
+        let mut recordings = RecordingWithListensOld::from_listencollection(conn, listens).await?;
         let minimum_listens = self.get_minimum_listens(conn).await?;
         recordings.merge(minimum_listens);
 
@@ -81,7 +81,7 @@ impl ListenSeeder {
     async fn get_minimum_listens(
         &self,
         conn: &mut sqlx::SqliteConnection,
-    ) -> Result<RecordingWithListensCollection, crate::Error> {
+    ) -> Result<RecordingWithListensCollectionOld, crate::Error> {
         // Early exit if no minimums
         if self.settings.min_listen_per_recording == 0 {
             return Ok(Default::default());
@@ -118,7 +118,7 @@ impl ListenSeeder {
         .await?
         .into();
 
-        let mapped = RecordingWithListens::from_listencollection(conn, listens)
+        let mapped = RecordingWithListensOld::from_listencollection(conn, listens)
             .await?
             .into_values()
             .map(|r| {
@@ -126,7 +126,7 @@ impl ListenSeeder {
                 let listens = r
                     .listens()
                     .get_latest_listens(self.settings.min_listen_per_recording as usize);
-                RecordingWithListens::new(r.recording().clone(), listens)
+                RecordingWithListensOld::new(r.recording().clone(), listens)
             })
             .collect_vec();
 

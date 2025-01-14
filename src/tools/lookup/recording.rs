@@ -3,7 +3,7 @@ use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use crate::database::get_db_client;
 use crate::database::listenbrainz::listens::ListenFetchQuery;
 use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
-use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
+use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListensOld;
 use crate::utils::println_cli;
 
 #[cfg(not(test))]
@@ -28,7 +28,7 @@ pub async fn lookup_recording(username: &str, id: &str) -> color_eyre::Result<()
         return Ok(());
     };
 
-    let mut all_listens = RecordingWithListens::from_listencollection(conn, listens)
+    let mut all_listens = RecordingWithListensOld::from_listencollection(conn, listens)
         .await
         .expect("Couldn't load recordings");
 

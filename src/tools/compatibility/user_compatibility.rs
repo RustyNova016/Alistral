@@ -1,13 +1,13 @@
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use rust_decimal::Decimal;
 
-use crate::datastructures::entity_with_listens::recording_with_listens::collection::RecordingWithListensCollection;
+use crate::datastructures::entity_with_listens::recording_with_listens::collection::RecordingWithListensCollectionOld;
 use crate::utils::cli::progress_bar::ProgressBarCli;
 
 /// Return a list of recordings that are both listened by user A and user B
 pub fn get_shared_recordings_between_users(
-    user_a_recordings: &RecordingWithListensCollection,
-    user_b_recordings: &RecordingWithListensCollection,
+    user_a_recordings: &RecordingWithListensCollectionOld,
+    user_b_recordings: &RecordingWithListensCollectionOld,
 ) -> Vec<Recording> {
     let mut recordings = Vec::new();
 
@@ -25,7 +25,7 @@ pub fn get_shared_recordings_between_users(
 /// Return the percentage of listens of user A that are also listened by user B
 pub fn get_user_shared_percent(
     shared_recordings: &[Recording],
-    user_recordings: &RecordingWithListensCollection,
+    user_recordings: &RecordingWithListensCollectionOld,
 ) -> Decimal {
     Decimal::new(shared_recordings.len().try_into().unwrap(), 0)
         / Decimal::new(user_recordings.len().try_into().unwrap(), 0)
@@ -35,7 +35,7 @@ pub fn get_user_shared_percent(
 /// For each shared recordings, return the ratio of listens being from a recording
 fn get_user_ratio<'r>(
     shared_recordings: &'r Vec<Recording>,
-    user_listens: &RecordingWithListensCollection,
+    user_listens: &RecordingWithListensCollectionOld,
 ) -> Vec<(Decimal, &'r Recording)> {
     let progress = ProgressBarCli::new(
         shared_recordings.len() as u64,
@@ -53,8 +53,8 @@ fn get_user_ratio<'r>(
 
 pub fn get_shared_ratio(
     shared_recordings: &Vec<Recording>,
-    user_a_listens: &RecordingWithListensCollection,
-    user_b_listens: &RecordingWithListensCollection,
+    user_a_listens: &RecordingWithListensCollectionOld,
+    user_b_listens: &RecordingWithListensCollectionOld,
 ) -> Decimal {
     let mut total_ratio = Decimal::ZERO;
     let ratios_a = get_user_ratio(shared_recordings, user_a_listens);
