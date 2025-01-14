@@ -20,3 +20,5 @@ macro_rules! impl_entity_with_listens {
         }
     };
 }
+
+pub(crate) use impl_entity_with_listens;

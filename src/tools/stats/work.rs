@@ -1,11 +1,11 @@
 use core::cmp::Reverse;
 
+use alistral_core::datastructures::entity_with_listens::work::WorkWithListens;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use alistral_core::datastructures::listen_collection::ListenCollection;
 use itertools::Itertools;
 
 use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
-use crate::datastructures::entity_with_listens::work_with_listens::WorkWithListens;
 use crate::datastructures::entity_with_listens::work_with_listens::WorkWithRecordingListens;
 use crate::utils::cli::display::WorkExt as _;
 use crate::utils::cli_paging::CLIPager;

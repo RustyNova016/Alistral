@@ -29,6 +29,16 @@ where
         self.0.get(&id)
     }
 
+    // --- Iters ---
+
+    pub fn iter(&self) -> impl Iterator<Item = &EntityWithListens<Ent, Lis>> {
+        self.0.values()
+    }
+
+    pub fn iter_entities(&self) -> impl Iterator<Item = &Ent> {
+        self.0.values().map(|r| &r.entity)
+    }
+
     // --- Inserts ---
 
     /// Insert a EntityWithListens, and merge if it doesn't exists

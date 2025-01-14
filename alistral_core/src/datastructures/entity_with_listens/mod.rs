@@ -7,6 +7,9 @@ use super::listen_collection::traits::ListenCollectionReadable;
 use super::listen_collection::ListenCollection;
 
 pub mod collection;
+pub mod recording;
+pub mod work;
+
 /// A structure representing an entity with associated listens.
 ///
 /// # Fields
@@ -28,6 +31,9 @@ where
     Ent: RowId,
     Lis: ListenCollectionReadable,
 {
+    pub fn listens(&self) -> &Lis {
+        &self.listens
+    }
 }
 
 impl<Ent> EntityWithListens<Ent, ListenCollection>
