@@ -1,7 +1,5 @@
 use core::cmp::Reverse;
 
-use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
-use alistral_core::datastructures::listen_collection::ListenCollection;
 use chrono::DateTime;
 use chrono::Datelike;
 use chrono::NaiveDate;
@@ -18,6 +16,8 @@ use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
 use crate::database::musicbrainz::anniversaries::get_recordings_aniversaries;
 use crate::datastructures::entity_with_listens::artist_with_listens::ArtistWithListens;
 use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
+use crate::datastructures::listen_collection::traits::ListenCollectionLike;
+use crate::datastructures::listen_collection::ListenCollection;
 use crate::models::config::Config;
 use crate::utils::cli::display::RecordingExt as _;
 use crate::utils::cli::display::ReleaseGroupExt;

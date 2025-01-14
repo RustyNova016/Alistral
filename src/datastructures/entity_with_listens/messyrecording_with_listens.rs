@@ -1,9 +1,9 @@
-use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
-use alistral_core::datastructures::listen_collection::ListenCollection;
 use itertools::Itertools;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::listenbrainz::messybrainz_submission::MessybrainzSubmission;
 
+use crate::datastructures::listen_collection::traits::ListenCollectionLike;
+use crate::datastructures::listen_collection::ListenCollection;
 use std::collections::HashMap;
 
 /// Represent a messybrainz recording id
@@ -13,7 +13,7 @@ pub struct MessyRecordingWithListens {
 }
 
 impl MessyRecordingWithListens {
-    pub async fn from_listencollection<T: ListenCollectionReadable>(
+    pub async fn from_listencollection<T: ListenCollectionLike>(
         conn: &mut sqlx::SqliteConnection,
         listens: T,
     ) -> Result<HashMap<String, Self>, crate::Error> {
@@ -51,7 +51,7 @@ impl MessyRecordingWithListens {
     }
 }
 
-impl ListenCollectionReadable for MessyRecordingWithListens {
+impl ListenCollectionLike for MessyRecordingWithListens {
     fn iter_listens(&self) -> impl Iterator<Item = &Listen> {
         self.associated_listens.iter_listens()
     }

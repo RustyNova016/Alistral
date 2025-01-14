@@ -1,10 +1,10 @@
-use alistral_core::datastructures::listen_collection::ListenCollection;
-
 use crate::database::get_conn;
 use crate::database::listenbrainz::listens::ListenFetchQuery;
 use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
 use crate::datastructures::entity_with_listens::recording_with_listens::collection::RecordingWithListensCollection;
 use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
+use crate::datastructures::listen_collection::ListenCollection;
+
 pub async fn get_test_user_listens() -> ListenCollection {
     ListenFetchQuery::builder()
         .fetch_recordings_redirects(true)

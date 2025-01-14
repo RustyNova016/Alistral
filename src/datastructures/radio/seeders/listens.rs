@@ -1,4 +1,3 @@
-use alistral_core::datastructures::listen_collection::ListenCollection;
 use derive_getters::Getters;
 use itertools::Itertools;
 use macon::Builder;
@@ -7,6 +6,7 @@ use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use crate::database::listenbrainz::listens::fetch_latest_listens_of_user;
 use crate::datastructures::entity_with_listens::recording_with_listens::collection::RecordingWithListensCollection;
 use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
+use crate::datastructures::listen_collection::ListenCollection;
 
 use super::SeederSettings;
 

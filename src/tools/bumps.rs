@@ -1,6 +1,5 @@
 use std::str::FromStr;
 
-use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use chrono::Duration;
 use chrono::Utc;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;

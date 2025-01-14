@@ -1,9 +1,9 @@
 use core::cmp::Reverse;
 
-use alistral_core::datastructures::listen_collection::ListenCollection;
 use itertools::Itertools;
 
 use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
+use crate::datastructures::listen_collection::ListenCollection;
 use crate::utils::cli::display::RecordingExt;
 use crate::utils::cli_paging::CLIPager;
 use crate::utils::extensions::chrono_ext::DurationExt;

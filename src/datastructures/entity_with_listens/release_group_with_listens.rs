@@ -1,7 +1,5 @@
 use std::collections::HashMap;
 
-use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
-use alistral_core::datastructures::listen_collection::ListenCollection;
 use derive_getters::Getters;
 use itertools::Itertools;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
@@ -10,16 +8,18 @@ use musicbrainz_db_lite::models::musicbrainz::release_group::ReleaseGroup;
 use musicbrainz_db_lite::RowId;
 
 use crate::database::listenbrainz::prefetching::prefetch_releases;
+use crate::datastructures::listen_collection::traits::ListenCollectionLike;
+use crate::datastructures::listen_collection::ListenCollection;
 
 use super::release_with_listens::ReleaseWithListens;
 
 #[derive(Debug, Clone, PartialEq, Eq, Getters)]
-pub struct ReleaseGroupWithListens<T: ListenCollectionReadable> {
+pub struct ReleaseGroupWithListens<T: ListenCollectionLike> {
     release_group: ReleaseGroup,
     listens: HashMap<i64, T>,
 }
 
-impl<T: ListenCollectionReadable> ReleaseGroupWithListens<T> {
+impl<T: ListenCollectionLike> ReleaseGroupWithListens<T> {
     /// Insert a listen element
     fn insert_element(&mut self, id: i64, element: T) {
         self.listens.insert(id, element);
@@ -63,7 +63,7 @@ impl ReleaseGroupWithListens<ReleaseWithListens> {
     }
 }
 
-impl ListenCollectionReadable for ReleaseGroupWithListens<ReleaseWithListens> {
+impl ListenCollectionLike for ReleaseGroupWithListens<ReleaseWithListens> {
     fn iter_listens(&self) -> impl Iterator<Item = &Listen> {
         self.listens.values().flat_map(|l| l.iter_listens())
     }
