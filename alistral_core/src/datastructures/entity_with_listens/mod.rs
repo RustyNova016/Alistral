@@ -6,6 +6,7 @@ use crate::traits::mergable::Mergable;
 use super::listen_collection::traits::ListenCollectionReadable;
 use super::listen_collection::ListenCollection;
 
+pub mod collection;
 /// A structure representing an entity with associated listens.
 ///
 /// # Fields
