@@ -1,9 +1,8 @@
 use std::ops::Deref;
 use std::time::Duration;
 
+use alistral_core::cli::logger::Logger;
 use indicatif::{ProgressBar, ProgressStyle};
-
-use crate::utils::logger::Logger;
 
 pub mod global_progress_bar;
 

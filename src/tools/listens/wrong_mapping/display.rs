@@ -1,3 +1,4 @@
+use alistral_core::cli::colors::AlistralColors as _;
 use color_eyre::owo_colors::OwoColorize as _;
 use inquire::InquireError;
 use inquire::Select;
@@ -10,7 +11,6 @@ use crate::api::listenbrainz::LISTENBRAINZ_CLIENT;
 use crate::models::config::whitelisted_wrong_mappings::WhilistedWrongMappings;
 use crate::utils::cli::display::RecordingExt as _;
 use crate::utils::cli::hyperlink_rename;
-use crate::utils::extensions::owo_colors_ext::AlistralColors as _;
 
 pub(super) async fn display_wrong_mapping(
     conn: &mut sqlx::SqliteConnection,

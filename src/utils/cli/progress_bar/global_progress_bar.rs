@@ -3,10 +3,9 @@ use core::sync::atomic::{AtomicU64, Ordering};
 use core::time::Duration;
 use std::sync::{Arc, RwLock};
 
+use alistral_core::cli::logger::Logger;
 use indicatif::{ProgressBar, ProgressStyle};
 use once_cell::sync::Lazy;
-
-use crate::utils::logger::Logger;
 
 pub static PG_FETCHING: Lazy<GlobalProgressBar<'static>> =
     Lazy::new(|| GlobalProgressBar::new("Fetching MBIDs".to_string()));
