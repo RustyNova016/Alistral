@@ -1,6 +1,7 @@
 pub mod collection;
 use std::collections::HashMap;
 
+use alistral_core::datastructures::entity_with_listens::EntityWithListens;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use alistral_core::datastructures::listen_collection::ListenCollection;
 use collection::WorkWithListensCollection;
@@ -15,7 +16,6 @@ use crate::utils::entities::relations::is_relation_parent;
 
 use super::recording_with_listens::collection::RecordingWithListensCollection;
 use super::recording_with_listens::RecordingWithListens;
-use super::EntityWithListens;
 
 #[derive(Debug, Clone, PartialEq, Eq, Getters)]
 pub struct WorkWithRecordingListens {

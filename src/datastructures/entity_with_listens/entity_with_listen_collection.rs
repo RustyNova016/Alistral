@@ -1,11 +1,9 @@
 use std::collections::HashMap;
 
+use alistral_core::datastructures::entity_with_listens::EntityWithListens;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
+use alistral_core::traits::mergable::Mergable;
 use musicbrainz_db_lite::RowId;
-
-use crate::utils::traits::mergable::Mergable;
-
-use super::EntityWithListens;
 
 #[derive(Debug, Clone)]
 pub struct EntityWithListensCollection<Ent, Lis>(pub HashMap<i64, EntityWithListens<Ent, Lis>>)
