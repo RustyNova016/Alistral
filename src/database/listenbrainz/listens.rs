@@ -1,3 +1,4 @@
+use alistral_core::cli::progress_bar::global_progress_bar::PG_FETCHING;
 use alistral_core::datastructures::listen_collection::ListenCollection;
 use chrono::{DateTime, Utc};
 use macon::Builder;
@@ -6,7 +7,6 @@ use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use sqlx::SqliteConnection;
 
 use crate::api::listenbrainz::LISTENBRAINZ_CLIENT;
-use crate::utils::cli::progress_bar::global_progress_bar::PG_FETCHING;
 use crate::utils::env::in_offline_mode;
 use crate::utils::println_lis;
 

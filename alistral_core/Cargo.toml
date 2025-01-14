@@ -8,3 +8,6 @@ musicbrainz-db-lite = { branch = "develop", git = "https://github.com/RustyNova0
 
 itertools = "0.14.0"
 serde = "1.0.217"
+owo-colors = "4.1.0"
+indicatif = "0.17.9"
+once_cell = "1.20.2"

@@ -1,12 +1,15 @@
 use core::ops::Deref;
-use core::sync::atomic::{AtomicU64, Ordering};
+use core::sync::atomic::AtomicU64;
+use core::sync::atomic::Ordering;
 use core::time::Duration;
-use std::sync::{Arc, RwLock};
+use std::sync::Arc;
+use std::sync::RwLock;
 
-use indicatif::{ProgressBar, ProgressStyle};
+use indicatif::ProgressBar;
+use indicatif::ProgressStyle;
 use once_cell::sync::Lazy;
 
-use crate::utils::logger::Logger;
+use crate::cli::logger::Logger;
 
 pub static PG_FETCHING: Lazy<GlobalProgressBar<'static>> =
     Lazy::new(|| GlobalProgressBar::new("Fetching MBIDs".to_string()));

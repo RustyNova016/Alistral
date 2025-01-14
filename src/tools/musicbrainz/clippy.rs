@@ -1,6 +1,7 @@
 use std::collections::VecDeque;
 
-use color_eyre::owo_colors::OwoColorize;
+use alistral_core::cli::colors::AlistralColors as _;
+use color_eyre::owo_colors::OwoColorize as _;
 use futures::TryStreamExt;
 use musicbrainz_db_lite::models::musicbrainz::main_entities::MainEntity;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
@@ -15,7 +16,6 @@ use crate::datastructures::clippy::suspicious_remix::SuspiciousRemixLint;
 use crate::models::clippy::MbClippyLint;
 use crate::utils::cli::await_next;
 use crate::utils::cli::display::MainEntityExt;
-use crate::utils::extensions::owo_colors_ext::AlistralColors;
 use crate::utils::println_cli;
 use crate::utils::whitelist_blacklist::WhitelistBlacklist;
 
