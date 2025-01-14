@@ -21,14 +21,13 @@ macro_rules! impl_entity_with_listens {
     };
 }
 
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
+use alistral_core::datastructures::listen_collection::ListenCollection;
 pub(crate) use impl_entity_with_listens;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::RowId;
 
 use crate::utils::traits::mergable::Mergable;
-
-use super::listen_collection::traits::ListenCollectionLike;
-use super::listen_collection::ListenCollection;
 
 /// A structure representing an entity with associated listens.
 ///
@@ -40,7 +39,7 @@ use super::listen_collection::ListenCollection;
 pub struct EntityWithListens<Ent, Lis>
 where
     Ent: RowId,
-    Lis: ListenCollectionLike,
+    Lis: ListenCollectionReadable,
 {
     entity: Ent,
     listens: Lis,
@@ -49,7 +48,7 @@ where
 impl<Ent, Lis> EntityWithListens<Ent, Lis>
 where
     Ent: RowId,
-    Lis: ListenCollectionLike,
+    Lis: ListenCollectionReadable,
 {
 }
 
@@ -83,7 +82,7 @@ where
 impl<Ent, Lis> RowId for EntityWithListens<Ent, Lis>
 where
     Ent: RowId,
-    Lis: ListenCollectionLike,
+    Lis: ListenCollectionReadable,
 {
     fn get_row_id(&self) -> i64 {
         self.entity.get_row_id()

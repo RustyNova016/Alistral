@@ -1,6 +1,8 @@
 pub mod collection;
 use std::collections::HashMap;
 
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
+use alistral_core::datastructures::listen_collection::ListenCollection;
 use collection::WorkWithListensCollection;
 use derive_getters::Getters;
 use itertools::Itertools;
@@ -9,8 +11,6 @@ use musicbrainz_db_lite::models::musicbrainz::work::Work;
 use musicbrainz_db_lite::RowId;
 
 use crate::database::listenbrainz::prefetching::fetch_recordings_as_complete;
-use crate::datastructures::listen_collection::traits::ListenCollectionLike;
-use crate::datastructures::listen_collection::ListenCollection;
 use crate::utils::entities::relations::is_relation_parent;
 
 use super::recording_with_listens::collection::RecordingWithListensCollection;
@@ -139,7 +139,7 @@ impl WorkWithListens {
     }
 }
 
-impl ListenCollectionLike for WorkWithListens {
+impl ListenCollectionReadable for WorkWithListens {
     fn listen_count(&self) -> usize {
         self.listens.listen_count()
     }

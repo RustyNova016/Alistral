@@ -104,6 +104,11 @@ dependencies = [
 [[package]]
 name = "alistral_core"
 version = "0.1.0"
+dependencies = [
+ "itertools 0.14.0",
+ "musicbrainz-db-lite",
+ "serde",
+]
 
 [[package]]
 name = "allocator-api2"
