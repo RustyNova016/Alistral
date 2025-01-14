@@ -73,10 +73,17 @@ inherits = "release"
 lto = "thin"
 
 [lints.rust]
-unsafe_code = "forbid"
 async_fn_in_trait = { level = "allow", priority = 1 }
 
-[lints.clippy]
+# --- Workspace ---
+
+[workspace]
+members = ["./alistral_core"]
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
 #pedantic = "deny"
 #nursery = "deny"
 #perf = "warn"
@@ -100,6 +107,3 @@ suboptimal_flops= { level = "warn", priority = 1 }
 # Won't apply... Yet
 must_use_candidate = { level = "allow", priority = 1 }
 map_unwrap_or = { level = "allow", priority = 1 }
-
-[workspace]
-members = ["./alistral_core"]
