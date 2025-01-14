@@ -1,4 +1,3 @@
-use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use chrono::Duration;
 use chrono::Local;
 use color_eyre::owo_colors::OwoColorize;
@@ -6,6 +5,7 @@ use humantime::format_duration;
 use indoc::formatdoc;
 use rust_decimal::Decimal;
 
+use crate::datastructures::listen_collection::traits::ListenCollectionLike;
 use crate::models::config::Config;
 use crate::utils::extensions::chrono_ext::DateTimeUtcExt;
 use crate::utils::extensions::chrono_ext::DurationExt;

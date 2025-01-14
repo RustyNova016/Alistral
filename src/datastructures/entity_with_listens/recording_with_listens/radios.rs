@@ -1,6 +1,7 @@
-use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use rust_decimal::Decimal;
 use rust_decimal_macros::dec;
+
+use crate::datastructures::listen_collection::traits::ListenCollectionLike;
 
 use super::collection::RecordingWithListensCollection;
 use super::RecordingWithListens;
