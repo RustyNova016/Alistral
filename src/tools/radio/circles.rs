@@ -35,7 +35,7 @@ pub async fn create_radio_mix(
     println_cli("[Seeding] Getting listens");
     let recordings_with_listens = seeder.seed(conn).await.expect("Couldn't find seed listens");
 
-    let recordings = recordings_with_listens.iter_recordings().collect_vec();
+    let recordings = recordings_with_listens.iter_entities().collect_vec();
 
     let radio = RadioCircle::new(unlistened);
     let radio_stream = radio.into_stream(conn, recordings);

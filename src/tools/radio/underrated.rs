@@ -1,3 +1,4 @@
+use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use futures::stream;
 use futures::StreamExt;
 use itertools::Itertools;
@@ -5,7 +6,6 @@ use itertools::Itertools;
 use crate::api::listenbrainz::global_listen_counts::get_global_listen_counts;
 use crate::database::listenbrainz::listens::ListenFetchQuery;
 use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
-use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
 use crate::datastructures::radio::collector::RadioCollector;
 use crate::datastructures::radio::seeders::listens::ListenSeeder;
 use crate::datastructures::radio::sorters::underrated::underrated_sorter;
@@ -36,19 +36,19 @@ pub async fn underrated_mix(
         .await
         .expect("Couldn't fetch the new listens");
 
-    let user_listens = RecordingWithListens::from_listencollection(conn, user_listens).await?;
+    let user_listens = RecordingWithListensCollection::from_listencollection(conn, user_listens).await?;
 
     // Get the global listen count
     println_cli("[Seeding] Getting global listen counts");
     let recording_ids = recordings
-        .iter_recordings()
+        .iter_entities()
         .map(|r| r.mbid.to_string())
         .collect_vec();
     let global_listen_counts = get_global_listen_counts(&recording_ids).await?;
 
     println_cli("[Sorting] Calculating underated scores");
     let sorted = underrated_sorter(
-        recordings.into_values().collect_vec(),
+        recordings.into_iter().collect_vec(),
         &user_listens,
         global_listen_counts,
     );

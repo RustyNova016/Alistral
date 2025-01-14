@@ -1,8 +1,10 @@
 use alistral_core::cli::progress_bar::ProgressBarCli;
+use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use rust_decimal::Decimal;
 
-use crate::datastructures::entity_with_listens::recording_with_listens::collection::RecordingWithListensCollection;
+//TODO: #459 Refactor user compatibility with a "UserWithListens" struct
 
 /// Return a list of recordings that are both listened by user A and user B
 pub fn get_shared_recordings_between_users(
@@ -11,8 +13,8 @@ pub fn get_shared_recordings_between_users(
 ) -> Vec<Recording> {
     let mut recordings = Vec::new();
 
-    for recording_a in user_a_recordings.iter_recordings() {
-        for recording_b in user_b_recordings.iter_recordings() {
+    for recording_a in user_a_recordings.iter_entities() {
+        for recording_b in user_b_recordings.iter_entities() {
             if recording_a == recording_b {
                 recordings.push(recording_a.clone());
             }
@@ -28,7 +30,7 @@ pub fn get_user_shared_percent(
     user_recordings: &RecordingWithListensCollection,
 ) -> Decimal {
     Decimal::new(shared_recordings.len().try_into().unwrap(), 0)
-        / Decimal::new(user_recordings.len().try_into().unwrap(), 0)
+        / Decimal::new(user_recordings.listen_count().try_into().unwrap(), 0)
         * Decimal::ONE_HUNDRED
 }
 

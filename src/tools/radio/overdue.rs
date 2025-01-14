@@ -1,9 +1,9 @@
 use core::pin::Pin;
 
+use alistral_core::datastructures::entity_with_listens::recording::RecordingWithListens;
 use chrono::Duration;
 use futures::{stream, StreamExt};
 
-use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
 use crate::datastructures::radio::collector::RadioCollector;
 use crate::datastructures::radio::filters::cooldown::cooldown_filter;
 use crate::datastructures::radio::filters::min_listens::min_listen_filter;
@@ -35,7 +35,7 @@ pub async fn overdue_radio(
     let recordings = seeder.seed(conn).await.expect("Couldn't find seed listens");
 
     println_cli("[Filter] Filtering minimum listen count");
-    let recordings = min_listen_filter(recordings.into_values_stream(), min_listens.unwrap_or(3));
+    let recordings = min_listen_filter(recordings.into_stream(), min_listens.unwrap_or(3));
 
     println_cli("[Filter] Filtering listen cooldown");
     let recordings = cooldown_filter(recordings, Duration::hours(cooldown as i64));

@@ -25,7 +25,7 @@ impl WorkWithListensCollection {
 
             for new_work in new_works {
                 queue.push(new_work.clone());
-                self.insert_or_merge(new_work);
+                self.insert_or_merge_entity(new_work);
                 //count += 1;
             }
             //progress_bar.inc(1);

@@ -1,3 +1,5 @@
+use chrono::Duration;
+use chrono::Utc;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::RowId;
 
@@ -8,6 +10,7 @@ use super::listen_collection::ListenCollection;
 
 pub mod collection;
 pub mod recording;
+pub mod traits;
 pub mod work;
 
 /// A structure representing an entity with associated listens.
@@ -31,8 +34,32 @@ where
     Ent: RowId,
     Lis: ListenCollectionReadable,
 {
+    pub fn new(entity: Ent, listens: Lis) -> Self {
+        Self { entity, listens }
+    }
+
+    pub fn entity(&self) -> &Ent {
+        &self.entity
+    }
+
     pub fn listens(&self) -> &Lis {
         &self.listens
+    }
+
+    /// Return the amount of time this entity having known about (Since first associated listen)
+    pub fn known_for(&self) -> Option<Duration> {
+        self.oldest_listen_date()
+            .map(|discovery| Utc::now() - discovery)
+    }
+}
+
+impl<Ent, Lis> ListenCollectionReadable for EntityWithListens<Ent, Lis>
+where
+    Ent: RowId,
+    Lis: ListenCollectionReadable,
+{
+    fn iter_listens(&self) -> impl Iterator<Item = &Listen> {
+        self.listens.iter_listens()
     }
 }
 

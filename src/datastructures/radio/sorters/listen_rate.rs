@@ -1,7 +1,8 @@
+use alistral_core::datastructures::entity_with_listens::recording::RecordingWithListens;
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use chrono::Duration;
 use rust_decimal::Decimal;
 
-use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
 use crate::models::config::Config;
 
 /// Sort listens based on the rate of listens of a recording
@@ -16,7 +17,7 @@ pub fn listen_rate_sorter(mut recordings: Vec<RecordingWithListens>) -> Vec<Reco
             * conf
                 .read_or_panic()
                 .bumps
-                .get_multiplier(&r.recording().mbid)
+                .get_multiplier(&r.entity().mbid)
     });
 
     recordings

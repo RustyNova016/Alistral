@@ -1,8 +1,7 @@
 use core::future::ready;
 
+use alistral_core::datastructures::entity_with_listens::recording::RecordingWithListens;
 use futures::StreamExt;
-
-use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
 
 pub fn and_filter(
     radio: impl StreamExt<Item = RecordingWithListens>,

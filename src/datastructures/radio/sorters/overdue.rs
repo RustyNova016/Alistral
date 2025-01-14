@@ -1,12 +1,13 @@
 use core::cmp::Reverse;
 
+use alistral_core::datastructures::entity_with_listens::recording::RecordingWithListens;
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use async_fn_stream::fn_stream;
 use chrono::Duration;
 use chrono::Utc;
 use futures::Stream;
 use rust_decimal::Decimal;
 
-use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
 use crate::models::config::Config;
 
 pub fn overdue_sorter(mut recordings: Vec<RecordingWithListens>) -> Vec<RecordingWithListens> {

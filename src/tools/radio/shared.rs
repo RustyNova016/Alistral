@@ -36,10 +36,10 @@ pub async fn shared_radio(
         .seed(conn)
         .await
         .expect("Couldn't find seed listens");
-    let other_recordings = other_recordings.into_values().collect_vec();
+    let other_recordings = other_recordings.into_iter().collect_vec();
 
     println_cli("[Filter] Filtering minimum listen count");
-    let recordings = min_listen_filter(recordings.into_values_stream(), min_listens.unwrap_or(3));
+    let recordings = min_listen_filter(recordings.into_stream(), min_listens.unwrap_or(3));
 
     println_cli("[Filter] Filtering listen cooldown");
     let recordings = cooldown_filter(recordings, Duration::hours(cooldown as i64));

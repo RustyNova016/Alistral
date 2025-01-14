@@ -4,7 +4,6 @@ use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use musicbrainz_db_lite::models::musicbrainz::work::Work;
 
 use crate::database::fetching::recordings::fetch_recordings_as_complete;
-use crate::datastructures::listen_collection::traits::ListenCollectionReadable;
 use crate::datastructures::listen_collection::ListenCollection;
 use crate::models::relations::parenting::is_relation_parent;
 
@@ -52,7 +51,7 @@ impl WorkWithListens {
                 };
 
                 // Save it
-                out.insert_or_merge(new);
+                out.insert_or_merge_entity(new);
             }
         }
 
@@ -78,21 +77,5 @@ impl WorkWithListens {
         }
 
         Ok(out)
-    }
-}
-
-impl ListenCollectionReadable for WorkWithListens {
-    fn listen_count(&self) -> usize {
-        self.listens.listen_count()
-    }
-
-    fn has_no_listens(&self) -> bool {
-        self.listens.has_no_listens()
-    }
-
-    fn iter_listens(
-        &self,
-    ) -> impl Iterator<Item = &musicbrainz_db_lite::models::listenbrainz::listen::Listen> {
-        self.listens.iter_listens()
     }
 }
