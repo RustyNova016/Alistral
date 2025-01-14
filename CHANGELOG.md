@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+No changelog for now as git cliff is broken :(
+
+## [0.4.2] - 2024-12-20
+
+### 🚀 Features
+
+- Wrong Mapping finder
+- Add lint filter
+- *(lint)* Missing_remixer_rel
+- Lint severity colors
+- *(lint)* Missing_remix_rel
+- *(lint)* Soundtrack_without_disambiguation
+- Add listening time option on radio overdue
+- *(lint)* Suspicious_remix
+
+### ⚙️ Miscellaneous Tasks
+
+- Release v0.4.1
+- Remove actionrs
+
 ## [0.4.0] - 2024-12-11
 
 ### 🚀 Features
