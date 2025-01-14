@@ -1,9 +1,9 @@
+use alistral_core::cli::progress_bar::global_progress_bar::PG_FETCHING;
 use alistral_core::datastructures::listen_collection::ListenCollection;
 use itertools::Itertools;
 use musicbrainz_db_lite::models::musicbrainz::work::Work;
 
 use crate::datastructures::entity_with_listens::entity_with_listen_collection::EntityWithListensCollection;
-use crate::utils::cli::progress_bar::global_progress_bar::PG_FETCHING;
 
 pub type WorkWithListensCollection = EntityWithListensCollection<Work, ListenCollection>;
 

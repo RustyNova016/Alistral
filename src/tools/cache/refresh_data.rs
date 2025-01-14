@@ -1,9 +1,9 @@
+use alistral_core::cli::progress_bar::global_progress_bar::PG_FETCHING;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 
 use crate::database::listenbrainz::listens::ListenFetchQuery;
 use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
 use crate::utils::cli::display::RecordingExt;
-use crate::utils::cli::progress_bar::global_progress_bar::PG_FETCHING;
 use crate::utils::println_cli;
 
 pub async fn refresh_data(

@@ -1,7 +1,8 @@
 use std::collections::HashMap;
 
+use alistral_core::cli::progress_bar::ProgressBarCli;
+
 use crate::models::data::listenbrainz::popularity::PopularityRecordingResponseItem;
-use crate::utils::cli::progress_bar::ProgressBarCli;
 
 pub async fn get_global_listen_counts(
     recordings: &[String],
