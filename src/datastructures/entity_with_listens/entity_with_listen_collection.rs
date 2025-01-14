@@ -1,8 +1,8 @@
 use std::collections::HashMap;
 
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use musicbrainz_db_lite::RowId;
 
-use crate::datastructures::listen_collection::traits::ListenCollectionLike;
 use crate::utils::traits::mergable::Mergable;
 
 use super::EntityWithListens;
@@ -11,12 +11,12 @@ use super::EntityWithListens;
 pub struct EntityWithListensCollection<Ent, Lis>(pub HashMap<i64, EntityWithListens<Ent, Lis>>)
 where
     Ent: RowId,
-    Lis: ListenCollectionLike;
+    Lis: ListenCollectionReadable;
 
 impl<Ent, Lis> EntityWithListensCollection<Ent, Lis>
 where
     Ent: RowId,
-    Lis: ListenCollectionLike,
+    Lis: ListenCollectionReadable,
 {
     pub fn new() -> Self {
         Self(HashMap::new())
@@ -36,7 +36,7 @@ where
 impl<Ent, Lis> Default for EntityWithListensCollection<Ent, Lis>
 where
     Ent: RowId,
-    Lis: ListenCollectionLike,
+    Lis: ListenCollectionReadable,
 {
     fn default() -> Self {
         Self::new()

@@ -1,5 +1,7 @@
 use std::collections::HashMap;
 
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
+use alistral_core::datastructures::listen_collection::ListenCollection;
 use derive_getters::Getters;
 use itertools::Itertools;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
@@ -9,8 +11,6 @@ use musicbrainz_db_lite::RowId;
 use rust_decimal::Decimal;
 
 use crate::database::listenbrainz::prefetching::fetch_recordings_as_complete;
-use crate::datastructures::listen_collection::traits::ListenCollectionLike;
-use crate::datastructures::listen_collection::ListenCollection;
 
 use super::recording_with_listens::RecordingWithListens;
 
@@ -72,7 +72,7 @@ impl ArtistWithListens {
 
 //impl_entity_with_listens!(ReleaseWithListens);
 
-impl ListenCollectionLike for ArtistWithListens {
+impl ListenCollectionReadable for ArtistWithListens {
     fn iter_listens(&self) -> impl Iterator<Item = &Listen> {
         self.listens.iter().flat_map(|l| l.iter_listens())
     }
