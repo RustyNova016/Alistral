@@ -58,6 +58,7 @@ dependencies = [
 name = "alistral"
 version = "0.4.3"
 dependencies = [
+ "alistral_core",
  "async-fn-stream",
  "chrono",
  "clap",
@@ -99,6 +100,10 @@ dependencies = [
  "tracing-subscriber",
  "zip",
 ]
+
+[[package]]
+name = "alistral_core"
+version = "0.1.0"
 
 [[package]]
 name = "allocator-api2"
