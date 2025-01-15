@@ -1984,7 +1984,7 @@ dependencies = [
 [[package]]
 name = "musicbrainz-db-lite"
 version = "0.1.0"
-source = "git+https://github.com/RustyNova016/musicbrainz_db_lite.git?branch=develop#ff827848ed01e5f580222515b9ce76c613d64e27"
+source = "git+https://github.com/RustyNova016/musicbrainz_db_lite.git?branch=develop#15fd830b141267028637728b7b5132cea436e151"
 dependencies = [
  "async-fn-stream",
  "async-trait",
@@ -1997,7 +1997,7 @@ dependencies = [
  "macon",
  "musicbrainz_db_lite_macros",
  "musicbrainz_db_lite_schema",
- "musicbrainz_rs_nova",
+ "musicbrainz_rs",
  "serde",
  "serde_json",
  "sqlx",
@@ -2008,7 +2008,7 @@ dependencies = [
 [[package]]
 name = "musicbrainz_db_lite_macros"
 version = "0.1.0"
-source = "git+https://github.com/RustyNova016/musicbrainz_db_lite.git?branch=develop#ff827848ed01e5f580222515b9ce76c613d64e27"
+source = "git+https://github.com/RustyNova016/musicbrainz_db_lite.git?branch=develop#15fd830b141267028637728b7b5132cea436e151"
 dependencies = [
  "darling",
  "proc-macro2",
@@ -2020,15 +2020,15 @@ dependencies = [
 [[package]]
 name = "musicbrainz_db_lite_schema"
 version = "0.1.1"
-source = "git+https://github.com/RustyNova016/musicbrainz_db_lite.git?branch=develop#ff827848ed01e5f580222515b9ce76c613d64e27"
+source = "git+https://github.com/RustyNova016/musicbrainz_db_lite.git?branch=develop#15fd830b141267028637728b7b5132cea436e151"
 dependencies = [
  "sqlx",
 ]
 
 [[package]]
-name = "musicbrainz_rs_nova"
+name = "musicbrainz_rs"
 version = "0.8.0"
-source = "git+https://github.com/RustyNova016/musicbrainz_rs_nova.git?branch=develop#427152ebca991f807e86a8be2d23ddbc338cbc98"
+source = "git+https://github.com/RustyNova016/musicbrainz_rs.git?branch=develop#37bfa9e4885e50a6b75cd1f6aefaa9a40aaddfe0"
 dependencies = [
  "chrono",
  "glob",
