@@ -1,3 +1,4 @@
+pub mod messybrainz;
 pub mod release_group;
 use chrono::Duration;
 use chrono::Utc;

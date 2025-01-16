@@ -1,2 +1,2 @@
-pub mod releases;
 pub mod recordings;
+pub mod releases;
