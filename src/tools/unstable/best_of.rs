@@ -1,13 +1,13 @@
 use core::cmp::Reverse;
 
 use alistral_core::cli::progress_bar::global_progress_bar::PG_FETCHING;
+use alistral_core::datastructures::entity_with_listens::release::collection::ReleaseWithListensCollection;
 use chrono::Utc;
 use color_eyre::owo_colors::OwoColorize;
 use itertools::Itertools;
 
 use crate::database::listenbrainz::listens::ListenFetchQuery;
 use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
-use crate::datastructures::entity_with_listens::release_with_listens::ReleaseWithListens;
 use crate::utils::extensions::chrono_ext::DurationExt;
 
 pub async fn best_of_checker(conn: &mut sqlx::SqliteConnection, username: &str) {
@@ -20,22 +20,22 @@ pub async fn best_of_checker(conn: &mut sqlx::SqliteConnection, username: &str) 
         .await
         .expect("Couldn't fetch the new listens");
 
-    let releases = ReleaseWithListens::from_listencollection(conn, listens)
+    let releases = ReleaseWithListensCollection::from_listencollection(conn, listens)
         .await
         .expect("Error while fetching recordings")
-        .into_values()
+        .into_iter()
         .collect_vec();
 
     let mut filtered = Vec::new();
     let progress_bar = PG_FETCHING.get_submitter(releases.len() as u64);
     for release in releases {
         progress_bar.inc(1);
-        if release.release().date.is_none_or(|date| date <= 1704067200) {
+        if release.entity().date.is_none_or(|date| date <= 1704067200) {
             continue;
         }
 
         let label_info = release
-            .release()
+            .entity()
             .get_label_infos_or_fetch(conn)
             .await
             .expect("Couldn't get label info");
@@ -55,9 +55,9 @@ pub async fn best_of_checker(conn: &mut sqlx::SqliteConnection, username: &str) 
 
     let recordings = filtered
         .into_iter()
-        .flat_map(|r| r.listens().clone())
+        .flat_map(|r| r.listens().into_iter().clone())
         .filter(|r| {
-            r.recording()
+            r.entity()
                 .first_release_date
                 .is_some_and(|t| t >= 1704067200)
         })
