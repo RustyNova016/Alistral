@@ -1,5 +1,3 @@
-pub mod artist;
-pub mod entity_as_listens;
 use chrono::Duration;
 use chrono::Utc;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
@@ -10,8 +8,11 @@ use crate::traits::mergable::Mergable;
 use super::listen_collection::traits::ListenCollectionReadable;
 use super::listen_collection::ListenCollection;
 
+pub mod artist;
 pub mod collection;
+pub mod entity_as_listens;
 pub mod recording;
+pub mod release;
 pub mod traits;
 pub mod work;
 

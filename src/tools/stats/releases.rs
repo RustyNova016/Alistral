@@ -1,18 +1,18 @@
 use core::cmp::Reverse;
 
+use alistral_core::datastructures::entity_with_listens::release::collection::ReleaseWithListensCollection;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use alistral_core::datastructures::listen_collection::ListenCollection;
 use itertools::Itertools;
 
-use crate::datastructures::entity_with_listens::release_with_listens::ReleaseWithListens;
 use crate::utils::cli::display::ReleaseExt as _;
 use crate::utils::cli_paging::CLIPager;
 
 pub async fn stats_releases(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
-    let mut groups = ReleaseWithListens::from_listencollection(conn, listens)
+    let mut groups = ReleaseWithListensCollection::from_listencollection(conn, listens)
         .await
         .expect("Error while fetching recordings")
-        .into_values()
+        .into_iter()
         .collect_vec();
     groups.sort_by_key(|a| Reverse(a.listen_count()));
 
@@ -20,7 +20,7 @@ pub async fn stats_releases(conn: &mut sqlx::SqliteConnection, listens: ListenCo
 
     for group in groups {
         group
-            .release()
+            .entity()
             .fetch_if_incomplete(conn)
             .await
             .expect("Error while fetching release");
@@ -28,7 +28,7 @@ pub async fn stats_releases(conn: &mut sqlx::SqliteConnection, listens: ListenCo
             "[{}] {}",
             group.listen_count(),
             group
-                .release()
+                .entity()
                 .pretty_format_with_credits(conn, true)
                 .await
                 .expect("Error getting formated release name"),
