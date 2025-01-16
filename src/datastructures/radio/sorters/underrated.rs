@@ -13,7 +13,7 @@ pub fn underrated_sorter(
     global_listen_counts: Vec<PopularityRecordingResponseItem>,
 ) -> Vec<RecordingWithListens> {
     let progress = ProgressBarCli::new((recordings.len()) as u64, Some("Sorting recordings"));
-    
+
     recordings.sort_by_cached_key(|r| {
         let global_count = global_listen_counts
             .iter()

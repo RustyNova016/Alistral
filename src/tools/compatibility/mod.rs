@@ -19,9 +19,10 @@ pub async fn compatibility_command(conn: &mut sqlx::SqliteConnection, user_a: &s
         .await
         .expect("Couldn't fetch the listens");
 
-    let user_a_recordings = RecordingWithListensCollection::from_listencollection(conn, user_a_listens)
-        .await
-        .expect("Couldn't get the listened recordings");
+    let user_a_recordings =
+        RecordingWithListensCollection::from_listencollection(conn, user_a_listens)
+            .await
+            .expect("Couldn't get the listened recordings");
 
     let user_b_listens = ListenFetchQuery::builder()
         //.fetch_recordings_redirects(true)
@@ -32,9 +33,10 @@ pub async fn compatibility_command(conn: &mut sqlx::SqliteConnection, user_a: &s
         .await
         .expect("Couldn't fetch the listens");
 
-    let user_b_recordings = RecordingWithListensCollection::from_listencollection(conn, user_b_listens)
-        .await
-        .expect("Couldn't get the listened recordings");
+    let user_b_recordings =
+        RecordingWithListensCollection::from_listencollection(conn, user_b_listens)
+            .await
+            .expect("Couldn't get the listened recordings");
 
     let shared_recordings =
         get_shared_recordings_between_users(&user_a_recordings, &user_b_recordings);

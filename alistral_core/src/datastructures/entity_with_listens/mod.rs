@@ -1,3 +1,5 @@
+pub mod artist;
+pub mod entity_as_listens;
 use chrono::Duration;
 use chrono::Utc;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
@@ -87,6 +89,24 @@ where
         }
 
         self.listens.merge_by_index(other.listens);
+    }
+}
+
+impl<Ent, Lis> Mergable for EntityWithListens<Ent, Lis>
+where
+    Ent: RowId,
+    Lis: ListenCollectionReadable + Mergable,
+{
+    fn merge(&mut self, other: Self) {
+        if self.entity.get_row_id() != other.entity.get_row_id() {
+            #[cfg(debug_assertions)] // This is an awkward situation. Let's crash in debug to catch those cases
+            panic!("Tried to merge two different recordings");
+
+            #[cfg(not(debug_assertions))]
+            return;
+        }
+
+        self.listens.merge(other.listens);
     }
 }
 

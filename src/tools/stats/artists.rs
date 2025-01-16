@@ -1,18 +1,18 @@
 use core::cmp::Reverse;
 
+use alistral_core::datastructures::entity_with_listens::artist::collection::ArtistWithListensCollection;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use alistral_core::datastructures::listen_collection::ListenCollection;
 use itertools::Itertools;
 
-use crate::datastructures::entity_with_listens::artist_with_listens::ArtistWithListens;
-use crate::utils::cli::display::ArtistExt;
+use crate::utils::cli::display::ArtistExt as _;
 use crate::utils::cli_paging::CLIPager;
 
 pub async fn stats_artist(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
-    let mut groups = ArtistWithListens::from_listencollection(conn, listens)
+    let mut groups = ArtistWithListensCollection::from_listencollection(conn, listens)
         .await
         .expect("Error while fetching recordings")
-        .into_values()
+        .into_iter()
         .collect_vec();
     groups.sort_by_key(|a| Reverse(a.listen_count()));
 
@@ -20,7 +20,7 @@ pub async fn stats_artist(conn: &mut sqlx::SqliteConnection, listens: ListenColl
 
     for group in groups {
         group
-            .artist()
+            .entity()
             .fetch_if_incomplete(conn)
             .await
             .expect("Error while fetching release");
@@ -28,7 +28,7 @@ pub async fn stats_artist(conn: &mut sqlx::SqliteConnection, listens: ListenColl
             "[{}] {}",
             group.listen_count(),
             group
-                .artist()
+                .entity()
                 .pretty_format(true)
                 .await
                 .expect("Couldn't format entity")

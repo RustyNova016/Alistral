@@ -1,4 +1,3 @@
-pub mod artist_with_listens;
 pub mod entity_with_listen_collection;
 pub mod messyrecording_with_listens;
 pub mod recording_with_listens;

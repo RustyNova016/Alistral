@@ -174,3 +174,27 @@ where
         new
     }
 }
+
+impl<Ent, Lis> From<EntityWithListens<Ent, Lis>> for EntityWithListensCollection<Ent, Lis>
+where
+    Ent: RowId,
+    Lis: ListenCollectionReadable,
+    EntityWithListens<Ent, Lis>: Mergable + Clone,
+{
+    fn from(value: EntityWithListens<Ent, Lis>) -> Self {
+        let mut new = Self::default();
+        new.insert_or_merge_entity(value);
+        new
+    }
+}
+
+impl<Ent, Lis> Mergable for EntityWithListensCollection<Ent, Lis>
+where
+    Ent: RowId,
+    Lis: ListenCollectionReadable,
+    EntityWithListens<Ent, Lis>: Mergable + Clone,
+{
+    fn merge(&mut self, other: Self) {
+        self.insert_or_merge(other)
+    }
+}

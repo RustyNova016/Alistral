@@ -36,7 +36,8 @@ pub async fn underrated_mix(
         .await
         .expect("Couldn't fetch the new listens");
 
-    let user_listens = RecordingWithListensCollection::from_listencollection(conn, user_listens).await?;
+    let user_listens =
+        RecordingWithListensCollection::from_listencollection(conn, user_listens).await?;
 
     // Get the global listen count
     println_cli("[Seeding] Getting global listen counts");
