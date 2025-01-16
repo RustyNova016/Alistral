@@ -1,9 +1,10 @@
 use core::cmp::Reverse;
 
+use alistral_core::cli::progress_bar::ProgressBarCli;
+
 use crate::datastructures::entity_with_listens::recording_with_listens::collection::RecordingWithListensCollection;
 use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
 use crate::models::data::listenbrainz::popularity::PopularityRecordingResponseItem;
-use crate::utils::cli::progress_bar::ProgressBarCli;
 
 /// Sort listens based on the rate of listens of a recording
 pub fn underrated_sorter(

@@ -1,14 +1,21 @@
-use crate::utils::STATIC_LOGGER;
-use color_eyre::owo_colors::OwoColorize;
-use indicatif::{MultiProgress, ProgressBar};
-use std::fmt::Display;
+use core::fmt::Display;
+use std::sync::Arc;
+use std::sync::Mutex;
 
-use super::extensions::owo_colors_ext::AlistralColors as _;
+use indicatif::MultiProgress;
+use indicatif::ProgressBar;
+use once_cell::sync::Lazy;
+use owo_colors::OwoColorize as _;
+
+use super::colors::AlistralColors as _;
 
 pub struct Logger {
     print_override: Option<MultiProgress>, //TODO: Keep bar all the time?
     bar_count: u32,
 }
+
+pub static STATIC_LOGGER: Lazy<Arc<Mutex<Logger>>> =
+    Lazy::new(|| Arc::new(Mutex::new(Logger::new())));
 
 impl Logger {
     pub fn new() -> Self {

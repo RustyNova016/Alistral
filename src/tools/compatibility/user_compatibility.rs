@@ -1,8 +1,8 @@
+use alistral_core::cli::progress_bar::ProgressBarCli;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use rust_decimal::Decimal;
 
 use crate::datastructures::entity_with_listens::recording_with_listens::collection::RecordingWithListensCollection;
-use crate::utils::cli::progress_bar::ProgressBarCli;
 
 /// Return a list of recordings that are both listened by user A and user B
 pub fn get_shared_recordings_between_users(

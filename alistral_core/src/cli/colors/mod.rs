@@ -1,8 +1,8 @@
 use core::fmt::Display;
 
-use color_eyre::owo_colors::OwoColorize;
+use owo_colors::OwoColorize as _;
 
-use crate::utils::cli::constants::CLEAR_UNTIL_END_OF_LINE;
+use crate::cli::constants::CLEAR_UNTIL_END_OF_LINE;
 
 pub trait AlistralColors: Display {
     fn true_color_tup(&self, color: (u8, u8, u8)) -> String {

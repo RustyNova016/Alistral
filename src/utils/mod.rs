@@ -1,27 +1,23 @@
-pub mod data_file;
-pub mod streams;
 use std::fmt::Display;
-use std::sync::{Arc, Mutex};
 
+use alistral_core::cli::logger::STATIC_LOGGER;
 use color_eyre::owo_colors::OwoColorize;
 use derive_builder::Builder;
 use listenbrainz::raw::response::{UserListensListen, UserListensResponse};
 use listenbrainz::raw::Client;
-use once_cell::sync::Lazy;
-
-use logger::Logger;
 
 use crate::api::listenbrainz::LISTENBRAINZ_CLIENT;
 
 pub mod cli;
 pub mod cli_paging;
+pub mod data_file;
 pub mod entities;
 pub mod env;
 pub mod extensions;
 pub mod listenbrainz_api;
-pub mod logger;
 pub mod radio;
 pub mod regex;
+pub mod streams;
 pub mod traits;
 pub mod whitelist_blacklist;
 
@@ -98,9 +94,6 @@ impl Iterator for ListenAPIReader {
         self.page.pop()
     }
 }
-
-pub(crate) static STATIC_LOGGER: Lazy<Arc<Mutex<Logger>>> =
-    Lazy::new(|| Arc::new(Mutex::new(Logger::new())));
 
 pub trait OverridePrint {
     fn override_print<I: AsRef<str>>(&self, msg: I);

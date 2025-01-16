@@ -1,11 +1,11 @@
-use std::ops::Deref;
-use std::time::Duration;
-
-use indicatif::{ProgressBar, ProgressStyle};
-
-use crate::utils::logger::Logger;
-
 pub mod global_progress_bar;
+use core::ops::Deref;
+use core::time::Duration;
+
+use indicatif::ProgressBar;
+use indicatif::ProgressStyle;
+
+use super::logger::Logger;
 
 pub struct ProgressBarCli {
     pg: ProgressBar,
