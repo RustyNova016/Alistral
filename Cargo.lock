@@ -58,6 +58,7 @@ dependencies = [
 name = "alistral"
 version = "0.4.5"
 dependencies = [
+ "alistral_core",
  "async-fn-stream",
  "chrono",
  "clap",
@@ -98,6 +99,15 @@ dependencies = [
  "tracing",
  "tracing-subscriber",
  "zip",
+]
+
+[[package]]
+name = "alistral_core"
+version = "0.1.0"
+dependencies = [
+ "itertools 0.14.0",
+ "musicbrainz-db-lite",
+ "serde",
 ]
 
 [[package]]

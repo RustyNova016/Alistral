@@ -1,9 +1,9 @@
 use core::cmp::Reverse;
 
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use futures::StreamExt;
 
 use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
-use crate::datastructures::listen_collection::traits::ListenCollectionLike;
 
 pub async fn shared_listens_sorter(
     radio: impl StreamExt<Item = RecordingWithListens>,

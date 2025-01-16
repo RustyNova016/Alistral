@@ -1,13 +1,12 @@
 use core::cmp::Reverse;
 use std::collections::HashMap;
 
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use futures::stream;
 use futures::Stream;
 use itertools::Itertools;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use rust_decimal::Decimal;
-
-use crate::datastructures::listen_collection::traits::ListenCollectionLike;
 
 use super::RecordingWithListens;
 
@@ -117,7 +116,7 @@ impl RecordingWithListensCollection {
     }
 }
 
-impl ListenCollectionLike for RecordingWithListensCollection {
+impl ListenCollectionReadable for RecordingWithListensCollection {
     fn iter_listens(
         &self,
     ) -> impl Iterator<Item = &musicbrainz_db_lite::models::listenbrainz::listen::Listen> {
