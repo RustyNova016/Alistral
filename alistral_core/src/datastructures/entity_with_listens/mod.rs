@@ -1,3 +1,4 @@
+pub mod release_group;
 use chrono::Duration;
 use chrono::Utc;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
