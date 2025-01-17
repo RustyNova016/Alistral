@@ -4,6 +4,9 @@ use thiserror::Error;
 #[derive(Error, Debug)]
 //#[expect(clippy::enum_variant_names)]
 pub enum Error {
+    #[error(transparent)]
+    AlistralCore(#[from] alistral_core::Error),
+
     // --- Config Errors ---
     #[error("An error occured when trying to load the configuration file.")]
     ConfigLoadError(io::Error),

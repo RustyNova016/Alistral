@@ -1,11 +1,10 @@
+use alistral_core::cli::logger::println_cli;
 use clap::Parser;
 use color_eyre::eyre::Ok;
 
 use database::cleanup::cleanup_database;
 use database::get_conn;
 use models::cli::Cli;
-
-use crate::utils::println_cli;
 
 pub mod api;
 pub mod database;

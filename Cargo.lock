@@ -56,7 +56,7 @@ dependencies = [
 
 [[package]]
 name = "alistral"
-version = "0.4.3"
+version = "0.4.5"
 dependencies = [
  "alistral_core",
  "async-fn-stream",
@@ -105,12 +105,18 @@ dependencies = [
 name = "alistral_core"
 version = "0.1.0"
 dependencies = [
+ "chrono",
+ "futures",
  "indicatif",
  "itertools 0.14.0",
  "musicbrainz-db-lite",
  "once_cell",
  "owo-colors 4.1.0",
+ "rust_decimal",
+ "rust_decimal_macros",
  "serde",
+ "sqlx",
+ "thiserror",
 ]
 
 [[package]]

@@ -1,8 +1,8 @@
 use core::future::ready;
 
+use alistral_core::datastructures::entity_with_listens::recording::RecordingWithListens;
 use futures::{Stream, StreamExt};
 
-use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
 use crate::models::config::config_trait::ConfigFile as _;
 use crate::models::config::recording_timeout::RecordingTimeoutConfig;
 

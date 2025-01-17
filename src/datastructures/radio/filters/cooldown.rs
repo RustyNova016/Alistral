@@ -1,16 +1,16 @@
 use core::future::ready;
 
+use alistral_core::datastructures::entity_with_listens::recording::RecordingWithListens;
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use chrono::{Duration, Utc};
 use futures::{Stream, StreamExt};
-
-use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
 
 pub fn cooldown_filter(
     recordings: impl StreamExt<Item = RecordingWithListens>,
     cooldown: Duration,
 ) -> impl Stream<Item = RecordingWithListens> {
     recordings.filter(move |r| {
-        let Some(last_listen_date) = r.last_listen_date() else {
+        let Some(last_listen_date) = r.latest_listen_date() else {
             return ready(true);
         };
 

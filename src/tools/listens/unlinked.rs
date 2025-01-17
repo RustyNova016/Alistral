@@ -1,10 +1,11 @@
 use std::cmp::Reverse;
 
+use alistral_core::datastructures::entity_with_listens::messybrainz::collection::MessybrainzWithListensCollection;
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use itertools::Itertools;
 
 use crate::database::listenbrainz::listens::ListenFetchQuery;
 use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
-use crate::datastructures::entity_with_listens::messyrecording_with_listens::MessyRecordingWithListens;
 use crate::models::cli::common::SortSorterBy;
 use crate::utils::cli_paging::CLIPager;
 use crate::utils::println_cli;
@@ -24,16 +25,16 @@ pub async fn unmapped_command(
         .await
         .expect("Couldn't fetch listens");
 
-    let unlinkeds = MessyRecordingWithListens::from_listencollection(conn, listens)
+    let unlinkeds = MessybrainzWithListensCollection::from_listencollection(conn, listens)
         .await
         .expect("Couldn't associate the listen to their messybrainz data");
     //let unlinked_count = unlinkeds.listen_count();
 
-    let mut messy_recordings = unlinkeds.values().collect_vec();
+    let mut messy_recordings = unlinkeds.iter().collect_vec();
 
     match sort.unwrap_or_default() {
         SortSorterBy::Name => {
-            messy_recordings.sort_by_key(|messy_data| &messy_data.messybrainz_data.recording);
+            messy_recordings.sort_by_key(|messy_data| &messy_data.entity().recording);
         }
 
         SortSorterBy::Oldest => {
@@ -45,7 +46,7 @@ pub async fn unmapped_command(
         }
 
         SortSorterBy::Count => {
-            messy_recordings.sort_by_key(|messy_data| Reverse(messy_data.associated_listens.len()));
+            messy_recordings.sort_by_key(|messy_data| Reverse(messy_data.listens().len()));
         }
     }
 
@@ -58,9 +59,9 @@ pub async fn unmapped_command(
         let pager_continue = pager.execute(|| {
             println!(
                 "({}) {} - {}",
-                record.associated_listens.len(),
-                record.messybrainz_data.recording,
-                record.messybrainz_data.artist_credit
+                record.listens().len(),
+                record.entity().recording,
+                record.entity().artist_credit
             );
 
             let latest_listen = record.get_latest_listen();

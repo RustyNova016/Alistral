@@ -1,3 +1,5 @@
+use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
+use alistral_core::datastructures::entity_with_listens::recording::RecordingWithListens;
 use alistral_core::datastructures::listen_collection::ListenCollection;
 use derive_getters::Getters;
 use itertools::Itertools;
@@ -5,8 +7,6 @@ use macon::Builder;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 
 use crate::database::listenbrainz::listens::fetch_latest_listens_of_user;
-use crate::datastructures::entity_with_listens::recording_with_listens::collection::RecordingWithListensCollection;
-use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
 
 use super::SeederSettings;
 
@@ -71,9 +71,10 @@ impl ListenSeeder {
         .await?
         .into();
 
-        let mut recordings = RecordingWithListens::from_listencollection(conn, listens).await?;
+        let mut recordings =
+            RecordingWithListensCollection::from_listencollection(conn, listens).await?;
         let minimum_listens = self.get_minimum_listens(conn).await?;
-        recordings.merge(minimum_listens);
+        recordings.insert_or_merge(minimum_listens);
 
         Ok(recordings)
     }
@@ -118,9 +119,9 @@ impl ListenSeeder {
         .await?
         .into();
 
-        let mapped = RecordingWithListens::from_listencollection(conn, listens)
+        let mapped = RecordingWithListensCollection::from_listencollection(conn, listens)
             .await?
-            .into_values()
+            .into_iter()
             .map(|r| {
                 // Extract the last X listens from the collection
                 let listens = r
