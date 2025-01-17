@@ -2,6 +2,7 @@ use core::cmp::Reverse;
 use std::collections::HashMap;
 
 use chrono::Duration;
+use chrono::Utc;
 use futures::stream;
 use futures::Stream;
 use itertools::Itertools as _;
@@ -10,6 +11,7 @@ use musicbrainz_db_lite::RowId;
 use rust_decimal::Decimal;
 
 use crate::datastructures::listen_collection::traits::ListenCollectionReadable;
+use crate::datastructures::listen_timeframe::traits::ExtractTimeframe;
 use crate::traits::mergable::Mergable;
 
 use super::traits::ListenCollWithTime;
@@ -204,5 +206,40 @@ where
     type IntoIter = std::collections::hash_map::IntoValues<i64, Self::Item>;
     fn into_iter(self) -> Self::IntoIter {
         self.0.into_values()
+    }
+}
+
+impl<Ent, Lis> FromIterator<EntityWithListens<Ent, Lis>> for EntityWithListensCollection<Ent, Lis>
+where
+    Ent: RowId + Clone,
+    Lis: ListenCollectionReadable + Mergable + Clone,
+{
+    fn from_iter<T: IntoIterator<Item = EntityWithListens<Ent, Lis>>>(iter: T) -> Self {
+        let mut new = Self::default();
+
+        for val in iter.into_iter() {
+            new.insert_or_merge_entity(val);
+        }
+
+        new
+    }
+}
+
+impl<Ent, Lis> ExtractTimeframe for EntityWithListensCollection<Ent, Lis>
+where
+    Ent: RowId + Clone,
+    Lis: ListenCollectionReadable + ExtractTimeframe + Mergable + Clone,
+    EntityWithListens<Ent, Lis>: ExtractTimeframe,
+{
+    fn extract_timeframe(
+        self,
+        start: chrono::DateTime<Utc>,
+        end: chrono::DateTime<Utc>,
+        include_start: bool,
+        include_end: bool,
+    ) -> Self {
+        self.into_iter()
+            .map(|val| val.extract_timeframe(start, end, include_start, include_end))
+            .collect()
     }
 }
