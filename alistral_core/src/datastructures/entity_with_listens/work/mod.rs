@@ -15,7 +15,6 @@ impl WorkWithListens {
         &self.entity
     }
 
-
     pub async fn get_parents(
         &self,
         conn: &mut sqlx::SqliteConnection,

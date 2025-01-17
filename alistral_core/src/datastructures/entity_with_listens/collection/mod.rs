@@ -42,16 +42,12 @@ where
         self.0.values()
     }
 
-    pub fn into_iter(self) -> impl Iterator<Item = EntityWithListens<Ent, Lis>> {
-        self.0.into_values()
-    }
-
     pub fn iter_entities(&self) -> impl Iterator<Item = &Ent> {
         self.0.values().map(|r| &r.entity)
     }
 
     pub fn into_stream(self) -> impl Stream<Item = EntityWithListens<Ent, Lis>> {
-        stream::iter(self.into_iter())
+        stream::iter(self)
     }
 
     // --- Inserts ---
@@ -196,5 +192,17 @@ where
 {
     fn merge(&mut self, other: Self) {
         self.insert_or_merge(other)
+    }
+}
+
+impl<Ent, Lis> IntoIterator for EntityWithListensCollection<Ent, Lis>
+where
+    Ent: RowId,
+    Lis: ListenCollectionReadable,
+{
+    type Item = EntityWithListens<Ent, Lis>;
+    type IntoIter = std::collections::hash_map::IntoValues<i64, Self::Item>;
+    fn into_iter(self) -> Self::IntoIter {
+        self.0.into_values()
     }
 }

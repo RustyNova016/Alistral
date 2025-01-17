@@ -1,4 +1,3 @@
-pub mod entity_with_listen_collection;
 pub mod recording_with_listens;
 
 macro_rules! impl_entity_with_listens {
