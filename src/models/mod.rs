@@ -1,3 +1,4 @@
+pub mod lookup_reports;
 pub mod cli;
 pub mod clippy;
 pub mod config;

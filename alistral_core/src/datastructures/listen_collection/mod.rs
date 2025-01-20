@@ -7,6 +7,7 @@ use serde::Deserialize;
 use serde::Serialize;
 
 use crate::datastructures::listen_timeframe::traits::ExtractTimeframe;
+use crate::traits::mergable::Mergable;
 
 pub mod traits;
 

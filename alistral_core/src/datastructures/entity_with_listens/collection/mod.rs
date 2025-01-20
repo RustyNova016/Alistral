@@ -11,6 +11,7 @@ use musicbrainz_db_lite::RowId;
 use rust_decimal::Decimal;
 
 use crate::datastructures::listen_collection::traits::ListenCollectionReadable;
+use crate::datastructures::listen_collection::ListenCollection;
 use crate::datastructures::listen_timeframe::traits::ExtractTimeframe;
 use crate::traits::mergable::Mergable;
 
@@ -212,7 +213,8 @@ where
 impl<Ent, Lis> FromIterator<EntityWithListens<Ent, Lis>> for EntityWithListensCollection<Ent, Lis>
 where
     Ent: RowId + Clone,
-    Lis: ListenCollectionReadable + Mergable + Clone,
+    Lis: ListenCollectionReadable + Clone,
+    EntityWithListens<Ent, Lis>: Mergable + Clone
 {
     fn from_iter<T: IntoIterator<Item = EntityWithListens<Ent, Lis>>>(iter: T) -> Self {
         let mut new = Self::default();
@@ -228,8 +230,8 @@ where
 impl<Ent, Lis> ExtractTimeframe for EntityWithListensCollection<Ent, Lis>
 where
     Ent: RowId + Clone,
-    Lis: ListenCollectionReadable + ExtractTimeframe + Mergable + Clone,
-    EntityWithListens<Ent, Lis>: ExtractTimeframe,
+    Lis: ListenCollectionReadable + ExtractTimeframe + Clone,
+    EntityWithListens<Ent, Lis>: ExtractTimeframe + Mergable,
 {
     fn extract_timeframe(
         self,

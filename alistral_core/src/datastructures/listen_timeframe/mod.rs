@@ -22,4 +22,16 @@ impl<T: ExtractTimeframe> ListenTimeframe<T> {
             settings: timeframe
         }
     }
+
+    pub fn all_time(&self) -> &T {
+        &self.all_time
+    }
+
+    pub fn current(&self) -> &T {
+        &self.current
+    }
+
+    pub fn previous(&self) -> &T {
+        &self.previous
+    }
 }
