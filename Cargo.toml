@@ -120,5 +120,5 @@ map_unwrap_or = { level = "allow", priority = 1 }
 [workspace]
 
 members = [
-    "youtube_brainz",
+    "symphony_brainz",
 ]

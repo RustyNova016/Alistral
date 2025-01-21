@@ -1,5 +1,5 @@
 [package]
-name = "youtube_brainz"
+name = "symphony_brainz"
 version = "0.1.0"
 edition = "2021"
 description = "Bunch of utilities to link metabrainz data to youtube"
