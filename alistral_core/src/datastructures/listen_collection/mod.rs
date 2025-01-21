@@ -108,7 +108,7 @@ impl FromIterator<Listen> for ListenCollection {
 impl IntoIterator for ListenCollection {
     type Item = Listen;
 
-    type IntoIter = std::vec::IntoIter<Self::Item> ;
+    type IntoIter = std::vec::IntoIter<Self::Item>;
 
     fn into_iter(self) -> Self::IntoIter {
         self.data.into_iter()
@@ -123,22 +123,31 @@ impl ExtractTimeframe for ListenCollection {
         include_start: bool,
         include_end: bool,
     ) -> Self {
-        self.into_iter().filter(|listen| {
-            if !(include_start && start <= listen.listened_at_as_datetime()) {
-                return false
-            }
-            if include_start || start >= listen.listened_at_as_datetime() {
-                return false
-            }
+        self.into_iter()
+            .filter(|listen| {
+                // Check if before start
+                let listen = listen.listened_at_as_datetime();
+                if start > listen {
+                    return false;
+                }
 
-            if !(include_end && end >= listen.listened_at_as_datetime()) {
-                return false
-            }
-            if include_end || end <= listen.listened_at_as_datetime() {
-                return false
-            }
+                // Check if equal start if needed
+                if !include_start && start == listen {
+                    return false;
+                }
 
-            true
-        }).collect()
+                // Check if after end
+                if end < listen {
+                    return false;
+                }
+
+                // Check if equal end if needed
+                if !include_end && start == listen {
+                    return false;
+                }
+
+                true
+            })
+            .collect()
     }
 }
