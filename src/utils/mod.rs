@@ -1,4 +1,3 @@
-
 use std::fmt::Display;
 use std::sync::{Arc, Mutex};
 
@@ -12,6 +11,8 @@ use logger::Logger;
 
 pub mod cli;
 pub mod cli_paging;
+pub mod constants;
+pub mod data_file;
 pub mod entities;
 pub mod env;
 pub mod extensions;
@@ -19,11 +20,9 @@ pub mod listenbrainz_api;
 pub mod logger;
 pub mod radio;
 pub mod regex;
+pub mod streams;
 pub mod traits;
 pub mod whitelist_blacklist;
-pub mod constants;
-pub mod data_file;
-pub mod streams;
 
 #[derive(Clone, Debug, PartialEq, Eq, Builder)]
 /// Reader for the User Listens endpoint

@@ -8,5 +8,9 @@ pub enum Error {
     SecretFileLoadError(io::Error),
 
     #[error(transparent)]
-    ApiError(#[from] google_youtube3::common::Error)
+    ApiError(#[from] google_youtube3::common::Error),
+
+    
+    #[error(transparent)]
+    MusicbrainzError(#[from] musicbrainz_rs::Error),
 }

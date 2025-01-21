@@ -1,2 +1,2 @@
-pub mod youtube;
 pub mod listenbrainz;
+pub mod youtube;

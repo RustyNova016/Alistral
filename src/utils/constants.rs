@@ -18,4 +18,3 @@ pub static CONFIG_DIR: Lazy<PathBuf> = Lazy::new(|| {
 
     path
 });
-
