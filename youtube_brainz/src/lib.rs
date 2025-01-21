@@ -1,3 +1,4 @@
+pub mod utils;
 pub mod api;
 pub mod client;
 pub mod database;

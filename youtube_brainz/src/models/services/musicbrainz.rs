@@ -1,11 +1,10 @@
-use google_youtube3::common::url;
 use musicbrainz_rs::entity::recording::Recording;
 use musicbrainz_rs::entity::relations::RelationContent;
-use musicbrainz_rs::entity::url::Url;
 use musicbrainz_rs::Fetch;
 
 use crate::models::external_id::ExternalId;
 use crate::models::messy_recording::MessyRecording;
+use crate::models::services::youtube::Youtube;
 use crate::Client;
 
 pub struct Musicbrainz;
@@ -15,29 +14,44 @@ impl Musicbrainz {
         client: &Client,
         recording: &MessyRecording,
     ) -> Result<(), crate::Error> {
-        let result = Recording::fetch().id(mbid).with_url_relations().execute_with_client(client).await?;
+        let result = Recording::fetch()
+            .id(recording
+                .mbid
+                .as_ref()
+                .ok_or(crate::Error::MissingRequiredMBIDError())?)
+            .with_url_relations()
+            .execute_with_client(&client.musicbrainz_client)
+            .await?;
 
         for rel in result.relations.unwrap_or_else(Vec::new) {
-            match rel.content {
-                RelationContent::Url(val) => {},
-                _ => {}
+            if let RelationContent::Url(val) = rel.content {
+                Self::save_url(client, &val.resource, recording).await?;
             }
         }
 
         Ok(())
     }
 
-    fn save_url(client: &Client, url: &str, recording: &MessyRecording) {
-        let ext_id = ""; //TODO
-        let service = "service";
+    async fn save_url(
+        client: &Client,
+        url: &str,
+        recording: &MessyRecording,
+    ) -> Result<(), crate::Error> {
+        let (ext_id, service) = if let Some(id) = Youtube::extract_id_from_url(url) {
+            (id, "youtube".to_string())
+        } else {
+            return Err(crate::Error::ServiceNotFoundError());
+        };
 
         let id = ExternalId {
             id: 0,
             recording_id: recording.id,
-            ext_id: todo!(),
-            service: todo!(),
+            ext_id,
+            service,
             user_overwrite: None,
-            
-        }
+        };
+
+        id.upsert(&client.database_client).await?;
+        Ok(())
     }
 }
