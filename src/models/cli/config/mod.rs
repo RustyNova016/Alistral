@@ -1,3 +1,5 @@
+use crate::api::youtube::TOKENCACHE;
+use crate::api::youtube::YT_SECRET_FILE;
 use crate::models::config::config_trait::ConfigFile as _;
 use crate::models::config::recording_timeout::RecordingTimeoutConfig;
 use crate::models::config::Config;
@@ -7,6 +9,8 @@ use chrono::Duration;
 use clap::Parser;
 use clap::Subcommand;
 use listen_config::ListenConfigCli;
+use musicbrainz_db_lite::client::MusicBrainzClient;
+use symphonyz::Client;
 
 pub mod listen_config;
 
@@ -51,7 +55,11 @@ pub enum ConfigCommands {
     Listens(ListenConfigCli),
 
     /// Set the default username
-    DefaultUser { username: String },
+    DefaultUser {
+        username: String,
+    },
+
+    YoutubeToken,
 }
 
 impl ConfigCommands {
@@ -87,6 +95,17 @@ impl ConfigCommands {
             Self::DefaultUser { username } => {
                 let conf = Config::load()?;
                 conf.write_or_panic().default_user = Some(username.clone());
+            }
+
+            Self::YoutubeToken => {
+                let mut client = Client::new_builder();
+                client.set_musicbrainz_client(MusicBrainzClient::default());
+                //client.create_database_if_missing(&SYMPHONYZ_DB).unwrap();
+                //client.read_database(&SYMPHONYZ_DB.to_string_lossy()).unwrap();
+                client.read_database(":memory:").unwrap();
+                client.migrate_database().await.unwrap();
+                let mut client = client.build().unwrap();
+                client.set_youtube_client(&YT_SECRET_FILE, &TOKENCACHE).await.unwrap();
             }
         }
 

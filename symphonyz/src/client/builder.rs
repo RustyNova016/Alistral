@@ -1,7 +1,6 @@
 use core::str::FromStr as _;
 use core::time::Duration;
 use std::fs::File;
-use std::fs::OpenOptions;
 use std::io;
 use std::path::Path;
 
@@ -23,7 +22,7 @@ impl ClientBuilder {
         self.musicbrainz_client = Some(client)
     }
 
-    pub fn create_database_if_missing(path: &Path) -> Result<(), io::Error> {
+    pub fn create_database_if_missing(&self, path: &Path) -> Result<(), io::Error> {
         if path.exists() {
             return Ok(());
         }

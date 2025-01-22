@@ -23,7 +23,7 @@ impl Client {
     }
 
     /// Create a new client
-    pub async fn set_youtube_client(&mut self, yt_secret_path: &Path) -> Result<(), crate::Error> {
+    pub async fn set_youtube_client(&mut self, yt_secret_path: &Path, token_cache_location: &Path) -> Result<(), crate::Error> {
         let secret = yup_oauth2::read_application_secret(yt_secret_path)
             .await
             .map_err(crate::Error::SecretFileLoadError)?;
@@ -32,7 +32,7 @@ impl Client {
             secret,
             yup_oauth2::InstalledFlowReturnMethod::Interactive,
         )
-        .persist_tokens_to_disk("tokencache.json")
+        .persist_tokens_to_disk(token_cache_location)
         .build()
         .await
         .unwrap();

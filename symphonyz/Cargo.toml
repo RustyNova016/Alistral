@@ -2,7 +2,7 @@
 name = "symphonyz"
 version = "0.1.0"
 edition = "2021"
-description = "Bunch of utilities to link metabrainz data to different services"
+description = "Bunch of utilities to link musicbrainz data to different services"
 
 [dependencies]
 google-youtube3 = "6.0.0"

@@ -38,21 +38,21 @@ impl Youtube {
     }
 
     pub async fn get_or_query(
-        client: Client,
+        client: &Client,
         recording: MessyRecording,
         user_overwrite: Option<String>,
     ) -> Result<Option<String>, crate::Error> {
-        if let Some(id) = get_cached(&client, &recording, user_overwrite.clone()).await? {
+        if let Some(id) = get_cached(client, &recording, user_overwrite.clone()).await? {
             return Ok(Some(id));
         }
 
-        Musicbrainz::fetch_and_save_urls(&client, &recording).await?;
+        Musicbrainz::fetch_and_save_urls(client, &recording).await?;
 
-        if let Some(id) = get_cached(&client, &recording, user_overwrite).await? {
+        if let Some(id) = get_cached(client, &recording, user_overwrite).await? {
             return Ok(Some(id));
         }
 
-        let id = Self::query_recording_id(&client, &recording).await?;
+        let id = Self::query_recording_id(client, &recording).await?;
 
         if let Some(id) = id {
             let ext_id = ExternalId {

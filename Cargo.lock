@@ -93,11 +93,11 @@ dependencies = [
  "sqlx",
  "strsim",
  "strum_macros",
+ "symphonyz",
  "thiserror 2.0.9",
  "tokio",
  "tracing",
  "tracing-subscriber",
- "youtube_brainz",
  "zip",
 ]
 
@@ -2065,7 +2065,7 @@ dependencies = [
 [[package]]
 name = "musicbrainz-db-lite"
 version = "0.1.0"
-source = "git+https://github.com/RustyNova016/musicbrainz_db_lite.git?branch=develop#e29fd746a3e9b67f9519ad4fef3f34256c9a6be0"
+source = "git+https://github.com/RustyNova016/musicbrainz_db_lite.git?branch=develop#e9ab372e1fac15f63ca4ae2e3433be248e939c28"
 dependencies = [
  "async-fn-stream",
  "async-trait",
@@ -2078,7 +2078,7 @@ dependencies = [
  "macon",
  "musicbrainz_db_lite_macros",
  "musicbrainz_db_lite_schema",
- "musicbrainz_rs_nova",
+ "musicbrainz_rs",
  "serde",
  "serde_json",
  "sqlx",
@@ -2089,7 +2089,7 @@ dependencies = [
 [[package]]
 name = "musicbrainz_db_lite_macros"
 version = "0.1.0"
-source = "git+https://github.com/RustyNova016/musicbrainz_db_lite.git?branch=develop#e29fd746a3e9b67f9519ad4fef3f34256c9a6be0"
+source = "git+https://github.com/RustyNova016/musicbrainz_db_lite.git?branch=develop#e9ab372e1fac15f63ca4ae2e3433be248e939c28"
 dependencies = [
  "darling",
  "proc-macro2",
@@ -2101,7 +2101,7 @@ dependencies = [
 [[package]]
 name = "musicbrainz_db_lite_schema"
 version = "0.1.1"
-source = "git+https://github.com/RustyNova016/musicbrainz_db_lite.git?branch=develop#e29fd746a3e9b67f9519ad4fef3f34256c9a6be0"
+source = "git+https://github.com/RustyNova016/musicbrainz_db_lite.git?branch=develop#e9ab372e1fac15f63ca4ae2e3433be248e939c28"
 dependencies = [
  "sqlx",
 ]
@@ -2111,23 +2111,6 @@ name = "musicbrainz_rs"
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "45c4baf9975b36493afaa0f2c4648ef987686ecafa24e64393523964ea8c0d54"
-dependencies = [
- "chrono",
- "glob",
- "governor",
- "lucene_query_builder",
- "once_cell",
- "reqwest",
- "serde",
- "serde_json",
- "thiserror 2.0.9",
- "tokio",
-]
-
-[[package]]
-name = "musicbrainz_rs_nova"
-version = "0.8.0"
-source = "git+https://github.com/RustyNova016/musicbrainz_rs_nova.git?branch=develop#427152ebca991f807e86a8be2d23ddbc338cbc98"
 dependencies = [
  "chrono",
  "glob",
@@ -3396,6 +3379,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "13c2bddecc57b384dee18652358fb23172facb8a2c51ccc10d74c157bdea3292"
 
 [[package]]
+name = "symphonyz"
+version = "0.1.0"
+dependencies = [
+ "google-youtube3",
+ "musicbrainz_rs",
+ "regex",
+ "sqlx",
+ "thiserror 2.0.9",
+]
+
+[[package]]
 name = "syn"
 version = "1.0.109"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4287,17 +4281,6 @@ dependencies = [
  "quote",
  "syn 2.0.90",
  "synstructure",
-]
-
-[[package]]
-name = "youtube_brainz"
-version = "0.1.0"
-dependencies = [
- "google-youtube3",
- "musicbrainz_rs",
- "regex",
- "sqlx",
- "thiserror 2.0.9",
 ]
 
 [[package]]

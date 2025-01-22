@@ -1,44 +1,65 @@
-use std::env;
 use std::path::PathBuf;
 use std::sync::LazyLock;
 
-use directories::BaseDirs;
-
-use once_cell::sync::Lazy;
-
 use crate::utils::constants::CONFIG_DIR;
 
-pub static YT_SECRET_FILE: Lazy<PathBuf> = Lazy::new(|| {
+pub static YT_SECRET_FILE: LazyLock<PathBuf> = LazyLock::new(|| {
     let mut path = CONFIG_DIR.clone();
 
     path.push("youtube_credentials.json");
 
-    println!("path: {}", path.display());
+    path
+});
+
+pub static TOKENCACHE: LazyLock<PathBuf> = LazyLock::new(|| {
+    let mut path = CONFIG_DIR.clone();
+
+    path.push("youtube_tokens.json");
+
+    path
+});
+
+pub static SYMPHONYZ_DB: LazyLock<PathBuf> = LazyLock::new(|| {
+    let mut path = CONFIG_DIR.clone();
+
+    path.push("symphonyz.db");
+
     path
 });
 
 #[cfg(test)]
 mod test {
-    use std::path::Path;
+    use musicbrainz_db_lite::client::MusicBrainzClient;
+    use symphonyz::models::messy_recording::MessyRecording;
+    use symphonyz::models::services::youtube::Youtube;
+    use symphonyz::Client;
 
-    use youtube_brainz::models::messy_recording::MessyRecording;
-    use youtube_brainz::Client;
-
+    use crate::api::youtube::SYMPHONYZ_DB;
+    use crate::api::youtube::TOKENCACHE;
     use crate::api::youtube::YT_SECRET_FILE;
-    use crate::utils::constants::CONFIG_DIR;
 
     #[tokio::test]
     pub async fn should_request_video_id() {
-        let client = Client::new(&YT_SECRET_FILE, &CONFIG_DIR).await.unwrap();
+        let mut client = Client::new_builder();
+        client.set_musicbrainz_client(MusicBrainzClient::default());
+        //client.create_database_if_missing(&SYMPHONYZ_DB).unwrap();
+        //client.read_database(&SYMPHONYZ_DB.to_string_lossy()).unwrap();
+        client.read_database(":memory:").unwrap();
+        client.migrate_database().await.unwrap();
+        let mut client = client.build().unwrap();
+        client.set_youtube_client(&YT_SECRET_FILE, &TOKENCACHE).await.unwrap();
+
         let recording = MessyRecording {
             title: "Midnight Runners".to_string(),
             artist_credits: "DirtyPhonics".to_string(),
-            release: "Magnetic".to_string(),
+            release: Some("Magnetic".to_string()),
+            mbid: Some("77d5d71a-d7bf-4def-a105-80a6b36ac044".to_string()),
+            id: 0,
         };
+        let recording = recording.upsert(&client.database_client).await.unwrap();
 
         println!("Before send");
-        let res = client
-            .get_recording_yt_id(recording)
+        let res = Youtube::get_or_query(&client, recording, None)
             .await
             .unwrap()
             .unwrap();

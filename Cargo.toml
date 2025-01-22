@@ -15,7 +15,7 @@ listenbrainz = "0.8.1"
 musicbrainz-db-lite = { branch = "develop", git = "https://github.com/RustyNova016/musicbrainz_db_lite.git" }
 #musicbrainz-db-lite = { version = "0.1.0", path = "../musicbrainz-db-lite" }
 
-youtube_brainz = { path = "./youtube_brainz" }
+symphonyz = { path = "./symphonyz" }
 
 derive_builder = "0.20.2"
 inquire = "0.7.5"
@@ -120,5 +120,5 @@ map_unwrap_or = { level = "allow", priority = 1 }
 [workspace]
 
 members = [
-    "symphony_brainz",
+    "symphonyz",
 ]
