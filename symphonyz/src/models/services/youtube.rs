@@ -52,6 +52,7 @@ impl Youtube {
             return Ok(Some(id));
         }
 
+        println!("Bad!");
         let id = Self::query_recording_id(client, &recording).await?;
 
         if let Some(id) = id {
@@ -60,7 +61,7 @@ impl Youtube {
                 ext_id: id.clone(),
                 recording_id: recording.id,
                 service: "youtube".to_string(),
-                user_overwrite: None,
+                user_overwrite: "".to_string(),
             };
             ext_id.upsert(&client.database_client).await?;
             return Ok(Some(id));

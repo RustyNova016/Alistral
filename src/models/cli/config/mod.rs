@@ -1,3 +1,4 @@
+use crate::api::youtube::SYMPHONYZ_DB;
 use crate::api::youtube::TOKENCACHE;
 use crate::api::youtube::YT_SECRET_FILE;
 use crate::models::config::config_trait::ConfigFile as _;
@@ -10,6 +11,8 @@ use clap::Parser;
 use clap::Subcommand;
 use listen_config::ListenConfigCli;
 use musicbrainz_db_lite::client::MusicBrainzClient;
+use symphonyz::models::messy_recording::MessyRecording;
+use symphonyz::models::services::youtube::Youtube;
 use symphonyz::Client;
 
 pub mod listen_config;
@@ -100,12 +103,32 @@ impl ConfigCommands {
             Self::YoutubeToken => {
                 let mut client = Client::new_builder();
                 client.set_musicbrainz_client(MusicBrainzClient::default());
-                //client.create_database_if_missing(&SYMPHONYZ_DB).unwrap();
-                //client.read_database(&SYMPHONYZ_DB.to_string_lossy()).unwrap();
-                client.read_database(":memory:").unwrap();
+                client.create_database_if_missing(&SYMPHONYZ_DB).unwrap();
+                client.read_database(&SYMPHONYZ_DB.to_string_lossy()).unwrap();
+                //client.read_database(&SYMPHONYZ_DB).unwrap();
                 client.migrate_database().await.unwrap();
                 let mut client = client.build().unwrap();
-                client.set_youtube_client(&YT_SECRET_FILE, &TOKENCACHE).await.unwrap();
+                client
+                    .set_youtube_client(&YT_SECRET_FILE, &TOKENCACHE)
+                    .await
+                    .unwrap();
+
+                let recording = MessyRecording {
+                    title: "Midnight Runners".to_string(),
+                    artist_credits: "DirtyPhonics".to_string(),
+                    release: Some("Magnetic".to_string()),
+                    mbid: Some("77d5d71a-d7bf-4def-a105-80a6b36ac044".to_string()),
+                    id: 0,
+                };
+                let recording = recording.upsert(&client.database_client).await.unwrap();
+
+                println!("Before send");
+                let res = Youtube::get_or_query(&client, recording, None)
+                    .await
+                    .unwrap()
+                    .unwrap();
+                println!("after send");
+                println!("res: {res}");
             }
         }
 

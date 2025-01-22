@@ -48,7 +48,7 @@ impl Musicbrainz {
             recording_id: recording.id,
             ext_id,
             service,
-            user_overwrite: None,
+            user_overwrite: "".to_string(),
         };
 
         id.upsert(&client.database_client).await?;

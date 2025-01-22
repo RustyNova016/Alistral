@@ -6,5 +6,7 @@ pub struct ExternalId {
     pub recording_id: i64,
     pub ext_id: String,
     pub service: String,
-    pub user_overwrite: Option<String>,
+
+    /// Set "" if null
+    pub user_overwrite: String,
 }

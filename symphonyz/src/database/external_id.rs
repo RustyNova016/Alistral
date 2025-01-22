@@ -47,7 +47,7 @@ SET
         sqlx::query_scalar("SELECT ext_id FROM external_id WHERE recording_id = ? AND service = ? AND user_overwrite = ?;")
             .bind(recording)
             .bind(service)
-            .bind(user_overwrite)
+            .bind(user_overwrite.unwrap_or_default())
             .fetch_optional(&mut *conn).await
     }
 }
