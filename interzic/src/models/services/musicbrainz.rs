@@ -40,7 +40,7 @@ impl Musicbrainz {
         let (ext_id, service) = if let Some(id) = Youtube::extract_id_from_url(url) {
             (id, "youtube".to_string())
         } else {
-            return Err(crate::Error::ServiceNotFoundError());
+            return Ok(());
         };
 
         let id = ExternalId {

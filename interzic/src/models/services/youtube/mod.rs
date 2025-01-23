@@ -1,10 +1,18 @@
+
+use google_youtube3::api::Playlist;
+use google_youtube3::api::PlaylistSnippet;
+
 use crate::models::external_id::ExternalId;
 use crate::models::messy_recording::MessyRecording;
+use crate::models::playlist_stub::PlaylistStub;
 use crate::models::services::musicbrainz::Musicbrainz;
 use crate::utils::regexes::YOUTUBE_URL_ID_REGEX;
 use crate::Client;
 
+pub mod playlists;
+
 pub struct Youtube;
+
 
 impl Youtube {
     pub async fn query_recording_id(
@@ -52,7 +60,6 @@ impl Youtube {
             return Ok(Some(id));
         }
 
-        println!("Bad!");
         let id = Self::query_recording_id(client, &recording).await?;
 
         if let Some(id) = id {
@@ -68,6 +75,8 @@ impl Youtube {
         }
         Ok(None)
     }
+
+
 }
 
 async fn get_cached(

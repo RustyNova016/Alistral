@@ -75,6 +75,7 @@ dependencies = [
  "indicatif",
  "indoc",
  "inquire",
+ "interzic",
  "itertools 0.14.0",
  "listenbrainz",
  "log",
@@ -93,7 +94,6 @@ dependencies = [
  "sqlx",
  "strsim",
  "strum_macros",
- "symphonyz",
  "thiserror 2.0.9",
  "tokio",
  "tracing",
@@ -1785,6 +1785,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "interzic"
+version = "0.1.0"
+dependencies = [
+ "google-youtube3",
+ "musicbrainz-db-lite",
+ "musicbrainz_rs",
+ "regex",
+ "sqlx",
+ "thiserror 2.0.9",
+]
+
+[[package]]
 name = "ipnet"
 version = "2.10.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3377,17 +3389,6 @@ name = "subtle"
 version = "2.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "13c2bddecc57b384dee18652358fb23172facb8a2c51ccc10d74c157bdea3292"
-
-[[package]]
-name = "symphonyz"
-version = "0.1.0"
-dependencies = [
- "google-youtube3",
- "musicbrainz_rs",
- "regex",
- "sqlx",
- "thiserror 2.0.9",
-]
 
 [[package]]
 name = "syn"

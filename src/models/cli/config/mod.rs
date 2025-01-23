@@ -9,11 +9,11 @@ use crate::utils::extensions::chrono_ext::DurationExt;
 use chrono::Duration;
 use clap::Parser;
 use clap::Subcommand;
+use interzic::models::messy_recording::MessyRecording;
+use interzic::models::services::youtube::Youtube;
+use interzic::Client;
 use listen_config::ListenConfigCli;
 use musicbrainz_db_lite::client::MusicBrainzClient;
-use symphonyz::models::messy_recording::MessyRecording;
-use symphonyz::models::services::youtube::Youtube;
-use symphonyz::Client;
 
 pub mod listen_config;
 
@@ -104,7 +104,9 @@ impl ConfigCommands {
                 let mut client = Client::new_builder();
                 client.set_musicbrainz_client(MusicBrainzClient::default());
                 client.create_database_if_missing(&SYMPHONYZ_DB).unwrap();
-                client.read_database(&SYMPHONYZ_DB.to_string_lossy()).unwrap();
+                client
+                    .read_database(&SYMPHONYZ_DB.to_string_lossy())
+                    .unwrap();
                 //client.read_database(&SYMPHONYZ_DB).unwrap();
                 client.migrate_database().await.unwrap();
                 let mut client = client.build().unwrap();

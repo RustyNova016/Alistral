@@ -33,4 +33,3 @@ pub static CACHE_DIR: Lazy<PathBuf> = Lazy::new(|| {
 
     path
 });
-

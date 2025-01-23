@@ -1,10 +1,13 @@
 [package]
-name = "symphonyz"
+name = "interzic"
 version = "0.1.0"
 edition = "2021"
 description = "Bunch of utilities to link musicbrainz data to different services"
 
 [dependencies]
+#TODO: Make optional
+musicbrainz-db-lite = { branch = "develop", git = "https://github.com/RustyNova016/musicbrainz_db_lite.git" }
+
 google-youtube3 = "6.0.0"
 musicbrainz_rs = "0.9.0"
 regex = "1.11.1"

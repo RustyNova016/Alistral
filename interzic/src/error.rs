@@ -27,7 +27,7 @@ pub enum Error {
 
     #[error("This action require a youtube client, but it wasn't set up in the main client")]
     MissingYoutubeClient(),
-
-    #[error("Tried to a service not recognized")]
-    ServiceNotFoundError(),
+    
+    #[error(transparent)]
+    MusicbrainzDBLiteError(#[from] musicbrainz_db_lite::Error),
 }

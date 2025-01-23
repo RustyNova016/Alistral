@@ -29,10 +29,10 @@ pub static SYMPHONYZ_DB: LazyLock<PathBuf> = LazyLock::new(|| {
 
 #[cfg(test)]
 mod test {
+    use interzic::models::messy_recording::MessyRecording;
+    use interzic::models::services::youtube::Youtube;
+    use interzic::Client;
     use musicbrainz_db_lite::client::MusicBrainzClient;
-    use symphonyz::models::messy_recording::MessyRecording;
-    use symphonyz::models::services::youtube::Youtube;
-    use symphonyz::Client;
 
     use crate::api::youtube::SYMPHONYZ_DB;
     use crate::api::youtube::TOKENCACHE;
@@ -47,7 +47,10 @@ mod test {
         client.read_database(":memory:").unwrap();
         client.migrate_database().await.unwrap();
         let mut client = client.build().unwrap();
-        client.set_youtube_client(&YT_SECRET_FILE, &TOKENCACHE).await.unwrap();
+        client
+            .set_youtube_client(&YT_SECRET_FILE, &TOKENCACHE)
+            .await
+            .unwrap();
 
         let recording = MessyRecording {
             title: "Midnight Runners".to_string(),
