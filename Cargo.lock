@@ -108,6 +108,7 @@ dependencies = [
  "futures",
  "indicatif",
  "itertools 0.14.0",
+ "listenbrainz",
  "musicbrainz-db-lite",
  "owo-colors 4.1.0",
  "rust_decimal",
