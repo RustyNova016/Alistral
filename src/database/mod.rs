@@ -88,7 +88,7 @@ async fn try_connect_to_db() -> Result<DBClient, crate::Error> {
     ))
 }
 
-async fn connect_and_setup() -> Result<DBClient, crate::Error> {
+pub async fn connect_and_setup() -> Result<DBClient, crate::Error> {
     match try_connect_to_db().await {
         Ok(db) => Ok(db),
         Err(crate::Error::MissingDatabaseFile(_)) => {
