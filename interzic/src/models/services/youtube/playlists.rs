@@ -51,6 +51,8 @@ impl PlaylistStub {
         let mut playlist = Playlist::default();
         let mut playlist_snippet = PlaylistSnippet::default();
 
+        //TODO: Visibility
+
         playlist_snippet.title = Some(self.title);
         playlist_snippet.description = Some(self.description);
 

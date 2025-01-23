@@ -69,6 +69,7 @@ impl ClientBuilder {
                 crate::Error::ClientBuildingError("musicbrainz_client".to_string()),
             )?,
             youtube_client: None,
+            listenbrainz_client: None
         })
     }
 }

@@ -17,6 +17,9 @@ pub enum Error {
     SQLXError(#[from] sqlx::Error),
 
     #[error(transparent)]
+    ListenBrainzError(#[from] listenbrainz::Error),
+
+    #[error(transparent)]
     MigrationError(#[from] sqlx::migrate::MigrateError),
 
     #[error("The client is missing: {0}")]
@@ -27,7 +30,10 @@ pub enum Error {
 
     #[error("This action require a youtube client, but it wasn't set up in the main client")]
     MissingYoutubeClient(),
-    
+
+    #[error("This action require a listenbrainz client, but it wasn't set up in the main client")]
+    MissingListenbrainzClient(),
+
     #[error(transparent)]
     MusicbrainzDBLiteError(#[from] musicbrainz_db_lite::Error),
 }

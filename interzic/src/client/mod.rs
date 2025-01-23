@@ -14,6 +14,7 @@ use crate::client::builder::ClientBuilder;
 pub struct Client {
     pub database_client: sqlx::SqlitePool,
     pub musicbrainz_client: MusicBrainzClient,
+    listenbrainz_client: Option<listenbrainz::raw::Client>,
     youtube_client: Option<YoutubeClient>,
 }
 
@@ -55,6 +56,16 @@ impl Client {
 
     pub fn youtube_client(&self) -> Result<&YoutubeClient, crate::Error> {
         self.youtube_client
+            .as_ref()
+            .ok_or(crate::Error::MissingYoutubeClient())
+    }
+
+    pub fn set_listenbrainz_client(&mut self, client: listenbrainz::raw::Client) {
+        self.listenbrainz_client = Some(client);
+    }
+
+        pub fn listenbrainz_client(&self) -> Result<&listenbrainz::raw::Client, crate::Error> {
+        self.listenbrainz_client
             .as_ref()
             .ok_or(crate::Error::MissingYoutubeClient())
     }

@@ -1789,6 +1789,7 @@ name = "interzic"
 version = "0.1.0"
 dependencies = [
  "google-youtube3",
+ "listenbrainz",
  "musicbrainz-db-lite",
  "musicbrainz_rs",
  "regex",
