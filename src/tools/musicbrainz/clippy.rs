@@ -6,7 +6,7 @@ use futures::TryStreamExt;
 use musicbrainz_db_lite::models::musicbrainz::main_entities::MainEntity;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 
-use crate::database::get_conn;
+use crate::api::clients::ALISTRAL_CLIENT;
 use crate::datastructures::clippy::missing_release_barcode::MissingBarcodeLint;
 use crate::datastructures::clippy::missing_remix_rel::MissingRemixRelLint;
 use crate::datastructures::clippy::missing_remixer_rel::MissingRemixerRelLint;
@@ -19,10 +19,13 @@ use crate::utils::cli::display::MainEntityExt;
 use crate::utils::println_cli;
 use crate::utils::whitelist_blacklist::WhitelistBlacklist;
 
-pub async fn mb_clippy(start_mbid: &str, new_first: bool, filter: &WhitelistBlacklist<String>) {
-    let mut conn = get_conn().await;
-
-    let start_node = Recording::fetch_and_save(&mut conn, start_mbid)
+pub async fn mb_clippy(
+    conn: &mut sqlx::SqliteConnection,
+    start_mbid: &str,
+    new_first: bool,
+    filter: &WhitelistBlacklist<String>,
+) {
+    let start_node = Recording::fetch_and_save(conn, &ALISTRAL_CLIENT.musicbrainz_db, start_mbid)
         .await
         .unwrap()
         .expect("Couldn't find MBID");
@@ -40,27 +43,27 @@ pub async fn mb_clippy(start_mbid: &str, new_first: bool, filter: &WhitelistBlac
         }
 
         entity
-            .refetch_and_load(&mut conn)
+            .refetch_and_load(conn, &ALISTRAL_CLIENT.musicbrainz_db)
             .await
             .expect("Couldn't fetch entity");
 
-        check_lint::<MissingWorkLint>(&mut conn, &mut entity, filter).await;
-        check_lint::<MissingBarcodeLint>(&mut conn, &mut entity, filter).await;
-        check_lint::<SuspiciousRemixLint>(&mut conn, &mut entity, filter).await;
-        check_lint::<MissingRemixRelLint>(&mut conn, &mut entity, filter).await;
-        check_lint::<MissingRemixerRelLint>(&mut conn, &mut entity, filter).await;
-        check_lint::<SoundtrackWithoutDisambiguationLint>(&mut conn, &mut entity, filter).await;
+        check_lint::<MissingWorkLint>(conn, &mut entity, filter).await;
+        check_lint::<MissingBarcodeLint>(conn, &mut entity, filter).await;
+        check_lint::<SuspiciousRemixLint>(conn, &mut entity, filter).await;
+        check_lint::<MissingRemixRelLint>(conn, &mut entity, filter).await;
+        check_lint::<MissingRemixerRelLint>(conn, &mut entity, filter).await;
+        check_lint::<SoundtrackWithoutDisambiguationLint>(conn, &mut entity, filter).await;
 
         println!(
             "Checked {}",
             entity
-                .pretty_format(&mut conn, false)
+                .pretty_format(conn, false)
                 .await
                 .expect("Error while formating the name of the entity")
         );
         println!();
 
-        get_new_nodes(&mut conn, &entity, &mut queue)
+        get_new_nodes(conn, &entity, &mut queue)
             .await
             .expect("Couldn't get new items to process");
 
@@ -136,7 +139,7 @@ async fn check_lint<L: MbClippyLint>(
     println!();
     await_next();
     entity
-        .refetch_and_load(conn)
+        .refetch_and_load(conn, &ALISTRAL_CLIENT.musicbrainz_db)
         .await
         .expect("Couldn't fetch entity");
 }
@@ -150,23 +153,31 @@ async fn get_new_nodes(
 
     match entity {
         MainEntity::Recording(val) => {
-            let artists = val.get_artists_or_fetch(conn).await?;
+            let artists = val
+                .get_artists_or_fetch(conn, &ALISTRAL_CLIENT.musicbrainz_db)
+                .await?;
             for artist in artists {
                 queue.push_front(MainEntity::Artist(artist));
             }
 
-            let releases = val.get_releases_or_fetch(conn).await?;
+            let releases = val
+                .get_releases_or_fetch(conn, &ALISTRAL_CLIENT.musicbrainz_db)
+                .await?;
             for release in releases {
                 queue.push_front(MainEntity::Release(release));
             }
 
-            let works = val.get_works_or_fetch(conn).await?;
+            let works = val
+                .get_works_or_fetch(conn, &ALISTRAL_CLIENT.musicbrainz_db)
+                .await?;
             for work in works {
                 queue.push_front(MainEntity::Work(work));
             }
         }
         MainEntity::Release(val) => {
-            let recordings = val.get_recordings_or_fetch(conn).await?;
+            let recordings = val
+                .get_recordings_or_fetch(conn, &ALISTRAL_CLIENT.musicbrainz_db)
+                .await?;
             for recording in recordings {
                 queue.push_front(MainEntity::Recording(recording));
             }

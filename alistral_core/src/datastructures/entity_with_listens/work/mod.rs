@@ -18,8 +18,11 @@ impl WorkWithListens {
     pub async fn get_parents(
         &self,
         conn: &mut sqlx::SqliteConnection,
+        client: &crate::AlistralClient,
     ) -> Result<Vec<Self>, crate::Error> {
-        self.entity.fetch_if_incomplete(conn).await?;
+        self.entity
+            .fetch_if_incomplete(conn, &client.musicbrainz_db)
+            .await?;
         let relations = self.entity.get_work_relations(conn).await?;
         let mut out = Vec::new();
 

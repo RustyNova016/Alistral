@@ -3,6 +3,7 @@ use itertools::Itertools;
 use musicbrainz_db_lite::models::listenbrainz::messybrainz_submission::MessybrainzSubmission;
 use strsim::sorensen_dice;
 
+use crate::api::clients::ALISTRAL_CLIENT;
 use crate::database::listenbrainz::listens::ListenFetchQuery;
 use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
 use crate::models::config::config_trait::ConfigFile as _;
@@ -29,7 +30,7 @@ pub async fn wrong_mapping(conn: &mut sqlx::SqliteConnection, username: String) 
                 .expect("Couldn't find the messybrainz data of the listen");
 
         let recording = listen
-            .get_recording_or_fetch(conn)
+            .get_recording_or_fetch(conn, &ALISTRAL_CLIENT.musicbrainz_db)
             .await
             .expect("Couldn't fetch recording data")
             .expect("The listen should be mapped");
@@ -49,7 +50,7 @@ pub async fn wrong_mapping(conn: &mut sqlx::SqliteConnection, username: String) 
         let formated_recording = format!(
             "{} {}",
             recording
-                .get_artist_credits_or_fetch(conn)
+                .get_artist_credits_or_fetch(conn, &ALISTRAL_CLIENT.musicbrainz_db)
                 .await
                 .expect("Couldn't get the artist credit"),
             recording.title

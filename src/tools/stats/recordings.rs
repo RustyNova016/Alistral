@@ -6,16 +6,18 @@ use alistral_core::datastructures::listen_collection::traits::ListenCollectionRe
 use alistral_core::datastructures::listen_collection::ListenCollection;
 use itertools::Itertools;
 
+use crate::api::clients::ALISTRAL_CLIENT;
 use crate::utils::cli::display::RecordingExt;
 use crate::utils::cli_paging::CLIPager;
 use crate::utils::extensions::chrono_ext::DurationExt;
 
 pub async fn stats_recording(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
-    let mut groups = RecordingWithListensCollection::from_listencollection(conn, listens)
-        .await
-        .expect("Error while fetching recordings")
-        .into_iter()
-        .collect_vec();
+    let mut groups =
+        RecordingWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT, listens)
+            .await
+            .expect("Error while fetching recordings")
+            .into_iter()
+            .collect_vec();
     groups.sort_by_key(|a| Reverse(a.listen_count()));
 
     let mut pager = CLIPager::new(10);
@@ -38,11 +40,12 @@ pub async fn stats_recording(conn: &mut sqlx::SqliteConnection, listens: ListenC
 }
 
 pub async fn stats_recording_time(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
-    let mut groups = RecordingWithListensCollection::from_listencollection(conn, listens)
-        .await
-        .expect("Error while fetching recordings")
-        .into_iter()
-        .collect_vec();
+    let mut groups =
+        RecordingWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT, listens)
+            .await
+            .expect("Error while fetching recordings")
+            .into_iter()
+            .collect_vec();
     groups.sort_by_key(|a| Reverse(a.get_time_listened()));
 
     let mut pager = CLIPager::new(10);

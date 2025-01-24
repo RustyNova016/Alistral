@@ -6,6 +6,7 @@ use chrono::Utc;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use rust_decimal::Decimal;
 
+use crate::api::clients::ALISTRAL_CLIENT;
 use crate::database::listenbrainz::listens::ListenFetchQuery;
 use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
 use crate::models::cli::BumpCLI;
@@ -22,7 +23,7 @@ pub async fn bump_command(conn: &mut sqlx::SqliteConnection, bump: BumpCLI) {
         Some(val) => {
             let mbid = read_mbid_from_input(&val).expect("Couldn't parse MBID");
 
-            Recording::get_or_fetch(conn, &mbid)
+            Recording::get_or_fetch(conn, &ALISTRAL_CLIENT.musicbrainz_db, &mbid)
                 .await
                 .expect("Couldn't get the recording")
                 .expect("The latest listen isn't mapped. Canceling")
@@ -40,7 +41,7 @@ pub async fn bump_command(conn: &mut sqlx::SqliteConnection, bump: BumpCLI) {
             listens
                 .get_latest_listen()
                 .expect("No listens were found")
-                .get_recording_or_fetch(conn)
+                .get_recording_or_fetch(conn, &ALISTRAL_CLIENT.musicbrainz_db)
                 .await
                 .expect("Couldn't fetch recording")
                 .expect("The latest listen isn't mapped. Canceling")

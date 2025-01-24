@@ -14,15 +14,16 @@ pub type WorkWithRecordingsCollection =
 impl WorkWithRecordingsCollection {
     pub async fn from_listencollection(
         conn: &mut sqlx::SqliteConnection,
+        client: &crate::AlistralClient,
         listens: ListenCollection,
     ) -> Result<Self, crate::Error> {
         // Convert Recordings
         let recordings =
-            RecordingWithListensCollection::from_listencollection(conn, listens).await?;
+            RecordingWithListensCollection::from_listencollection(conn, client, listens).await?;
 
         // Prefetch Releases
         let recording_refs = recordings.iter_entities().collect_vec();
-        fetch_recordings_as_complete(conn, &recording_refs).await?;
+        fetch_recordings_as_complete(conn, client, &recording_refs).await?;
 
         // Load Releases
         let results = Recording::get_works_as_batch(conn, &recording_refs).await?;

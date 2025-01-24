@@ -6,7 +6,7 @@ use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use sqlx::SqliteConnection;
 
-use crate::api::listenbrainz::LISTENBRAINZ_CLIENT;
+use crate::api::clients::ALISTRAL_CLIENT;
 use crate::utils::env::in_offline_mode;
 use crate::utils::println_lis;
 
@@ -34,8 +34,13 @@ pub async fn fetch_latest_listens_of_user(
             DateTime::from_timestamp(pull_ts.unwrap(), 0).unwrap(),
             pull_ts.unwrap(),
         ));
-        pull_ts = Listen::execute_listen_fetch(conn, &LISTENBRAINZ_CLIENT, user, pull_ts.unwrap())
-            .await?;
+        pull_ts = Listen::execute_listen_fetch(
+            conn,
+            &ALISTRAL_CLIENT.listenbrainz,
+            user,
+            pull_ts.unwrap(),
+        )
+        .await?;
     }
 
     Ok(())
@@ -85,7 +90,7 @@ impl ListenFetchQuery {
         let subm = PG_FETCHING.get_submitter(unfetched.len() as u64);
 
         for id in unfetched {
-            Recording::get_or_fetch(conn, &id).await?;
+            Recording::get_or_fetch(conn, &ALISTRAL_CLIENT.musicbrainz_db, &id).await?;
             subm.inc(1);
         }
 

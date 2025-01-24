@@ -6,7 +6,7 @@ use derive_builder::Builder;
 use listenbrainz::raw::response::{UserListensListen, UserListensResponse};
 use listenbrainz::raw::Client;
 
-use crate::api::listenbrainz::LISTENBRAINZ_CLIENT;
+use crate::api::clients::ALISTRAL_CLIENT;
 
 pub mod cli;
 pub mod cli_paging;
@@ -87,7 +87,7 @@ impl Iterator for ListenAPIReader {
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.page.is_empty() {
-            let page = self.paginator.next(&LISTENBRAINZ_CLIENT).unwrap();
+            let page = self.paginator.next(&ALISTRAL_CLIENT.listenbrainz).unwrap();
             self.page.extend(page.payload.listens);
         }
 

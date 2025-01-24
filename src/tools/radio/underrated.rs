@@ -3,6 +3,7 @@ use futures::stream;
 use futures::StreamExt;
 use itertools::Itertools;
 
+use crate::api::clients::ALISTRAL_CLIENT;
 use crate::api::listenbrainz::global_listen_counts::get_global_listen_counts;
 use crate::database::listenbrainz::listens::ListenFetchQuery;
 use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
@@ -37,7 +38,8 @@ pub async fn underrated_mix(
         .expect("Couldn't fetch the new listens");
 
     let user_listens =
-        RecordingWithListensCollection::from_listencollection(conn, user_listens).await?;
+        RecordingWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT, user_listens)
+            .await?;
 
     // Get the global listen count
     println_cli("[Seeding] Getting global listen counts");

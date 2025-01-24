@@ -16,20 +16,22 @@ pub type WorkWithListensCollection = EntityWithListensCollection<Work, ListenCol
 impl WorkWithListensCollection {
     pub async fn from_listencollection(
         conn: &mut sqlx::SqliteConnection,
+        client: &crate::AlistralClient,
         listens: ListenCollection,
     ) -> Result<WorkWithListensCollection, crate::Error> {
         let recordings =
-            RecordingWithListensCollection::from_listencollection(conn, listens).await?;
-        Self::from_recording_with_listens(conn, recordings).await
+            RecordingWithListensCollection::from_listencollection(conn, client, listens).await?;
+        Self::from_recording_with_listens(conn, client, recordings).await
     }
 
     pub async fn from_recording_with_listens(
         conn: &mut sqlx::SqliteConnection,
+        client: &crate::AlistralClient,
         recordings: RecordingWithListensCollection,
     ) -> Result<WorkWithListensCollection, crate::Error> {
         // Prefetch Releases
         let recording_refs = recordings.iter_entities().collect_vec();
-        fetch_recordings_as_complete(conn, &recording_refs).await?;
+        fetch_recordings_as_complete(conn, client, &recording_refs).await?;
 
         // Load Releases
         let results = Recording::get_works_as_batch(conn, &recording_refs).await?;
@@ -66,6 +68,7 @@ impl WorkWithListensCollection {
     pub async fn add_parents_recursive(
         &mut self,
         conn: &mut sqlx::SqliteConnection,
+        client: &crate::AlistralClient,
     ) -> Result<(), crate::Error> {
         let mut queue = self.0.values().cloned().collect_vec();
         let mut seen = Vec::new();
@@ -77,7 +80,7 @@ impl WorkWithListensCollection {
             if seen.contains(&work.work().mbid.clone()) {
                 continue;
             }
-            let new_works = work.get_parents(conn).await?;
+            let new_works = work.get_parents(conn, client).await?;
 
             for new_work in new_works {
                 queue.push(new_work.clone());

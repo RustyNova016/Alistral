@@ -11,6 +11,7 @@ pub type RecordingWithListensCollection = EntityWithListensCollection<Recording,
 impl RecordingWithListensCollection {
     pub async fn from_listencollection(
         conn: &mut sqlx::SqliteConnection,
+        client: &crate::AlistralClient,
         listens: ListenCollection,
     ) -> Result<Self, crate::Error> {
         // If empty, early return
@@ -29,7 +30,7 @@ impl RecordingWithListensCollection {
             .await?
             .ok_or(crate::Error::MissingUserError(user_name.clone()))?;
 
-        prefetch_recordings_of_listens(conn, user.id, &listens.data).await?;
+        prefetch_recordings_of_listens(conn, client, user.id, &listens.data).await?;
 
         // Get all the data from the DB
         let joins = Listen::get_recordings_as_batch(conn, user.id, listens.data).await?;

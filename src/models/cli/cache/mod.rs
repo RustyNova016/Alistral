@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use crate::database::get_conn;
+use crate::api::clients::create_client;
 use crate::database::DB_LOCATION;
 use crate::models::config::Config;
 //use crate::models::config::Config;
@@ -88,7 +88,7 @@ impl CacheCommand {
                 if *reset {
                     delete_database(&DB_LOCATION).expect("Failed to delete the database");
                 }
-                get_conn().await;
+                create_client().await;
             }
             CacheSubcommands::LoadDump { username, path } => {
                 import_listen_dump(conn, path, &Config::check_username(username)).await;
