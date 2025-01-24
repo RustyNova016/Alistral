@@ -6,6 +6,7 @@ use humantime::format_duration;
 use indoc::formatdoc;
 use rust_decimal::Decimal;
 
+use crate::api::clients::ALISTRAL_CLIENT;
 use crate::models::config::Config;
 use crate::utils::extensions::chrono_ext::DateTimeUtcExt;
 use crate::utils::extensions::chrono_ext::DurationExt;
@@ -99,7 +100,9 @@ impl RecordingWithListens {
     async fn get_title(&self, conn: &mut sqlx::SqliteConnection) -> Result<String, crate::Error> {
         let raw = format!(
             "\n Statistics of {} ",
-            self.recording().format_with_credits(conn).await?
+            self.recording()
+                .format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db)
+                .await?
         );
         Ok(format!("{}", raw.on_green().black().bold()))
     }

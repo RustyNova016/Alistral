@@ -1,6 +1,7 @@
 use alistral_core::cli::progress_bar::global_progress_bar::PG_FETCHING;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 
+use crate::api::clients::ALISTRAL_CLIENT;
 use crate::database::listenbrainz::listens::ListenFetchQuery;
 use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
 use crate::utils::cli::display::RecordingExt;
@@ -40,7 +41,7 @@ pub async fn refresh_data(
 
     let progress_bar = PG_FETCHING.get_submitter(mbids.len() as u64);
     for mbid in mbids {
-        let recording = Recording::fetch_and_save(conn, &mbid)
+        let recording = Recording::fetch_and_save(conn, &ALISTRAL_CLIENT.musicbrainz_db, &mbid)
             .await
             .expect("Couldn't refresh mbid");
 

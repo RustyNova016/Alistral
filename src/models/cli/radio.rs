@@ -221,6 +221,7 @@ impl RadioSubcommands {
                 //cooldown
             } => {
                 create_radio_mix(
+                    conn,
                     command.get_listen_seeder(username),
                     Config::check_token(&Config::check_username(username), token),
                     *unlistened,

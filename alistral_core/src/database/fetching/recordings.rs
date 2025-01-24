@@ -8,6 +8,7 @@ use crate::cli::progress_bar::global_progress_bar::PG_FETCHING;
 /// Prefetch all the recordings of a list of listens
 pub async fn prefetch_recordings_of_listens(
     conn: &mut sqlx::SqliteConnection,
+    client: &crate::AlistralClient,
     user_id: i64,
     listens: &[Listen],
 ) -> Result<(), musicbrainz_db_lite::Error> {
@@ -16,7 +17,7 @@ pub async fn prefetch_recordings_of_listens(
 
     println_cli("Fetching missing recording data");
     for recording in recordings {
-        Recording::get_or_fetch(conn, &recording).await?;
+        Recording::get_or_fetch(conn, &client.musicbrainz_db, &recording).await?;
         progress_bar.inc(1);
     }
 
@@ -25,6 +26,7 @@ pub async fn prefetch_recordings_of_listens(
 
 pub async fn fetch_recordings_as_complete(
     conn: &mut sqlx::SqliteConnection,
+    client: &crate::AlistralClient,
     recordings: &[&Recording],
 ) -> Result<(), musicbrainz_db_lite::Error> {
     // Eliminate all the recordings that are complete
@@ -37,7 +39,9 @@ pub async fn fetch_recordings_as_complete(
 
     println_cli("Fetching missing recording data");
     for recording in uncompletes {
-        recording.fetch_if_incomplete(conn).await?;
+        recording
+            .fetch_if_incomplete(conn, &client.musicbrainz_db)
+            .await?;
         progress_bar.inc(1);
     }
 

@@ -14,14 +14,16 @@ pub type ReleaseGroupWithListensCollection =
 impl ReleaseGroupWithListensCollection {
     pub async fn from_listencollection(
         conn: &mut sqlx::SqliteConnection,
+        client: &crate::AlistralClient,
         listens: ListenCollection,
     ) -> Result<Self, crate::Error> {
         // Convert Releases
-        let releases = ReleaseWithListensCollection::from_listencollection(conn, listens).await?;
+        let releases =
+            ReleaseWithListensCollection::from_listencollection(conn, client, listens).await?;
 
         // Prefetch the releases
         let recording_refs = releases.iter_entities().collect_vec();
-        prefetch_releases(conn, &recording_refs).await?;
+        prefetch_releases(conn, client, &recording_refs).await?;
 
         // Load Releases
         let results = Release::get_release_groups_as_batch(conn, &recording_refs).await?;

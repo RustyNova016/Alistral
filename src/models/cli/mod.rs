@@ -209,11 +209,11 @@ impl Commands {
 
             Self::Listens(val) => val.run(conn).await,
 
-            Self::Lookup(val) => val.run().await?,
+            Self::Lookup(val) => val.run(conn).await?,
 
             Self::Mapping(val) => val.run(conn).await?,
 
-            Self::Musicbrainz(val) => val.run().await,
+            Self::Musicbrainz(val) => val.run(conn).await,
 
             Self::Bump(val) => bump_command(conn, val.clone()).await,
 

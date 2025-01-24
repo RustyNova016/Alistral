@@ -8,7 +8,7 @@ use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use rand::prelude::SliceRandom;
 use rand::thread_rng;
 
-use crate::database::get_db_client;
+use crate::api::clients::ALISTRAL_CLIENT;
 use crate::datastructures::radio::collector::RadioCollector;
 use crate::datastructures::radio::seeders::listens::ListenSeeder;
 use crate::models::data_storage::DataStorage;
@@ -18,18 +18,12 @@ use crate::utils::data_file::DataFile as _;
 use crate::utils::println_cli;
 
 pub async fn create_radio_mix(
+    conn: &mut sqlx::SqliteConnection,
     seeder: ListenSeeder,
     token: String,
     unlistened: bool,
     collector: RadioCollector,
 ) {
-    let db = get_db_client().await;
-    let conn = &mut *db
-        .connection
-        .acquire()
-        .await
-        .expect("Couldn't get a database connection");
-
     let username = seeder.username().clone();
 
     println_cli("[Seeding] Getting listens");
@@ -113,7 +107,9 @@ impl RadioCircle {
         recordings.shuffle(&mut thread_rng());
 
         for recording in recordings {
-            let mut artists = recording.get_artists_or_fetch(conn).await?;
+            let mut artists = recording
+                .get_artists_or_fetch(conn, &ALISTRAL_CLIENT.musicbrainz_db)
+                .await?;
 
             artists.shuffle(&mut thread_rng());
 

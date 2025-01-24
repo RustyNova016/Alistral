@@ -6,15 +6,17 @@ use alistral_core::datastructures::listen_collection::traits::ListenCollectionRe
 use alistral_core::datastructures::listen_collection::ListenCollection;
 use itertools::Itertools;
 
+use crate::api::clients::ALISTRAL_CLIENT;
 use crate::utils::cli::display::WorkExt as _;
 use crate::utils::cli_paging::CLIPager;
 
 pub async fn stats_works(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
-    let mut groups = WorkWithListensCollection::from_listencollection(conn, listens)
-        .await
-        .expect("Error while fetching recordings")
-        .into_iter()
-        .collect_vec();
+    let mut groups =
+        WorkWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT, listens)
+            .await
+            .expect("Error while fetching recordings")
+            .into_iter()
+            .collect_vec();
     groups.sort_by_key(|a| Reverse(a.listen_count()));
 
     let mut pager = CLIPager::new(10);
@@ -41,16 +43,18 @@ pub async fn stats_works(conn: &mut sqlx::SqliteConnection, listens: ListenColle
 }
 
 pub async fn stats_works_recursive(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
-    let recordings = RecordingWithListensCollection::from_listencollection(conn, listens)
-        .await
-        .expect("Error while fetching recordings");
+    let recordings =
+        RecordingWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT, listens)
+            .await
+            .expect("Error while fetching recordings");
 
-    let mut groups = WorkWithListensCollection::from_recording_with_listens(conn, recordings)
-        .await
-        .expect("Error while fetching works");
+    let mut groups =
+        WorkWithListensCollection::from_recording_with_listens(conn, &ALISTRAL_CLIENT, recordings)
+            .await
+            .expect("Error while fetching works");
 
     groups
-        .add_parents_recursive(conn)
+        .add_parents_recursive(conn, &ALISTRAL_CLIENT)
         .await
         .expect("Couldn't add parents");
 

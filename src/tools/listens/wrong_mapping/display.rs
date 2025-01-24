@@ -7,7 +7,7 @@ use musicbrainz_db_lite::models::listenbrainz::messybrainz_submission::Messybrai
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use strsim::sorensen_dice;
 
-use crate::api::listenbrainz::LISTENBRAINZ_CLIENT;
+use crate::api::clients::ALISTRAL_CLIENT;
 use crate::models::config::whitelisted_wrong_mappings::WhilistedWrongMappings;
 use crate::utils::cli::display::RecordingExt as _;
 use crate::utils::cli::hyperlink_rename;
@@ -47,7 +47,7 @@ pub(super) async fn display_wrong_mapping(
     let artist_score = sorensen_dice(
         &messybrainz_data.artist_credit.to_lowercase(),
         &recording
-            .get_artist_credits_or_fetch(conn)
+            .get_artist_credits_or_fetch(conn, &ALISTRAL_CLIENT.musicbrainz_db)
             .await
             .expect("Couldn't get the artist credit")
             .to_string()
@@ -77,7 +77,7 @@ pub(super) async fn display_wrong_mapping(
         Choice::Next => {
             Listen::fetch_listen_by_id(
                 conn,
-                &LISTENBRAINZ_CLIENT,
+                &ALISTRAL_CLIENT.listenbrainz,
                 listen.listened_at,
                 &listen.user,
                 &listen.recording_msid,
