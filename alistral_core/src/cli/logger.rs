@@ -78,6 +78,14 @@ impl Logger {
         self.print(format!("{} {}", "[MusicBrainz]".bright_magenta(), string));
     }
 
+    pub fn println_inter<T: Display>(&self, string: T) {
+        self.print(format!(
+            "{} {}",
+            "[Interzic]".truecolor(204, 168, 36),
+            string
+        ));
+    }
+
     pub fn add_global_pg(pg: ProgressBar) {
         let static_clone = STATIC_LOGGER.clone();
         let mut logger = static_clone.lock().unwrap();
@@ -118,6 +126,12 @@ pub fn println_lis<T: Display>(string: T) {
 }
 
 pub fn println_mus<T: Display>(string: T) {
+    let static_clone = STATIC_LOGGER.clone();
+    let logger = static_clone.lock().unwrap();
+    logger.println_mus(string);
+}
+
+pub fn println_inter<T: Display>(string: T) {
     let static_clone = STATIC_LOGGER.clone();
     let logger = static_clone.lock().unwrap();
     logger.println_mus(string);
