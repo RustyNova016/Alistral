@@ -6,11 +6,12 @@ use futures::{stream, StreamExt};
 use interzic::models::messy_recording::MessyRecording;
 use interzic::models::playlist_stub::PlaylistStub;
 use interzic::models::services::youtube::Youtube;
-use interzic::Client;
+use interzic::InterzicClient;
 use listenbrainz::raw::jspf::Playlist;
 use musicbrainz_db_lite::client::MusicBrainzClient;
 
-use crate::api::youtube::SYMPHONYZ_DB;
+use crate::api::clients::ALISTRAL_CLIENT;
+use crate::api::youtube::INTERZIC_DB;
 use crate::api::youtube::TOKENCACHE;
 use crate::api::youtube::YT_SECRET_FILE;
 use crate::datastructures::radio::collector::RadioCollector;
@@ -85,11 +86,11 @@ pub async fn overdue_radio(
     // .send(token)
     // .await?;
 
-        let mut client = Client::new_builder();
+    let mut client = InterzicClient::new_builder();
     client.set_musicbrainz_client(MusicBrainzClient::default());
-    client.create_database_if_missing(&SYMPHONYZ_DB).unwrap();
+    client.create_database_if_missing(&INTERZIC_DB).unwrap();
     client
-        .read_database(&SYMPHONYZ_DB.to_string_lossy())
+        .read_database(&INTERZIC_DB.to_string_lossy())
         .unwrap();
     //client.read_database(&SYMPHONYZ_DB).unwrap();
     client.migrate_database().await.unwrap();
@@ -101,7 +102,8 @@ pub async fn overdue_radio(
 
     let mut messy = Vec::new();
     for recording in collected {
-        let rec = MessyRecording::from_db_recording(conn, recording).await?;
+        let rec =
+            MessyRecording::from_db_recording(conn, &ALISTRAL_CLIENT.interzic, recording).await?;
         let rec = rec.upsert(&client.database_client).await?;
         messy.push(rec);
     }
@@ -115,8 +117,6 @@ pub async fn overdue_radio(
             .to_string(),
         recordings: messy,
     };
-
-
 
     Youtube::create_playlist(&client, playlist).await?;
 

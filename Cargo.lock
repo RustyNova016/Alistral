@@ -108,6 +108,7 @@ dependencies = [
  "chrono",
  "futures",
  "indicatif",
+ "interzic",
  "itertools 0.14.0",
  "listenbrainz",
  "musicbrainz-db-lite",

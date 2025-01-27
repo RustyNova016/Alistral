@@ -30,9 +30,20 @@ pub enum Error {
     #[error("This action require a listenbrainz client, but it wasn't set up in the main client")]
     MissingListenbrainzClient(),
 
-    #[error(transparent)]
-    MusicbrainzDBLiteError(#[from] musicbrainz_db_lite::Error),
+    #[error(
+        "This action require a musicbrainz_db_lite client, but it wasn't set up in the main client"
+    )]
+    MissingMusicbrainzDbLiteClient,
 
+    #[error(
+        "This action require a musicbrainz_rs client, but it wasn't set up in the main client"
+    )]
+    MissingMusicbrainzClient,
+
+    // --- Service Errors ---
     #[error(transparent)]
     YoutubeError(#[from] YoutubeError),
+
+    #[error(transparent)]
+    MusicbrainzDBLiteError(#[from] musicbrainz_db_lite::Error),
 }

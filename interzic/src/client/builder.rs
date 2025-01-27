@@ -4,24 +4,18 @@ use std::fs::File;
 use std::io;
 use std::path::Path;
 
-use musicbrainz_rs::client::MusicBrainzClient;
 use sqlx::sqlite::SqliteConnectOptions;
 use sqlx::sqlite::SqliteJournalMode;
 use sqlx::sqlite::SqlitePoolOptions;
 
-use crate::Client;
+use crate::InterzicClient;
 
 #[derive(Default)]
 pub struct ClientBuilder {
     pub database_client: Option<sqlx::SqlitePool>,
-    pub musicbrainz_client: Option<MusicBrainzClient>,
 }
 
 impl ClientBuilder {
-    pub fn set_musicbrainz_client(&mut self, client: MusicBrainzClient) {
-        self.musicbrainz_client = Some(client)
-    }
-
     pub fn create_database_if_missing(&self, path: &Path) -> Result<(), io::Error> {
         if path.exists() {
             return Ok(());
@@ -58,18 +52,17 @@ impl ClientBuilder {
             .await?)
     }
 
-    pub fn build(self) -> Result<Client, crate::Error> {
-        Ok(Client {
+    pub fn build(self) -> Result<InterzicClient, crate::Error> {
+        Ok(InterzicClient {
             database_client: self
                 .database_client
                 .ok_or(crate::Error::ClientBuildingError(
                     "database_client".to_string(),
                 ))?,
-            musicbrainz_client: self.musicbrainz_client.ok_or(
-                crate::Error::ClientBuildingError("musicbrainz_client".to_string()),
-            )?,
+            musicbrainz_client: None,
             youtube_client: None,
-            listenbrainz_client: None
+            listenbrainz_client: None,
+            musicbrainz_db_lite_client: None,
         })
     }
 }

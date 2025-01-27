@@ -5,13 +5,13 @@ use musicbrainz_rs::Fetch;
 use crate::models::external_id::ExternalId;
 use crate::models::messy_recording::MessyRecording;
 use crate::models::services::youtube::Youtube;
-use crate::Client;
+use crate::InterzicClient;
 
 pub struct Musicbrainz;
 
 impl Musicbrainz {
     pub async fn fetch_and_save_urls(
-        client: &Client,
+        client: &InterzicClient,
         recording: &MessyRecording,
     ) -> Result<(), crate::Error> {
         let result = Recording::fetch()
@@ -20,7 +20,7 @@ impl Musicbrainz {
                 .as_ref()
                 .ok_or(crate::Error::MissingRequiredMBIDError())?)
             .with_url_relations()
-            .execute_with_client(&client.musicbrainz_client)
+            .execute_with_client(client.musicbrainz_rs_client()?)
             .await?;
 
         for rel in result.relations.unwrap_or_else(Vec::new) {
@@ -33,7 +33,7 @@ impl Musicbrainz {
     }
 
     async fn save_url(
-        client: &Client,
+        client: &InterzicClient,
         url: &str,
         recording: &MessyRecording,
     ) -> Result<(), crate::Error> {
