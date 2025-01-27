@@ -14,14 +14,18 @@ pub struct MessyRecording {
 
 impl MessyRecording {
     pub async fn from_db_recording(
-        conn: &mut sqlx::SqliteConnection,
+        db_lite_conn: &mut sqlx::SqliteConnection,
         client: &crate::InterzicClient,
         recording: Recording,
     ) -> Result<Self, crate::Error> {
         let db_lite = client.musicbrainz_db_lite_client()?;
 
-        let credits = recording.get_artist_credits_or_fetch(conn, db_lite).await?;
-        let release = recording.get_releases_or_fetch(conn, db_lite).await?;
+        let credits = recording
+            .get_artist_credits_or_fetch(db_lite_conn, db_lite)
+            .await?;
+        let release = recording
+            .get_releases_or_fetch(db_lite_conn, db_lite)
+            .await?;
 
         Ok(MessyRecording {
             id: 0,

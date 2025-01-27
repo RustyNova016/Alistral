@@ -1,6 +1,8 @@
+use core::fmt::Display;
 use std::ops::Deref;
 
 use clap::ArgAction;
+use clap::ValueEnum;
 use clap::{Parser, Subcommand};
 
 use crate::datastructures::radio::collector::RadioCollector;
@@ -15,7 +17,6 @@ use crate::tools::radio::listen_rate::listen_rate_radio;
 use crate::tools::radio::overdue::overdue_radio;
 use crate::tools::radio::shared::shared_radio;
 use crate::tools::radio::underrated::underrated_mix;
-//use crate::tools::radio::underrated::underrated_mix;
 
 use super::common::Timeframe;
 
@@ -40,6 +41,10 @@ pub struct RadioCommand {
     /// When used with `seed_listen_range`, how many listens should be given as a minimum, even if they are outside of the range (Default: 3)
     #[arg(long)]
     min_seed_listens: Option<u64>,
+
+    /// Where to output the radio
+    #[arg(short, long, default_value_t = RadioExportTarget::Listenbrainz)]
+    output: RadioExportTarget,
 }
 
 impl RadioCommand {
@@ -83,7 +88,9 @@ impl RadioCommand {
     }
 
     pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> color_eyre::Result<()> {
-        self.command.run(conn, self.get_collector(), self).await
+        self.command
+            .run(conn, self.get_collector(), self, self.output.clone())
+            .await
     }
 }
 
@@ -212,6 +219,7 @@ impl RadioSubcommands {
         conn: &mut sqlx::SqliteConnection,
         collector: RadioCollector,
         command: &RadioCommand,
+        target: RadioExportTarget,
     ) -> color_eyre::Result<()> {
         match self {
             Self::Circles {
@@ -226,6 +234,7 @@ impl RadioSubcommands {
                     Config::check_token(&Config::check_username(username), token),
                     *unlistened,
                     collector,
+                    target,
                 )
                 .await;
             }
@@ -236,6 +245,7 @@ impl RadioSubcommands {
                     command.get_listen_seeder(username),
                     collector,
                     &Config::check_token(&Config::check_username(username), token),
+                    target,
                 )
                 .await?;
             }
@@ -252,6 +262,7 @@ impl RadioSubcommands {
                     *min,
                     *cooldown,
                     collector,
+                    target,
                 )
                 .await?;
             }
@@ -273,6 +284,7 @@ impl RadioSubcommands {
                     *delay_factor,
                     command.get_collector(),
                     *at_listening_time,
+                    target,
                 )
                 .await?;
             }
@@ -292,11 +304,28 @@ impl RadioSubcommands {
                     *cooldown,
                     command.get_collector(),
                     &Config::check_token(&Config::check_username(&None), token),
+                    target,
                 )
                 .await?;
             }
         }
 
         Ok(())
+    }
+}
+
+#[derive(ValueEnum, Clone, Debug)]
+pub enum RadioExportTarget {
+    Listenbrainz,
+    Youtube,
+    //TODO: JSPF
+}
+
+impl Display for RadioExportTarget {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::Listenbrainz => write!(f, "listenbrainz"),
+            Self::Youtube => write!(f, "youtube"),
+        }
     }
 }

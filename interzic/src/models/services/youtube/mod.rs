@@ -1,11 +1,7 @@
 pub mod error;
 
-use google_youtube3::api::Playlist;
-use google_youtube3::api::PlaylistSnippet;
-
 use crate::models::external_id::ExternalId;
 use crate::models::messy_recording::MessyRecording;
-use crate::models::playlist_stub::PlaylistStub;
 use crate::models::services::musicbrainz::Musicbrainz;
 use crate::models::services::youtube::error::YoutubeError;
 use crate::utils::regexes::YOUTUBE_URL_ID_REGEX;

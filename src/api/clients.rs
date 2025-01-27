@@ -81,7 +81,10 @@ async fn create_interzic(
     client.set_musicbrainz_client(musicbrainz_rs);
     client.set_listenbrainz_client(listenbrainz);
     client.set_musicbrainz_db_lite_client(musicbrainz_db);
-    client.set_youtube_client(&YT_SECRET_FILE, &TOKENCACHE);
+    client
+        .set_youtube_client(&YT_SECRET_FILE, &TOKENCACHE)
+        .await
+        .expect("Couldn't create the youtube client");
 
     client
 }

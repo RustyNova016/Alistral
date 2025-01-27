@@ -1,6 +1,7 @@
 use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use futures::stream;
 use futures::StreamExt;
+use interzic::models::playlist_stub::PlaylistStub;
 use itertools::Itertools;
 
 use crate::api::clients::ALISTRAL_CLIENT;
@@ -10,8 +11,9 @@ use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
 use crate::datastructures::radio::collector::RadioCollector;
 use crate::datastructures::radio::seeders::listens::ListenSeeder;
 use crate::datastructures::radio::sorters::underrated::underrated_sorter;
+use crate::models::cli::radio::RadioExportTarget;
 use crate::models::data_storage::DataStorage;
-use crate::models::playlist_stub::PlaylistStub;
+use crate::tools::radio::convert_recordings;
 use crate::utils::data_file::DataFile as _;
 use crate::utils::println_cli;
 
@@ -20,6 +22,7 @@ pub async fn underrated_mix(
     seeder: ListenSeeder,
     collector: RadioCollector,
     token: &str,
+    target: RadioExportTarget,
 ) -> color_eyre::Result<()> {
     let username = seeder.username().clone();
 
@@ -63,16 +66,12 @@ pub async fn underrated_mix(
 
     println_cli("[Sending] Sending radio playlist to listenbrainz");
     let counter = DataStorage::load().expect("Couldn't load data storage");
-    PlaylistStub::new(
-        format!("Radio: Underrated recordings #{}", counter.write().unwrap().incr_playlist_count()),
-        Some(username.to_string()),
-        true,
-        collected
-            .into_iter()
-            .map(|r| r.mbid)
-            .collect(),
-        Some(
-            format!("A playlist containing all the tracks that {username} listen to, 
+    let playlist = PlaylistStub {
+        title: format!(
+            "Radio: Underrated recordings #{}",
+            counter.write().unwrap().incr_playlist_count()
+        ),
+        description:  format!("A playlist containing all the tracks that {username} listen to, 
         but seemingly no one else does. Come take a listen if you want to find hidden gems!<br>
         <br>
         The mix is made by calculating a score for each listen. This score is composed of two values:<br>
@@ -80,10 +79,16 @@ pub async fn underrated_mix(
         - The percentage of the recording's listens being from {username} (Made with this formula: (user listens / worldwide listens) *100)<br>
         <br>
         Made with: https://github.com/RustyNova016/Alistral"
-        )),
-    )
-    .send(token)
-    .await?;
+        ),
+        recordings: convert_recordings(conn, collected)
+            .await
+            .expect("Couldn't convert recordings for playlist"),
+    };
+
+    target
+        .export(playlist, Some(username), Some(token))
+        .await
+        .expect("Couldn't send the playlist");
 
     Ok(())
 }
