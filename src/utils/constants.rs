@@ -33,3 +33,27 @@ pub static CACHE_DIR: LazyLock<PathBuf> = LazyLock::new(|| {
 
     path
 });
+
+pub static YT_SECRET_FILE: LazyLock<PathBuf> = LazyLock::new(|| {
+    let mut path = CONFIG_DIR.clone();
+
+    path.push("youtube_credentials.json");
+
+    path
+});
+
+pub static TOKENCACHE: LazyLock<PathBuf> = LazyLock::new(|| {
+    let mut path = CONFIG_DIR.clone();
+
+    path.push("youtube_tokens.json");
+
+    path
+});
+
+pub static INTERZIC_DB: LazyLock<PathBuf> = LazyLock::new(|| {
+    let mut path = CONFIG_DIR.clone();
+
+    path.push("interzic.db");
+
+    path
+});

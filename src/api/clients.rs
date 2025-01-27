@@ -8,11 +8,11 @@ use listenbrainz::raw::Client as ListenbrainzClient;
 use musicbrainz_db_lite::client::MusicBrainzClient;
 use musicbrainz_db_lite::DBClient;
 
-use crate::api::youtube::INTERZIC_DB;
-use crate::api::youtube::TOKENCACHE;
-use crate::api::youtube::YT_SECRET_FILE;
 use crate::database::DB_LOCATION;
 use crate::models::config::Config;
+use crate::utils::constants::INTERZIC_DB;
+use crate::utils::constants::TOKENCACHE;
+use crate::utils::constants::YT_SECRET_FILE;
 
 pub static ALISTRAL_CLIENT: LazyLock<AlistralClient> = LazyLock::new(|| block_on(create_client()));
 
@@ -81,10 +81,13 @@ async fn create_interzic(
     client.set_musicbrainz_client(musicbrainz_rs);
     client.set_listenbrainz_client(listenbrainz);
     client.set_musicbrainz_db_lite_client(musicbrainz_db);
-    client
-        .set_youtube_client(&YT_SECRET_FILE, &TOKENCACHE)
-        .await
-        .expect("Couldn't create the youtube client");
+
+    if YT_SECRET_FILE.exists() {
+        client
+            .set_youtube_client(&YT_SECRET_FILE, &TOKENCACHE)
+            .await
+            .expect("Couldn't create the youtube client");
+    }
 
     client
 }
