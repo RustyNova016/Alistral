@@ -3,22 +3,23 @@ use listenbrainz::raw::request::PlaylistCreatePlaylist;
 use listenbrainz::raw::request::PlaylistCreatePlaylistExtension;
 use listenbrainz::raw::request::PlaylistCreatePlaylistExtensionInner;
 use listenbrainz::raw::request::PlaylistCreatePlaylistTrack;
-use musicbrainz_db_lite::api::musicbrainz::recording;
 
-use crate::models::messy_recording::MessyRecording;
 use crate::models::playlist_stub::PlaylistStub;
-use crate::Client;
+use crate::InterzicClient;
 
 pub struct Listenbrainz;
 
 impl Listenbrainz {
     pub async fn create_playlist(
-        client: &Client,
+        client: &InterzicClient,
         playlist: PlaylistStub,
         username: String,
-        token: &str
+        token: &str,
     ) -> Result<String, crate::Error> {
-        Ok(client.listenbrainz_client()?.playlist_create(token, Self::into_jspf(playlist, username))?.playlist_mbid)
+        Ok(client
+            .listenbrainz_client()?
+            .playlist_create(token, Self::into_jspf(playlist, username))?
+            .playlist_mbid)
     }
 
     pub fn into_jspf(playlist: PlaylistStub, username: String) -> PlaylistCreate {

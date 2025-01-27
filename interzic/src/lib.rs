@@ -4,7 +4,7 @@ pub mod error;
 pub mod models;
 pub mod utils;
 
-pub use crate::client::Client;
+pub use crate::client::InterzicClient;
 pub use crate::error::Error;
 
 pub mod reexports {

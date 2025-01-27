@@ -9,16 +9,15 @@ use crate::models::playlist_stub::PlaylistStub;
 use crate::models::services::musicbrainz::Musicbrainz;
 use crate::models::services::youtube::error::YoutubeError;
 use crate::utils::regexes::YOUTUBE_URL_ID_REGEX;
-use crate::Client;
+use crate::InterzicClient;
 
 pub mod playlists;
 
 pub struct Youtube;
 
-
 impl Youtube {
     pub async fn query_recording_id(
-        client: &Client,
+        client: &InterzicClient,
         recording: &MessyRecording,
     ) -> Result<Option<String>, crate::Error> {
         let result = client
@@ -30,7 +29,8 @@ impl Youtube {
             .safe_search("none")
             .add_type("video")
             .doit()
-            .await.map_err(YoutubeError::RecordingSearchError)?
+            .await
+            .map_err(YoutubeError::RecordingSearchError)?
             .1;
 
         Ok(result
@@ -48,13 +48,15 @@ impl Youtube {
     }
 
     pub async fn get_or_query(
-        client: &Client,
+        client: &InterzicClient,
         recording: MessyRecording,
         user_overwrite: Option<String>,
     ) -> Result<Option<String>, crate::Error> {
         if let Some(id) = get_cached(client, &recording, user_overwrite.clone()).await? {
             return Ok(Some(id));
         }
+
+        //TODO: Interogate DBLite if available
 
         Musicbrainz::fetch_and_save_urls(client, &recording).await?;
 
@@ -77,12 +79,10 @@ impl Youtube {
         }
         Ok(None)
     }
-
-
 }
 
 async fn get_cached(
-    client: &Client,
+    client: &InterzicClient,
     recording: &MessyRecording,
     user_overwrite: Option<String>,
 ) -> Result<Option<String>, crate::Error> {

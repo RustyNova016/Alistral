@@ -14,11 +14,11 @@ use crate::models::services::youtube::error::BadRequestError;
 use crate::models::services::youtube::error::BadRequestErrorErrorItem;
 use crate::models::services::youtube::error::YoutubeError;
 use crate::models::services::youtube::Youtube;
-use crate::Client;
+use crate::InterzicClient;
 
 impl Youtube {
     pub async fn create_playlist(
-        client: &Client,
+        client: &InterzicClient,
         playlist: PlaylistStub,
     ) -> Result<String, crate::Error> {
         let rate_limit = RateLimiter::direct(Quota::per_second(NonZeroU32::new(1).unwrap()));
@@ -49,7 +49,7 @@ impl Youtube {
     }
 
     async fn add_video_to_playlist(
-        client: &Client,
+        client: &InterzicClient,
         playlist_id: String,
         video_id: String,
     ) -> Result<(), YoutubeError> {

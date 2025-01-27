@@ -24,17 +24,17 @@ pub enum YoutubeError {
 
 #[derive(Debug, Deserialize)]
 pub struct BadRequestError {
-    pub error: BadRequestErrorError
+    pub error: BadRequestErrorError,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct BadRequestErrorError {
     pub code: i64,
-    pub errors: Vec<BadRequestErrorErrorItem>
+    pub errors: Vec<BadRequestErrorErrorItem>,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct BadRequestErrorErrorItem {
     pub domain: String,
-    pub reason: String
+    pub reason: String,
 }
