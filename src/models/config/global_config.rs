@@ -1,9 +1,9 @@
 use std::ops::Deref;
 use std::ops::DerefMut;
 use std::sync::Arc;
+use std::sync::LazyLock;
 use std::thread::panicking;
 
-use once_cell::sync::Lazy;
 use tokio::sync::RwLock;
 use tokio::sync::RwLockReadGuard;
 use tokio::sync::RwLockWriteGuard;
@@ -11,7 +11,7 @@ use tokio::sync::RwLockWriteGuard;
 use super::config_trait::ConfigFile as _;
 use super::Config;
 
-pub(crate) static CONFIG: Lazy<GlobalConfig> = Lazy::new(GlobalConfig::load);
+pub(crate) static CONFIG: LazyLock<GlobalConfig> = LazyLock::new(GlobalConfig::load);
 
 pub struct GlobalConfig {
     config: Arc<RwLock<Config>>,

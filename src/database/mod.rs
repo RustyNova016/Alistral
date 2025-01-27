@@ -1,10 +1,11 @@
 pub mod musicbrainz;
 use std::fs::{self};
 use std::path::PathBuf;
+use std::sync::LazyLock;
+use std::sync::OnceLock;
 
 use directories::BaseDirs;
 use musicbrainz_db_lite::database::client::DBClient;
-use once_cell::sync::{Lazy, OnceCell};
 use sqlx::Pool;
 use sqlx::Sqlite;
 
@@ -14,9 +15,9 @@ use crate::utils::println_cli;
 pub mod cleanup;
 pub mod listenbrainz;
 
-static MUSICBRAINZ_LITE: OnceCell<DBClient> = OnceCell::new();
+static MUSICBRAINZ_LITE: OnceLock<DBClient> = OnceLock::new();
 
-pub static RELEASE_DB_LOCATION: Lazy<PathBuf> = Lazy::new(|| {
+pub static RELEASE_DB_LOCATION: LazyLock<PathBuf> = LazyLock::new(|| {
     let mut path = BaseDirs::new()
         .expect("Couldn't find the standard cache directory. Is your system an oddball one?")
         .cache_dir()
@@ -32,7 +33,7 @@ pub static RELEASE_DB_LOCATION: Lazy<PathBuf> = Lazy::new(|| {
     path
 });
 
-pub static DEBUG_DB_LOCATION: Lazy<PathBuf> = Lazy::new(|| {
+pub static DEBUG_DB_LOCATION: LazyLock<PathBuf> = LazyLock::new(|| {
     let mut path = BaseDirs::new()
         .expect("Couldn't find the standard cache directory. Is your system an oddball one?")
         .cache_dir()
@@ -49,7 +50,7 @@ pub static DEBUG_DB_LOCATION: Lazy<PathBuf> = Lazy::new(|| {
     path
 });
 
-pub static DB_LOCATION: Lazy<PathBuf> = Lazy::new(|| {
+pub static DB_LOCATION: LazyLock<PathBuf> = LazyLock::new(|| {
     #[cfg(debug_assertions)]
     return DEBUG_DB_LOCATION.clone();
 
