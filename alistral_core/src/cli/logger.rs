@@ -1,10 +1,10 @@
 use core::fmt::Display;
 use std::sync::Arc;
+use std::sync::LazyLock;
 use std::sync::Mutex;
 
 use indicatif::MultiProgress;
 use indicatif::ProgressBar;
-use once_cell::sync::Lazy;
 use owo_colors::OwoColorize as _;
 
 use super::colors::AlistralColors as _;
@@ -14,8 +14,8 @@ pub struct Logger {
     bar_count: u32,
 }
 
-pub static STATIC_LOGGER: Lazy<Arc<Mutex<Logger>>> =
-    Lazy::new(|| Arc::new(Mutex::new(Logger::new())));
+pub static STATIC_LOGGER: LazyLock<Arc<Mutex<Logger>>> =
+    LazyLock::new(|| Arc::new(Mutex::new(Logger::new())));
 
 impl Logger {
     pub fn new() -> Self {

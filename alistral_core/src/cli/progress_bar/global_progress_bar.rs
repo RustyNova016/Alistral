@@ -3,16 +3,16 @@ use core::sync::atomic::AtomicU64;
 use core::sync::atomic::Ordering;
 use core::time::Duration;
 use std::sync::Arc;
+use std::sync::LazyLock;
 use std::sync::RwLock;
 
 use indicatif::ProgressBar;
 use indicatif::ProgressStyle;
-use once_cell::sync::Lazy;
 
 use crate::cli::logger::Logger;
 
-pub static PG_FETCHING: Lazy<GlobalProgressBar<'static>> =
-    Lazy::new(|| GlobalProgressBar::new("Fetching MBIDs".to_string()));
+pub static PG_FETCHING: LazyLock<GlobalProgressBar<'static>> =
+    LazyLock::new(|| GlobalProgressBar::new("Fetching MBIDs".to_string()));
 
 pub struct GlobalProgressBar<'a> {
     pg: ProgressBar,
