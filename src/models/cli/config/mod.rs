@@ -1,6 +1,3 @@
-use crate::api::youtube::INTERZIC_DB;
-use crate::api::youtube::TOKENCACHE;
-use crate::api::youtube::YT_SECRET_FILE;
 use crate::models::config::config_trait::ConfigFile as _;
 use crate::models::config::recording_timeout::RecordingTimeoutConfig;
 use crate::models::config::Config;
@@ -9,11 +6,7 @@ use crate::utils::extensions::chrono_ext::DurationExt;
 use chrono::Duration;
 use clap::Parser;
 use clap::Subcommand;
-use interzic::models::messy_recording::MessyRecording;
-use interzic::models::services::youtube::Youtube;
-use interzic::InterzicClient;
 use listen_config::ListenConfigCli;
-use musicbrainz_db_lite::client::MusicBrainzClient;
 
 pub mod listen_config;
 

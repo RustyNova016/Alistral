@@ -8,10 +8,8 @@ use google_youtube3::api::ResourceId;
 use governor::Quota;
 use governor::RateLimiter;
 
-use crate::database::recording;
 use crate::models::playlist_stub::PlaylistStub;
 use crate::models::services::youtube::error::BadRequestError;
-use crate::models::services::youtube::error::BadRequestErrorErrorItem;
 use crate::models::services::youtube::error::YoutubeError;
 use crate::models::services::youtube::Youtube;
 use crate::InterzicClient;
@@ -101,32 +99,28 @@ fn is_retry_error(err: &google_youtube3::common::Error) -> bool {
 
 impl PlaylistStub {
     pub fn to_yt_playlist(self) -> Playlist {
-        let mut playlist = Playlist::default();
-        let mut playlist_snippet = PlaylistSnippet::default();
-
-        //TODO: Visibility
-
-        playlist_snippet.title = Some(self.title);
-        playlist_snippet.description = Some(self.description);
-
-        playlist.snippet = Some(playlist_snippet);
-
-        playlist
+        Playlist {
+            snippet: Some(PlaylistSnippet {
+                title: Some(self.title),
+                description: Some(self.description),
+                ..Default::default()
+            }),
+            ..Default::default()
+        }
     }
 }
 
 fn recording_to_playlist_item(playlist_id: String, vid_id: String) -> PlaylistItem {
-    let mut playlist = PlaylistItem::default();
-    let mut playlist_snippet = PlaylistItemSnippet::default();
-    let mut ressource_id = ResourceId::default();
-
-    ressource_id.kind = Some("youtube#video".to_string());
-    ressource_id.video_id = Some(vid_id);
-
-    playlist_snippet.playlist_id = Some(playlist_id);
-    playlist_snippet.resource_id = Some(ressource_id);
-
-    playlist.snippet = Some(playlist_snippet);
-
-    playlist
+    PlaylistItem {
+        snippet: Some(PlaylistItemSnippet {
+            playlist_id: Some(playlist_id),
+            resource_id: Some(ResourceId {
+                kind: Some("youtube#video".to_string()),
+                video_id: Some(vid_id),
+                ..Default::default()
+            }),
+            ..Default::default()
+        }),
+        ..Default::default()
+    }
 }
