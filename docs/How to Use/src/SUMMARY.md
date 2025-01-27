@@ -7,3 +7,4 @@
 # Settings
 
 - [Config file](./config/config.md)
+- [Interzic](./config/interzic.md)
