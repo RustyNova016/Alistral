@@ -1,9 +1,10 @@
+use alistral_core::cli::progress_bar::global_progress_bar::PG_FETCHING;
 use itertools::Itertools;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use musicbrainz_db_lite::models::musicbrainz::release::Release;
 
-use crate::utils::cli::progress_bar::global_progress_bar::PG_FETCHING;
+use crate::api::clients::ALISTRAL_CLIENT;
 use crate::utils::println_cli;
 
 /// Prefetch all the recordings of a list of listens
@@ -17,7 +18,7 @@ pub async fn prefetch_recordings_of_listens(
 
     println_cli("Fetching missing recording data");
     for recording in recordings {
-        Recording::get_or_fetch(conn, &recording).await?;
+        Recording::get_or_fetch(conn, &ALISTRAL_CLIENT.musicbrainz_db, &recording).await?;
         progress_bar.inc(1);
     }
 
@@ -39,7 +40,9 @@ pub async fn prefetch_releases(
 
     println_cli("Fetching missing release data");
     for release in uncompletes {
-        release.fetch_if_incomplete(conn).await?;
+        release
+            .fetch_if_incomplete(conn, &ALISTRAL_CLIENT.musicbrainz_db)
+            .await?;
         progress_bar.inc(1);
     }
 
@@ -60,7 +63,9 @@ pub async fn fetch_recordings_as_complete(
 
     println_cli("Fetching missing recording data");
     for recording in uncompletes {
-        recording.fetch_if_incomplete(conn).await?;
+        recording
+            .fetch_if_incomplete(conn, &ALISTRAL_CLIENT.musicbrainz_db)
+            .await?;
         progress_bar.inc(1);
     }
 

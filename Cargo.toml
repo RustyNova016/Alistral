@@ -11,9 +11,15 @@ rust-version = "1.83.0"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+# Workspace dependencies
+alistral_core = { path = "./alistral_core" }
+
+# Musicbrainz dependencies
 listenbrainz = "0.8.1"
 musicbrainz-db-lite = { branch = "develop", git = "https://github.com/RustyNova016/musicbrainz_db_lite.git" }
 #musicbrainz-db-lite = { version = "0.1.0", path = "../musicbrainz-db-lite" }
+
+interzic = { path = "./interzic" }
 
 derive_builder = "0.20.2"
 inquire = "0.7.5"
@@ -31,7 +37,6 @@ clap_complete = "4.5.42"
 chrono = "0.4.39"
 serde = { version = "1.0.217", features = ["rc"] }
 serde_json = "1.0.135"
-once_cell = "1.20.2"
 extend = "1.2.0"
 directories = "6.0.0"
 indicatif = { version = "0.17.8", features = [
@@ -69,10 +74,17 @@ inherits = "release"
 lto = "thin"
 
 [lints.rust]
-unsafe_code = "forbid"
 async_fn_in_trait = { level = "allow", priority = 1 }
 
-[lints.clippy]
+# --- Workspace ---
+
+[workspace]
+members = ["./alistral_core", "interzic",]
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
 #pedantic = "deny"
 #nursery = "deny"
 #perf = "warn"

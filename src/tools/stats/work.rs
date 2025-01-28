@@ -1,22 +1,23 @@
 use core::cmp::Reverse;
 
+use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
+use alistral_core::datastructures::entity_with_listens::work::collection::WorkWithListensCollection;
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
+use alistral_core::datastructures::listen_collection::ListenCollection;
 use itertools::Itertools;
 
-use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
-use crate::datastructures::entity_with_listens::work_with_listens::WorkWithListens;
-use crate::datastructures::entity_with_listens::work_with_listens::WorkWithRecordingListens;
-use crate::datastructures::listen_collection::traits::ListenCollectionLike;
-use crate::datastructures::listen_collection::ListenCollection;
+use crate::api::clients::ALISTRAL_CLIENT;
 use crate::utils::cli::display::WorkExt as _;
 use crate::utils::cli_paging::CLIPager;
 
 pub async fn stats_works(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
-    let mut groups = WorkWithRecordingListens::from_listencollection(conn, listens)
-        .await
-        .expect("Error while fetching recordings")
-        .into_values()
-        .collect_vec();
-    groups.sort_by_key(|a| Reverse(a.len()));
+    let mut groups =
+        WorkWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT, listens)
+            .await
+            .expect("Error while fetching recordings")
+            .into_iter()
+            .collect_vec();
+    groups.sort_by_key(|a| Reverse(a.listen_count()));
 
     let mut pager = CLIPager::new(10);
 
@@ -27,7 +28,7 @@ pub async fn stats_works(conn: &mut sqlx::SqliteConnection, listens: ListenColle
     for group in groups {
         println!(
             "[{}] {}",
-            group.len(),
+            group.listen_count(),
             group
                 .work()
                 .pretty_format()
@@ -42,16 +43,18 @@ pub async fn stats_works(conn: &mut sqlx::SqliteConnection, listens: ListenColle
 }
 
 pub async fn stats_works_recursive(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
-    let recordings = RecordingWithListens::from_listencollection(conn, listens)
-        .await
-        .expect("Error while fetching recordings");
+    let recordings =
+        RecordingWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT, listens)
+            .await
+            .expect("Error while fetching recordings");
 
-    let mut groups = WorkWithListens::from_recording_with_listens(conn, recordings)
-        .await
-        .expect("Error while fetching works");
+    let mut groups =
+        WorkWithListensCollection::from_recording_with_listens(conn, &ALISTRAL_CLIENT, recordings)
+            .await
+            .expect("Error while fetching works");
 
     groups
-        .add_parents_recursive(conn)
+        .add_parents_recursive(conn, &ALISTRAL_CLIENT)
         .await
         .expect("Couldn't add parents");
 

@@ -1,0 +1,6 @@
+[book]
+authors = ["RustyNova"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Alistral Manual"

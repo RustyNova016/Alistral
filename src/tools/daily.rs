@@ -1,5 +1,9 @@
 use core::cmp::Reverse;
 
+use alistral_core::datastructures::entity_with_listens::artist::collection::artist_with_recordings::ArtistWithRecordingsCollection;
+use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
+use alistral_core::datastructures::listen_collection::ListenCollection;
 use chrono::DateTime;
 use chrono::Datelike;
 use chrono::NaiveDate;
@@ -9,15 +13,12 @@ use color_eyre::owo_colors::OwoColorize;
 use itertools::Itertools;
 use musicbrainz_db_lite::models::musicbrainz::release_group::ReleaseGroup;
 
+use crate::api::clients::ALISTRAL_CLIENT;
 use crate::api::listenbrainz::fresh_releases::FreshReleaseRelease;
 use crate::api::listenbrainz::fresh_releases::FreshReleaseRequest;
 use crate::database::listenbrainz::listens::ListenFetchQuery;
 use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
 use crate::database::musicbrainz::anniversaries::get_recordings_aniversaries;
-use crate::datastructures::entity_with_listens::artist_with_listens::ArtistWithListens;
-use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
-use crate::datastructures::listen_collection::traits::ListenCollectionLike;
-use crate::datastructures::listen_collection::ListenCollection;
 use crate::models::config::Config;
 use crate::utils::cli::display::RecordingExt as _;
 use crate::utils::cli::display::ReleaseGroupExt;
@@ -32,9 +33,13 @@ pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
         .await
         .expect("Couldn't fetch the new listens");
 
-    let recordings = RecordingWithListens::from_listencollection(conn, listens.clone())
-        .await
-        .expect("Couldn't get listen's recordings");
+    let recordings = RecordingWithListensCollection::from_listencollection(
+        conn,
+        &ALISTRAL_CLIENT,
+        listens.clone(),
+    )
+    .await
+    .expect("Couldn't get listen's recordings");
 
     // release days
     let today = Utc::now();
@@ -73,9 +78,9 @@ pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
     println!();
 
     let first_discoveries = recordings
-        .values()
+        .iter()
         .filter(|rec| {
-            rec.first_listen_date()
+            rec.oldest_listen_date()
                 .is_some_and(|date| date.day() == today.day() && date.month() == today.month())
         })
         .collect_vec();
@@ -96,7 +101,7 @@ pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
                     .pretty_format_with_credits(conn, true)
                     .await
                     .expect("Couldn't get artist credits"),
-                rec.first_listen_date()
+                rec.oldest_listen_date()
                     .expect("There should be at least a listen")
                     .format("%d/%m/%Y"),
                 rec.listen_count()
@@ -114,10 +119,14 @@ pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
         );
 
         for fresh_release in fresh_releases {
-            let rg = ReleaseGroup::get_or_fetch(conn, &fresh_release.release_group_mbid)
-                .await
-                .expect("Couldn't retrieve release group data")
-                .expect("Couldn't find the release group");
+            let rg = ReleaseGroup::get_or_fetch(
+                conn,
+                &ALISTRAL_CLIENT.musicbrainz_db,
+                &fresh_release.release_group_mbid,
+            )
+            .await
+            .expect("Couldn't retrieve release group data")
+            .expect("Couldn't find the release group");
 
             println!(
                 "   - {} {}",
@@ -154,17 +163,18 @@ async fn get_fresh_releases(
         .payload
         .releases;
 
-    let artists = ArtistWithListens::from_listencollection(conn, listens)
-        .await
-        .expect("Couldn't get the listened artists");
+    let artists =
+        ArtistWithRecordingsCollection::from_listencollection(conn, &ALISTRAL_CLIENT, listens)
+            .await
+            .expect("Couldn't get the listened artists");
 
     let min_avg = Config::load_or_panic()
         .read_or_panic()
         .get_artist_listened_to_threshold();
     let listened_artist_ids = artists
-        .into_values()
-        .filter(|artist| artist.average_listen_per_recordings_listened() >= min_avg)
-        .map(|artist| artist.artist().mbid.clone())
+        .into_iter()
+        .filter(|artist| artist.average_listen_per_entity_listened() >= min_avg)
+        .map(|artist| artist.entity().mbid.clone())
         .collect_vec();
 
     let mut out = fresh_releases

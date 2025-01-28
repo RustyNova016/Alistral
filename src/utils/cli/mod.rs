@@ -1,6 +1,3 @@
-pub mod constants;
-pub mod navigation;
-pub mod prompt;
 use core::fmt;
 use core::fmt::Display;
 use std::io;
@@ -12,8 +9,9 @@ use crate::models::cli::Cli;
 use crate::utils::regex::get_raw_mbid_from_url;
 
 pub mod display;
+pub mod navigation;
 pub mod parsing;
-pub mod progress_bar;
+pub mod prompt;
 
 /// Block the current trhead until the user press enter
 pub fn await_next() {

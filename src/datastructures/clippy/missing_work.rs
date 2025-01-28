@@ -1,5 +1,6 @@
 use musicbrainz_db_lite::models::musicbrainz::{main_entities::MainEntity, recording::Recording};
 
+use crate::api::clients::ALISTRAL_CLIENT;
 use crate::models::clippy::lint_severity::LintSeverity;
 use crate::models::clippy::MbClippyLintHint;
 use crate::models::clippy::{MbClippyLint, MbClippyLintLink};
@@ -22,7 +23,9 @@ impl MbClippyLint for MissingWorkLint {
             return Ok(None);
         };
 
-        let work = recording.get_works_or_fetch(conn).await?;
+        let work = recording
+            .get_works_or_fetch(conn, &ALISTRAL_CLIENT.musicbrainz_db)
+            .await?;
 
         if !work.is_empty() {
             return Ok(None);
@@ -49,7 +52,10 @@ impl MbClippyLint for MissingWorkLint {
         conn: &mut sqlx::SqliteConnection,
     ) -> Result<Vec<MbClippyLintLink>, crate::Error> {
         let mut out = Vec::new();
-        let releases = self.recording.get_releases_or_fetch(conn).await?;
+        let releases = self
+            .recording
+            .get_releases_or_fetch(conn, &ALISTRAL_CLIENT.musicbrainz_db)
+            .await?;
 
         out.push(MbClippyLintLink {
             name: "Recording".to_string(),

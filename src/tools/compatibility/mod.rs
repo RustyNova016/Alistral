@@ -1,10 +1,11 @@
+use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use user_compatibility::get_shared_ratio;
 use user_compatibility::get_shared_recordings_between_users;
 use user_compatibility::get_user_shared_percent;
 
+use crate::api::clients::ALISTRAL_CLIENT;
 use crate::database::listenbrainz::listens::ListenFetchQuery;
 use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
-use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
 use crate::utils::cli::await_next;
 
 pub mod user_compatibility;
@@ -19,9 +20,13 @@ pub async fn compatibility_command(conn: &mut sqlx::SqliteConnection, user_a: &s
         .await
         .expect("Couldn't fetch the listens");
 
-    let user_a_recordings = RecordingWithListens::from_listencollection(conn, user_a_listens)
-        .await
-        .expect("Couldn't get the listened recordings");
+    let user_a_recordings = RecordingWithListensCollection::from_listencollection(
+        conn,
+        &ALISTRAL_CLIENT,
+        user_a_listens,
+    )
+    .await
+    .expect("Couldn't get the listened recordings");
 
     let user_b_listens = ListenFetchQuery::builder()
         //.fetch_recordings_redirects(true)
@@ -32,9 +37,13 @@ pub async fn compatibility_command(conn: &mut sqlx::SqliteConnection, user_a: &s
         .await
         .expect("Couldn't fetch the listens");
 
-    let user_b_recordings = RecordingWithListens::from_listencollection(conn, user_b_listens)
-        .await
-        .expect("Couldn't get the listened recordings");
+    let user_b_recordings = RecordingWithListensCollection::from_listencollection(
+        conn,
+        &ALISTRAL_CLIENT,
+        user_b_listens,
+    )
+    .await
+    .expect("Couldn't get the listened recordings");
 
     let shared_recordings =
         get_shared_recordings_between_users(&user_a_recordings, &user_b_recordings);

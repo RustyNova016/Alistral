@@ -1,9 +1,9 @@
-use crate::database::get_conn;
+use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
+use alistral_core::datastructures::listen_collection::ListenCollection;
+
+use crate::api::clients::ALISTRAL_CLIENT;
 use crate::database::listenbrainz::listens::ListenFetchQuery;
 use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
-use crate::datastructures::entity_with_listens::recording_with_listens::collection::RecordingWithListensCollection;
-use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
-use crate::datastructures::listen_collection::ListenCollection;
 
 pub async fn get_test_user_listens() -> ListenCollection {
     ListenFetchQuery::builder()
@@ -11,14 +11,25 @@ pub async fn get_test_user_listens() -> ListenCollection {
         .returns(ListenFetchQueryReturn::Mapped)
         .user("RustyNova")
         .build()
-        .fetch(&mut *get_conn().await)
+        .fetch(
+            &mut *ALISTRAL_CLIENT
+                .musicbrainz_db
+                .connection
+                .acquire_guarded()
+                .await,
+        )
         .await
         .expect("Couldn't fetch test listens")
 }
 
 pub async fn get_test_user_recording_with_listens() -> RecordingWithListensCollection {
-    RecordingWithListens::from_listencollection(
-        &mut *get_conn().await,
+    RecordingWithListensCollection::from_listencollection(
+        &mut *ALISTRAL_CLIENT
+            .musicbrainz_db
+            .connection
+            .acquire_guarded()
+            .await,
+        &ALISTRAL_CLIENT,
         get_test_user_listens().await,
     )
     .await

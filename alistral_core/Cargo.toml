@@ -1,0 +1,20 @@
+[package]
+name = "alistral_core"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+musicbrainz-db-lite = { branch = "develop", git = "https://github.com/RustyNova016/musicbrainz_db_lite.git" }
+interzic = { path = "../interzic" }
+
+itertools = "0.14.0"
+serde = "1.0.217"
+sqlx = { version = "0.8.3", features = ["runtime-tokio", "macros"] }
+thiserror = "2.0.11"
+owo-colors = "4.1.0"
+indicatif = "0.17.9"
+chrono = "0.4.39"
+rust_decimal = "1.36.0"
+rust_decimal_macros = "1.36.0"
+futures = "0.3.31"
+listenbrainz = "0.8.1"

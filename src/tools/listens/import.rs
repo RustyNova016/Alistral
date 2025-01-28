@@ -178,16 +178,20 @@ impl ImportListen {
 
 #[cfg(test)]
 mod tests {
-    use crate::database::get_conn;
+    use crate::api::clients::ALISTRAL_CLIENT;
     use crate::tools::listens::import::import_listen_dump;
     use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
     use std::path::PathBuf;
 
     #[sqlx::test]
     async fn load_listen_dump_test() {
-        let conn = &mut *get_conn().await;
+        let mut conn = ALISTRAL_CLIENT
+            .musicbrainz_db
+            .connection
+            .acquire_guarded()
+            .await;
         import_listen_dump(
-            conn,
+            &mut conn,
             &PathBuf::from("tests/data/listen_dump.zip".to_string()),
             "TestNova",
         )
@@ -199,7 +203,7 @@ mod tests {
             .await
             .expect("This listen should exist");
         listen
-            .get_recording_or_fetch(conn)
+            .get_recording_or_fetch(&mut conn, &ALISTRAL_CLIENT.musicbrainz_db)
             .await
             .expect("The listen should be mapped");
     }

@@ -11,6 +11,8 @@ use musicbrainz_db_lite::models::musicbrainz::release::Release;
 use musicbrainz_db_lite::models::musicbrainz::release_group::ReleaseGroup;
 use musicbrainz_db_lite::models::musicbrainz::work::Work;
 
+use crate::api::clients::ALISTRAL_CLIENT;
+
 use super::hyperlink_rename;
 
 #[ext]
@@ -127,7 +129,7 @@ pub impl Recording {
         Ok(format!(
             "{} by {}",
             self.pretty_format().await?,
-            self.get_artist_credits_or_fetch(conn)
+            self.get_artist_credits_or_fetch(conn, &ALISTRAL_CLIENT.musicbrainz_db)
                 .await?
                 .pretty_format(listenbrainz)
                 .await?
@@ -155,7 +157,7 @@ pub impl Release {
         Ok(format!(
             "{} by {}",
             self.pretty_format(listenbrainz).await?,
-            self.get_artist_credits_or_fetch(conn)
+            self.get_artist_credits_or_fetch(conn, &ALISTRAL_CLIENT.musicbrainz_db)
                 .await?
                 .pretty_format(listenbrainz)
                 .await?
@@ -204,7 +206,7 @@ pub impl ReleaseGroup {
         Ok(format!(
             "{} by {}",
             self.pretty_format(listenbrainz).await?,
-            self.get_artist_credits_or_fetch(conn)
+            self.get_artist_credits_or_fetch(conn, &ALISTRAL_CLIENT.musicbrainz_db)
                 .await?
                 .pretty_format(listenbrainz)
                 .await?

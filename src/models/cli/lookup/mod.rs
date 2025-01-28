@@ -1,4 +1,3 @@
-use crate::database::get_conn;
 use crate::models::config::Config;
 use crate::tools::lookup::lookup_command;
 use crate::utils::cli::parsing::assert_recording_mbid;
@@ -19,11 +18,11 @@ pub struct LookupCommand {
 }
 
 impl LookupCommand {
-    pub async fn run(&self) -> color_eyre::Result<()> {
-        let mut conn = get_conn().await;
-        let id = assert_recording_mbid(&mut conn, &self.id).await;
+    pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> color_eyre::Result<()> {
+        let id = assert_recording_mbid(conn, &self.id).await;
 
         lookup_command(
+            conn,
             &Config::check_username(&self.username),
             &id,
             self.entity_type,

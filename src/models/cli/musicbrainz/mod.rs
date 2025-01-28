@@ -13,8 +13,8 @@ pub struct MusicbrainzCommand {
 }
 
 impl MusicbrainzCommand {
-    pub async fn run(&self) {
-        self.subcommand.run().await;
+    pub async fn run(&self, conn: &mut sqlx::SqliteConnection) {
+        self.subcommand.run(conn).await;
     }
 }
 
@@ -42,7 +42,7 @@ pub enum MusicbrainzSubcommands {
 }
 
 impl MusicbrainzSubcommands {
-    pub async fn run(&self) {
+    pub async fn run(&self, conn: &mut sqlx::SqliteConnection) {
         match self {
             Self::Clippy {
                 start_mbid,
@@ -63,6 +63,7 @@ impl MusicbrainzSubcommands {
                 };
 
                 mb_clippy(
+                    conn,
                     &read_mbid_from_input(&mbid).expect("Couldn't read mbid"),
                     *new_first,
                     &filter,

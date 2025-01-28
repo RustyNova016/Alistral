@@ -4,6 +4,12 @@ use thiserror::Error;
 #[derive(Error, Debug)]
 //#[expect(clippy::enum_variant_names)]
 pub enum Error {
+    #[error(transparent)]
+    AlistralCore(#[from] alistral_core::Error),
+
+    #[error(transparent)]
+    InterzicError(#[from] interzic::Error),
+
     // --- Config Errors ---
     #[error("An error occured when trying to load the configuration file.")]
     ConfigLoadError(io::Error),
@@ -42,6 +48,9 @@ pub enum Error {
 
     #[error("Listenbrainz responded with an error")]
     ListenbrainzError(#[from] listenbrainz::Error),
+
+    #[error("No user data is available for this playlist export target: {0}")]
+    MissingPlaylistUserDataError(String),
 }
 
 impl Error {
