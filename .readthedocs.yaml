@@ -18,7 +18,7 @@ build:
         # For an example book..
         # - mdbook init docs
         - cd "./docs/book"
-        - mdbook build docs --dest-dir $READTHEDOCS_OUTPUT/html
+        - /home/docs/.asdf/installs/rust/1.82.0/bin/mdbook build docs --dest-dir $READTHEDOCS_OUTPUT/html
 
 # Optionally build your docs in additional formats such as PDF and ePub
 # formats:
