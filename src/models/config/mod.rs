@@ -40,6 +40,9 @@ pub struct Config {
 
     #[serde(default = "default_lb_url")]
     pub listenbrainz_url: String,
+
+    #[serde(default = "default_mb_url")]
+    pub musicbrainz_url: String,
 }
 
 impl Config {
@@ -116,10 +119,15 @@ impl Default for Config {
             default_user: Default::default(),
             bumps: Default::default(),
             listenbrainz_url: default_lb_url(),
+            musicbrainz_url: default_mb_url(),
         }
     }
 }
 
 fn default_lb_url() -> String {
     "https://api.listenbrainz.org/1/".to_string()
+}
+
+fn default_mb_url() -> String {
+    "http://musicbrainz.org/ws/2/".to_string()
 }
