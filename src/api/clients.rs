@@ -23,7 +23,9 @@ pub async fn create_client() -> AlistralClient {
 
         let listenbrainz = Arc::new(ListenbrainzClient::new_with_url(&config.listenbrainz_url));
 
-        let musicbrainz_rs: Arc<MusicBrainzClient> = Arc::new(Default::default());
+        let mut musicbrainz_rs = MusicBrainzClient::default();
+        musicbrainz_rs.musicbrainz_url = config.musicbrainz_url.to_string();
+        let musicbrainz_rs = Arc::new(musicbrainz_rs);
 
         let musicbrainz_db = DBClient::builder()
             .as_file(DB_LOCATION.to_path_buf())
