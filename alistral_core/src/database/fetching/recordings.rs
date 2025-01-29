@@ -1,11 +1,15 @@
 use itertools::Itertools as _;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
+use tracing::info;
+use tracing::instrument;
+use tracing::Span;
+use tracing_indicatif::span_ext::IndicatifSpanExt;
 
-use crate::cli::logger::println_cli;
-use crate::cli::progress_bar::global_progress_bar::PG_FETCHING;
+use crate::pg_counted;
 
 /// Prefetch all the recordings of a list of listens
+#[instrument(skip(client), fields(indicatif.pb_show = tracing::field::Empty))]
 pub async fn prefetch_recordings_of_listens(
     conn: &mut sqlx::SqliteConnection,
     client: &crate::AlistralClient,
@@ -13,17 +17,18 @@ pub async fn prefetch_recordings_of_listens(
     listens: &[Listen],
 ) -> Result<(), musicbrainz_db_lite::Error> {
     let recordings = Listen::get_unfetched_recordings_ids(conn, user_id, listens).await?;
-    let progress_bar = PG_FETCHING.get_submitter(recordings.len() as u64);
+    pg_counted!(recordings.len(), "Fetching Recordings");
 
-    println_cli("Fetching missing recording data");
+    info!("Fetching recordings from listens");
     for recording in recordings {
         Recording::get_or_fetch(conn, &client.musicbrainz_db, &recording).await?;
-        progress_bar.inc(1);
+        Span::current().pb_inc(1);
     }
 
     Ok(())
 }
 
+#[instrument(skip(client), fields(indicatif.pb_show = tracing::field::Empty))]
 pub async fn fetch_recordings_as_complete(
     conn: &mut sqlx::SqliteConnection,
     client: &crate::AlistralClient,
@@ -34,15 +39,15 @@ pub async fn fetch_recordings_as_complete(
         .iter()
         .filter(|r| !r.is_fully_fetched())
         .collect_vec();
+    
+    pg_counted!(uncompletes.len(), "Fetching Recordings");
+    info!("Fetching full recording data");
 
-    let progress_bar = PG_FETCHING.get_submitter(uncompletes.len() as u64);
-
-    println_cli("Fetching missing recording data");
     for recording in uncompletes {
         recording
             .fetch_if_incomplete(conn, &client.musicbrainz_db)
             .await?;
-        progress_bar.inc(1);
+        Span::current().pb_inc(1);
     }
 
     Ok(())

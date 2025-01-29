@@ -12,6 +12,7 @@ use chrono::Utc;
 use color_eyre::owo_colors::OwoColorize;
 use itertools::Itertools;
 use musicbrainz_db_lite::models::musicbrainz::release_group::ReleaseGroup;
+use tracing::instrument;
 
 use crate::api::clients::ALISTRAL_CLIENT;
 use crate::api::listenbrainz::fresh_releases::FreshReleaseRelease;
@@ -23,6 +24,7 @@ use crate::models::config::Config;
 use crate::utils::cli::display::RecordingExt as _;
 use crate::utils::cli::display::ReleaseGroupExt;
 
+#[instrument]
 pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
     let listens = ListenFetchQuery::builder()
         //.fetch_recordings_redirects(true)
@@ -146,6 +148,7 @@ pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
     }
 }
 
+#[instrument(skip_all)]
 async fn get_fresh_releases(
     conn: &mut sqlx::SqliteConnection,
     listens: ListenCollection,

@@ -2,21 +2,25 @@ pub mod artist_with_recordings;
 use itertools::Itertools as _;
 use musicbrainz_db_lite::models::musicbrainz::artist::Artist;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
+use tracing::instrument;
 
 use crate::database::fetching::recordings::fetch_recordings_as_complete;
 use crate::datastructures::entity_with_listens::artist::ArtistWithListens;
 use crate::datastructures::entity_with_listens::collection::EntityWithListensCollection;
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use crate::datastructures::listen_collection::ListenCollection;
+use crate::pg_spinner;
 
 pub type ArtistWithListensCollection = EntityWithListensCollection<Artist, ListenCollection>;
 
 impl ArtistWithListensCollection {
+    #[instrument(skip_all, fields(indicatif.pb_show = tracing::field::Empty))]
     pub async fn from_listencollection(
         conn: &mut sqlx::SqliteConnection,
         client: &crate::AlistralClient,
         listens: ListenCollection,
     ) -> Result<Self, crate::Error> {
+        pg_spinner!("Compiling artist data");
         // Convert Recordings
         let recordings =
             RecordingWithListensCollection::from_listencollection(conn, client, listens).await?;
