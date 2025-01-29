@@ -7,6 +7,7 @@ use interzic::InterzicClient;
 use listenbrainz::raw::Client as ListenbrainzClient;
 use musicbrainz_db_lite::client::MusicBrainzClient;
 use musicbrainz_db_lite::DBClient;
+use tracing::debug;
 
 use crate::database::DB_LOCATION;
 use crate::models::config::Config;
@@ -17,6 +18,7 @@ use crate::utils::constants::YT_SECRET_FILE;
 pub static ALISTRAL_CLIENT: LazyLock<AlistralClient> = LazyLock::new(|| block_on(create_client()));
 
 pub async fn create_client() -> AlistralClient {
+    debug!("Creating client");
     let (listenbrainz, musicbrainz_rs, musicbrainz_db) = {
         let config = Config::load_or_panic();
         let config = config.read_or_panic();
@@ -52,6 +54,7 @@ pub async fn create_client() -> AlistralClient {
         )
         .await,
     );
+    debug!("Created client");
 
     AlistralClient {
         musicbrainz_rs,
