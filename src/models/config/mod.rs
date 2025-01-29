@@ -129,5 +129,5 @@ fn default_lb_url() -> String {
 }
 
 fn default_mb_url() -> String {
-    "http://musicbrainz.org/ws/2/".to_string()
+    "http://musicbrainz.org/ws/2".to_string()
 }
