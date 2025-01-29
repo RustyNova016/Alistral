@@ -4,10 +4,13 @@ use color_eyre::eyre::Ok;
 
 use database::cleanup::cleanup_database;
 use models::cli::Cli;
+use tracing::debug;
+use tracing::info;
 
 pub mod api;
 pub mod database;
 pub mod datastructures;
+pub mod interface;
 pub mod models;
 #[cfg(test)]
 pub mod testing;
@@ -17,11 +20,15 @@ pub mod utils;
 
 use crate::api::clients::create_client;
 use crate::api::clients::ALISTRAL_CLIENT;
+use crate::interface::tracing::init_tracer;
 pub use crate::models::error::Error;
 
 #[tokio::main]
 async fn main() -> color_eyre::Result<()> {
+    init_tracer();
     color_eyre::install()?;
+
+    info!("Hello world!");
 
     if run_cli().await {
         post_run().await
@@ -31,6 +38,7 @@ async fn main() -> color_eyre::Result<()> {
 }
 
 async fn run_cli() -> bool {
+    debug!("Starting the database");
     // Set up the database
     let conn = &mut *ALISTRAL_CLIENT
         .musicbrainz_db

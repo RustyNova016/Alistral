@@ -25,6 +25,10 @@ pub trait AlistralColors: Display {
         self.on_truecolor(0, 165, 93).to_string()
     }
 
+    fn interzic_red(&self) -> String {
+        self.truecolor(255, 75, 75).to_string()
+    }
+
     fn as_title(&self) -> String {
         format!(" {self} {CLEAR_UNTIL_END_OF_LINE}")
             .bold()
