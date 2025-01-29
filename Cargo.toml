@@ -36,7 +36,7 @@ clap = { version = "4.5.26", features = [
 clap_complete = "4.5.42"
 chrono = "0.4.39"
 serde = { version = "1.0.217", features = ["rc"] }
-serde_json = "1.0.135"
+serde_json = "1.0.138"
 extend = "1.2.0"
 directories = "6.0.0"
 indicatif = { version = "0.17.11", features = [
