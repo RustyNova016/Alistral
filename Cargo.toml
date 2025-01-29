@@ -39,7 +39,7 @@ serde = { version = "1.0.217", features = ["rc"] }
 serde_json = "1.0.135"
 extend = "1.2.0"
 directories = "6.0.0"
-indicatif = { version = "0.17.8", features = [
+indicatif = { version = "0.17.11", features = [
     "rayon",
     "improved_unicode",
     "futures",
