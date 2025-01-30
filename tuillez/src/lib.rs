@@ -1,3 +1,4 @@
+pub mod fatal_error;
 pub mod macros;
 pub mod styles;
 

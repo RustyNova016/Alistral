@@ -14,6 +14,7 @@ use crate::datastructures::radio::seeders::listens::ListenSeeder;
 use crate::datastructures::radio::sorters::underrated::underrated_sorter;
 use crate::models::cli::radio::RadioExportTarget;
 use crate::models::data_storage::DataStorage;
+use crate::models::error::ResultTEExt as _;
 use crate::tools::radio::convert_recordings;
 use crate::utils::data_file::DataFile as _;
 
@@ -23,13 +24,16 @@ pub async fn underrated_mix(
     collector: RadioCollector,
     token: &str,
     target: RadioExportTarget,
-) -> color_eyre::Result<()> {
+) -> Result<(), crate::Error> {
     let username = seeder.username().clone();
 
     info!("[Seeding] Getting listens");
 
     // Get the seeder
-    let recordings = seeder.seed(conn).await.expect("Couldn't find seed listens");
+    let recordings = seeder
+        .seed(conn)
+        .await
+        .expect_fatal("Couldn't find seed listens");
 
     // Get the all time listens
     let user_listens = ListenFetchQuery::builder()
@@ -38,7 +42,7 @@ pub async fn underrated_mix(
         .build()
         .fetch(conn)
         .await
-        .expect("Couldn't fetch the new listens");
+        .expect_fatal("Couldn't fetch the new listens");
 
     let user_listens =
         RecordingWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT, user_listens)
@@ -65,7 +69,7 @@ pub async fn underrated_mix(
         .await;
 
     info!("[Sending] Sending radio playlist to listenbrainz");
-    let counter = DataStorage::load().expect("Couldn't load data storage");
+    let counter = DataStorage::load().expect_fatal("Couldn't load data storage");
     let playlist = PlaylistStub {
         title: format!(
             "Radio: Underrated recordings #{}",
@@ -82,13 +86,13 @@ pub async fn underrated_mix(
         ),
         recordings: convert_recordings(conn, collected)
             .await
-            .expect("Couldn't convert recordings for playlist"),
+            .expect_fatal("Couldn't convert recordings for playlist"),
     };
 
     target
         .export(playlist, Some(username), Some(token))
         .await
-        .expect("Couldn't send the playlist");
+        .expect_fatal("Couldn't send the playlist");
 
     Ok(())
 }

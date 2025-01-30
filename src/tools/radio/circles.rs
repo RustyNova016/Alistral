@@ -16,6 +16,7 @@ use crate::datastructures::radio::collector::RadioCollector;
 use crate::datastructures::radio::seeders::listens::ListenSeeder;
 use crate::models::cli::radio::RadioExportTarget;
 use crate::models::data_storage::DataStorage;
+use crate::models::error::ResultTEExt as _;
 use crate::tools::radio::convert_recordings;
 use crate::utils::cli::display::ArtistExt;
 use crate::utils::data_file::DataFile as _;
@@ -31,7 +32,10 @@ pub async fn create_radio_mix(
     let username = seeder.username().clone();
 
     info!("[Seeding] Getting listens");
-    let recordings_with_listens = seeder.seed(conn).await.expect("Couldn't find seed listens");
+    let recordings_with_listens = seeder
+        .seed(conn)
+        .await
+        .expect_fatal("Couldn't find seed listens");
 
     let recordings = recordings_with_listens.iter_entities().collect_vec();
 
@@ -46,10 +50,10 @@ pub async fn create_radio_mix(
         collector
             .try_collect(radio_stream)
             .await
-            .expect("Error while generating the playlist")
+            .expect_fatal("Error while generating the playlist")
     };
 
-    let counter = DataStorage::load().expect("Couldn't load data storage");
+    let counter = DataStorage::load().expect_fatal("Couldn't load data storage");
     let playlist = PlaylistStub {
         title: format!(
             "Radio: Circles #{}",
@@ -59,13 +63,13 @@ pub async fn create_radio_mix(
             .to_string(),
         recordings: convert_recordings(conn, collected)
             .await
-            .expect("Couldn't convert recordings for playlist"),
+            .expect_fatal("Couldn't convert recordings for playlist"),
     };
 
     target
         .export(playlist, Some(username), Some(&token))
         .await
-        .expect("Couldn't send the playlist");
+        .expect_fatal("Couldn't send the playlist");
 }
 
 #[derive(Debug)]

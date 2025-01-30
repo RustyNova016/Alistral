@@ -1,5 +1,8 @@
 use std::io;
 use thiserror::Error;
+use tuillez::fatal_error::FatalError;
+
+use crate::interface::errors::process_errors;
 
 #[derive(Error, Debug)]
 //#[expect(clippy::enum_variant_names)]
@@ -61,4 +64,37 @@ impl Error {
 
         Self::RequestError(err)
     }
+
+    pub fn expect_fatal(self, text: String) -> ! {
+        let text = process_errors(&self).or(Some(text));
+
+        println!("{}", FatalError::new(self, text));
+        panic!()
+    }
+}
+
+#[extend::ext]
+pub impl<T, E> Result<T, E>
+where
+    E: Into<crate::Error>,
+{
+    fn unwrap_fatal(self) -> T {
+        match self {
+            Ok(v) => v,
+            Err(err) => inner(err, None),
+        }
+    }
+
+    fn expect_fatal(self, text: &str) -> T {
+        match self {
+            Ok(v) => v,
+            Err(err) => inner(err, Some(text.to_string())),
+        }
+    }
+}
+
+fn inner<T: Into<crate::Error>>(this: T, text: Option<String>) -> ! {
+    let err: crate::Error = this.into();
+    let text = process_errors(&err).or(text);
+    FatalError::new(err, text).panic()
 }
