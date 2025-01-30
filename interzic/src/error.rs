@@ -1,7 +1,7 @@
 use std::io;
 use thiserror::Error;
 
-use crate::models::services::youtube::error::YoutubeError;
+use crate::models::services::youtube::error::InterzicYoutubeError;
 
 #[derive(Error, Debug)]
 pub enum Error {
@@ -42,7 +42,7 @@ pub enum Error {
 
     // --- Service Errors ---
     #[error(transparent)]
-    YoutubeError(#[from] YoutubeError),
+    YoutubeError(#[from] InterzicYoutubeError),
 
     #[error(transparent)]
     MusicbrainzDBLiteError(#[from] musicbrainz_db_lite::Error),

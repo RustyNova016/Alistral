@@ -16,6 +16,7 @@ use crate::datastructures::radio::sorters::overdue::overdue_factor_sorter_cumula
 use crate::datastructures::radio::sorters::overdue::overdue_sorter;
 use crate::models::cli::radio::RadioExportTarget;
 use crate::models::data_storage::DataStorage;
+use crate::models::error::ResultTEExt;
 use crate::tools::radio::convert_recordings;
 use crate::utils::data_file::DataFile;
 
@@ -31,7 +32,7 @@ pub async fn overdue_radio(
     collector: RadioCollector,
     at_listening_time: bool,
     target: RadioExportTarget,
-) -> color_eyre::Result<()> {
+) -> Result<(), crate::Error> {
     let username = seeder.username().clone();
 
     info!("[Seeding] Getting listens");
@@ -67,7 +68,7 @@ pub async fn overdue_radio(
 
     info!("[Sending] Sending radio playlist to listenbrainz");
 
-    let counter = DataStorage::load().expect("Couldn't load data storage");
+    let counter = DataStorage::load().expect_fatal("Couldn't load data storage");
     let playlist = PlaylistStub {
         title: format!(
             "Radio: Overdue listens #{}",
@@ -77,13 +78,13 @@ pub async fn overdue_radio(
             .to_string(),
         recordings: convert_recordings(conn, collected)
             .await
-            .expect("Couldn't convert recordings for playlist"),
+            .expect_fatal("Couldn't convert recordings for playlist"),
     };
 
     target
         .export(playlist, Some(username), Some(token))
         .await
-        .expect("Couldn't send the playlist");
+        .expect_fatal("Couldn't send the playlist");
 
     Ok(())
 }

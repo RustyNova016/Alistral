@@ -1,25 +1,75 @@
 use serde::Deserialize;
 use thiserror::Error;
 
+/// Errors for the actions of interzic for youtube
 #[derive(Error, Debug)]
-pub enum YoutubeError {
+pub enum InterzicYoutubeError {
     #[error(transparent)]
-    ApiError(#[from] google_youtube3::common::Error),
+    ApiError(#[from] YoutubeError),
 
     #[error("This action require a youtube client, but it wasn't set up in the main client")]
     MissingYoutubeClient(),
 
     //#[error("An error happened when creating a playlist")]
     #[error(transparent)]
-    PlaylistCreateError(google_youtube3::common::Error),
+    PlaylistCreateError(YoutubeError),
 
     //#[error("An error happened when adding a video to a playlist: {0}")]
     #[error(transparent)]
-    PlaylistInsertError(google_youtube3::common::Error),
+    PlaylistInsertError(YoutubeError),
 
     //#[error("Couldn't search the recording")]
     #[error(transparent)]
-    RecordingSearchError(google_youtube3::common::Error),
+    RecordingSearchError(YoutubeError),
+}
+
+impl InterzicYoutubeError {
+    pub fn as_youtube_error(&self) -> Option<&YoutubeError> {
+        match self {
+            Self::ApiError(val) => Some(val),
+            Self::PlaylistCreateError(val) => Some(val),
+            Self::PlaylistInsertError(val) => Some(val),
+            Self::RecordingSearchError(val) => Some(val),
+            Self::MissingYoutubeClient() => None,
+        }
+    }
+}
+
+impl From<google_youtube3::common::Error> for InterzicYoutubeError {
+    fn from(value: google_youtube3::common::Error) -> Self {
+        Self::ApiError(value.into())
+    }
+}
+
+/// Errors from youtube
+#[derive(Error, Debug)]
+pub enum YoutubeError {
+    #[error(transparent)]
+    ApiError(google_youtube3::common::Error),
+
+    #[error(transparent)]
+    QuotaExceededError(google_youtube3::common::Error),
+
+    #[error(transparent)]
+    BadServiceError(google_youtube3::common::Error),
+}
+
+impl YoutubeError {
+    pub fn is_bad_service_error(&self) -> bool {
+        matches!(self, Self::BadServiceError(_))
+    }
+}
+
+impl From<google_youtube3::common::Error> for YoutubeError {
+    fn from(value: google_youtube3::common::Error) -> Self {
+        if is_quota_exceeded_error(&value) {
+            Self::QuotaExceededError(value)
+        } else if is_bad_service_error(&value) {
+            Self::BadServiceError(value)
+        } else {
+            Self::ApiError(value)
+        }
+    }
 }
 
 #[derive(Debug, Deserialize)]
@@ -37,4 +87,42 @@ pub struct BadRequestErrorError {
 pub struct BadRequestErrorErrorItem {
     pub domain: String,
     pub reason: String,
+}
+
+pub(super) fn is_quota_exceeded_error(err: &google_youtube3::common::Error) -> bool {
+    let google_youtube3::common::Error::BadRequest(err) = err else {
+        return false;
+    };
+
+    let err: Result<BadRequestError, serde_json::Error> = serde_json::from_value(err.clone());
+
+    let Ok(err) = err else {
+        return false;
+    };
+
+    err.error.code == 403
+        && err
+            .error
+            .errors
+            .iter()
+            .any(|err| err.reason == "quotaExceeded")
+}
+
+fn is_bad_service_error(err: &google_youtube3::common::Error) -> bool {
+    let google_youtube3::common::Error::BadRequest(err) = err else {
+        return false;
+    };
+
+    let err: Result<BadRequestError, serde_json::Error> = serde_json::from_value(err.clone());
+
+    let Ok(err) = err else {
+        return false;
+    };
+
+    err.error.code == 409
+        && err
+            .error
+            .errors
+            .iter()
+            .any(|err| err.reason == "SERVICE_UNAVAILABLE")
 }
