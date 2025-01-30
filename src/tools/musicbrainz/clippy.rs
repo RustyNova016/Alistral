@@ -5,6 +5,7 @@ use color_eyre::owo_colors::OwoColorize as _;
 use futures::TryStreamExt;
 use musicbrainz_db_lite::models::musicbrainz::main_entities::MainEntity;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
+use tracing::info;
 
 use crate::api::clients::ALISTRAL_CLIENT;
 use crate::datastructures::clippy::missing_release_barcode::MissingBarcodeLint;
@@ -16,7 +17,6 @@ use crate::datastructures::clippy::suspicious_remix::SuspiciousRemixLint;
 use crate::models::clippy::MbClippyLint;
 use crate::utils::cli::await_next;
 use crate::utils::cli::display::MainEntityExt;
-use crate::utils::println_cli;
 use crate::utils::whitelist_blacklist::WhitelistBlacklist;
 
 pub async fn mb_clippy(
@@ -149,7 +149,7 @@ async fn get_new_nodes(
     entity: &MainEntity,
     queue: &mut VecDeque<MainEntity>,
 ) -> Result<(), crate::Error> {
-    println_cli("Getting new data...");
+    info!("Getting new data...");
 
     match entity {
         MainEntity::Recording(val) => {

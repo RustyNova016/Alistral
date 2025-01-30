@@ -8,6 +8,8 @@ use musicbrainz_db_lite::models::musicbrainz::artist::Artist;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use rand::prelude::SliceRandom;
 use rand::thread_rng;
+use tracing::info;
+use tracing::warn;
 
 use crate::api::clients::ALISTRAL_CLIENT;
 use crate::datastructures::radio::collector::RadioCollector;
@@ -17,7 +19,6 @@ use crate::models::data_storage::DataStorage;
 use crate::tools::radio::convert_recordings;
 use crate::utils::cli::display::ArtistExt;
 use crate::utils::data_file::DataFile as _;
-use crate::utils::println_cli;
 
 pub async fn create_radio_mix(
     conn: &mut sqlx::SqliteConnection,
@@ -29,7 +30,7 @@ pub async fn create_radio_mix(
 ) {
     let username = seeder.username().clone();
 
-    println_cli("[Seeding] Getting listens");
+    info!("[Seeding] Getting listens");
     let recordings_with_listens = seeder.seed(conn).await.expect("Couldn't find seed listens");
 
     let recordings = recordings_with_listens.iter_entities().collect_vec();
@@ -39,7 +40,7 @@ pub async fn create_radio_mix(
     let collected = {
         let radio_stream = radio.into_stream(conn, recordings);
 
-        println_cli("[Finalising] Creating radio playlist");
+        info!("[Finalising] Creating radio playlist");
         pin_mut!(radio_stream);
 
         collector
@@ -87,10 +88,10 @@ impl RadioCircle {
         conn: &mut sqlx::SqliteConnection,
         artist: &Artist,
     ) -> Result<Option<Recording>, crate::Error> {
-        println_cli(format!(
+        info!(
             "Checking artist: {}",
             artist.pretty_format(true).await.unwrap()
-        ));
+        );
         let mut recordings: Vec<Recording> = artist
             .browse_or_fetch_artist_recordings(conn)
             .try_collect()
@@ -162,7 +163,7 @@ impl RadioCircle {
                             return Ok(Some(recording));
                         }
                         None => {
-                            println_cli(format!("{} has not enough recordings for generation. Consider adding more recordings to Musicbrainz!", artist.name));
+                            warn!("{} has not enough recordings for generation. Consider adding more recordings to Musicbrainz!", artist.name);
                             self.artist_blacklist.push(artist.mbid.clone());
                         }
                     }

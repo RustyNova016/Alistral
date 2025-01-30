@@ -3,19 +3,19 @@ use std::cmp::Reverse;
 use alistral_core::datastructures::entity_with_listens::messybrainz::collection::MessybrainzWithListensCollection;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use itertools::Itertools;
+use tracing::info;
 
 use crate::database::listenbrainz::listens::ListenFetchQuery;
 use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
 use crate::models::cli::common::SortSorterBy;
 use crate::utils::cli_paging::CLIPager;
-use crate::utils::println_cli;
 
 pub async fn unmapped_command(
     conn: &mut sqlx::SqliteConnection,
     username: &str,
     sort: Option<SortSorterBy>,
 ) {
-    println_cli(format!("Fetching unmapped for user {username}"));
+    info!("Fetching unmapped for user {username}");
     let listens = ListenFetchQuery::builder()
         .fetch_recordings_redirects(true)
         .returns(ListenFetchQueryReturn::Unmapped)

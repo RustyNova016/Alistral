@@ -1,7 +1,3 @@
-use std::fmt::Display;
-
-use alistral_core::cli::logger::STATIC_LOGGER;
-use color_eyre::owo_colors::OwoColorize;
 use derive_builder::Builder;
 use listenbrainz::raw::response::{UserListensListen, UserListensResponse};
 use listenbrainz::raw::Client;
@@ -94,34 +90,4 @@ impl Iterator for ListenAPIReader {
 
         self.page.pop()
     }
-}
-
-pub trait OverridePrint {
-    fn override_print<I: AsRef<str>>(&self, msg: I);
-}
-
-pub fn println_cli<T: Display>(string: T) {
-    let static_clone = STATIC_LOGGER.clone();
-    let logger = static_clone.lock().unwrap();
-    logger.println_cli(string);
-}
-
-pub fn println_cli_warn<T: Display>(string: T) {
-    println_cli(format!("[Warning] {string}").yellow());
-}
-
-pub fn println_cli_info<T: Display>(string: T) {
-    println_cli(format!("[Info] {string}").yellow());
-}
-
-pub fn println_lis<T: Display>(string: T) {
-    let static_clone = STATIC_LOGGER.clone();
-    let logger = static_clone.lock().unwrap();
-    logger.println_lis(string);
-}
-
-pub fn println_mus<T: Display>(string: T) {
-    let static_clone = STATIC_LOGGER.clone();
-    let logger = static_clone.lock().unwrap();
-    logger.println_mus(string);
 }

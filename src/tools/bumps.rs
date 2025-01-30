@@ -5,6 +5,7 @@ use chrono::Duration;
 use chrono::Utc;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use rust_decimal::Decimal;
+use tracing::info;
 
 use crate::api::clients::ALISTRAL_CLIENT;
 use crate::database::listenbrainz::listens::ListenFetchQuery;
@@ -14,7 +15,6 @@ use crate::models::config::Config;
 use crate::utils::cli::display::RecordingExt as _;
 use crate::utils::cli::read_mbid_from_input;
 use crate::utils::extensions::chrono_ext::DurationExt as _;
-use crate::utils::println_cli;
 
 pub async fn bump_command(conn: &mut sqlx::SqliteConnection, bump: BumpCLI) {
     let username = Config::check_username(&bump.username);
@@ -58,7 +58,7 @@ pub async fn bump_command(conn: &mut sqlx::SqliteConnection, bump: BumpCLI) {
 
     let conf = Config::load_or_panic();
 
-    println_cli(format!(
+    info!(
         "Adding bump to {}, giving a {} multiplier for {}",
         recording
             .pretty_format_with_credits(conn, true)
@@ -66,7 +66,7 @@ pub async fn bump_command(conn: &mut sqlx::SqliteConnection, bump: BumpCLI) {
             .expect("Error while getting recording credits"),
         multiplier,
         duration.to_humantime().unwrap()
-    ));
+    );
 
     conf.write_or_panic().bumps.add_bump(
         recording.mbid.clone(),

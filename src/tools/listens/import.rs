@@ -12,8 +12,7 @@ use musicbrainz_db_lite::models::musicbrainz::user::User;
 use serde::Deserialize;
 use serde::Serialize;
 use sqlx::Acquire;
-
-use crate::utils::println_cli_info;
+use tracing::info;
 
 pub async fn import_listen_dump(
     conn: &mut sqlx::SqliteConnection,
@@ -76,7 +75,7 @@ pub async fn import_listen_dump(
         }
         trans.commit().await.expect("Couldn't save transaction");
 
-        println_cli_info(format!("Loaded {count} listens"));
+        info!("Loaded {count} listens");
     }
     import_trans
         .commit()
