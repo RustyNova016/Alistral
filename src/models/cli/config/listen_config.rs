@@ -1,9 +1,9 @@
 use crate::models::cli::common::ConfigBool;
 use crate::models::config::global_config::CONFIG;
-use crate::utils::println_cli;
 use clap::command;
 use clap::Parser;
 use clap::Subcommand;
+use tracing::info;
 
 #[derive(Parser, Debug, Clone)]
 #[command(version, about, long_about = None)]
@@ -35,10 +35,10 @@ impl ListenConfigSubcommands {
 
                 config_lock.listens.config_refresh_unmapped_listens(*state);
 
-                println_cli(format!(
+                info!(
                     "Successfully set `RefreshUnmappedListens` to {}",
                     config_lock.listens.refresh_unmapped_listens
-                ));
+                );
             }
         }
 
