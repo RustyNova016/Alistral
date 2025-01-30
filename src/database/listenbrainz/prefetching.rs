@@ -1,4 +1,3 @@
-use alistral_core::cli::progress_bar::global_progress_bar::PG_FETCHING;
 use itertools::Itertools;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
@@ -14,12 +13,10 @@ pub async fn prefetch_recordings_of_listens(
     listens: &[Listen],
 ) -> Result<(), musicbrainz_db_lite::Error> {
     let recordings = Listen::get_unfetched_recordings_ids(conn, user_id, listens).await?;
-    let progress_bar = PG_FETCHING.get_submitter(recordings.len() as u64);
 
     println_cli("Fetching missing recording data");
     for recording in recordings {
         Recording::get_or_fetch(conn, &ALISTRAL_CLIENT.musicbrainz_db, &recording).await?;
-        progress_bar.inc(1);
     }
 
     Ok(())
@@ -36,14 +33,11 @@ pub async fn prefetch_releases(
         .filter(|r| !r.is_fully_fetched())
         .collect_vec();
 
-    let progress_bar = PG_FETCHING.get_submitter(uncompletes.len() as u64);
-
     println_cli("Fetching missing release data");
     for release in uncompletes {
         release
             .fetch_if_incomplete(conn, &ALISTRAL_CLIENT.musicbrainz_db)
             .await?;
-        progress_bar.inc(1);
     }
 
     Ok(())
@@ -59,14 +53,11 @@ pub async fn fetch_recordings_as_complete(
         .filter(|r| !r.is_fully_fetched())
         .collect_vec();
 
-    let progress_bar = PG_FETCHING.get_submitter(uncompletes.len() as u64);
-
     println_cli("Fetching missing recording data");
     for recording in uncompletes {
         recording
             .fetch_if_incomplete(conn, &ALISTRAL_CLIENT.musicbrainz_db)
             .await?;
-        progress_bar.inc(1);
     }
 
     Ok(())

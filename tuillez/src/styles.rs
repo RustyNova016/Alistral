@@ -1,7 +1,6 @@
 use std::sync::LazyLock;
 
 use indicatif::ProgressState;
-use owo_colors::OwoColorize;
 use tracing_indicatif::style::ProgressStyle;
 
 pub static SPINNER_STYLE: LazyLock<ProgressStyle> = LazyLock::new(|| {
