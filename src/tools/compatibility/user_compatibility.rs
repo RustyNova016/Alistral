@@ -1,8 +1,10 @@
-use alistral_core::cli::progress_bar::ProgressBarCli;
 use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use rust_decimal::Decimal;
+use tracing::instrument;
+use tuillez::pg_counted;
+use tuillez::pg_inc;
 
 //TODO: #459 Refactor user compatibility with a "UserWithListens" struct
 
@@ -35,19 +37,17 @@ pub fn get_user_shared_percent(
 }
 
 /// For each shared recordings, return the ratio of listens being from a recording
+#[instrument( fields(indicatif.pb_show = tracing::field::Empty))]
 fn get_user_ratio<'r>(
     shared_recordings: &'r Vec<Recording>,
     user_listens: &RecordingWithListensCollection,
 ) -> Vec<(Decimal, &'r Recording)> {
-    let progress = ProgressBarCli::new(
-        shared_recordings.len() as u64,
-        Some("Calculating listen ratios"),
-    );
+    pg_counted!(shared_recordings.len(), "Calculating listen ratios");
 
     let mut ratios = Vec::new();
     for shared_rec in shared_recordings {
         ratios.push((user_listens.get_listen_ratio(shared_rec), shared_rec));
-        progress.inc(1);
+        pg_inc!();
     }
 
     ratios

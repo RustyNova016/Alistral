@@ -1,18 +1,18 @@
 use std::collections::HashMap;
 
-use alistral_core::cli::progress_bar::ProgressBarCli;
+use tracing::instrument;
+use tuillez::pg_counted;
+use tuillez::pg_inc;
 
 use crate::models::data::listenbrainz::popularity::PopularityRecordingResponseItem;
 
+#[instrument( fields(indicatif.pb_show = tracing::field::Empty))]
 pub async fn get_global_listen_counts(
     recordings: &[String],
 ) -> Result<Vec<PopularityRecordingResponseItem>, crate::Error> {
     let mut results = Vec::new();
     let client = reqwest::Client::new();
-    let progress = ProgressBarCli::new(
-        (recordings.len() / 999) as u64,
-        Some("Getting global statistics"),
-    );
+    pg_counted!(recordings.len() / 999, "Getting global statistics");
 
     for chunk in recordings.chunks(999) {
         let mut req_body = HashMap::new();
@@ -27,7 +27,7 @@ pub async fn get_global_listen_counts(
             .await?;
 
         results.extend(res);
-        progress.inc(1);
+        pg_inc!();
     }
 
     Ok(results)

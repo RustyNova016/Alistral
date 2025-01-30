@@ -15,7 +15,8 @@ pub static COUNT_STYLE: LazyLock<ProgressStyle> = LazyLock::new(|| {
         "{span_child_prefix}[{msg}]┫{wide_bar} {pos}/{len} ┃ {eta_precise} ┃ {elapsed_subsec}",
     )
     .unwrap()
-    .with_key("elapsed_subsec", elapsed_subsec).progress_chars(&format!("{}{}{}", "█", "┣", "━"))
+    .with_key("elapsed_subsec", elapsed_subsec)
+    .progress_chars(&format!("{}{}{}", "█", "┣", "━"))
 });
 
 fn elapsed_subsec(state: &ProgressState, writer: &mut dyn std::fmt::Write) {

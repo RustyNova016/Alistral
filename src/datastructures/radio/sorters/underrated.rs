@@ -1,18 +1,21 @@
 use core::cmp::Reverse;
 
-use alistral_core::cli::progress_bar::ProgressBarCli;
 use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use alistral_core::datastructures::entity_with_listens::recording::RecordingWithListens;
+use tracing::instrument;
+use tuillez::pg_counted;
+use tuillez::pg_inc;
 
 use crate::models::data::listenbrainz::popularity::PopularityRecordingResponseItem;
 
 /// Sort listens based on the rate of listens of a recording
+#[instrument( fields(indicatif.pb_show = tracing::field::Empty))]
 pub fn underrated_sorter(
     mut recordings: Vec<RecordingWithListens>,
     user_listens: &RecordingWithListensCollection,
     global_listen_counts: Vec<PopularityRecordingResponseItem>,
 ) -> Vec<RecordingWithListens> {
-    let progress = ProgressBarCli::new((recordings.len()) as u64, Some("Sorting recordings"));
+    pg_counted!(recordings.len(), "Sorting recordings");
 
     recordings.sort_by_cached_key(|r| {
         let global_count = global_listen_counts
@@ -27,7 +30,7 @@ pub fn underrated_sorter(
 
         let score = r.get_underated_score(user_listens, global_count);
 
-        progress.inc(1);
+        pg_inc!();
 
         Reverse(score)
     });
