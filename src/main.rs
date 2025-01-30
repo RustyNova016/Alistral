@@ -1,4 +1,3 @@
-use alistral_core::cli::logger::println_cli;
 use clap::Parser;
 use color_eyre::eyre::Ok;
 
@@ -59,12 +58,12 @@ async fn post_run() {
         .acquire_guarded()
         .await;
 
-    println_cli("Optional cleanup - This is fine to cancel");
-    println_cli("Cleaning some old entries...");
+    info!("Optional cleanup - This is fine to cancel");
+    info!("Cleaning some old entries...");
     cleanup_database(conn)
         .await
         .expect("Error while cleaning the database");
-    println_cli("Done!");
+    info!("Done!");
 
-    println_cli("Have a nice day!");
+    info!("Have a nice day!");
 }

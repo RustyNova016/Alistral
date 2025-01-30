@@ -1,4 +1,3 @@
-use alistral_core::cli::progress_bar::global_progress_bar::PG_FETCHING;
 use alistral_core::datastructures::listen_collection::ListenCollection;
 use chrono::{DateTime, Utc};
 use macon::Builder;
@@ -7,6 +6,8 @@ use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use sqlx::SqliteConnection;
 use tracing::info;
 use tracing::instrument;
+use tuillez::pg_counted;
+use tuillez::pg_inc;
 use tuillez::pg_spinner;
 
 use crate::api::clients::ALISTRAL_CLIENT;
@@ -89,16 +90,17 @@ impl ListenFetchQuery {
         }
     }
 
+    #[instrument(fields(indicatif.pb_show = tracing::field::Empty))]
     async fn fetch_recordings_redirects(
         conn: &mut SqliteConnection,
         user: &str,
     ) -> Result<(), crate::Error> {
         let unfetched = Listen::get_unfetched_recordings_of_user(conn, user).await?;
-        let subm = PG_FETCHING.get_submitter(unfetched.len() as u64);
+        pg_counted!(unfetched.len(), "Fetching listen MBIDs");
 
         for id in unfetched {
             Recording::get_or_fetch(conn, &ALISTRAL_CLIENT.musicbrainz_db, &id).await?;
-            subm.inc(1);
+            pg_inc!();
         }
 
         Ok(())

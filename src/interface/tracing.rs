@@ -1,6 +1,7 @@
 use core::fmt;
 
 use alistral_core::cli::colors::AlistralColors as _;
+use color_eyre::owo_colors::OwoColorize;
 use tracing::Event;
 use tracing::Level;
 use tracing::Metadata;
@@ -57,33 +58,33 @@ where
 
         get_domain(&mut writer, metadata)?;
 
-        //write!(&mut writer, "{} {}: ", metadata.level(), metadata.target())?;
-
-        // Format all the spans in the event's span context.
-        if let Some(scope) = ctx.event_scope() {
-            for span in scope.from_root() {
-                // write!(writer, "{}", span.name())?;
-
-                // // `FormattedFields` is a formatted representation of the span's
-                // // fields, which is stored in its extensions by the `fmt` layer's
-                // // `new_span` method. The fields will have been formatted
-                // // by the same field formatter that's provided to the event
-                // // formatter in the `FmtContext`.
-                // let ext = span.extensions();
-                // let fields = &ext
-                //     .get::<FormattedFields<N>>()
-                //     .expect("will never be `None`");
-
-                // // Skip formatting the fields if the span had no fields.
-                // if !fields.is_empty() {
-                //     write!(writer, "{{{}}}", fields)?;
-                // }
-                //write!(writer, "§: ")?;
+                write!(
+            writer,
+            "{}",
+            match *metadata.level() {
+                Level::ERROR => "[Error] ".red().to_string(),
+                Level::WARN => "[Warn] ".yellow().to_string(),
+                Level::INFO => "".to_string(),
+                Level::DEBUG => "[Debug] ".cyan().to_string(),
+                Level::TRACE => "[Trace] ".bright_black().to_string(),
             }
-        }
+        )?;
 
         // Write fields on the event
         ctx.field_format().format_fields(writer.by_ref(), event)?;
+
+        // write!(
+        //     writer,
+        //     "{}",
+        //     match *metadata.level() {
+        //         Level::ERROR => fields.red().to_string(),
+        //         Level::WARN => fields.yellow().to_string(),
+        //         Level::INFO => fields,
+        //         Level::DEBUG => fields.cyan().to_string(),
+        //         Level::TRACE => fields.bright_black().to_string(),
+        //     }
+        // )?;        
+
 
         writeln!(writer)
     }

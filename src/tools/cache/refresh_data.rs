@@ -1,5 +1,6 @@
-use alistral_core::cli::progress_bar::global_progress_bar::PG_FETCHING;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
+use tuillez::pg_counted;
+use tuillez::pg_inc;
 
 use crate::api::clients::ALISTRAL_CLIENT;
 use crate::database::listenbrainz::listens::ListenFetchQuery;
@@ -39,13 +40,13 @@ pub async fn refresh_data(
             LIMIT ?", username,max_ts,  limit
         ).fetch_all(&mut *conn).await.expect("Couldn't retrieve the listened mbids");
 
-    let progress_bar = PG_FETCHING.get_submitter(mbids.len() as u64);
+    pg_counted!(mbids.len(), "Refetching data");
     for mbid in mbids {
         let recording = Recording::fetch_and_save(conn, &ALISTRAL_CLIENT.musicbrainz_db, &mbid)
             .await
             .expect("Couldn't refresh mbid");
 
-        progress_bar.inc(1);
+        pg_inc!();
 
         if let Some(recording) = recording {
             // It's ok to silently discard the error here. It's just some fancy display
