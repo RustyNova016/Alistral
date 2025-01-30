@@ -1,16 +1,13 @@
 use alistral_core::cli::progress_bar::global_progress_bar::PG_FETCHING;
 use alistral_core::datastructures::listen_collection::ListenCollection;
-use alistral_core::pg_spinner;
 use chrono::{DateTime, Utc};
-use indicatif::ProgressStyle;
 use macon::Builder;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use sqlx::SqliteConnection;
 use tracing::info;
 use tracing::instrument;
-use tracing::Span;
-use tracing_indicatif::span_ext::IndicatifSpanExt as _;
+use tuillez::pg_spinner;
 
 use crate::api::clients::ALISTRAL_CLIENT;
 use crate::utils::env::in_offline_mode;

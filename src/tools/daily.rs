@@ -166,6 +166,7 @@ async fn get_fresh_releases(
         .payload
         .releases;
 
+    //TODO: Prevent recompiling recording with listens
     let artists =
         ArtistWithRecordingsCollection::from_listencollection(conn, &ALISTRAL_CLIENT, listens)
             .await

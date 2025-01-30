@@ -20,6 +20,7 @@ musicbrainz-db-lite = { branch = "develop", git = "https://github.com/RustyNova0
 #musicbrainz-db-lite = { version = "0.1.0", path = "../musicbrainz-db-lite" }
 
 interzic = { path = "./interzic" }
+tuillez = { path = "./tuillez" }
 
 derive_builder = "0.20.2"
 inquire = "0.7.5"
@@ -79,7 +80,7 @@ async_fn_in_trait = { level = "allow", priority = 1 }
 # --- Workspace ---
 
 [workspace]
-members = ["./alistral_core", "interzic",]
+members = ["./alistral_core", "interzic", "tuillez",]
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
