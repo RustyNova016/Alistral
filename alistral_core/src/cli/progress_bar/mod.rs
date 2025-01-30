@@ -1,4 +1,3 @@
-pub mod global_progress_bar;
 use core::ops::Deref;
 use core::time::Duration;
 

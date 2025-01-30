@@ -11,7 +11,7 @@ use crate::datastructures::listen_collection::ListenCollection;
 pub type RecordingWithListensCollection = EntityWithListensCollection<Recording, ListenCollection>;
 
 impl RecordingWithListensCollection {
-    #[instrument(skip_all, fields(indicatif.pb_show = tracing::field::Empty))]
+    #[instrument(skip(client), fields(indicatif.pb_show = tracing::field::Empty))]
     pub async fn from_listencollection(
         conn: &mut sqlx::SqliteConnection,
         client: &crate::AlistralClient,
