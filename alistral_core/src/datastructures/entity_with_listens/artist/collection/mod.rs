@@ -1,15 +1,16 @@
-pub mod artist_with_recordings;
 use itertools::Itertools as _;
 use musicbrainz_db_lite::models::musicbrainz::artist::Artist;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use tracing::instrument;
+use tuillez::pg_spinner;
 
 use crate::database::fetching::recordings::fetch_recordings_as_complete;
 use crate::datastructures::entity_with_listens::artist::ArtistWithListens;
 use crate::datastructures::entity_with_listens::collection::EntityWithListensCollection;
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use crate::datastructures::listen_collection::ListenCollection;
-use crate::pg_spinner;
+
+pub mod artist_with_recordings;
 
 pub type ArtistWithListensCollection = EntityWithListensCollection<Artist, ListenCollection>;
 
@@ -20,7 +21,7 @@ impl ArtistWithListensCollection {
         client: &crate::AlistralClient,
         listens: ListenCollection,
     ) -> Result<Self, crate::Error> {
-        pg_spinner!("Compiling artist data");
+        pg_spinner!("Compiling artist listen data");
         // Convert Recordings
         let recordings =
             RecordingWithListensCollection::from_listencollection(conn, client, listens).await?;

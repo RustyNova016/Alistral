@@ -5,8 +5,7 @@ use tracing::info;
 use tracing::instrument;
 use tracing::Span;
 use tracing_indicatif::span_ext::IndicatifSpanExt;
-
-use crate::pg_counted;
+use tuillez::pg_counted;
 
 /// Prefetch all the recordings of a list of listens
 #[instrument(skip(client), fields(indicatif.pb_show = tracing::field::Empty))]
@@ -17,7 +16,7 @@ pub async fn prefetch_recordings_of_listens(
     listens: &[Listen],
 ) -> Result<(), musicbrainz_db_lite::Error> {
     let recordings = Listen::get_unfetched_recordings_ids(conn, user_id, listens).await?;
-    pg_counted!(recordings.len(), "Fetching Recordings");
+    pg_counted!(recordings.len(), "Fetching recordings");
 
     info!("Fetching recordings from listens");
     for recording in recordings {
@@ -39,8 +38,8 @@ pub async fn fetch_recordings_as_complete(
         .iter()
         .filter(|r| !r.is_fully_fetched())
         .collect_vec();
-    
-    pg_counted!(uncompletes.len(), "Fetching Recordings");
+
+    pg_counted!(uncompletes.len(), "Fetching recordings");
     info!("Fetching full recording data");
 
     for recording in uncompletes {

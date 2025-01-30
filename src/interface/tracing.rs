@@ -1,9 +1,6 @@
 use core::fmt;
 
 use alistral_core::cli::colors::AlistralColors as _;
-use color_eyre::owo_colors::OwoColorize;
-use indicatif::ProgressState;
-use indicatif::ProgressStyle;
 use tracing::Event;
 use tracing::Level;
 use tracing::Metadata;
@@ -15,11 +12,11 @@ use tracing_subscriber::fmt::format;
 use tracing_subscriber::fmt::FmtContext;
 use tracing_subscriber::fmt::FormatEvent;
 use tracing_subscriber::fmt::FormatFields;
-use tracing_subscriber::fmt::FormattedFields;
 use tracing_subscriber::layer::SubscriberExt as _;
 use tracing_subscriber::registry::LookupSpan;
 use tracing_subscriber::util::SubscriberInitExt as _;
 use tracing_subscriber::Layer;
+use tuillez::styles::COUNT_STYLE;
 
 pub fn init_tracer() {
     let main_filter = filter::Targets::new()
@@ -27,14 +24,8 @@ pub fn init_tracer() {
         .with_target("interzic", Level::DEBUG);
 
     let indicatif_layer = IndicatifLayer::new()
-        .with_progress_style(
-            ProgressStyle::with_template(
-                "{span_child_prefix}[{msg}] {wide_bar} {pos}/{len} | {eta_precise} | {elapsed_subsec}",
-            )
-            .unwrap()
-            .with_key("elapsed_subsec", elapsed_subsec),
-        )
-        .with_span_child_prefix_symbol("┗ ")
+        .with_progress_style(COUNT_STYLE.to_owned())
+        .with_span_child_prefix_symbol("└─")
         .with_span_child_prefix_indent("  ");
 
     let layer = tracing_subscriber::fmt::layer()
@@ -114,10 +105,4 @@ fn get_domain(writer: &mut format::Writer<'_>, metadata: &Metadata<'static>) -> 
     };
 
     write!(writer, "{} ", content)
-}
-
-fn elapsed_subsec(state: &ProgressState, writer: &mut dyn std::fmt::Write) {
-    let seconds = state.elapsed().as_secs();
-    let sub_seconds = (state.elapsed().as_millis() % 1000) / 100;
-    let _ = writer.write_str(&format!("{}.{}s", seconds, sub_seconds));
 }

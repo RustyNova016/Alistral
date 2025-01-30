@@ -1,6 +1,8 @@
 use itertools::Itertools as _;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use musicbrainz_db_lite::models::musicbrainz::release::Release;
+use tracing::instrument;
+use tuillez::pg_spinner;
 
 use crate::database::fetching::recordings::fetch_recordings_as_complete;
 use crate::datastructures::entity_with_listens::collection::EntityWithListensCollection;
@@ -11,11 +13,13 @@ use crate::datastructures::listen_collection::ListenCollection;
 pub type ReleaseWithListensCollection = EntityWithListensCollection<Release, ListenCollection>;
 
 impl ReleaseWithListensCollection {
+    #[instrument(skip_all, fields(indicatif.pb_show = tracing::field::Empty))]
     pub async fn from_listencollection(
         conn: &mut sqlx::SqliteConnection,
         client: &crate::AlistralClient,
         listens: ListenCollection,
     ) -> Result<Self, crate::Error> {
+        pg_spinner!("Compiling release listens data");
         // Convert Recordings
         let recordings =
             RecordingWithListensCollection::from_listencollection(conn, client, listens).await?;
