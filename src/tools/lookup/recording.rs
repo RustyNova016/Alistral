@@ -1,10 +1,10 @@
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
+use tracing::info;
 
 use crate::api::clients::ALISTRAL_CLIENT;
 use crate::database::listenbrainz::listens::ListenFetchQuery;
 use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
 use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
-use crate::utils::println_cli;
 
 #[cfg(not(test))]
 use crate::utils::cli::await_next;
@@ -27,7 +27,7 @@ pub async fn lookup_recording(
     let Some(recording) =
         Recording::fetch_and_save(conn, &ALISTRAL_CLIENT.musicbrainz_db, id).await?
     else {
-        println_cli(format!("Couldn't find the recording with id: {id}"));
+        info!("Couldn't find the recording with id: {id}");
         return Ok(());
     };
 

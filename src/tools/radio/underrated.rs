@@ -3,6 +3,7 @@ use futures::stream;
 use futures::StreamExt;
 use interzic::models::playlist_stub::PlaylistStub;
 use itertools::Itertools;
+use tracing::info;
 
 use crate::api::clients::ALISTRAL_CLIENT;
 use crate::api::listenbrainz::global_listen_counts::get_global_listen_counts;
@@ -15,7 +16,6 @@ use crate::models::cli::radio::RadioExportTarget;
 use crate::models::data_storage::DataStorage;
 use crate::tools::radio::convert_recordings;
 use crate::utils::data_file::DataFile as _;
-use crate::utils::println_cli;
 
 pub async fn underrated_mix(
     conn: &mut sqlx::SqliteConnection,
@@ -26,7 +26,7 @@ pub async fn underrated_mix(
 ) -> color_eyre::Result<()> {
     let username = seeder.username().clone();
 
-    println_cli("[Seeding] Getting listens");
+    info!("[Seeding] Getting listens");
 
     // Get the seeder
     let recordings = seeder.seed(conn).await.expect("Couldn't find seed listens");
@@ -45,26 +45,26 @@ pub async fn underrated_mix(
             .await?;
 
     // Get the global listen count
-    println_cli("[Seeding] Getting global listen counts");
+    info!("[Seeding] Getting global listen counts");
     let recording_ids = recordings
         .iter_entities()
         .map(|r| r.mbid.to_string())
         .collect_vec();
     let global_listen_counts = get_global_listen_counts(&recording_ids).await?;
 
-    println_cli("[Sorting] Calculating underated scores");
+    info!("[Sorting] Calculating underated scores");
     let sorted = underrated_sorter(
         recordings.into_iter().collect_vec(),
         &user_listens,
         global_listen_counts,
     );
 
-    println_cli("[Finalising] Creating radio playlist");
+    info!("[Finalising] Creating radio playlist");
     let collected = collector
         .collect(stream::iter(sorted).map(|r| r.recording().clone()))
         .await;
 
-    println_cli("[Sending] Sending radio playlist to listenbrainz");
+    info!("[Sending] Sending radio playlist to listenbrainz");
     let counter = DataStorage::load().expect("Couldn't load data storage");
     let playlist = PlaylistStub {
         title: format!(

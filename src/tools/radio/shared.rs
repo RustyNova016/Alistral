@@ -3,6 +3,7 @@ use futures::stream;
 use futures::StreamExt;
 use interzic::models::playlist_stub::PlaylistStub;
 use itertools::Itertools;
+use tracing::info;
 
 use crate::datastructures::radio::collector::RadioCollector;
 use crate::datastructures::radio::filters::booleans::and_filter;
@@ -15,7 +16,6 @@ use crate::models::cli::radio::RadioExportTarget;
 use crate::models::data_storage::DataStorage;
 use crate::tools::radio::convert_recordings;
 use crate::utils::data_file::DataFile as _;
-use crate::utils::println_cli;
 
 #[expect(clippy::too_many_arguments)]
 pub async fn shared_radio(
@@ -30,7 +30,7 @@ pub async fn shared_radio(
 ) -> color_eyre::Result<()> {
     let username = seeder.username().clone();
 
-    println_cli("[Seeding] Getting listens");
+    info!("[Seeding] Getting listens");
 
     // Get the seeder
     let mut other_seeder = seeder.clone();
@@ -42,27 +42,27 @@ pub async fn shared_radio(
         .expect("Couldn't find seed listens");
     let other_recordings = other_recordings.into_iter().collect_vec();
 
-    println_cli("[Filter] Filtering minimum listen count");
+    info!("[Filter] Filtering minimum listen count");
     let recordings = min_listen_filter(recordings.into_stream(), min_listens.unwrap_or(3));
 
-    println_cli("[Filter] Filtering listen cooldown");
+    info!("[Filter] Filtering listen cooldown");
     let recordings = cooldown_filter(recordings, Duration::hours(cooldown as i64));
 
-    println_cli("[Filter] Filtering listen timeouts");
+    info!("[Filter] Filtering listen timeouts");
     let recordings = timeout_filter(recordings);
 
-    println_cli("[Filter] Filtering by other user");
+    info!("[Filter] Filtering by other user");
     let recordings = and_filter(recordings, other_recordings.clone());
 
-    println_cli("[Sorting] Calculating scores");
+    info!("[Sorting] Calculating scores");
     let recordings = shared_listens_sorter(recordings, other_recordings).await;
 
-    println_cli("[Finalising] Creating radio playlist");
+    info!("[Finalising] Creating radio playlist");
     let collected = collector
         .collect(stream::iter(recordings).map(|r| r.recording().clone()))
         .await;
 
-    println_cli("[Sending] Sending radio playlist to listenbrainz");
+    info!("[Sending] Sending radio playlist to listenbrainz");
     let counter = DataStorage::load().expect("Couldn't load data storage");
     let playlist = PlaylistStub {
         title: format!(
