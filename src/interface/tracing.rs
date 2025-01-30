@@ -58,7 +58,7 @@ where
 
         get_domain(&mut writer, metadata)?;
 
-                write!(
+        write!(
             writer,
             "{}",
             match *metadata.level() {
@@ -83,8 +83,7 @@ where
         //         Level::DEBUG => fields.cyan().to_string(),
         //         Level::TRACE => fields.bright_black().to_string(),
         //     }
-        // )?;        
-
+        // )?;
 
         writeln!(writer)
     }
