@@ -109,6 +109,8 @@ pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
                 rec.listen_count()
             );
         }
+
+        println!();
     }
 
     if !fresh_releases.is_empty() {
