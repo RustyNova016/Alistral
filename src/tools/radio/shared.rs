@@ -14,6 +14,7 @@ use crate::datastructures::radio::seeders::listens::ListenSeeder;
 use crate::datastructures::radio::sorters::shared::shared_listens_sorter;
 use crate::models::cli::radio::RadioExportTarget;
 use crate::models::data_storage::DataStorage;
+use crate::models::error::ResultTEExt as _;
 use crate::tools::radio::convert_recordings;
 use crate::utils::data_file::DataFile as _;
 
@@ -34,12 +35,15 @@ pub async fn shared_radio(
 
     // Get the seeder
     let mut other_seeder = seeder.clone();
-    let recordings = seeder.seed(conn).await.expect("Couldn't find seed listens");
+    let recordings = seeder
+        .seed(conn)
+        .await
+        .expect_fatal("Couldn't find seed listens");
     other_seeder.username = other_user.clone();
     let other_recordings = other_seeder
         .seed(conn)
         .await
-        .expect("Couldn't find seed listens");
+        .expect_fatal("Couldn't find seed listens");
     let other_recordings = other_recordings.into_iter().collect_vec();
 
     info!("[Filter] Filtering minimum listen count");
@@ -63,7 +67,7 @@ pub async fn shared_radio(
         .await;
 
     info!("[Sending] Sending radio playlist to listenbrainz");
-    let counter = DataStorage::load().expect("Couldn't load data storage");
+    let counter = DataStorage::load().expect_fatal("Couldn't load data storage");
     let playlist = PlaylistStub {
         title: format!(
             "Radio: Shared listens #{}",
@@ -77,13 +81,13 @@ pub async fn shared_radio(
         ),
         recordings: convert_recordings(conn, collected)
             .await
-            .expect("Couldn't convert recordings for playlist"),
+            .expect_fatal("Couldn't convert recordings for playlist"),
     };
 
     target
         .export(playlist, Some(username), Some(token))
         .await
-        .expect("Couldn't send the playlist");
+        .expect_fatal("Couldn't send the playlist");
 
     Ok(())
 }

@@ -21,7 +21,7 @@ use tracing_indicatif::span_ext::IndicatifSpanExt as _;
 use tuillez::pg_counted;
 
 use crate::models::playlist_stub::PlaylistStub;
-use crate::models::services::youtube::error::BadRequestError;
+use crate::models::services::youtube::error::InterzicYoutubeError;
 use crate::models::services::youtube::error::YoutubeError;
 use crate::models::services::youtube::Youtube;
 use crate::InterzicClient;
@@ -42,7 +42,8 @@ impl Youtube {
             .add_part("snippet")
             .doit()
             .await
-            .map_err(YoutubeError::PlaylistCreateError)?;
+            .map_err(YoutubeError::from)
+            .map_err(InterzicYoutubeError::PlaylistCreateError)?;
 
         let playlist_id = response.1.id.expect("No id returned"); //TODO: Proper error
 
@@ -94,7 +95,7 @@ impl Youtube {
         client: &InterzicClient,
         playlist_id: String,
         video_id: String,
-    ) -> Result<(), YoutubeError> {
+    ) -> Result<(), InterzicYoutubeError> {
         for i in 0..5 {
             let responce = client
                 .youtube_client()?
@@ -112,8 +113,10 @@ impl Youtube {
                 return Ok(());
             };
 
-            if i != 5 && !is_retry_error(&err) {
-                return Err(YoutubeError::PlaylistInsertError(err));
+            let err = YoutubeError::from(err);
+
+            if i != 5 && !err.is_bad_service_error() {
+                return Err(InterzicYoutubeError::PlaylistInsertError(err));
             }
 
             warn!(
@@ -126,25 +129,6 @@ impl Youtube {
         error!("Couldn't send video {}. Skipping to next track", video_id);
         Ok(())
     }
-}
-
-fn is_retry_error(err: &google_youtube3::common::Error) -> bool {
-    let google_youtube3::common::Error::BadRequest(err) = err else {
-        return false;
-    };
-
-    let err: Result<BadRequestError, serde_json::Error> = serde_json::from_value(err.clone());
-
-    let Ok(err) = err else {
-        return false;
-    };
-
-    err.error.code == 409
-        && err
-            .error
-            .errors
-            .iter()
-            .any(|err| err.reason == "SERVICE_UNAVAILABLE")
 }
 
 impl PlaylistStub {

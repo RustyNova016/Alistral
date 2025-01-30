@@ -12,7 +12,7 @@ use musicbrainz_db_lite::DBClient;
 use musicbrainz_rs::client::MusicBrainzClient;
 
 use crate::client::builder::ClientBuilder;
-use crate::models::services::youtube::error::YoutubeError;
+use crate::models::services::youtube::error::InterzicYoutubeError;
 
 pub struct InterzicClient {
     pub database_client: sqlx::SqlitePool,
@@ -63,11 +63,11 @@ impl InterzicClient {
         Ok(())
     }
 
-    pub fn youtube_client(&self) -> Result<&YoutubeClient, YoutubeError> {
+    pub fn youtube_client(&self) -> Result<&YoutubeClient, InterzicYoutubeError> {
         self.youtube_client
             .as_ref()
             .map(Arc::as_ref)
-            .ok_or(YoutubeError::MissingYoutubeClient())
+            .ok_or(InterzicYoutubeError::MissingYoutubeClient())
     }
 
     pub fn set_listenbrainz_client(&mut self, client: Arc<listenbrainz::raw::Client>) {

@@ -12,6 +12,7 @@ use crate::datastructures::radio::seeders::listens::ListenSeeder;
 use crate::datastructures::radio::sorters::listen_rate::listen_rate_sorter;
 use crate::models::cli::radio::RadioExportTarget;
 use crate::models::data_storage::DataStorage;
+use crate::models::error::ResultTEExt as _;
 use crate::tools::radio::convert_recordings;
 use crate::utils::data_file::DataFile as _;
 
@@ -27,7 +28,10 @@ pub async fn listen_rate_radio(
     let username = seeder.username().clone();
 
     info!("[Seeding] Getting listens");
-    let recordings = seeder.seed(conn).await.expect("Couldn't find seed listens");
+    let recordings = seeder
+        .seed(conn)
+        .await
+        .expect_fatal("Couldn't find seed listens");
 
     info!("[Filter] Filtering minimum listen count");
     let recordings = min_listen_filter(recordings.into_stream(), min_listens.unwrap_or(3));
@@ -48,7 +52,7 @@ pub async fn listen_rate_radio(
 
     info!("[Sending] Sending radio playlist to listenbrainz");
 
-    let counter = DataStorage::load().expect("Couldn't load data storage");
+    let counter = DataStorage::load().expect_fatal("Couldn't load data storage");
     let playlist = PlaylistStub {
         title: format!(
             "Radio: Listen Rate #{}",
@@ -58,13 +62,13 @@ pub async fn listen_rate_radio(
             .to_string(),
         recordings: convert_recordings(conn, collected)
             .await
-            .expect("Couldn't convert recordings for playlist"),
+            .expect_fatal("Couldn't convert recordings for playlist"),
     };
 
     target
         .export(playlist, Some(username), Some(token))
         .await
-        .expect("Couldn't send the playlist");
+        .expect_fatal("Couldn't send the playlist");
 
     Ok(())
 }

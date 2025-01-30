@@ -3,6 +3,7 @@ pub mod error;
 use crate::models::external_id::ExternalId;
 use crate::models::messy_recording::MessyRecording;
 use crate::models::services::musicbrainz::Musicbrainz;
+use crate::models::services::youtube::error::InterzicYoutubeError;
 use crate::models::services::youtube::error::YoutubeError;
 use crate::utils::regexes::YOUTUBE_URL_ID_REGEX;
 use crate::InterzicClient;
@@ -26,7 +27,8 @@ impl Youtube {
             .add_type("video")
             .doit()
             .await
-            .map_err(YoutubeError::RecordingSearchError)?
+            .map_err(YoutubeError::from)
+            .map_err(InterzicYoutubeError::RecordingSearchError)?
             .1;
 
         Ok(result
