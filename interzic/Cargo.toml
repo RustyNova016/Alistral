@@ -7,6 +7,7 @@ description = "Bunch of utilities to link musicbrainz data to different services
 [dependencies]
 #TODO: Make optional
 musicbrainz-db-lite = { branch = "develop", git = "https://github.com/RustyNova016/musicbrainz_db_lite.git" }
+tuillez = { path = "../tuillez" }
 
 google-youtube3 = "6.0.0"
 musicbrainz_rs = "0.9.0"

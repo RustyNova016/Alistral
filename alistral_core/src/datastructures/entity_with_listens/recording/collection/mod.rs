@@ -1,16 +1,12 @@
-use indicatif::ProgressStyle;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use musicbrainz_db_lite::models::musicbrainz::user::User;
-use tracing::info_span;
 use tracing::instrument;
-use tracing::Span;
-use tracing_indicatif::span_ext::IndicatifSpanExt as _;
+use tuillez::pg_spinner;
 
 use crate::database::fetching::recordings::prefetch_recordings_of_listens;
 use crate::datastructures::entity_with_listens::collection::EntityWithListensCollection;
 use crate::datastructures::listen_collection::ListenCollection;
-use crate::pg_spinner;
 
 pub type RecordingWithListensCollection = EntityWithListensCollection<Recording, ListenCollection>;
 
@@ -25,7 +21,7 @@ impl RecordingWithListensCollection {
         if listens.is_empty() {
             return Ok(Default::default());
         }
-        pg_spinner!("Compiling recording listens");
+        pg_spinner!("Compiling recording listens data");
 
         // Prefetch the missing data
         let user_name = listens

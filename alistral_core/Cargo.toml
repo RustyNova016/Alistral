@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 musicbrainz-db-lite = { branch = "develop", git = "https://github.com/RustyNova016/musicbrainz_db_lite.git" }
 interzic = { path = "../interzic" }
+tuillez = { path = "../tuillez" }
 
 itertools = "0.14.0"
 serde = "1.0.217"

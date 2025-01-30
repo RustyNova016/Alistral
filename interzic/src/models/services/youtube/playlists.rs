@@ -16,10 +16,10 @@ use tracing::error;
 use tracing::info;
 use tracing::instrument;
 use tracing::warn;
-use tracing::Span; 
+use tracing::Span;
 use tracing_indicatif::span_ext::IndicatifSpanExt as _;
+use tuillez::pg_counted;
 
-use crate::models::playlist_stub;
 use crate::models::playlist_stub::PlaylistStub;
 use crate::models::services::youtube::error::BadRequestError;
 use crate::models::services::youtube::error::YoutubeError;
@@ -73,9 +73,7 @@ impl Youtube {
             NoOpMiddleware<QuantaInstant>,
         >,
     ) -> Result<(), crate::Error> {
-        //TODO: use pg_counted from alistral_core > Move CLI stuff to separate crate
-        Span::current().pb_set_length(playlist.recordings.len() as u64);
-        Span::current().pb_set_message("Creating playlist");
+        pg_counted!(playlist.recordings.len(), "Creating playlist");
 
         for recording in playlist.recordings {
             //TODO: Check number of recordings missing
