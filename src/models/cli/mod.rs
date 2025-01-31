@@ -8,6 +8,8 @@ use clap::Subcommand;
 use clap_complete::generate;
 use clap_complete::Generator;
 use clap_complete::Shell;
+use clap_verbosity_flag::InfoLevel;
+use clap_verbosity_flag::Verbosity;
 use common::SortSorterBy;
 use common::StatsTarget;
 use config::ConfigCli;
@@ -42,6 +44,9 @@ pub mod unstable;
 pub struct Cli {
     #[arg(long, hide = true)]
     pub markdown_help: bool,
+
+    #[command(flatten)]
+    pub verbose: Verbosity<InfoLevel>,
 
     // If provided, outputs the completion file for given shell
     #[arg(long = "generate", value_enum)]

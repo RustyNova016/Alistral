@@ -19,7 +19,9 @@ use tracing_subscriber::util::SubscriberInitExt as _;
 use tracing_subscriber::Layer;
 use tuillez::styles::COUNT_STYLE;
 
-pub fn init_tracer() {
+use crate::models::cli::Cli;
+
+pub fn init_tracer(cli: &Cli) {
     let main_filter = filter::Targets::new()
         .with_target("alistral", Level::DEBUG)
         .with_target("interzic", Level::DEBUG);
@@ -34,8 +36,9 @@ pub fn init_tracer() {
         .event_format(PublicFormater);
     //.with_filter(filter);
     tracing_subscriber::registry()
-        .with(layer)
+        .with(cli.verbose.tracing_level_filter())
         .with(main_filter)
+        .with(layer)
         .with(indicatif_layer.with_filter(IndicatifFilter::new(false)))
         .init();
 }
