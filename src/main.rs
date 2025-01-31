@@ -24,19 +24,20 @@ pub use crate::models::error::Error;
 
 #[tokio::main]
 async fn main() -> color_eyre::Result<()> {
-    init_tracer();
+    let cli = Cli::parse();
+    init_tracer(&cli);
     color_eyre::install()?;
 
     info!("Hello world!");
 
-    if run_cli().await {
+    if run_cli(cli).await {
         post_run().await
     }
 
     Ok(())
 }
 
-async fn run_cli() -> bool {
+async fn run_cli(cli: Cli) -> bool {
     debug!("Starting the database");
     // Set up the database
     let conn = &mut *ALISTRAL_CLIENT
@@ -44,8 +45,6 @@ async fn run_cli() -> bool {
         .connection
         .acquire_guarded()
         .await;
-
-    let cli = Cli::parse();
 
     cli.run(conn).await.expect("An error occured in the app")
 }

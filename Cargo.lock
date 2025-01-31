@@ -63,6 +63,7 @@ dependencies = [
  "chrono",
  "clap",
  "clap-markdown",
+ "clap-verbosity-flag",
  "clap_complete",
  "color-eyre",
  "derive-getters",
@@ -484,6 +485,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8ebc67e6266e14f8b31541c2f204724fa2ac7ad5c17d6f5908fbb92a60f42cff"
 dependencies = [
  "clap",
+]
+
+[[package]]
+name = "clap-verbosity-flag"
+version = "3.0.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2678fade3b77aa3a8ff3aae87e9c008d3fb00473a41c71fbf74e91c8c7b37e84"
+dependencies = [
+ "clap",
+ "tracing-core",
 ]
 
 [[package]]
