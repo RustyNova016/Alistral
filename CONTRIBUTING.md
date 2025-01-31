@@ -22,10 +22,15 @@ On linux, it should be at `~/.cache/alistral/debug/debug_db.db`.
 
 Close the previous terminal, reopen it, and it will compile against the debug database
 
+## Why is `develop` the default branch?
+
+This project uses [gitflow](https://www.gitkraken.com/learn/git/git-flow) as a project management, but github makes it difficult to work with. 
+To force github to use develop as the main changes branch, `develop` as been set as default. The `master` branch still exist, and contain "clean" release code, which is able to be built from source without unreleased and potentially broken code
+
 # Pull requests
 ### Which branch should I PR onto?
 
-This project uses [gitflow](https://www.gitkraken.com/learn/git/git-flow) as a project management. In short, PR onto `develop`. 
+This project uses [gitflow](https://www.gitkraken.com/learn/git/git-flow) as a project management. In short, PR onto `develop`.
 
 ### What commit message should I use?
 

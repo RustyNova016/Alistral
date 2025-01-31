@@ -12,11 +12,14 @@ The latest build can be found in the [release](https://github.com/RustyNova016/a
 ```shell
 git clone https://github.com/RustyNova016/alistral.git
 cd ./alistral
+git checkout master
 export SQLX_OFFLINE=true
 cargo build --release
 ```
 
 # Usage
+
+Documentation book can be found [here](https://rustynova016.github.io/Alistral/)
 
 Full markdown help can be found under [docs/CommandLineHelp.md](https://github.com/RustyNova016/alistral/blob/master/docs/CommandLineHelp.md), but full `--help` support exists too. 
 
@@ -77,15 +80,6 @@ There is the option to only get unlistened recordings, making an alternative to 
 [Usage > Command Line documentation](https://github.com/RustyNova016/alistral/blob/master/docs/CommandLineHelp.md#alistral-radio-underrated)
 
 This radio will create a playlist containing all the tracks that you listen to, but seemingly no one else does. 
-
-> The mix is made by calculating a score for each listen. This score is composed of two values:
->
-> - The rank in the user's top 1000 recording of all time (First place get 100 points, second get 999.9, etc...)
->
-> - The percentage of the recording's listens being from the user (Made with this formula: (user listens / worldwide listens) *100)
-
-> [!IMPORTANT]  
-> As of the 2nd of july 2024, a bug in ListenBrainz made all global listen counts frozen. This radio will most likely be extremely inaccurrate by now. See the official status on [LB-1590](https://tickets.metabrainz.org/projects/LB/issues/LB-1590) 
 
 ### Listen rate
 
