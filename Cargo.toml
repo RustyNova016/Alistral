@@ -16,6 +16,7 @@ alistral_core = { path = "./alistral_core" }
 interzic = { path = "./interzic" }
 tuillez = { path = "./tuillez" }
 musicbrainz-db-lite = { path = "./musicbrainz_db_lite" }
+sonartra = { path = "./sonartra" }
 
 # Musicbrainz dependencies
 #listenbrainz = "0.8.1"
@@ -79,7 +80,15 @@ async_fn_in_trait = { level = "allow", priority = 1 }
 # --- Workspace ---
 
 [workspace]
-members = ["./alistral_core", "interzic", "tuillez", "musicbrainz_db_lite", "musicbrainz_db_lite/musicbrainz_db_lite_macros", "musicbrainz_db_lite/musicbrainz_db_lite_schema"]
+members = [
+    "./alistral_core", 
+    "interzic", 
+    "sonartra", 
+    "tuillez" 
+    "musicbrainz_db_lite", 
+    "musicbrainz_db_lite/musicbrainz_db_lite_macros", 
+    "musicbrainz_db_lite/musicbrainz_db_lite_schema"
+]
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
