@@ -1,0 +1,19 @@
+{
+    "name": "Test Radio",
+    "stack": [
+        {
+            "step_type": "listen_seeder",
+            "id": "listen_seeder"
+        },
+        {
+            "step_type": "minimum_listen_filter",
+            "id": "minimum_listen_filter",
+            "variables": {
+                "count": 5
+            }
+        }
+    ],
+    "inputs": {
+        "minimum_listens": "minimum_listen_filter.count"
+    }
+}
