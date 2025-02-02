@@ -53,7 +53,7 @@ name = "alistral"
 version = "0.6.6"
 dependencies = [
  "alistral_core",
- "async-fn-stream",
+ "async-fn-stream 0.3.2",
  "async-once-cell",
  "bon",
  "charchart",
@@ -89,7 +89,7 @@ dependencies = [
  "serde_json",
  "snafu",
  "sqlx",
- "streamies 0.2.2",
+ "streamies",
  "strsim",
  "strum_macros",
  "symphonize",
@@ -101,6 +101,7 @@ dependencies = [
  "tracing-subscriber",
  "tuillez",
  "url",
+ "yumako_jams",
  "zip",
 ]
 
@@ -289,6 +290,16 @@ dependencies = [
  "futures-lite",
  "pin-project-lite",
  "slab",
+]
+
+[[package]]
+name = "async-fn-stream"
+version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e71711442f1016c768c259bec59300a10efe753bc3e686ec19e2c6a54a97c29b"
+dependencies = [
+ "futures-util",
+ "pin-project-lite",
 ]
 
 [[package]]
@@ -566,9 +577,15 @@ dependencies = [
 
 [[package]]
 name = "cc"
+<<<<<<< HEAD
 version = "1.2.55"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "47b26a0954ae34af09b50f0de26458fa95369a0d478d8236d3f93082b219bd29"
+=======
+version = "1.2.30"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "deec109607ca693028562ed836a5f1c4b8bd77755c4e132fc5ce11b0b6211ae7"
+>>>>>>> 023f9969 (feat: initial repo work)
 dependencies = [
  "find-msvc-tools",
  "jobserver",
@@ -1107,6 +1124,9 @@ name = "deadpool-runtime"
 version = "0.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "092966b41edc516079bdf31ec78a2e0588d1d0c08f78b91d8307215928642b2b"
+dependencies = [
+ "tokio",
+]
 
 [[package]]
 name = "deadpool-runtime"
@@ -2085,9 +2105,15 @@ dependencies = [
 
 [[package]]
 name = "hyper-util"
+<<<<<<< HEAD
 version = "0.1.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "96547c2556ec9d12fb1578c4eaf448b04993e7fb79cbaad930a656880a6bdfa0"
+=======
+version = "0.1.16"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8d9b05277c7e8da2c93a568989bb6207bef0112e8d17df7a6eda4a3cf143bc5e"
+>>>>>>> 023f9969 (feat: initial repo work)
 dependencies = [
  "base64 0.22.1",
  "bytes",
@@ -2100,13 +2126,33 @@ dependencies = [
  "libc",
  "percent-encoding",
  "pin-project-lite",
+<<<<<<< HEAD
  "socket2 0.6.2",
  "system-configuration 0.7.0",
+=======
+ "socket2 0.6.0",
+ "system-configuration",
+>>>>>>> 023f9969 (feat: initial repo work)
  "tokio",
  "tower-service",
  "tracing",
  "windows-registry",
 ]
+
+[[package]]
+name = "i_splits"
+version = "0.1.0"
+<<<<<<< HEAD
+=======
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3c16bbe9bf11c6c33c8d7d8cfa347ccf7cd77f5cbf69dcf2148d6af46cfb7270"
+
+[[package]]
+name = "iana-time-zone"
+version = "0.1.63"
+>>>>>>> 023f9969 (feat: initial repo work)
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3c16bbe9bf11c6c33c8d7d8cfa347ccf7cd77f5cbf69dcf2148d6af46cfb7270"
 
 [[package]]
 name = "iana-time-zone"
@@ -2336,7 +2382,7 @@ dependencies = [
 name = "interzic"
 version = "0.1.0"
 dependencies = [
- "async-fn-stream",
+ "async-fn-stream 0.3.2",
  "bon",
  "futures",
  "google-youtube3",
@@ -2356,6 +2402,20 @@ dependencies = [
 ]
 
 [[package]]
+<<<<<<< HEAD
+=======
+name = "io-uring"
+version = "0.7.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d93587f37623a1a17d94ef2bc9ada592f5465fe7732084ab7beefabe5c77c0c4"
+dependencies = [
+ "bitflags 2.9.1",
+ "cfg-if",
+ "libc",
+]
+
+[[package]]
+>>>>>>> 023f9969 (feat: initial repo work)
 name = "ipnet"
 version = "2.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2433,6 +2493,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "json"
+version = "0.12.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "078e285eafdfb6c4b434e0d31e8cfcb5115b651496faca5749b88fafd4f23bfd"
+
+[[package]]
 name = "konst"
 version = "0.2.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2482,9 +2548,15 @@ checksum = "b6d2cec3eae94f9f509c767b45932f1ada8350c4bdb85af2fcab4a3c14807981"
 
 [[package]]
 name = "libredox"
+<<<<<<< HEAD
 version = "0.1.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3d0b95e02c851351f877147b7deea7b1afb1df71b63aa5f8270716e0c5720616"
+=======
+version = "0.1.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4488594b9328dee448adb906d8b126d9b7deb7cf5c22161ee591610bb1be83c0"
+>>>>>>> 023f9969 (feat: initial repo work)
 dependencies = [
  "bitflags 2.10.0",
  "libc",
@@ -2583,8 +2655,19 @@ dependencies = [
 ]
 
 [[package]]
+<<<<<<< HEAD
 name = "lzma-rust2"
 version = "0.15.7"
+=======
+name = "lyn"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f08d9299a146aa1eb3c5451e6d9045708f232a43fd8d4436f69cf00fcb2a019c"
+
+[[package]]
+name = "macon"
+version = "1.3.0"
+>>>>>>> 023f9969 (feat: initial repo work)
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1670343e58806300d87950e3401e820b519b9384281bbabfb15e3636689ffd69"
 dependencies = [
@@ -2679,7 +2762,7 @@ dependencies = [
 name = "musicbrainz-db-lite"
 version = "0.1.0"
 dependencies = [
- "async-fn-stream",
+ "async-fn-stream 0.3.2",
  "bon",
  "chrono",
  "const_format",
@@ -2709,6 +2792,30 @@ dependencies = [
 ]
 
 [[package]]
+<<<<<<< HEAD
+=======
+name = "musicbrainz_db_lite_macros"
+version = "0.1.0"
+dependencies = [
+ "darling 0.21.0",
+ "proc-macro2",
+ "quote",
+ "sqlx",
+ "syn 2.0.104",
+]
+
+[[package]]
+name = "musicbrainz_db_lite_schema"
+version = "0.1.1"
+dependencies = [
+ "directories",
+ "serial_test",
+ "sqlx",
+ "tokio",
+]
+
+[[package]]
+>>>>>>> 023f9969 (feat: initial repo work)
 name = "musicbrainz_rs"
 version = "0.12.0"
 source = "git+https://github.com/RustyNova016/musicbrainz_rs?rev=60ab4d48a6898cc2fc8e0b6fc9fb774c64cfe8d2#60ab4d48a6898cc2fc8e0b6fc9fb774c64cfe8d2"
@@ -2724,7 +2831,11 @@ dependencies = [
  "reqwest 0.12.28",
  "serde",
  "serde_json",
+<<<<<<< HEAD
  "snafu",
+=======
+ "thiserror 2.0.12",
+>>>>>>> 023f9969 (feat: initial repo work)
  "tokio",
  "tracing",
 ]
@@ -3100,8 +3211,24 @@ dependencies = [
 ]
 
 [[package]]
+<<<<<<< HEAD
 name = "prettyplease"
 version = "0.2.37"
+=======
+name = "priority-queue"
+version = "2.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5676d703dda103cbb035b653a9f11448c0a7216c7926bd35fcb5865475d0c970"
+dependencies = [
+ "autocfg",
+ "equivalent",
+ "indexmap 2.10.0",
+]
+
+[[package]]
+name = "proc-macro-crate"
+version = "3.3.0"
+>>>>>>> ba6f0d51 (feat: listened_artist radio)
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "479ca8adacdd7ce8f1fb39ce9ecccbfe93a3f1344b3d0d97f20bc0196208f62b"
 dependencies = [
@@ -3295,9 +3422,15 @@ dependencies = [
 
 [[package]]
 name = "redox_syscall"
+<<<<<<< HEAD
 version = "0.5.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ed2bf2547551a7053d6fdfafda3f938979645c44812fbfcda098faae3f1a362d"
+=======
+version = "0.5.15"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7e8af0dde094006011e6a740d4879319439489813bd0bcdc7d821beaeeff48ec"
+>>>>>>> 023f9969 (feat: initial repo work)
 dependencies = [
  "bitflags 2.10.0",
 ]
@@ -3581,22 +3714,38 @@ dependencies = [
 
 [[package]]
 name = "rustix"
+<<<<<<< HEAD
 version = "1.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "146c9e247ccc180c1f61615433868c99f3de3ae256a30a43b49f67c2d9171f34"
+=======
+version = "1.0.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "11181fbabf243db407ef8df94a6ce0b2f9a733bd8be4ad02b4eda9602296cac8"
+>>>>>>> 023f9969 (feat: initial repo work)
 dependencies = [
  "bitflags 2.10.0",
  "errno",
  "libc",
  "linux-raw-sys",
+<<<<<<< HEAD
  "windows-sys 0.61.2",
+=======
+ "windows-sys 0.60.2",
+>>>>>>> 023f9969 (feat: initial repo work)
 ]
 
 [[package]]
 name = "rustls"
+<<<<<<< HEAD
 version = "0.21.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3f56a14d1f48b391359b22f731fd4bd7e43c97f3c50eee276f3aa09c94784d3e"
+=======
+version = "0.23.29"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2491382039b29b9b11ff08b76ff6c97cf287671dbb74f0be44bda389fffe9bd1"
+>>>>>>> 023f9969 (feat: initial repo work)
 dependencies = [
  "log",
  "ring",
@@ -3660,6 +3809,7 @@ dependencies = [
 
 [[package]]
 name = "rustls-webpki"
+<<<<<<< HEAD
 version = "0.101.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8b6275d1ee7a1cd780b64aca7726599a1dbc893b1e64144529e55c3c2f745765"
@@ -3673,6 +3823,11 @@ name = "rustls-webpki"
 version = "0.103.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d7df23109aa6c1567d1c575b9952556388da57401e4ace1d15f79eedad0d8f53"
+=======
+version = "0.103.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0a17884ae0c1b773f1ccd2bd4a8c72f16da897310a98b0e84bf349ad5ead92fc"
+>>>>>>> 023f9969 (feat: initial repo work)
 dependencies = [
  "ring",
  "rustls-pki-types",
@@ -3740,6 +3895,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "94143f37725109f92c262ed2cf5e59bce7498c01bcc1502d7b9afe439a4e9f49"
 
 [[package]]
+<<<<<<< HEAD
 name = "sct"
 version = "0.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3778,6 +3934,12 @@ dependencies = [
  "syn 2.0.117",
  "thiserror 2.0.18",
 ]
+=======
+name = "sdd"
+version = "3.0.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "490dcfcbfef26be6800d11870ff2df8774fa6e86d047e3e8c8a76b25655e41ca"
+>>>>>>> 023f9969 (feat: initial repo work)
 
 [[package]]
 name = "seahash"
@@ -3873,15 +4035,30 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
+<<<<<<< HEAD
 version = "1.0.149"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "83fc039473c5595ace860d8c4fafa220ff474b3fc6bfdb4293327f1a37e94d86"
+=======
+version = "1.0.141"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "30b9eff21ebe718216c6ec64e1d9ac57087aad11efc64e32002bce4a0d4c03d3"
+>>>>>>> 023f9969 (feat: initial repo work)
 dependencies = [
  "itoa",
  "memchr",
  "serde",
  "serde_core",
  "zmij",
+]
+
+[[package]]
+name = "serde_spanned"
+version = "0.6.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bf41e0cfaf7226dca15e8197172c295a782857fcb97fad1808a166870dee75a3"
+dependencies = [
+ "serde",
 ]
 
 [[package]]
@@ -4094,12 +4271,21 @@ dependencies = [
 
 [[package]]
 name = "socket2"
+<<<<<<< HEAD
 version = "0.6.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "86f4aa3ad99f2088c990dfa82d367e19cb29268ed67c574d10d0a4bfe71f07e0"
 dependencies = [
  "libc",
  "windows-sys 0.60.2",
+=======
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "233504af464074f9d066d7b5416c5f9b894a5862a6506e306f7b816cdd6f1807"
+dependencies = [
+ "libc",
+ "windows-sys 0.59.0",
+>>>>>>> 023f9969 (feat: initial repo work)
 ]
 
 [[package]]
@@ -4686,7 +4872,13 @@ dependencies = [
  "mio",
  "parking_lot",
  "pin-project-lite",
+<<<<<<< HEAD
  "socket2 0.6.2",
+=======
+ "signal-hook-registry",
+ "slab",
+ "socket2 0.5.10",
+>>>>>>> 023f9969 (feat: initial repo work)
  "tokio-macros",
  "windows-sys 0.61.2",
 ]
@@ -4757,12 +4949,30 @@ dependencies = [
 ]
 
 [[package]]
+name = "toml"
+version = "0.8.23"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dc1beb996b9d83529a9e75c17a1686767d148d70663143c7854d8b4a09ced362"
+dependencies = [
+ "serde",
+ "serde_spanned",
+ "toml_datetime",
+ "toml_edit",
+]
+
+[[package]]
 name = "toml_datetime"
 version = "0.7.5+spec-1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
+<<<<<<< HEAD
 checksum = "92e1cfed4a3038bc5a127e35a2d360f145e1f4b971b551a2ba5fd7aedf7e1347"
 dependencies = [
  "serde_core",
+=======
+checksum = "22cddaf88f4fbc13c51aebbf5f8eceb5c7c5a9da2ac40a13519eb5b0a0e8f11c"
+dependencies = [
+ "serde",
+>>>>>>> 023f9969 (feat: initial repo work)
 ]
 
 [[package]]
@@ -4771,6 +4981,7 @@ version = "0.23.10+spec-1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "84c8b9f757e028cee9fa244aea147aab2a9ec09d5325a9b01e0a49730c2b5269"
 dependencies = [
+<<<<<<< HEAD
  "indexmap 2.13.0",
  "toml_datetime",
  "toml_parser",
@@ -4783,8 +4994,21 @@ version = "1.0.6+spec-1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a3198b4b0a8e11f09dd03e133c0280504d0801269e9afa46362ffde1cbeebf44"
 dependencies = [
+=======
+ "indexmap 2.10.0",
+ "serde",
+ "serde_spanned",
+ "toml_datetime",
+ "toml_write",
+>>>>>>> 023f9969 (feat: initial repo work)
  "winnow",
 ]
+
+[[package]]
+name = "toml_write"
+version = "0.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5d99f8c9a7727884afe522e9bd5edbfc91a3312b36a77b5fb8926e4c31a41801"
 
 [[package]]
 name = "tower"
@@ -5678,9 +5902,15 @@ checksum = "d6bbff5f0aada427a1e5a6da5f1f98158182f26556f345ac9e04d36d0ebed650"
 
 [[package]]
 name = "winnow"
+<<<<<<< HEAD
 version = "0.7.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5a5364e9d77fcdeeaa6062ced926ee3381faa2ee02d3eb83a5c27a8825540829"
+=======
+version = "0.7.12"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f3edebf492c8125044983378ecb5766203ad3b4c2f7a922bd7dd207f6d443e95"
+>>>>>>> 023f9969 (feat: initial repo work)
 dependencies = [
  "memchr",
 ]
@@ -5825,6 +6055,47 @@ dependencies = [
  "quote",
  "syn 2.0.117",
  "synstructure",
+]
+
+[[package]]
+name = "yumako_jams"
+version = "0.1.0"
+dependencies = [
+ "alistral_core",
+ "async-fn-stream 0.2.2",
+ "chrono",
+ "extend",
+ "futures",
+ "i_splits",
+ "itertools 0.14.0",
+ "json",
+ "musicbrainz-db-lite",
+ "priority-queue",
+ "rand 0.9.2",
+ "reqwest",
+ "rust_decimal",
+ "serde",
+ "serde_json",
+ "sqlx",
+<<<<<<< HEAD
+ "streamies 0.1.6",
+<<<<<<< HEAD
+ "thiserror 2.0.18",
+=======
+=======
+ "streamies",
+<<<<<<< HEAD
+>>>>>>> ba6f0d51 (feat: listened_artist radio)
+ "thiserror",
+ "tokio",
+>>>>>>> 4f69af0d (feat: artist_discography_mapper)
+=======
+ "thiserror 2.0.12",
+ "tokio",
+ "toml",
+>>>>>>> 023f9969 (feat: initial repo work)
+ "tracing",
+ "tuillez",
 ]
 
 [[package]]

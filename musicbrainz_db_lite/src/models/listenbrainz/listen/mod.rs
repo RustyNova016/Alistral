@@ -1,3 +1,4 @@
+pub mod views;
 use chrono::{DateTime, TimeZone, Utc};
 use sea_query::enum_def;
 use sequelles::has_rowid::HasRowID;

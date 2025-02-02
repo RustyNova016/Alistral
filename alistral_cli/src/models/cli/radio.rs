@@ -10,10 +10,12 @@ use crate::datastructures::radio::seeders::SeederSettings;
 use crate::datastructures::radio::seeders::listens::ListenSeeder;
 use crate::models::config::Config;
 use crate::tools::radio::circles::create_radio_mix;
+use crate::tools::radio::inspect::RadioInspectCommand;
 use crate::tools::radio::listen_rate::listen_rate_radio;
 use crate::tools::radio::overdue::overdue_radio;
 use crate::tools::radio::shared::shared_radio;
 use crate::tools::radio::underrated::underrated_mix;
+use crate::tools::radio::yumako::RadioYumakoCommand;
 
 use super::common::Timeframe;
 
@@ -207,6 +209,9 @@ pub enum RadioSubcommands {
         #[arg(short, long, default_value_t = 0)]
         cooldown: u64,
     },
+
+    Yumako(RadioYumakoCommand),
+    Inspect(RadioInspectCommand),
 }
 
 impl RadioSubcommands {
@@ -304,6 +309,8 @@ impl RadioSubcommands {
                 )
                 .await?;
             }
+            Self::Yumako(val) => val.run(conn).await?,
+            Self::Inspect(val) => val.run().await?,
         }
 
         Ok(())
