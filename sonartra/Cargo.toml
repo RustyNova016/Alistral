@@ -1,0 +1,19 @@
+[package]
+name = "sonartra"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+alistral_core = { path = "../alistral_core" }
+async-fn-stream = "0.2.2"
+futures = "0.3.31"
+json = "0.12.4"
+musicbrainz-db-lite = { branch = "develop", git = "https://github.com/RustyNova016/musicbrainz_db_lite.git" }
+serde = "1.0.217"
+serde_json = "1.0.138"
+tuillez = { path = "../tuillez" }
+thiserror = "2.0.11"
+
+[lints]
+workspace = true
+
