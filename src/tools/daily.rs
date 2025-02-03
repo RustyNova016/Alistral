@@ -50,7 +50,7 @@ pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
         .await
         .expect("Couldn't get the recording anniversaries");
 
-    let anniversary_recordings = release_day_recordings
+    let mut anniversary_recordings = release_day_recordings
         .iter()
         .filter_map(|rec| recordings.get_by_id(rec.id))
         .collect_vec();
@@ -61,6 +61,8 @@ pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
 
     if !anniversary_recordings.is_empty() {
         println!("{}", " Today in history 🎂 ".on_green().black().bold());
+
+        anniversary_recordings.sort_by_cached_key(|r| r.listen_count());
 
         for rec in anniversary_recordings {
             println!(
@@ -79,7 +81,7 @@ pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
 
     println!();
 
-    let first_discoveries = recordings
+    let mut first_discoveries = recordings
         .iter()
         .filter(|rec| {
             rec.oldest_listen_date()
@@ -95,6 +97,8 @@ pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
                 .black()
                 .bold()
         );
+
+        first_discoveries.sort_by_cached_key(|r| r.listen_count());
 
         for rec in first_discoveries {
             println!(
