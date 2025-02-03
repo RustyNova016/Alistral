@@ -54,7 +54,7 @@ impl Youtube {
             return Ok(Some(id));
         }
 
-        //TODO: Interogate DBLite if available
+        //TODO: #517 Use MBDBlite to search for urls if available
 
         Musicbrainz::fetch_and_save_urls(client, &recording).await?;
 

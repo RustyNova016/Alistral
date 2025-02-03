@@ -69,7 +69,7 @@ impl MbClippyLint for MissingBarcodeLint {
     ) -> Result<Vec<crate::models::clippy::MbClippyLintHint>, crate::Error> {
         let hints = Vec::new();
 
-        // TODO: Harmony hint
+        // TODO: #525 missing_release_barcode: add hint to use harmony to find it if possible
 
         Ok(hints)
     }

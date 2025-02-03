@@ -318,7 +318,7 @@ impl RadioSubcommands {
 pub enum RadioExportTarget {
     Listenbrainz,
     Youtube,
-    //TODO: JSPF
+    //TODO: #527 Allow exporting radio to JSPF
 }
 
 impl Display for RadioExportTarget {

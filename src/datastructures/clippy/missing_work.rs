@@ -84,7 +84,7 @@ impl MbClippyLint for MissingWorkLint {
 
         hints.push(MbClippyLintHint::new("Recordings of more spontaneous actions like improvisations and field recordings generally don't need works".to_string()));
 
-        // TODO: Remix hint
+        // TODO: #526 missing_recording_work: add hint that remixes uses the same work
         Ok(hints)
     }
 
