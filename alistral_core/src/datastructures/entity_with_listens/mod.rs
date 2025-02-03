@@ -1,10 +1,9 @@
-pub mod messybrainz;
-pub mod release_group;
 use chrono::Duration;
 use chrono::Utc;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::RowId;
 
+use crate::datastructures::listen_timeframe::traits::ExtractTimeframe;
 use crate::traits::mergable::Mergable;
 
 use super::listen_collection::traits::ListenCollectionReadable;
@@ -13,8 +12,10 @@ use super::listen_collection::ListenCollection;
 pub mod artist;
 pub mod collection;
 pub mod entity_as_listens;
+pub mod messybrainz;
 pub mod recording;
 pub mod release;
+pub mod release_group;
 pub mod traits;
 pub mod work;
 
@@ -120,5 +121,26 @@ where
 {
     fn get_row_id(&self) -> i64 {
         self.entity.get_row_id()
+    }
+}
+
+impl<Ent, Lis> ExtractTimeframe for EntityWithListens<Ent, Lis>
+where
+    Ent: RowId,
+    Lis: ListenCollectionReadable + ExtractTimeframe,
+{
+    fn extract_timeframe(
+        self,
+        start: chrono::DateTime<Utc>,
+        end: chrono::DateTime<Utc>,
+        include_start: bool,
+        include_end: bool,
+    ) -> Self {
+        Self {
+            entity: self.entity,
+            listens: self
+                .listens
+                .extract_timeframe(start, end, include_start, include_end),
+        }
     }
 }

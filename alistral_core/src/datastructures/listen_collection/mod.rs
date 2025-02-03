@@ -6,6 +6,9 @@ use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use serde::Deserialize;
 use serde::Serialize;
 
+use crate::datastructures::listen_timeframe::traits::ExtractTimeframe;
+use crate::traits::mergable::Mergable;
+
 pub mod traits;
 
 #[derive(Debug, Clone, PartialEq, Eq, Default, Deserialize, Serialize)]
@@ -92,5 +95,59 @@ impl Deref for ListenCollection {
 
     fn deref(&self) -> &Self::Target {
         &self.data
+    }
+}
+
+impl FromIterator<Listen> for ListenCollection {
+    fn from_iter<T: IntoIterator<Item = Listen>>(iter: T) -> Self {
+        let inner = iter.into_iter().collect_vec();
+        Self { data: inner }
+    }
+}
+
+impl IntoIterator for ListenCollection {
+    type Item = Listen;
+
+    type IntoIter = std::vec::IntoIter<Self::Item>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.data.into_iter()
+    }
+}
+
+impl ExtractTimeframe for ListenCollection {
+    fn extract_timeframe(
+        self,
+        start: chrono::DateTime<chrono::Utc>,
+        end: chrono::DateTime<chrono::Utc>,
+        include_start: bool,
+        include_end: bool,
+    ) -> Self {
+        self.into_iter()
+            .filter(|listen| {
+                // Check if before start
+                let listen = listen.listened_at_as_datetime();
+                if start > listen {
+                    return false;
+                }
+
+                // Check if equal start if needed
+                if !include_start && start == listen {
+                    return false;
+                }
+
+                // Check if after end
+                if end < listen {
+                    return false;
+                }
+
+                // Check if equal end if needed
+                if !include_end && start == listen {
+                    return false;
+                }
+
+                true
+            })
+            .collect()
     }
 }
