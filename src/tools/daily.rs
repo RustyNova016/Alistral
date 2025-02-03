@@ -62,7 +62,7 @@ pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
     if !anniversary_recordings.is_empty() {
         println!("{}", " Today in history 🎂 ".on_green().black().bold());
 
-        anniversary_recordings.sort_by_cached_key(|r| r.listen_count());
+        anniversary_recordings.sort_by_cached_key(|r| Reverse(r.listen_count()));
 
         for rec in anniversary_recordings {
             println!(
@@ -98,7 +98,7 @@ pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
                 .bold()
         );
 
-        first_discoveries.sort_by_cached_key(|r| r.listen_count());
+        first_discoveries.sort_by_cached_key(|r| Reverse(r.listen_count()));
 
         for rec in first_discoveries {
             println!(
