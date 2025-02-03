@@ -1,3 +1,4 @@
+pub mod estimates;
 use core::cmp::Ordering;
 use std::fmt::Write;
 
@@ -11,11 +12,13 @@ use color_eyre::owo_colors::OwoColorize as _;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use rust_decimal::Decimal;
 
+use crate::api::clients::ALISTRAL_CLIENT;
 use crate::models::lookup_reports::ARROW_DOWN_GREEN;
 use crate::models::lookup_reports::ARROW_DOWN_RED;
 use crate::models::lookup_reports::ARROW_UP_GREEN;
 use crate::models::lookup_reports::ARROW_UP_RED;
 use crate::models::lookup_reports::DASH_GREY;
+use crate::utils::cli::display::RecordingExt;
 use crate::utils::extensions::chrono_ext::DurationExt as _;
 
 pub struct RecordingLookupReport {
@@ -47,6 +50,10 @@ impl RecordingLookupReport {
         self.data.previous().get_by_id(self.recording.id)
     }
 
+    pub fn recording_all_time(&self) -> Option<&RecordingWithListens> {
+        self.data.all_time().get_by_id(self.recording.id)
+    }
+
     pub fn all_current(&self) -> &RecordingWithListensCollection {
         self.data.current()
     }
@@ -57,8 +64,8 @@ impl RecordingLookupReport {
 
     fn get_arrow<T: Ord>(&self, now: &T, then: &T, lower_better: bool) -> &str {
         match now.cmp(then) {
-            Ordering::Greater if lower_better => &ARROW_UP_RED,
-            Ordering::Less if lower_better => &ARROW_DOWN_GREEN,
+            Ordering::Greater if lower_better => &ARROW_DOWN_RED,
+            Ordering::Less if lower_better => &ARROW_UP_GREEN,
             Ordering::Greater => &ARROW_UP_GREEN,
             Ordering::Less => &ARROW_DOWN_RED,
             Ordering::Equal => &DASH_GREY,
@@ -77,6 +84,11 @@ impl RecordingLookupReport {
         writeln!(report, "   - {}", self.get_rank_line()).unwrap();
         writeln!(report, "   - {}", self.get_listen_count_line()).unwrap();
         writeln!(report, "   - {}", self.get_listen_time_line()).unwrap();
+        writeln!(report, "   - {}", self.get_discovered_on_line()).unwrap();
+        writeln!(report, "   - {}", self.get_latest_listen_line()).unwrap();
+        writeln!(report).unwrap();
+        writeln!(report, "[Estimates]").unwrap();
+        writeln!(report, "   - {}", self.fmt_average_dur_between_listens()).unwrap();
 
         Ok(report)
     }
@@ -85,12 +97,16 @@ impl RecordingLookupReport {
         Ok(if self.all_time {
             format!(
                 "\nStatistics of {} ",
-                self.recording.format_with_credits(conn).await?
+                self.recording
+                    .pretty_format_with_credits(conn, true)
+                    .await?
             )
         } else {
             format!(
                 "\nStatistics of {} ({} - {}) {}",
-                self.recording.format_with_credits(conn).await?,
+                self.recording
+                    .pretty_format_with_credits(conn, true)
+                    .await?,
                 self.data.settings().timeframe().start(),
                 self.data.settings().timeframe().end(),
                 format!(
@@ -168,11 +184,31 @@ impl RecordingLookupReport {
                 .unwrap_or(Decimal::ZERO);
 
             format!(
-                "Total playtime: {} [{} - {}]",
+                "Total playtime: {} minutes [{} - {}]",
                 data,
                 self.get_arrow(&data, &prev_data, false),
                 prev_data
             )
         }
+    }
+
+    fn get_discovered_on_line(&self) -> String {
+        format!(
+            "Discovered on the: {}",
+            self.recording_all_time()
+                .and_then(|r| r.get_oldest_listen())
+                .map(|l| l.listened_at_as_datetime())
+                .expect("There should be at least one listen")
+        )
+    }
+
+    fn get_latest_listen_line(&self) -> String {
+        format!(
+            "Last listened on: {}",
+            self.recording_all_time()
+                .and_then(|r| r.get_latest_listen())
+                .map(|l| l.listened_at_as_datetime())
+                .expect("There should be at least one listen")
+        )
     }
 }

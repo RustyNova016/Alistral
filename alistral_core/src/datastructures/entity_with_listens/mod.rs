@@ -3,7 +3,6 @@ use chrono::Utc;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::RowId;
 
-use crate::cli::logger::println_cli;
 use crate::datastructures::listen_timeframe::traits::ExtractTimeframe;
 use crate::traits::mergable::Mergable;
 

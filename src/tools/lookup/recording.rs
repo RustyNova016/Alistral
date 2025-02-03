@@ -36,14 +36,15 @@ pub async fn lookup_recording(
         return Ok(());
     };
 
-    let all_listens = RecordingWithListensCollection::from_listencollection(conn, listens)
-        .await
-        .expect("Couldn't load recordings");
+    let all_listens =
+        RecordingWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT, listens)
+            .await
+            .expect("Couldn't load recordings");
 
     let timeframe = TimeframeSettings::new(
         TimeWindow::new(
-            DateTime::from_timestamp(1724640873, 0).unwrap(),
-            DateTime::from_timestamp( 	1737446035, 0).unwrap(),
+            DateTime::from_timestamp(1735689601, 0).unwrap(),
+            DateTime::from_timestamp(1738368001, 0).unwrap(),
         ),
         true,
         true,
@@ -80,12 +81,17 @@ pub async fn lookup_recording(
 
 #[cfg(test)]
 mod tests {
-    use crate::database::get_conn;
+    use crate::api::clients::ALISTRAL_CLIENT;
     use crate::tools::lookup::recording::lookup_recording;
-
     #[sqlx::test]
     async fn report_test() {
-        lookup_recording("RustyNova", "ff0c4bd4-de61-4512-b5c0-be4edb81d2fc")
+        let conn = &mut *ALISTRAL_CLIENT
+            .musicbrainz_db
+            .connection
+            .acquire_guarded()
+            .await;
+
+        lookup_recording(conn, "RustyNova", "ff0c4bd4-de61-4512-b5c0-be4edb81d2fc")
             .await
             .unwrap()
     }

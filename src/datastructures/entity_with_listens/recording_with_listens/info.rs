@@ -60,6 +60,7 @@ impl RecordingWithListens {
         
             [Listening rate]
                - Average duration between listens: {average_dur}
+               - Average number of tracks between listens
                - Estimated date of next listen: {next_listen_date}
                {overdue}
 

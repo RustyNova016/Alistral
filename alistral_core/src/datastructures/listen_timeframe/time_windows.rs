@@ -1,7 +1,7 @@
 use chrono::DateTime;
 use chrono::Duration;
-use chrono::Utc;
 use chrono::TimeZone;
+use chrono::Utc;
 
 pub struct TimeWindow {
     start: DateTime<Utc>,
@@ -14,7 +14,10 @@ impl TimeWindow {
     }
 
     pub fn from_duration(duration: Duration, start: DateTime<Utc>) -> Self {
-        Self { end: start + duration, start }
+        Self {
+            end: start + duration,
+            start,
+        }
     }
 
     pub fn start(&self) -> DateTime<Utc> {
