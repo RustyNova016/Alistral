@@ -5,7 +5,7 @@ edition = "2021"
 description = "Bunch of utilities to link musicbrainz data to different services"
 
 [dependencies]
-#TODO: Make optional
+#TODO: Make musicbrainz-db-lite optional
 musicbrainz-db-lite = { branch = "develop", git = "https://github.com/RustyNova016/musicbrainz_db_lite.git" }
 tuillez = { path = "../tuillez" }
 

@@ -5,5 +5,5 @@ pub struct PlaylistStub {
     pub title: String,
     pub description: String,
     pub recordings: Vec<MessyRecording>,
-    //TODO: visibility
+    //TODO: #521 Allow setting playlist visibility
 }

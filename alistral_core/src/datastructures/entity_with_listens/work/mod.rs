@@ -28,7 +28,6 @@ impl WorkWithListens {
 
         for relation in relations {
             if is_relation_parent(&relation, self.entity.id) {
-                //TODO: Proper relation checking
                 out.push(WorkWithListens {
                     entity: relation.get_other_entity(conn, self.entity.id).await?,
                     listens: self.listens.clone(),

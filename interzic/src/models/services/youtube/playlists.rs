@@ -45,11 +45,12 @@ impl Youtube {
             .map_err(YoutubeError::from)
             .map_err(InterzicYoutubeError::PlaylistCreateError)?;
 
-        let playlist_id = response.1.id.expect("No id returned"); //TODO: Proper error
+        let playlist_id = response.1.id.expect("No id returned"); //TODO: #518 Properly error if no playlist id is returned
 
+        //TODO: #520 Replace with add_recordings_to_playlist
         for recording in playlist.recordings {
-            //TODO: Check number of recordings missing
-            //TODO: User overwrite
+            //TODO: #519 Return how many recordings are missing from the playlist, and why
+            //TODO: #516 User overwrite
             let Some(video_id) = Self::get_or_query(client, recording, None).await? else {
                 continue;
             };
@@ -77,8 +78,8 @@ impl Youtube {
         pg_counted!(playlist.recordings.len(), "Creating playlist");
 
         for recording in playlist.recordings {
-            //TODO: Check number of recordings missing
-            //TODO: User overwrite
+            //TODO: #519 Return how many recordings are missing from the playlist, and why
+            //TODO: #516 User overwrite
             let Some(video_id) = Self::get_or_query(client, recording, None).await? else {
                 continue;
             };

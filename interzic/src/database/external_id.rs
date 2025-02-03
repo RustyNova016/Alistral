@@ -41,7 +41,7 @@ SET
     where
         A: Acquire<'a, Database = Sqlite>,
     {
-        //TODO: Make user overwrite return default result
+        //TODO: #516 Make user overwrite return default result
 
         let mut conn = conn.acquire().await?;
         sqlx::query_scalar("SELECT ext_id FROM external_id WHERE recording_id = ? AND service = ? AND user_overwrite = ?;")

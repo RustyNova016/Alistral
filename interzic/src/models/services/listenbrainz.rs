@@ -42,7 +42,7 @@ impl Listenbrainz {
                         copied_from: None,
                         copied_from_deleted: None,
                         //public: self.public,
-                        public: true, //TODO: visibility
+                        public: true, //TODO: #521 Allow setting playlist visibility
                         last_modified_at: None,
                         additional_metadata: None,
                     },

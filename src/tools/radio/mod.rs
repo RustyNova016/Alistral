@@ -40,9 +40,10 @@ impl RadioExportTarget {
             Self::Youtube => {
                 let _playlist_id =
                     Youtube::create_playlist(&ALISTRAL_CLIENT.interzic, playlist).await?;
-                //TODO: display url after export
             }
         }
+
+        //TODO: #528 display playlist url after export
 
         Ok(())
     }
