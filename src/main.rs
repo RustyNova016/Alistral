@@ -28,8 +28,6 @@ async fn main() -> color_eyre::Result<()> {
     init_tracer(&cli);
     color_eyre::install()?;
 
-    info!("Hello world!");
-
     if run_cli(cli).await {
         post_run().await
     }
@@ -63,6 +61,4 @@ async fn post_run() {
         .await
         .expect("Error while cleaning the database");
     info!("Done!");
-
-    info!("Have a nice day!");
 }
