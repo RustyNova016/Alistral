@@ -12,6 +12,7 @@ use governor::state::InMemoryState;
 use governor::state::NotKeyed;
 use governor::Quota;
 use governor::RateLimiter;
+use tracing::debug;
 use tracing::error;
 use tracing::info;
 use tracing::instrument;
@@ -47,18 +48,8 @@ impl Youtube {
 
         let playlist_id = response.1.id.expect("No id returned"); //TODO: #518 Properly error if no playlist id is returned
 
-        //TODO: #520 Replace with add_recordings_to_playlist
-        for recording in playlist.recordings {
-            //TODO: #519 Return how many recordings are missing from the playlist, and why
-            //TODO: #516 User overwrite
-            let Some(video_id) = Self::get_or_query(client, recording, None).await? else {
-                continue;
-            };
-            rate_limit.until_ready().await;
-
-            Self::add_video_to_playlist(client, playlist_id.clone(), video_id).await?;
-            Span::current().pb_inc(1);
-        }
+        debug!("Adding recordings to playlist");
+        Self::add_recordings_to_playlist(client, &playlist_id, playlist, rate_limit).await?;
 
         Ok(playlist_id)
     }
@@ -66,7 +57,7 @@ impl Youtube {
     #[instrument(skip(client), fields(indicatif.pb_show = tracing::field::Empty))]
     async fn add_recordings_to_playlist(
         client: &InterzicClient,
-        playlist_id: String,
+        playlist_id: &String,
         playlist: PlaylistStub,
         rate_limit: RateLimiter<
             NotKeyed,
