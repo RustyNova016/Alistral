@@ -27,6 +27,7 @@ use crate::tools::bumps::bump_command;
 use crate::tools::bumps::bump_down_command;
 use crate::tools::compatibility::compatibility_command;
 use crate::tools::daily::daily_report;
+use crate::tools::playlist::PlaylistCommand;
 use crate::tools::stats::stats_command;
 
 use super::config::Config;
@@ -156,6 +157,9 @@ pub enum Commands {
     /// Commands for musicbrainz stuff
     Musicbrainz(MusicbrainzCommand),
 
+    /// Interact with playlists
+    Playlist(PlaylistCommand),
+
     /// Generate radio playlists for you
     Radio(RadioCommand),
 
@@ -227,6 +231,8 @@ impl Commands {
             Self::Mapping(val) => val.run(conn).await?,
 
             Self::Musicbrainz(val) => val.run(conn).await,
+
+            Self::Playlist(val) => val.run(conn).await?,
 
             Self::Bump(val) => bump_command(conn, val.clone()).await,
 

@@ -6,6 +6,7 @@ pub mod interzic;
 pub mod listens;
 pub mod lookup;
 pub mod musicbrainz;
+pub mod playlist;
 pub mod radio;
 pub mod stats;
 pub mod unstable;

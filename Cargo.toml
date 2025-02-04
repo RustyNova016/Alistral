@@ -18,7 +18,8 @@ tuillez = { path = "./tuillez" }
 musicbrainz-db-lite = { path = "./musicbrainz_db_lite" }
 
 # Musicbrainz dependencies
-listenbrainz = "0.8.1"
+#listenbrainz = "0.8.1"
+listenbrainz = { branch = "alistral_version", git = "https://github.com/RustyNova016/listenbrainz-rs.git" }
 
 derive_builder = "0.20.2"
 inquire = "0.7.5"

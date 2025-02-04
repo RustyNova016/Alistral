@@ -11,5 +11,27 @@ tracing-indicatif = "0.3.9"
 backtrace = "^0.3.48"
 thiserror = "2.0.11"
 
-[lints]
-workspace = true
+
+[lints.clippy]
+#pedantic = "deny"
+#nursery = "deny"
+#perf = "warn"
+#cargo = "warn"
+
+# Applied
+enum_glob_use = { level = "deny", priority = 1 }
+semicolon_if_nothing_returned = { level = "warn", priority = 1 }
+use_self = { level = "warn", priority = 1 }
+or_fun_call = { level = "warn", priority = 1 }
+match_same_arms = { level = "warn", priority = 1 }
+manual_string_new = { level = "warn", priority = 1 }
+doc_markdown = { level = "warn", priority = 1 }
+uninlined_format_args = { level = "warn", priority = 1 }
+explicit_iter_loop = { level = "warn", priority = 1 }
+allow_attributes = { level = "warn", priority = 1 }
+suboptimal_flops= { level = "warn", priority = 1 }
+
+
+# Won't apply... Yet
+must_use_candidate = { level = "allow", priority = 1 }
+map_unwrap_or = { level = "allow", priority = 1 }

@@ -9,6 +9,8 @@ use crate::InterzicClient;
 
 pub struct Listenbrainz;
 
+pub mod playlists;
+
 impl Listenbrainz {
     pub async fn create_playlist(
         client: &InterzicClient,
@@ -50,5 +52,15 @@ impl Listenbrainz {
                 annotation: Some(playlist.description),
             },
         }
+    }
+
+    pub fn import_playlist(
+        client: &InterzicClient,
+        playlist_id: &str,
+    ) -> Result<PlaylistStub, crate::Error> {
+        Ok(client
+            .listenbrainz_client()?
+            .get_playlist(playlist_id)
+            .map(|res| PlaylistStub::from(res.playlist))?)
     }
 }

@@ -605,7 +605,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "117725a109d387c937a1533ce01b450cbde6b88abceea8473c4d7a85853cda3c"
 dependencies = [
  "lazy_static",
- "windows-sys 0.59.0",
+ "windows-sys 0.48.0",
 ]
 
 [[package]]
@@ -2032,8 +2032,7 @@ checksum = "d26c52dbd32dccf2d10cac7725f8eae5296885fb5703b261f7d0a0739ec807ab"
 [[package]]
 name = "listenbrainz"
 version = "0.8.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1fd685ff956be01182a38cb22fb4ba75646caa3ae226befdb7fd31d379cebcc7"
+source = "git+https://github.com/RustyNova016/listenbrainz-rs.git?branch=alistral_version#7880fe615f8d3e60898043bb42936528136026dd"
 dependencies = [
  "attohttpc",
  "serde",
@@ -2239,14 +2238,14 @@ dependencies = [
 [[package]]
 name = "musicbrainz_rs"
 version = "0.9.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "45c4baf9975b36493afaa0f2c4648ef987686ecafa24e64393523964ea8c0d54"
+source = "git+https://github.com/RustyNova016/musicbrainz_rs.git?branch=develop#0a5095848f58827d603627dc8cd105d080bd845f"
 dependencies = [
  "chrono",
  "glob",
  "governor",
  "lucene_query_builder",
  "once_cell",
+ "regex",
  "reqwest",
  "serde",
  "serde_json",
@@ -4226,7 +4225,7 @@ version = "0.1.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cf221c93e13a30d793f7645a0e7762c55d169dbb0a49671918a2319d289b10bb"
 dependencies = [
- "windows-sys 0.59.0",
+ "windows-sys 0.48.0",
 ]
 
 [[package]]
