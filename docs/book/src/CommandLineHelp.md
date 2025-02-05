@@ -23,6 +23,10 @@ This document contains the help content for the `alistral` command-line program.
 * [`alistral config listens refresh-unmapped-listens`↴](#alistral-config-listens-refresh-unmapped-listens)
 * [`alistral config default-user`↴](#alistral-config-default-user)
 * [`alistral daily`↴](#alistral-daily)
+* [`alistral interzic`↴](#alistral-interzic)
+* [`alistral interzic get-mapping`↴](#alistral-interzic-get-mapping)
+* [`alistral interzic reverse-mapping`↴](#alistral-interzic-reverse-mapping)
+* [`alistral interzic overwrite`↴](#alistral-interzic-overwrite)
 * [`alistral listens`↴](#alistral-listens)
 * [`alistral listens remap-msid`↴](#alistral-listens-remap-msid)
 * [`alistral listens wrong-mapping`↴](#alistral-listens-wrong-mapping)
@@ -39,7 +43,6 @@ This document contains the help content for the `alistral` command-line program.
 * [`alistral radio shared`↴](#alistral-radio-shared)
 * [`alistral stats`↴](#alistral-stats)
 * [`alistral unstable`↴](#alistral-unstable)
-* [`alistral unstable best-of-mc`↴](#alistral-unstable-best-of-mc)
 
 ## `alistral`
 
@@ -55,6 +58,7 @@ A CLI app containing a set of useful tools for Listenbrainz
 * `compatibility` — 
 * `config` — Commands to deal with the app's configuration
 * `daily` — Daily report
+* `interzic` — Interact with the interzic database
 * `listens` — Commands to edit listens
 * `lookup` — Get detailled information about an entity
 * `mapping` — Commands for interacting with listen mappings
@@ -65,6 +69,8 @@ A CLI app containing a set of useful tools for Listenbrainz
 
 ###### **Options:**
 
+* `-v`, `--verbose` — Increase logging verbosity
+* `-q`, `--quiet` — Decrease logging verbosity
 * `--generate <GENERATOR>`
 
   Possible values: `bash`, `elvish`, `fish`, `powershell`, `zsh`
@@ -331,6 +337,84 @@ Daily report
 
 
 
+## `alistral interzic`
+
+Interact with the interzic database
+
+**Usage:** `alistral interzic <COMMAND>`
+
+###### **Subcommands:**
+
+* `get-mapping` — Fetch the id of a recording on an external service
+* `reverse-mapping` — Get the recording mapped to this id
+* `overwrite` — Overwrite a mapping for an user
+
+
+
+## `alistral interzic get-mapping`
+
+Fetch the id of a recording on an external service
+
+**Usage:** `alistral interzic get-mapping [OPTIONS] <TARGET>`
+
+###### **Arguments:**
+
+* `<TARGET>` — Get the mapping of which service?
+
+  Possible values: `youtube`
+
+
+###### **Options:**
+
+* `-r`, `--recording <RECORDING>` — The title of the recording
+* `-a`, `--artist <ARTIST>` — The artist credit
+* `-g`, `--release <RELEASE>` — The title of the release
+* `-m`, `--mbid <MBID>` — The mbid to search from (Overwrite `recording`, `artist`, and `release`)
+* `-u`, `--user <USER>` — Search the mapping of this user
+
+
+
+## `alistral interzic reverse-mapping`
+
+Get the recording mapped to this id
+
+**Usage:** `alistral interzic reverse-mapping <SOURCE> <ID> [USER]`
+
+###### **Arguments:**
+
+* `<SOURCE>` — Get the mapping of which service?
+
+  Possible values: `youtube`
+
+* `<ID>` — The id on the external service
+* `<USER>` — Search the mapping of this user
+
+
+
+## `alistral interzic overwrite`
+
+Overwrite a mapping for an user
+
+**Usage:** `alistral interzic overwrite [OPTIONS] <TARGET> <USER> <ID>`
+
+###### **Arguments:**
+
+* `<TARGET>` — Set the mapping of this service
+
+  Possible values: `youtube`
+
+* `<USER>` — Set the mapping of this user
+* `<ID>` — The id on the external service
+
+###### **Options:**
+
+* `-r`, `--recording <RECORDING>` — The title of the recording
+* `-a`, `--artist <ARTIST>` — The artist credit
+* `-g`, `--release <RELEASE>` — The title of the release
+* `-m`, `--mbid <MBID>` — The mbid to search from (Overwrite `recording`, `artist`, and `release`)
+
+
+
 ## `alistral listens`
 
 Commands to edit listens
@@ -500,6 +584,12 @@ Generate radio playlists for you
     Uses the last 365 days from now
 
 * `--min-seed-listens <MIN_SEED_LISTENS>` — When used with `seed_listen_range`, how many listens should be given as a minimum, even if they are outside of the range (Default: 3)
+* `-o`, `--output <OUTPUT>` — Where to output the radio
+
+  Default value: `listenbrainz`
+
+  Possible values: `listenbrainz`, `youtube`
+
 
 
 
@@ -672,25 +762,7 @@ Target is the entity type to group the stats by. Currently, those entities stats
 
 A CLI app containing a set of useful tools for Listenbrainz
 
-**Usage:** `alistral unstable <COMMAND>`
-
-###### **Subcommands:**
-
-* `best-of-mc` — See what your favourite Monstercat releases of this year are, and have an easier time voting for this year's Best of 2024!
-
-
-
-## `alistral unstable best-of-mc`
-
-See what your favourite Monstercat releases of this year are, and have an easier time voting for this year's Best of 2024!
-
-You can get a listen dump [here](https://listenbrainz.org/settings/export/)
-
-**Usage:** `alistral unstable best-of-mc [USERNAME]`
-
-###### **Arguments:**
-
-* `<USERNAME>` — Name of the user to look up stats from
+**Usage:** `alistral unstable`
 
 
 
@@ -700,3 +772,4 @@ You can get a listen dump [here](https://listenbrainz.org/settings/export/)
     This document was generated automatically by
     <a href="https://crates.io/crates/clap-markdown"><code>clap-markdown</code></a>.
 </i></small>
+

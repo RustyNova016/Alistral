@@ -27,7 +27,7 @@ SET
         .bind(self.recording_id)
         .bind(self.ext_id)
         .bind(self.service)
-        .bind(self.user_overwrite)
+        .bind(self.user_overwrite.to_lowercase())
         .fetch_one(&mut *conn)
         .await
     }
@@ -41,10 +41,8 @@ SET
     where
         A: Acquire<'a, Database = Sqlite>,
     {
-        //TODO: #516 Make user overwrite return default result
-
         let mut conn = conn.acquire().await?;
-        sqlx::query_scalar("SELECT ext_id FROM external_id WHERE recording_id = ? AND service = ? AND user_overwrite = ?;")
+        sqlx::query_scalar("SELECT ext_id FROM external_id WHERE recording_id = ? AND service = ? AND (LOWER(user_overwrite) = LOWER(?) OR user_overwrite = '') ORDER BY user_overwrite DESC LIMIT 1;")
             .bind(recording)
             .bind(service)
             .bind(user_overwrite.unwrap_or_default())
