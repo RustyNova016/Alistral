@@ -13,6 +13,18 @@ pub struct MessyRecording {
 }
 
 impl MessyRecording {
+    pub async fn from_mbid_with_db(
+        db_lite_conn: &mut sqlx::SqliteConnection,
+        client: &crate::InterzicClient,
+        mbid: &str,
+    ) -> Result<Self, crate::Error> {
+        let db_lite = client.musicbrainz_db_lite_client()?;
+        let recording = Recording::get_or_fetch(db_lite_conn, db_lite, mbid)
+            .await?
+            .unwrap(); //TODO: Replace when https://github.com/RustyNova016/musicbrainz_db_lite/issues/63 is done
+        Self::from_db_recording(db_lite_conn, client, recording).await
+    }
+
     pub async fn from_db_recording(
         db_lite_conn: &mut sqlx::SqliteConnection,
         client: &crate::InterzicClient,

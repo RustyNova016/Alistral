@@ -87,7 +87,7 @@ impl RadioCommand {
             .build()
     }
 
-    pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> color_eyre::Result<()> {
+    pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> Result<(), crate::Error> {
         self.command
             .run(conn, self.get_collector(), self, self.output.clone())
             .await
@@ -220,7 +220,7 @@ impl RadioSubcommands {
         collector: RadioCollector,
         command: &RadioCommand,
         target: RadioExportTarget,
-    ) -> color_eyre::Result<()> {
+    ) -> Result<(), crate::Error> {
         match self {
             Self::Circles {
                 username,

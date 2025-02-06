@@ -1,30 +1,39 @@
 use core::error::Error;
 use core::fmt::Display;
+use std::backtrace::Backtrace;
+use std::backtrace::BacktraceStatus;
 
+use color_backtrace::btparse::deserialize;
+use color_backtrace::BacktracePrinter;
 use owo_colors::OwoColorize as _;
 
+#[derive(Debug)]
 pub struct FatalError {
     text: Option<String>,
-    error: Box<dyn Error>,
+    error: Option<Box<dyn Error>>,
+    backtrace: Backtrace,
 }
 
 impl FatalError {
     pub fn new<T: Error + 'static>(error: T, text: Option<String>) -> Self {
         Self {
-            error: Box::new(error),
+            error: Some(Box::new(error)),
             text,
+            backtrace: Backtrace::capture(),
+        }
+    }
+
+    pub fn new_string(text: &str) -> Self {
+        Self {
+            error: None,
+            text: Some(text.to_string()),
+            backtrace: Backtrace::capture(),
         }
     }
 
     pub fn panic(self) -> ! {
         println!("{self}");
-        let err: Result<(), Box<dyn Error>> = Err(self.error);
-        #[expect(
-            clippy::unnecessary_literal_unwrap,
-            reason = "We need to print the trace, so we need to unwrap the error"
-        )]
-        err.unwrap();
-        panic!();
+        std::process::exit(2)
     }
 }
 
@@ -38,16 +47,29 @@ impl Display for FatalError {
         )?;
         writeln!(f)?;
         writeln!(f, "Something wrong happened, and the app couldn't recover.")?;
-        writeln!(f)?;
         if let Some(text) = self.text.as_ref() {
+            writeln!(f)?;
             writeln!(f, "🧨 Here's what went wrong:")?;
             let text = text.replace("\n", "\n    ");
             writeln!(f, "    {text}")?;
-            writeln!(f)?;
         }
 
-        writeln!(f, "🗒️  Here's the raw error data:")?;
+        if let Some(err) = self.error.as_ref() {
+            writeln!(f)?;
+            writeln!(f, "🗒️  Here's the raw error data:")?;
+            writeln!(f, "{err}")?;
+            writeln!(f, "{err:#?}")?;
+        }
+
+        if self.backtrace.status() == BacktraceStatus::Captured {
+            writeln!(f)?;
+            let printer = BacktracePrinter::default();
+            let bt = deserialize(&self.backtrace).unwrap();
+            writeln!(f, "{}", printer.format_trace_to_string(&bt).unwrap())?;
+        }
 
         Ok(())
     }
 }
+
+impl core::error::Error for FatalError {}

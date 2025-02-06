@@ -11,6 +11,7 @@ use crate::tools::listens::import::import_listen_dump;
 //use crate::tools::listens::import::import_listen_dump;
 use clap::ValueEnum;
 use clap::{Parser, Subcommand};
+use tuillez::fatal_error::FatalError;
 
 #[derive(Parser, Debug, Clone)]
 #[command(version, about, long_about = None)]
@@ -77,7 +78,7 @@ pub enum CacheSubcommands {
 }
 
 impl CacheCommand {
-    pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> color_eyre::Result<()> {
+    pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> Result<(), FatalError> {
         match &self.command {
             #[cfg(debug_assertions)]
             CacheSubcommands::CopyToDebug => {

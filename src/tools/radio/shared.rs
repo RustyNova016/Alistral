@@ -28,7 +28,7 @@ pub async fn shared_radio(
     collector: RadioCollector,
     token: &str,
     target: RadioExportTarget,
-) -> color_eyre::Result<()> {
+) -> Result<(), crate::Error> {
     let username = seeder.username().clone();
 
     info!("[Seeding] Getting listens");

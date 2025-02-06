@@ -1,5 +1,4 @@
 use clap::Parser;
-use color_eyre::eyre::Ok;
 
 use database::cleanup::cleanup_database;
 use models::cli::Cli;
@@ -23,16 +22,13 @@ use crate::interface::tracing::init_tracer;
 pub use crate::models::error::Error;
 
 #[tokio::main]
-async fn main() -> color_eyre::Result<()> {
+async fn main() {
     let cli = Cli::parse();
     init_tracer(&cli);
-    color_eyre::install()?;
 
     if run_cli(cli).await {
         post_run().await
     }
-
-    Ok(())
 }
 
 async fn run_cli(cli: Cli) -> bool {
@@ -44,7 +40,12 @@ async fn run_cli(cli: Cli) -> bool {
         .acquire_guarded()
         .await;
 
-    cli.run(conn).await.expect("An error occured in the app")
+    match cli.run(conn).await {
+        Result::Ok(val) => {val},
+        Err(err) => {
+            err.panic()
+        }
+    }
 }
 
 async fn post_run() {

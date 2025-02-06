@@ -1,3 +1,4 @@
+pub mod interzic;
 pub mod bumps;
 pub mod cache;
 pub mod compatibility;

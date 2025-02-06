@@ -1,3 +1,4 @@
+pub mod time_error;
 pub mod cli;
 pub mod clippy;
 pub mod config;

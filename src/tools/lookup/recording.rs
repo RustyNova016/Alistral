@@ -1,5 +1,6 @@
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use tracing::info;
+use tuillez::fatal_error::FatalError;
 
 use crate::api::clients::ALISTRAL_CLIENT;
 use crate::database::listenbrainz::listens::ListenFetchQuery;
@@ -13,7 +14,7 @@ pub async fn lookup_recording(
     conn: &mut sqlx::SqliteConnection,
     username: &str,
     id: &str,
-) -> color_eyre::Result<()> {
+) -> Result<(), FatalError> {
     // Fetch the listens.
     let listens = ListenFetchQuery::builder()
         .fetch_recordings_redirects(true)
@@ -25,7 +26,7 @@ pub async fn lookup_recording(
 
     // Refetch the recording to make sure it's up to date
     let Some(recording) =
-        Recording::fetch_and_save(conn, &ALISTRAL_CLIENT.musicbrainz_db, id).await?
+        Recording::fetch_and_save(conn, &ALISTRAL_CLIENT.musicbrainz_db, id).await.map_err(crate::Error::from)?
     else {
         info!("Couldn't find the recording with id: {id}");
         return Ok(());
