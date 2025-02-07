@@ -45,24 +45,27 @@ impl Youtube {
         None
     }
 
+    /// Try finding the corresponding id in this service
     pub async fn get_or_query(
         client: &InterzicClient,
-        recording: MessyRecording,
+        recording: &MessyRecording,
         user_overwrite: Option<String>,
     ) -> Result<Option<String>, crate::Error> {
-        if let Some(id) = get_cached(client, &recording, user_overwrite.clone()).await? {
+        if let Some(id) = get_cached(client, recording, user_overwrite.clone()).await? {
             return Ok(Some(id));
         }
 
         //TODO: #517 Use MBDBlite to search for urls if available
 
-        Musicbrainz::fetch_and_save_urls(client, &recording).await?;
+        if recording.mbid.is_some() {
+            Musicbrainz::fetch_and_save_urls(client, recording).await?;
 
-        if let Some(id) = get_cached(client, &recording, user_overwrite).await? {
-            return Ok(Some(id));
+            if let Some(id) = get_cached(client, recording, user_overwrite).await? {
+                return Ok(Some(id));
+            }
         }
 
-        let id = Self::query_recording_id(client, &recording).await?;
+        let id = Self::query_recording_id(client, recording).await?;
 
         if let Some(id) = id {
             let ext_id = ExternalId {

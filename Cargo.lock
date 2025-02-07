@@ -3867,6 +3867,7 @@ dependencies = [
  "color-backtrace",
  "indicatif",
  "owo-colors 4.1.0",
+ "thiserror",
  "tracing-indicatif",
 ]
 

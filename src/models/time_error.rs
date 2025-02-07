@@ -7,6 +7,5 @@ pub enum TimeError {
     ParseError(humantime::DurationError),
 
     #[error(transparent)]
-    ConvertError(chrono::OutOfRangeError)
+    ConvertError(chrono::OutOfRangeError),
 }
-

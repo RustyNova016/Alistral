@@ -41,10 +41,8 @@ async fn run_cli(cli: Cli) -> bool {
         .await;
 
     match cli.run(conn).await {
-        Result::Ok(val) => {val},
-        Err(err) => {
-            err.panic()
-        }
+        Result::Ok(val) => val,
+        Err(err) => err.panic(),
     }
 }
 

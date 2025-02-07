@@ -58,11 +58,20 @@ pub enum Error {
 
     #[error("No user data is available for this playlist export target: {0}")]
     MissingPlaylistUserDataError(String),
+
+    #[error(transparent)]
+    FatalError(#[from] FatalError),
 }
 
 impl From<Error> for FatalError {
     fn from(value: Error) -> Self {
-        FatalError::new(value, None)
+        match value {
+            Error::FatalError(val) => val,
+            _ => {
+                let text = value.get_help();
+                FatalError::new(value, text)
+            }
+        }
     }
 }
 
@@ -80,6 +89,10 @@ impl Error {
 
         println!("{}", FatalError::new(self, text));
         panic!()
+    }
+
+    pub fn get_help(&self) -> Option<String> {
+        process_errors(self)
     }
 }
 

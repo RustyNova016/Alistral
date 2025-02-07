@@ -25,8 +25,9 @@ pub async fn lookup_recording(
         .await?;
 
     // Refetch the recording to make sure it's up to date
-    let Some(recording) =
-        Recording::fetch_and_save(conn, &ALISTRAL_CLIENT.musicbrainz_db, id).await.map_err(crate::Error::from)?
+    let Some(recording) = Recording::fetch_and_save(conn, &ALISTRAL_CLIENT.musicbrainz_db, id)
+        .await
+        .map_err(crate::Error::from)?
     else {
         info!("Couldn't find the recording with id: {id}");
         return Ok(());

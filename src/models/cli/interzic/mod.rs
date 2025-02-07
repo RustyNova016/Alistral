@@ -24,7 +24,7 @@ pub enum InterzicSubcommands {
 impl InterzicSubcommands {
     pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> Result<(), FatalError> {
         match self {
-            Self::GetMapping(args) => args.run(conn).await,
+            Self::GetMapping(args) => Ok(args.run(conn).await?),
         }
     }
 }

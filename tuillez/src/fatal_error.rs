@@ -2,6 +2,7 @@ use core::error::Error;
 use core::fmt::Display;
 use std::backtrace::Backtrace;
 use std::backtrace::BacktraceStatus;
+use std::fmt::Write;
 
 use color_backtrace::btparse::deserialize;
 use color_backtrace::BacktracePrinter;
@@ -57,8 +58,12 @@ impl Display for FatalError {
         if let Some(err) = self.error.as_ref() {
             writeln!(f)?;
             writeln!(f, "🗒️  Here's the raw error data:")?;
-            writeln!(f, "{err}")?;
-            writeln!(f, "{err:#?}")?;
+            let text = err.to_string().replace("\n", "\n    ");
+            writeln!(f, "    {text}")?;
+            let mut text = String::new();
+            write!(text, "{err:#?}")?;
+            let text = text.replace("\n", "\n    ");
+            writeln!(f, "    {text}")?;
         }
 
         if self.backtrace.status() == BacktraceStatus::Captured {
@@ -73,3 +78,33 @@ impl Display for FatalError {
 }
 
 impl core::error::Error for FatalError {}
+
+pub trait IntoFatal<T, E: Error> {
+    fn unwrap_fatal(self) -> Result<T, FatalError>;
+    fn expect_fatal(self, text: &str) -> Result<T, FatalError>;
+}
+
+impl<T, E: core::error::Error + 'static> IntoFatal<T, E> for Result<T, E> {
+    fn unwrap_fatal(self) -> Result<T, FatalError> {
+        self.map_err(|error| FatalError::new(error, None))
+    }
+
+    fn expect_fatal(self, text: &str) -> Result<T, FatalError> {
+        self.map_err(|error| FatalError::new(error, Some(text.to_owned())))
+    }
+}
+
+pub trait OptIntoFatal<T> {
+    fn unwrap_fatal(self) -> Result<T, FatalError>;
+    fn expect_fatal(self, text: &str) -> Result<T, FatalError>;
+}
+
+impl<T> OptIntoFatal<T> for Option<T> {
+    fn unwrap_fatal(self) -> Result<T, FatalError> {
+        self.ok_or_else(|| FatalError::new(crate::Error::UnwrapNone, None))
+    }
+
+    fn expect_fatal(self, text: &str) -> Result<T, FatalError> {
+        self.ok_or_else(|| FatalError::new(crate::Error::UnwrapNone, Some(text.to_owned())))
+    }
+}

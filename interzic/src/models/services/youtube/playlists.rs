@@ -71,7 +71,7 @@ impl Youtube {
         for recording in playlist.recordings {
             //TODO: #519 Return how many recordings are missing from the playlist, and why
             //TODO: #516 User overwrite
-            let Some(video_id) = Self::get_or_query(client, recording, None).await? else {
+            let Some(video_id) = Self::get_or_query(client, &recording, None).await? else {
                 continue;
             };
             rate_limit.until_ready().await;
