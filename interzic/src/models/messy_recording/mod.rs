@@ -1,3 +1,4 @@
+pub mod database;
 use core::fmt::Display;
 
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
