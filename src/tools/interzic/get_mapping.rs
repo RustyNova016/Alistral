@@ -48,7 +48,7 @@ impl GetMappingCommand {
                 conn,
                 &ALISTRAL_CLIENT.interzic,
                 &read_mbid_from_input(mbid)
-                    .expect_fatal("Couldn't read the mbid from the input")?,
+                    .expect_fatal("Couldn't read the mbid from the input. Check if it's correct")?,
             )
             .await
             .expect_fatal("Couldn't find this mbid. Are you sure it is correct?")?

@@ -3,7 +3,6 @@ use clap::Parser;
 use database::cleanup::cleanup_database;
 use models::cli::Cli;
 use tracing::debug;
-use tracing::info;
 
 pub mod api;
 pub mod database;
@@ -54,10 +53,9 @@ async fn post_run() {
         .acquire_guarded()
         .await;
 
-    info!("Optional cleanup - This is fine to cancel");
-    info!("Cleaning some old entries...");
+    debug!("Cleaning some old entries...");
     cleanup_database(conn)
         .await
         .expect("Error while cleaning the database");
-    info!("Done!");
+    debug!("Done!");
 }

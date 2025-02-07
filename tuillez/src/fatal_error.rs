@@ -60,10 +60,11 @@ impl Display for FatalError {
             writeln!(f, "🗒️  Here's the raw error data:")?;
             let text = err.to_string().replace("\n", "\n    ");
             writeln!(f, "    {text}")?;
+            writeln!(f)?;
             let mut text = String::new();
             write!(text, "{err:#?}")?;
             let text = text.replace("\n", "\n    ");
-            writeln!(f, "    {text}")?;
+            writeln!(f, "    Debug: {text}")?;
         }
 
         if self.backtrace.status() == BacktraceStatus::Captured {
