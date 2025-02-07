@@ -37,6 +37,18 @@ impl Youtube {
             .and_then(|id| id.video_id))
     }
 
+    pub fn extract_id_from_text(text: &str) -> Option<String> {
+        if let Some(val) = Self::extract_id_from_url(text) {
+            return Some(val);
+        };
+
+        if text.len() == 11 {
+            return Some(text.to_owned());
+        }
+
+        None
+    }
+
     pub fn extract_id_from_url(url: &str) -> Option<String> {
         if let Some(capt) = YOUTUBE_URL_ID_REGEX.captures_iter(url).next() {
             return capt.get(7).map(|m| m.as_str().to_string()); // Capture group 7 is the one containing the id
@@ -79,6 +91,20 @@ impl Youtube {
             return Ok(Some(id));
         }
         Ok(None)
+    }
+
+    pub async fn get_recording_from_id(
+        client: &InterzicClient,
+        ext_id: &str,
+        user_overwrite: Option<&str>,
+    ) -> Result<Option<MessyRecording>, sqlx::Error> {
+        MessyRecording::find_from_mapping(
+            &client.database_client,
+            ext_id,
+            "youtube",
+            user_overwrite,
+        )
+        .await
     }
 }
 
