@@ -1,3 +1,4 @@
+pub mod caching;
 use musicbrainz_rs::entity::recording::Recording;
 use musicbrainz_rs::entity::relations::RelationContent;
 use musicbrainz_rs::Fetch;

@@ -11,6 +11,12 @@ Retrieve the mapped id from a recording.
 
 [Usage](../CommandLineHelp.md#alistral-interzic-get-mapping)
 
+## `get-mapping`
+
+Fetch musicbrainz for recording urls and save them
+
+[Usage](../CommandLineHelp.md#alistral-interzic-reload)
+
 ## `reverse-mapping`
 
 Retrieve the recording data from an id.
