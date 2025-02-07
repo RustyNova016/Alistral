@@ -2,6 +2,7 @@ use clap::{Parser, Subcommand};
 use tuillez::fatal_error::FatalError;
 
 use crate::tools::interzic::get_mapping::GetMappingCommand;
+use crate::tools::interzic::overwrite::OverwriteCommand;
 use crate::tools::interzic::reverse_mapping::ReverseMappingCommand;
 
 #[derive(Parser, Debug, Clone)]
@@ -24,6 +25,9 @@ pub enum InterzicSubcommands {
 
     /// Get the recording mapped to this id
     ReverseMapping(ReverseMappingCommand),
+
+    /// Overwrite a mapping for an user
+    Overwrite(OverwriteCommand),
 }
 
 impl InterzicSubcommands {
@@ -31,6 +35,7 @@ impl InterzicSubcommands {
         match self {
             Self::GetMapping(args) => Ok(args.run(conn).await?),
             Self::ReverseMapping(args) => Ok(args.run(conn).await?),
+            InterzicSubcommands::Overwrite(args) => Ok(args.run(conn).await?),
         }
     }
 }

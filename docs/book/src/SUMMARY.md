@@ -1,6 +1,7 @@
 # Summary
 
-[hello](hello.md)
+[Welcome](hello.md)
+[Help](CommandLineHelp.md)
 
 # Commands
 
