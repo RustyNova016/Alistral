@@ -55,7 +55,7 @@ pub enum ConfigCommands {
 }
 
 impl ConfigCommands {
-    pub async fn run(&self) -> color_eyre::Result<()> {
+    pub async fn run(&self) -> Result<(), crate::Error> {
         match self {
             Self::SetToken { username, token } => {
                 let conf = Config::load()?;

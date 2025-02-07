@@ -3,6 +3,7 @@ use thiserror::Error;
 use tuillez::fatal_error::FatalError;
 
 use crate::interface::errors::process_errors;
+use crate::models::time_error::TimeError;
 
 #[derive(Error, Debug)]
 //#[expect(clippy::enum_variant_names)]
@@ -12,6 +13,9 @@ pub enum Error {
 
     #[error(transparent)]
     InterzicError(#[from] interzic::Error),
+
+    #[error(transparent)]
+    TimeError(#[from] TimeError),
 
     // --- Config Errors ---
     #[error("An error occured when trying to load the configuration file.")]
@@ -54,6 +58,21 @@ pub enum Error {
 
     #[error("No user data is available for this playlist export target: {0}")]
     MissingPlaylistUserDataError(String),
+
+    #[error(transparent)]
+    FatalError(#[from] FatalError),
+}
+
+impl From<Error> for FatalError {
+    fn from(value: Error) -> Self {
+        match value {
+            Error::FatalError(val) => val,
+            _ => {
+                let text = value.get_help();
+                FatalError::new(value, text)
+            }
+        }
+    }
 }
 
 impl Error {
@@ -70,6 +89,10 @@ impl Error {
 
         println!("{}", FatalError::new(self, text));
         panic!()
+    }
+
+    pub fn get_help(&self) -> Option<String> {
+        process_errors(self)
     }
 }
 

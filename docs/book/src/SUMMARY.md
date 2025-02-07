@@ -1,8 +1,11 @@
 # Summary
 
+[hello](hello.md)
+
 # Commands
 
 - [stats](./stats/stats.md)
+- [interzic](./interzic/interzic.md)
 
 # Settings
 

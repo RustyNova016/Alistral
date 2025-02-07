@@ -1,5 +1,6 @@
 use clap::Parser;
 use clap::Subcommand;
+use tuillez::fatal_error::FatalError;
 
 use crate::models::config::Config;
 use crate::tools::listens::unlinked::unmapped_command;
@@ -14,7 +15,7 @@ pub struct MappingCommand {
 }
 
 impl MappingCommand {
-    pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> color_eyre::Result<()> {
+    pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> Result<(), FatalError> {
         self.subcommand.run(conn).await
     }
 }
@@ -54,7 +55,7 @@ pub enum MappingSubcommands {
 }
 
 impl MappingSubcommands {
-    pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> color_eyre::Result<()> {
+    pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> Result<(), FatalError> {
         match self {
             Self::ListUnmapped { username, sort } => {
                 unmapped_command(

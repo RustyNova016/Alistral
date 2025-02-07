@@ -6,11 +6,13 @@ use extend::ext;
 use rust_decimal::Decimal;
 use rust_decimal_macros::dec;
 
+use crate::models::time_error::TimeError;
+
 #[ext]
 pub impl Duration {
-    fn from_human_string(value: &str) -> color_eyre::Result<Duration> {
-        let human_dur: humantime::Duration = value.parse()?;
-        Ok(Duration::from_std(*human_dur)?)
+    fn from_human_string(value: &str) -> Result<Duration, crate::Error> {
+        let human_dur: humantime::Duration = value.parse().map_err(TimeError::ParseError)?;
+        Ok(Duration::from_std(*human_dur).map_err(TimeError::ConvertError)?)
     }
 
     fn to_humantime(self) -> Result<humantime::Duration, OutOfRangeError> {

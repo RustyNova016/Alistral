@@ -1,3 +1,4 @@
+pub mod interzic;
 use std::io;
 
 use cache::CacheCommand;
@@ -17,8 +18,10 @@ use listens::ListenCommand;
 use lookup::LookupCommand;
 use mapping::MappingCommand;
 use musicbrainz::MusicbrainzCommand;
+use tuillez::fatal_error::FatalError;
 use unstable::UnstableCommand;
 
+use crate::models::cli::interzic::InterzicCommand;
 use crate::models::cli::radio::RadioCommand;
 use crate::tools::bumps::bump_command;
 use crate::tools::bumps::bump_down_command;
@@ -60,7 +63,7 @@ pub struct Cli {
 }
 
 impl Cli {
-    pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> color_eyre::Result<bool> {
+    pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> Result<bool, FatalError> {
         // Invoked as: `$ my-app --markdown-help`
         if self.markdown_help {
             clap_markdown::print_help_markdown::<Self>();
@@ -138,6 +141,9 @@ pub enum Commands {
         username: Option<String>,
     },
 
+    /// Interact with the interzic database
+    Interzic(InterzicCommand),
+
     /// Commands to edit listens
     Listens(ListenCommand),
 
@@ -184,7 +190,7 @@ pub enum Commands {
 }
 
 impl Commands {
-    pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> color_eyre::Result<()> {
+    pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> Result<(), FatalError> {
         match self {
             Self::Stats {
                 username,
@@ -211,6 +217,8 @@ impl Commands {
             Self::Config(val) => val.command.run().await?,
 
             Self::Daily { username } => daily_report(conn, &Config::check_username(username)).await,
+
+            Self::Interzic(val) => val.run(conn).await?,
 
             Self::Listens(val) => val.run(conn).await,
 

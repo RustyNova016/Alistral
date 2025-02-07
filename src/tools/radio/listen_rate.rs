@@ -24,7 +24,7 @@ pub async fn listen_rate_radio(
     cooldown: u64,
     collector: RadioCollector,
     target: RadioExportTarget,
-) -> color_eyre::Result<()> {
+) -> Result<(), crate::Error> {
     let username = seeder.username().clone();
 
     info!("[Seeding] Getting listens");

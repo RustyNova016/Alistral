@@ -1,5 +1,7 @@
+pub mod error;
 pub mod fatal_error;
 pub mod macros;
 pub mod styles;
 
+pub use crate::error::Error;
 pub use crate::styles::SPINNER_STYLE;

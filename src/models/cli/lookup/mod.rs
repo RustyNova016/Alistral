@@ -3,6 +3,7 @@ use crate::tools::lookup::lookup_command;
 use crate::utils::cli::parsing::assert_recording_mbid;
 use clap::Parser;
 use clap::ValueEnum;
+use tuillez::fatal_error::FatalError;
 
 #[derive(Parser, Debug, Clone)]
 #[command(version, about, long_about = None)]
@@ -18,7 +19,7 @@ pub struct LookupCommand {
 }
 
 impl LookupCommand {
-    pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> color_eyre::Result<()> {
+    pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> Result<(), FatalError> {
         let id = assert_recording_mbid(conn, &self.id).await;
 
         lookup_command(

@@ -13,7 +13,7 @@ pub struct ListenConfigCli {
 }
 
 impl ListenConfigCli {
-    pub async fn run(&self) -> color_eyre::Result<()> {
+    pub async fn run(&self) -> Result<(), crate::Error> {
         self.subcommand.run().await
     }
 }
@@ -28,7 +28,7 @@ pub enum ListenConfigSubcommands {
 }
 
 impl ListenConfigSubcommands {
-    pub async fn run(&self) -> color_eyre::Result<()> {
+    pub async fn run(&self) -> Result<(), crate::Error> {
         match self {
             Self::RefreshUnmappedListens { state } => {
                 let mut config_lock = CONFIG.write().await;
