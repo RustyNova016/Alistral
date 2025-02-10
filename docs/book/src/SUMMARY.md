@@ -5,8 +5,9 @@
 
 # Commands
 
-- [stats](./stats/stats.md)
 - [interzic](./interzic/interzic.md)
+- [listens](./listens/listens.md)
+- [stats](./stats/stats.md)
 
 # Settings
 

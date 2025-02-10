@@ -4,7 +4,7 @@ use interzic::models::services::youtube::error::YoutubeError;
 pub fn process_errors(error: &crate::Error) -> Option<String> {
     match &error {
         crate::Error::InterzicError(err) => process_interzic_error(err),
-
+        crate::Error::ListenbrainzError(err) => process_listenbrainz_error(err),
         _ => None,
     }
 }
@@ -12,6 +12,19 @@ pub fn process_errors(error: &crate::Error) -> Option<String> {
 fn process_interzic_error(error: &interzic::Error) -> Option<String> {
     match error {
         interzic::Error::YoutubeError(err) => process_interzic_youtube_error(err),
+        _ => None,
+    }
+}
+
+fn process_listenbrainz_error(error: &listenbrainz::Error) -> Option<String> {
+    match error {
+        listenbrainz::Error::Api { code: _, error } => {
+            if error == "Invalid authorization token." {
+                return Some("The authentification token is invalid.".to_string());
+            }
+
+            None
+        }
         _ => None,
     }
 }
