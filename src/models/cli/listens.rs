@@ -3,6 +3,7 @@ use clap::Subcommand;
 
 use crate::models::config::Config;
 use crate::tools::listens::mapper::listen_mapper_convert_mbids;
+use crate::tools::listens::submit::ListenSubmitCommand;
 use crate::tools::listens::wrong_mapping::wrong_mapping;
 use crate::utils::cli::read_mbid_from_input;
 
@@ -14,8 +15,8 @@ pub struct ListenCommand {
 }
 
 impl ListenCommand {
-    pub async fn run(&self, conn: &mut sqlx::SqliteConnection) {
-        self.subcommand.run(conn).await;
+    pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> Result<(), crate::Error> {
+        self.subcommand.run(conn).await
     }
 }
 
@@ -36,6 +37,8 @@ pub enum ListenSubcommands {
         token: Option<String>,
     },
 
+    Submit(ListenSubmitCommand),
+
     WrongMapping {
         /// Your username
         username: Option<String>,
@@ -43,7 +46,7 @@ pub enum ListenSubcommands {
 }
 
 impl ListenSubcommands {
-    pub async fn run(&self, conn: &mut sqlx::SqliteConnection) {
+    pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> Result<(), crate::Error> {
         match self {
             Self::RemapMsid {
                 original_id,
@@ -61,9 +64,12 @@ impl ListenSubcommands {
                 )
                 .await;
             }
+            Self::Submit(cmd) => cmd.run().await?,
             Self::WrongMapping { username } => {
                 wrong_mapping(conn, Config::check_username(username)).await;
             }
         }
+
+        Ok(())
     }
 }

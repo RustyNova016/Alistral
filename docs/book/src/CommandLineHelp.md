@@ -25,10 +25,12 @@ This document contains the help content for the `alistral` command-line program.
 * [`alistral daily`↴](#alistral-daily)
 * [`alistral interzic`↴](#alistral-interzic)
 * [`alistral interzic get-mapping`↴](#alistral-interzic-get-mapping)
+* [`alistral interzic reload`↴](#alistral-interzic-reload)
 * [`alistral interzic reverse-mapping`↴](#alistral-interzic-reverse-mapping)
 * [`alistral interzic overwrite`↴](#alistral-interzic-overwrite)
 * [`alistral listens`↴](#alistral-listens)
 * [`alistral listens remap-msid`↴](#alistral-listens-remap-msid)
+* [`alistral listens submit`↴](#alistral-listens-submit)
 * [`alistral listens wrong-mapping`↴](#alistral-listens-wrong-mapping)
 * [`alistral lookup`↴](#alistral-lookup)
 * [`alistral mapping`↴](#alistral-mapping)
@@ -346,6 +348,7 @@ Interact with the interzic database
 ###### **Subcommands:**
 
 * `get-mapping` — Fetch the id of a recording on an external service
+* `reload` — Reload recording data from Musicbrainz
 * `reverse-mapping` — Get the recording mapped to this id
 * `overwrite` — Overwrite a mapping for an user
 
@@ -371,6 +374,14 @@ Fetch the id of a recording on an external service
 * `-g`, `--release <RELEASE>` — The title of the release
 * `-m`, `--mbid <MBID>` — The mbid to search from (Overwrite `recording`, `artist`, and `release`)
 * `-u`, `--user <USER>` — Search the mapping of this user
+
+
+
+## `alistral interzic reload`
+
+Reload recording data from Musicbrainz
+
+**Usage:** `alistral interzic reload`
 
 
 
@@ -424,6 +435,7 @@ Commands to edit listens
 ###### **Subcommands:**
 
 * `remap-msid` — Changes all the listens of a recording into another. Useful if LB mapped to a recording you never listened
+* `submit` — 
 * `wrong-mapping` — 
 
 
@@ -440,6 +452,23 @@ Changes all the listens of a recording into another. Useful if LB mapped to a re
 * `<NEW_ID>` — The MBID of the recorind to replace it with
 * `<USERNAME>` — Your username
 * `<TOKEN>` — Your account token
+
+
+
+## `alistral listens submit`
+
+**Usage:** `alistral listens submit [OPTIONS] <RECORDING> <ARTIST_CREDITS>`
+
+###### **Arguments:**
+
+* `<RECORDING>` — The name of the recording listened to
+* `<ARTIST_CREDITS>` — The artist credits of the listen
+
+###### **Options:**
+
+* `-g`, `--release <RELEASE>` — The release of the recording
+* `-u`, `--user <USER>` — Submit the listen on this user
+* `-t`, `--token <TOKEN>` — The token of the user
 
 
 

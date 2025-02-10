@@ -220,7 +220,7 @@ impl Commands {
 
             Self::Interzic(val) => val.run(conn).await?,
 
-            Self::Listens(val) => val.run(conn).await,
+            Self::Listens(val) => val.run(conn).await?,
 
             Self::Lookup(val) => val.run(conn).await?,
 
