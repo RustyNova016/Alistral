@@ -1,3 +1,4 @@
+use alistral_core::api::listenbrainz::listens::fetch_latest_listens_of_user;
 use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use alistral_core::datastructures::entity_with_listens::recording::RecordingWithListens;
 use alistral_core::datastructures::listen_collection::ListenCollection;
@@ -7,7 +8,6 @@ use macon::Builder;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 
 use crate::api::clients::ALISTRAL_CLIENT;
-use crate::database::listenbrainz::listens::fetch_latest_listens_of_user;
 
 use super::SeederSettings;
 
@@ -27,7 +27,7 @@ impl ListenSeeder {
         conn: &mut sqlx::SqliteConnection,
     ) -> Result<RecordingWithListensCollection, crate::Error> {
         // Get the listens
-        fetch_latest_listens_of_user(conn, &self.username).await?;
+        fetch_latest_listens_of_user(&ALISTRAL_CLIENT, conn, &self.username).await?;
 
         let min_listened_at = self
             .settings
