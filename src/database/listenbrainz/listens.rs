@@ -1,15 +1,12 @@
 use alistral_core::api::listenbrainz::listens::fetch_latest_listens_of_user;
 use alistral_core::datastructures::listen_collection::ListenCollection;
-use chrono::{DateTime, Utc};
 use macon::Builder;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use sqlx::SqliteConnection;
-use tracing::info;
 use tracing::instrument;
 use tuillez::pg_counted;
 use tuillez::pg_inc;
-use tuillez::pg_spinner;
 
 use crate::api::clients::ALISTRAL_CLIENT;
 use crate::utils::env::in_offline_mode;
