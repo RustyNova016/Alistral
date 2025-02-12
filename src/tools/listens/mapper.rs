@@ -40,17 +40,21 @@ pub async fn listen_mapper_convert_mbids(
             .await
             .expect("Couldn't get the listens of the msid");
         if let Some(listen) = listens.first() {
-            Listen::fetch_listen_by_id(
-                conn,
-                &ALISTRAL_CLIENT.listenbrainz,
-                listen.listened_at,
-                &listen.user,
-                &listen.recording_msid,
-                20,
-            )
-            .await
-            .expect("Couldn't refresh listen")
-            .expect("Couldn't refresh listen");
+            // Check if we are refreshing the listen of the current user.
+            // Refreshing other is useless as they weren't modified by this function
+            if listen.user.to_lowercase() == username.to_lowercase() {
+                Listen::fetch_listen_by_id(
+                    conn,
+                    &ALISTRAL_CLIENT.listenbrainz,
+                    listen.listened_at,
+                    &listen.user,
+                    &listen.recording_msid,
+                    20,
+                )
+                .await
+                .expect("Couldn't refresh listen")
+                .expect("Couldn't refresh listen");
+            }
         }
     }
 
