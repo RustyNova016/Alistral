@@ -3,9 +3,12 @@ use alistral_core::datastructures::entity_with_listens::artist::collection::Arti
 use alistral_core::datastructures::entity_with_listens::artist::collection::ArtistWithRecordingsStrategy;
 use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListenStrategy;
 use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
+use alistral_core::datastructures::entity_with_listens::release::collection::ReleaseWithListensCollection;
 use alistral_core::datastructures::entity_with_listens::release::collection::ReleaseWithRecordingsStrategy;
+use alistral_core::datastructures::entity_with_listens::release_group::collection::ReleaseGroupWithListensCollection;
 use alistral_core::datastructures::entity_with_listens::release_group::collection::ReleaseGroupWithReleasesStrategy;
 use alistral_core::datastructures::entity_with_listens::work::collection::WorkWithRecordingsStrategy;
+use alistral_core::datastructures::entity_with_listens::work::collection::WorkWithListensCollection;
 
 use crate::models::client::AlistralCliClient;
 
@@ -47,6 +50,33 @@ pub async fn recording_stats(
     user: String,
 ) -> Result<RecordingWithListensCollection, crate::Error> {
     let strategy = recording_strategy(client);
+
+    Ok(ListenFetchQuery::get_entity_with_listens(&client.core, user, &strategy).await?)
+}
+
+pub async fn release_stats(
+    client: &AlistralCliClient,
+    user: String,
+) -> Result<ReleaseWithListensCollection, crate::Error> {
+    let strategy = release_strategy(client);
+
+    Ok(ListenFetchQuery::get_entity_with_listens(&client.core, user, &strategy).await?)
+}
+
+pub async fn release_group_stats(
+    client: &AlistralCliClient,
+    user: String,
+) -> Result<ReleaseGroupWithListensCollection, crate::Error> {
+    let strategy = release_group_strategy(client);
+
+    Ok(ListenFetchQuery::get_entity_with_listens(&client.core, user, &strategy).await?)
+}
+
+pub async fn work_stats(
+    client: &AlistralCliClient,
+    user: String,
+) -> Result<WorkWithListensCollection, crate::Error> {
+    let strategy = work_strategy(client);
 
     Ok(ListenFetchQuery::get_entity_with_listens(&client.core, user, &strategy).await?)
 }
