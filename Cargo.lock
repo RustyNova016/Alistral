@@ -80,7 +80,7 @@ dependencies = [
  "itertools 0.14.0",
  "listenbrainz",
  "macon",
- "musicbrainz-db-lite 0.1.0",
+ "musicbrainz-db-lite",
  "rand",
  "rayon",
  "regex",
@@ -113,7 +113,7 @@ dependencies = [
  "interzic",
  "itertools 0.14.0",
  "listenbrainz",
- "musicbrainz-db-lite 0.1.0",
+ "musicbrainz-db-lite",
  "owo-colors 4.2.0",
  "rust_decimal",
  "rust_decimal_macros",
@@ -1905,8 +1905,8 @@ dependencies = [
  "google-youtube3",
  "governor",
  "listenbrainz",
- "musicbrainz-db-lite 0.1.0",
- "musicbrainz_rs 0.9.0 (git+https://github.com/RustyNova016/musicbrainz_rs.git?branch=develop)",
+ "musicbrainz-db-lite",
+ "musicbrainz_rs",
  "regex",
  "serde",
  "serde_json",
@@ -2230,45 +2230,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "musicbrainz-db-lite"
-version = "0.1.0"
-source = "git+https://github.com/RustyNova016/musicbrainz_db_lite.git?branch=develop#7298b21aac9f449e6ee9866842e45213b1a4473c"
-dependencies = [
- "async-fn-stream",
- "async-trait",
- "chrono",
- "const_format",
- "extend",
- "futures",
- "itertools 0.13.0",
- "listenbrainz",
- "macon",
- "musicbrainz_db_lite_macros 0.1.0 (git+https://github.com/RustyNova016/musicbrainz_db_lite.git?branch=develop)",
- "musicbrainz_db_lite_schema 0.1.1 (git+https://github.com/RustyNova016/musicbrainz_db_lite.git?branch=develop)",
- "musicbrainz_rs 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "serde",
- "serde_json",
- "sqlx",
- "thiserror",
- "tokio",
- "tracing",
-]
-
-[[package]]
 name = "musicbrainz_db_lite_macros"
 version = "0.1.0"
-dependencies = [
- "darling",
- "proc-macro2",
- "quote",
- "sqlx",
- "syn 2.0.98",
-]
-
-[[package]]
-name = "musicbrainz_db_lite_macros"
-version = "0.1.0"
-source = "git+https://github.com/RustyNova016/musicbrainz_db_lite.git?branch=develop#7298b21aac9f449e6ee9866842e45213b1a4473c"
 dependencies = [
  "darling",
  "proc-macro2",
@@ -2283,32 +2246,6 @@ version = "0.1.1"
 dependencies = [
  "serial_test",
  "sqlx",
- "tokio",
-]
-
-[[package]]
-name = "musicbrainz_db_lite_schema"
-version = "0.1.1"
-source = "git+https://github.com/RustyNova016/musicbrainz_db_lite.git?branch=develop#7298b21aac9f449e6ee9866842e45213b1a4473c"
-dependencies = [
- "sqlx",
-]
-
-[[package]]
-name = "musicbrainz_rs"
-version = "0.9.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "45c4baf9975b36493afaa0f2c4648ef987686ecafa24e64393523964ea8c0d54"
-dependencies = [
- "chrono",
- "glob",
- "governor",
- "lucene_query_builder",
- "once_cell",
- "reqwest",
- "serde",
- "serde_json",
- "thiserror",
  "tokio",
 ]
 
@@ -3341,7 +3278,7 @@ dependencies = [
  "futures",
  "i_splits",
  "json",
- "musicbrainz-db-lite 0.1.0 (git+https://github.com/RustyNova016/musicbrainz_db_lite.git?branch=develop)",
+ "musicbrainz-db-lite",
  "serde",
  "serde_json",
  "thiserror",
