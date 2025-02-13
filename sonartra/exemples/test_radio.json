@@ -8,12 +8,31 @@
         {
             "step_type": "minimum_listen_filter",
             "id": "minimum_listen_filter",
-            "variables": {
+            "inputs": {
                 "count": 5
+            }
+        },
+        {
+            "step_type": "and_filter",
+            "id": "and_filter",
+            "inputs": {
+                "radio_schema": {
+                    "name": "Test Inner Radio",
+                    "stack": [
+                        {
+                            "step_type": "listen_seeder",
+                            "id": "listen_seeder"
+                        }
+                    ],
+                    "inputs": {
+                        "user": "listen_seeder.username"
+                    }
+                }
             }
         }
     ],
     "inputs": {
-        "minimum_listens": "minimum_listen_filter.count"
+        "minimum_listens": "minimum_listen_filter.count",
+        "username": "and_filter.radio.user"
     }
 }
