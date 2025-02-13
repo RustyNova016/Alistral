@@ -1,6 +1,8 @@
 pub mod caching;
 pub mod error;
 
+use tracing::debug;
+
 use crate::models::external_id::ExternalId;
 use crate::models::messy_recording::MessyRecording;
 use crate::models::services::musicbrainz::Musicbrainz;
@@ -18,6 +20,8 @@ impl Youtube {
         client: &InterzicClient,
         recording: &MessyRecording,
     ) -> Result<Option<String>, crate::Error> {
+        debug!("Searching on youtube:`\"{}\"", recording);
+
         let result = client
             .youtube_client()?
             .search()
