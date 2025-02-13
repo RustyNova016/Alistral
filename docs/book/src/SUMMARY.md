@@ -9,6 +9,10 @@
 - [stats](./stats/stats.md)
 - [Help index](CommandLineHelp.md)
 
+# Yumako Jam
+
+- [Filters](./yumako_jam/modules/filters.md)
+
 # Settings
 
 - [Config file](./config/config.md)
