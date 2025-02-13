@@ -11,6 +11,10 @@
 - [stats](./stats/stats.md)
 - [clippy](./clippy/clippy.md)
 
+# Yumako Jam
+
+- [Filters](./yumako_jam/modules/filters.md)
+
 # Settings
 
 - [Config file](./config/config.md)
