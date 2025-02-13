@@ -84,7 +84,7 @@ members = [
     "./alistral_core", 
     "interzic", 
     "sonartra", 
-    "tuillez" 
+    "tuillez",
     "musicbrainz_db_lite", 
     "musicbrainz_db_lite/musicbrainz_db_lite_macros", 
     "musicbrainz_db_lite/musicbrainz_db_lite_schema"
