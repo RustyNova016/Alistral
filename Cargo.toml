@@ -66,7 +66,7 @@ async-fn-stream = "0.2.2"
 zip = "2.2.2"
 indoc = "2.0.5"
 strsim = "0.11.1"
-strum_macros = "0.27.0"
+strum_macros = "0.27.1"
 tracing-indicatif = "0.3.9"
 clap-verbosity-flag = { version = "3.0.2", default-features = false, features = ["tracing"] }
 
