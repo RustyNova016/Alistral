@@ -6,7 +6,7 @@ repository = "https://github.com/RustyNova016/alistral"
 publish = true
 license = "MIT"
 description = "A CLI app containing a set of useful tools for Listenbrainz"
-rust-version = "1.83.0"
+rust-version = "1.84.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

@@ -19,7 +19,6 @@ pub impl Duration {
         Ok(humantime::Duration::from(self.to_std()?))
     }
 
-    #[must_use]
     fn floor_to_minute(self) -> Self {
         Self::minutes(self.num_minutes())
     }
@@ -46,7 +45,6 @@ pub impl Duration {
 
 #[ext]
 pub impl DateTime<Utc> {
-    #[must_use]
     fn floor_to_second(self) -> Self {
         Self::from_timestamp(self.timestamp(), 0).unwrap()
     }
