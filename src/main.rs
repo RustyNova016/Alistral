@@ -1,7 +1,10 @@
+use arbitrary::Arbitrary;
+use arbitrary::Unstructured;
 use clap::Parser;
 
 use database::cleanup::cleanup_database;
 use models::cli::Cli;
+use musicbrainz_db_lite::entity::recording::Recording;
 use tracing::debug;
 
 pub mod api;
@@ -20,8 +23,25 @@ use crate::api::clients::ALISTRAL_CLIENT;
 use crate::interface::tracing::init_tracer;
 pub use crate::models::error::Error;
 
+#[derive(Arbitrary, Debug)]
+struct TestData {
+    listens: Vec<UserListensResponse>,
+    recordings: Vec<Recording>
+}
+
 #[tokio::main]
 async fn main() {
+    let bytes = "jsfpijeosqk$qk$$oesk$poejkspjrijriojgjdriojdroij";
+    
+    let mut unstruct = Unstructured::new(bytes);
+
+    println!("{:#?}", TestData::arbitrary_take_rest(unstruct));
+
+    panic!();
+
+
+
+
     let cli = Cli::parse();
     init_tracer(&cli);
 

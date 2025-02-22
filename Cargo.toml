@@ -16,7 +16,7 @@ alistral_core = { path = "./alistral_core" }
 
 # Musicbrainz dependencies
 listenbrainz = "0.8.1"
-musicbrainz-db-lite = { branch = "develop", git = "https://github.com/RustyNova016/musicbrainz_db_lite.git" }
+musicbrainz-db-lite = { branch = "fuzzing", git = "https://github.com/RustyNova016/musicbrainz_db_lite.git" }
 #musicbrainz-db-lite = { version = "0.1.0", path = "../musicbrainz-db-lite" }
 
 interzic = { path = "./interzic" }
@@ -69,6 +69,7 @@ strsim = "0.11.1"
 strum_macros = "0.27.1"
 tracing-indicatif = "0.3.9"
 clap-verbosity-flag = { version = "3.0.2", default-features = false, features = ["tracing"] }
+arbitrary = { version = "1", features = ["derive"] }
 
 # The profile that 'cargo dist' will build with
 [profile.dist]

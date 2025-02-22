@@ -59,6 +59,7 @@ name = "alistral"
 version = "0.5.0"
 dependencies = [
  "alistral_core",
+ "arbitrary",
  "async-fn-stream",
  "chrono",
  "clap",
@@ -79,9 +80,9 @@ dependencies = [
  "inquire",
  "interzic",
  "itertools 0.14.0",
- "listenbrainz",
+ "listenbrainz 0.8.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "macon",
- "musicbrainz-db-lite",
+ "musicbrainz-db-lite 0.1.0 (git+https://github.com/RustyNova016/musicbrainz_db_lite.git?branch=fuzzing)",
  "rand",
  "rayon",
  "regex",
@@ -112,8 +113,8 @@ dependencies = [
  "indicatif",
  "interzic",
  "itertools 0.14.0",
- "listenbrainz",
- "musicbrainz-db-lite",
+ "listenbrainz 0.8.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "musicbrainz-db-lite 0.1.0 (git+https://github.com/RustyNova016/musicbrainz_db_lite.git?branch=develop)",
  "owo-colors 4.1.0",
  "rust_decimal",
  "rust_decimal_macros",
@@ -456,6 +457,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7e36cc9d416881d2e24f9a963be5fb1cd90966419ac844274161d10488b3e825"
 dependencies = [
  "android-tzdata",
+ "arbitrary",
  "iana-time-zone",
  "js-sys",
  "num-traits",
@@ -1854,9 +1856,9 @@ dependencies = [
  "futures",
  "google-youtube3",
  "governor",
- "listenbrainz",
- "musicbrainz-db-lite",
- "musicbrainz_rs",
+ "listenbrainz 0.8.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "musicbrainz-db-lite 0.1.0 (git+https://github.com/RustyNova016/musicbrainz_db_lite.git?branch=develop)",
+ "musicbrainz_rs 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "regex",
  "serde",
  "serde_json",
@@ -1991,6 +1993,18 @@ version = "0.8.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1fd685ff956be01182a38cb22fb4ba75646caa3ae226befdb7fd31d379cebcc7"
 dependencies = [
+ "attohttpc",
+ "serde",
+ "serde_json",
+ "thiserror",
+]
+
+[[package]]
+name = "listenbrainz"
+version = "0.8.1"
+source = "git+https://github.com/RustyNova016/listenbrainz-rs.git?branch=arbitrary#9546e4578aa97eecf1be9ac46669c3267f180c7b"
+dependencies = [
+ "arbitrary",
  "attohttpc",
  "serde",
  "serde_json",
@@ -2157,11 +2171,37 @@ dependencies = [
  "extend",
  "futures",
  "itertools 0.13.0",
- "listenbrainz",
+ "listenbrainz 0.8.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "macon",
- "musicbrainz_db_lite_macros",
- "musicbrainz_db_lite_schema",
- "musicbrainz_rs",
+ "musicbrainz_db_lite_macros 0.1.0 (git+https://github.com/RustyNova016/musicbrainz_db_lite.git?branch=develop)",
+ "musicbrainz_db_lite_schema 0.1.1 (git+https://github.com/RustyNova016/musicbrainz_db_lite.git?branch=develop)",
+ "musicbrainz_rs 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde",
+ "serde_json",
+ "sqlx",
+ "thiserror",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
+name = "musicbrainz-db-lite"
+version = "0.1.0"
+source = "git+https://github.com/RustyNova016/musicbrainz_db_lite.git?branch=fuzzing#1d756729f24d0542d08c198080195e27cb786f48"
+dependencies = [
+ "arbitrary",
+ "async-fn-stream",
+ "async-trait",
+ "chrono",
+ "const_format",
+ "extend",
+ "futures",
+ "itertools 0.13.0",
+ "listenbrainz 0.8.1 (git+https://github.com/RustyNova016/listenbrainz-rs.git?branch=arbitrary)",
+ "macon",
+ "musicbrainz_db_lite_macros 0.1.0 (git+https://github.com/RustyNova016/musicbrainz_db_lite.git?branch=fuzzing)",
+ "musicbrainz_db_lite_schema 0.1.1 (git+https://github.com/RustyNova016/musicbrainz_db_lite.git?branch=fuzzing)",
+ "musicbrainz_rs 0.9.0 (git+https://github.com/RustyNova016/musicbrainz_rs.git?branch=arbitrary)",
  "serde",
  "serde_json",
  "sqlx",
@@ -2183,9 +2223,29 @@ dependencies = [
 ]
 
 [[package]]
+name = "musicbrainz_db_lite_macros"
+version = "0.1.0"
+source = "git+https://github.com/RustyNova016/musicbrainz_db_lite.git?branch=fuzzing#1d756729f24d0542d08c198080195e27cb786f48"
+dependencies = [
+ "darling",
+ "proc-macro2",
+ "quote",
+ "sqlx",
+ "syn 2.0.98",
+]
+
+[[package]]
 name = "musicbrainz_db_lite_schema"
 version = "0.1.1"
 source = "git+https://github.com/RustyNova016/musicbrainz_db_lite.git?branch=develop#c59a0daf3bd3aaec2ceaf3117f7c09dd28b1727b"
+dependencies = [
+ "sqlx",
+]
+
+[[package]]
+name = "musicbrainz_db_lite_schema"
+version = "0.1.1"
+source = "git+https://github.com/RustyNova016/musicbrainz_db_lite.git?branch=fuzzing#1d756729f24d0542d08c198080195e27cb786f48"
 dependencies = [
  "sqlx",
 ]
@@ -2196,6 +2256,24 @@ version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "45c4baf9975b36493afaa0f2c4648ef987686ecafa24e64393523964ea8c0d54"
 dependencies = [
+ "chrono",
+ "glob",
+ "governor",
+ "lucene_query_builder",
+ "once_cell",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "thiserror",
+ "tokio",
+]
+
+[[package]]
+name = "musicbrainz_rs"
+version = "0.9.0"
+source = "git+https://github.com/RustyNova016/musicbrainz_rs.git?branch=arbitrary#8dba5bab291398275801d0308fe058112dbe5a44"
+dependencies = [
+ "arbitrary",
  "chrono",
  "glob",
  "governor",
