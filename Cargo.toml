@@ -13,14 +13,12 @@ rust-version = "1.85.0"
 [dependencies]
 # Workspace dependencies
 alistral_core = { path = "./alistral_core" }
+interzic = { path = "./interzic" }
+tuillez = { path = "./tuillez" }
+musicbrainz-db-lite = { path = "./musicbrainz_db_lite" }
 
 # Musicbrainz dependencies
 listenbrainz = "0.8.1"
-musicbrainz-db-lite = { branch = "develop", git = "https://github.com/RustyNova016/musicbrainz_db_lite.git" }
-#musicbrainz-db-lite = { version = "0.1.0", path = "../musicbrainz-db-lite" }
-
-interzic = { path = "./interzic" }
-tuillez = { path = "./tuillez" }
 
 derive_builder = "0.20.2"
 inquire = "0.7.5"
@@ -81,7 +79,7 @@ async_fn_in_trait = { level = "allow", priority = 1 }
 # --- Workspace ---
 
 [workspace]
-members = ["./alistral_core", "interzic", "tuillez",]
+members = ["./alistral_core", "interzic", "tuillez", "musicbrainz_db_lite", "musicbrainz_db_lite/musicbrainz_db_lite_macros", "musicbrainz_db_lite/musicbrainz_db_lite_schema"]
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
