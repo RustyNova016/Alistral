@@ -1,6 +1,6 @@
-use futures::stream;
 use futures::Stream;
 use futures::StreamExt;
+use futures::stream;
 
 /// Turns an hard type variable into an opaque type
 pub fn into_opaque_stream<T, U>(val: T) -> impl Stream<Item = U>

@@ -1,7 +1,7 @@
 use async_fn_stream::try_fn_stream;
-use futures::pin_mut;
 use futures::Stream;
 use futures::TryStreamExt;
+use futures::pin_mut;
 use interzic::models::playlist_stub::PlaylistStub;
 use itertools::Itertools;
 use musicbrainz_db_lite::models::musicbrainz::artist::Artist;
@@ -167,7 +167,10 @@ impl RadioCircle {
                             return Ok(Some(recording));
                         }
                         None => {
-                            warn!("{} has not enough recordings for generation. Consider adding more recordings to Musicbrainz!", artist.name);
+                            warn!(
+                                "{} has not enough recordings for generation. Consider adding more recordings to Musicbrainz!",
+                                artist.name
+                            );
                             self.artist_blacklist.push(artist.mbid.clone());
                         }
                     }

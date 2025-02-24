@@ -2,7 +2,7 @@ use core::pin::Pin;
 
 use alistral_core::datastructures::entity_with_listens::recording::RecordingWithListens;
 use chrono::Duration;
-use futures::{stream, StreamExt};
+use futures::{StreamExt, stream};
 use interzic::models::playlist_stub::PlaylistStub;
 use tracing::info;
 

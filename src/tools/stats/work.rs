@@ -2,8 +2,8 @@ use core::cmp::Reverse;
 
 use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use alistral_core::datastructures::entity_with_listens::work::collection::WorkWithListensCollection;
-use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use alistral_core::datastructures::listen_collection::ListenCollection;
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use itertools::Itertools;
 
 use crate::api::clients::ALISTRAL_CLIENT;

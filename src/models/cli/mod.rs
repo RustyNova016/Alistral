@@ -6,9 +6,9 @@ use clap::Command;
 use clap::CommandFactory;
 use clap::Parser;
 use clap::Subcommand;
-use clap_complete::generate;
 use clap_complete::Generator;
 use clap_complete::Shell;
+use clap_complete::generate;
 use clap_verbosity_flag::InfoLevel;
 use clap_verbosity_flag::Verbosity;
 use common::SortSorterBy;
@@ -83,8 +83,8 @@ impl Cli {
         Ok(!self.no_cleanup)
     }
 
-    fn print_completions<G: Generator>(gen: G, cmd: &mut Command) {
-        generate(gen, cmd, cmd.get_name().to_string(), &mut io::stdout());
+    fn print_completions<G: Generator>(gene: G, cmd: &mut Command) {
+        generate(gene, cmd, cmd.get_name().to_string(), &mut io::stdout());
     }
 }
 

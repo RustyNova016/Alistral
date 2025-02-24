@@ -112,7 +112,7 @@ fn choice() -> Choice {
         match ans {
             Ok(choice) => return choice,
             Err(InquireError::OperationCanceled) | Err(InquireError::OperationInterrupted) => {
-                return Choice::Exit
+                return Choice::Exit;
             }
             _ => println!("There was an error, please try again"),
         }

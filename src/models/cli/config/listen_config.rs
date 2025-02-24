@@ -1,8 +1,8 @@
 use crate::models::cli::common::ConfigBool;
 use crate::models::config::global_config::CONFIG;
-use clap::command;
 use clap::Parser;
 use clap::Subcommand;
+use clap::command;
 use tracing::info;
 
 #[derive(Parser, Debug, Clone)]

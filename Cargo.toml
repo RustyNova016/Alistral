@@ -1,12 +1,12 @@
 [package]
 name = "alistral"
 version = "0.5.0"
-edition = "2021"
+edition = "2024"
 repository = "https://github.com/RustyNova016/alistral"
 publish = true
 license = "MIT"
 description = "A CLI app containing a set of useful tools for Listenbrainz"
-rust-version = "1.83.0"
+rust-version = "1.85.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

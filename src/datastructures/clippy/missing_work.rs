@@ -1,8 +1,8 @@
 use musicbrainz_db_lite::models::musicbrainz::{main_entities::MainEntity, recording::Recording};
 
 use crate::api::clients::ALISTRAL_CLIENT;
-use crate::models::clippy::lint_severity::LintSeverity;
 use crate::models::clippy::MbClippyLintHint;
+use crate::models::clippy::lint_severity::LintSeverity;
 use crate::models::clippy::{MbClippyLint, MbClippyLintLink};
 use crate::utils::cli::display::RecordingExt;
 

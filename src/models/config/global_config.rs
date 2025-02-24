@@ -8,8 +8,8 @@ use tokio::sync::RwLock;
 use tokio::sync::RwLockReadGuard;
 use tokio::sync::RwLockWriteGuard;
 
-use super::config_trait::ConfigFile as _;
 use super::Config;
+use super::config_trait::ConfigFile as _;
 
 pub(crate) static CONFIG: LazyLock<GlobalConfig> = LazyLock::new(GlobalConfig::load);
 

@@ -4,8 +4,8 @@ use std::io;
 use std::path::PathBuf;
 
 use directories::BaseDirs;
-use serde::de::DeserializeOwned;
 use serde::Serialize;
+use serde::de::DeserializeOwned;
 
 use super::config_guard::ConfigGuard;
 

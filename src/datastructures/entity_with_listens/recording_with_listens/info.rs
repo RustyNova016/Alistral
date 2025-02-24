@@ -11,8 +11,8 @@ use crate::models::config::Config;
 use crate::utils::extensions::chrono_ext::DateTimeUtcExt;
 use crate::utils::extensions::chrono_ext::DurationExt;
 
-use super::collection::RecordingWithListensCollection;
 use super::RecordingWithListens;
+use super::collection::RecordingWithListensCollection;
 
 impl RecordingWithListens {
     /// Generate a formated string with all the informations to display in reports

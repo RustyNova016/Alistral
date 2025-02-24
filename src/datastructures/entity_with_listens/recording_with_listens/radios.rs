@@ -2,8 +2,8 @@ use alistral_core::datastructures::listen_collection::traits::ListenCollectionRe
 use rust_decimal::Decimal;
 use rust_decimal_macros::dec;
 
-use super::collection::RecordingWithListensCollection;
 use super::RecordingWithListens;
+use super::collection::RecordingWithListensCollection;
 
 impl RecordingWithListens {
     pub fn get_underated_score(
