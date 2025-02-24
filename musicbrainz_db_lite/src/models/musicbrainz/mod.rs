@@ -1,0 +1,12 @@
+pub mod artist;
+pub mod artist_credit;
+pub mod genre;
+pub mod label;
+pub mod main_entities;
+pub mod recording;
+pub mod relations;
+pub mod release;
+pub mod release_group;
+pub mod tags;
+pub mod user;
+pub mod work;

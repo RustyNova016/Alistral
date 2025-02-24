@@ -1,0 +1,1 @@
+pub mod after_delete_table_artist_credits;

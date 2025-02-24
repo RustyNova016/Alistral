@@ -1,0 +1,44 @@
+{
+  "db_name": "SQLite",
+  "query": "\n                    SELECT\n                        *\n                    FROM\n                        listens\n                    WHERE\n                        listened_at = ?\n                        AND recording_msid = ?\n                        AND user = ?;",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "listened_at",
+        "ordinal": 1,
+        "type_info": "Integer"
+      },
+      {
+        "name": "user",
+        "ordinal": 2,
+        "type_info": "Text"
+      },
+      {
+        "name": "recording_msid",
+        "ordinal": 3,
+        "type_info": "Text"
+      },
+      {
+        "name": "data",
+        "ordinal": 4,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 3
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "af202039ef6a128a1a01c2b9ada5dd36cc2f8995945d43c9e855014804ff1047"
+}
