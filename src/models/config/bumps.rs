@@ -1,6 +1,6 @@
 use chrono::{DateTime, Utc};
 use derive_new::new;
-use rust_decimal::{prelude::One, Decimal};
+use rust_decimal::{Decimal, prelude::One};
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, new, Default, Debug)]

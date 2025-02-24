@@ -1,7 +1,7 @@
 use core::cmp::Reverse;
 
-use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use alistral_core::datastructures::entity_with_listens::recording::RecordingWithListens;
+use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use tracing::instrument;
 use tuillez::pg_counted;
 use tuillez::pg_inc;

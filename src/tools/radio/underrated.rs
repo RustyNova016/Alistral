@@ -1,6 +1,6 @@
 use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
-use futures::stream;
 use futures::StreamExt;
+use futures::stream;
 use interzic::models::playlist_stub::PlaylistStub;
 use itertools::Itertools;
 use tracing::info;

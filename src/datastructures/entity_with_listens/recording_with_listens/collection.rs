@@ -2,8 +2,8 @@ use core::cmp::Reverse;
 use std::collections::HashMap;
 
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
-use futures::stream;
 use futures::Stream;
+use futures::stream;
 use itertools::Itertools;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use rust_decimal::Decimal;

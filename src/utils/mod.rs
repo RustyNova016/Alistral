@@ -1,6 +1,6 @@
 use derive_builder::Builder;
-use listenbrainz::raw::response::{UserListensListen, UserListensResponse};
 use listenbrainz::raw::Client;
+use listenbrainz::raw::response::{UserListensListen, UserListensResponse};
 
 use crate::api::clients::ALISTRAL_CLIENT;
 

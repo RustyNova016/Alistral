@@ -5,8 +5,8 @@ use alistral_core::models::client::AlistralClient;
 use futures::executor::block_on;
 use interzic::InterzicClient;
 use listenbrainz::raw::Client as ListenbrainzClient;
-use musicbrainz_db_lite::client::MusicBrainzClient;
 use musicbrainz_db_lite::DBClient;
+use musicbrainz_db_lite::client::MusicBrainzClient;
 use tracing::debug;
 
 use crate::database::DB_LOCATION;

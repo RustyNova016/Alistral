@@ -1,6 +1,6 @@
+use crate::models::config::Config;
 use crate::models::config::config_trait::ConfigFile as _;
 use crate::models::config::recording_timeout::RecordingTimeoutConfig;
-use crate::models::config::Config;
 use crate::utils::cli::read_mbid_from_input;
 use crate::utils::extensions::chrono_ext::DurationExt;
 use chrono::Duration;

@@ -3,8 +3,8 @@ use interzic::models::playlist_stub::PlaylistStub;
 use interzic::models::services::listenbrainz::Listenbrainz;
 use interzic::models::services::youtube::Youtube;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
-use tracing::instrument;
 use tracing::Span;
+use tracing::instrument;
 use tracing_indicatif::span_ext::IndicatifSpanExt as _;
 
 use crate::api::clients::ALISTRAL_CLIENT;

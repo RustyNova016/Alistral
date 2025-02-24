@@ -15,8 +15,8 @@ pub mod testing;
 pub mod tools;
 pub mod utils;
 
-use crate::api::clients::create_client;
 use crate::api::clients::ALISTRAL_CLIENT;
+use crate::api::clients::create_client;
 use crate::interface::tracing::init_tracer;
 pub use crate::models::error::Error;
 

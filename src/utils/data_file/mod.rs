@@ -3,8 +3,8 @@ use std::io;
 use std::path::PathBuf;
 
 use file_guard::FileGuard;
-use serde::de::DeserializeOwned;
 use serde::Serialize;
+use serde::de::DeserializeOwned;
 
 pub mod file_guard;
 

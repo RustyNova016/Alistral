@@ -1,6 +1,6 @@
 use chrono::Duration;
-use futures::stream;
 use futures::StreamExt;
+use futures::stream;
 use interzic::models::playlist_stub::PlaylistStub;
 use itertools::Itertools;
 use tracing::info;

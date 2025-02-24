@@ -1,15 +1,15 @@
 use std::collections::HashMap;
 
-use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use alistral_core::datastructures::listen_collection::ListenCollection;
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use chrono::{DateTime, Duration, Utc};
 use collection::RecordingWithListensCollection;
 use derive_getters::Getters;
+use musicbrainz_db_lite::RowId;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use musicbrainz_db_lite::models::musicbrainz::user::User;
-use musicbrainz_db_lite::RowId;
-use rust_decimal::{prelude::FromPrimitive, Decimal};
+use rust_decimal::{Decimal, prelude::FromPrimitive};
 use serde::Deserialize;
 use serde::Serialize;
 
