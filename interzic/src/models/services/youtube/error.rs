@@ -52,6 +52,9 @@ pub enum YoutubeError {
 
     #[error(transparent)]
     BadServiceError(google_youtube3::common::Error),
+
+    #[error("The api didn't return a playlist ID")]
+    MissingPlaylistIDError,
 }
 
 impl YoutubeError {

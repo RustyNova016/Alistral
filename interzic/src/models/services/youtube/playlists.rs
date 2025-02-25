@@ -46,7 +46,11 @@ impl Youtube {
             .map_err(YoutubeError::from)
             .map_err(InterzicYoutubeError::PlaylistCreateError)?;
 
-        let playlist_id = response.1.id.expect("No id returned"); //TODO: #518 Properly error if no playlist id is returned
+        let playlist_id = response
+            .1
+            .id
+            .ok_or(YoutubeError::MissingPlaylistIDError)
+            .map_err(InterzicYoutubeError::PlaylistCreateError)?;
 
         debug!("Adding recordings to playlist");
         Self::add_recordings_to_playlist(client, &playlist_id, playlist, rate_limit).await?;
