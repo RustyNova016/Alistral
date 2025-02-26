@@ -1,0 +1,58 @@
+{
+    "artist-credit": [
+        {
+            "name": "Alistral",
+            "artist": {
+                "type-id": null,
+                "aliases": [],
+                "disambiguation": "",
+                "sort-name": "Alistral",
+                "name": "Alistral",
+                "id": "06baf1f1-e9b3-40b7-8376-1f53a676a919",
+                "type": null,
+                "country": null
+            },
+            "joinphrase": ""
+        }
+    ],
+    "aliases": [],
+    "video": false,
+    "disambiguation": "",
+    "id": "51feae17-26bd-4aa9-bfaa-ef408df58293",
+    "title": "missing_work",
+    "releases": [
+        {
+            "packaging-id": null,
+            "id": "695b178b-68e7-4e28-a2b5-4a1b6027ed31",
+            "barcode": null,
+            "aliases": [],
+            "status-id": null,
+            "status": null,
+            "quality": "normal",
+            "packaging": null,
+            "disambiguation": "",
+            "artist-credit": [
+                {
+                    "name": "Alistral",
+                    "joinphrase": "",
+                    "artist": {
+                        "aliases": [],
+                        "type-id": null,
+                        "disambiguation": "",
+                        "sort-name": "Alistral",
+                        "name": "Alistral",
+                        "id": "06baf1f1-e9b3-40b7-8376-1f53a676a919",
+                        "type": null,
+                        "country": null
+                    }
+                }
+            ],
+            "text-representation": {
+                "language": null,
+                "script": null
+            },
+            "title": "missing_work"
+        }
+    ],
+    "length": null
+}

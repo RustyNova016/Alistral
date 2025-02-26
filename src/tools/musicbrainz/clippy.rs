@@ -5,17 +5,17 @@ use color_eyre::owo_colors::OwoColorize as _;
 use futures::TryStreamExt;
 use musicbrainz_db_lite::models::musicbrainz::main_entities::MainEntity;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
+use symphonize::clippy::clippy_lint::MbClippyLint;
+use symphonize::clippy::lints::missing_release_barcode::MissingBarcodeLint;
+use symphonize::clippy::lints::missing_remix_rel::MissingRemixRelLint;
+use symphonize::clippy::lints::missing_remixer_rel::MissingRemixerRelLint;
+use symphonize::clippy::lints::missing_work::MissingWorkLint;
+use symphonize::clippy::lints::soundtrack_without_disambiguation::SoundtrackWithoutDisambiguationLint;
+use symphonize::clippy::lints::suspicious_remix::SuspiciousRemixLint;
 use tracing::info;
 use tuillez::formatter::FormatWithAsync;
 
 use crate::ALISTRAL_CLIENT;
-use crate::datastructures::clippy::missing_release_barcode::MissingBarcodeLint;
-use crate::datastructures::clippy::missing_remix_rel::MissingRemixRelLint;
-use crate::datastructures::clippy::missing_remixer_rel::MissingRemixerRelLint;
-use crate::datastructures::clippy::missing_work::MissingWorkLint;
-use crate::datastructures::clippy::soundtrack_without_disambiguation::SoundtrackWithoutDisambiguationLint;
-use crate::datastructures::clippy::suspicious_remix::SuspiciousRemixLint;
-use crate::models::clippy::MbClippyLint;
 use crate::utils::cli::await_next;
 use crate::utils::constants::MUSIBRAINZ_FMT;
 use crate::utils::whitelist_blacklist::WhitelistBlacklist;
@@ -92,7 +92,7 @@ async fn check_lint<L: MbClippyLint>(
         return;
     }
 
-    let Some(lint) = L::check(conn, entity)
+    let Some(lint) = L::check(&ALISTRAL_CLIENT.symphonize, entity)
         .await
         .expect("Error while processing lint")
     else {
@@ -109,14 +109,14 @@ async fn check_lint<L: MbClippyLint>(
     println!();
     println!(
         "{}",
-        lint.get_body(conn)
+        lint.get_body(&ALISTRAL_CLIENT.symphonize)
             .await
             .expect("Error while processing lint body")
     );
 
     // Hints
     let hints = lint
-        .get_hints(conn)
+        .get_hints(&ALISTRAL_CLIENT.symphonize)
         .await
         .expect("Error while processing lint hints");
     if !hints.is_empty() {
@@ -130,7 +130,7 @@ async fn check_lint<L: MbClippyLint>(
     println!();
     println!("Links:");
     for link in lint
-        .get_links(conn)
+        .get_links(&ALISTRAL_CLIENT.symphonize)
         .await
         .expect("Error while processing lint links")
     {

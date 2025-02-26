@@ -3,10 +3,12 @@ use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use regex::Regex;
 use tuillez::formatter::FormatWithAsync;
 
-use crate::models::clippy::MbClippyLint;
-use crate::models::clippy::MbClippyLintLink;
-use crate::models::clippy::lint_severity::LintSeverity;
-use crate::utils::constants::MUSIBRAINZ_FMT;
+use crate::clippy::clippy_lint::MbClippyLint;
+use crate::clippy::lint_hint::MbClippyLintHint;
+use crate::clippy::lint_link::MbClippyLintLink;
+use crate::clippy::lint_severity::LintSeverity;
+use crate::utils::formater;
+use crate::SymphonyzeClient;
 
 pub struct SuspiciousRemixLint {
     recording: Recording,
@@ -18,7 +20,7 @@ impl MbClippyLint for SuspiciousRemixLint {
     }
 
     async fn check(
-        conn: &mut sqlx::SqliteConnection,
+        client: &SymphonyzeClient,
         entity: &musicbrainz_db_lite::models::musicbrainz::main_entities::MainEntity,
     ) -> Result<Option<Self>, crate::Error> {
         let MainEntity::Recording(recording) = entity else {
@@ -32,6 +34,8 @@ impl MbClippyLint for SuspiciousRemixLint {
             return Ok(None);
         }
 
+        let conn = &mut client.mb_database.get_raw_connection().await?;
+
         // Then check if the links have been set
         if recording.is_remix(conn).await? {
             return Ok(None);
@@ -44,18 +48,19 @@ impl MbClippyLint for SuspiciousRemixLint {
 
     async fn get_body(
         &self,
-        _conn: &mut sqlx::SqliteConnection,
+
+        client: &SymphonyzeClient,
     ) -> Result<impl std::fmt::Display, crate::Error> {
         Ok(format!(
             "Recording \"{}\" seems to be a remix, but no remix relations have been set
 -> Add a `remix of` and `remixer` relationships to the recording",
-            self.recording.format_with_async(&MUSIBRAINZ_FMT).await?
+            self.recording.format_with_async(&formater(client)).await?
         ))
     }
 
     async fn get_links(
         &self,
-        _conn: &mut sqlx::SqliteConnection,
+        _client: &SymphonyzeClient,
     ) -> Result<Vec<MbClippyLintLink>, crate::Error> {
         let mut out = Vec::new();
 
@@ -77,12 +82,12 @@ impl MbClippyLint for SuspiciousRemixLint {
 
     async fn get_hints(
         &self,
-        _conn: &mut sqlx::SqliteConnection,
-    ) -> Result<Vec<crate::models::clippy::MbClippyLintHint>, crate::Error> {
+        _client: &SymphonyzeClient,
+    ) -> Result<Vec<MbClippyLintHint>, crate::Error> {
         Ok(Vec::new())
     }
 
-    fn get_severity(&self) -> crate::models::clippy::lint_severity::LintSeverity {
+    fn get_severity(&self) -> LintSeverity {
         LintSeverity::MissingRelation
     }
 }

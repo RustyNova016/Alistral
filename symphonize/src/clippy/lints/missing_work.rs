@@ -1,11 +1,13 @@
 use musicbrainz_db_lite::models::musicbrainz::{main_entities::MainEntity, recording::Recording};
 use tuillez::formatter::FormatWithAsync;
 
-use crate::ALISTRAL_CLIENT;
-use crate::models::clippy::MbClippyLintHint;
-use crate::models::clippy::lint_severity::LintSeverity;
-use crate::models::clippy::{MbClippyLint, MbClippyLintLink};
-use crate::utils::constants::MUSIBRAINZ_FMT;
+use crate::clippy::clippy_lint::MbClippyLint;
+use crate::clippy::lint_hint::MbClippyLintHint;
+use crate::clippy::lint_link::MbClippyLintLink;
+use crate::clippy::lint_severity::LintSeverity;
+
+use crate::utils::formater;
+use crate::SymphonyzeClient;
 
 pub struct MissingWorkLint {
     recording: Recording,
@@ -17,15 +19,16 @@ impl MbClippyLint for MissingWorkLint {
     }
 
     async fn check(
-        conn: &mut sqlx::SqliteConnection,
+        client: &SymphonyzeClient,
         entity: &MainEntity,
     ) -> Result<Option<Self>, crate::Error> {
         let MainEntity::Recording(recording) = entity else {
             return Ok(None);
         };
+        let conn = &mut client.mb_database.get_raw_connection().await?;
 
         let work = recording
-            .get_works_or_fetch(conn, &ALISTRAL_CLIENT.musicbrainz_db)
+            .get_works_or_fetch(conn, &client.mb_database)
             .await?;
 
         if !work.is_empty() {
@@ -41,21 +44,22 @@ impl MbClippyLint for MissingWorkLint {
 
     async fn get_body(
         &self,
-        _conn: &mut sqlx::SqliteConnection,
+        client: &SymphonyzeClient,
     ) -> Result<impl std::fmt::Display, crate::Error> {
         Ok(format!("Recording \"{}\" has no associated works
 -> Most recordings should have a work associated to them. Please check if a work exists for a recording and add it / create it"
-, self.recording.format_with_async(&MUSIBRAINZ_FMT).await?))
+, self.recording.format_with_async(&formater(client)).await?))
     }
 
     async fn get_links(
         &self,
-        conn: &mut sqlx::SqliteConnection,
+        client: &SymphonyzeClient,
     ) -> Result<Vec<MbClippyLintLink>, crate::Error> {
         let mut out = Vec::new();
+        let conn = &mut client.mb_database.get_raw_connection().await?;
         let releases = self
             .recording
-            .get_releases_or_fetch(conn, &ALISTRAL_CLIENT.musicbrainz_db)
+            .get_releases_or_fetch(conn, &client.mb_database)
             .await?;
 
         out.push(MbClippyLintLink {
@@ -79,8 +83,8 @@ impl MbClippyLint for MissingWorkLint {
     #[expect(clippy::vec_init_then_push)]
     async fn get_hints(
         &self,
-        _conn: &mut sqlx::SqliteConnection,
-    ) -> Result<Vec<crate::models::clippy::MbClippyLintHint>, crate::Error> {
+        _client: &SymphonyzeClient,
+    ) -> Result<Vec<MbClippyLintHint>, crate::Error> {
         let mut hints = Vec::new();
 
         hints.push(MbClippyLintHint::new("Recordings of more spontaneous actions like improvisations and field recordings generally don't need works".to_string()));
@@ -89,7 +93,7 @@ impl MbClippyLint for MissingWorkLint {
         Ok(hints)
     }
 
-    fn get_severity(&self) -> crate::models::clippy::lint_severity::LintSeverity {
+    fn get_severity(&self) -> LintSeverity {
         LintSeverity::MissingData
     }
 }

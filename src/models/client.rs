@@ -7,6 +7,7 @@ use interzic::InterzicClient;
 use listenbrainz::raw::Client as ListenbrainzClient;
 use musicbrainz_db_lite::DBClient;
 use musicbrainz_db_lite::client::MusicBrainzClient;
+use symphonize::SymphonyzeClient;
 use tuillez::fatal_error::IntoFatal;
 
 use crate::database::DB_LOCATION;
@@ -26,6 +27,7 @@ pub struct AlistralCliClient {
     pub interzic: Arc<InterzicClient>,
     pub listenbrainz: Arc<ListenbrainzClient>,
     pub musicbrainz_db: Arc<DBClient>,
+    pub symphonize: Arc<SymphonyzeClient>,
 }
 
 impl AlistralCliClient {
@@ -38,6 +40,7 @@ impl AlistralCliClient {
         let interzic =
             Self::create_interzic(musicbrainz, listenbrainz.clone(), musicbrainz_db.clone()).await;
         let core = Self::create_core_client(musicbrainz_db.clone(), listenbrainz.clone());
+        let symphonize = Self::create_symphonize_client(musicbrainz_db.clone());
 
         Ok(Self {
             config,
@@ -45,6 +48,7 @@ impl AlistralCliClient {
             interzic,
             listenbrainz,
             musicbrainz_db,
+            symphonize,
         })
     }
 
@@ -136,5 +140,11 @@ impl AlistralCliClient {
     /// Create the client as a blocking operation, or fancy panic if an error occur
     pub fn create_blocking_or_fatal() -> Self {
         block_on(Self::create_or_fatal())
+    }
+
+    pub fn create_symphonize_client(musicbrainz_db: Arc<DBClient>) -> Arc<SymphonyzeClient> {
+        Arc::new(SymphonyzeClient {
+            mb_database: musicbrainz_db,
+        })
     }
 }
