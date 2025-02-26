@@ -1,4 +1,3 @@
-use color_eyre::owo_colors::OwoColorize;
 use musicbrainz_db_lite::models::musicbrainz::main_entities::MainEntity;
 use musicbrainz_db_lite::models::musicbrainz::work::Work;
 

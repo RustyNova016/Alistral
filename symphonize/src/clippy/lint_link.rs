@@ -1,5 +1,7 @@
 use core::fmt::Display;
 
+use owo_colors::OwoColorize as _;
+
 pub struct MbClippyLintLink {
     pub name: String,
     pub url: String,
