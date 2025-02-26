@@ -11,13 +11,15 @@ use musicbrainz_rs_nova::Browse;
 use crate::api::SaveToDatabase;
 use crate::models::musicbrainz::artist::Artist;
 use crate::models::musicbrainz::recording::Recording;
+use crate::DBClient;
 
 impl Artist {
     /// Fetch all the artist's recordings into a stream. it returns a stream of tuple containing (Recording, Total Recordings)
-    pub fn fetch_artist_recordings<'conn>(
+    pub fn fetch_artist_recordings<'conn, 'client>(
         &self,
         conn: &'conn mut sqlx::SqliteConnection,
-    ) -> impl Stream<Item = Result<(Recording, i32), crate::Error>> + use<'_, 'conn> {
+        client: &'client DBClient,
+    ) -> impl Stream<Item = Result<(Recording, i32), crate::Error>> + use<'_, 'conn, 'client> {
         try_fn_stream(|emitter| async move {
             let mut progress = 0;
             let mut offset = 0;
@@ -46,7 +48,7 @@ impl Artist {
                     .with_work_relations()
                     .limit(90)
                     .offset(offset as u16)
-                    .execute()
+                    .execute_with_client(&client.musicbrainz_client)
                     .await?;
 
                 progress += results.entities.len();
@@ -105,10 +107,11 @@ impl Artist {
     /// ⚠️ This stream may return entities that are cached but removed in MB.
     ///
     /// ⚠️ It may also return stale data from the cache even if it updates it later
-    pub fn browse_or_fetch_artist_recordings<'this, 'conn>(
+    pub fn browse_or_fetch_artist_recordings<'this, 'conn, 'client>(
         &'this self,
         conn: &'conn mut sqlx::SqliteConnection,
-    ) -> impl Stream<Item = Result<Recording, crate::Error>> + use<'this, 'conn> {
+        client: &'client DBClient,
+    ) -> impl Stream<Item = Result<Recording, crate::Error>> + use<'this, 'conn, 'client> {
         try_fn_stream(|emitter| async move {
             let mut unique = HashSet::new();
             // First, browse the cache
@@ -125,7 +128,7 @@ impl Artist {
             } // We use a scope to drop any shadowed `stream` variable that is caused by `pin_mut!`. This allows us to gain back our `&mut conn`
 
             // We browsed the cache. Now let's browse from MB
-            let mb_stream = self.fetch_artist_recordings(conn);
+            let mb_stream = self.fetch_artist_recordings(conn, client);
             pin_mut!(mb_stream);
 
             while let Some(data) = mb_stream.next().await {
