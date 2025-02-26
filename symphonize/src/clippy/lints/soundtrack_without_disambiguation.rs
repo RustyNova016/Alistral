@@ -1,11 +1,10 @@
-use color_eyre::owo_colors::OwoColorize;
 use musicbrainz_db_lite::models::musicbrainz::main_entities::MainEntity;
 use musicbrainz_db_lite::models::musicbrainz::work::Work;
 
-use crate::models::clippy::MbClippyLint;
-use crate::models::clippy::MbClippyLintLink;
-use crate::models::clippy::lint_severity::LintSeverity;
-use crate::utils::cli::display::WorkExt as _;
+use crate::clippy::clippy_lint::MbClippyLint;
+use crate::clippy::lint_hint::MbClippyLintHint;
+use crate::clippy::lint_link::MbClippyLintLink;
+use crate::clippy::lint_severity::LintSeverity;
 
 pub struct SoundtrackWithoutDisambiguationLint {
     work: Work,

@@ -1,10 +1,9 @@
 use musicbrainz_db_lite::models::musicbrainz::{main_entities::MainEntity, recording::Recording};
 
-use crate::api::clients::ALISTRAL_CLIENT;
-use crate::models::clippy::MbClippyLintHint;
-use crate::models::clippy::lint_severity::LintSeverity;
-use crate::models::clippy::{MbClippyLint, MbClippyLintLink};
-use crate::utils::cli::display::RecordingExt;
+use crate::clippy::clippy_lint::MbClippyLint;
+use crate::clippy::lint_hint::MbClippyLintHint;
+use crate::clippy::lint_link::MbClippyLintLink;
+use crate::clippy::lint_severity::LintSeverity;
 
 pub struct MissingWorkLint {
     recording: Recording,
@@ -79,7 +78,7 @@ impl MbClippyLint for MissingWorkLint {
     async fn get_hints(
         &self,
         _conn: &mut sqlx::SqliteConnection,
-    ) -> Result<Vec<crate::models::clippy::MbClippyLintHint>, crate::Error> {
+    ) -> Result<Vec<MbClippyLintHint>, crate::Error> {
         let mut hints = Vec::new();
 
         hints.push(MbClippyLintHint::new("Recordings of more spontaneous actions like improvisations and field recordings generally don't need works".to_string()));
@@ -88,7 +87,7 @@ impl MbClippyLint for MissingWorkLint {
         Ok(hints)
     }
 
-    fn get_severity(&self) -> crate::models::clippy::lint_severity::LintSeverity {
+    fn get_severity(&self) -> LintSeverity {
         LintSeverity::MissingData
     }
 }

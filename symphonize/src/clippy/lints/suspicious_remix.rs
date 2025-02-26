@@ -2,10 +2,10 @@ use musicbrainz_db_lite::models::musicbrainz::main_entities::MainEntity;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use regex::Regex;
 
-use crate::models::clippy::MbClippyLint;
-use crate::models::clippy::MbClippyLintLink;
-use crate::models::clippy::lint_severity::LintSeverity;
-use crate::utils::cli::display::RecordingExt as _;
+use crate::clippy::clippy_lint::MbClippyLint;
+use crate::clippy::lint_hint::MbClippyLintHint;
+use crate::clippy::lint_link::MbClippyLintLink;
+use crate::clippy::lint_severity::LintSeverity;
 
 pub struct SuspiciousRemixLint {
     recording: Recording,
@@ -79,11 +79,11 @@ impl MbClippyLint for SuspiciousRemixLint {
     async fn get_hints(
         &self,
         _conn: &mut sqlx::SqliteConnection,
-    ) -> Result<Vec<crate::models::clippy::MbClippyLintHint>, crate::Error> {
+    ) -> Result<Vec<MbClippyLintHint>, crate::Error> {
         Ok(Vec::new())
     }
 
-    fn get_severity(&self) -> crate::models::clippy::lint_severity::LintSeverity {
+    fn get_severity(&self) -> LintSeverity {
         LintSeverity::MissingRelation
     }
 }

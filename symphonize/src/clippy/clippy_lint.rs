@@ -1,10 +1,10 @@
-use std::fmt::Display;
+use core::fmt::Display;
 
-use color_eyre::owo_colors::OwoColorize;
-use lint_severity::LintSeverity;
 use musicbrainz_db_lite::models::musicbrainz::main_entities::MainEntity;
 
-pub mod lint_severity;
+use crate::clippy::lint_hint::MbClippyLintHint;
+use crate::clippy::lint_link::MbClippyLintLink;
+use crate::clippy::lint_severity::LintSeverity;
 
 pub trait MbClippyLint: Sized {
     async fn check(
@@ -30,35 +30,4 @@ pub trait MbClippyLint: Sized {
     ) -> Result<Vec<MbClippyLintHint>, crate::Error>;
 
     fn get_severity(&self) -> LintSeverity;
-}
-
-pub struct MbClippyLintLink {
-    pub name: String,
-    pub url: String,
-}
-
-impl Display for MbClippyLintLink {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}: {}", self.name, self.url.blue())?;
-
-        Ok(())
-    }
-}
-
-pub struct MbClippyLintHint {
-    text: String,
-}
-
-impl MbClippyLintHint {
-    pub fn new(text: String) -> Self {
-        Self { text }
-    }
-}
-
-impl Display for MbClippyLintHint {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "= Hint: {}", self.text)?;
-
-        Ok(())
-    }
 }
