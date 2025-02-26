@@ -5,7 +5,6 @@ use extend::ext;
 use listenbrainz::raw::response::{UserListensListen, UserListensMBIDMapping, UserListensPayload};
 
 pub mod chrono_ext;
-pub mod db_lite_ext;
 pub mod listenbrainz_ext;
 
 #[ext]
