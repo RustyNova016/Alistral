@@ -6,7 +6,6 @@ use crate::models::clippy::MbClippyLint;
 use crate::models::clippy::MbClippyLintLink;
 use crate::models::clippy::lint_severity::LintSeverity;
 use crate::utils::cli::display::RecordingExt as _;
-use crate::utils::extensions::db_lite_ext::RecordingExt;
 
 pub struct SuspiciousRemixLint {
     recording: Recording,

@@ -1,4 +1,5 @@
 pub mod impl_relations;
+pub mod kind;
 
 use core::marker::PhantomData;
 
