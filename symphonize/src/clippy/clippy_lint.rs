@@ -1,3 +1,10 @@
+use core::fmt::Display;
+
+use musicbrainz_db_lite::models::musicbrainz::main_entities::MainEntity;
+
+use crate::clippy::lint_hint::MbClippyLintHint;
+use crate::clippy::lint_link::MbClippyLintLink;
+use crate::clippy::lint_severity::LintSeverity;
 
 pub trait MbClippyLint: Sized {
     async fn check(
@@ -24,5 +31,3 @@ pub trait MbClippyLint: Sized {
 
     fn get_severity(&self) -> LintSeverity;
 }
-
-
