@@ -97,7 +97,7 @@ impl RadioCircle {
             artist.pretty_format(true).await.unwrap()
         );
         let mut recordings: Vec<Recording> = artist
-            .browse_or_fetch_artist_recordings(conn)
+            .browse_or_fetch_artist_recordings(conn, &ALISTRAL_CLIENT.musicbrainz_db)
             .try_collect()
             .await?;
 
