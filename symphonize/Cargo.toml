@@ -1,0 +1,11 @@
+[package]
+name = "symphonize"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+musicbrainz-db-lite = { path = "../musicbrainz_db_lite" }
+tuillez = { path = "../tuillez" }
+
+[lints]
+workspace = true
