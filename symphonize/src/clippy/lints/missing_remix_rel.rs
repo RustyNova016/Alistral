@@ -1,30 +1,33 @@
 use musicbrainz_db_lite::models::musicbrainz::{main_entities::MainEntity, recording::Recording};
 
-use crate::ALISTRAL_CLIENT;
-use crate::models::clippy::lint_severity::LintSeverity;
-use crate::models::clippy::{MbClippyLint, MbClippyLintLink};
+use crate::clippy::clippy_lint::MbClippyLint;
+use crate::clippy::lint_hint::MbClippyLintHint;
+use crate::clippy::lint_link::MbClippyLintLink;
+use crate::clippy::lint_severity::LintSeverity;
+use crate::SymphonyzeClient;
 
-pub struct MissingRemixerRelLint {
+pub struct MissingRemixRelLint {
     recording: Recording,
 }
 
-impl MbClippyLint for MissingRemixerRelLint {
+impl MbClippyLint for MissingRemixRelLint {
     fn get_name() -> &'static str {
-        "missing_remixer_rel"
+        "missing_remix_rel"
     }
 
     async fn check(
-        conn: &mut sqlx::SqliteConnection,
+        client: &SymphonyzeClient,
         entity: &MainEntity,
     ) -> Result<Option<Self>, crate::Error> {
         let MainEntity::Recording(recording) = entity else {
             return Ok(None);
         };
 
-        let recording_rels = recording.get_recording_relations(conn).await?;
+        let conn = &mut client.mb_database.get_raw_connection().await?;
+        let recording_rels = recording.get_artist_relations(conn).await?;
         let mut is_remix = false;
         for relation in recording_rels {
-            if relation.is_remix_of_rel(recording) {
+            if relation.is_remixer_rel(recording) {
                 is_remix = true;
             }
         }
@@ -33,10 +36,10 @@ impl MbClippyLint for MissingRemixerRelLint {
             return Ok(None);
         }
 
-        let artist_relations = recording.get_artist_relations(conn).await?;
+        let artist_relations = recording.get_recording_relations(conn).await?;
         // Check if a remixer relationship is missing
         for relation in artist_relations {
-            if relation.is_remixer_rel(recording) {
+            if relation.is_remix_of_rel(recording) {
                 return Ok(None);
             }
         }
@@ -50,20 +53,21 @@ impl MbClippyLint for MissingRemixerRelLint {
 
     async fn get_body(
         &self,
-        conn: &mut sqlx::SqliteConnection,
+        client: &SymphonyzeClient,
     ) -> Result<impl std::fmt::Display, crate::Error> {
+        let conn = &mut client.mb_database.get_raw_connection().await?;
         Ok(format!(
-            "Recording \"{}\" has a remix relationship, but no remixer relationship.
--> Add the remixer as an artist relationship",
+            "Recording \"{}\" has a remixer relationship, but no `remix of` relationship.
+-> Add the original recording as an recording relationship",
             self.recording
-                .pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, false)
+                .pretty_format_with_credits(conn, &client.mb_database, false)
                 .await?
         ))
     }
 
     async fn get_links(
         &self,
-        _conn: &mut sqlx::SqliteConnection,
+        _client: &SymphonyzeClient,
     ) -> Result<Vec<MbClippyLintLink>, crate::Error> {
         let mut out = Vec::new();
 
@@ -85,12 +89,12 @@ impl MbClippyLint for MissingRemixerRelLint {
 
     async fn get_hints(
         &self,
-        _conn: &mut sqlx::SqliteConnection,
-    ) -> Result<Vec<crate::models::clippy::MbClippyLintHint>, crate::Error> {
+        _client: &SymphonyzeClient,
+    ) -> Result<Vec<MbClippyLintHint>, crate::Error> {
         Ok(Vec::new())
     }
 
-    fn get_severity(&self) -> crate::models::clippy::lint_severity::LintSeverity {
+    fn get_severity(&self) -> LintSeverity {
         LintSeverity::MissingRelation
     }
 }
