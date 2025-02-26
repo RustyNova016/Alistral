@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 musicbrainz-db-lite = { path = "../musicbrainz_db_lite" }
+sqlx = "0.8.3"
 tuillez = { path = "../tuillez" }
 
 [lints]

@@ -8,13 +8,6 @@ use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use tracing::info;
 
 use crate::api::clients::ALISTRAL_CLIENT;
-use crate::datastructures::clippy::missing_release_barcode::MissingBarcodeLint;
-use crate::datastructures::clippy::missing_remix_rel::MissingRemixRelLint;
-use crate::datastructures::clippy::missing_remixer_rel::MissingRemixerRelLint;
-use crate::datastructures::clippy::missing_work::MissingWorkLint;
-use crate::datastructures::clippy::soundtrack_without_disambiguation::SoundtrackWithoutDisambiguationLint;
-use crate::datastructures::clippy::suspicious_remix::SuspiciousRemixLint;
-use crate::models::clippy::MbClippyLint;
 use crate::utils::cli::await_next;
 use crate::utils::cli::display::MainEntityExt;
 use crate::utils::whitelist_blacklist::WhitelistBlacklist;

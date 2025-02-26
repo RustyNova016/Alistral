@@ -3518,6 +3518,7 @@ name = "symphonize"
 version = "0.1.0"
 dependencies = [
  "musicbrainz-db-lite",
+ "sqlx",
  "tuillez",
 ]
 
