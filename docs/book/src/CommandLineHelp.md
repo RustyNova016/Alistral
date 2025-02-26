@@ -37,6 +37,8 @@ This document contains the help content for the `alistral` command-line program.
 * [`alistral mapping list-unmapped`↴](#alistral-mapping-list-unmapped)
 * [`alistral musicbrainz`↴](#alistral-musicbrainz)
 * [`alistral musicbrainz clippy`↴](#alistral-musicbrainz-clippy)
+* [`alistral playlist`↴](#alistral-playlist)
+* [`alistral playlist convert`↴](#alistral-playlist-convert)
 * [`alistral radio`↴](#alistral-radio)
 * [`alistral radio circles`↴](#alistral-radio-circles)
 * [`alistral radio underrated`↴](#alistral-radio-underrated)
@@ -65,6 +67,7 @@ A CLI app containing a set of useful tools for Listenbrainz
 * `lookup` — Get detailled information about an entity
 * `mapping` — Commands for interacting with listen mappings
 * `musicbrainz` — Commands for musicbrainz stuff
+* `playlist` — Interact with playlists
 * `radio` — Generate radio playlists for you
 * `stats` — Shows top statistics for a specific target
 * `unstable` — A CLI app containing a set of useful tools for Listenbrainz
@@ -581,6 +584,38 @@ Search for potential mistakes, missing data and style issues. This allows to qui
 * `-n`, `--new-first` — Whether to check FILO (first in, last out) instead of FIFO (first in, first out)
 * `-w`, `--whitelist <WHITELIST>` — List of lints that should only be checked (Note: Put this argument last or before another argument)
 * `-b`, `--blacklist <BLACKLIST>` — List of lints that should not be checked (Note: Put this argument last or before another argument)
+
+
+
+## `alistral playlist`
+
+Interact with playlists
+
+**Usage:** `alistral playlist <COMMAND>`
+
+###### **Subcommands:**
+
+* `convert` — Convert a playlist from one service to another
+
+
+
+## `alistral playlist convert`
+
+Convert a playlist from one service to another
+
+**Usage:** `alistral playlist convert <SOURCE> <ID> <TARGET>`
+
+###### **Arguments:**
+
+* `<SOURCE>` — Get the playlist from which service?
+
+  Possible values: `listenbrainz`
+
+* `<ID>` — The id of the playlist on the external service
+* `<TARGET>` — Convert to this service
+
+  Possible values: `youtube`
+
 
 
 
