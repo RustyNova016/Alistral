@@ -7,6 +7,7 @@ rust-version = "1.82.0"
 [dependencies]
 musicbrainz_db_lite_macros = { path = "./musicbrainz_db_lite_macros" }
 musicbrainz_db_lite_schema = { path = "./musicbrainz_db_lite_schema" }
+tuillez = { path = "../tuillez", optional = true }
 
 #musicbrainz_rs_nova = { version = "0.9.0", package = "musicbrainz_rs"  }
 musicbrainz_rs_nova = { branch = "develop", git = "https://github.com/RustyNova016/musicbrainz_rs.git", package = "musicbrainz_rs" }
@@ -30,9 +31,12 @@ async-fn-stream = "0.2.2"
 const_format = { version = "0.2.34" , features = ["rust_1_51", "rust_1_64", "assertcp"] }
 tokio = { version = "1.40.0", features = ["full"] }
 
+owo-colors = { version = "4.2.0", optional = true}
+
 [features]
-default = ["timeout_continue"]
+default = ["timeout_continue", "pretty_format"]
 timeout_continue = []
+pretty_format = ["dep:tuillez", "dep:owo-colors"]
 
 [dev-dependencies]
 serial_test = "3.1.1"

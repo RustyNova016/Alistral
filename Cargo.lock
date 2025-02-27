@@ -2206,6 +2206,7 @@ dependencies = [
  "musicbrainz_db_lite_macros",
  "musicbrainz_db_lite_schema",
  "musicbrainz_rs",
+ "owo-colors 4.2.0",
  "serde",
  "serde_json",
  "serial_test",
@@ -2213,6 +2214,7 @@ dependencies = [
  "thiserror",
  "tokio",
  "tracing",
+ "tuillez",
 ]
 
 [[package]]

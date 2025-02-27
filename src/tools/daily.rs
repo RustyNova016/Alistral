@@ -21,8 +21,6 @@ use crate::database::listenbrainz::listens::ListenFetchQuery;
 use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
 use crate::database::musicbrainz::anniversaries::get_recordings_aniversaries;
 use crate::models::config::Config;
-use crate::utils::cli::display::RecordingExt as _;
-use crate::utils::cli::display::ReleaseGroupExt;
 
 #[instrument]
 pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
@@ -68,7 +66,7 @@ pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
             println!(
                 "   - {} ({}, {} Listens)",
                 rec.recording()
-                    .pretty_format_with_credits(conn, true)
+                    .pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, true)
                     .await
                     .expect("Couldn't get artist credits"),
                 Utc.timestamp_opt(rec.recording().first_release_date.unwrap(), 0)
@@ -104,7 +102,7 @@ pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
             println!(
                 "   - {} ({}, {} Listens)",
                 rec.recording()
-                    .pretty_format_with_credits(conn, true)
+                    .pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, true)
                     .await
                     .expect("Couldn't get artist credits"),
                 rec.oldest_listen_date()
@@ -138,7 +136,7 @@ pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
 
             println!(
                 "   - {} {}",
-                rg.pretty_format_with_credits(conn, true)
+                rg.pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, true)
                     .await
                     .expect("Couldn't get artist credits"),
                 format!(

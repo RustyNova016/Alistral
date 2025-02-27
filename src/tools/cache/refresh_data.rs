@@ -6,7 +6,6 @@ use tuillez::pg_inc;
 use crate::api::clients::ALISTRAL_CLIENT;
 use crate::database::listenbrainz::listens::ListenFetchQuery;
 use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
-use crate::utils::cli::display::RecordingExt;
 
 pub async fn refresh_data(
     conn: &mut sqlx::SqliteConnection,
@@ -50,7 +49,10 @@ pub async fn refresh_data(
 
         if let Some(recording) = recording {
             // It's ok to silently discard the error here. It's just some fancy display
-            if let Ok(recording) = recording.pretty_format_with_credits(conn, true).await {
+            if let Ok(recording) = recording
+                .pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, true)
+                .await
+            {
                 info!("Refreshed: {recording}");
             }
         }

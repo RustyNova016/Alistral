@@ -6,7 +6,6 @@ use alistral_core::datastructures::listen_collection::traits::ListenCollectionRe
 use itertools::Itertools;
 
 use crate::api::clients::ALISTRAL_CLIENT;
-use crate::utils::cli::display::ArtistExt as _;
 use crate::utils::cli_paging::CLIPager;
 
 pub async fn stats_artist(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {

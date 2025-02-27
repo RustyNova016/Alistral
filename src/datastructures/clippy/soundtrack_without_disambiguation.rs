@@ -5,7 +5,6 @@ use musicbrainz_db_lite::models::musicbrainz::work::Work;
 use crate::models::clippy::MbClippyLint;
 use crate::models::clippy::MbClippyLintLink;
 use crate::models::clippy::lint_severity::LintSeverity;
-use crate::utils::cli::display::WorkExt as _;
 
 pub struct SoundtrackWithoutDisambiguationLint {
     work: Work,
