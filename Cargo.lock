@@ -3346,12 +3346,14 @@ version = "0.1.0"
 dependencies = [
  "alistral_core",
  "async-fn-stream",
+ "chrono",
  "futures",
  "i_splits",
  "json",
  "musicbrainz-db-lite",
  "serde",
  "serde_json",
+ "streamies",
  "thiserror",
  "tuillez",
 ]
