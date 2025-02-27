@@ -3309,12 +3309,14 @@ version = "0.1.0"
 dependencies = [
  "alistral_core",
  "async-fn-stream",
+ "chrono",
  "futures",
  "i_splits",
  "json",
  "musicbrainz-db-lite",
  "serde",
  "serde_json",
+ "streamies",
  "thiserror",
  "tuillez",
 ]
@@ -3539,6 +3541,16 @@ name = "stable_deref_trait"
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a8f112729512f8e442d81f95a8a7ddf2b7c6b8a1a6f509a95864142b30cab2d3"
+
+[[package]]
+name = "streamies"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "72f6e06e8417b8b7212c4f4097cc5bd2f912b9a40bdc0383f3ab23a7f0561af2"
+dependencies = [
+ "futures",
+ "pin-project-lite",
+]
 
 [[package]]
 name = "stringprep"
