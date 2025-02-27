@@ -6,7 +6,6 @@ use alistral_core::datastructures::listen_collection::traits::ListenCollectionRe
 use itertools::Itertools;
 
 use crate::api::clients::ALISTRAL_CLIENT;
-use crate::utils::cli::display::ReleaseGroupExt as _;
 use crate::utils::cli_paging::CLIPager;
 
 pub async fn stats_release_groups(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
@@ -31,7 +30,7 @@ pub async fn stats_release_groups(conn: &mut sqlx::SqliteConnection, listens: Li
             group.listen_count(),
             group
                 .entity()
-                .pretty_format_with_credits(conn, true)
+                .pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, true)
                 .await
                 .expect("Error getting formated release name"),
         );

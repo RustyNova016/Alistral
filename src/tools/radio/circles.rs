@@ -18,7 +18,6 @@ use crate::models::cli::radio::RadioExportTarget;
 use crate::models::data_storage::DataStorage;
 use crate::models::error::ResultTEExt as _;
 use crate::tools::radio::convert_recordings;
-use crate::utils::cli::display::ArtistExt;
 use crate::utils::data_file::DataFile as _;
 
 pub async fn create_radio_mix(

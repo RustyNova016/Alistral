@@ -2,6 +2,8 @@ use std::fmt::Display;
 
 use sqlx::SqliteConnection;
 
+pub mod display;
+
 pub struct ArtistCredit {
     pub artist_credit: i64,
     pub position: i64,
@@ -51,15 +53,6 @@ impl ArtistCredits {
         }
 
         Self::find_by_id(conn, id).await
-    }
-}
-
-impl Display for ArtistCredits {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        for row in &self.1 {
-            write!(f, "{}", row)?;
-        }
-        Ok(())
     }
 }
 

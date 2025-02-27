@@ -1,4 +1,6 @@
 use crate::models::shared_traits::HasMBID;
+#[cfg(feature = "pretty_format")]
+use crate::DBClient;
 use crate::RowId;
 
 use super::artist::Artist;
@@ -62,5 +64,31 @@ impl HasMBID for MainEntity {
             Self::Release(val) => val.get_mbid(),
             Self::Work(val) => val.get_mbid(),
         }
+    }
+}
+
+impl MainEntity {
+    #[cfg(feature = "pretty_format")]
+    pub async fn pretty_format(
+        &self,
+        conn: &mut sqlx::SqliteConnection,
+        client: &DBClient,
+        listenbrainz: bool,
+    ) -> Result<String, crate::Error> {
+        let out = match self {
+            MainEntity::Artist(val) => val.pretty_format(listenbrainz).await?,
+            MainEntity::Label(val) => val.pretty_format().await?,
+            MainEntity::Recording(val) => {
+                val.pretty_format_with_credits(conn, client, listenbrainz)
+                    .await?
+            }
+            MainEntity::Release(val) => {
+                val.pretty_format_with_credits(conn, client, listenbrainz)
+                    .await?
+            }
+            MainEntity::Work(val) => val.pretty_format().await?,
+        };
+
+        Ok(out)
     }
 }

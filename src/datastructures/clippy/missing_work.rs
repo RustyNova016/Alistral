@@ -4,7 +4,6 @@ use crate::api::clients::ALISTRAL_CLIENT;
 use crate::models::clippy::MbClippyLintHint;
 use crate::models::clippy::lint_severity::LintSeverity;
 use crate::models::clippy::{MbClippyLint, MbClippyLintLink};
-use crate::utils::cli::display::RecordingExt;
 
 pub struct MissingWorkLint {
     recording: Recording,
@@ -44,7 +43,7 @@ impl MbClippyLint for MissingWorkLint {
     ) -> Result<impl std::fmt::Display, crate::Error> {
         Ok(format!("Recording \"{}\" has no associated works
 -> Most recordings should have a work associated to them. Please check if a work exists for a recording and add it / create it"
-, self.recording.pretty_format_with_credits(conn, false).await?))
+, self.recording.pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, false).await?))
     }
 
     async fn get_links(
