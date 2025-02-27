@@ -6,6 +6,7 @@ use chrono::Utc;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use rust_decimal::Decimal;
 use tracing::info;
+use tuillez::extensions::chrono_exts::DurationExt as _;
 
 use crate::api::clients::ALISTRAL_CLIENT;
 use crate::database::listenbrainz::listens::ListenFetchQuery;
@@ -13,7 +14,6 @@ use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
 use crate::models::cli::BumpCLI;
 use crate::models::config::Config;
 use crate::utils::cli::read_mbid_from_input;
-use crate::utils::extensions::chrono_ext::DurationExt as _;
 
 pub async fn bump_command(conn: &mut sqlx::SqliteConnection, bump: BumpCLI) {
     let username = Config::check_username(&bump.username);

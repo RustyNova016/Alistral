@@ -73,7 +73,6 @@ dependencies = [
  "directories",
  "extend",
  "futures",
- "humantime",
  "indicatif",
  "indoc",
  "inquire",
@@ -3912,9 +3911,14 @@ name = "tuillez"
 version = "0.1.0"
 dependencies = [
  "backtrace",
+ "chrono",
  "color-backtrace",
+ "extend",
+ "humantime",
  "indicatif",
  "owo-colors 4.2.0",
+ "rust_decimal",
+ "rust_decimal_macros",
  "thiserror",
  "tracing-indicatif",
 ]
