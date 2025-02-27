@@ -1,9 +1,9 @@
 use core::fmt::Display;
-use std::ops::Deref;
 
 use clap::ArgAction;
 use clap::ValueEnum;
 use clap::{Parser, Subcommand};
+use tuillez::extensions::chrono_exts::DurationExt;
 
 use crate::datastructures::radio::collector::RadioCollector;
 use crate::datastructures::radio::collector::RadioCollectorBuilder;
@@ -57,15 +57,10 @@ impl RadioCommand {
         };
 
         let collector = match self.min_duration.as_ref() {
-            Some(val) => {
-                let dura: humantime::Duration = val
-                    .clone()
-                    .parse()
-                    .expect("Couldn't parse mimimum lenght for radio");
-                let std_dura = dura.deref();
-                let chrono_dura = chrono::Duration::from_std(*std_dura).unwrap();
-                collector.duration(chrono_dura)
-            }
+            Some(val) => collector.duration(
+                chrono::Duration::from_human_string(val)
+                    .expect("Couldn't parse mimimum lenght for radio"),
+            ),
             None => collector.duration_none(),
         };
 

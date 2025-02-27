@@ -5,10 +5,10 @@ use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTi
 use alistral_core::datastructures::listen_collection::ListenCollection;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use itertools::Itertools;
+use tuillez::extensions::chrono_exts::DurationExt as _;
 
 use crate::api::clients::ALISTRAL_CLIENT;
 use crate::utils::cli_paging::CLIPager;
-use crate::utils::extensions::chrono_ext::DurationExt;
 
 pub async fn stats_recording(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
     let mut groups =
