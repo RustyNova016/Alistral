@@ -11,6 +11,9 @@ pub enum Error {
     #[error("Variable {0} has the wrong type. Expected `{1}`, got `{2}`")]
     WrongVariableTypeError(String, String, String),
 
-    #[error("Couldn't compile the radio due to incorect variables: {0}")]
+    #[error("Couldn't compile the radio due to incorect variable: {0}")]
     VariableReadError(serde_json::Error),
+
+    #[error("Couldn't compile the radio due to incorect variable: {0}. Hint: {1}")]
+    VariableDecodeError(String, String),
 }
