@@ -24,7 +24,7 @@ pub mod work;
 ///
 /// * `entity` - The entity of type `Ent`.
 /// * `listens` - The listens associated with the entity of type `Lis`.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct EntityWithListens<Ent, Lis>
 where
     Ent: RowId,
