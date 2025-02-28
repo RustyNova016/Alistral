@@ -4,7 +4,7 @@ This filter takes in another radio, and only keep tracks that are both found in 
 
 ### Inputs
 
-- `radio_schema` (required): The schema of another radio
+- `radio_schema: Radio` (required): The schema of another radio. This will consume it entirely
 
 ### Example
 
@@ -29,7 +29,7 @@ Removes all the tracks that have been recently listened.
 
 ### Inputs
 
-- `duration` (required): The ammount of time that should pass before allowing the track to pass.
+- `duration: String` (required): The ammount of time that should pass before allowing the track to pass.
 
 ### Example
 
@@ -49,7 +49,7 @@ This filter only let tracks that have a minimum (inclusive) of listens
 
 ### Inputs
 
-- `minimum` (required): The minimum amount of listens
+- `minimum: Int` (required): The minimum amount of listens
 
 ### Example
 
@@ -69,7 +69,7 @@ Removes all the tracks that are "in timeout".
 
 ### Inputs
 
-- `timeouts`: The list of track timeouts. In the context of Alistral, those are automatically provided
+- `timeouts: Timeout`: The list of track timeouts. In the context of Alistral, those are automatically provided
 
 ### Example
 
