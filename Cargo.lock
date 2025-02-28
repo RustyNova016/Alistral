@@ -3544,9 +3544,9 @@ checksum = "a8f112729512f8e442d81f95a8a7ddf2b7c6b8a1a6f509a95864142b30cab2d3"
 
 [[package]]
 name = "streamies"
-version = "0.1.0"
+version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "72f6e06e8417b8b7212c4f4097cc5bd2f912b9a40bdc0383f3ab23a7f0561af2"
+checksum = "aecd7ea1b0457949a0dd0e91c3502e469411e6339aea412393be962f10d8d233"
 dependencies = [
  "futures",
  "pin-project-lite",
