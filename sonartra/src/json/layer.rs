@@ -11,6 +11,7 @@ use crate::modules::filters::cooldown::CooldownFilter;
 use crate::modules::filters::minimum_listens::MinimumListenFilter;
 use crate::modules::filters::timeout::TimeoutFilter;
 use crate::modules::radio_module::RadioModule;
+use crate::modules::scores::sort::SortModule;
 use crate::radio_variables::RadioVariables;
 
 /// A layer represent a step in the radio processing. It calls a module based on the step type
@@ -39,6 +40,7 @@ impl Layer {
             "minimum_listen_filter" => {
                 MinimumListenFilter::create(self.inputs, variables)?.create_stream(stream)
             },
+            "sort_module" => {SortModule::create(self.inputs, variables)?.create_stream(stream)}
             "timeout_filter" => {
                 TimeoutFilter::create(self.inputs, variables)?.create_stream(stream)
             }
