@@ -4,7 +4,7 @@ This filter takes in another radio, and only keep tracks that are both found in 
 
 ### Inputs
 
-- `radio_schema`: The schema of another radio
+- `radio_schema` (required): The schema of another radio
 
 ### Example
 
@@ -29,14 +29,14 @@ Removes all the tracks that have been recently listened.
 
 ### Inputs
 
-- `duration`: The ammount of time that should pass before allowing the track to pass.
+- `duration` (required): The ammount of time that should pass before allowing the track to pass.
 
 ### Example
 
 ```json
 {
-    "step_type": "and_filter",
-    "id": "and_filter",
+    "step_type": "cooldown_filter",
+    "id": "cooldown_filter",
     "inputs": {
         "duration": "1 day 12 hours 24 minutes"
     }
@@ -49,7 +49,7 @@ This filter only let tracks that have a minimum (inclusive) of listens
 
 ### Inputs
 
-- `minimum`: The minimum amount of listens
+- `minimum` (required): The minimum amount of listens
 
 ### Example
 
@@ -59,6 +59,29 @@ This filter only let tracks that have a minimum (inclusive) of listens
     "id": "minimum_listen_filter",
     "inputs": {
         "minimum": 3 
+    }
+}
+```
+
+## Timeouts
+
+Removes all the tracks that are "in timeout". 
+
+### Inputs
+
+- `timeouts`: The list of track timeouts. In the context of Alistral, those are automatically provided
+
+### Example
+
+```json
+{
+    "step_type": "timeout_filter",
+    "id": "timeout_filter",
+    "inputs": {
+        "timeouts": {
+            "1119dec1-2ed9-49ff-a059-2bd5b048af3c": "2025-09-20T14:26:57.455793591Z",
+            "7cd8da60-3255-4708-9cc0-6bfdd196fd5f": "2025-09-20T14:28:19.264683649Z",
+        }
     }
 }
 ```
