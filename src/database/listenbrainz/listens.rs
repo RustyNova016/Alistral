@@ -11,7 +11,6 @@ use tuillez::pg_inc;
 use tuillez::pg_spinner;
 
 use crate::api::clients::ALISTRAL_CLIENT;
-use crate::utils::env::in_offline_mode;
 
 /// Fetch the latest listens for the provided user. If the user has no listens, it will do a full listen fetch.
 #[instrument(fields(indicatif.pb_show = tracing::field::Empty))]
@@ -71,7 +70,7 @@ impl ListenFetchQuery {
     ) -> Result<ListenCollection, crate::Error> {
         // Fetch the latest listens
         // ... If it's not in offline mode
-        if !in_offline_mode() {
+        if !ALISTRAL_CLIENT.offline {
             fetch_latest_listens_of_user(conn, &self.user).await?;
         }
 
