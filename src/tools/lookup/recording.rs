@@ -1,10 +1,11 @@
+use alistral_core::database::fetching::listens::ListenFetchQuery;
+use alistral_core::database::fetching::listens::ListenFetchQueryReturn;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use tracing::info;
 use tuillez::fatal_error::FatalError;
+use tuillez::fatal_error::IntoFatal;
 
 use crate::api::clients::ALISTRAL_CLIENT;
-use crate::database::listenbrainz::listens::ListenFetchQuery;
-use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
 use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
 
 #[cfg(not(test))]
@@ -21,8 +22,9 @@ pub async fn lookup_recording(
         .returns(ListenFetchQueryReturn::Mapped)
         .user(username.to_string())
         .build()
-        .fetch(conn)
-        .await?;
+        .fetch(conn, &ALISTRAL_CLIENT)
+        .await
+        .expect_fatal("Couldn't fetch listens")?;
 
     // Refetch the recording to make sure it's up to date
     let Some(recording) = Recording::fetch_and_save(conn, &ALISTRAL_CLIENT.musicbrainz_db, id)

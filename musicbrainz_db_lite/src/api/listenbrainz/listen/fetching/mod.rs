@@ -1,22 +1,30 @@
+use chrono::DateTime;
 use chrono::Utc;
 use listenbrainz::raw::Client;
+use tracing::info;
+use tracing::instrument;
+use tuillez::pg_spinner;
 
 use crate::api::listenbrainz::listen_collection::SaveListenPayload;
 use crate::models::listenbrainz::listen::Listen;
+use crate::DBClient;
 use crate::Error;
 
 impl Listen {
     /// Fetch the latest listens for the provided user. If the user has no listens, it will do a full listen fetch.
+    #[instrument(fields(indicatif.pb_show = tracing::field::Empty))]
     pub async fn fetch_latest_listens_of_user(
         conn: &mut sqlx::SqliteConnection,
+        client: &DBClient,
         user: &str,
-    ) -> Result<(), Error> {
-        let latest_listen_ts = Listen::get_latest_listen_of_user(conn, user)
+    ) -> Result<(), crate::Error> {
+        pg_spinner!("Fetching listens");
+        info!("Fetching latest listens of {}", user);
+
+        let latest_listen_ts = Listen::get_latest_listen_of_user(&mut *conn, user)
             .await?
             .map(|v| v.listened_at);
         let mut pull_ts = Some(Utc::now().timestamp());
-
-        let lb_client = Client::new();
 
         // This loop has two possible states.
         // - Fresh dump:
@@ -27,7 +35,18 @@ impl Listen {
         while (latest_listen_ts.is_none() && pull_ts.is_some())
             || (latest_listen_ts.is_some_and(|a| pull_ts.is_some_and(|b| a <= b)))
         {
-            pull_ts = Self::execute_listen_fetch(conn, &lb_client, user, pull_ts.unwrap()).await?;
+            info!(
+                "Getting listens from before: {} ({})",
+                DateTime::from_timestamp(pull_ts.unwrap(), 0).unwrap(),
+                pull_ts.unwrap()
+            );
+            pull_ts = Listen::execute_listen_fetch(
+                conn,
+                &client.listenbrainz_client,
+                user,
+                pull_ts.unwrap(),
+            )
+            .await?;
         }
 
         Ok(())
@@ -40,6 +59,11 @@ impl Listen {
         user: &str,
         max_ts: i64,
     ) -> Result<Option<i64>, Error> {
+        info!(
+            "Getting listens from before: {} ({})",
+            DateTime::from_timestamp(max_ts, 0).unwrap(),
+            max_ts
+        );
         let dump = lb_client.user_listens(user, None, Some(max_ts), Some(1000));
 
         match dump {

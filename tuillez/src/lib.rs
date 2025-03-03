@@ -8,3 +8,7 @@ pub mod utils;
 
 pub use crate::error::Error;
 pub use crate::styles::SPINNER_STYLE;
+
+pub mod tracing_indicatif {
+    pub use tracing_indicatif::*;
+}

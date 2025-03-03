@@ -42,14 +42,6 @@ impl RecordingWithListensCollection {
         // Convert into structs
         let mut out = Self::new();
 
-        // Span::current().pb_set_style(
-        //     &ProgressStyle::with_template(
-        //         "{span_child_prefix}[{span_name}] {wide_bar} {pos}/{len} | {eta_precise}",
-        //     )
-        //     .unwrap(),
-        // );
-        //Span::current().pb_set_length(joins.len() as u64);
-
         for (_, (listen, recordings)) in joins {
             for recording in recordings {
                 out.insert_or_merge_listen(recording, listen.clone());
