@@ -1,3 +1,6 @@
+use std::sync::Arc;
+
+use listenbrainz::raw::Client as ListenbrainzClient;
 use musicbrainz_rs_nova::client::MusicBrainzClient;
 
 use crate::database::client::builder::ClientBuilder;
@@ -9,7 +12,8 @@ pub mod builder;
 pub struct DBClient {
     pub connection: DbConnection,
 
-    pub musicbrainz_client: MusicBrainzClient,
+    pub musicbrainz_client: Arc<MusicBrainzClient>,
+    pub listenbrainz_client: Arc<ListenbrainzClient>,
 }
 
 impl DBClient {
@@ -23,6 +27,7 @@ impl DBClient {
         Ok(Self::builder()
             .in_memory()
             .set_default_mb_client()
+            .set_default_lb_client()
             .connect_and_migrate()
             .await?
             .build())
