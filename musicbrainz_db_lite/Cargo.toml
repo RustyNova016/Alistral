@@ -17,7 +17,7 @@ musicbrainz_rs_nova = { branch = "develop", git = "https://github.com/RustyNova0
 listenbrainz = { branch = "alistral_version", git = "https://github.com/RustyNova016/listenbrainz-rs.git" }
 
 async-trait = "0.1.82"
-chrono = "0.4.38"
+chrono = "0.4.40"
 extend = "1.2.0"
 futures = "0.3.30"
 macon = "1.2.0"

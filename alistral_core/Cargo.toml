@@ -17,7 +17,7 @@ sqlx = { version = "0.8.3", features = ["runtime-tokio", "macros"] }
 thiserror = "2.0.11"
 owo-colors = "4.2.0"
 indicatif = "0.17.11"
-chrono = "0.4.39"
+chrono = "0.4.40"
 rust_decimal = "1.36.0"
 rust_decimal_macros = "1.36.0"
 futures = "0.3.31"
