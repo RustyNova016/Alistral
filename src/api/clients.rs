@@ -42,7 +42,8 @@ pub async fn create_client() -> AlistralClient {
             .connect_and_migrate()
             .await
             .expect("Couldn't connect to database")
-            .set_mb_client(musicbrainz_rs.as_ref().clone())
+            .set_mb_client(musicbrainz_rs.clone())
+            .set_lb_client(listenbrainz.clone())
             .build(),
     );
 
