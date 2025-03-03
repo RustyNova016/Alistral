@@ -1,7 +1,7 @@
 use core::cmp::Reverse;
 
+use alistral_core::database::fetching::listens::ListenFetchQuery;
 use alistral_core::datastructures::entity_with_listens::artist::collection::artist_with_recordings::ArtistWithRecordingsCollection;
-use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use alistral_core::datastructures::listen_collection::ListenCollection;
 use chrono::DateTime;
@@ -17,29 +17,15 @@ use tracing::instrument;
 use crate::api::clients::ALISTRAL_CLIENT;
 use crate::api::listenbrainz::fresh_releases::FreshReleaseRelease;
 use crate::api::listenbrainz::fresh_releases::FreshReleaseRequest;
-use crate::database::listenbrainz::listens::ListenFetchQuery;
-use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
 use crate::database::musicbrainz::anniversaries::get_recordings_aniversaries;
 use crate::models::config::Config;
 
 #[instrument]
 pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
-    let listens = ListenFetchQuery::builder()
-        //.fetch_recordings_redirects(true)
-        .returns(ListenFetchQueryReturn::Mapped)
-        .user(username.to_string())
-        .build()
-        .fetch(conn)
-        .await
-        .expect("Couldn't fetch the new listens");
-
-    let recordings = RecordingWithListensCollection::from_listencollection(
-        conn,
-        &ALISTRAL_CLIENT,
-        listens.clone(),
-    )
-    .await
-    .expect("Couldn't get listen's recordings");
+    let recordings =
+        ListenFetchQuery::get_recordings_with_listens(conn, &ALISTRAL_CLIENT, username.to_string())
+            .await
+            .expect("Couldn't fetch the listened recordings");
 
     // release days
     let today = Utc::now();
@@ -53,7 +39,7 @@ pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
         .filter_map(|rec| recordings.get_by_id(rec.id))
         .collect_vec();
 
-    let fresh_releases = get_fresh_releases(conn, listens, today).await;
+    let fresh_releases = get_fresh_releases(conn, recordings.clone().into(), today).await;
 
     println!();
 

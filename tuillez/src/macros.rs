@@ -3,7 +3,7 @@ macro_rules! pg_spinner {
     ($($arg:tt)*) => {
         {
             use tracing::Span;
-            use tracing_indicatif::span_ext::IndicatifSpanExt as _;
+            use tuillez::tracing_indicatif::span_ext::IndicatifSpanExt as _;
             use tuillez::SPINNER_STYLE;
 
             Span::current().pb_set_message(&format!($($arg)*));

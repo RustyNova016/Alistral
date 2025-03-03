@@ -1,11 +1,11 @@
+use alistral_core::database::fetching::listens::ListenFetchQuery;
+use alistral_core::database::fetching::listens::ListenFetchQueryReturn;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use tracing::info;
 use tuillez::pg_counted;
 use tuillez::pg_inc;
 
 use crate::api::clients::ALISTRAL_CLIENT;
-use crate::database::listenbrainz::listens::ListenFetchQuery;
-use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
 
 pub async fn refresh_data(
     conn: &mut sqlx::SqliteConnection,
@@ -18,7 +18,7 @@ pub async fn refresh_data(
         .returns(ListenFetchQueryReturn::Mapped)
         .user(username.to_string())
         .build()
-        .fetch(&mut *conn)
+        .fetch(&mut *conn, &ALISTRAL_CLIENT)
         .await
         .expect("Couldn't fetch the new listens");
 

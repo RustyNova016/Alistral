@@ -1,0 +1,74 @@
+{
+  "db_name": "SQLite",
+  "query": "\n                SELECT\n                    recordings.*\n                FROM\n                    recordings\n                    INNER JOIN artist_credits ON recordings.artist_credit = artist_credits.id\n                    INNER JOIN artist_credits_item ON artist_credits.id = artist_credits_item.artist_credit\n                WHERE\n                    artist_credits_item.artist_gid IN (\n                        SELECT\n                            gid\n                        FROM\n                            artists_gid_redirect\n                        WHERE\n                            artists_gid_redirect.new_id = ?\n                    )\n                ",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "mbid",
+        "ordinal": 1,
+        "type_info": "Text"
+      },
+      {
+        "name": "title",
+        "ordinal": 2,
+        "type_info": "Text"
+      },
+      {
+        "name": "video",
+        "ordinal": 3,
+        "type_info": "Integer"
+      },
+      {
+        "name": "length",
+        "ordinal": 4,
+        "type_info": "Integer"
+      },
+      {
+        "name": "disambiguation",
+        "ordinal": 5,
+        "type_info": "Text"
+      },
+      {
+        "name": "annotation",
+        "ordinal": 6,
+        "type_info": "Text"
+      },
+      {
+        "name": "first_release_date",
+        "ordinal": 7,
+        "type_info": "Integer"
+      },
+      {
+        "name": "full_update_date",
+        "ordinal": 8,
+        "type_info": "Integer"
+      },
+      {
+        "name": "artist_credit",
+        "ordinal": 9,
+        "type_info": "Integer"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  "hash": "496c3ae0d9e64c949480db962c4f1c483023858d8b4abd64585d6c34a5a4e1ff"
+}

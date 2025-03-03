@@ -1,12 +1,13 @@
 use std::cmp::Reverse;
 
+use alistral_core::database::fetching::listens::ListenFetchQuery;
+use alistral_core::database::fetching::listens::ListenFetchQueryReturn;
 use alistral_core::datastructures::entity_with_listens::messybrainz::collection::MessybrainzWithListensCollection;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use itertools::Itertools;
 use tracing::info;
 
-use crate::database::listenbrainz::listens::ListenFetchQuery;
-use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
+use crate::api::clients::ALISTRAL_CLIENT;
 use crate::models::cli::common::SortSorterBy;
 use crate::utils::cli_paging::CLIPager;
 
@@ -21,7 +22,7 @@ pub async fn unmapped_command(
         .returns(ListenFetchQueryReturn::Unmapped)
         .user(username.to_string())
         .build()
-        .fetch(conn)
+        .fetch(conn, &ALISTRAL_CLIENT)
         .await
         .expect("Couldn't fetch listens");
 

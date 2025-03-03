@@ -1,11 +1,11 @@
+use alistral_core::database::fetching::listens::ListenFetchQuery;
+use alistral_core::database::fetching::listens::ListenFetchQueryReturn;
 use display::display_wrong_mapping;
 use itertools::Itertools;
 use musicbrainz_db_lite::models::listenbrainz::messybrainz_submission::MessybrainzSubmission;
 use strsim::sorensen_dice;
 
 use crate::api::clients::ALISTRAL_CLIENT;
-use crate::database::listenbrainz::listens::ListenFetchQuery;
-use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
 use crate::models::config::config_trait::ConfigFile as _;
 use crate::models::config::whitelisted_wrong_mappings::WhilistedWrongMappings;
 
@@ -18,7 +18,7 @@ pub async fn wrong_mapping(conn: &mut sqlx::SqliteConnection, username: String) 
         .returns(ListenFetchQueryReturn::Mapped)
         .user(username.to_string())
         .build()
-        .fetch(conn)
+        .fetch(conn, &ALISTRAL_CLIENT)
         .await
         .expect("Couldn't fetch listens");
 
