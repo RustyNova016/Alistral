@@ -14,6 +14,7 @@ use crate::models::config::Config;
 use crate::utils::constants::INTERZIC_DB;
 use crate::utils::constants::TOKENCACHE;
 use crate::utils::constants::YT_SECRET_FILE;
+use crate::utils::env::in_offline_mode;
 
 pub static ALISTRAL_CLIENT: LazyLock<AlistralClient> = LazyLock::new(|| block_on(create_client()));
 
@@ -61,6 +62,8 @@ pub async fn create_client() -> AlistralClient {
         listenbrainz,
         musicbrainz_db,
         interzic,
+
+        offline: in_offline_mode(),
     }
 }
 
