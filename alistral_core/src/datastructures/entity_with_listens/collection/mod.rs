@@ -10,6 +10,7 @@ use musicbrainz_db_lite::RowId;
 use rust_decimal::Decimal;
 
 use crate::datastructures::listen_collection::traits::ListenCollectionReadable;
+use crate::datastructures::listen_collection::ListenCollection;
 use crate::traits::mergable::Mergable;
 
 use super::traits::ListenCollWithTime;
@@ -204,5 +205,15 @@ where
     type IntoIter = std::collections::hash_map::IntoValues<i64, Self::Item>;
     fn into_iter(self) -> Self::IntoIter {
         self.0.into_values()
+    }
+}
+
+impl<Ent, Lis> From<EntityWithListensCollection<Ent, Lis>> for ListenCollection
+where
+    Ent: RowId,
+    Lis: ListenCollectionReadable + IntoIterator<Item = Listen>,
+{
+    fn from(value: EntityWithListensCollection<Ent, Lis>) -> Self {
+        value.into_iter().flat_map(ListenCollection::from).collect()
     }
 }

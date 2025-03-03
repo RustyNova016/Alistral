@@ -122,3 +122,13 @@ where
         self.entity.get_row_id()
     }
 }
+
+impl<Ent, Lis> From<EntityWithListens<Ent, Lis>> for ListenCollection
+where
+    Ent: RowId,
+    Lis: IntoIterator<Item = Listen> + ListenCollectionReadable,
+{
+    fn from(value: EntityWithListens<Ent, Lis>) -> Self {
+        value.listens.into_iter().collect()
+    }
+}

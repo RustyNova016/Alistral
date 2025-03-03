@@ -94,3 +94,25 @@ impl Deref for ListenCollection {
         &self.data
     }
 }
+
+impl IntoIterator for ListenCollection {
+    type Item = Listen;
+
+    type IntoIter = std::vec::IntoIter<Self::Item>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.data.into_iter()
+    }
+}
+
+impl FromIterator<Listen> for ListenCollection {
+    fn from_iter<T: IntoIterator<Item = Listen>>(iter: T) -> Self {
+        let mut this = Self::default();
+
+        for i in iter {
+            this.push_unique(i)
+        }
+
+        this
+    }
+}
