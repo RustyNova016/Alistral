@@ -1,30 +1,40 @@
-use core::future::ready;
-
+use alistral_core::database::fetching::listens::ListenFetchQuery;
+use async_fn_stream::try_fn_stream;
 use futures::StreamExt;
 use serde::Deserialize;
 use serde::Serialize;
-use serde_json::Map;
-use serde_json::Value;
 
 use crate::aliases::LayerResult;
 use crate::aliases::RadioStream;
+use crate::modules::radio_module::RadioModule;
+use crate::radio_item::RadioItem;
 
 #[derive(Serialize, Deserialize, Clone)]
-pub struct ListenSeederVariables {
+pub struct ListenSeeder {
     user: String,
 }
 
-pub fn listen_seeder(stream: RadioStream, variables: Map<String, Value>) -> LayerResult {
-    let variables: ListenSeederVariables =
-        serde_json::from_value(Value::Object(variables)).unwrap();
+impl RadioModule for ListenSeeder {
+    fn create_stream<'a>(
+        self,
+        _stream: RadioStream<'a>,
+        client: &'a crate::client::YumakoClient,
+    ) -> LayerResult<'a> {
+        Ok(try_fn_stream(async |emitter| {
+            let tracks = ListenFetchQuery::get_recordings_with_listens(
+                &mut *client.get_db_lite_raw_conn().await?,
+                &client.alistral_core,
+                self.user,
+            )
+            .await?
+            .into_iter();
 
-    Ok(stream
-        .filter(move |_r| {
-            if variables.user != "a" {
-                return ready(false);
+            for track in tracks {
+                emitter.emit(RadioItem::from(track)).await;
             }
 
-            ready(true)
+            Ok(())
         })
         .boxed())
+    }
 }
