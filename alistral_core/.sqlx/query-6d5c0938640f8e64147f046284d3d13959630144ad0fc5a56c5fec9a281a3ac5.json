@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "INSERT INTO `artist_credits_item` VALUES (?, ?, ?, ?, ?)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 5
+    },
+    "nullable": []
+  },
+  "hash": "6d5c0938640f8e64147f046284d3d13959630144ad0fc5a56c5fec9a281a3ac5"
+}

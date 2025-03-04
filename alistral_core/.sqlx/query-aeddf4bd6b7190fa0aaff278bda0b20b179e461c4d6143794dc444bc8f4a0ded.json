@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "INSERT INTO `msid_mapping` VALUES (NULL, ?, ?, ?, NULL) ON CONFLICT DO UPDATE SET `recording_mbid` = ?",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 4
+    },
+    "nullable": []
+  },
+  "hash": "aeddf4bd6b7190fa0aaff278bda0b20b179e461c4d6143794dc444bc8f4a0ded"
+}

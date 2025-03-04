@@ -3,6 +3,7 @@ name = "interzic"
 version = "0.1.0"
 edition = "2021"
 description = "Bunch of utilities to link musicbrainz data to different services"
+rust-version = "1.82.0"
 
 [dependencies]
 

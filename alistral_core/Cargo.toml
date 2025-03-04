@@ -2,6 +2,7 @@
 name = "alistral_core"
 version = "0.1.0"
 edition = "2021"
+rust-version = "1.82.0"
 
 [dependencies]
 musicbrainz-db-lite = { path = "../musicbrainz_db_lite" }

@@ -11,8 +11,9 @@ env:
   RUSTFLAGS: -Dwarnings
   RUST_BACKTRACE: 1
 
-# Copied from the dotenvy crate
-# https://github.com/allan2/dotenvy/blob/master/.github/workflows/ci.yml
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   stable_tests:
@@ -127,13 +128,41 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+
     - uses: Swatinem/rust-cache@v2
+
     - name: Install Rust
-      uses: dtolnay/rust-toolchain@stable
+      uses: dtolnay/rust-toolchain@1.78.0
+
+    - name: Install binstall
+      uses: cargo-bins/cargo-binstall@main
+
     - name: Install cargo-msrv
-      run: cargo install cargo-msrv --all-features
+      run: cargo binstall --no-confirm cargo-msrv
+
     - name: Run cargo-msrv
-      run: cargo msrv verify --output-format json
-    - name: Run cargo-msrv on verification failure
-      if: ${{ failure() }}
-      run: cargo msrv find --output-format json
+      run: sh scripts/ci/check_msrv.sh
+
+  minimal_versions:
+    env: 
+      SQLX_OFFLINE: true
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: Swatinem/rust-cache@v2
+
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@nightly
+
+    - name: Install binstall
+      uses: cargo-bins/cargo-binstall@main
+
+    - name: Install cargo-hack
+      run: cargo binstall --no-confirm cargo-hack
+
+    - name: Install cargo-minimal-versions
+      run: cargo binstall --no-confirm cargo-minimal-versions
+
+    - name: Run
+      run: sh scripts/ci/check_minimum_versions.sh

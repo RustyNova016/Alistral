@@ -1,0 +1,74 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT\n                    labels.*\n                FROM \n                    releases\n                    INNER JOIN label_infos ON releases.id = label_infos.release\n                    INNER JOIN labels ON label_infos.label = labels_gid_redirect.gid\n                    INNER JOIN labels_gid_redirect ON labels_gid_redirect.new_id = labels.id\n                WHERE\n                    releases.id = ?",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "mbid",
+        "ordinal": 1,
+        "type_info": "Text"
+      },
+      {
+        "name": "name",
+        "ordinal": 2,
+        "type_info": "Text"
+      },
+      {
+        "name": "label_type",
+        "ordinal": 3,
+        "type_info": "Text"
+      },
+      {
+        "name": "sort_name",
+        "ordinal": 4,
+        "type_info": "Text"
+      },
+      {
+        "name": "disambiguation",
+        "ordinal": 5,
+        "type_info": "Text"
+      },
+      {
+        "name": "country",
+        "ordinal": 6,
+        "type_info": "Text"
+      },
+      {
+        "name": "label_code",
+        "ordinal": 7,
+        "type_info": "Integer"
+      },
+      {
+        "name": "annotation",
+        "ordinal": 8,
+        "type_info": "Text"
+      },
+      {
+        "name": "full_update_date",
+        "ordinal": 9,
+        "type_info": "Integer"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  "hash": "1b0dbd988f063ce634b3c16c1aadd97baecfa0b7606bbd51a87a980598d55f57"
+}

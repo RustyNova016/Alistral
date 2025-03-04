@@ -1,0 +1,44 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT * FROM `artist_credits_item` WHERE artist_credit = ? ORDER BY position",
+  "describe": {
+    "columns": [
+      {
+        "name": "artist_credit",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "position",
+        "ordinal": 1,
+        "type_info": "Integer"
+      },
+      {
+        "name": "name",
+        "ordinal": 2,
+        "type_info": "Text"
+      },
+      {
+        "name": "artist_gid",
+        "ordinal": 3,
+        "type_info": "Text"
+      },
+      {
+        "name": "join_phrase",
+        "ordinal": 4,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "8262fb860f662f575eb365badaf8316478838df837ee6624f64861cbba3241b4"
+}
