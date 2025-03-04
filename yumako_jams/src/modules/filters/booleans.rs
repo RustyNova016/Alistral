@@ -9,6 +9,7 @@ use streamies::Streamies;
 
 use crate::aliases::LayerResult;
 use crate::aliases::RadioStream;
+use crate::client::YumakoClient;
 use crate::json::radio::Radio;
 use crate::modules::radio_module::RadioModule;
 
@@ -19,8 +20,12 @@ pub struct AndFilter {
 }
 
 impl RadioModule for AndFilter {
-    fn create_stream(self, mut stream: RadioStream<'_>) -> LayerResult<'_> {
-        let other_radio = self.radio_schema.to_stream(self.radio)?;
+    fn create_stream<'a>(
+        self,
+        mut stream: RadioStream<'a>,
+        client: &'a YumakoClient,
+    ) -> LayerResult<'a> {
+        let other_radio = self.radio_schema.to_stream(client, self.radio)?;
 
         // We create a stream here to capture the other stream collection as part of the first poll's work
         // If we don't do that, we force having a to read a whole radio upon compilation,

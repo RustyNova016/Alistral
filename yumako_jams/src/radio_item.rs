@@ -14,3 +14,12 @@ impl Deref for RadioItem {
         &self.recording
     }
 }
+
+impl From<RecordingWithListens> for RadioItem {
+    fn from(value: RecordingWithListens) -> Self {
+        Self {
+            recording: value,
+            score: 0,
+        }
+    }
+}
