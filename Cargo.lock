@@ -90,7 +90,6 @@ dependencies = [
  "serde",
  "serde_json",
  "serial_test",
- "sonartra",
  "sqlx",
  "strsim",
  "strum_macros",
@@ -100,6 +99,7 @@ dependencies = [
  "tracing-indicatif",
  "tracing-subscriber",
  "tuillez",
+ "yumako_jams",
  "zip",
 ]
 
@@ -3304,24 +3304,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "sonartra"
-version = "0.1.0"
-dependencies = [
- "alistral_core",
- "async-fn-stream",
- "chrono",
- "futures",
- "i_splits",
- "json",
- "musicbrainz-db-lite",
- "serde",
- "serde_json",
- "streamies",
- "thiserror",
- "tuillez",
-]
-
-[[package]]
 name = "spin"
 version = "0.9.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4569,6 +4551,24 @@ dependencies = [
  "quote",
  "syn 2.0.98",
  "synstructure",
+]
+
+[[package]]
+name = "yumako_jams"
+version = "0.1.0"
+dependencies = [
+ "alistral_core",
+ "async-fn-stream",
+ "chrono",
+ "futures",
+ "i_splits",
+ "json",
+ "musicbrainz-db-lite",
+ "serde",
+ "serde_json",
+ "streamies",
+ "thiserror",
+ "tuillez",
 ]
 
 [[package]]
