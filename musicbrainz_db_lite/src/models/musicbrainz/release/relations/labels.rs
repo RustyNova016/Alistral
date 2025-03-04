@@ -74,13 +74,14 @@ impl Release {
 #[cfg(test)]
 mod tests {
     use crate::database::client::DBClient;
+    use crate::database::pool::DBLitePoolExt as _;
     use crate::models::musicbrainz::release::Release;
 
     #[tokio::test]
     #[serial_test::serial]
     async fn should_get_labels_from_release() {
         let client = DBClient::connect_in_memory_and_create().await.unwrap();
-        let conn = &mut *client.connection.acquire_guarded().await;
+        let conn = &mut *client.connection.get_raw_connection().await.unwrap();
 
         // Test values. Feel free to add edge cases here
         // (Release MBID, RG MBID)

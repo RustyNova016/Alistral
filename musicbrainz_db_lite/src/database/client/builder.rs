@@ -9,10 +9,10 @@ use listenbrainz::raw::Client as ListenbrainzClient;
 use musicbrainz_rs_nova::client::MusicBrainzClient;
 use sqlx::sqlite::SqliteConnectOptions;
 use sqlx::sqlite::SqliteJournalMode;
-use sqlx::Connection as _;
-use sqlx::SqliteConnection;
 
-use crate::database::db_connection::DbConnection;
+use crate::database::pool::DBLitePool;
+use crate::database::pool::DBLitePoolExt;
+use crate::database::pool::PoolManager;
 
 use super::DBClient;
 
@@ -71,17 +71,15 @@ impl<MBClient, LBClient> ClientBuilder<DatabaseFile, (), MBClient, LBClient> {
 
     pub async fn connect(
         self,
-    ) -> Result<ClientBuilder<DatabaseFile, DbConnection, MBClient, LBClient>, crate::Error> {
+    ) -> Result<ClientBuilder<DatabaseFile, DBLitePool, MBClient, LBClient>, crate::Error> {
         let optconn = SqliteConnectOptions::from_str(
             self.database_location.clone().unwrap().to_str().unwrap(),
         )?
         .journal_mode(SqliteJournalMode::Wal)
         .busy_timeout(Duration::from_millis(60000));
 
-        let connection = SqliteConnection::connect_with(&optconn).await?;
-
         Ok(ClientBuilder {
-            connection: DbConnection::new(connection),
+            connection: PoolManager::create_pool(optconn),
             database_location: self.database_location,
             database_type: self.database_type,
             musicbrainz_client: self.musicbrainz_client,
@@ -91,11 +89,11 @@ impl<MBClient, LBClient> ClientBuilder<DatabaseFile, (), MBClient, LBClient> {
 
     pub async fn connect_and_migrate(
         self,
-    ) -> Result<ClientBuilder<DatabaseFile, DbConnection, MBClient, LBClient>, crate::Error> {
+    ) -> Result<ClientBuilder<DatabaseFile, DBLitePool, MBClient, LBClient>, crate::Error> {
         let new = self.connect().await?;
 
         musicbrainz_db_lite_schema::create_and_migrate(
-            &mut *new.connection.acquire_guarded().await,
+            &mut *new.connection.get_raw_connection().await?,
         )
         .await?;
 
@@ -106,17 +104,17 @@ impl<MBClient, LBClient> ClientBuilder<DatabaseFile, (), MBClient, LBClient> {
 impl<MBClient, LBClient> ClientBuilder<InMemory, (), MBClient, LBClient> {
     pub async fn connect_and_migrate(
         self,
-    ) -> Result<ClientBuilder<InMemory, DbConnection, MBClient, LBClient>, crate::Error> {
+    ) -> Result<ClientBuilder<InMemory, DBLitePool, MBClient, LBClient>, crate::Error> {
         let optconn = SqliteConnectOptions::from_str(":memory:")?
             .journal_mode(SqliteJournalMode::Wal)
             .busy_timeout(Duration::from_millis(60000));
 
-        let mut connection = SqliteConnection::connect_with(&optconn).await?;
-
-        musicbrainz_db_lite_schema::create_and_migrate(&mut connection).await?;
+        let pool = PoolManager::create_pool(optconn);
+        musicbrainz_db_lite_schema::create_and_migrate(&mut *pool.get_raw_connection().await?)
+            .await?;
 
         Ok(ClientBuilder {
-            connection: DbConnection::new(connection),
+            connection: pool,
             database_location: self.database_location,
             database_type: self.database_type,
             musicbrainz_client: self.musicbrainz_client,
@@ -179,7 +177,7 @@ impl<Loc, DbConn, MBClient> ClientBuilder<Loc, DbConn, MBClient, ()> {
     }
 }
 
-impl<Loc> ClientBuilder<Loc, DbConnection, Arc<MusicBrainzClient>, Arc<ListenbrainzClient>> {
+impl<Loc> ClientBuilder<Loc, DBLitePool, Arc<MusicBrainzClient>, Arc<ListenbrainzClient>> {
     pub fn build(self) -> DBClient {
         DBClient {
             connection: self.connection,

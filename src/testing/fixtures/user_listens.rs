@@ -12,11 +12,11 @@ pub async fn get_test_user_listens() -> ListenCollection {
         .user("RustyNova")
         .build()
         .fetch(
-            &mut *ALISTRAL_CLIENT
+            &mut ALISTRAL_CLIENT
                 .musicbrainz_db
-                .connection
-                .acquire_guarded()
-                .await,
+                .get_raw_connection()
+                .await
+                .expect("Couldn't connect to the database"),
             &ALISTRAL_CLIENT,
         )
         .await
@@ -25,11 +25,11 @@ pub async fn get_test_user_listens() -> ListenCollection {
 
 pub async fn get_test_user_recording_with_listens() -> RecordingWithListensCollection {
     RecordingWithListensCollection::from_listencollection(
-        &mut *ALISTRAL_CLIENT
+        &mut ALISTRAL_CLIENT
             .musicbrainz_db
-            .connection
-            .acquire_guarded()
-            .await,
+            .get_raw_connection()
+            .await
+            .expect("Couldn't connect to the database"),
         &ALISTRAL_CLIENT,
         get_test_user_listens().await,
     )

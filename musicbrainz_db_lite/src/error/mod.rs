@@ -1,3 +1,4 @@
+use deadpool::managed::PoolError;
 use thiserror::Error;
 
 #[derive(Error, Debug)]
@@ -32,4 +33,7 @@ pub enum Error {
 
     #[error(transparent)]
     IOError(#[from] std::io::Error),
+
+    #[error(transparent)]
+    DeadpoolError(#[from] PoolError<sqlx::Error>),
 }

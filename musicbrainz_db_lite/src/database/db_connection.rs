@@ -2,14 +2,18 @@ use std::sync::Arc;
 
 use async_fn_stream::try_fn_stream;
 use futures::TryStreamExt as _;
+use sqlx::sqlite::SqliteConnectOptions;
+use sqlx::Connection as _;
 use sqlx::Executor;
 use sqlx::Sqlite;
+use sqlx::SqliteConnection;
 use tokio::sync::Mutex;
+use tokio::sync::OwnedMutexGuard;
 
 /// A wrapper arround sqlx's Sqlite connection.
 ///
 /// Sqlite can only accept one write transaction at the time.
-/// If multiple write transations are requested, they will be run one after another, in a first in, last out, order.
+/// If multiple write transations are requested, they will be run one after another, in a first in, last out order.
 ///
 /// This struct allow to change this order, by providing a first in, first out `Mutex`. This also prevent hitting write timeouts.
 /// This doesn't cover other application using the database at the same time, but it's better than nothing
@@ -23,6 +27,19 @@ impl DbConnection {
 
     pub async fn acquire_guarded(&self) -> tokio::sync::MutexGuard<'_, sqlx::SqliteConnection> {
         self.0.lock().await
+    }
+
+    pub async fn connect_with(config: &SqliteConnectOptions) -> Result<Self, sqlx::Error> {
+        let inner = SqliteConnection::connect_with(config).await?;
+        Ok(Self::new(inner))
+    }
+
+    pub async fn ping(&self) -> Result<(), sqlx::Error> {
+        self.0.lock().await.ping().await
+    }
+
+    pub async fn take(self) -> OwnedMutexGuard<sqlx::SqliteConnection> {
+        self.0.lock_owned().await
     }
 }
 
