@@ -2202,7 +2202,7 @@ dependencies = [
  "const_format",
  "extend",
  "futures",
- "itertools 0.14.0",
+ "itertools 0.13.0",
  "listenbrainz",
  "log",
  "macon",
