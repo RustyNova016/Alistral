@@ -81,7 +81,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sqlx",
- "streamies",
+ "streamies 0.2.2",
  "strsim",
  "strum_macros",
  "symphonize",
@@ -3354,24 +3354,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "sonartra"
-version = "0.1.0"
-dependencies = [
- "alistral_core",
- "async-fn-stream",
- "chrono",
- "futures",
- "i_splits",
- "json",
- "musicbrainz-db-lite",
- "serde",
- "serde_json",
- "streamies",
- "thiserror",
- "tuillez",
-]
-
-[[package]]
 name = "spin"
 version = "0.9.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3592,6 +3574,16 @@ name = "stable_deref_trait"
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a8f112729512f8e442d81f95a8a7ddf2b7c6b8a1a6f509a95864142b30cab2d3"
+
+[[package]]
+name = "streamies"
+version = "0.1.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "085244a9c5b9e427a605655010857732850965499a0f91d31493db618441503e"
+dependencies = [
+ "futures",
+ "pin-project-lite",
+]
 
 [[package]]
 name = "streamies"
@@ -4787,6 +4779,24 @@ dependencies = [
  "quote",
  "syn 2.0.104",
  "synstructure",
+]
+
+[[package]]
+name = "yumako_jams"
+version = "0.1.0"
+dependencies = [
+ "alistral_core",
+ "async-fn-stream",
+ "chrono",
+ "futures",
+ "i_splits",
+ "json",
+ "musicbrainz-db-lite",
+ "serde",
+ "serde_json",
+ "streamies 0.1.6",
+ "thiserror",
+ "tuillez",
 ]
 
 [[package]]

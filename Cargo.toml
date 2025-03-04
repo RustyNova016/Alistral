@@ -9,7 +9,7 @@ members = [
     "musicbrainz_db_lite/musicbrainz_db_lite_schema", 
     "symphonize", 
     "sequelles",
-    "sonartra"
+    "yumako_jams"
 ]
 resolver = "3"
 
