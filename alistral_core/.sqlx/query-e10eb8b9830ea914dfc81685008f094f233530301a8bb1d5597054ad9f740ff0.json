@@ -1,6 +1,6 @@
 {
   "db_name": "SQLite",
-  "query": "\n                    SELECT\n                        *\n                    FROM\n                        listens\n                    WHERE\n                        listened_at = ?\n                        AND recording_msid = ?\n                        AND user = ?;",
+  "query": "\n                    SELECT\n                        *\n                    FROM\n                        listens\n                    WHERE\n                        listened_at = ?\n                        AND recording_msid = ?\n                        AND LOWER(listens.user) = LOWER(?)",
   "describe": {
     "columns": [
       {
@@ -40,5 +40,5 @@
       true
     ]
   },
-  "hash": "af202039ef6a128a1a01c2b9ada5dd36cc2f8995945d43c9e855014804ff1047"
+  "hash": "e10eb8b9830ea914dfc81685008f094f233530301a8bb1d5597054ad9f740ff0"
 }

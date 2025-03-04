@@ -16,6 +16,8 @@ resolver = "3"
 inherits = "release"
 lto = "thin"
 
+[profile.dev.package.sqlx-macros]
+opt-level = 3
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
