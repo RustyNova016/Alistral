@@ -5,6 +5,7 @@ use serde_json::Value;
 
 use crate::aliases::LayerResult;
 use crate::aliases::RadioStream;
+use crate::client::YumakoClient;
 
 pub trait RadioModule: DeserializeOwned {
     fn create(
@@ -21,5 +22,9 @@ pub trait RadioModule: DeserializeOwned {
         .map_err(crate::Error::VariableReadError)
     }
 
-    fn create_stream(self, stream: RadioStream<'_>) -> LayerResult<'_>;
+    fn create_stream<'a>(
+        self,
+        stream: RadioStream<'a>,
+        client: &'a YumakoClient,
+    ) -> LayerResult<'a>;
 }

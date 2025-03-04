@@ -11,6 +11,7 @@ use tuillez::extensions::chrono_exts::DurationExt as _;
 
 use crate::aliases::LayerResult;
 use crate::aliases::RadioStream;
+use crate::client::YumakoClient;
 use crate::modules::radio_module::RadioModule;
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -19,7 +20,7 @@ pub struct CooldownFilter {
 }
 
 impl RadioModule for CooldownFilter {
-    fn create_stream(self, stream: RadioStream<'_>) -> LayerResult<'_> {
+    fn create_stream<'a>(self, stream: RadioStream<'a>, _: &'a YumakoClient) -> LayerResult<'a> {
         let cooldown = Duration::from_human_string(&self.duration).map_err(|_| {
             crate::Error::VariableDecodeError(
                 "duration".to_string(),
