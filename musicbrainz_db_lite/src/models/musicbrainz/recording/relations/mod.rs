@@ -81,13 +81,14 @@ impl Recording {
 mod tests {
 
     use crate::database::client::DBClient;
+    use crate::database::pool::DBLitePoolExt as _;
     use crate::models::musicbrainz::recording::Recording;
 
     #[tokio::test]
     #[serial_test::serial]
     async fn should_get_release_group_from_release() {
         let client = DBClient::connect_in_memory_and_create().await.unwrap();
-        let conn = &mut *client.connection.acquire_guarded().await;
+        let conn = &mut *client.connection.get_raw_connection().await.unwrap();
 
         // Test values. Feel free to add edge cases here
         // (Recording MBID, Release MBID)
@@ -120,7 +121,7 @@ mod tests {
     #[serial_test::serial]
     async fn should_get_original_mix_from_remix() {
         let client = DBClient::connect_in_memory_and_create().await.unwrap();
-        let conn = &mut *client.connection.acquire_guarded().await;
+        let conn = &mut *client.connection.get_raw_connection().await.unwrap();
 
         // Test values. Feel free to add edge cases here
         // (Remix Recording MBID, Original Recording MBID)

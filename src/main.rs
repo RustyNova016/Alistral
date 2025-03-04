@@ -35,9 +35,9 @@ async fn run_cli(cli: Cli) -> bool {
     // Set up the database
     let conn = &mut *ALISTRAL_CLIENT
         .musicbrainz_db
-        .connection
-        .acquire_guarded()
-        .await;
+        .get_raw_connection()
+        .await
+        .expect("Couldn't connect to the database");
 
     match cli.run(conn).await {
         Result::Ok(val) => val,
@@ -49,9 +49,9 @@ async fn post_run() {
     let alistral_client = create_client().await;
     let conn = &mut *alistral_client
         .musicbrainz_db
-        .connection
-        .acquire_guarded()
-        .await;
+        .get_raw_connection()
+        .await
+        .expect("Couldn't connect to the database");
 
     debug!("Cleaning some old entries...");
     cleanup_database(conn)
