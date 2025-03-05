@@ -2,6 +2,7 @@ use core::future::ready;
 
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use futures::StreamExt;
+use futures::TryStreamExt;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -17,7 +18,7 @@ pub struct MinimumListenFilter {
 impl RadioModule for MinimumListenFilter {
     fn create_stream(self, stream: RadioStream<'_>) -> LayerResult<'_> {
         Ok(stream
-            .filter(move |ele| ready(ele.listen_count() >= self.minimum))
+            .try_filter(move |ele| ready(ele.listen_count() >= self.minimum))
             .boxed())
     }
 }

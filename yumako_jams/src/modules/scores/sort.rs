@@ -19,9 +19,14 @@ impl RadioModule for SortModule {
     fn create_stream(self, stream: RadioStream<'_>) -> LayerResult<'_> {
         let stream = fn_stream(|emitter| async move {
             let mut collection = stream.collect_vec().await;
+
             match self.direction {
-                SortDirection::Asc => collection.sort_by_key(|i| i.score),
-                SortDirection::Desc => collection.sort_by_key(|i| Reverse(i.score)),
+                SortDirection::Asc => {
+                    collection.sort_by_key(|i| i.as_ref().map(|i| i.score).unwrap_or(-1));
+                }
+                SortDirection::Desc => {
+                    collection.sort_by_key(|i| Reverse(i.as_ref().map(|i| i.score).unwrap_or(-1)));
+                }
             }
 
             for i in collection {
