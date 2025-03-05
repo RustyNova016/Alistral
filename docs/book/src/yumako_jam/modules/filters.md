@@ -29,7 +29,7 @@ Removes all the tracks that have been recently listened.
 
 ### Inputs
 
-- `duration: String` (required): The ammount of time that should pass before allowing the track to pass.
+- `duration: String` (required): The amount of time that should pass since the last listen before allowing the track to pass.
 
 ### Example
 
