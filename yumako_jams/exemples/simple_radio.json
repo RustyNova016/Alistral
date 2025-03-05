@@ -1,0 +1,19 @@
+{
+    "name": "Simple Radio",
+    "stack": [
+        {
+            "step_type": "listen_seeder",
+            "id": "listen_seeder"
+        },
+        {
+            "step_type": "minimum_listen_filter",
+            "id": "minimum_listen_filter",
+            "inputs": {
+                "minimum": 100
+            }
+        }
+    ],
+    "inputs": {
+        "username": "listen_seeder.user"
+    }
+}
