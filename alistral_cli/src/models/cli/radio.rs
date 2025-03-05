@@ -17,6 +17,7 @@ use crate::tools::radio::listen_rate::listen_rate_radio;
 use crate::tools::radio::overdue::overdue_radio;
 use crate::tools::radio::shared::shared_radio;
 use crate::tools::radio::underrated::underrated_mix;
+use crate::tools::radio::yumako::RadioYumakoCommand;
 
 use super::common::Timeframe;
 
@@ -206,6 +207,8 @@ pub enum RadioSubcommands {
         #[arg(short, long, default_value_t = 0)]
         cooldown: u64,
     },
+
+    Yumako(RadioYumakoCommand),
 }
 
 impl RadioSubcommands {
@@ -303,6 +306,7 @@ impl RadioSubcommands {
                 )
                 .await?;
             }
+            Self::Yumako(val) => val.run(conn).await?,
         }
 
         Ok(())
