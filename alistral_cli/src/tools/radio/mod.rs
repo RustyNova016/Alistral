@@ -1,3 +1,4 @@
+pub mod yumako;
 use interzic::models::messy_recording::MessyRecording;
 use interzic::models::playlist_stub::PlaylistStub;
 use interzic::models::services::listenbrainz::Listenbrainz;
