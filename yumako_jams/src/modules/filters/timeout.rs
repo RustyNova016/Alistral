@@ -4,6 +4,7 @@ use std::collections::HashMap;
 use chrono::DateTime;
 use chrono::Utc;
 use futures::StreamExt as _;
+use futures::TryStreamExt;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -19,7 +20,7 @@ pub struct TimeoutFilter {
 impl RadioModule for TimeoutFilter {
     fn create_stream(self, stream: RadioStream<'_>) -> LayerResult<'_> {
         Ok(stream
-            .filter(move |r| {
+            .try_filter(move |r| {
                 ready(
                     self.timeouts
                         .get(&r.entity().mbid)

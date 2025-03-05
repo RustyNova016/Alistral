@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
-use futures::stream;
 use futures::StreamExt as _;
+use futures::stream;
 use serde::Deserialize;
 use serde::Serialize;
 use serde_json::Value;

@@ -36,11 +36,13 @@ impl Layer {
         match self.step_type.as_str() {
             //"listen_seeder" => listen_seeder(stream, self.variables),
             "and_filter" => AndFilter::create(self.inputs, variables)?.create_stream(stream),
-            "cooldown_filter" => CooldownFilter::create(self.inputs, variables)?.create_stream(stream),
+            "cooldown_filter" => {
+                CooldownFilter::create(self.inputs, variables)?.create_stream(stream)
+            }
             "minimum_listen_filter" => {
                 MinimumListenFilter::create(self.inputs, variables)?.create_stream(stream)
-            },
-            "sort_module" => {SortModule::create(self.inputs, variables)?.create_stream(stream)}
+            }
+            "sort_module" => SortModule::create(self.inputs, variables)?.create_stream(stream),
             "timeout_filter" => {
                 TimeoutFilter::create(self.inputs, variables)?.create_stream(stream)
             }

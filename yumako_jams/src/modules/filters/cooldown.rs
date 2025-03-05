@@ -4,6 +4,7 @@ use alistral_core::datastructures::listen_collection::traits::ListenCollectionRe
 use chrono::Duration;
 use chrono::Utc;
 use futures::StreamExt as _;
+use futures::TryStreamExt;
 use serde::Deserialize;
 use serde::Serialize;
 use tuillez::extensions::chrono_exts::DurationExt as _;
@@ -19,15 +20,16 @@ pub struct CooldownFilter {
 
 impl RadioModule for CooldownFilter {
     fn create_stream(self, stream: RadioStream<'_>) -> LayerResult<'_> {
-        let cooldown =
-            Duration::from_human_string(&self.duration).map_err(|_| crate::Error::VariableDecodeError(
+        let cooldown = Duration::from_human_string(&self.duration).map_err(|_| {
+            crate::Error::VariableDecodeError(
                 "duration".to_string(),
                 "The duration couldn't be parsed. Make sure it fits the `humantime` specification"
                     .to_string(),
-            ))?;
+            )
+        })?;
 
         Ok(stream
-            .filter(move |r| {
+            .try_filter(move |r| {
                 let Some(last_listen_date) = r.latest_listen_date() else {
                     return ready(true);
                 };
