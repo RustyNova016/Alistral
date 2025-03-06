@@ -1,4 +1,6 @@
 use deadpool::managed;
+use deadpool::managed::Object;
+use deadpool::managed::PoolError;
 use sqlx::sqlite::SqliteConnectOptions;
 use sqlx::Connection as _;
 use sqlx::SqliteConnection;
@@ -35,3 +37,7 @@ impl managed::Manager for RawPoolManager {
 
 /// A connection pool of raw `SqliteConnection`. Prefer using [`DBLitePool`] instead
 pub type RawConnectionPool = managed::Pool<RawPoolManager>;
+
+pub type RawPoolError = PoolError<sqlx::Error>;
+
+pub type RawPoolResult = Result<Object<RawPoolManager>, RawPoolError>;

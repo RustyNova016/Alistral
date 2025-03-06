@@ -8,7 +8,7 @@ use musicbrainz_rs_nova::client::MusicBrainzClient;
 use crate::database::client::builder::ClientBuilder;
 use crate::database::pool::DBLitePool;
 use crate::database::pool::DBLitePoolExt;
-use crate::database::pool::PoolManager;
+use crate::database::pool::DBLitePoolResult;
 use crate::database::raw_conn_pool::RawPoolManager;
 
 pub mod builder;
@@ -26,10 +26,9 @@ impl DBClient {
         ClientBuilder::default()
     }
 
-    pub async fn get_connection(&self) -> Result<Object<PoolManager>, PoolError<crate::Error>> {
+    pub async fn get_connection(&self) -> DBLitePoolResult {
         self.connection.get().await
     }
-
     pub async fn get_raw_connection(
         &self,
     ) -> Result<Object<RawPoolManager>, PoolError<sqlx::Error>> {

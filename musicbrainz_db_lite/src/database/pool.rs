@@ -46,6 +46,10 @@ impl managed::Manager for PoolManager {
 /// The database pool with sync protected connections
 pub type DBLitePool = managed::Pool<PoolManager>;
 
+pub type DBLitePoolError = PoolError<crate::Error>;
+
+pub type DBLitePoolResult = Result<Object<PoolManager>, DBLitePoolError>;
+
 #[ext]
 pub impl DBLitePool {
     #[allow(async_fn_in_trait)]

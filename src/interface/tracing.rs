@@ -24,6 +24,7 @@ use crate::models::cli::Cli;
 pub fn init_tracer(cli: &Cli) {
     let main_filter = filter::Targets::new()
         .with_target("alistral", Level::DEBUG)
+        .with_target("alistral_core", Level::DEBUG)
         .with_target("interzic", Level::DEBUG);
 
     let indicatif_layer = IndicatifLayer::new()
@@ -103,7 +104,7 @@ fn get_domain(writer: &mut format::Writer<'_>, metadata: &Metadata<'static>) -> 
     let content = match top_crate {
         "alistral" => "[Alistral]".alistral_green(),
         "alistral_core" => "[Alistral]".alistral_green(),
-        "interzic" => "[Interzic]".interzic_red(),
+        "interzic" => "[Interzic]".interzic_turquoize(),
         _ => format!("[{}]", top_crate),
     };
 
