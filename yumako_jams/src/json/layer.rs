@@ -59,7 +59,7 @@ impl Layer {
             }
             "timeout_filter" => {
                 TimeoutFilter::create(self.inputs, variables)?.create_stream(stream, client)
-            },
+            }
             "overdue_duration_scorer" => {
                 OverdueDurationScorer::create(self.inputs, variables)?.create_stream(stream, client)
             }
