@@ -56,6 +56,26 @@ Set the score to the number of listens estimated to happen in a year
 }
 ```
 
+## Overdue count scorer
+
+Set the score to the number of times the user should have listened to the track in between the latest listen and now
+
+### Inputs
+
+- `merge`
+
+### Example
+
+```json
+{
+    "step_type": "overdue_count_scorer",
+    "id": "overdue_count_scorer",
+    "inputs": {
+        "merge": "Add"
+    }
+}
+```
+
 ## Overdue duration scorer
 
 Set the score to the number of seconds elapsed since the user should have listened to the track again.
@@ -69,8 +89,8 @@ Set the score to the number of seconds elapsed since the user should have listen
 
 ```json
 {
-    "step_type": "overdue_scorer",
-    "id": "overdue_scorer",
+    "step_type": "overdue_duration_scorer",
+    "id": "overdue_duration_scorer",
     "inputs": {
         "merge": "Add"
     }

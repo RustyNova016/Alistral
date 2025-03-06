@@ -13,7 +13,8 @@ use crate::modules::filters::minimum_listens::MinimumListenFilter;
 use crate::modules::filters::timeout::TimeoutFilter;
 use crate::modules::radio_module::RadioModule;
 use crate::modules::scores::listenrate::ListenRateScorer;
-use crate::modules::scores::overdue::OverdueDurationScorer;
+use crate::modules::scores::overdue_count::OverdueCountScorer;
+use crate::modules::scores::overdue_duration::OverdueDurationScorer;
 use crate::modules::scores::sort::SortModule;
 use crate::modules::seeders::listen_seeder::ListenSeeder;
 use crate::radio_variables::RadioVariables;
@@ -59,6 +60,9 @@ impl Layer {
             }
             "timeout_filter" => {
                 TimeoutFilter::create(self.inputs, variables)?.create_stream(stream, client)
+            }
+            "overdue_count_scorer" => {
+                OverdueCountScorer::create(self.inputs, variables)?.create_stream(stream, client)
             }
             "overdue_duration_scorer" => {
                 OverdueDurationScorer::create(self.inputs, variables)?.create_stream(stream, client)
