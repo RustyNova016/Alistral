@@ -11,5 +11,5 @@ pub struct RadioInput {
     required: bool,
     pub default: Option<Value>,
     #[serde(default)]
-    hidden: bool
+    hidden: bool,
 }
