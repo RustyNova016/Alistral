@@ -4681,6 +4681,7 @@ dependencies = [
  "serde_json",
  "streamies",
  "thiserror",
+ "tracing",
  "tuillez",
 ]
 

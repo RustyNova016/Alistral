@@ -69,7 +69,7 @@ Removes all the tracks that are "in timeout".
 
 ### Inputs
 
-- `timeouts: Timeout`: The list of track timeouts. In the context of Alistral, those are automatically provided
+- `timeouts: Timeout`: The list of track timeouts.
 
 ### Example
 
