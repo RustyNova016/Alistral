@@ -25,8 +25,8 @@ pub trait AlistralColors: Display {
         self.on_truecolor(0, 165, 93).to_string()
     }
 
-    fn interzic_red(&self) -> String {
-        self.truecolor(255, 75, 75).to_string()
+    fn interzic_turquoize(&self) -> String {
+        self.truecolor(0, 255, 255).to_string()
     }
 
     fn as_title(&self) -> String {
