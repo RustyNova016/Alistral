@@ -4,6 +4,7 @@ pub mod error;
 pub mod json;
 pub mod modules;
 pub mod radio_item;
+mod radio_stream;
 pub mod radio_variables;
 
 pub use crate::error::Error;
