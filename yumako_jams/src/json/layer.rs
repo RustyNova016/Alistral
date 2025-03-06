@@ -12,6 +12,7 @@ use crate::modules::filters::cooldown::CooldownFilter;
 use crate::modules::filters::minimum_listens::MinimumListenFilter;
 use crate::modules::filters::timeout::TimeoutFilter;
 use crate::modules::radio_module::RadioModule;
+use crate::modules::scores::listenrate::ListenRateScorer;
 use crate::modules::scores::sort::SortModule;
 use crate::modules::seeders::listen_seeder::ListenSeeder;
 use crate::radio_variables::RadioVariables;
@@ -37,14 +38,17 @@ impl Layer {
         let variables = radio_variables.get_layer_variables(&self.id);
 
         match self.step_type.as_str() {
-            "listen_seeder" => {
-                ListenSeeder::create(self.inputs, variables)?.create_stream(stream, client)
-            }
             "and_filter" => {
                 AndFilter::create(self.inputs, variables)?.create_stream(stream, client)
             }
             "cooldown_filter" => {
                 CooldownFilter::create(self.inputs, variables)?.create_stream(stream, client)
+            }
+            "listen_seeder" => {
+                ListenSeeder::create(self.inputs, variables)?.create_stream(stream, client)
+            }
+            "listenrate_scorer" => {
+                ListenRateScorer::create(self.inputs, variables)?.create_stream(stream, client)
             }
             "minimum_listen_filter" => {
                 MinimumListenFilter::create(self.inputs, variables)?.create_stream(stream, client)
