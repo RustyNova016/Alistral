@@ -9,7 +9,7 @@
             "step_type": "minimum_listen_filter",
             "id": "minimum_listen_filter",
             "inputs": {
-                "count": 5
+                "minimum": 5
             }
         },
         {
@@ -25,14 +25,27 @@
                         }
                     ],
                     "inputs": {
-                        "user": "listen_seeder.username"
+                        "username": {
+                            "targets": [
+                                "listen_seeder.user"
+                            ]
+                        }
                     }
                 }
             }
         }
     ],
     "inputs": {
-        "minimum_listens": "minimum_listen_filter.count",
-        "username": "and_filter.radio.user"
+        "minimum_listens": {
+            "targets": [
+                "minimum_listen_filter.minimum"
+            ]
+        },
+        "username": {
+            "targets": [
+                "listen_seeder.user",
+                "and_filter.radio.username"
+            ]
+        }
     }
 }
