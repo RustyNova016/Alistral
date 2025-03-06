@@ -6,6 +6,7 @@ use serde::Deserialize;
 use serde::Serialize;
 use serde_json::Value;
 use streamies::Streamies;
+use tracing::debug;
 
 use crate::aliases::LayerResult;
 use crate::aliases::RadioStream;
@@ -48,8 +49,10 @@ impl RadioModule for AndFilter {
             while let Some(track) = stream.next().await {
                 match track {
                     Ok(track) => {
-                        if other_tracks.contains(&track) {
+                        if other_tracks.iter().any(|other_track| track.entity().mbid == other_track.entity().mbid ) {
                             emitter.emit(track).await;
+                        } else {
+                            debug!("Removing `{}` from the radio", track.entity().title);
                         }
                     }
                     Err(err) => {

@@ -19,7 +19,7 @@ pub struct RadioYumakoCommand {}
 impl RadioYumakoCommand {
     pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> Result<(), crate::Error> {
         // Open the file in read-only mode with buffer.
-        let file = File::open("./yumako_jams/exemples/simple_radio.json").unwrap();
+        let file = File::open("./yumako_jams/exemples/test_radio.json").unwrap();
         let reader = BufReader::new(file);
 
         // Read the JSON contents of the file as an instance of `User`.
