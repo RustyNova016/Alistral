@@ -4704,6 +4704,7 @@ dependencies = [
  "alistral_core",
  "async-fn-stream",
  "chrono",
+ "extend",
  "futures",
  "i_splits",
  "json",

@@ -49,7 +49,10 @@ impl RadioModule for AndFilter {
             while let Some(track) = stream.next().await {
                 match track {
                     Ok(track) => {
-                        if other_tracks.iter().any(|other_track| track.entity().mbid == other_track.entity().mbid ) {
+                        if other_tracks
+                            .iter()
+                            .any(|other_track| track.entity().mbid == other_track.entity().mbid)
+                        {
                             emitter.emit(track).await;
                         } else {
                             debug!("Removing `{}` from the radio", track.entity().title);
