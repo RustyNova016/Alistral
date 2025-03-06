@@ -4594,6 +4594,7 @@ dependencies = [
  "i_splits",
  "json",
  "musicbrainz-db-lite",
+ "rust_decimal",
  "serde",
  "serde_json",
  "streamies 0.1.6",
