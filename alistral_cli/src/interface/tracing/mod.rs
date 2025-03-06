@@ -36,7 +36,8 @@ pub fn init_tracer(cli: &Cli) -> WorkerGuard {
         .with_target("alistral_core", Level::DEBUG)
         .with_target("musicbrainz_db_lite", Level::DEBUG)
         .with_target("interzic", Level::DEBUG)
-        .with_target("symphonize", Level::DEBUG);
+        .with_target("symphonize", Level::DEBUG)
+        .with_target("yumako_jams", Level::DEBUG);
 
     let indicatif_layer = IndicatifLayer::new()
         .with_progress_style(COUNT_STYLE.to_owned())
@@ -170,6 +171,7 @@ fn get_domain(writer: &mut format::Writer<'_>, metadata: &Metadata<'static>) -> 
         "alistral_core" => "[Alistral]".alistral_green(),
         "musicbrainz_db_lite" => "[MusicBrainz DB]".db_lite_purple(),
         "interzic" => "[Interzic]".interzic_turquoize(),
+        "yumako_jams" => "[Yumako Jams]".yumako_red(),
         _ => format!("[{top_crate}]"),
     };
 
