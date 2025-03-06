@@ -29,6 +29,10 @@ pub trait AlistralColors: Display {
         self.truecolor(0, 255, 255).to_string()
     }
 
+    fn yumako_red(&self) -> String {
+        self.truecolor(255, 75, 75).to_string()
+    }
+
     fn db_lite_purple(&self) -> String {
         self.truecolor(175, 100, 220).to_string()
     }

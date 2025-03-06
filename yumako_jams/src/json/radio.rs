@@ -10,13 +10,14 @@ use crate::aliases::LayerResult;
 use crate::aliases::RadioStream;
 use crate::client::YumakoClient;
 use crate::json::layer::Layer;
+use crate::json::radio_input::RadioInput;
 use crate::radio_variables::RadioVariables;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct Radio {
     name: String,
     stack: Vec<Layer>,
-    inputs: HashMap<String, String>,
+    inputs: HashMap<String, RadioInput>,
 }
 
 impl Radio {
