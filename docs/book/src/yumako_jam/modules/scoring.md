@@ -1,7 +1,7 @@
 # Scoring
 
 Having a flux of tracks is nice and all, but having them randomly arranged doesn't make a good radio.
-That's where "scoring" comes in play. Each track can get assigned a score, then sorted accordingly.
+That's where "scoring" comes in play. Each track can get assigned a score, then sorted accordingly. This score is a decimal number
 
 ## Merging scores
 
@@ -38,7 +38,7 @@ This [consume](../consuming_stream.md) the entire stream.
 
 ## Listen rate scorer
 
-Set the score the number of listens estimated to happen in a year
+Set the score to the number of listens estimated to happen in a year
 
 ### Inputs
 
@@ -50,6 +50,27 @@ Set the score the number of listens estimated to happen in a year
 {
     "step_type": "listenrate_scorer",
     "id": "listenrate_scorer",
+    "inputs": {
+        "merge": "Add"
+    }
+}
+```
+
+## Overdue duration scorer
+
+Set the score to the number of seconds elapsed since the user should have listened to the track again.
+
+
+### Inputs
+
+- `merge`
+
+### Example
+
+```json
+{
+    "step_type": "overdue_scorer",
+    "id": "overdue_scorer",
     "inputs": {
         "merge": "Add"
     }
