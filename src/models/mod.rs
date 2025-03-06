@@ -1,3 +1,4 @@
+pub mod client;
 pub mod cli;
 pub mod clippy;
 pub mod config;

@@ -3,18 +3,18 @@ use user_compatibility::get_shared_ratio;
 use user_compatibility::get_shared_recordings_between_users;
 use user_compatibility::get_user_shared_percent;
 
-use crate::api::clients::ALISTRAL_CLIENT;
+use crate::ALISTRAL_CLIENT;
 use crate::utils::cli::await_next;
 
 pub mod user_compatibility;
 
 pub async fn compatibility_command(conn: &mut sqlx::SqliteConnection, user_a: &str, user_b: &str) {
     let user_a_recordings =
-        ListenFetchQuery::get_recordings_with_listens(conn, &ALISTRAL_CLIENT, user_a.to_string())
+        ListenFetchQuery::get_recordings_with_listens(conn, &ALISTRAL_CLIENT.core, user_a.to_string())
             .await
             .expect("Couldn't get the listened recordings");
     let user_b_recordings =
-        ListenFetchQuery::get_recordings_with_listens(conn, &ALISTRAL_CLIENT, user_b.to_string())
+        ListenFetchQuery::get_recordings_with_listens(conn, &ALISTRAL_CLIENT.core, user_b.to_string())
             .await
             .expect("Couldn't get the listened recordings");
 

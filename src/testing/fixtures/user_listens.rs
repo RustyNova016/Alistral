@@ -3,7 +3,7 @@ use alistral_core::database::fetching::listens::ListenFetchQueryReturn;
 use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use alistral_core::datastructures::listen_collection::ListenCollection;
 
-use crate::api::clients::ALISTRAL_CLIENT;
+use crate::ALISTRAL_CLIENT;
 
 pub async fn get_test_user_listens() -> ListenCollection {
     ListenFetchQuery::builder()
@@ -17,7 +17,7 @@ pub async fn get_test_user_listens() -> ListenCollection {
                 .get_raw_connection()
                 .await
                 .expect("Couldn't connect to the database"),
-            &ALISTRAL_CLIENT,
+            &ALISTRAL_CLIENT.core,
         )
         .await
         .expect("Couldn't fetch test listens")
@@ -30,7 +30,7 @@ pub async fn get_test_user_recording_with_listens() -> RecordingWithListensColle
             .get_raw_connection()
             .await
             .expect("Couldn't connect to the database"),
-        &ALISTRAL_CLIENT,
+        &ALISTRAL_CLIENT.core,
         get_test_user_listens().await,
     )
     .await

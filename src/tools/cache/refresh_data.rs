@@ -5,7 +5,7 @@ use tracing::info;
 use tuillez::pg_counted;
 use tuillez::pg_inc;
 
-use crate::api::clients::ALISTRAL_CLIENT;
+use crate::ALISTRAL_CLIENT;
 
 pub async fn refresh_data(
     conn: &mut sqlx::SqliteConnection,
@@ -18,7 +18,7 @@ pub async fn refresh_data(
         .returns(ListenFetchQueryReturn::Mapped)
         .user(username.to_string())
         .build()
-        .fetch(&mut *conn, &ALISTRAL_CLIENT)
+        .fetch(&mut *conn, &ALISTRAL_CLIENT.core)
         .await
         .expect("Couldn't fetch the new listens");
 

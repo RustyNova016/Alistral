@@ -10,7 +10,7 @@ use rust_decimal::Decimal;
 use tracing::info;
 use tuillez::extensions::chrono_exts::DurationExt as _;
 
-use crate::api::clients::ALISTRAL_CLIENT;
+use crate::ALISTRAL_CLIENT;
 use crate::models::cli::BumpCLI;
 use crate::models::config::Config;
 use crate::utils::cli::read_mbid_from_input;
@@ -33,7 +33,7 @@ pub async fn bump_command(conn: &mut sqlx::SqliteConnection, bump: BumpCLI) {
                 .returns(ListenFetchQueryReturn::Mapped)
                 .user(username.to_string())
                 .build()
-                .fetch(conn, &ALISTRAL_CLIENT)
+                .fetch(conn, &ALISTRAL_CLIENT.core)
                 .await
                 .expect("Couldn't fetch the new listens");
 

@@ -7,7 +7,7 @@ use tracing::Span;
 use tracing::instrument;
 use tracing_indicatif::span_ext::IndicatifSpanExt as _;
 
-use crate::api::clients::ALISTRAL_CLIENT;
+use crate::ALISTRAL_CLIENT;
 use crate::models::cli::radio::RadioExportTarget;
 
 pub mod circles;

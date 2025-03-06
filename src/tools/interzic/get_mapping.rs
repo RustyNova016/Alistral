@@ -6,7 +6,7 @@ use tuillez::fatal_error::FatalError;
 use tuillez::fatal_error::IntoFatal;
 use tuillez::fatal_error::OptIntoFatal;
 
-use crate::api::clients::ALISTRAL_CLIENT;
+use crate::ALISTRAL_CLIENT;
 use crate::utils::cli::read_mbid_from_input;
 
 #[derive(Parser, Debug, Clone)]

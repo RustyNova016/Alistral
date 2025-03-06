@@ -2,7 +2,7 @@ use musicbrainz_db_lite::models::musicbrainz::main_entities::MainEntity;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use regex::Regex;
 
-use crate::api::clients::ALISTRAL_CLIENT;
+use crate::ALISTRAL_CLIENT;
 use crate::models::clippy::MbClippyLint;
 use crate::models::clippy::MbClippyLintLink;
 use crate::models::clippy::lint_severity::LintSeverity;

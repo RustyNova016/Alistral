@@ -5,7 +5,7 @@ use itertools::Itertools;
 use musicbrainz_db_lite::models::listenbrainz::messybrainz_submission::MessybrainzSubmission;
 use strsim::sorensen_dice;
 
-use crate::api::clients::ALISTRAL_CLIENT;
+use crate::ALISTRAL_CLIENT;
 use crate::models::config::config_trait::ConfigFile as _;
 use crate::models::config::whitelisted_wrong_mappings::WhilistedWrongMappings;
 
@@ -18,7 +18,7 @@ pub async fn wrong_mapping(conn: &mut sqlx::SqliteConnection, username: String) 
         .returns(ListenFetchQueryReturn::Mapped)
         .user(username.to_string())
         .build()
-        .fetch(conn, &ALISTRAL_CLIENT)
+        .fetch(conn, &ALISTRAL_CLIENT.core)
         .await
         .expect("Couldn't fetch listens");
 

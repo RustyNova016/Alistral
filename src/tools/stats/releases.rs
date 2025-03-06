@@ -5,12 +5,12 @@ use alistral_core::datastructures::listen_collection::ListenCollection;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use itertools::Itertools;
 
-use crate::api::clients::ALISTRAL_CLIENT;
+use crate::ALISTRAL_CLIENT;
 use crate::utils::cli_paging::CLIPager;
 
 pub async fn stats_releases(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
     let mut groups =
-        ReleaseWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT, listens)
+        ReleaseWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT.core, listens)
             .await
             .expect("Error while fetching recordings")
             .into_iter()

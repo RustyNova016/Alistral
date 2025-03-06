@@ -6,7 +6,7 @@ use itertools::Itertools;
 use macon::Builder;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 
-use crate::api::clients::ALISTRAL_CLIENT;
+use crate::ALISTRAL_CLIENT;
 use crate::database::listenbrainz::listens::fetch_latest_listens_of_user;
 
 use super::SeederSettings;
@@ -73,7 +73,7 @@ impl ListenSeeder {
         .into();
 
         let mut recordings =
-            RecordingWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT, listens)
+            RecordingWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT.core, listens)
                 .await?;
         let minimum_listens = self.get_minimum_listens(conn).await?;
         recordings.insert_or_merge(minimum_listens);
@@ -122,7 +122,7 @@ impl ListenSeeder {
         .into();
 
         let mapped =
-            RecordingWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT, listens)
+            RecordingWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT.core, listens)
                 .await?
                 .into_iter()
                 .map(|r| {

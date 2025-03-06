@@ -7,7 +7,7 @@ use listenbrainz::raw::request::SubmitListens;
 use listenbrainz::raw::request::TrackMetadata;
 use tuillez::fatal_error::IntoFatal;
 
-use crate::api::clients::ALISTRAL_CLIENT;
+use crate::ALISTRAL_CLIENT;
 use crate::models::config::Config;
 
 #[derive(Parser, Debug, Clone)]

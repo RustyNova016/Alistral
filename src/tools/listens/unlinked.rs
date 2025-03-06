@@ -7,7 +7,7 @@ use alistral_core::datastructures::listen_collection::traits::ListenCollectionRe
 use itertools::Itertools;
 use tracing::info;
 
-use crate::api::clients::ALISTRAL_CLIENT;
+use crate::ALISTRAL_CLIENT;
 use crate::models::cli::common::SortSorterBy;
 use crate::utils::cli_paging::CLIPager;
 
@@ -22,7 +22,7 @@ pub async fn unmapped_command(
         .returns(ListenFetchQueryReturn::Unmapped)
         .user(username.to_string())
         .build()
-        .fetch(conn, &ALISTRAL_CLIENT)
+        .fetch(conn, &ALISTRAL_CLIENT.core)
         .await
         .expect("Couldn't fetch listens");
 
