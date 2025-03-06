@@ -20,6 +20,7 @@ streamies = "0.1.1"
 chrono = "0.4.40"
 rust_decimal = "1.36.0"
 tracing = "0.1.41"
+extend = "1.2.0"
 
 [lints]
 workspace = true
