@@ -89,7 +89,7 @@ impl CacheCommand {
                 if *reset {
                     delete_database(&DB_LOCATION).expect("Failed to delete the database");
                 }
-                AlistralCliClient::create().await;
+                AlistralCliClient::create_or_fatal().await;
             }
             CacheSubcommands::LoadDump { username, path } => {
                 import_listen_dump(conn, path, &Config::check_username(username)).await;

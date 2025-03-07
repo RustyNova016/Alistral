@@ -9,12 +9,15 @@ use crate::ALISTRAL_CLIENT;
 use crate::utils::cli_paging::CLIPager;
 
 pub async fn stats_release_groups(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
-    let mut groups =
-        ReleaseGroupWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT.core, listens)
-            .await
-            .expect("Error while fetching recordings")
-            .into_iter()
-            .collect_vec();
+    let mut groups = ReleaseGroupWithListensCollection::from_listencollection(
+        conn,
+        &ALISTRAL_CLIENT.core,
+        listens,
+    )
+    .await
+    .expect("Error while fetching recordings")
+    .into_iter()
+    .collect_vec();
     groups.sort_by_key(|a| Reverse(a.listen_count()));
 
     let mut pager = CLIPager::new(10);

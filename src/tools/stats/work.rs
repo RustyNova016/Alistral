@@ -47,10 +47,13 @@ pub async fn stats_works_recursive(conn: &mut sqlx::SqliteConnection, listens: L
             .await
             .expect("Error while fetching recordings");
 
-    let mut groups =
-        WorkWithListensCollection::from_recording_with_listens(conn, &ALISTRAL_CLIENT.core, recordings)
-            .await
-            .expect("Error while fetching works");
+    let mut groups = WorkWithListensCollection::from_recording_with_listens(
+        conn,
+        &ALISTRAL_CLIENT.core,
+        recordings,
+    )
+    .await
+    .expect("Error while fetching works");
 
     groups
         .add_parents_recursive(conn, &ALISTRAL_CLIENT.core)
