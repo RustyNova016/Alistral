@@ -2226,6 +2226,7 @@ dependencies = [
  "deadpool",
  "extend",
  "futures",
+ "governor",
  "itertools 0.13.0",
  "listenbrainz",
  "log",

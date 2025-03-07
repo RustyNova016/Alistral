@@ -1,14 +1,24 @@
+use core::num::NonZeroU32;
 use core::ops::DerefMut;
+use std::sync::Arc;
 
 use chrono::DateTime;
 use chrono::Duration;
 use chrono::Utc;
 use futures::join;
 use futures::FutureExt;
+use governor::Quota;
+use governor::RateLimiter;
 use listenbrainz::raw::response::UserListensListen;
 use sqlx::Acquire;
 use thiserror::Error;
-use tracing::info;
+use tracing::debug;
+use tracing::instrument;
+use tracing::Span;
+use tuillez::pg_counted;
+use tuillez::pg_inc;
+use tuillez::pg_spinner;
+use tuillez::tracing_indicatif::span_ext::IndicatifSpanExt;
 
 use crate::api::listenbrainz::listen::fetching::api::fetch_user_listens;
 use crate::models::listenbrainz::listen::Listen;
@@ -19,7 +29,18 @@ pub struct ListenFetchAPIQuery {
     from: Option<DateTime<Utc>>,
     to: Option<DateTime<Utc>>,
     count: u32,
+
+    rate_limiter: RateLimiterType,
 }
+
+type RateLimiterType = Arc<
+    RateLimiter<
+        governor::state::NotKeyed,
+        governor::state::InMemoryState,
+        governor::clock::QuantaClock,
+        governor::middleware::NoOpMiddleware<governor::clock::QuantaInstant>,
+    >,
+>;
 
 impl ListenFetchAPIQuery {
     pub fn try_new(
@@ -36,11 +57,16 @@ impl ListenFetchAPIQuery {
             return Err(ListenFetchQueryError::NoDates);
         }
 
+        let quota = Quota::per_second(NonZeroU32::new(2).unwrap())
+            .allow_burst(NonZeroU32::new(15).unwrap());
+        let rate_limiter = Arc::new(RateLimiter::direct(quota));
+
         Ok(Self {
             user,
             from,
             to,
             count,
+            rate_limiter,
         })
     }
 
@@ -53,19 +79,27 @@ impl ListenFetchAPIQuery {
 
         Ok(Self::try_new(
             user,
-            latest_listen.map(|l| l.listened_at_as_datetime()),
+            // Offset by 3 days to catch some remappings
+            latest_listen.map(|l| l.listened_at_as_datetime() - Duration::days(3)), // TODO: Add to client config
             Some(Utc::now()),
             1000,
         )?)
     }
 
+    #[instrument(skip(self, client), fields(indicatif.pb_show = tracing::field::Empty))]
     pub async fn request_and_save(&mut self, client: &DBClient) -> Result<(), crate::Error> {
+        pg_counted!(1, "Fetching Listens");
         let result = self.request(client).await?;
+
+        let oldest_ts = result.iter().map(|l| l.listened_at).min().unwrap_or(-1);
+        let latest_ts = result.iter().map(|l| l.listened_at).max().unwrap_or(-1);
 
         let mut conn = client.get_raw_connection().await?;
         let mut trans = conn.deref_mut().begin().await?;
 
-        info!("Saving listens...");
+        pg_spinner!("Saving listens...");
+        Listen::delete_listen_period(&mut trans, oldest_ts, latest_ts, &self.user).await?;
+
         for lis in result {
             Listen::insert_api_listen(&mut trans, &lis).await?;
         }
@@ -89,20 +123,20 @@ impl ListenFetchAPIQuery {
         let middle = (dur / 2) + from;
 
         Some((
-            Self::try_new(
-                self.user.clone(),
-                self.from,
-                DateTime::from_timestamp(middle + 1, 0),
-                self.count,
-            )
-            .unwrap(),
-            Self::try_new(
-                self.user.clone(),
-                DateTime::from_timestamp(middle, 0),
-                self.to,
-                self.count,
-            )
-            .unwrap(),
+            Self {
+                user: self.user.clone(),
+                from: self.from,
+                to: DateTime::from_timestamp(middle + 1, 0),
+                count: self.count,
+                rate_limiter: self.rate_limiter.clone(),
+            },
+            Self {
+                user: self.user.clone(),
+                from: DateTime::from_timestamp(middle, 0),
+                to: self.to,
+                count: self.count,
+                rate_limiter: self.rate_limiter.clone(),
+            },
         ))
     }
 
@@ -111,6 +145,8 @@ impl ListenFetchAPIQuery {
         client: &DBClient,
     ) -> Result<Vec<UserListensListen>, reqwest::Error> {
         let (mut a, mut b) = self.split().unwrap();
+
+        Span::current().pb_inc_length(1);
 
         let (a_iter, b_iter) = join!(a.request(client), b.request(client));
 
@@ -129,13 +165,14 @@ impl ListenFetchAPIQuery {
         // If the work is too big, split it
         if self
             .fetch_interval_duration()
-            .is_some_and(|d| d > Duration::days(30))
+            .is_some_and(|d| d > Duration::days(15))
         {
             return self.split_and_request(client).boxed_local().await;
         }
 
         // Fetch from the api
-        info!(
+        self.wait_for_rate_limit().await;
+        debug!(
             "Fetching listens from {} to {}",
             self.from.unwrap_or(DateTime::from_timestamp(0, 0).unwrap()),
             self.to.unwrap_or(Utc::now())
@@ -143,8 +180,8 @@ impl ListenFetchAPIQuery {
         let response = fetch_user_listens(
             client,
             &self.user,
-            self.from.map(|t| t.timestamp()),
-            self.to.map(|t| t.timestamp()),
+            self.from.map(|t| t.timestamp() - 1),
+            self.to.map(|t| t.timestamp() + 1),
             Some(self.count),
         )
         .await?;
@@ -152,6 +189,7 @@ impl ListenFetchAPIQuery {
         // Did we fetch everything?
         if self.count as u64 > response.payload.count {
             // Then everything is fine to yield!
+            pg_inc!();
             return Ok(response.payload.listens);
         }
 
@@ -167,6 +205,10 @@ impl ListenFetchAPIQuery {
 
         // Bounds set. We split and yield that
         self.split_and_request(client).boxed_local().await
+    }
+
+    async fn wait_for_rate_limit(&self) {
+        self.rate_limiter.until_ready().await;
     }
 
     fn fetch_interval_duration(&self) -> Option<Duration> {

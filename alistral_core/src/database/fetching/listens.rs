@@ -29,8 +29,11 @@ impl ListenFetchQuery {
         // Fetch the latest listens
         // ... If it's not in offline mode
         if !client.offline {
-            let mut fetch = ListenFetchAPIQuery::incremental_fetch_user(&client.musicbrainz_db, self.user.clone())
-                .await?;
+            let mut fetch = ListenFetchAPIQuery::incremental_fetch_user(
+                &client.musicbrainz_db,
+                self.user.clone(),
+            )
+            .await?;
 
             fetch.request_and_save(&client.musicbrainz_db).await?;
         }

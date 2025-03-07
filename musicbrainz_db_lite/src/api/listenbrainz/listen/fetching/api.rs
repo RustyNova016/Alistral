@@ -10,7 +10,7 @@ pub(super) async fn fetch_user_listens(
     min_ts: Option<i64>,
     max_ts: Option<i64>,
     count: Option<u32>,
-) -> Result<UserListensResponse, reqwest::Error>{
+) -> Result<UserListensResponse, reqwest::Error> {
     let mut url = format!(
         "{api_root}user/{username}/listens?count={count}",
         api_root = crate_client.listenbrainz_client.api_url(),
