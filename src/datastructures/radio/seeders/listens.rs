@@ -6,7 +6,7 @@ use itertools::Itertools;
 use macon::Builder;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 
-use crate::api::clients::ALISTRAL_CLIENT;
+use crate::ALISTRAL_CLIENT;
 use crate::database::listenbrainz::listens::fetch_latest_listens_of_user;
 
 use super::SeederSettings;
@@ -72,9 +72,12 @@ impl ListenSeeder {
         .await?
         .into();
 
-        let mut recordings =
-            RecordingWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT, listens)
-                .await?;
+        let mut recordings = RecordingWithListensCollection::from_listencollection(
+            conn,
+            &ALISTRAL_CLIENT.core,
+            listens,
+        )
+        .await?;
         let minimum_listens = self.get_minimum_listens(conn).await?;
         recordings.insert_or_merge(minimum_listens);
 
@@ -121,18 +124,21 @@ impl ListenSeeder {
         .await?
         .into();
 
-        let mapped =
-            RecordingWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT, listens)
-                .await?
-                .into_iter()
-                .map(|r| {
-                    // Extract the last X listens from the collection
-                    let listens = r
-                        .listens()
-                        .get_latest_listens(self.settings.min_listen_per_recording as usize);
-                    RecordingWithListens::new(r.recording().clone(), listens)
-                })
-                .collect_vec();
+        let mapped = RecordingWithListensCollection::from_listencollection(
+            conn,
+            &ALISTRAL_CLIENT.core,
+            listens,
+        )
+        .await?
+        .into_iter()
+        .map(|r| {
+            // Extract the last X listens from the collection
+            let listens = r
+                .listens()
+                .get_latest_listens(self.settings.min_listen_per_recording as usize);
+            RecordingWithListens::new(r.recording().clone(), listens)
+        })
+        .collect_vec();
 
         Ok(mapped.into())
     }

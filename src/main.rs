@@ -15,9 +15,9 @@ pub mod testing;
 pub mod tools;
 pub mod utils;
 
-use crate::api::clients::ALISTRAL_CLIENT;
-use crate::api::clients::create_client;
 use crate::interface::tracing::init_tracer;
+pub use crate::models::client::ALISTRAL_CLIENT;
+use crate::models::client::AlistralCliClient;
 pub use crate::models::error::Error;
 
 #[tokio::main]
@@ -46,7 +46,7 @@ async fn run_cli(cli: Cli) -> bool {
 }
 
 async fn post_run() {
-    let alistral_client = create_client().await;
+    let alistral_client = AlistralCliClient::create_or_fatal().await;
     let conn = &mut *alistral_client
         .musicbrainz_db
         .get_raw_connection()

@@ -5,7 +5,7 @@ use interzic::models::playlist_stub::PlaylistStub;
 use itertools::Itertools;
 use tracing::info;
 
-use crate::api::clients::ALISTRAL_CLIENT;
+use crate::ALISTRAL_CLIENT;
 use crate::api::listenbrainz::global_listen_counts::get_global_listen_counts;
 use crate::datastructures::radio::collector::RadioCollector;
 use crate::datastructures::radio::seeders::listens::ListenSeeder;
@@ -34,9 +34,12 @@ pub async fn underrated_mix(
         .expect_fatal("Couldn't find seed listens");
 
     // Get the all time listens
-    let user_listens =
-        ListenFetchQuery::get_recordings_with_listens(conn, &ALISTRAL_CLIENT, username.clone())
-            .await?;
+    let user_listens = ListenFetchQuery::get_recordings_with_listens(
+        conn,
+        &ALISTRAL_CLIENT.core,
+        username.clone(),
+    )
+    .await?;
 
     // Get the global listen count
     info!("[Seeding] Getting global listen counts");

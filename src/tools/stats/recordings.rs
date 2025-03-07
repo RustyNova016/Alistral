@@ -7,12 +7,12 @@ use alistral_core::datastructures::listen_collection::traits::ListenCollectionRe
 use itertools::Itertools;
 use tuillez::extensions::chrono_exts::DurationExt as _;
 
-use crate::api::clients::ALISTRAL_CLIENT;
+use crate::ALISTRAL_CLIENT;
 use crate::utils::cli_paging::CLIPager;
 
 pub async fn stats_recording(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
     let mut groups =
-        RecordingWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT, listens)
+        RecordingWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT.core, listens)
             .await
             .expect("Error while fetching recordings")
             .into_iter()
@@ -40,7 +40,7 @@ pub async fn stats_recording(conn: &mut sqlx::SqliteConnection, listens: ListenC
 
 pub async fn stats_recording_time(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
     let mut groups =
-        RecordingWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT, listens)
+        RecordingWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT.core, listens)
             .await
             .expect("Error while fetching recordings")
             .into_iter()

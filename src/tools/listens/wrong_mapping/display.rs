@@ -8,7 +8,7 @@ use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use strsim::sorensen_dice;
 use tuillez::utils::hyperlink_rename;
 
-use crate::api::clients::ALISTRAL_CLIENT;
+use crate::ALISTRAL_CLIENT;
 use crate::models::config::whitelisted_wrong_mappings::WhilistedWrongMappings;
 
 pub(super) async fn display_wrong_mapping(

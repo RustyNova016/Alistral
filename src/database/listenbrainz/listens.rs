@@ -4,7 +4,7 @@ use tracing::info;
 use tracing::instrument;
 use tuillez::pg_spinner;
 
-use crate::api::clients::ALISTRAL_CLIENT;
+use crate::ALISTRAL_CLIENT;
 
 /// Fetch the latest listens for the provided user. If the user has no listens, it will do a full listen fetch.
 #[instrument(fields(indicatif.pb_show = tracing::field::Empty))]

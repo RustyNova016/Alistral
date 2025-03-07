@@ -14,7 +14,7 @@ use itertools::Itertools;
 use musicbrainz_db_lite::models::musicbrainz::release_group::ReleaseGroup;
 use tracing::instrument;
 
-use crate::api::clients::ALISTRAL_CLIENT;
+use crate::ALISTRAL_CLIENT;
 use crate::api::listenbrainz::fresh_releases::FreshReleaseRelease;
 use crate::api::listenbrainz::fresh_releases::FreshReleaseRequest;
 use crate::database::musicbrainz::anniversaries::get_recordings_aniversaries;
@@ -22,10 +22,13 @@ use crate::models::config::Config;
 
 #[instrument]
 pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
-    let recordings =
-        ListenFetchQuery::get_recordings_with_listens(conn, &ALISTRAL_CLIENT, username.to_string())
-            .await
-            .expect("Couldn't fetch the listened recordings");
+    let recordings = ListenFetchQuery::get_recordings_with_listens(
+        conn,
+        &ALISTRAL_CLIENT.core,
+        username.to_string(),
+    )
+    .await
+    .expect("Couldn't fetch the listened recordings");
 
     // release days
     let today = Utc::now();
@@ -158,7 +161,7 @@ async fn get_fresh_releases(
 
     //TODO: #529 Daily: Prevent recompiling recording with listens
     let artists =
-        ArtistWithRecordingsCollection::from_listencollection(conn, &ALISTRAL_CLIENT, listens)
+        ArtistWithRecordingsCollection::from_listencollection(conn, &ALISTRAL_CLIENT.core, listens)
             .await
             .expect("Couldn't get the listened artists");
 

@@ -7,7 +7,7 @@ use rust_decimal::Decimal;
 use tuillez::extensions::chrono_exts::DateTimeUtcExt as _;
 use tuillez::extensions::chrono_exts::DurationExt as _;
 
-use crate::api::clients::ALISTRAL_CLIENT;
+use crate::ALISTRAL_CLIENT;
 use crate::models::config::Config;
 
 use super::RecordingWithListens;

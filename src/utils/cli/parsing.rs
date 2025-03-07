@@ -1,6 +1,6 @@
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 
-use crate::api::clients::ALISTRAL_CLIENT;
+use crate::ALISTRAL_CLIENT;
 
 use super::clap_error;
 use super::read_mbid_from_input;

@@ -2,7 +2,7 @@ use clap::Parser;
 use interzic::models::services::youtube::Youtube;
 use tuillez::fatal_error::OptIntoFatal;
 
-use crate::api::clients::ALISTRAL_CLIENT;
+use crate::ALISTRAL_CLIENT;
 use crate::tools::interzic::get_mapping::InterzicMappingTarget;
 
 #[derive(Parser, Debug, Clone)]

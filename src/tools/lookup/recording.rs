@@ -5,7 +5,7 @@ use tracing::info;
 use tuillez::fatal_error::FatalError;
 use tuillez::fatal_error::IntoFatal;
 
-use crate::api::clients::ALISTRAL_CLIENT;
+use crate::ALISTRAL_CLIENT;
 use crate::datastructures::entity_with_listens::recording_with_listens::RecordingWithListens;
 
 #[cfg(not(test))]
@@ -22,7 +22,7 @@ pub async fn lookup_recording(
         .returns(ListenFetchQueryReturn::Mapped)
         .user(username.to_string())
         .build()
-        .fetch(conn, &ALISTRAL_CLIENT)
+        .fetch(conn, &ALISTRAL_CLIENT.core)
         .await
         .expect_fatal("Couldn't fetch listens")?;
 

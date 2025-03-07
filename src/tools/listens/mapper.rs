@@ -4,7 +4,7 @@ use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::listenbrainz::messybrainz_submission::MessybrainzSubmission;
 use musicbrainz_db_lite::models::musicbrainz::user::User;
 
-use crate::api::clients::ALISTRAL_CLIENT;
+use crate::ALISTRAL_CLIENT;
 use crate::utils::listenbrainz_api::map_msid_to_mbid;
 
 pub async fn listen_mapper_convert_mbids(
@@ -19,7 +19,7 @@ pub async fn listen_mapper_convert_mbids(
         .returns(ListenFetchQueryReturn::None)
         .user(username.to_string())
         .build()
-        .fetch(conn, &ALISTRAL_CLIENT)
+        .fetch(conn, &ALISTRAL_CLIENT.core)
         .await
         .expect("Couldn't fetch listens");
 

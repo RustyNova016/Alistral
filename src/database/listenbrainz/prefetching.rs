@@ -4,7 +4,7 @@ use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use musicbrainz_db_lite::models::musicbrainz::release::Release;
 use tracing::info;
 
-use crate::api::clients::ALISTRAL_CLIENT;
+use crate::ALISTRAL_CLIENT;
 
 /// Prefetch all the recordings of a list of listens
 pub async fn prefetch_recordings_of_listens(

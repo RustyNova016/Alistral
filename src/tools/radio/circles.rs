@@ -11,7 +11,7 @@ use rand::thread_rng;
 use tracing::info;
 use tracing::warn;
 
-use crate::api::clients::ALISTRAL_CLIENT;
+use crate::ALISTRAL_CLIENT;
 use crate::datastructures::radio::collector::RadioCollector;
 use crate::datastructures::radio::seeders::listens::ListenSeeder;
 use crate::models::cli::radio::RadioExportTarget;
