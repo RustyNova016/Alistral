@@ -1,6 +1,8 @@
 use deadpool::managed::PoolError;
 use thiserror::Error;
 
+use crate::api::listenbrainz::listen::fetching::query::ListenFetchQueryError;
+
 #[derive(Error, Debug)]
 pub enum Error {
     //#[error(transparent)]
@@ -16,6 +18,9 @@ pub enum Error {
 
     #[error(transparent)]
     SerdeJsonError(#[from] serde_json::Error),
+
+    #[error(transparent)]
+    ReqwestError(#[from] reqwest::Error),
 
     #[error(transparent)]
     MigrationError(#[from] sqlx::migrate::MigrateError),
@@ -36,4 +41,7 @@ pub enum Error {
 
     #[error(transparent)]
     DeadpoolError(#[from] PoolError<sqlx::Error>),
+
+    #[error(transparent)]
+    ListenFetchQueryError(#[from] ListenFetchQueryError),
 }
