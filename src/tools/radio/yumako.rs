@@ -1,17 +1,14 @@
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::BufReader;
-use std::sync::Arc;
 
 use clap::Parser;
 use futures::TryStreamExt;
 use serde_json::Value;
 use tracing::debug;
-use yumako_jams::client::YumakoClient;
 use yumako_jams::json::radio::Radio;
 
-use crate::api::clients::ALISTRAL_CLIENT;
-use crate::api::clients::create_client;
+use crate::ALISTRAL_CLIENT;
 
 #[derive(Parser, Debug, Clone)]
 pub struct RadioYumakoCommand {}
@@ -31,12 +28,10 @@ impl RadioYumakoCommand {
             Value::String("RustyNova".to_string()),
         );
 
-        let client = YumakoClient {
-            alistral_core: Arc::new(create_client().await),
-        };
+        
 
         debug!("Compiling radio");
-        let mut radio = radio_schema.to_stream(&client, vars).unwrap();
+        let mut radio = radio_schema.to_stream(&ALISTRAL_CLIENT.yumako_jams, vars).unwrap();
         debug!("Compiled radio");
 
         for _ in 0..5 {
