@@ -5,10 +5,10 @@ use futures::StreamExt as _;
 use serde::Deserialize;
 use serde::Serialize;
 
+use crate::RadioStream;
 use crate::client::YumakoClient;
 use crate::modules::radio_module::LayerResult;
 use crate::modules::radio_module::RadioModule;
-use crate::RadioStream;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct SortModule {

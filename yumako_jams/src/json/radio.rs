@@ -6,12 +6,12 @@ use serde::Deserialize;
 use serde::Serialize;
 use serde_json::Value;
 
+use crate::RadioStream;
 use crate::client::YumakoClient;
 use crate::json::layer::Layer;
 use crate::json::radio_input::RadioInput;
 use crate::modules::radio_module::LayerResult;
 use crate::radio_variables::RadioVariables;
-use crate::RadioStream;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct Radio {

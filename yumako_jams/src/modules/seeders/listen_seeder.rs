@@ -4,10 +4,10 @@ use futures::StreamExt;
 use serde::Deserialize;
 use serde::Serialize;
 
+use crate::RadioStream;
 use crate::modules::radio_module::LayerResult;
 use crate::modules::radio_module::RadioModule;
 use crate::radio_item::RadioItem;
-use crate::RadioStream;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct ListenSeeder {
