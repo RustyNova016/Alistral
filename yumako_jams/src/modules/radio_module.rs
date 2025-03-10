@@ -3,9 +3,10 @@ use std::collections::HashMap;
 use serde::de::DeserializeOwned;
 use serde_json::Value;
 
-use crate::aliases::LayerResult;
-use crate::aliases::RadioStream;
 use crate::client::YumakoClient;
+use crate::RadioStream;
+
+pub type LayerResult<'a> = Result<RadioStream<'a>, crate::Error>;
 
 pub trait RadioModule: DeserializeOwned {
     fn create(
