@@ -4,11 +4,13 @@ use serde::Deserialize;
 use serde::Serialize;
 use serde_json::Value;
 
+use crate::RadioStream;
 use crate::client::YumakoClient;
 use crate::modules::filters::booleans::AndFilter;
 use crate::modules::filters::cooldown::CooldownFilter;
 use crate::modules::filters::minimum_listens::MinimumListenFilter;
 use crate::modules::filters::timeout::TimeoutFilter;
+use crate::modules::mapper::artist_discography::ArtistDiscographyMapper;
 use crate::modules::radio_module::LayerResult;
 use crate::modules::radio_module::RadioModule;
 use crate::modules::scores::listenrate::ListenRateScorer;
@@ -17,7 +19,6 @@ use crate::modules::scores::overdue_duration::OverdueDurationScorer;
 use crate::modules::scores::sort::SortModule;
 use crate::modules::seeders::listen_seeder::ListenSeeder;
 use crate::radio_variables::RadioVariables;
-use crate::RadioStream;
 
 /// A layer represent a step in the radio processing. It calls a module based on the step type
 #[derive(Serialize, Deserialize, Clone)]
@@ -43,6 +44,8 @@ impl Layer {
             "and_filter" => {
                 AndFilter::create(self.inputs, variables)?.create_stream(stream, client)
             }
+            "artist_discography_mapper" => ArtistDiscographyMapper::create(self.inputs, variables)?
+                .create_stream(stream, client),
             "cooldown_filter" => {
                 CooldownFilter::create(self.inputs, variables)?.create_stream(stream, client)
             }

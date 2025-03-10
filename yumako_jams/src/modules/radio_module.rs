@@ -3,8 +3,8 @@ use std::collections::HashMap;
 use serde::de::DeserializeOwned;
 use serde_json::Value;
 
-use crate::client::YumakoClient;
 use crate::RadioStream;
+use crate::client::YumakoClient;
 
 pub type LayerResult<'a> = Result<RadioStream<'a>, crate::Error>;
 

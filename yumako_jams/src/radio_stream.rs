@@ -1,8 +1,8 @@
-use async_fn_stream::fn_stream;
 use async_fn_stream::TryStreamEmitter;
-use futures::stream::BoxStream;
+use async_fn_stream::fn_stream;
 use futures::StreamExt;
 use futures::TryStreamExt as _;
+use futures::stream::BoxStream;
 use rust_decimal::Decimal;
 
 use crate::modules::scores::ScoreMerging;
@@ -32,16 +32,18 @@ pub impl<'a> RadioStream<'a> {
     }
 
     /// Remove the errors of the stream by reemitting them early
-    fn to_item_stream(mut self, try_emitter: &'a TryStreamEmitter<RadioItem, crate::Error>) -> RadioItemStream<'a> {
+    fn to_item_stream(
+        mut self,
+        try_emitter: &'a TryStreamEmitter<RadioItem, crate::Error>,
+    ) -> RadioItemStream<'a> {
         fn_stream(|emitter| async move {
             while let Some(item) = self.next().await {
                 match item {
                     Ok(val) => emitter.emit(val).await,
-                    Err(err) => try_emitter.emit_err(err).await
+                    Err(err) => try_emitter.emit_err(err).await,
                 }
             }
-        }).boxed()
+        })
+        .boxed()
     }
-
-    
 }
