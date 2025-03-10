@@ -1,9 +1,9 @@
 use std::io;
 use thiserror::Error;
+use tuillez::extensions::chrono_exts::TimeError;
 use tuillez::fatal_error::FatalError;
 
 use crate::interface::errors::process_errors;
-use crate::models::time_error::TimeError;
 
 #[derive(Error, Debug)]
 //#[expect(clippy::enum_variant_names)]

@@ -1,4 +1,4 @@
-pub mod finds;
+pub mod display;
 use chrono::Duration;
 use musicbrainz_db_lite_macros::{MainEntity, Upsert};
 use serde::Deserialize;
@@ -14,7 +14,9 @@ use crate::utils::macros::{
 
 use super::relations::impl_relations::impl_relations;
 
+pub mod finds;
 pub mod relations;
+pub mod status;
 
 #[derive(
     Debug, Default, PartialEq, Eq, Clone, FromRow, Upsert, MainEntity, Deserialize, Serialize,

@@ -177,7 +177,7 @@ impl ImportListen {
 
 #[cfg(test)]
 mod tests {
-    use crate::api::clients::ALISTRAL_CLIENT;
+    use crate::ALISTRAL_CLIENT;
     use crate::tools::listens::import::import_listen_dump;
     use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
     use std::path::PathBuf;
@@ -186,9 +186,9 @@ mod tests {
     async fn load_listen_dump_test() {
         let mut conn = ALISTRAL_CLIENT
             .musicbrainz_db
-            .connection
-            .acquire_guarded()
-            .await;
+            .get_raw_connection()
+            .await
+            .expect("Couldn't connect to the database");
         import_listen_dump(
             &mut conn,
             &PathBuf::from("tests/data/listen_dump.zip".to_string()),

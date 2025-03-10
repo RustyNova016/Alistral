@@ -6,13 +6,12 @@ use alistral_core::datastructures::listen_collection::ListenCollection;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use itertools::Itertools;
 
-use crate::api::clients::ALISTRAL_CLIENT;
-use crate::utils::cli::display::WorkExt as _;
+use crate::ALISTRAL_CLIENT;
 use crate::utils::cli_paging::CLIPager;
 
 pub async fn stats_works(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
     let mut groups =
-        WorkWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT, listens)
+        WorkWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT.core, listens)
             .await
             .expect("Error while fetching recordings")
             .into_iter()
@@ -44,17 +43,20 @@ pub async fn stats_works(conn: &mut sqlx::SqliteConnection, listens: ListenColle
 
 pub async fn stats_works_recursive(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
     let recordings =
-        RecordingWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT, listens)
+        RecordingWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT.core, listens)
             .await
             .expect("Error while fetching recordings");
 
-    let mut groups =
-        WorkWithListensCollection::from_recording_with_listens(conn, &ALISTRAL_CLIENT, recordings)
-            .await
-            .expect("Error while fetching works");
+    let mut groups = WorkWithListensCollection::from_recording_with_listens(
+        conn,
+        &ALISTRAL_CLIENT.core,
+        recordings,
+    )
+    .await
+    .expect("Error while fetching works");
 
     groups
-        .add_parents_recursive(conn, &ALISTRAL_CLIENT)
+        .add_parents_recursive(conn, &ALISTRAL_CLIENT.core)
         .await
         .expect("Couldn't add parents");
 

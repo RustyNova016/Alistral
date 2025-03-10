@@ -30,6 +30,7 @@ This document contains the help content for the `alistral` command-line program.
 * [`alistral interzic overwrite`↴](#alistral-interzic-overwrite)
 * [`alistral listens`↴](#alistral-listens)
 * [`alistral listens remap-msid`↴](#alistral-listens-remap-msid)
+* [`alistral listens reload`↴](#alistral-listens-reload)
 * [`alistral listens submit`↴](#alistral-listens-submit)
 * [`alistral listens wrong-mapping`↴](#alistral-listens-wrong-mapping)
 * [`alistral lookup`↴](#alistral-lookup)
@@ -384,7 +385,11 @@ Fetch the id of a recording on an external service
 
 Reload recording data from Musicbrainz
 
-**Usage:** `alistral interzic reload`
+**Usage:** `alistral interzic reload [MBID]`
+
+###### **Arguments:**
+
+* `<MBID>` — Reload only this mbid
 
 
 
@@ -438,6 +443,7 @@ Commands to edit listens
 ###### **Subcommands:**
 
 * `remap-msid` — Changes all the listens of a recording into another. Useful if LB mapped to a recording you never listened
+* `reload` — 
 * `submit` — 
 * `wrong-mapping` — 
 
@@ -455,6 +461,16 @@ Changes all the listens of a recording into another. Useful if LB mapped to a re
 * `<NEW_ID>` — The MBID of the recorind to replace it with
 * `<USERNAME>` — Your username
 * `<TOKEN>` — Your account token
+
+
+
+## `alistral listens reload`
+
+**Usage:** `alistral listens reload [USER]`
+
+###### **Arguments:**
+
+* `<USER>` — Reload the listens of this user
 
 
 

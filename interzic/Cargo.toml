@@ -14,7 +14,7 @@ musicbrainz_rs = { branch = "develop", git = "https://github.com/RustyNova016/mu
 musicbrainz-db-lite = { path = "../musicbrainz_db_lite" }
 tuillez = { path = "../tuillez" }
 #listenbrainz = "0.8.1"
-listenbrainz = { branch = "alistral_version", git = "https://github.com/RustyNova016/listenbrainz-rs.git" }
+listenbrainz = { branch = "alistral_version", git = "https://github.com/RustyNova016/listenbrainz-rs.git", default-features = false, features = ["tls-native"] }
 
 
 # --- Service crates ---
@@ -24,9 +24,9 @@ google-youtube3 = "6.0.0"
 regex = "1.11.1"
 sqlx = "0.8.3"
 thiserror = "2.0.0"
-governor = "0.8.0"
+governor = "0.8.1"
 serde = "1.0.218"
-serde_json = "1.0.139"
+serde_json = "1.0.140"
 tracing-indicatif = "0.3.9"
 tracing = "0.1.41"
 futures = "0.3.31"

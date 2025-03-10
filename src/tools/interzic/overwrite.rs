@@ -5,7 +5,7 @@ use tuillez::fatal_error::FatalError;
 use tuillez::fatal_error::IntoFatal as _;
 use tuillez::fatal_error::OptIntoFatal as _;
 
-use crate::api::clients::ALISTRAL_CLIENT;
+use crate::ALISTRAL_CLIENT;
 use crate::tools::interzic::get_mapping::InterzicMappingTarget;
 use crate::utils::cli::read_mbid_from_input;
 

@@ -1,5 +1,7 @@
-use crate::database::listenbrainz::listens::ListenFetchQuery;
-use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
+use alistral_core::database::fetching::listens::ListenFetchQuery;
+use alistral_core::database::fetching::listens::ListenFetchQueryReturn;
+
+use crate::ALISTRAL_CLIENT;
 use crate::models::cli::common::SortSorterBy;
 use crate::models::cli::common::StatsTarget;
 
@@ -20,7 +22,7 @@ pub async fn stats_command(
         .returns(ListenFetchQueryReturn::Mapped)
         .user(username.to_string())
         .build()
-        .fetch(conn)
+        .fetch(conn, &ALISTRAL_CLIENT.core)
         .await
         .expect("Couldn't fetch the new listens");
 

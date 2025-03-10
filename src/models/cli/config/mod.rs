@@ -1,12 +1,13 @@
-use crate::models::config::Config;
-use crate::models::config::config_trait::ConfigFile as _;
-use crate::models::config::recording_timeout::RecordingTimeoutConfig;
-use crate::utils::cli::read_mbid_from_input;
-use crate::utils::extensions::chrono_ext::DurationExt;
 use chrono::Duration;
 use clap::Parser;
 use clap::Subcommand;
 use listen_config::ListenConfigCli;
+use tuillez::extensions::chrono_exts::DurationExt as _;
+
+use crate::models::config::Config;
+use crate::models::config::config_trait::ConfigFile as _;
+use crate::models::config::recording_timeout::RecordingTimeoutConfig;
+use crate::utils::cli::read_mbid_from_input;
 
 pub mod listen_config;
 

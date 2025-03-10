@@ -5,7 +5,6 @@ use serde::Serialize;
 use crate::models::shared_traits::RowId;
 
 pub mod deletes;
-pub mod querry_builder;
 pub mod relations;
 pub mod selects;
 

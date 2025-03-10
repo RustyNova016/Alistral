@@ -3,7 +3,7 @@ use interzic::models::services::listenbrainz::Listenbrainz;
 use interzic::models::services::youtube::Youtube;
 use tuillez::fatal_error::IntoFatal;
 
-use crate::api::clients::ALISTRAL_CLIENT;
+use crate::ALISTRAL_CLIENT;
 use crate::tools::playlist::PlaylistOrigin;
 use crate::tools::playlist::PlaylistTarget;
 

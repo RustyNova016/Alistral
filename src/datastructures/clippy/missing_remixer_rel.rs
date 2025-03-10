@@ -1,10 +1,8 @@
 use musicbrainz_db_lite::models::musicbrainz::{main_entities::MainEntity, recording::Recording};
 
+use crate::ALISTRAL_CLIENT;
 use crate::models::clippy::lint_severity::LintSeverity;
 use crate::models::clippy::{MbClippyLint, MbClippyLintLink};
-use crate::utils::cli::display::RecordingExt;
-use crate::utils::extensions::db_lite_ext::RelationRecordingArtistExt;
-use crate::utils::extensions::db_lite_ext::RelationRecordingRecordingExt;
 
 pub struct MissingRemixerRelLint {
     recording: Recording,
@@ -58,7 +56,7 @@ impl MbClippyLint for MissingRemixerRelLint {
             "Recording \"{}\" has a remix relationship, but no remixer relationship.
 -> Add the remixer as an artist relationship",
             self.recording
-                .pretty_format_with_credits(conn, false)
+                .pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, false)
                 .await?
         ))
     }

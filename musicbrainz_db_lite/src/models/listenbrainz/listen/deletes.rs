@@ -21,4 +21,23 @@ impl Listen {
         .execute(conn)
         .await
     }
+
+    /// Delete a periode of listens. The start and end timestamps are **inclusive**.
+    ///
+    /// Start timestamp is the lower date, end timestamp is the higher one
+    pub async fn delete_listen_period(
+        conn: &mut SqliteConnection,
+        start_ts: i64,
+        end_ts: i64,
+        username: &str,
+    ) -> Result<sqlx::sqlite::SqliteQueryResult, sqlx::Error> {
+        sqlx::query!(
+            "DELETE FROM `listens` WHERE listened_at >= ? AND listened_at <= ? AND `user` = ?",
+            start_ts,
+            end_ts,
+            username
+        )
+        .execute(conn)
+        .await
+    }
 }

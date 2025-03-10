@@ -1,12 +1,11 @@
+use alistral_core::database::fetching::listens::ListenFetchQuery;
+use alistral_core::database::fetching::listens::ListenFetchQueryReturn;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use tracing::info;
 use tuillez::pg_counted;
 use tuillez::pg_inc;
 
-use crate::api::clients::ALISTRAL_CLIENT;
-use crate::database::listenbrainz::listens::ListenFetchQuery;
-use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
-use crate::utils::cli::display::RecordingExt;
+use crate::ALISTRAL_CLIENT;
 
 pub async fn refresh_data(
     conn: &mut sqlx::SqliteConnection,
@@ -19,7 +18,7 @@ pub async fn refresh_data(
         .returns(ListenFetchQueryReturn::Mapped)
         .user(username.to_string())
         .build()
-        .fetch(&mut *conn)
+        .fetch(&mut *conn, &ALISTRAL_CLIENT.core)
         .await
         .expect("Couldn't fetch the new listens");
 
@@ -50,7 +49,10 @@ pub async fn refresh_data(
 
         if let Some(recording) = recording {
             // It's ok to silently discard the error here. It's just some fancy display
-            if let Ok(recording) = recording.pretty_format_with_credits(conn, true).await {
+            if let Ok(recording) = recording
+                .pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, true)
+                .await
+            {
                 info!("Refreshed: {recording}");
             }
         }

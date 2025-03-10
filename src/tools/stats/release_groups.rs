@@ -5,17 +5,19 @@ use alistral_core::datastructures::listen_collection::ListenCollection;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use itertools::Itertools;
 
-use crate::api::clients::ALISTRAL_CLIENT;
-use crate::utils::cli::display::ReleaseGroupExt as _;
+use crate::ALISTRAL_CLIENT;
 use crate::utils::cli_paging::CLIPager;
 
 pub async fn stats_release_groups(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
-    let mut groups =
-        ReleaseGroupWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT, listens)
-            .await
-            .expect("Error while fetching recordings")
-            .into_iter()
-            .collect_vec();
+    let mut groups = ReleaseGroupWithListensCollection::from_listencollection(
+        conn,
+        &ALISTRAL_CLIENT.core,
+        listens,
+    )
+    .await
+    .expect("Error while fetching recordings")
+    .into_iter()
+    .collect_vec();
     groups.sort_by_key(|a| Reverse(a.listen_count()));
 
     let mut pager = CLIPager::new(10);
@@ -31,7 +33,7 @@ pub async fn stats_release_groups(conn: &mut sqlx::SqliteConnection, listens: Li
             group.listen_count(),
             group
                 .entity()
-                .pretty_format_with_credits(conn, true)
+                .pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, true)
                 .await
                 .expect("Error getting formated release name"),
         );

@@ -1,9 +1,9 @@
 use musicbrainz_db_lite::models::musicbrainz::main_entities::MainEntity;
 use musicbrainz_db_lite::models::musicbrainz::release::Release;
 
+use crate::ALISTRAL_CLIENT;
 use crate::models::clippy::lint_severity::LintSeverity;
 use crate::models::clippy::{MbClippyLint, MbClippyLintLink};
-use crate::utils::cli::display::ReleaseExt;
 
 pub struct MissingBarcodeLint {
     release: Release,
@@ -40,7 +40,9 @@ impl MbClippyLint for MissingBarcodeLint {
         Ok(format!(
             "Release \"{}\" has no barcode
 -> No barcode has been entered for this release, nor has been set has not having one.",
-            self.release.pretty_format_with_credits(conn, false).await?
+            self.release
+                .pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, false)
+                .await?
         ))
     }
 

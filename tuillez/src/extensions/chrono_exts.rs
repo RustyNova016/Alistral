@@ -5,14 +5,13 @@ use chrono::Utc;
 use extend::ext;
 use rust_decimal::Decimal;
 use rust_decimal_macros::dec;
-
-use crate::models::time_error::TimeError;
+use thiserror::Error;
 
 #[ext]
 pub impl Duration {
-    fn from_human_string(value: &str) -> Result<Duration, crate::Error> {
+    fn from_human_string(value: &str) -> Result<Duration, TimeError> {
         let human_dur: humantime::Duration = value.parse().map_err(TimeError::ParseError)?;
-        Ok(Duration::from_std(*human_dur).map_err(TimeError::ConvertError)?)
+        Duration::from_std(*human_dur).map_err(TimeError::ConvertError)
     }
 
     fn to_humantime(self) -> Result<humantime::Duration, OutOfRangeError> {
@@ -48,4 +47,14 @@ pub impl DateTime<Utc> {
     fn floor_to_second(self) -> Self {
         Self::from_timestamp(self.timestamp(), 0).unwrap()
     }
+}
+
+#[derive(Error, Debug)]
+//#[expect(clippy::enum_variant_names)]
+pub enum TimeError {
+    #[error(transparent)]
+    ParseError(humantime::DurationError),
+
+    #[error(transparent)]
+    ConvertError(chrono::OutOfRangeError),
 }

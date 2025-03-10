@@ -1,3 +1,4 @@
+pub mod display;
 pub mod finds;
 pub mod relations;
 use musicbrainz_db_lite_macros::{MainEntity, Upsert};

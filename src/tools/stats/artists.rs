@@ -5,13 +5,12 @@ use alistral_core::datastructures::listen_collection::ListenCollection;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use itertools::Itertools;
 
-use crate::api::clients::ALISTRAL_CLIENT;
-use crate::utils::cli::display::ArtistExt as _;
+use crate::ALISTRAL_CLIENT;
 use crate::utils::cli_paging::CLIPager;
 
 pub async fn stats_artist(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
     let mut groups =
-        ArtistWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT, listens)
+        ArtistWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT.core, listens)
             .await
             .expect("Error while fetching recordings")
             .into_iter()

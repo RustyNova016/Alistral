@@ -1,4 +1,7 @@
+use deadpool::managed::PoolError;
 use thiserror::Error;
+
+use crate::api::listenbrainz::listen::fetching::query::ListenFetchQueryError;
 
 #[derive(Error, Debug)]
 pub enum Error {
@@ -17,6 +20,9 @@ pub enum Error {
     SerdeJsonError(#[from] serde_json::Error),
 
     #[error(transparent)]
+    ReqwestError(#[from] reqwest::Error),
+
+    #[error(transparent)]
     MigrationError(#[from] sqlx::migrate::MigrateError),
 
     #[error("The MBID {0} wasn't found in Musicbrainz, but found in the local database. Hint: The upstream MBID might have been deleted")]
@@ -32,4 +38,10 @@ pub enum Error {
 
     #[error(transparent)]
     IOError(#[from] std::io::Error),
+
+    #[error(transparent)]
+    DeadpoolError(#[from] PoolError<sqlx::Error>),
+
+    #[error(transparent)]
+    ListenFetchQueryError(#[from] ListenFetchQueryError),
 }

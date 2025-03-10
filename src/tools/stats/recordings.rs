@@ -5,15 +5,14 @@ use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTi
 use alistral_core::datastructures::listen_collection::ListenCollection;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use itertools::Itertools;
+use tuillez::extensions::chrono_exts::DurationExt as _;
 
-use crate::api::clients::ALISTRAL_CLIENT;
-use crate::utils::cli::display::RecordingExt;
+use crate::ALISTRAL_CLIENT;
 use crate::utils::cli_paging::CLIPager;
-use crate::utils::extensions::chrono_ext::DurationExt;
 
 pub async fn stats_recording(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
     let mut groups =
-        RecordingWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT, listens)
+        RecordingWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT.core, listens)
             .await
             .expect("Error while fetching recordings")
             .into_iter()
@@ -28,7 +27,7 @@ pub async fn stats_recording(conn: &mut sqlx::SqliteConnection, listens: ListenC
             group.listen_count(),
             group
                 .entity()
-                .pretty_format_with_credits(conn, true)
+                .pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, true)
                 .await
                 .expect("Error getting formated recording name"),
         );
@@ -41,7 +40,7 @@ pub async fn stats_recording(conn: &mut sqlx::SqliteConnection, listens: ListenC
 
 pub async fn stats_recording_time(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
     let mut groups =
-        RecordingWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT, listens)
+        RecordingWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT.core, listens)
             .await
             .expect("Error while fetching recordings")
             .into_iter()
@@ -59,7 +58,7 @@ pub async fn stats_recording_time(conn: &mut sqlx::SqliteConnection, listens: Li
                 .unwrap_or_else(|| "??".to_string()),
             group
                 .entity()
-                .pretty_format_with_credits(conn, true)
+                .pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, true)
                 .await
                 .expect("Error getting formated recording name"),
         );

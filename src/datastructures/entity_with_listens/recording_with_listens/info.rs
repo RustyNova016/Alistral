@@ -2,14 +2,13 @@ use alistral_core::datastructures::listen_collection::traits::ListenCollectionRe
 use chrono::Duration;
 use chrono::Local;
 use color_eyre::owo_colors::OwoColorize;
-use humantime::format_duration;
 use indoc::formatdoc;
 use rust_decimal::Decimal;
+use tuillez::extensions::chrono_exts::DateTimeUtcExt as _;
+use tuillez::extensions::chrono_exts::DurationExt as _;
 
-use crate::api::clients::ALISTRAL_CLIENT;
+use crate::ALISTRAL_CLIENT;
 use crate::models::config::Config;
-use crate::utils::extensions::chrono_ext::DateTimeUtcExt;
-use crate::utils::extensions::chrono_ext::DurationExt;
 
 use super::RecordingWithListens;
 use super::collection::RecordingWithListensCollection;
@@ -75,17 +74,16 @@ impl RecordingWithListens {
             hours_listened = self.get_time_listened().map(|dur| dur.format_hh_mm()).unwrap_or_else(|| "??".to_string()), // TODO: Proper error
             first_listened = self.first_listen_date().unwrap().floor_to_second().with_timezone(&Local),
             last_listened = self.last_listen_date().unwrap().floor_to_second().with_timezone(&Local),
-            average_dur = format_duration(
-                self
-                    .average_duration_between_listens()
-                    .floor_to_minute()
-                    .to_std()
-                    .unwrap()
-            ),
-            next_listen_date =         self
-            .estimated_date_of_next_listen()
-            .unwrap()
-            .floor_to_second(),
+            average_dur = self
+                .average_duration_between_listens()
+                .floor_to_minute()
+                .to_humantime()
+                .unwrap()
+            ,
+            next_listen_date = self
+                .estimated_date_of_next_listen()
+                .unwrap()
+                .floor_to_second(),
             overdue = get_overdue_line(self),
             underrated_score = self.get_underated_score(other_listens, global_count).trunc_with_scale(2),
             overdue_score = self.overdue_factor().trunc_with_scale(2)  + Decimal::ONE,
@@ -117,6 +115,6 @@ fn get_overdue_line(recording_info: &RecordingWithListens) -> String {
 
     format!(
         "- Overdue by: {}",
-        format_duration(time.floor_to_minute().to_std().unwrap())
+        time.floor_to_minute().to_humantime().unwrap()
     )
 }

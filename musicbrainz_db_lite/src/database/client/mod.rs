@@ -1,20 +1,38 @@
+use std::sync::Arc;
+
+use deadpool::managed::Object;
+use deadpool::managed::PoolError;
+use listenbrainz::raw::Client as ListenbrainzClient;
 use musicbrainz_rs_nova::client::MusicBrainzClient;
 
 use crate::database::client::builder::ClientBuilder;
-use crate::database::db_connection::DbConnection;
+use crate::database::pool::DBLitePool;
+use crate::database::pool::DBLitePoolExt;
+use crate::database::pool::DBLitePoolResult;
+use crate::database::raw_conn_pool::RawPoolManager;
 
 pub mod builder;
 
 #[derive(Debug)]
 pub struct DBClient {
-    pub connection: DbConnection,
+    pub connection: DBLitePool,
 
-    pub musicbrainz_client: MusicBrainzClient,
+    pub musicbrainz_client: Arc<MusicBrainzClient>,
+    pub listenbrainz_client: Arc<ListenbrainzClient>,
 }
 
 impl DBClient {
     pub fn builder() -> ClientBuilder<(), (), ()> {
         ClientBuilder::default()
+    }
+
+    pub async fn get_connection(&self) -> DBLitePoolResult {
+        self.connection.get().await
+    }
+    pub async fn get_raw_connection(
+        &self,
+    ) -> Result<Object<RawPoolManager>, PoolError<sqlx::Error>> {
+        self.connection.get_raw_connection().await
     }
 
     #[cfg(test)]
@@ -23,6 +41,7 @@ impl DBClient {
         Ok(Self::builder()
             .in_memory()
             .set_default_mb_client()
+            .set_default_lb_client()
             .connect_and_migrate()
             .await?
             .build())

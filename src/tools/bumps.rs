@@ -1,20 +1,19 @@
 use std::str::FromStr;
 
+use alistral_core::database::fetching::listens::ListenFetchQuery;
+use alistral_core::database::fetching::listens::ListenFetchQueryReturn;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use chrono::Duration;
 use chrono::Utc;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use rust_decimal::Decimal;
 use tracing::info;
+use tuillez::extensions::chrono_exts::DurationExt as _;
 
-use crate::api::clients::ALISTRAL_CLIENT;
-use crate::database::listenbrainz::listens::ListenFetchQuery;
-use crate::database::listenbrainz::listens::ListenFetchQueryReturn;
+use crate::ALISTRAL_CLIENT;
 use crate::models::cli::BumpCLI;
 use crate::models::config::Config;
-use crate::utils::cli::display::RecordingExt as _;
 use crate::utils::cli::read_mbid_from_input;
-use crate::utils::extensions::chrono_ext::DurationExt as _;
 
 pub async fn bump_command(conn: &mut sqlx::SqliteConnection, bump: BumpCLI) {
     let username = Config::check_username(&bump.username);
@@ -34,7 +33,7 @@ pub async fn bump_command(conn: &mut sqlx::SqliteConnection, bump: BumpCLI) {
                 .returns(ListenFetchQueryReturn::Mapped)
                 .user(username.to_string())
                 .build()
-                .fetch(conn)
+                .fetch(conn, &ALISTRAL_CLIENT.core)
                 .await
                 .expect("Couldn't fetch the new listens");
 
@@ -61,7 +60,7 @@ pub async fn bump_command(conn: &mut sqlx::SqliteConnection, bump: BumpCLI) {
     info!(
         "Adding bump to {}, giving a {} multiplier for {}",
         recording
-            .pretty_format_with_credits(conn, true)
+            .pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, true)
             .await
             .expect("Error while getting recording credits"),
         multiplier,
