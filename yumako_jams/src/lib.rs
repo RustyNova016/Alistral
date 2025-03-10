@@ -7,8 +7,8 @@ pub mod radio_stream;
 pub mod radio_variables;
 
 pub use crate::error::Error;
-pub use crate::radio_stream::RadioStream;
 pub use crate::radio_stream::RadioResult;
+pub use crate::radio_stream::RadioStream;
 
 // #[test]
 // fn stream_compile_test() {
