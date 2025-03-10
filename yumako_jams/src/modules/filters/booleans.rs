@@ -12,6 +12,7 @@ use crate::client::YumakoClient;
 use crate::json::radio::Radio;
 use crate::modules::radio_module::LayerResult;
 use crate::modules::radio_module::RadioModule;
+use crate::radio_stream::RadioStreamaExt;
 use crate::RadioStream;
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -34,16 +35,7 @@ impl RadioModule for AndFilter {
         // This also allow us to keep the compilation sync
         Ok(try_fn_stream(async move |emitter| {
             // Collect the other radio
-            let other_radio_coll = other_radio.collect_vec().await;
-
-            // Early yield all the Errs of the other radio
-            let mut other_tracks = Vec::new();
-            for track in other_radio_coll {
-                match track {
-                    Ok(v) => other_tracks.push(v),
-                    Err(err) => emitter.emit_err(err).await,
-                }
-            }
+            let other_tracks = other_radio.to_item_stream(&emitter).collect_vec().await;
 
             // Filter the stream
             while let Some(track) = stream.next().await {
