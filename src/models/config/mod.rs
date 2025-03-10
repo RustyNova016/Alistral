@@ -97,6 +97,20 @@ impl Config {
         }
     }
 
+    pub fn get_username_or_panic(&self, user: Option<String>) -> String {
+        match user.or(self.default_user.clone()) {
+            Some(v) => v,
+            None => {
+                Cli::command()
+                    .error(
+                        clap::error::ErrorKind::MissingRequiredArgument,
+                        "No username was provided, and the default username isn't set. Try adding your username to the command, or set the default username with `config default-user <USERNAME>`",
+                    )
+                    .exit()
+            }
+        }
+    }
+
     pub fn get_artist_listened_to_threshold(&self) -> Decimal {
         self.artist_listened_to
             .unwrap_or_else(|| Decimal::new(2, 0))

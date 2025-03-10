@@ -29,6 +29,10 @@ pub trait AlistralColors: Display {
         self.truecolor(0, 255, 255).to_string()
     }
 
+    fn db_lite_purple(&self) -> String {
+        self.truecolor(175, 100, 220).to_string()
+    }
+
     fn as_title(&self) -> String {
         format!(" {self} {CLEAR_UNTIL_END_OF_LINE}")
             .bold()
