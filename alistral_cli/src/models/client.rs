@@ -13,6 +13,7 @@ use musicbrainz_db_lite::client::MusicBrainzClient;
 #[cfg(feature = "clippy")]
 use symphonize::SymphonyzeClient;
 use tuillez::fatal_error::IntoFatal;
+use yumako_jams::client::YumakoClient;
 
 use crate::database::DB_LOCATION;
 use crate::models::config::Config;
@@ -38,6 +39,7 @@ pub struct AlistralCliClient {
     pub musicbrainz_db: Arc<DBClient>,
     #[cfg(feature = "clippy")]
     pub symphonize: Arc<SymphonyzeClient>,
+    pub yumako_jams: Arc<YumakoClient>,
 }
 
 impl AlistralCliClient {
@@ -53,6 +55,7 @@ impl AlistralCliClient {
         let core = Self::create_core_client(musicbrainz_db.clone(), listenbrainz.clone());
         #[cfg(feature = "clippy")]
         let symphonize = Self::create_symphonize_client(musicbrainz_db.clone());
+        let yumako_jams = Self::create_yumako_jams_client(core.clone());
 
         Ok(Self {
             config,
@@ -63,6 +66,7 @@ impl AlistralCliClient {
             musicbrainz_db,
             #[cfg(feature = "clippy")]
             symphonize,
+            yumako_jams
         })
     }
 
@@ -170,5 +174,9 @@ impl AlistralCliClient {
         Arc::new(SymphonyzeClient {
             mb_database: musicbrainz_db,
         })
+    }
+
+    pub fn create_yumako_jams_client(alistral_core: Arc<AlistralClient>) -> Arc<YumakoClient> {
+        Arc::new(YumakoClient { alistral_core })
     }
 }
