@@ -45,7 +45,9 @@ impl RadioVariables {
 
         // Look at all the variables provided
         for (key, value) in &self.values {
-            let (domain, var_name) = key.split_once(".").expect("msg"); //TODO: Error
+            let (domain, var_name) = key
+                .split_once(".")
+                .expect(&format!("Something wrong with: {key}")); //TODO: Error
 
             // Is this variable for this layer?
             if domain == layer_name {

@@ -18,6 +18,9 @@ pub enum Error {
     #[error("Couldn't compile the radio due to incorect variable: {0}. Hint: {1}")]
     VariableDecodeError(String, String),
 
+    #[error("Couldn't deserialize the radio. Please check for errors in the schema: {0}")]
+    RadioReadError(serde_json::Error),
+
     #[error(transparent)]
     DBConnectionError(#[from] DBLitePoolError),
 
@@ -29,4 +32,7 @@ pub enum Error {
 
     #[error(transparent)]
     MBDBliteeError(#[from] musicbrainz_db_lite::Error),
+
+    #[error(transparent)]
+    IOError(#[from] std::io::Error),
 }
