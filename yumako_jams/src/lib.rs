@@ -1,13 +1,14 @@
-pub mod aliases;
 pub mod client;
 pub mod error;
 pub mod json;
 pub mod modules;
 pub mod radio_item;
-mod radio_stream;
+pub mod radio_stream;
 pub mod radio_variables;
 
 pub use crate::error::Error;
+pub use crate::radio_stream::RadioStream;
+pub use crate::radio_stream::RadioResult;
 
 // #[test]
 // fn stream_compile_test() {
