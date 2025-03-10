@@ -9,10 +9,10 @@ use serde::Deserialize;
 use serde::Serialize;
 use tuillez::extensions::chrono_exts::DurationExt as _;
 
-use crate::aliases::LayerResult;
-use crate::aliases::RadioStream;
 use crate::client::YumakoClient;
+use crate::modules::radio_module::LayerResult;
 use crate::modules::radio_module::RadioModule;
+use crate::RadioStream;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct CooldownFilter {

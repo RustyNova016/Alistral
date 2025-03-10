@@ -8,11 +8,11 @@ use serde_json::Value;
 use streamies::Streamies;
 use tracing::debug;
 
-use crate::aliases::LayerResult;
-use crate::aliases::RadioStream;
 use crate::client::YumakoClient;
 use crate::json::radio::Radio;
+use crate::modules::radio_module::LayerResult;
 use crate::modules::radio_module::RadioModule;
+use crate::RadioStream;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct AndFilter {

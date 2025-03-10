@@ -1,10 +1,13 @@
+use futures::stream::BoxStream;
 use futures::StreamExt;
 use futures::TryStreamExt as _;
 use rust_decimal::Decimal;
 
-use crate::aliases::RadioStream;
 use crate::modules::scores::ScoreMerging;
 use crate::radio_item::RadioItem;
+
+pub type RadioStream<'a> = BoxStream<'a, RadioResult>;
+pub type RadioResult = Result<RadioItem, crate::Error>;
 
 #[extend::ext]
 pub impl<'a> RadioStream<'a> {
