@@ -26,4 +26,7 @@ pub enum Error {
 
     #[error(transparent)]
     AlistralCoreError(#[from] alistral_core::Error),
+
+    #[error(transparent)]
+    MBDBliteeError(#[from] musicbrainz_db_lite::Error),
 }
