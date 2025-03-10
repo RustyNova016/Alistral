@@ -54,7 +54,7 @@ impl AlistralCliClient {
             listenbrainz,
             musicbrainz_db,
             symphonize,
-            yumako_jams
+            yumako_jams,
         })
     }
 
