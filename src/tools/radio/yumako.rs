@@ -28,10 +28,10 @@ impl RadioYumakoCommand {
             Value::String("RustyNova".to_string()),
         );
 
-        
-
         debug!("Compiling radio");
-        let mut radio = radio_schema.to_stream(&ALISTRAL_CLIENT.yumako_jams, vars).unwrap();
+        let mut radio = radio_schema
+            .to_stream(&ALISTRAL_CLIENT.yumako_jams, vars)
+            .unwrap();
         debug!("Compiled radio");
 
         for _ in 0..5 {
