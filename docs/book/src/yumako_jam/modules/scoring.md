@@ -22,7 +22,7 @@ This [consume](../consuming_stream.md) the entire stream.
 
 ### Inputs
 
-- `direction: String`: Whether to sort by ascending or descending order. By default, it sort by descending order. Accept: `"asc"` or `"desc`
+- `direction: String`: Whether to sort by ascending or descending order. By default, it sort by descending order. Accept: `"Asc"` or `"Desc"`
 
 ### Example
 
@@ -31,7 +31,7 @@ This [consume](../consuming_stream.md) the entire stream.
     "step_type": "sort_module",
     "id": "sort_module",
     "inputs": {
-        "direction": "desc"
+        "direction": "Desc"
     }
 }
 ```
