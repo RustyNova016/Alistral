@@ -1,4 +1,7 @@
 use std::collections::HashMap;
+use std::fs::File;
+use std::io::BufReader;
+use std::path::Path;
 
 use futures::StreamExt as _;
 use futures::stream;
@@ -34,5 +37,17 @@ impl Radio {
         }
 
         Ok(stream)
+    }
+
+    pub fn from_file<P>(path: P) -> Result<Self, crate::Error>
+    where
+        P: AsRef<Path>,
+    {
+        // Open the file in read-only mode with buffer.
+        let file = File::open(path)?;
+        let reader = BufReader::new(file);
+
+        // Read the JSON contents of the file as an instance of `User`.
+        serde_json::from_reader(reader).map_err(crate::Error::RadioReadError)
     }
 }

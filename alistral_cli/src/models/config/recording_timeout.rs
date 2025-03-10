@@ -1,3 +1,4 @@
+use core::ops::Deref;
 use std::collections::HashMap;
 
 use chrono::DateTime;
@@ -30,6 +31,13 @@ impl RecordingTimeoutConfig {
             })
             .cloned()
             .collect_vec()
+    }
+}
+
+impl Deref for RecordingTimeoutConfig {
+    type Target = HashMap<String, DateTime<Utc>>;
+    fn deref(&self) -> &Self::Target {
+        &self.0
     }
 }
 

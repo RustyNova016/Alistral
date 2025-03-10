@@ -1,31 +1,35 @@
+use core::ops::Deref as _;
 use std::collections::HashMap;
-use std::fs::File;
-use std::io::BufReader;
 
+use chrono::DateTime;
+use chrono::Utc;
 use clap::Parser;
 use futures::TryStreamExt;
 use serde_json::Value;
 use tracing::debug;
+use tuillez::fatal_error::IntoFatal;
 use yumako_jams::json::radio::Radio;
 
 use crate::ALISTRAL_CLIENT;
+use crate::models::config::config_trait::ConfigFile as _;
+use crate::models::config::recording_timeout::RecordingTimeoutConfig;
 
 #[derive(Parser, Debug, Clone)]
 pub struct RadioYumakoCommand {}
 
 impl RadioYumakoCommand {
     pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> Result<(), crate::Error> {
-        // Open the file in read-only mode with buffer.
-        let file = File::open("./yumako_jams/exemples/test_radio.json").unwrap();
-        let reader = BufReader::new(file);
-
-        // Read the JSON contents of the file as an instance of `User`.
-        let radio_schema: Radio = serde_json::from_reader(reader).unwrap();
+        let radio_schema = Radio::from_file("./yumako_jams/exemples/listenrate_radio.json")
+            .expect_fatal("Couldn't read the radio")?;
 
         let mut vars = HashMap::new();
         vars.insert(
             "username".to_string(),
             Value::String("RustyNova".to_string()),
+        );
+        vars.insert(
+            "timeouts".to_string(),
+            serde_json::to_value(load_timeouts()).unwrap(),
         );
 
         debug!("Compiling radio");
@@ -34,7 +38,7 @@ impl RadioYumakoCommand {
             .unwrap();
         debug!("Compiled radio");
 
-        for _ in 0..5 {
+        for _ in 0..20 {
             let track = radio.try_next().await.unwrap().unwrap();
 
             println!(
@@ -49,4 +53,11 @@ impl RadioYumakoCommand {
 
         Ok(())
     }
+}
+
+/// Read the recording timeouts
+pub fn load_timeouts() -> HashMap<String, DateTime<Utc>> {
+    let config = RecordingTimeoutConfig::load().expect("Couldn't fetch the timeout config");
+    let config = config.read_or_panic();
+    config.deref().deref().clone()
 }
