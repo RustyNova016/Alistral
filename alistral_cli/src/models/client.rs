@@ -66,7 +66,7 @@ impl AlistralCliClient {
             musicbrainz_db,
             #[cfg(feature = "clippy")]
             symphonize,
-            yumako_jams
+            yumako_jams,
         })
     }
 

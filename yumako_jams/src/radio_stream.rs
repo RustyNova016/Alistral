@@ -1,7 +1,10 @@
 use async_fn_stream::TryStreamEmitter;
 use async_fn_stream::fn_stream;
+use chrono::Duration;
+use futures::FutureExt;
 use futures::StreamExt;
 use futures::TryStreamExt as _;
+use futures::future::BoxFuture;
 use futures::stream::BoxStream;
 use rust_decimal::Decimal;
 
@@ -44,6 +47,37 @@ pub impl<'a> RadioStream<'a> {
                 }
             }
         })
+        .boxed()
+    }
+
+    fn collect_with(
+        mut self,
+        min_count: u64,
+        min_duration: Duration,
+    ) -> BoxFuture<'a, Vec<RadioResult>> {
+        async move {
+            let mut out = Vec::new();
+
+            while let Some(track) = self.next().await {
+                out.push(track);
+
+                let has_minimum_count = min_count <= out.len() as u64;
+                let has_sufficient_duration = out
+                    .iter()
+                    .map(|r| match r {
+                        Ok(r) => r.entity().length_as_duration().unwrap_or_default(),
+                        Err(_) => Duration::zero(),
+                    })
+                    .sum::<Duration>()
+                    >= min_duration;
+
+                if has_minimum_count && has_sufficient_duration {
+                    return out;
+                }
+            }
+
+            out
+        }
         .boxed()
     }
 }
