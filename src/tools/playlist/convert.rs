@@ -17,6 +17,9 @@ pub struct PlaylistConvertCommand {
 
     /// Convert to this service
     pub target: PlaylistTarget,
+
+    /// Use the mapping of this user
+    pub user: Option<String>,
 }
 
 impl PlaylistConvertCommand {
@@ -35,7 +38,7 @@ impl PlaylistConvertCommand {
 
         match self.target {
             PlaylistTarget::Youtube => {
-                Youtube::create_playlist(&ALISTRAL_CLIENT.interzic, playlist)
+                Youtube::create_playlist(&ALISTRAL_CLIENT.interzic, playlist, self.user.clone())
                     .await
                     .expect_fatal("Couldn't send the playlist to youtube")?;
             }

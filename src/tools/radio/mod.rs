@@ -39,7 +39,7 @@ impl RadioExportTarget {
             }
             Self::Youtube => {
                 let _playlist_id =
-                    Youtube::create_playlist(&ALISTRAL_CLIENT.interzic, playlist).await?;
+                    Youtube::create_playlist(&ALISTRAL_CLIENT.interzic, playlist, username).await?;
             }
         }
 

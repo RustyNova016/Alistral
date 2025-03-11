@@ -63,7 +63,7 @@ impl Youtube {
     }
 
     /// Try finding the corresponding id in this service
-    pub async fn get_or_query(
+    pub async fn get_id_or_query(
         client: &InterzicClient,
         recording: &MessyRecording,
         user_overwrite: Option<String>,
