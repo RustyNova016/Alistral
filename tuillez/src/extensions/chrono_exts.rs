@@ -3,6 +3,7 @@ use chrono::Duration;
 use chrono::OutOfRangeError;
 use chrono::Utc;
 use extend::ext;
+use jiff::Unit;
 use rust_decimal::Decimal;
 use rust_decimal_macros::dec;
 use thiserror::Error;
@@ -10,12 +11,17 @@ use thiserror::Error;
 #[ext]
 pub impl Duration {
     fn from_human_string(value: &str) -> Result<Duration, TimeError> {
-        let human_dur: humantime::Duration = value.parse().map_err(TimeError::ParseError)?;
-        Duration::from_std(*human_dur).map_err(TimeError::ConvertError)
+        let human_dur: jiff::Span = value.parse().map_err(TimeError::ParseError)?;
+        let num_secs = human_dur
+            .total(Unit::Second)
+            .map_err(TimeError::ConvertError)?;
+        let num_secs = num_secs.round() as i64;
+
+        Ok(Duration::new(num_secs, 0).unwrap())
     }
 
-    fn to_humantime(self) -> Result<humantime::Duration, OutOfRangeError> {
-        Ok(humantime::Duration::from(self.to_std()?))
+    fn to_humantime(self) -> Result<jiff::Span, OutOfRangeError> {
+        Ok(jiff::Span::new().seconds(self.num_seconds()))
     }
 
     fn floor_to_minute(self) -> Self {
@@ -53,8 +59,8 @@ pub impl DateTime<Utc> {
 //#[expect(clippy::enum_variant_names)]
 pub enum TimeError {
     #[error(transparent)]
-    ParseError(humantime::DurationError),
+    ParseError(jiff::Error),
 
     #[error(transparent)]
-    ConvertError(chrono::OutOfRangeError),
+    ConvertError(jiff::Error),
 }
