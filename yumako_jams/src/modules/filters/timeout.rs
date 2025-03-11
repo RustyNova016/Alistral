@@ -25,7 +25,7 @@ impl RadioModule for TimeoutFilter {
                 ready(
                     self.timeouts
                         .get(&r.entity().mbid)
-                        .is_none_or(|t| t > &Utc::now()),
+                        .is_none_or(|t| t <= &Utc::now()),
                 )
             })
             .boxed())

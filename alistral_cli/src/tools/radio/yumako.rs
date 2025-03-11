@@ -19,7 +19,7 @@ pub struct RadioYumakoCommand {}
 
 impl RadioYumakoCommand {
     pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> Result<(), crate::Error> {
-        let radio_schema = Radio::from_file("./yumako_jams/exemples/listenrate_radio.json")
+        let radio_schema = Radio::from_file("./yumako_jams/exemples/overdue_count.json")
             .expect_fatal("Couldn't read the radio")?;
 
         let mut vars = HashMap::new();
@@ -42,7 +42,8 @@ impl RadioYumakoCommand {
             let track = radio.try_next().await.unwrap().unwrap();
 
             println!(
-                "{}",
+                "[{}] {}",
+                track.score.round_sf(3).unwrap(),
                 track
                     .entity()
                     .pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, true)
