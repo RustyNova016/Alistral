@@ -16,7 +16,7 @@ musicbrainz_rs_nova = { branch = "develop", git = "https://github.com/RustyNova0
 #listenbrainz = "0.8.1"
 listenbrainz = { branch = "alistral_version", git = "https://github.com/RustyNova016/listenbrainz-rs.git", default-features = false, features = ["tls-native"] }
 
-async-trait = "0.1.82"
+async-trait = "0.1.87"
 chrono = "0.4.40"
 extend = "1.2.0"
 futures = "0.3.30"
