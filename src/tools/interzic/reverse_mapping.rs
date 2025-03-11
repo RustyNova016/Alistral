@@ -19,9 +19,9 @@ pub struct ReverseMappingCommand {
 
 impl ReverseMappingCommand {
     pub async fn run(&self, _conn: &mut sqlx::SqliteConnection) -> Result<(), crate::Error> {
-        let recording = match self.source {
+        let recordings = match self.source {
             InterzicMappingTarget::Youtube => {
-                Youtube::get_recording_from_id(
+                Youtube::get_recordings_from_id(
                     &ALISTRAL_CLIENT.interzic,
                     &Youtube::extract_id_from_text(&self.id).expect_fatal(
                         "Couldn't parse the youtube id from the input. Check if it's correct",
@@ -32,19 +32,21 @@ impl ReverseMappingCommand {
             }
         };
 
-        match recording {
-            None => println!("No mapped recordings found"),
-            Some(rec) => {
-                println!("Found recording");
-                println!();
-                println!("Title: {}", rec.title);
-                println!("Artist credit: {}", rec.artist_credits);
-                if let Some(release) = rec.release {
-                    println!("Release: {}", release);
-                }
-                if let Some(mbid) = rec.mbid {
-                    println!("MBID: {}", mbid);
-                }
+        if recordings.is_empty() {
+            println!("Found no recordings");
+            return Ok(());
+        }
+
+        println!("Found recording(s)");
+        for rec in recordings {
+            println!();
+            println!("Title: {}", rec.title);
+            println!("Artist credit: {}", rec.artist_credits);
+            if let Some(release) = rec.release {
+                println!("Release: {}", release);
+            }
+            if let Some(mbid) = rec.mbid {
+                println!("MBID: {}", mbid);
             }
         }
 

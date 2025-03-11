@@ -73,9 +73,12 @@ impl GetMappingCommand {
 
         match self.target {
             InterzicMappingTarget::Youtube => {
-                let id =
-                    Youtube::get_or_query(&ALISTRAL_CLIENT.interzic, &recording, self.user.clone())
-                        .await?;
+                let id = Youtube::get_id_or_query(
+                    &ALISTRAL_CLIENT.interzic,
+                    &recording,
+                    self.user.clone(),
+                )
+                .await?;
 
                 match id {
                     None => println!("Couldn't find a mapping for the recording"),
