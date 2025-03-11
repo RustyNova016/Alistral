@@ -14,7 +14,7 @@ listenbrainz = { branch = "alistral_version", git = "https://github.com/RustyNov
 itertools = "0.14.0"
 serde = "1.0.218"
 sqlx = { version = "0.8.3", features = ["runtime-tokio", "macros"] }
-thiserror = "2.0.11"
+thiserror = "2.0.12"
 owo-colors = "4.2.0"
 indicatif = "0.17.11"
 chrono = "0.4.40"
