@@ -98,12 +98,12 @@ impl Youtube {
         Ok(None)
     }
 
-    pub async fn get_recording_from_id(
+    pub async fn get_recordings_from_id(
         client: &InterzicClient,
         ext_id: &str,
         user_overwrite: Option<&str>,
-    ) -> Result<Option<MessyRecording>, sqlx::Error> {
-        MessyRecording::find_from_mapping(
+    ) -> Result<Vec<MessyRecording>, sqlx::Error> {
+        MessyRecording::recordings_from_mapping(
             &client.database_client,
             ext_id,
             "youtube",

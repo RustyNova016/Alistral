@@ -619,7 +619,7 @@ Interact with playlists
 
 Convert a playlist from one service to another
 
-**Usage:** `alistral playlist convert <SOURCE> <ID> <TARGET>`
+**Usage:** `alistral playlist convert <SOURCE> <ID> <TARGET> [USER]`
 
 ###### **Arguments:**
 
@@ -632,6 +632,7 @@ Convert a playlist from one service to another
 
   Possible values: `youtube`
 
+* `<USER>` — Use the mapping of this user
 
 
 
