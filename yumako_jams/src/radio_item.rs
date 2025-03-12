@@ -1,8 +1,10 @@
 use core::ops::Deref;
 
 use alistral_core::datastructures::entity_with_listens::recording::RecordingWithListens;
+use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use rust_decimal::Decimal;
 
+use crate::modules::listen_data::ListenAction;
 use crate::modules::scores::ScoreMerging;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -19,6 +21,13 @@ impl RadioItem {
             ScoreMerging::Sub => self.score -= score,
             ScoreMerging::Multiply => self.score *= score,
             ScoreMerging::Divide => self.score /= score,
+        }
+    }
+
+    pub fn set_listens(&mut self, listens: Vec<Listen>, action: ListenAction) {
+        match action {
+            ListenAction::Add => self.recording.insert_unique_listens_unchecked(listens),
+            ListenAction::Remove => todo!(),
         }
     }
 }
