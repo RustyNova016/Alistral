@@ -27,15 +27,15 @@ itertools = "0.14.0"
 color-eyre = "0.6.3"
 rust_decimal = "1.36.0"
 rust_decimal_macros = "1.36.0"
-clap = { version = "4.5.30", features = [
+clap = { version = "4.5.32", features = [
     "unicode",
     "wrap_help",
     "derive",
     "color",
 ] }
-clap_complete = "4.5.45"
+clap_complete = "4.5.46"
 chrono = "0.4.40"
-serde = { version = "1.0.218", features = ["rc"] }
+serde = { version = "1.0.219", features = ["rc"] }
 serde_json = "1.0.140"
 extend = "1.2.0"
 directories = "6.0.0"
@@ -44,18 +44,18 @@ indicatif = { version = "0.17.11", features = [
     "improved_unicode",
     "futures",
 ] }
-tokio = { version = "1.43.0", features = ["full"] }
+tokio = { version = "1.44.0", features = ["full"] }
 rayon = "1.10.0"
-reqwest = { version = "0.12.12", features = ["json"] }
+reqwest = { version = "0.12.13", features = ["json"] }
 rand = "0.8.5"
-thiserror = "2.0.11"
+thiserror = "2.0.12"
 derive_more = { version = "2.0.1", features = ["full"] }
 derive-new = "0.7.0"
 derive-getters = "0.5.0"
 futures = "0.3.31"
-regex = "1.11.0"
+regex = "1.11.1"
 clap-markdown = "0.1.4"
-serial_test = "3.1.1"
+serial_test = "3.2.0"
 sqlx = { version = "0.8.3", features = ["runtime-tokio", "macros"] }
 tracing = "0.1.41"
 tracing-subscriber = "0.3.19"
