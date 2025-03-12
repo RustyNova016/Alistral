@@ -10,7 +10,8 @@ use crate::modules::filters::booleans::AndFilter;
 use crate::modules::filters::cooldown::CooldownFilter;
 use crate::modules::filters::minimum_listens::MinimumListenFilter;
 use crate::modules::filters::timeout::TimeoutFilter;
-use crate::modules::mapper::artist_discography::ArtistDiscographyMapper;
+use crate::modules::listen_data::last_listens::LatestListens;
+use crate::modules::mappers::artist_discography::ArtistDiscographyMapper;
 use crate::modules::radio_module::LayerResult;
 use crate::modules::radio_module::RadioModule;
 use crate::modules::scores::listenrate::ListenRateScorer;
@@ -48,6 +49,9 @@ impl Layer {
                 .create_stream(stream, client),
             "cooldown_filter" => {
                 CooldownFilter::create(self.inputs, variables)?.create_stream(stream, client)
+            }
+            "latest_listens" => {
+                LatestListens::create(self.inputs, variables)?.create_stream(stream, client)
             }
             "listen_seeder" => {
                 ListenSeeder::create(self.inputs, variables)?.create_stream(stream, client)
