@@ -1,6 +1,7 @@
 use core::ops::Deref as _;
 use std::collections::HashMap;
 
+use alistral_core::cli::colors::AlistralColors;
 use chrono::DateTime;
 use chrono::Utc;
 use clap::Parser;
@@ -33,9 +34,13 @@ impl RadioYumakoCommand {
         );
 
         debug!("Compiling radio");
-        let mut radio = radio_schema
-            .to_stream(&ALISTRAL_CLIENT.yumako_jams, vars)
-            .unwrap();
+        let mut radio = match radio_schema.to_stream(&ALISTRAL_CLIENT.yumako_jams, vars) {
+            Ok(val) => val,
+            Err(err) => {
+                compilation_error(err);
+                return Ok(());
+            }
+        };
         debug!("Compiled radio");
 
         for _ in 0..20 {
@@ -61,4 +66,15 @@ pub fn load_timeouts() -> HashMap<String, DateTime<Utc>> {
     let config = RecordingTimeoutConfig::load().expect("Couldn't fetch the timeout config");
     let config = config.read_or_panic();
     config.deref().deref().clone()
+}
+
+pub fn compilation_error(err: yumako_jams::Error) {
+    println!();
+    println!(
+        "{}",
+        "Radio compilation error".as_color_title((225, 125, 0))
+    );
+    println!();
+    println!("{}", err);
+    println!();
 }

@@ -44,6 +44,14 @@ pub trait AlistralColors: Display {
             .black()
             .to_string()
     }
+
+    fn as_color_title(&self, color: (u8, u8, u8)) -> String {
+        format!(" {self} {CLEAR_UNTIL_END_OF_LINE}")
+            .bold()
+            .on_truecolor_tup(color)
+            .black()
+            .to_string()
+    }
 }
 
 impl<T: Display> AlistralColors for T {}
