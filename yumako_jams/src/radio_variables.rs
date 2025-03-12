@@ -40,14 +40,17 @@ impl RadioVariables {
     }
 
     /// This returns the variables of a layer
-    pub fn get_layer_variables(&self, layer_name: &str) -> HashMap<String, Value> {
+    pub fn get_layer_variables(
+        &self,
+        layer_name: &str,
+    ) -> Result<HashMap<String, Value>, crate::Error> {
         let mut out = HashMap::new();
 
         // Look at all the variables provided
         for (key, value) in &self.values {
             let (domain, var_name) = key
                 .split_once(".")
-                .expect(&format!("Something wrong with: {key}")); //TODO: Error
+                .ok_or_else(|| crate::Error::VariablePathError(key.to_string()))?;
 
             // Is this variable for this layer?
             if domain == layer_name {
@@ -60,7 +63,7 @@ impl RadioVariables {
             }
         }
 
-        out
+        Ok(out)
     }
 }
 
