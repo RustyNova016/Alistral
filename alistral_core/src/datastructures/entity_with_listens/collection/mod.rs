@@ -1,6 +1,8 @@
 use core::cmp::Reverse;
-use std::collections::HashMap;
+use core::fmt::Debug;
 
+use ahash::HashMap;
+use ahash::HashMapExt as _;
 use chrono::Duration;
 use futures::stream;
 use futures::Stream;

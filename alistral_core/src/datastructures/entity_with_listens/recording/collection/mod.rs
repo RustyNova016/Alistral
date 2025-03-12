@@ -1,7 +1,10 @@
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use musicbrainz_db_lite::models::musicbrainz::user::User;
+use musicbrainz_db_lite::utils::sqlx_utils::entity_relations::JoinRelation;
 use tracing::instrument;
+use tuillez::pg_counted;
+use tuillez::pg_inc;
 use tuillez::pg_spinner;
 
 use crate::database::fetching::recordings::prefetch_recordings_of_listens;
@@ -36,19 +39,28 @@ impl RecordingWithListensCollection {
 
         prefetch_recordings_of_listens(conn, client, user.id, &listens.data).await?;
 
-        // Get all the data from the DB
-        let joins = Listen::get_recordings_as_batch(conn, user.id, listens.data).await?;
+        Ok(Self::compile(
+            Listen::get_recordings_as_batch(conn, user.id, &listens.data).await?,
+            listens,
+        ))
+    }
 
-        // Convert into structs
+    #[instrument(fields(indicatif.pb_show = tracing::field::Empty))]
+    fn compile(relations: Vec<JoinRelation<i64, Recording>>, listens: ListenCollection) -> Self {
+        pg_counted!(relations.len(), "Loading listens data");
         let mut out = Self::new();
 
-        for (_, (listen, recordings)) in joins {
-            for recording in recordings {
-                out.insert_or_merge_listen(recording, listen.clone());
-                //Span::current().pb_inc(1);
-            }
-        }
+        relations
+            .into_iter()
+            .map(|join| {
+                let listen = listens.iter().find(|l| l.id == join.original_id).unwrap();
+                (listen.clone(), join.data)
+            })
+            .for_each(|(listen, recording)| {
+                out.insert_or_merge_listen(recording, listen);
+                pg_inc!()
+            });
 
-        Ok(out)
+        out
     }
 }

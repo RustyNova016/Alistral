@@ -55,22 +55,24 @@ impl RecordingWithListens {
 
         prefetch_recordings_of_listens(conn, user.id, &listens.data).await?;
 
-        // Get all the data from the DB
-        let joins = Listen::get_recordings_as_batch(conn, user.id, listens.data).await?;
-
-        // Convert into structs
         let mut out = HashMap::new();
 
-        for (_, (listen, recordings)) in joins {
-            for recording in recordings {
+        // Get all the data from the DB
+        Listen::get_recordings_as_batch(conn, user.id, &listens.data)
+            .await?
+            .into_iter()
+            .map(|join| {
+                let listen = listens.iter().find(|l| l.id == join.original_id).unwrap();
+                (listen.clone(), join.data)
+            })
+            .for_each(|(listen, recording)| {
                 out.entry(recording.get_row_id())
                     .or_insert_with(|| Self {
                         recording,
                         listens: ListenCollection::default(),
                     })
                     .push(listen.clone());
-            }
-        }
+            });
 
         Ok(out.into())
     }
