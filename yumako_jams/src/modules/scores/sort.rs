@@ -12,6 +12,7 @@ use crate::modules::radio_module::RadioModule;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct SortModule {
+    #[serde(default = "default_direction")]
     direction: SortDirection,
 }
 
@@ -55,4 +56,8 @@ impl RadioModule for SortModule {
 pub enum SortDirection {
     Asc,
     Desc,
+}
+
+fn default_direction() -> SortDirection {
+    SortDirection::Desc
 }
