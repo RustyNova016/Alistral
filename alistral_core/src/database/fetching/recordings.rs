@@ -18,7 +18,6 @@ pub async fn prefetch_recordings_of_listens(
     let recordings = Listen::get_unfetched_recordings_ids(conn, user_id, listens).await?;
     pg_counted!(recordings.len(), "Fetching recordings");
 
-    info!("Fetching recordings from listens");
     for recording in recordings {
         Recording::get_or_fetch(conn, &client.musicbrainz_db, &recording).await?;
         Span::current().pb_inc(1);

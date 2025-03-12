@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use itertools::Itertools;
 use sqlx::SqliteConnection;
 
@@ -7,7 +5,7 @@ use crate::models::listenbrainz::listen::Listen;
 use crate::models::listenbrainz::msid_mapping::MsidMapping;
 use crate::models::musicbrainz::recording::Recording;
 use crate::models::musicbrainz::user::User;
-use crate::utils::sqlx_utils::entity_relations::{JoinCollection, JoinRelation};
+use crate::utils::sqlx_utils::entity_relations::JoinRelation;
 
 impl Listen {
     pub async fn get_recording_or_fetch(
@@ -35,12 +33,12 @@ impl Listen {
     pub async fn get_recordings_as_batch(
         conn: &mut SqliteConnection,
         user_id: i64,
-        listens: Vec<Listen>,
-    ) -> Result<HashMap<i64, (Listen, Vec<Recording>)>, crate::Error> {
+        listens: &[Listen],
+    ) -> Result<Vec<JoinRelation<i64, Recording>>, crate::Error> {
         let ids = listens.iter().map(|v| v.id).collect_vec();
         let id_string = serde_json::to_string(&ids)?;
 
-        let joins: Vec<JoinRelation<i64, Recording>> = sqlx::query_as("
+        Ok(sqlx::query_as("
             SELECT
                 listens.id as original_id,
                 recordings.*
@@ -54,9 +52,7 @@ impl Listen {
                 AND listens.id IN (
                     SELECT value FROM JSON_EACH(?)
                 )"
-        ).bind(user_id).bind(id_string).fetch_all(conn).await?;
-
-        Ok(JoinCollection::from(joins).into_hashmap(listens, |id, listen| &listen.id == id))
+        ).bind(user_id).bind(id_string).fetch_all(conn).await?)
     }
 
     /// Get the recordings that aren't in the database but have listens among a list of listens
