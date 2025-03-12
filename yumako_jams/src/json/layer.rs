@@ -39,7 +39,7 @@ impl Layer {
         stream: RadioStream<'a>,
         radio_variables: &RadioVariables,
     ) -> LayerResult<'a> {
-        let variables = radio_variables.get_layer_variables(&self.id);
+        let variables = radio_variables.get_layer_variables(&self.id)?;
 
         match self.step_type.as_str() {
             "and_filter" => {
@@ -74,9 +74,9 @@ impl Layer {
             "overdue_duration_scorer" => {
                 OverdueDurationScorer::create(self.inputs, variables)?.create_stream(stream, client)
             }
-            _ => {
-                panic!("Wrong type") // TODO: Proper error
-            }
+            _ => Err(crate::Error::UnknownStepTypeError(
+                self.step_type.to_string(),
+            )),
         }
     }
 }

@@ -21,6 +21,14 @@ pub enum Error {
     #[error("Couldn't deserialize the radio. Please check for errors in the schema: {0}")]
     RadioReadError(serde_json::Error),
 
+    #[error(
+        "A variable path isn't properly constructed. Expected format `step_id.input_name`, found: `{0}`"
+    )]
+    VariablePathError(String),
+
+    #[error("Unknown step type `{0}`. Please check for typos")]
+    UnknownStepTypeError(String),
+
     #[error(transparent)]
     DBConnectionError(#[from] DBLitePoolError),
 
