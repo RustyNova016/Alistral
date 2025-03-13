@@ -1,6 +1,7 @@
 use google_youtube3::api::PlaylistItem;
 use google_youtube3::api::PlaylistItemSnippet;
 use google_youtube3::api::ResourceId;
+use tracing::debug;
 use tracing::error;
 use tracing::instrument;
 use tracing::warn;
@@ -43,7 +44,8 @@ impl Youtube {
                 Ok(_) => {}
                 Err(err) => {
                     error!(
-                        "Error while sending recoding \"{}\". Skipping...",
+                        "Error while sending playlist item: \n{}. \n\nRecording: `{}` \n\nSkipping...",
+                        err.to_string(),
                         recording,
                     );
                     errors.push(err)
@@ -63,6 +65,7 @@ impl Youtube {
         rate_limit: &YoutubeRateLimit,
         user_overwrite: Option<String>,
     ) -> Result<(), crate::Error> {
+        debug!("Sending recording: {recording}");
         let video_id = Youtube::get_id_or_query(client, recording, user_overwrite)
             .await?
             .ok_or_else(|| InterzicYoutubeError::RecordingSearchNotFoundError(recording.clone()))?;
@@ -126,6 +129,7 @@ async fn add_item_request(
     playlist_id: String,
     video_id: String,
 ) -> Result<(), google_youtube3::common::Error> {
+    debug!("Sending video `{video_id}` to playlist {playlist_id}");
     client
         .playlist_items()
         .insert(recording_to_playlist_item(playlist_id, video_id))

@@ -53,19 +53,18 @@ FROM recording
 WHERE ext_id = $1
     AND service = $2
     AND (
-        user_overwrite = $3
+        LOWER(user_overwrite) = LOWER($3)
         OR (
             user_overwrite = ''
-            AND (
+            AND recording_id NOT IN (
                 -- Remove all the mappings that got overwritten
-                SELECT id 
+                SELECT recording_id 
                 FROM external_id 
-                WHERE ext_id = $1
-                    AND service = $2 
-                    AND user_overwrite = $3
-                ) IS NULL
+                WHERE service = $2 
+                    AND LOWER(user_overwrite) = LOWER($3)
+                )
         )
-    )",
+    );",
         )
         .bind(ext_id)
         .bind(service)
