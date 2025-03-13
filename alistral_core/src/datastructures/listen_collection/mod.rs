@@ -75,6 +75,13 @@ impl ListenCollection {
             self.data.push(new_listen);
         }
     }
+
+    pub fn retain<F>(&mut self, f: F)
+    where
+        F: FnMut(&Listen) -> bool,
+    {
+        self.data.retain(f);
+    }
 }
 
 impl From<Listen> for ListenCollection {
