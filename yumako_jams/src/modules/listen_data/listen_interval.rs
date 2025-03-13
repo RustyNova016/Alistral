@@ -5,6 +5,7 @@ use futures::StreamExt;
 use futures::TryStreamExt;
 use serde::Deserialize;
 use serde::Serialize;
+use tracing::debug;
 
 use crate::RadioStream;
 use crate::client::YumakoClient;
@@ -13,8 +14,13 @@ use crate::modules::radio_module::RadioModule;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct ListenInterval {
+    #[serde(default = "default_min_ts")]
     min_ts: i64,
+
+    #[serde(default = "default_max_ts")]
     max_ts: i64,
+
+    #[serde(default = "default_period")]
     period: StatPeriod,
 }
 
@@ -26,6 +32,8 @@ impl RadioModule for ListenInterval {
     ) -> LayerResult<'a> {
         let min = self.get_start_date();
         let max = self.get_end_date();
+
+        debug!("ListenInterval: start: {min}, end: {max}, end_ts: {}", max.timestamp());
 
         Ok(stream
             .map_ok(move |mut track| {
@@ -50,7 +58,7 @@ impl ListenInterval {
     pub fn get_end_date(&self) -> DateTime<Utc> {
         let max_ts = DateTime::from_timestamp(self.max_ts, 0);
         max_ts
-            .unwrap_or_else(|| self.period.get_start_date())
+            .unwrap_or_else(|| self.period.get_end_date())
             .min(self.period.get_end_date())
     }
 }

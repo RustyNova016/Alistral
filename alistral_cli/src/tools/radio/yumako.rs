@@ -3,6 +3,7 @@ use std::collections::HashMap;
 
 use alistral_core::cli::colors::AlistralColors;
 use chrono::DateTime;
+use chrono::Duration;
 use chrono::Utc;
 use clap::Parser;
 use futures::TryStreamExt;
@@ -10,6 +11,7 @@ use serde_json::Value;
 use tracing::debug;
 use tuillez::fatal_error::IntoFatal;
 use yumako_jams::json::radio::Radio;
+use yumako_jams::radio_stream::RadioStreamaExt;
 
 use crate::ALISTRAL_CLIENT;
 use crate::models::config::config_trait::ConfigFile as _;
@@ -32,9 +34,13 @@ impl RadioYumakoCommand {
             "timeouts".to_string(),
             serde_json::to_value(load_timeouts()).unwrap(),
         );
+        vars.insert(
+            "listen_range".to_string(),
+            Value::String("Last90Days".to_string()),
+        );
 
         debug!("Compiling radio");
-        let mut radio = match radio_schema.to_stream(&ALISTRAL_CLIENT.yumako_jams, vars) {
+        let radio = match radio_schema.to_stream(&ALISTRAL_CLIENT.yumako_jams, vars) {
             Ok(val) => val,
             Err(err) => {
                 compilation_error(err);
@@ -43,8 +49,8 @@ impl RadioYumakoCommand {
         };
         debug!("Compiled radio");
 
-        for _ in 0..20 {
-            let track = radio.try_next().await.unwrap().unwrap();
+        for track in radio.collect_with(20, Duration::zero()).await {
+            let track = track.unwrap();
 
             println!(
                 "[{}] {}",
@@ -75,6 +81,8 @@ pub fn compilation_error(err: yumako_jams::Error) {
         "Radio compilation error".as_color_title((225, 125, 0))
     );
     println!();
-    println!("{}", err);
+    println!("{err}");
     println!();
+    // #[cfg(debug_assertions)]
+    // println!("{err:#?}")
 }

@@ -39,7 +39,7 @@ Removes all the listens not in the interval
     "step_type": "listen_interval",
     "id": "listen_interval",
     "inputs": {
-        "period": "RustyNova"
+        "period": "Last90Days"
     }
 }
 ```

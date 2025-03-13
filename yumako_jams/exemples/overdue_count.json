@@ -24,6 +24,11 @@
             "id": "timeout_filter"
         },
         {
+            "step_type": "listen_interval",
+            "id": "listen_interval"
+        },
+
+        {
             "step_type": "overdue_count_scorer",
             "id": "overdue_count_scorer",
             "inputs": {
@@ -40,6 +45,7 @@
     ],
     "inputs": {
         "minimum_listens": {
+            "description": "The minimum all time listens the tracks need to have before getting suggested",
             "targets": [
                 "minimum_listen_filter.minimum"
             ]
@@ -47,13 +53,28 @@
         "username": {
             "targets": [
                 "listen_seeder.user",
-                "and_filter.radio.username"
+                "and_filter.radio.username",
+                "latest_listens.user"
             ]
         },
         "timeouts": {
             "targets": [
                 "timeout_filter.timeouts"
             ]
+        },
+        "listen_range": {
+            "description": "The time range of listens to use",
+            "targets": [
+                "listen_interval.period"
+            ],
+            "default": "AllTime"
+        },
+        "minimum_seed_listens": {
+            "description": "The number of minimum listens to use for the score",
+            "targets": [
+                "listen_interval.listen_interval"
+            ],
+            "default": 0
         }
     }
 }

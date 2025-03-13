@@ -4,6 +4,7 @@ use serde::Deserialize;
 use serde::Serialize;
 use serde_json::Value;
 
+use crate::modules::listen_data::listen_interval::ListenInterval;
 use crate::RadioStream;
 use crate::client::YumakoClient;
 use crate::modules::filters::booleans::AndFilter;
@@ -43,47 +44,52 @@ impl Layer {
         let variables = radio_variables.get_layer_variables(&self.id)?;
 
         match self.step_type.as_str() {
-            "and_filter" => {
-                AndFilter::create(self.inputs, variables)?.create_stream(stream, client)
+            "and_filter" => AndFilter::create(&self, variables)?.create_stream(stream, client),
+            "artist_discography_mapper" => {
+                ArtistDiscographyMapper::create(&self, variables)?.create_stream(stream, client)
             }
-            "artist_discography_mapper" => ArtistDiscographyMapper::create(self.inputs, variables)?
-                .create_stream(stream, client),
             "clear_listens" => {
-                ClearListens::create(self.inputs, variables)?.create_stream(stream, client)
+                ClearListens::create(&self, variables)?.create_stream(stream, client)
             }
             "cooldown_filter" => {
-                CooldownFilter::create(self.inputs, variables)?.create_stream(stream, client)
+                CooldownFilter::create(&self, variables)?.create_stream(stream, client)
             }
             "latest_listens" => {
-                LatestListens::create(self.inputs, variables)?.create_stream(stream, client)
+                LatestListens::create(&self, variables)?.create_stream(stream, client)
             }
             "listen_interval" => {
-                LatestListens::create(self.inputs, variables)?.create_stream(stream, client)
+                ListenInterval::create(&self, variables)?.create_stream(stream, client)
             }
             "listen_seeder" => {
-                ListenSeeder::create(self.inputs, variables)?.create_stream(stream, client)
+                ListenSeeder::create(&self, variables)?.create_stream(stream, client)
             }
             "listenrate_scorer" => {
-                ListenRateScorer::create(self.inputs, variables)?.create_stream(stream, client)
+                ListenRateScorer::create(&self, variables)?.create_stream(stream, client)
             }
             "minimum_listen_filter" => {
-                MinimumListenFilter::create(self.inputs, variables)?.create_stream(stream, client)
+                MinimumListenFilter::create(&self, variables)?.create_stream(stream, client)
             }
-            "sort_module" => {
-                SortModule::create(self.inputs, variables)?.create_stream(stream, client)
-            }
+            "sort_module" => SortModule::create(&self, variables)?.create_stream(stream, client),
             "timeout_filter" => {
-                TimeoutFilter::create(self.inputs, variables)?.create_stream(stream, client)
+                TimeoutFilter::create(&self, variables)?.create_stream(stream, client)
             }
             "overdue_count_scorer" => {
-                OverdueCountScorer::create(self.inputs, variables)?.create_stream(stream, client)
+                OverdueCountScorer::create(&self, variables)?.create_stream(stream, client)
             }
             "overdue_duration_scorer" => {
-                OverdueDurationScorer::create(self.inputs, variables)?.create_stream(stream, client)
+                OverdueDurationScorer::create(&self, variables)?.create_stream(stream, client)
             }
             _ => Err(crate::Error::UnknownStepTypeError(
                 self.step_type.to_string(),
             )),
         }
+    }
+
+    pub fn id(&self) -> &str {
+        &self.id
+    }
+
+    pub fn inputs(&self) -> &HashMap<String, Value> {
+        &self.inputs
     }
 }
