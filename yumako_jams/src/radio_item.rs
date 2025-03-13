@@ -9,7 +9,7 @@ use crate::modules::scores::ScoreMerging;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct RadioItem {
-    recording: RecordingWithListens,
+    pub recording: RecordingWithListens,
     pub score: Decimal,
 }
 
@@ -27,7 +27,10 @@ impl RadioItem {
     pub fn set_listens(&mut self, listens: Vec<Listen>, action: ListenAction) {
         match action {
             ListenAction::Add => self.recording.insert_unique_listens_unchecked(listens),
-            ListenAction::Remove => todo!(),
+            ListenAction::Remove => self
+                .recording
+                .retain(|l| listens.iter().all(|l2| l.id != l2.id)),
+            ListenAction::Replace => self.recording.set_listens(listens.into()),
         }
     }
 }

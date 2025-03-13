@@ -10,6 +10,12 @@ This seeder provide all the tracks listened by an user
 
 - `user: String`: The username of the user to pull the listening history from
 
+### Stream Info
+
+- The stream is [finite](../create/consuming_stream.md)
+- The scores are set to 0
+- Adds all time listens
+
 ### Example
 
 ```json
