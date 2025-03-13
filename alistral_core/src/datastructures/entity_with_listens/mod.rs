@@ -57,6 +57,11 @@ where
         self.oldest_listen_date()
             .map(|discovery| Utc::now() - discovery)
     }
+
+    /// Set the listens.
+    pub fn set_listens(&mut self, listens: Lis) {
+        self.listens = listens
+    }
 }
 
 impl<Ent, Lis> ListenCollectionReadable for EntityWithListens<Ent, Lis>
@@ -86,6 +91,13 @@ where
         for lis in new_listens {
             self.listens.push_unique(lis);
         }
+    }
+
+    pub fn retain<F>(&mut self, f: F)
+    where
+        F: FnMut(&Listen) -> bool,
+    {
+        self.listens.retain(f);
     }
 }
 
