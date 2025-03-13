@@ -18,11 +18,14 @@ Accepted values are:
 ## Sort
 
 This is the main module of the scoring system. It sorts the tracks depending on their score.
-This [consume](../consuming_stream.md) the entire stream.
 
 ### Inputs
 
 - `direction: String`: Whether to sort by ascending or descending order. By default, it sort by descending order. Accept: `"Asc"` or `"Desc"`
+
+### Stream Info
+
+- ⚠️ This [consume](../create/consuming_stream.md) the stream
 
 ### Example
 
