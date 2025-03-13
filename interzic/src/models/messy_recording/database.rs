@@ -34,31 +34,42 @@ impl MessyRecording {
         .await
     }
 
-    pub async fn find_from_mapping<'a, A>(
+    /// Return all the recordings that are mapped to this `ext_id`.
+    pub async fn recordings_from_mapping<'a, A>(
         conn: A,
         ext_id: &str,
         service: &str,
         user_overwrite: Option<&str>,
-    ) -> Result<Option<MessyRecording>, sqlx::Error>
+    ) -> Result<Vec<MessyRecording>, sqlx::Error>
     where
         A: Acquire<'a, Database = Sqlite>,
     {
         let mut conn = conn.acquire().await?;
         sqlx::query_as(
             "
-            SELECT recording.* 
+SELECT recording.* 
 FROM recording
     INNER JOIN external_id ON recording.id = external_id.recording_id
-WHERE ext_id = ?
-    AND service = ?
-    AND (user_overwrite = ? OR user_overwrite = '')
-ORDER BY user_overwrite DESC
-LIMIT 1;",
+WHERE ext_id = $1
+    AND service = $2
+    AND (
+        LOWER(user_overwrite) = LOWER($3)
+        OR (
+            user_overwrite = ''
+            AND recording_id NOT IN (
+                -- Remove all the mappings that got overwritten
+                SELECT recording_id 
+                FROM external_id 
+                WHERE service = $2 
+                    AND LOWER(user_overwrite) = LOWER($3)
+                )
+        )
+    );",
         )
         .bind(ext_id)
         .bind(service)
         .bind(user_overwrite.unwrap_or_default())
-        .fetch_optional(&mut *conn)
+        .fetch_all(&mut *conn)
         .await
     }
 
