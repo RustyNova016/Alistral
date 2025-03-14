@@ -131,3 +131,10 @@ impl Mergable for ListenCollection {
         self.merge_by_index(other);
     }
 }
+
+
+impl From<ListenCollection> for Vec<Listen> {
+    fn from(value: ListenCollection) -> Self {
+        value.data
+    }
+}
