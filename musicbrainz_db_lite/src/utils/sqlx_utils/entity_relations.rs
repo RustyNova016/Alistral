@@ -95,6 +95,7 @@ where
 }
 
 impl<LId, R: Clone> JoinCollection<LId, R> {
+
     pub fn into_hashmap<L, LIte, F>(
         self,
         left_elements: LIte,
