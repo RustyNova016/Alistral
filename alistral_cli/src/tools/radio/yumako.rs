@@ -6,7 +6,7 @@ use chrono::DateTime;
 use chrono::Duration;
 use chrono::Utc;
 use clap::Parser;
-use futures::TryStreamExt;
+use musicbrainz_db_lite::models::listenbrainz::listen::views::latest_listens::LatestRecordingListensView;
 use serde_json::Value;
 use tracing::debug;
 use tuillez::fatal_error::IntoFatal;
@@ -57,7 +57,7 @@ impl RadioYumakoCommand {
                 track.score.round_sf(3).unwrap(),
                 track
                     .entity()
-                    .pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, true)
+                    .pretty_format_with_credits(&mut *conn, &ALISTRAL_CLIENT.musicbrainz_db, true)
                     .await
                     .unwrap()
             )

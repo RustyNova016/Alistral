@@ -27,7 +27,10 @@
             "step_type": "listen_interval",
             "id": "listen_interval"
         },
-
+        {
+            "step_type": "latest_listens",
+            "id": "latest_listens"
+        },
         {
             "step_type": "overdue_count_scorer",
             "id": "overdue_count_scorer",
