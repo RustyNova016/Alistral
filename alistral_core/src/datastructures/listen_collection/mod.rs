@@ -124,7 +124,6 @@ impl FromIterator<Listen> for ListenCollection {
     }
 }
 
-
 impl From<ListenCollection> for Vec<Listen> {
     fn from(value: ListenCollection) -> Self {
         value.data

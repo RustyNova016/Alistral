@@ -33,7 +33,10 @@ impl RadioModule for ListenInterval {
         let min = self.get_start_date();
         let max = self.get_end_date();
 
-        debug!("ListenInterval: start: {min}, end: {max}, end_ts: {}", max.timestamp());
+        debug!(
+            "ListenInterval: start: {min}, end: {max}, end_ts: {}",
+            max.timestamp()
+        );
 
         Ok(stream
             .map_ok(move |mut track| {
