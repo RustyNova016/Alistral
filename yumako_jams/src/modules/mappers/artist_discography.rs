@@ -1,26 +1,22 @@
-use alistral_core::datastructures::entity_with_listens::recording::RecordingWithListens;
 use async_fn_stream::try_fn_stream;
 use futures::StreamExt as _;
-use futures::TryStreamExt as _;
-use itertools::Itertools as _;
+use futures::TryStreamExt;
+use futures::pin_mut;
+use futures::stream;
+use futures::stream::BoxStream;
 use musicbrainz_db_lite::models::musicbrainz::artist::Artist;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
-use rand::rng;
-use rand::seq::SliceRandom as _;
 use serde::Deserialize;
-use streamies::Streamies;
-use tracing::info;
-use tracing::warn;
+use streamies::TryStreamies as _;
 
 use crate::RadioStream;
 use crate::client::YumakoClient;
 use crate::modules::radio_module::LayerResult;
 use crate::modules::radio_module::RadioModule;
 use crate::radio_item::RadioItem;
-use crate::radio_stream::RadioStreamaExt;
 
 #[derive(Debug, Deserialize)]
-pub struct ArtistDiscographyMapper;
+pub struct ArtistDiscographyMapper {}
 
 impl RadioModule for ArtistDiscographyMapper {
     fn create_stream<'a>(
@@ -28,132 +24,52 @@ impl RadioModule for ArtistDiscographyMapper {
         stream: RadioStream<'a>,
         client: &'a YumakoClient,
     ) -> LayerResult<'a> {
-        Ok(try_fn_stream(|emitter| async move {
-            let mut data = ListenedArtistData::default();
-            let recordings = stream
-                .to_item_stream(&emitter)
-                .map(|r| r.entity().clone())
-                .collect_vec()
-                .await;
+        Ok(stream
+            .map_ok(|radio_item| radio_item.entity().clone())
+            .unique_by_ok(|r| r.id)
+            .map_ok(|rec| get_artist_streams_from_recording(client, rec))
+            .extract_future_ok()
+            .buffer_unordered(8)
+            .flatten_result_ok()
+            .try_flatten_unordered(8) //TODO: Make it a variable
+            .unique_by_ok(|r| r.id)
+            .map_ok(RadioItem::from)
+            .boxed())
+    }
+}
 
-            while let Some(val) = data
-                .get_random_item(client, recordings.iter().collect_vec().clone())
-                .await
-                .transpose()
-            {
-                match val {
-                    Ok(val) => {
-                        let recording_listens = RecordingWithListens::new(val, Vec::new().into());
+async fn get_artist_streams_from_recording(
+    client: &YumakoClient,
+    recording: Recording,
+) -> Result<BoxStream<'_, Result<Recording, crate::Error>>, crate::Error> {
+    let conn = &mut client.get_db_lite_raw_conn().await?;
 
-                        emitter.emit(RadioItem::from(recording_listens)).await;
-                    }
-                    Err(err) => emitter.emit_err(err).await,
-                }
-            }
+    let artists = recording
+        .get_artists_or_fetch(conn, &client.alistral_core.musicbrainz_db)
+        .await?;
 
-            Ok(())
-        })
+    Ok(stream::iter(artists)
+        .flat_map_unordered(None, |art| get_stream_from_artist(client, art))
         .boxed())
-    }
 }
 
-#[derive(Debug, Default)]
-pub struct ListenedArtistData {
-    artist_blacklist: Vec<String>,
-    recording_blacklist: Vec<String>,
-}
-
-impl ListenedArtistData {
-    async fn get_random_recording_from_artist(
-        &self,
-        client: &YumakoClient,
-        artist: &Artist,
-    ) -> Result<Option<Recording>, crate::Error> {
-        info!(
-            "Checking artist: {}",
-            artist.pretty_format(true).await.unwrap()
-        );
-
+fn get_stream_from_artist(
+    client: &YumakoClient,
+    artist: Artist,
+) -> BoxStream<'_, Result<Recording, crate::Error>> {
+    try_fn_stream(|emit| async move {
         let conn = &mut client.get_db_lite_raw_conn().await?;
+        let stream = artist.browse_or_fetch_artist_recordings(conn);
 
-        let mut recordings: Vec<Recording> = artist
-            .browse_or_fetch_artist_recordings(conn)
-            .try_collect()
-            .await?;
-
-        recordings.shuffle(&mut rng());
-
-        for recording in recordings {
-            if self.recording_blacklist.contains(&recording.mbid) {
-                continue;
-            }
-
-            return Ok(Some(recording));
+        pin_mut!(stream);
+        while let Some(item) = stream.next().await {
+            match item {
+                Ok(v) => emit.emit(v).await,
+                Err(e) => emit.emit_err(e.into()).await,
+            };
         }
 
-        Ok(None)
-    }
-
-    async fn get_random_artist_from_recordings(
-        &self,
-        client: &YumakoClient,
-        mut recordings: Vec<&Recording>,
-    ) -> Result<Option<Artist>, crate::Error> {
-        let conn = &mut client.get_db_lite_raw_conn().await?;
-        recordings.shuffle(&mut rng());
-
-        for recording in recordings {
-            let mut artists = recording
-                .get_artists_or_fetch(conn, &client.alistral_core.musicbrainz_db)
-                .await?;
-
-            artists.shuffle(&mut rng());
-
-            for artist in artists {
-                if self.artist_blacklist.contains(&artist.mbid) {
-                    continue;
-                }
-
-                return Ok(Some(artist));
-            }
-        }
-
-        Ok(None)
-    }
-
-    /// Get an item of the playlist
-    async fn get_random_item(
-        &mut self,
-        client: &YumakoClient,
-        recordings: Vec<&Recording>,
-    ) -> Result<Option<Recording>, crate::Error> {
-        loop {
-            let artist = self
-                .get_random_artist_from_recordings(client, recordings.clone())
-                .await?;
-
-            match artist {
-                Some(artist) => {
-                    let recording = self
-                        .get_random_recording_from_artist(client, &artist)
-                        .await?;
-
-                    match recording {
-                        Some(recording) => {
-                            self.recording_blacklist.push(recording.mbid.clone());
-                            return Ok(Some(recording));
-                        }
-                        None => {
-                            warn!(
-                                "{} has not enough recordings for generation. Consider adding more recordings to Musicbrainz!",
-                                artist.name
-                            );
-                            self.artist_blacklist.push(artist.mbid.clone());
-                        }
-                    }
-                }
-                None => return Ok(None),
-            }
-        }
-    }
+        Ok(())
+    })
+    .boxed()
 }

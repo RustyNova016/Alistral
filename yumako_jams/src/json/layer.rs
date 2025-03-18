@@ -4,15 +4,15 @@ use serde::Deserialize;
 use serde::Serialize;
 use serde_json::Value;
 
-use crate::modules::listen_data::listen_interval::ListenInterval;
 use crate::RadioStream;
 use crate::client::YumakoClient;
 use crate::modules::filters::booleans::AndFilter;
 use crate::modules::filters::cooldown::CooldownFilter;
-use crate::modules::filters::minimum_listens::MinimumListenFilter;
+use crate::modules::filters::listens::ListenFilter;
 use crate::modules::filters::timeout::TimeoutFilter;
 use crate::modules::listen_data::clear_listens::ClearListens;
 use crate::modules::listen_data::last_listens::LatestListens;
+use crate::modules::listen_data::listen_interval::ListenInterval;
 use crate::modules::mappers::artist_discography::ArtistDiscographyMapper;
 use crate::modules::radio_module::LayerResult;
 use crate::modules::radio_module::RadioModule;
@@ -57,6 +57,9 @@ impl Layer {
             "latest_listens" => {
                 LatestListens::create(&self, variables)?.create_stream(stream, client)
             }
+            "listen_filter" => {
+                ListenFilter::create(&self, variables)?.create_stream(stream, client)
+            }
             "listen_interval" => {
                 ListenInterval::create(&self, variables)?.create_stream(stream, client)
             }
@@ -65,9 +68,6 @@ impl Layer {
             }
             "listenrate_scorer" => {
                 ListenRateScorer::create(&self, variables)?.create_stream(stream, client)
-            }
-            "minimum_listen_filter" => {
-                MinimumListenFilter::create(&self, variables)?.create_stream(stream, client)
             }
             "sort_module" => SortModule::create(&self, variables)?.create_stream(stream, client),
             "timeout_filter" => {
