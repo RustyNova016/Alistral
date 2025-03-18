@@ -1,6 +1,9 @@
+use core::time::Duration;
+
 use deadpool::managed;
 use deadpool::managed::Object;
 use deadpool::managed::PoolError;
+use deadpool::Runtime;
 use sqlx::Connection as _;
 use sqlx::SqliteConnection;
 use sqlx::sqlite::SqliteConnectOptions;
@@ -13,6 +16,10 @@ pub struct RawPoolManager {
 impl RawPoolManager {
     pub fn create_pool(config: SqliteConnectOptions) -> RawConnectionPool {
         RawConnectionPool::builder(RawPoolManager { config })
+            .wait_timeout(Some(Duration::from_secs(10)))
+            .runtime(Runtime::Tokio1)
+            .queue_mode(managed::QueueMode::Fifo)
+            .max_size(64)
             .build()
             .unwrap()
     }

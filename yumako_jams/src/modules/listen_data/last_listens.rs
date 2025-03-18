@@ -39,7 +39,7 @@ impl RadioModule for LatestListens {
         let this_moved = this.clone();
 
         Ok(stream
-            .try_ready_chunks_result(50000)
+            .ready_chunks_ok(50000)
             .map_ok(move |tracks| convert_batch(this_moved.clone(), client, tracks))
             .extract_future_ok()
             .buffered(this.buffer)
