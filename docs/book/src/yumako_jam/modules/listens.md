@@ -51,6 +51,7 @@ This module add / remove the latest X listens of the recording
 ### Inputs
 
 - `user: String` (required): The user to pull listens from
+- `count: Integer` (Default: `3`): The number of latest listens to add to each recording
 - `action: ListenAction` (Default: `Add`): Either add or remove listens. Accept: `"Add"`, `"Remove"`, or `"Replace"`
 - `buffer: Integer` (Default: `8`): Buffer size for the listens. See [buffering](../create/performance.md#buffering)
 

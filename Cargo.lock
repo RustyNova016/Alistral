@@ -798,6 +798,9 @@ name = "deadpool-runtime"
 version = "0.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "092966b41edc516079bdf31ec78a2e0588d1d0c08f78b91d8307215928642b2b"
+dependencies = [
+ "tokio",
+]
 
 [[package]]
 name = "deflate64"
@@ -2495,6 +2498,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "85eae3c4ed2f50dcfe72643da4befc30deadb458a9b590d720cde2f2b1e97da9"
 dependencies = [
  "zerocopy",
+]
+
+[[package]]
+name = "priority-queue"
+version = "2.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6af7c37f3487fd85d8e576b32095e1fe8c4860472f035d25472f1223b5026c88"
+dependencies = [
+ "autocfg",
+ "equivalent",
+ "indexmap 2.8.0",
 ]
 
 [[package]]
@@ -4596,6 +4610,7 @@ dependencies = [
  "itertools 0.14.0",
  "json",
  "musicbrainz-db-lite",
+ "priority-queue",
  "rand 0.9.0",
  "rust_decimal",
  "serde",
