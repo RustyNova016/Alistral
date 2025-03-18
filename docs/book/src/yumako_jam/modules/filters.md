@@ -43,20 +43,25 @@ Removes all the tracks that have been recently listened.
 }
 ```
 
-## Minimum listens
+## listens
 
-This filter only let tracks that have a minimum (inclusive) of listens
+This filter only let tracks that have a minimum (inclusive) or maximum (inclusive) of listens..
+
+Setting a maximum of 0 only give unlistened tracks
+
+⚠️ Make sure the listens are loaded before this step
 
 ### Inputs
 
-- `minimum: Int` (required): The minimum amount of listens
+- `minimum: Int` (Default: `0`): The minimum amount of listens
+- `maximum: Int` (Default: `infinite`): The minimum amount of listens
 
 ### Example
 
 ```json
 {
-    "step_type": "minimum_listen_filter",
-    "id": "minimum_listen_filter",
+    "step_type": "listen_filter",
+    "id": "listen_filter",
     "inputs": {
         "minimum": 3 
     }

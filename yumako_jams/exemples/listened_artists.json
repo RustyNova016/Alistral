@@ -24,36 +24,53 @@
             "id": "timeout_filter"
         },
         {
-            "step_type": "listenrate_scorer",
-            "id": "listenrate_scorer",
-            "inputs": {
-                "merge": "Add"
-            }
+            "step_type": "listen_interval",
+            "id": "listen_interval"
         },
         {
-            "step_type": "sort_module",
-            "id": "sort_module",
+            "step_type": "artist_discography_mapper",
+            "id": "artist_discography_mapper"
+        },
+        {
+            "step_type": "listen_filter",
+            "id": "unlistened_filter",
             "inputs": {
-                "direction": "Asc"
+                
             }
         }
     ],
     "inputs": {
         "minimum_listens": {
+            "description": "The minimum all time listens the tracks need to have before getting suggested",
             "targets": [
-                "listen_filter.minimum"
+                "minimum_listen_filter.minimum"
             ]
         },
         "username": {
             "targets": [
                 "listen_seeder.user",
-                "and_filter.radio.username"
+                "and_filter.radio.username",
+                "latest_listens.user"
             ]
         },
         "timeouts": {
             "targets": [
                 "timeout_filter.timeouts"
             ]
+        },
+        "listen_range": {
+            "description": "The time range of listens to use",
+            "targets": [
+                "listen_interval.period"
+            ],
+            "default": "AllTime"
+        },
+        "minimum_seed_listens": {
+            "description": "The number of minimum listens to use for the score",
+            "targets": [
+                "listen_interval.listen_interval"
+            ],
+            "default": 0
         }
     }
 }

@@ -132,7 +132,6 @@ impl Mergable for ListenCollection {
     }
 }
 
-
 impl From<ListenCollection> for Vec<Listen> {
     fn from(value: ListenCollection) -> Self {
         value.data

@@ -2,6 +2,7 @@ use core::ops::Deref;
 
 use alistral_core::datastructures::entity_with_listens::recording::RecordingWithListens;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
+use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use rust_decimal::Decimal;
 
 use crate::modules::listen_data::ListenAction;
@@ -46,6 +47,15 @@ impl From<RecordingWithListens> for RadioItem {
     fn from(value: RecordingWithListens) -> Self {
         Self {
             recording: value,
+            score: Decimal::ZERO,
+        }
+    }
+}
+
+impl From<Recording> for RadioItem {
+    fn from(value: Recording) -> Self {
+        Self {
+            recording: RecordingWithListens::new(value, Default::default()),
             score: Decimal::ZERO,
         }
     }

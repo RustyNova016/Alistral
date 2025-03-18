@@ -7,9 +7,9 @@ use futures::TryStreamExt as _;
 use futures::future::BoxFuture;
 use futures::stream::BoxStream;
 use rust_decimal::Decimal;
-use tracing::Span;
 use tracing::instrument;
 use tuillez::pg_counted;
+use tuillez::pg_inc;
 use tuillez::tracing_indicatif::span_ext::IndicatifSpanExt;
 
 use crate::modules::scores::ScoreMerging;
@@ -70,6 +70,7 @@ async fn collect_with_inner(
     min_duration: Duration,
 ) -> Vec<RadioResult> {
     let mut out = Vec::new();
+    let mut prog = 0;
     pg_counted!(100, "Collecting Radio");
 
     while let Some(track) = this.next().await {
@@ -82,15 +83,20 @@ async fn collect_with_inner(
                 Err(_) => Duration::zero(),
             })
             .sum::<Duration>();
-
         let count_prog = (out.len() as u64 * 100)
-            .checked_div(min_count * 100)
+            .checked_div(min_count)
             .unwrap_or(100);
-        let dur_prog = (collected_duration.num_seconds() * 100)
-            .checked_div(min_duration.num_seconds() * 100)
-            .unwrap_or(100) as u64;
 
-        Span::current().pb_set_position(count_prog.min(dur_prog));
+        let dur_prog = (collected_duration.num_seconds() * 100)
+            .checked_div(min_duration.num_seconds())
+            .unwrap_or(1) as u64;
+
+        let tot_prog = count_prog.min(dur_prog);
+
+        if tot_prog > prog {
+            pg_inc!(tot_prog - prog);
+            prog = tot_prog;
+        }
 
         let has_minimum_count = min_count <= out.len() as u64;
         let has_sufficient_duration = collected_duration >= min_duration;

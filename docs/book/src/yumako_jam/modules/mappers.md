@@ -24,6 +24,6 @@ They are returned in a random order
 ```json
 {
     "step_type": "artist_discography_mapper",
-    "id": "artist_discography_mapper",
+    "id": "artist_discography_mapper"
 }
 ```

@@ -1,13 +1,13 @@
 {
-    "name": "Listenrate Radio",
+    "name": "Overdue Radio",
     "stack": [
         {
             "step_type": "listen_seeder",
             "id": "listen_seeder"
         },
         {
-            "step_type": "minimum_listen_filter",
-            "id": "minimum_listen_filter",
+            "step_type": "listen_filter",
+            "id": "listen_filter",
             "inputs": {
                 "minimum": 3
             }
@@ -50,7 +50,7 @@
         "minimum_listens": {
             "description": "The minimum all time listens the tracks need to have before getting suggested",
             "targets": [
-                "minimum_listen_filter.minimum"
+                "listen_filter.minimum"
             ]
         },
         "username": {

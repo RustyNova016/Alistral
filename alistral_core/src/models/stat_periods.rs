@@ -17,7 +17,7 @@ pub enum StatPeriod {
     /// Uses the last 365 days from now    
     Last365Days,
 
-    AllTime
+    AllTime,
 }
 
 impl StatPeriod {
@@ -28,7 +28,7 @@ impl StatPeriod {
             Self::Last30Days => now - Duration::days(30),
             Self::Last90Days => now - Duration::days(90),
             Self::Last365Days => now - Duration::days(365),
-            Self::AllTime => DateTime::<Utc>::MIN_UTC
+            Self::AllTime => DateTime::<Utc>::MIN_UTC,
         }
     }
 
@@ -39,7 +39,7 @@ impl StatPeriod {
             Self::Last30Days => now,
             Self::Last90Days => now,
             Self::Last365Days => now,
-            Self::AllTime => DateTime::<Utc>::MAX_UTC
+            Self::AllTime => DateTime::<Utc>::MAX_UTC,
         }
     }
 }
