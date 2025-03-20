@@ -71,6 +71,7 @@ dependencies = [
  "interzic",
  "itertools 0.14.0",
  "listenbrainz",
+ "lyn",
  "macon",
  "musicbrainz-db-lite",
  "rand 0.9.1",
@@ -2010,6 +2011,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "lyn"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f08d9299a146aa1eb3c5451e6d9045708f232a43fd8d4436f69cf00fcb2a019c"
+
+[[package]]
 name = "lzma-rs"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2137,7 +2144,7 @@ dependencies = [
  "serde_json",
  "serial_test",
  "sqlx",
- "streamies 0.2.2",
+ "streamies",
  "thiserror",
  "tokio",
  "tracing",
@@ -2508,7 +2515,7 @@ checksum = "6af7c37f3487fd85d8e576b32095e1fe8c4860472f035d25472f1223b5026c88"
 dependencies = [
  "autocfg",
  "equivalent",
- "indexmap 2.8.0",
+ "indexmap 2.9.0",
 ]
 
 [[package]]
@@ -3447,16 +3454,6 @@ name = "stable_deref_trait"
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a8f112729512f8e442d81f95a8a7ddf2b7c6b8a1a6f509a95864142b30cab2d3"
-
-[[package]]
-name = "streamies"
-version = "0.1.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "085244a9c5b9e427a605655010857732850965499a0f91d31493db618441503e"
-dependencies = [
- "futures",
- "pin-project-lite",
-]
 
 [[package]]
 name = "streamies"
@@ -4616,7 +4613,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sqlx",
- "streamies 0.1.6",
+ "streamies",
  "thiserror",
  "tokio",
  "tracing",
