@@ -1,3 +1,4 @@
+pub mod inspect;
 pub mod yumako;
 use interzic::models::messy_recording::MessyRecording;
 use interzic::models::playlist_stub::PlaylistStub;
