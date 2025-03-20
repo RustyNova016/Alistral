@@ -1,0 +1,51 @@
+{
+    "name": "Test Radio",
+    "stack": [
+        {
+            "step_type": "listen_seeder",
+            "id": "listen_seeder"
+        },
+        {
+            "step_type": "minimum_listen_filter",
+            "id": "minimum_listen_filter",
+            "inputs": {
+                "minimum": 5
+            }
+        },
+        {
+            "step_type": "and_filter",
+            "id": "and_filter",
+            "inputs": {
+                "radio_schema": {
+                    "name": "Test Inner Radio",
+                    "stack": [
+                        {
+                            "step_type": "listen_seeder",
+                            "id": "listen_seeder"
+                        }
+                    ],
+                    "inputs": {
+                        "username": {
+                            "targets": [
+                                "listen_seeder.user"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    ],
+    "inputs": {
+        "minimum_listens": {
+            "targets": [
+                "minimum_listen_filter.minimum"
+            ]
+        },
+        "username": {
+            "targets": [
+                "listen_seeder.user",
+                "and_filter.radio.username"
+            ]
+        }
+    }
+}

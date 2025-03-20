@@ -16,6 +16,7 @@ alistral_core = { path = "./alistral_core" }
 interzic = { path = "./interzic" }
 tuillez = { path = "./tuillez" }
 musicbrainz-db-lite = { path = "./musicbrainz_db_lite" }
+yumako_jams = { path = "./yumako_jams" }
 
 # Musicbrainz dependencies
 #listenbrainz = "0.8.1"
@@ -67,6 +68,7 @@ strsim = "0.11.1"
 strum_macros = "0.27.1"
 tracing-indicatif = "0.3.9"
 clap-verbosity-flag = { version = "3.0.2", default-features = false, features = ["tracing"] }
+lyn = "0.1.0"
 
 # The profile that 'cargo dist' will build with
 [profile.dist]
@@ -79,7 +81,15 @@ async_fn_in_trait = { level = "allow", priority = 1 }
 # --- Workspace ---
 
 [workspace]
-members = ["./alistral_core", "interzic", "tuillez", "musicbrainz_db_lite", "musicbrainz_db_lite/musicbrainz_db_lite_macros", "musicbrainz_db_lite/musicbrainz_db_lite_schema"]
+members = [
+    "./alistral_core", 
+    "interzic", 
+    "yumako_jams", 
+    "tuillez",
+    "musicbrainz_db_lite", 
+    "musicbrainz_db_lite/musicbrainz_db_lite_macros", 
+    "musicbrainz_db_lite/musicbrainz_db_lite_schema"
+]
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
