@@ -52,6 +52,7 @@ url = "2.5.4"
 futures = "0.3.31"
 tokio = { version = "1.46.1", features = ["rt", "rt-multi-thread", "parking_lot"] }
 streamies = "0.2.2"
+lyn = "0.1.0"
 
 # Cli
 clap = { version = "4.5.42", features = [
