@@ -6,30 +6,34 @@ use chrono::DateTime;
 use chrono::Duration;
 use chrono::Utc;
 use clap::Parser;
-use serde_json::Value;
 use tracing::debug;
 use tuillez::fatal_error::IntoFatal;
 use yumako_jams::json::radio::Radio;
 use yumako_jams::radio_stream::RadioStreamaExt;
 
 use crate::ALISTRAL_CLIENT;
+use crate::models::cli::parsers::yumako_parser::parse_yumako_variables;
 use crate::models::config::config_trait::ConfigFile as _;
 use crate::models::config::recording_timeout::RecordingTimeoutConfig;
 
 #[derive(Parser, Debug, Clone)]
-pub struct RadioYumakoCommand {}
+pub struct RadioYumakoCommand {
+    /// The name of the radio to inspect
+    radio_name: String,
+
+    /// Radio arguments
+    arguments: Vec<String>,
+}
 
 impl RadioYumakoCommand {
     pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> Result<(), crate::Error> {
-        let radio_schema = Radio::from_file("./yumako_jams/exemples/listened_artists.json")
-            .expect_fatal("Couldn't read the radio")?;
+        let mut args = parse_yumako_variables(&self.arguments.join(" ")).unwrap();
 
-        let mut vars = HashMap::new();
-        vars.insert(
-            "username".to_string(),
-            Value::String("RustyNova".to_string()),
-        );
-        vars.insert(
+        let radio_schema =
+            Radio::from_file(format!("./yumako_jams/exemples/{}.json", self.radio_name))
+                .expect_fatal("Couldn't read the radio")?;
+
+        args.insert(
             "timeouts".to_string(),
             serde_json::to_value(load_timeouts()).unwrap(),
         );
@@ -39,7 +43,7 @@ impl RadioYumakoCommand {
         // );
 
         debug!("Compiling radio");
-        let radio = match radio_schema.to_stream(&ALISTRAL_CLIENT.yumako_jams, vars) {
+        let radio = match radio_schema.to_stream(&ALISTRAL_CLIENT.yumako_jams, args) {
             Ok(val) => val,
             Err(err) => {
                 compilation_error(err);
@@ -48,7 +52,7 @@ impl RadioYumakoCommand {
         };
         debug!("Compiled radio");
 
-        for track in radio.collect_with(200, Duration::zero()).await {
+        for track in radio.collect_with(50, Duration::zero()).await {
             let track = track.unwrap();
 
             println!(
