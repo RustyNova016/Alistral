@@ -1,4 +1,5 @@
 pub mod interzic;
+pub mod parsers;
 use std::io;
 
 use cache::CacheCommand;
