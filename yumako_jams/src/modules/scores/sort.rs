@@ -35,14 +35,20 @@ impl RadioModule for SortModule {
 
             let mut stream = stream.to_item_stream(&emitter).map(SortItem);
 
+            let mut stream_ended = false;
             loop {
-                if let Some(val) = stream.next().await {
-                    let score = val.score();
-                    collection.push(val, score);
+                if !stream_ended {
+                    match stream.next().await {
+                        Some(val) => {
+                            let score = val.score();
+                            collection.push(val, score);
 
-                    if collection.len() as u64 <= self.max_count {
-                        pg_inc!();
-                        continue;
+                            if collection.len() as u64 <= self.max_count {
+                                pg_inc!();
+                                continue;
+                            }
+                        }
+                        None => stream_ended = true,
                     }
                 }
 
