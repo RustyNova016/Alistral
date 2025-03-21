@@ -44,4 +44,7 @@ pub enum Error {
 
     #[error(transparent)]
     ListenFetchQueryError(#[from] ListenFetchQueryError),
+
+    #[error("Listenbrainz returned an error while fetching listens: {0}")]
+    ListenFetchingError(String),
 }

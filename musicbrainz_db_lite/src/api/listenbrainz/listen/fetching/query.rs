@@ -143,7 +143,7 @@ impl ListenFetchAPIQuery {
     async fn split_and_request(
         &mut self,
         client: &DBClient,
-    ) -> Result<Vec<UserListensListen>, reqwest::Error> {
+    ) -> Result<Vec<UserListensListen>, crate::Error> {
         let (mut a, mut b) = self.split().unwrap();
 
         Span::current().pb_inc_length(1);
@@ -158,10 +158,7 @@ impl ListenFetchAPIQuery {
         Ok(a_vec)
     }
 
-    async fn request(
-        &mut self,
-        client: &DBClient,
-    ) -> Result<Vec<UserListensListen>, reqwest::Error> {
+    async fn request(&mut self, client: &DBClient) -> Result<Vec<UserListensListen>, crate::Error> {
         // If the work is too big, split it
         if self
             .fetch_interval_duration()
