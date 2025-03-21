@@ -72,6 +72,9 @@ pub enum Error {
     YumakoArgumentDataDeserializingError(String, String, serde_json::Error),
 
     #[error(transparent)]
+    YumakoError(#[from] yumako_jams::Error),
+
+    #[error(transparent)]
     RawConnectionError(#[from] RawPoolError),
 }
 

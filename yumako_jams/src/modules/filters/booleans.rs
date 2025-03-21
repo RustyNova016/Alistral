@@ -8,6 +8,7 @@ use serde_json::Value;
 use streamies::Streamies;
 use tracing::debug;
 
+use crate::radio_variables::RadioVariables;
 use crate::RadioStream;
 use crate::client::YumakoClient;
 use crate::json::radio::Radio;
@@ -27,7 +28,9 @@ impl RadioModule for AndFilter {
         mut stream: RadioStream<'a>,
         client: &'a YumakoClient,
     ) -> LayerResult<'a> {
-        let other_radio = self.radio_schema.to_stream(client, self.radio)?;
+        let other_radio = self
+            .radio_schema
+            .to_stream(client, RadioVariables::new(self.radio))?;
 
         // We create a stream here to capture the other stream collection as part of the first poll's work
         // If we don't do that, we force having a to read a whole radio upon compilation,
