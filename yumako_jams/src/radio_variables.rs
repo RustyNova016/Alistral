@@ -1,15 +1,25 @@
 use std::collections::HashMap;
 
+use chrono::DateTime;
+use chrono::Duration;
+use chrono::Utc;
+use serde::de::DeserializeOwned;
 use serde_json::Value;
+use tuillez::extensions::chrono_exts::DurationExt;
 
 use crate::json::radio_input::RadioInput;
 
 /// Represent all the variable of a radio
+#[derive(Clone, Debug)]
 pub struct RadioVariables {
     values: HashMap<String, Value>,
 }
 
 impl RadioVariables {
+    pub fn new(values: HashMap<String, Value>) -> Self {
+        Self { values }
+    }
+
     pub fn new_with_aliases(
         data: HashMap<String, Value>,
         aliases: HashMap<String, RadioInput>,
@@ -64,6 +74,50 @@ impl RadioVariables {
         }
 
         Ok(out)
+    }
+
+    pub fn into_hashmap(self) -> HashMap<String, Value> {
+        self.values
+    }
+
+    pub fn get_as<T: DeserializeOwned>(
+        &self,
+        key: &str,
+        type_name: &str,
+    ) -> Option<Result<T, crate::Error>> {
+        let data = self.values.get(key)?;
+
+        match serde_json::from_value(data.clone()) {
+            Ok(val) => Some(Ok(val)),
+            Err(err) => Some(Err(crate::Error::new_variable_type_error(
+                key.to_string(),
+                type_name.to_string(),
+                data.to_string(),
+                err,
+            ))),
+        }
+    }
+
+    pub fn get_as_u64(&self, key: &str) -> Option<Result<u64, crate::Error>> {
+        self.get_as(key, "integer")
+    }
+
+    pub fn get_as_string(&self, key: &str) -> Option<Result<String, crate::Error>> {
+        self.get_as(key, "string")
+    }
+
+    pub fn get_count(&self) -> Option<Result<u64, crate::Error>> {
+        self.get_as_u64("count")
+    }
+
+    pub fn get_duration(&self) -> Option<Result<Duration, crate::Error>> {
+        self.get_as_string("duration").map(|res| {
+            res.and_then(|dur| {
+                Duration::from_human_string(&dur).map_err(|err| {
+                    crate::Error::new_variable_type_error("duration".to_string(), "duration_string".to_string(), dur, err)
+                })
+            })
+        })
     }
 }
 
