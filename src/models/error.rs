@@ -69,6 +69,9 @@ pub enum Error {
         "Couldn't read the data of a variable. \nVariable: {0}. \nProvided data: {1}\nError: {2}"
     )]
     YumakoArgumentDataDeserializingError(String, String, serde_json::Error),
+
+    #[error(transparent)]
+    YumakoError(#[from] yumako_jams::Error),
 }
 
 impl From<Error> for FatalError {
