@@ -1,3 +1,7 @@
+use core::fmt::Display;
+use core::pin::Pin;
+use std::fmt::format;
+
 use musicbrainz_db_lite::database::pool::DBLitePoolError;
 use musicbrainz_db_lite::database::raw_conn_pool::RawPoolError;
 use thiserror::Error;
@@ -5,17 +9,20 @@ use thiserror::Error;
 #[derive(Error, Debug)]
 pub enum Error {
     #[error(
-        "A variable was missing during the radio compilation. Please provide it \nMissing variable path: `{0}.{1}`"
+        "A variable was missing during the radio compilation. Please provide it \nMissing variable path: `{0}`"
     )]
-    MissingVariableError(String, String),
+    MissingVariableError(String),
 
     #[error("Variable {0} has the wrong type. Expected `{1}`, got `{2}`")]
     WrongVariableTypeError(String, String, String),
 
-    #[error("Couldn't compile the radio due to incorect variable: {0}. \nStep id: `{1}`")]
+    #[error(transparent)]
+    VariableTypeError(VariableTypeError),
+
+    #[error("Couldn't compile the radio due to incorrect variable: {0}. \nStep id: `{1}`")]
     VariableReadError(serde_json::Error, String),
 
-    #[error("Couldn't compile the radio due to incorect variable: {0}. Hint: {1}")]
+    #[error("Couldn't compile the radio due to incorrect variable: {0}. Hint: {1}")]
     VariableDecodeError(String, String),
 
     #[error("Couldn't deserialize the radio. Please check for errors in the schema: {0}")]
@@ -44,3 +51,46 @@ pub enum Error {
     #[error(transparent)]
     IOError(#[from] std::io::Error),
 }
+
+impl Error {
+    pub fn new_variable_type_error<T: core::error::Error + Send + 'static>(
+        variable_name: String,
+        variable_type: String,
+        data: String,
+        error: T,
+    ) -> Self {
+        Self::VariableTypeError(VariableTypeError {
+            variable_name,
+            variable_type,
+            data,
+            serde_error: Box::new(error),
+        })
+    }
+
+    pub fn new_missing_variable_error(layer: &str, variable: &str) -> Self {
+        Self::MissingVariableError(format!("{layer}.{variable}"))
+    }
+}
+
+#[derive(Debug)]
+pub struct VariableTypeError {
+    variable_name: String,
+    variable_type: String,
+    data: String,
+    serde_error: Box<dyn core::error::Error + Send>,
+}
+
+impl Display for VariableTypeError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        writeln!(
+            f,
+            "Found invalid variable type. Variable `{}` is declared as type `{}`, but got `{}`, which is not deserialable to this type.",
+            self.variable_name, self.variable_type, self.data
+        )?;
+        writeln!(f, "The deserializer returned: {}", self.serde_error)?;
+
+        Ok(())
+    }
+}
+
+impl core::error::Error for VariableTypeError {}

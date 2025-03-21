@@ -5,13 +5,10 @@ use alistral_core::cli::colors::AlistralColors;
 use chrono::DateTime;
 use chrono::Utc;
 use clap::Parser;
-use futures::TryStreamExt;
 use serde_json::Value;
-use tracing::debug;
 use tuillez::fatal_error::IntoFatal;
 use yumako_jams::json::radio::Radio;
 
-use crate::ALISTRAL_CLIENT;
 use crate::models::config::config_trait::ConfigFile as _;
 use crate::models::config::recording_timeout::RecordingTimeoutConfig;
 
@@ -44,39 +41,39 @@ impl RadioInspectCommand {
             Value::String("Last90Days".to_string()),
         );
 
-        debug!("Compiling radio");
-        let mut radio = match radio_schema.to_stream(&ALISTRAL_CLIENT.yumako_jams, vars) {
-            Ok(val) => val,
-            Err(err) => {
-                compilation_error(err);
-                return Ok(());
-            }
-        };
-        debug!("Compiled radio");
+        // debug!("Compiling radio");
+        // let mut radio = match radio_schema.to_stream(&ALISTRAL_CLIENT.yumako_jams, vars) {
+        //     Ok(val) => val,
+        //     Err(err) => {
+        //         compilation_error(err);
+        //         return Ok(());
+        //     }
+        // };
+        // debug!("Compiled radio");
 
-        let mut i = 0;
-        while let Some(track) = radio.try_next().await.unwrap() {
-            i += 1;
+        // let mut i = 0;
+        // while let Some(track) = radio.try_next().await.unwrap() {
+        //     i += 1;
 
-            if track.entity().mbid == self.recording {
-                println!(
-                    "[#{} - {}] {}",
-                    i,
-                    track.score.round_sf(3).unwrap(),
-                    track
-                        .entity()
-                        .pretty_format_with_credits(
-                            &mut *conn,
-                            &ALISTRAL_CLIENT.musicbrainz_db,
-                            true
-                        )
-                        .await
-                        .unwrap()
-                );
+        //     if track.entity().mbid == self.recording {
+        //         println!(
+        //             "[#{} - {}] {}",
+        //             i,
+        //             track.score.round_sf(3).unwrap(),
+        //             track
+        //                 .entity()
+        //                 .pretty_format_with_credits(
+        //                     &mut *conn,
+        //                     &ALISTRAL_CLIENT.musicbrainz_db,
+        //                     true
+        //                 )
+        //                 .await
+        //                 .unwrap()
+        //         );
 
-                return Ok(());
-            }
-        }
+        //         return Ok(());
+        //     }
+        // }
 
         println!("Recording not found in the radio");
 

@@ -18,7 +18,11 @@ use crate::radio_variables::RadioVariables;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct Radio {
-    name: String,
+    pub name: String,
+
+    #[serde(default = "default_description")]
+    pub description: String,
+    
     stack: Vec<Layer>,
     inputs: HashMap<String, RadioInput>,
 }
@@ -27,9 +31,9 @@ impl Radio {
     pub fn to_stream(
         self,
         client: &YumakoClient,
-        inputs: HashMap<String, Value>,
+        inputs: RadioVariables,
     ) -> LayerResult<'_> {
-        let variables = RadioVariables::new_with_aliases(inputs, self.inputs);
+        let variables = RadioVariables::new_with_aliases(inputs.into_hashmap(), self.inputs);
         let mut stream: RadioStream = stream::empty().boxed();
 
         for layer in self.stack {
@@ -50,4 +54,8 @@ impl Radio {
         // Read the JSON contents of the file as an instance of `User`.
         serde_json::from_reader(reader).map_err(crate::Error::RadioReadError)
     }
+}
+
+fn default_description() -> String {
+    String::new()
 }

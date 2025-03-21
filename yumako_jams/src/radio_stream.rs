@@ -14,6 +14,7 @@ use tuillez::tracing_indicatif::span_ext::IndicatifSpanExt;
 
 use crate::modules::scores::ScoreMerging;
 use crate::radio_item::RadioItem;
+use crate::radio_variables::RadioVariables;
 
 /// The stream output of the radio
 pub type RadioStream<'a> = BoxStream<'a, RadioResult>;
@@ -61,6 +62,20 @@ pub impl<'a> RadioStream<'a> {
     ) -> BoxFuture<'a, Vec<RadioResult>> {
         collect_with_inner(self, min_count, min_duration).boxed()
     }
+
+    fn collect_with_args(
+        self,
+        args: RadioVariables,
+    ) -> Result<BoxFuture<'a, Vec<RadioResult>>, crate::Error> {
+        let min_count = args.get_count().transpose()?.unwrap_or(50);
+
+        let min_duration = args
+            .get_duration()
+            .transpose()?
+            .unwrap_or_else(Duration::zero);
+
+        Ok(collect_with_inner(self, min_count, min_duration).boxed())
+    }
 }
 
 #[instrument(skip(this), fields(indicatif.pb_show = tracing::field::Empty))]
@@ -83,6 +98,7 @@ async fn collect_with_inner(
                 Err(_) => Duration::zero(),
             })
             .sum::<Duration>();
+        
         let count_prog = (out.len() as u64 * 100)
             .checked_div(min_count)
             .unwrap_or(100);

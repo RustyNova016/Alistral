@@ -65,6 +65,12 @@
                 "timeout_filter.timeouts"
             ]
         },
+        "count": {
+            "targets": []
+        },
+        "duration": {
+            "targets": []
+        },
         "listen_range": {
             "description": "The time range of listens to use",
             "targets": [
