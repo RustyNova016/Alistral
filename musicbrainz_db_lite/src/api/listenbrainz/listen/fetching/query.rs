@@ -104,6 +104,8 @@ impl ListenFetchAPIQuery {
             Listen::insert_api_listen(&mut trans, &lis).await?;
         }
 
+        trans.commit().await?;
+
         Ok(())
     }
 
