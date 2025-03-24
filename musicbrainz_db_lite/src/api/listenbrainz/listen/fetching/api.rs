@@ -10,7 +10,7 @@ pub(super) async fn fetch_user_listens(
     min_ts: Option<i64>,
     max_ts: Option<i64>,
     count: Option<u32>,
-) -> Result<UserListensResponse, reqwest::Error> {
+) -> Result<UserListensResponse, crate::Error> {
     let mut url = format!(
         "{api_root}user/{username}/listens?count={count}",
         api_root = crate_client.listenbrainz_client.api_url(),
@@ -26,5 +26,6 @@ pub(super) async fn fetch_user_listens(
         write!(&mut url, "&max_ts={}", max_ts).unwrap();
     }
 
-    reqwest::get(url).await?.json().await
+    let body = reqwest::get(url).await?.text().await?;
+    serde_json::from_str(&body).map_err(|_| crate::Error::ListenFetchingError(body))
 }

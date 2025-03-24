@@ -2,11 +2,11 @@ use core::num::NonZeroU32;
 use core::ops::DerefMut;
 use std::sync::Arc;
 
+use async_recursion::async_recursion;
 use chrono::DateTime;
 use chrono::Duration;
 use chrono::Utc;
 use futures::join;
-use futures::FutureExt;
 use governor::Quota;
 use governor::RateLimiter;
 use listenbrainz::raw::response::UserListensListen;
@@ -57,8 +57,8 @@ impl ListenFetchAPIQuery {
             return Err(ListenFetchQueryError::NoDates);
         }
 
-        let quota = Quota::per_second(NonZeroU32::new(2).unwrap())
-            .allow_burst(NonZeroU32::new(15).unwrap());
+        let quota =
+            Quota::per_second(NonZeroU32::new(2).unwrap()).allow_burst(NonZeroU32::new(5).unwrap());
         let rate_limiter = Arc::new(RateLimiter::direct(quota));
 
         Ok(Self {
@@ -104,6 +104,8 @@ impl ListenFetchAPIQuery {
             Listen::insert_api_listen(&mut trans, &lis).await?;
         }
 
+        trans.commit().await?;
+
         Ok(())
     }
 
@@ -140,10 +142,11 @@ impl ListenFetchAPIQuery {
         ))
     }
 
+    #[async_recursion]
     async fn split_and_request(
         &mut self,
         client: &DBClient,
-    ) -> Result<Vec<UserListensListen>, reqwest::Error> {
+    ) -> Result<Vec<UserListensListen>, crate::Error> {
         let (mut a, mut b) = self.split().unwrap();
 
         Span::current().pb_inc_length(1);
@@ -158,16 +161,14 @@ impl ListenFetchAPIQuery {
         Ok(a_vec)
     }
 
-    async fn request(
-        &mut self,
-        client: &DBClient,
-    ) -> Result<Vec<UserListensListen>, reqwest::Error> {
+    #[async_recursion]
+    async fn request(&mut self, client: &DBClient) -> Result<Vec<UserListensListen>, crate::Error> {
         // If the work is too big, split it
         if self
             .fetch_interval_duration()
             .is_some_and(|d| d > Duration::days(15))
         {
-            return self.split_and_request(client).boxed_local().await;
+            return self.split_and_request(client).await;
         }
 
         // Fetch from the api
@@ -204,7 +205,7 @@ impl ListenFetchAPIQuery {
         }
 
         // Bounds set. We split and yield that
-        self.split_and_request(client).boxed_local().await
+        self.split_and_request(client).await
     }
 
     async fn wait_for_rate_limit(&self) {
