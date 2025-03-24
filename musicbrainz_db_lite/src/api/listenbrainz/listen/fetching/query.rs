@@ -7,7 +7,6 @@ use chrono::DateTime;
 use chrono::Duration;
 use chrono::Utc;
 use futures::join;
-use futures::FutureExt;
 use governor::Quota;
 use governor::RateLimiter;
 use listenbrainz::raw::response::UserListensListen;
@@ -58,8 +57,8 @@ impl ListenFetchAPIQuery {
             return Err(ListenFetchQueryError::NoDates);
         }
 
-        let quota = Quota::per_second(NonZeroU32::new(2).unwrap())
-            .allow_burst(NonZeroU32::new(15).unwrap());
+        let quota =
+            Quota::per_second(NonZeroU32::new(2).unwrap()).allow_burst(NonZeroU32::new(5).unwrap());
         let rate_limiter = Arc::new(RateLimiter::direct(quota));
 
         Ok(Self {
