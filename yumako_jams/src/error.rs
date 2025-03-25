@@ -1,6 +1,4 @@
 use core::fmt::Display;
-use core::pin::Pin;
-use std::fmt::format;
 
 use musicbrainz_db_lite::database::pool::DBLitePoolError;
 use musicbrainz_db_lite::database::raw_conn_pool::RawPoolError;
