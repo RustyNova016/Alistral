@@ -39,6 +39,28 @@ This is the main module of the scoring system. It sorts the tracks depending on 
 }
 ```
 
+## Bump score
+
+This multiply the score by the bump value for each recording.
+
+A bump is a temporary increase / decrease an user can set to make a track more or less frequent.
+
+Bumps usually are automatically provided by the app using the `bumps` variable. 
+However they still require linking the path of the step in the variable's targets
+
+### Inputs
+
+- `bumps`
+
+### Example
+
+```json
+{
+    "step_type": "bump_score",
+    "id": "bump_score",
+}
+```
+
 ## Listen rate scorer
 
 Set the score to the number of listens estimated to happen in a year
