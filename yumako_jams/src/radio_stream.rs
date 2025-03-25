@@ -98,7 +98,7 @@ async fn collect_with_inner(
                 Err(_) => Duration::zero(),
             })
             .sum::<Duration>();
-        
+
         let count_prog = (out.len() as u64 * 100)
             .checked_div(min_count)
             .unwrap_or(100);

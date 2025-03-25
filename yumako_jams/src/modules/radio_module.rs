@@ -32,11 +32,9 @@ pub trait RadioModule: DeserializeOwned {
 
                     Err(crate::Error::new_missing_variable_error(
                         layer.id(),
-                        parse
-                            .next()
-                            .expect(
-                                "If you are seeing this fail, blame `serde_json`'s error system",
-                            ),
+                        parse.next().expect(
+                            "If you are seeing this fail, blame `serde_json`'s error system",
+                        ),
                     ))
                 } else {
                     Err(crate::Error::VariableReadError(err, layer.id().to_string()))

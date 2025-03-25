@@ -1,8 +1,6 @@
 use std::collections::HashMap;
 
-use chrono::DateTime;
 use chrono::Duration;
-use chrono::Utc;
 use serde::de::DeserializeOwned;
 use serde_json::Value;
 use tuillez::extensions::chrono_exts::DurationExt;
@@ -114,7 +112,12 @@ impl RadioVariables {
         self.get_as_string("duration").map(|res| {
             res.and_then(|dur| {
                 Duration::from_human_string(&dur).map_err(|err| {
-                    crate::Error::new_variable_type_error("duration".to_string(), "duration_string".to_string(), dur, err)
+                    crate::Error::new_variable_type_error(
+                        "duration".to_string(),
+                        "duration_string".to_string(),
+                        dur,
+                        err,
+                    )
                 })
             })
         })

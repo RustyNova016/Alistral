@@ -16,6 +16,7 @@ use crate::modules::listen_data::listen_interval::ListenInterval;
 use crate::modules::mappers::artist_discography::ArtistDiscographyMapper;
 use crate::modules::radio_module::LayerResult;
 use crate::modules::radio_module::RadioModule;
+use crate::modules::scores::bump::BumpScore;
 use crate::modules::scores::listenrate::ListenRateScorer;
 use crate::modules::scores::overdue_count::OverdueCountScorer;
 use crate::modules::scores::overdue_duration::OverdueDurationScorer;
@@ -48,6 +49,7 @@ impl Layer {
             "artist_discography_mapper" => {
                 ArtistDiscographyMapper::create(&self, variables)?.create_stream(stream, client)
             }
+            "bumps_score" => BumpScore::create(&self, variables)?.create_stream(stream, client),
             "clear_listens" => {
                 ClearListens::create(&self, variables)?.create_stream(stream, client)
             }
