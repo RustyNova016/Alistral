@@ -7,7 +7,6 @@ use futures::StreamExt as _;
 use futures::stream;
 use serde::Deserialize;
 use serde::Serialize;
-use serde_json::Value;
 
 use crate::RadioStream;
 use crate::client::YumakoClient;
@@ -22,17 +21,13 @@ pub struct Radio {
 
     #[serde(default = "default_description")]
     pub description: String,
-    
+
     stack: Vec<Layer>,
     inputs: HashMap<String, RadioInput>,
 }
 
 impl Radio {
-    pub fn to_stream(
-        self,
-        client: &YumakoClient,
-        inputs: RadioVariables,
-    ) -> LayerResult<'_> {
+    pub fn to_stream(self, client: &YumakoClient, inputs: RadioVariables) -> LayerResult<'_> {
         let variables = RadioVariables::new_with_aliases(inputs.into_hashmap(), self.inputs);
         let mut stream: RadioStream = stream::empty().boxed();
 
