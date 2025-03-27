@@ -1428,6 +1428,29 @@ dependencies = [
 ]
 
 [[package]]
+name = "governor"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ae4a26ace7b5399e349df31c90afec7555b5af2e64ee8fe9f2a9b5a3204dca06"
+dependencies = [
+ "cfg-if",
+ "dashmap",
+ "futures-sink",
+ "futures-timer",
+ "futures-util",
+ "getrandom 0.3.1",
+ "hashbrown 0.15.2",
+ "nonzero_ext",
+ "parking_lot",
+ "portable-atomic",
+ "quanta",
+ "rand 0.9.0",
+ "smallvec",
+ "spinning_top",
+ "web-time",
+]
+
+[[package]]
 name = "h2"
 version = "0.4.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1904,7 +1927,7 @@ dependencies = [
  "async-fn-stream",
  "futures",
  "google-youtube3",
- "governor",
+ "governor 0.9.0",
  "listenbrainz",
  "musicbrainz-db-lite",
  "musicbrainz_rs",
@@ -2218,7 +2241,7 @@ dependencies = [
  "deadpool",
  "extend",
  "futures",
- "governor",
+ "governor 0.9.0",
  "itertools 0.13.0",
  "listenbrainz",
  "macon",
@@ -2265,7 +2288,7 @@ source = "git+https://github.com/RustyNova016/musicbrainz_rs.git?branch=develop#
 dependencies = [
  "chrono",
  "glob",
- "governor",
+ "governor 0.8.1",
  "lucene_query_builder",
  "once_cell",
  "regex",
