@@ -26,6 +26,9 @@ pub enum InterzicYoutubeError {
 
     #[error("Couldn't find the recording \"{0}\" on youtube")]
     RecordingSearchNotFoundError(MessyRecording),
+
+    #[error("Couldn't find a youtube id in: {0}")]
+    ExtractIdError(String),
 }
 
 impl InterzicYoutubeError {
@@ -37,6 +40,7 @@ impl InterzicYoutubeError {
             Self::RecordingSearchError(val) => Some(val),
             Self::MissingYoutubeClient() => None,
             Self::RecordingSearchNotFoundError(_) => None,
+            Self::ExtractIdError(_) => None,
         }
     }
 }
@@ -47,7 +51,7 @@ impl From<google_youtube3::common::Error> for InterzicYoutubeError {
     }
 }
 
-/// Errors from youtube
+/// Errors from the youtube api
 #[derive(Error, Debug)]
 pub enum YoutubeError {
     #[error(transparent)]

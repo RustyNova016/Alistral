@@ -3,6 +3,7 @@ use tuillez::fatal_error::FatalError;
 
 use crate::tools::interzic::get_mapping::GetMappingCommand;
 use crate::tools::interzic::overwrite::OverwriteCommand;
+use crate::tools::interzic::overwrite::interactive::InteractiveOverwriteCommand;
 use crate::tools::interzic::reload::ReloadCommand;
 use crate::tools::interzic::reverse_mapping::ReverseMappingCommand;
 
@@ -32,15 +33,19 @@ pub enum InterzicSubcommands {
 
     /// Overwrite a mapping for an user
     Overwrite(OverwriteCommand),
+
+    /// Overwrite a mapping for an user, with an interactive prompt
+    OverwriteI(InteractiveOverwriteCommand),
 }
 
 impl InterzicSubcommands {
     pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> Result<(), FatalError> {
         match self {
             Self::GetMapping(args) => Ok(args.run(conn).await?),
-            InterzicSubcommands::Reload(args) => Ok(args.run(conn).await?),
+            Self::Reload(args) => Ok(args.run(conn).await?),
             Self::ReverseMapping(args) => Ok(args.run(conn).await?),
-            InterzicSubcommands::Overwrite(args) => Ok(args.run(conn).await?),
+            Self::Overwrite(args) => Ok(args.run(conn).await?),
+            Self::OverwriteI(args) => Ok(args.run().await?),
         }
     }
 }

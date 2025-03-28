@@ -1,3 +1,6 @@
+use inquire::InquireError;
+use interzic::models::services::youtube::error::InterzicYoutubeError;
+use musicbrainz_db_lite::database::raw_conn_pool::RawPoolError;
 use musicbrainz_db_lite::database::raw_conn_pool::RawPoolError;
 use std::io;
 use thiserror::Error;
@@ -62,6 +65,21 @@ pub enum Error {
 
     #[error(transparent)]
     FatalError(#[from] FatalError),
+
+    #[error(transparent)]
+    InquireError(#[from] InquireError),
+
+    #[error(transparent)]
+    RawPoolError(#[from] RawPoolError),
+
+    #[error("Invalid user input: {0}")]
+    UserInputError(String),
+}
+
+impl From<InterzicYoutubeError> for Error {
+    fn from(value: InterzicYoutubeError) -> Self {
+        interzic::Error::from(value).into()
+    }
 
     #[error(transparent)]
     RawConnectionError(#[from] RawPoolError),

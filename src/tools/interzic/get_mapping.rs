@@ -1,5 +1,4 @@
 use clap::Parser;
-use clap::ValueEnum;
 use interzic::models::messy_recording::MessyRecording;
 use interzic::models::services::youtube::Youtube;
 use tuillez::fatal_error::FatalError;
@@ -7,6 +6,7 @@ use tuillez::fatal_error::IntoFatal;
 use tuillez::fatal_error::OptIntoFatal;
 
 use crate::ALISTRAL_CLIENT;
+use crate::tools::interzic::InterzicMappingTarget;
 use crate::utils::cli::read_mbid_from_input;
 
 #[derive(Parser, Debug, Clone)]
@@ -33,11 +33,6 @@ pub struct GetMappingCommand {
     /// Search the mapping of this user
     #[arg(short, long)]
     pub user: Option<String>,
-}
-
-#[derive(ValueEnum, Clone, Debug)]
-pub enum InterzicMappingTarget {
-    Youtube,
 }
 
 impl GetMappingCommand {

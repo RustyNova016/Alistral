@@ -96,7 +96,7 @@ pub(super) async fn display_wrong_mapping(
     }
 }
 
-#[derive(strum_macros::Display)]
+#[derive(strum::Display)]
 enum Choice {
     Next,
     #[strum(to_string = "Whitelist mapping")]

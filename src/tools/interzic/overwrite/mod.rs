@@ -6,8 +6,11 @@ use tuillez::fatal_error::IntoFatal as _;
 use tuillez::fatal_error::OptIntoFatal as _;
 
 use crate::ALISTRAL_CLIENT;
-use crate::tools::interzic::get_mapping::InterzicMappingTarget;
+use crate::tools::interzic::InterzicMappingTarget;
+use crate::tools::interzic::overwrite::interactive::InteractiveOverwriteCommand;
 use crate::utils::cli::read_mbid_from_input;
+
+pub mod interactive;
 
 #[derive(Parser, Debug, Clone)]
 pub struct OverwriteCommand {
