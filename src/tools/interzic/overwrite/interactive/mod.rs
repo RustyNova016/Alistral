@@ -1,3 +1,4 @@
+pub mod get_target;
 pub mod find_source;
 use clap::Id;
 use clap::Parser;
@@ -7,10 +8,13 @@ use inquire::Text;
 use interzic::models::messy_recording::MessyRecording;
 use interzic::models::services::youtube::Youtube;
 use itertools::Itertools;
+use thiserror::Error;
 use tuillez::fatal_error::IntoFatal;
 use tuillez::fatal_error::OptIntoFatal as _;
 use tuillez::inquire_ext::select_enum::select_enum;
 
+use crate::tools::interzic::overwrite::interactive::find_source::get_source_id;
+use crate::tools::interzic::overwrite::interactive::get_target::get_target_id;
 use crate::ALISTRAL_CLIENT;
 use crate::models::config::Config;
 use crate::tools::interzic::IdOrigin;
@@ -38,6 +42,23 @@ struct State {
 
 impl State {
     pub async fn run(&mut self) -> Result<(), crate::Error> {
+        loop {
+            let Some(source) = get_source_id(None).await? else {continue};
+            let target = get_target_id()?;
+
+            // Create a messy recording from the mbid
+            let recording = MessyRecording::from_mbid_with_db(
+                conn,
+                &ALISTRAL_CLIENT.interzic,
+                source,
+            )
+            .await
+            .expect_fatal("Couldn't find this mbid. Are you sure it is correct?")?;
+
+            
+        }
+    }
+    pub async fn runy(&mut self) -> Result<(), crate::Error> {
         loop {
             if self.selected_id.is_none() {
                 self.prompt_source_id()?;
@@ -155,4 +176,13 @@ async fn prompt_mbid_from_youtube(yt_id: &str, user: Option<&str>) -> Result<Opt
     }
 
     Ok(())
+}
+
+#[derive(Debug, Error)]
+pub enum OverwriteError {
+    #[error("Couldn't parse a youtube ID from `{0}`")]
+    YoutubeIdParsing(String),
+
+    #[error(transparent)]
+    Inquire(#[from] InquireError)
 }

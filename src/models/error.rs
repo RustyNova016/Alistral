@@ -8,6 +8,7 @@ use tuillez::extensions::chrono_exts::TimeError;
 use tuillez::fatal_error::FatalError;
 
 use crate::interface::errors::process_errors;
+use crate::tools::interzic::overwrite::interactive::OverwriteError;
 
 #[derive(Error, Debug)]
 //#[expect(clippy::enum_variant_names)]
@@ -74,6 +75,9 @@ pub enum Error {
 
     #[error("Invalid user input: {0}")]
     UserInputError(String),
+
+    #[error(transparent)]
+    OverwriteError(#[from] OverwriteError),
 }
 
 impl From<InterzicYoutubeError> for Error {
