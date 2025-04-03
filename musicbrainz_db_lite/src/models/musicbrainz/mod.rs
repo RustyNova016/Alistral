@@ -1,3 +1,5 @@
+use crate::DBClient;
+
 pub mod artist;
 pub mod artist_credit;
 pub mod genre;
@@ -10,3 +12,13 @@ pub mod release_group;
 pub mod tags;
 pub mod user;
 pub mod work;
+
+pub struct MusicbrainzFormater<'l> {
+    client: &'l DBClient,
+
+    /// Use Listenbrainz URLs instead of Musicbrainz
+    listenbrainz_link: bool,
+
+    /// Add the artist credits of the enitity as well.
+    artist_credits: bool
+}

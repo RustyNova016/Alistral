@@ -1,47 +1,46 @@
-use crate::models::musicbrainz::release_group::ReleaseGroup;
-#[cfg(feature = "pretty_format")]
-use crate::DBClient;
+use tuillez::formatter::FormatWithAsync;
 
-impl ReleaseGroup {
-    #[cfg(feature = "pretty_format")]
-    pub async fn pretty_format(&self, listenbrainz: bool) -> Result<String, crate::Error> {
+use crate::models::musicbrainz::release_group::ReleaseGroup;
+use crate::models::musicbrainz::MusicbrainzFormater;
+
+#[cfg(feature = "pretty_format")]
+impl FormatWithAsync<MusicbrainzFormater<'_>> for ReleaseGroup {
+    type Error = crate::Error;
+
+    async fn format_with_async(&self, ft: &MusicbrainzFormater<'_>) -> Result<String, Self::Error> {
         use owo_colors::OwoColorize as _;
         use tuillez::utils::hyperlink_rename;
 
         use crate::utils::display::format_disambiguation;
 
-        Ok(hyperlink_rename(
-            &format_disambiguation(
-                &self.title.truecolor(254, 173, 75).to_string(),
-                &Some(self.disambiguation.clone()),
-            ),
-            &self.get_url_link(listenbrainz),
-        ))
-    }
-
-    #[cfg(feature = "pretty_format")]
-    pub async fn pretty_format_with_credits(
-        &self,
-        conn: &mut sqlx::SqliteConnection,
-        client: &DBClient,
-        listenbrainz: bool,
-    ) -> Result<String, crate::Error> {
-        Ok(format!(
-            "{} by {}",
-            self.pretty_format(listenbrainz).await?,
-            self.get_artist_credits_or_fetch(conn, client)
-                .await?
-                .pretty_format(listenbrainz)
-                .await?
-        ))
-    }
-
-    #[cfg(feature = "pretty_format")]
-    pub fn get_url_link(&self, listenbrainz: bool) -> String {
-        if !listenbrainz {
+        let link = if !ft.listenbrainz_link {
             format!("https://musicbrainz.org/release-group/{}", &self.mbid)
         } else {
             format!("https://listenbrainz.org/album/{}", &self.mbid)
+        };
+
+        let name_format = hyperlink_rename(
+            &format_disambiguation(
+                &self.title.truecolor(254, 173, 75).to_string(),
+                &Some(self.disambiguation.to_string()),
+            ),
+            &link,
+        );
+
+        if ft.artist_credits {
+            Ok(format!(
+                "{} by {}",
+                name_format,
+                self.get_artist_credits_or_fetch(
+                    ft.client.get_raw_connection().await?.as_mut(),
+                    ft.client
+                )
+                .await?
+                .format_with_async(ft)
+                .await?
+            ))
+        } else {
+            Ok(name_format)
         }
     }
 }

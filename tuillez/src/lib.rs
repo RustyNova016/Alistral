@@ -1,3 +1,4 @@
+pub mod formatter;
 pub mod error;
 #[cfg(feature = "extensions")]
 pub mod extensions;
