@@ -6,9 +6,11 @@ use alistral_core::datastructures::listen_collection::ListenCollection;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use itertools::Itertools;
 use tuillez::extensions::chrono_exts::DurationExt as _;
+use tuillez::formatter::FormatWithAsync;
 
 use crate::ALISTRAL_CLIENT;
 use crate::utils::cli_paging::CLIPager;
+use crate::utils::constants::LISTENBRAINZ_FMT;
 
 pub async fn stats_recording(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
     let mut groups =
@@ -27,7 +29,7 @@ pub async fn stats_recording(conn: &mut sqlx::SqliteConnection, listens: ListenC
             group.listen_count(),
             group
                 .entity()
-                .pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, true)
+                .format_with_async(&LISTENBRAINZ_FMT)
                 .await
                 .expect("Error getting formated recording name"),
         );
@@ -58,7 +60,7 @@ pub async fn stats_recording_time(conn: &mut sqlx::SqliteConnection, listens: Li
                 .unwrap_or_else(|| "??".to_string()),
             group
                 .entity()
-                .pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, true)
+                .format_with_async(&LISTENBRAINZ_FMT)
                 .await
                 .expect("Error getting formated recording name"),
         );

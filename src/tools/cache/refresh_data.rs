@@ -2,10 +2,12 @@ use alistral_core::database::fetching::listens::ListenFetchQuery;
 use alistral_core::database::fetching::listens::ListenFetchQueryReturn;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use tracing::info;
+use tuillez::formatter::FormatWithAsync;
 use tuillez::pg_counted;
 use tuillez::pg_inc;
 
 use crate::ALISTRAL_CLIENT;
+use crate::utils::constants::LISTENBRAINZ_FMT;
 
 pub async fn refresh_data(
     conn: &mut sqlx::SqliteConnection,
@@ -49,10 +51,7 @@ pub async fn refresh_data(
 
         if let Some(recording) = recording {
             // It's ok to silently discard the error here. It's just some fancy display
-            if let Ok(recording) = recording
-                .pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, true)
-                .await
-            {
+            if let Ok(recording) = recording.format_with_async(&LISTENBRAINZ_FMT).await {
                 info!("Refreshed: {recording}");
             }
         }

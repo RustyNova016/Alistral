@@ -1,9 +1,11 @@
 use musicbrainz_db_lite::models::musicbrainz::{main_entities::MainEntity, recording::Recording};
+use tuillez::formatter::FormatWithAsync;
 
 use crate::ALISTRAL_CLIENT;
 use crate::models::clippy::MbClippyLintHint;
 use crate::models::clippy::lint_severity::LintSeverity;
 use crate::models::clippy::{MbClippyLint, MbClippyLintLink};
+use crate::utils::constants::MUSIBRAINZ_FMT;
 
 pub struct MissingWorkLint {
     recording: Recording,
@@ -39,11 +41,11 @@ impl MbClippyLint for MissingWorkLint {
 
     async fn get_body(
         &self,
-        conn: &mut sqlx::SqliteConnection,
+        _conn: &mut sqlx::SqliteConnection,
     ) -> Result<impl std::fmt::Display, crate::Error> {
         Ok(format!("Recording \"{}\" has no associated works
 -> Most recordings should have a work associated to them. Please check if a work exists for a recording and add it / create it"
-, self.recording.pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, false).await?))
+, self.recording.format_with_async(&MUSIBRAINZ_FMT).await?))
     }
 
     async fn get_links(

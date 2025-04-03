@@ -1,38 +1,40 @@
-use crate::models::musicbrainz::recording::Recording;
-#[cfg(feature = "pretty_format")]
-use crate::DBClient;
+use tuillez::formatter::FormatWithAsync;
 
-impl Recording {
-    #[cfg(feature = "pretty_format")]
-    pub async fn pretty_format(&self) -> Result<String, crate::Error> {
+use crate::models::musicbrainz::recording::Recording;
+use crate::models::musicbrainz::MusicbrainzFormater;
+
+#[cfg(feature = "pretty_format")]
+impl FormatWithAsync<MusicbrainzFormater<'_>> for Recording {
+    type Error = crate::Error;
+
+    async fn format_with_async(&self, ft: &MusicbrainzFormater<'_>) -> Result<String, Self::Error> {
         use owo_colors::OwoColorize as _;
         use tuillez::utils::hyperlink_rename;
 
         use crate::utils::display::format_disambiguation;
 
-        Ok(hyperlink_rename(
+        let name_format = hyperlink_rename(
             &format_disambiguation(
                 &self.title.truecolor(0, 214, 114).to_string(),
                 &self.disambiguation,
             ),
             &format!("https://musicbrainz.org/recording/{}", &self.mbid),
-        ))
-    }
+        );
 
-    #[cfg(feature = "pretty_format")]
-    pub async fn pretty_format_with_credits(
-        &self,
-        conn: &mut sqlx::SqliteConnection,
-        client: &DBClient,
-        listenbrainz: bool,
-    ) -> Result<String, crate::Error> {
-        Ok(format!(
-            "{} by {}",
-            self.pretty_format().await?,
-            self.get_artist_credits_or_fetch(conn, client)
+        if ft.artist_credits {
+            Ok(format!(
+                "{} by {}",
+                name_format,
+                self.get_artist_credits_or_fetch(
+                    ft.client.get_raw_connection().await?.as_mut(),
+                    ft.client
+                )
                 .await?
-                .pretty_format(listenbrainz)
+                .format_with_async(ft)
                 .await?
-        ))
+            ))
+        } else {
+            Ok(name_format)
+        }
     }
 }

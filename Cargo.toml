@@ -15,7 +15,7 @@ rust-version = "1.85.0"
 alistral_core = { path = "./alistral_core" }
 interzic = { path = "./interzic" }
 tuillez = { path = "./tuillez" }
-musicbrainz-db-lite = { path = "./musicbrainz_db_lite" }
+musicbrainz-db-lite = { path = "./musicbrainz_db_lite", features = ["pretty_format"] }
 
 # Musicbrainz dependencies
 #listenbrainz = "0.8.1"
