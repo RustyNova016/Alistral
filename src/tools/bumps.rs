@@ -9,11 +9,13 @@ use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use rust_decimal::Decimal;
 use tracing::info;
 use tuillez::extensions::chrono_exts::DurationExt as _;
+use tuillez::formatter::FormatWithAsync;
 
 use crate::ALISTRAL_CLIENT;
 use crate::models::cli::BumpCLI;
 use crate::models::config::Config;
 use crate::utils::cli::read_mbid_from_input;
+use crate::utils::constants::LISTENBRAINZ_FMT;
 
 pub async fn bump_command(conn: &mut sqlx::SqliteConnection, bump: BumpCLI) {
     let username = Config::check_username(&bump.username);
@@ -60,7 +62,7 @@ pub async fn bump_command(conn: &mut sqlx::SqliteConnection, bump: BumpCLI) {
     info!(
         "Adding bump to {}, giving a {} multiplier for {}",
         recording
-            .pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, true)
+            .format_with_async(&LISTENBRAINZ_FMT)
             .await
             .expect("Error while getting recording credits"),
         multiplier,

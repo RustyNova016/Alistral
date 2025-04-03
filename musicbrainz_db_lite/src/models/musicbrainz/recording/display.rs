@@ -25,10 +25,13 @@ impl FormatWithAsync<MusicbrainzFormater<'_>> for Recording {
             Ok(format!(
                 "{} by {}",
                 name_format,
-                self.get_artist_credits_or_fetch(ft.client.get_raw_connection().await?.as_mut(), ft.client)
-                    .await?
-                    .format_with_async(ft)
-                    .await?
+                self.get_artist_credits_or_fetch(
+                    ft.client.get_raw_connection().await?.as_mut(),
+                    ft.client
+                )
+                .await?
+                .format_with_async(ft)
+                .await?
             ))
         } else {
             Ok(name_format)

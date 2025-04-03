@@ -14,11 +14,11 @@ pub mod user;
 pub mod work;
 
 pub struct MusicbrainzFormater<'l> {
-    client: &'l DBClient,
+    pub client: &'l DBClient,
 
     /// Use Listenbrainz URLs instead of Musicbrainz
-    listenbrainz_link: bool,
+    pub listenbrainz_link: bool,
 
     /// Add the artist credits of the enitity as well.
-    artist_credits: bool
+    pub artist_credits: bool,
 }

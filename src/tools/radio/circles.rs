@@ -10,6 +10,7 @@ use rand::prelude::SliceRandom;
 use rand::thread_rng;
 use tracing::info;
 use tracing::warn;
+use tuillez::formatter::FormatWithAsync;
 
 use crate::ALISTRAL_CLIENT;
 use crate::datastructures::radio::collector::RadioCollector;
@@ -18,6 +19,7 @@ use crate::models::cli::radio::RadioExportTarget;
 use crate::models::data_storage::DataStorage;
 use crate::models::error::ResultTEExt as _;
 use crate::tools::radio::convert_recordings;
+use crate::utils::constants::LISTENBRAINZ_FMT;
 use crate::utils::data_file::DataFile as _;
 
 pub async fn create_radio_mix(
@@ -93,7 +95,7 @@ impl RadioCircle {
     ) -> Result<Option<Recording>, crate::Error> {
         info!(
             "Checking artist: {}",
-            artist.pretty_format(true).await.unwrap()
+            artist.format_with_async(&LISTENBRAINZ_FMT).await?
         );
         let mut recordings: Vec<Recording> = artist
             .browse_or_fetch_artist_recordings(conn)

@@ -6,10 +6,12 @@ use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::listenbrainz::messybrainz_submission::MessybrainzSubmission;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use strsim::sorensen_dice;
+use tuillez::formatter::FormatWithAsync;
 use tuillez::utils::hyperlink_rename;
 
 use crate::ALISTRAL_CLIENT;
 use crate::models::config::whitelisted_wrong_mappings::WhilistedWrongMappings;
+use crate::utils::constants::LISTENBRAINZ_FMT;
 
 pub(super) async fn display_wrong_mapping(
     conn: &mut sqlx::SqliteConnection,
@@ -26,7 +28,7 @@ pub(super) async fn display_wrong_mapping(
         messybrainz_data.recording.truecolor(0, 184, 84),
         messybrainz_data.artist_credit.truecolor(0, 143, 229),
         recording
-            .pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, true)
+            .format_with_async(&LISTENBRAINZ_FMT)
             .await
             .expect("Couldn't format credits")
     );

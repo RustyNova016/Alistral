@@ -13,12 +13,14 @@ use color_eyre::owo_colors::OwoColorize;
 use itertools::Itertools;
 use musicbrainz_db_lite::models::musicbrainz::release_group::ReleaseGroup;
 use tracing::instrument;
+use tuillez::formatter::FormatWithAsync;
 
 use crate::ALISTRAL_CLIENT;
 use crate::api::listenbrainz::fresh_releases::FreshReleaseRelease;
 use crate::api::listenbrainz::fresh_releases::FreshReleaseRequest;
 use crate::database::musicbrainz::anniversaries::get_recordings_aniversaries;
 use crate::models::config::Config;
+use crate::utils::constants::LISTENBRAINZ_FMT;
 
 #[instrument]
 pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
@@ -55,7 +57,7 @@ pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
             println!(
                 "   - {} ({}, {} Listens)",
                 rec.recording()
-                    .pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, true)
+                    .format_with_async(&LISTENBRAINZ_FMT)
                     .await
                     .expect("Couldn't get artist credits"),
                 Utc.timestamp_opt(rec.recording().first_release_date.unwrap(), 0)
@@ -91,7 +93,7 @@ pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
             println!(
                 "   - {} ({}, {} Listens)",
                 rec.recording()
-                    .pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, true)
+                    .format_with_async(&LISTENBRAINZ_FMT)
                     .await
                     .expect("Couldn't get artist credits"),
                 rec.oldest_listen_date()
@@ -125,7 +127,7 @@ pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
 
             println!(
                 "   - {} {}",
-                rg.pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, true)
+                rg.format_with_async(&LISTENBRAINZ_FMT)
                     .await
                     .expect("Couldn't get artist credits"),
                 format!(

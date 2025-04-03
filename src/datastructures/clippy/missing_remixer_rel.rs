@@ -1,8 +1,9 @@
 use musicbrainz_db_lite::models::musicbrainz::{main_entities::MainEntity, recording::Recording};
+use tuillez::formatter::FormatWithAsync;
 
-use crate::ALISTRAL_CLIENT;
 use crate::models::clippy::lint_severity::LintSeverity;
 use crate::models::clippy::{MbClippyLint, MbClippyLintLink};
+use crate::utils::constants::MUSIBRAINZ_FMT;
 
 pub struct MissingRemixerRelLint {
     recording: Recording,
@@ -50,14 +51,12 @@ impl MbClippyLint for MissingRemixerRelLint {
 
     async fn get_body(
         &self,
-        conn: &mut sqlx::SqliteConnection,
+        _conn: &mut sqlx::SqliteConnection,
     ) -> Result<impl std::fmt::Display, crate::Error> {
         Ok(format!(
             "Recording \"{}\" has a remix relationship, but no remixer relationship.
 -> Add the remixer as an artist relationship",
-            self.recording
-                .pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, false)
-                .await?
+            self.recording.format_with_async(&MUSIBRAINZ_FMT).await?
         ))
     }
 

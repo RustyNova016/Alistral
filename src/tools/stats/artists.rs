@@ -4,9 +4,11 @@ use alistral_core::datastructures::entity_with_listens::artist::collection::Arti
 use alistral_core::datastructures::listen_collection::ListenCollection;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use itertools::Itertools;
+use tuillez::formatter::FormatWithAsync;
 
 use crate::ALISTRAL_CLIENT;
 use crate::utils::cli_paging::CLIPager;
+use crate::utils::constants::LISTENBRAINZ_FMT;
 
 pub async fn stats_artist(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
     let mut groups =
@@ -30,7 +32,7 @@ pub async fn stats_artist(conn: &mut sqlx::SqliteConnection, listens: ListenColl
             group.listen_count(),
             group
                 .entity()
-                .pretty_format(true)
+                .format_with_async(&LISTENBRAINZ_FMT)
                 .await
                 .expect("Couldn't format entity")
         );
