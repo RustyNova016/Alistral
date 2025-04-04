@@ -1,3 +1,4 @@
+use musicbrainz_db_lite::database::raw_conn_pool::RawPoolError;
 use thiserror::Error;
 
 #[derive(Error, Debug)]
@@ -11,4 +12,7 @@ pub enum Error {
 
     #[error(transparent)]
     SQLxError(#[from] sqlx::Error),
+
+    #[error(transparent)]
+    DatabasePoolError(#[from] RawPoolError),
 }

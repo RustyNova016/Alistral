@@ -7,6 +7,7 @@ use tuillez::pg_counted;
 use tuillez::pg_inc;
 
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
+use crate::datastructures::entity_with_listens::traits::FromListenCollection;
 use crate::datastructures::listen_collection::ListenCollection;
 use crate::AlistralClient;
 
@@ -71,19 +72,33 @@ impl ListenFetchQuery {
     }
 
     pub async fn get_recordings_with_listens(
-        conn: &mut sqlx::SqliteConnection,
         client: &AlistralClient,
         user: String,
     ) -> Result<RecordingWithListensCollection, crate::Error> {
+        Self::get_entity_with_listens(client, user).await
+    }
+
+    pub async fn get_entity_with_listens<T>(
+        client: &AlistralClient,
+        user: String,
+    ) -> Result<T, crate::Error>
+    where
+        T: FromListenCollection,
+    {
         let query = Self {
             fetch_recordings_redirects: false,
             returns: ListenFetchQueryReturn::Mapped,
             user,
         };
 
-        let listens = query.fetch(conn, client).await?;
+        let listens = query
+            .fetch(
+                client.musicbrainz_db.get_raw_connection().await?.as_mut(),
+                client,
+            )
+            .await?;
 
-        RecordingWithListensCollection::from_listencollection(conn, client, listens).await
+        T::from_listencollection(client, listens).await
     }
 }
 

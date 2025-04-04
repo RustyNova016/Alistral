@@ -8,21 +8,15 @@ use crate::utils::cli::await_next;
 
 pub mod user_compatibility;
 
-pub async fn compatibility_command(conn: &mut sqlx::SqliteConnection, user_a: &str, user_b: &str) {
-    let user_a_recordings = ListenFetchQuery::get_recordings_with_listens(
-        conn,
-        &ALISTRAL_CLIENT.core,
-        user_a.to_string(),
-    )
-    .await
-    .expect("Couldn't get the listened recordings");
-    let user_b_recordings = ListenFetchQuery::get_recordings_with_listens(
-        conn,
-        &ALISTRAL_CLIENT.core,
-        user_b.to_string(),
-    )
-    .await
-    .expect("Couldn't get the listened recordings");
+pub async fn compatibility_command(_conn: &mut sqlx::SqliteConnection, user_a: &str, user_b: &str) {
+    let user_a_recordings =
+        ListenFetchQuery::get_recordings_with_listens(&ALISTRAL_CLIENT.core, user_a.to_string())
+            .await
+            .expect("Couldn't get the listened recordings");
+    let user_b_recordings =
+        ListenFetchQuery::get_recordings_with_listens(&ALISTRAL_CLIENT.core, user_b.to_string())
+            .await
+            .expect("Couldn't get the listened recordings");
 
     let shared_recordings =
         get_shared_recordings_between_users(&user_a_recordings, &user_b_recordings);
