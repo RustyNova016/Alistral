@@ -2261,7 +2261,7 @@ dependencies = [
 [[package]]
 name = "musicbrainz_rs"
 version = "0.9.0"
-source = "git+https://github.com/RustyNova016/musicbrainz_rs.git?branch=develop#0a5095848f58827d603627dc8cd105d080bd845f"
+source = "git+https://github.com/RustyNova016/musicbrainz_rs.git?branch=develop#8f45d59393abf8de20c7a900edcb46a9b634b503"
 dependencies = [
  "chrono",
  "glob",
@@ -4304,7 +4304,7 @@ version = "0.1.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cf221c93e13a30d793f7645a0e7762c55d169dbb0a49671918a2319d289b10bb"
 dependencies = [
- "windows-sys 0.59.0",
+ "windows-sys 0.48.0",
 ]
 
 [[package]]
