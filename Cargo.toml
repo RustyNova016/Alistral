@@ -44,7 +44,7 @@ indicatif = { version = "0.17.11", features = [
     "improved_unicode",
     "futures",
 ] }
-tokio = { version = "1.44.0", features = ["full"] }
+tokio = { version = "1.44.1", features = ["full"] }
 rayon = "1.10.0"
 reqwest = { version = "0.12.13", features = ["json"] }
 rand = "0.8.5"
