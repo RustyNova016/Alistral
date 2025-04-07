@@ -8,6 +8,7 @@ use crate::database::fetching::releases::prefetch_releases;
 use crate::datastructures::entity_with_listens::collection::EntityWithListensCollection;
 use crate::datastructures::entity_with_listens::release::collection::ReleaseWithListensCollection;
 use crate::datastructures::entity_with_listens::release_group::ReleaseGroupWithListens;
+use crate::datastructures::entity_with_listens::traits::FromListenCollection;
 use crate::datastructures::listen_collection::ListenCollection;
 
 pub type ReleaseGroupWithListensCollection =
@@ -47,5 +48,19 @@ impl ReleaseGroupWithListensCollection {
         }
 
         Ok(out)
+    }
+}
+
+impl FromListenCollection for ReleaseGroupWithListensCollection {
+    async fn from_listencollection(
+        client: &crate::AlistralClient,
+        listens: ListenCollection,
+    ) -> Result<Self, crate::Error> {
+        Self::from_listencollection(
+            client.musicbrainz_db.get_raw_connection().await?.as_mut(),
+            client,
+            listens,
+        )
+        .await
     }
 }

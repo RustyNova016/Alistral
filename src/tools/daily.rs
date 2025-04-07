@@ -24,13 +24,10 @@ use crate::utils::constants::LISTENBRAINZ_FMT;
 
 #[instrument]
 pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
-    let recordings = ListenFetchQuery::get_recordings_with_listens(
-        conn,
-        &ALISTRAL_CLIENT.core,
-        username.to_string(),
-    )
-    .await
-    .expect("Couldn't fetch the listened recordings");
+    let recordings =
+        ListenFetchQuery::get_recordings_with_listens(&ALISTRAL_CLIENT.core, username.to_string())
+            .await
+            .expect("Couldn't fetch the listened recordings");
 
     // release days
     let today = Utc::now();

@@ -8,6 +8,7 @@ use crate::database::fetching::recordings::fetch_recordings_as_complete;
 use crate::datastructures::entity_with_listens::collection::EntityWithListensCollection;
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use crate::datastructures::entity_with_listens::release::ReleaseWithListens;
+use crate::datastructures::entity_with_listens::traits::FromListenCollection;
 use crate::datastructures::listen_collection::ListenCollection;
 
 pub type ReleaseWithListensCollection = EntityWithListensCollection<Release, ListenCollection>;
@@ -53,5 +54,19 @@ impl ReleaseWithListensCollection {
         }
 
         Ok(out)
+    }
+}
+
+impl FromListenCollection for ReleaseWithListensCollection {
+    async fn from_listencollection(
+        client: &crate::AlistralClient,
+        listens: ListenCollection,
+    ) -> Result<Self, crate::Error> {
+        Self::from_listencollection(
+            client.musicbrainz_db.get_raw_connection().await?.as_mut(),
+            client,
+            listens,
+        )
+        .await
     }
 }

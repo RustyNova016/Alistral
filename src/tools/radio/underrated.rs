@@ -34,12 +34,9 @@ pub async fn underrated_mix(
         .expect_fatal("Couldn't find seed listens");
 
     // Get the all time listens
-    let user_listens = ListenFetchQuery::get_recordings_with_listens(
-        conn,
-        &ALISTRAL_CLIENT.core,
-        username.clone(),
-    )
-    .await?;
+    let user_listens =
+        ListenFetchQuery::get_recordings_with_listens(&ALISTRAL_CLIENT.core, username.clone())
+            .await?;
 
     // Get the global listen count
     info!("[Seeding] Getting global listen counts");

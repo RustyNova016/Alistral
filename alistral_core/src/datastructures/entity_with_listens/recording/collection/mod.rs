@@ -9,6 +9,7 @@ use tuillez::pg_spinner;
 
 use crate::database::fetching::recordings::prefetch_recordings_of_listens;
 use crate::datastructures::entity_with_listens::collection::EntityWithListensCollection;
+use crate::datastructures::entity_with_listens::traits::FromListenCollection;
 use crate::datastructures::listen_collection::ListenCollection;
 
 pub type RecordingWithListensCollection = EntityWithListensCollection<Recording, ListenCollection>;
@@ -62,5 +63,19 @@ impl RecordingWithListensCollection {
             });
 
         out
+    }
+}
+
+impl FromListenCollection for RecordingWithListensCollection {
+    async fn from_listencollection(
+        client: &crate::AlistralClient,
+        listens: ListenCollection,
+    ) -> Result<Self, crate::Error> {
+        Self::from_listencollection(
+            client.musicbrainz_db.get_raw_connection().await?.as_mut(),
+            client,
+            listens,
+        )
+        .await
     }
 }
