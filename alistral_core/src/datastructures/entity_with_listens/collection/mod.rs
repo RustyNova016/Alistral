@@ -13,11 +13,13 @@ use rust_decimal::Decimal;
 
 use crate::datastructures::listen_collection::traits::ListenCollectionReadable;
 use crate::datastructures::listen_collection::ListenCollection;
+use crate::datastructures::listen_sorter::ListenSortingStrategy;
 use crate::traits::mergable::Mergable;
 
 use super::traits::ListenCollWithTime;
 use super::EntityWithListens;
 
+/// An indexed collection of [`EntityWithListens`]
 #[derive(Debug, Clone)]
 pub struct EntityWithListensCollection<Ent, Lis>(pub HashMap<i64, EntityWithListens<Ent, Lis>>)
 where
@@ -121,6 +123,49 @@ where
         }
 
         None
+    }
+
+    /// Insert a listen with a specific sorting strategy
+    pub async fn insert_listen_with<T>(
+        &mut self,
+        listen: Listen,
+        strategy: &T,
+    ) -> Result<(), crate::Error>
+    where
+        T: ListenSortingStrategy<Ent, Lis>,
+    {
+        strategy.sort_insert_listen(self, listen).await
+    }
+
+    /// Insert a collection of listens with a specific sorting strategy
+    pub async fn insert_listens_with<T>(
+        &mut self,
+        listens: Vec<Listen>,
+        strategy: &T,
+    ) -> Result<(), crate::Error>
+    where
+        T: ListenSortingStrategy<Ent, Lis>,
+    {
+        strategy.sort_insert_listens(self, listens).await
+    }
+
+    pub async fn from_listens<S>(listens: Vec<Listen>, strat: &S) -> Result<Self, crate::Error>
+    where
+        S: ListenSortingStrategy<Ent, Lis>,
+    {
+        let mut new = Self::new();
+        new.insert_listens_with(listens, strat).await?;
+        Ok(new)
+    }
+
+    pub async fn from_listencollection<S>(
+        listens: ListenCollection,
+        strat: &S,
+    ) -> Result<Self, crate::Error>
+    where
+        S: ListenSortingStrategy<Ent, Lis>,
+    {
+        Self::from_listens(listens.data, strat).await
     }
 }
 

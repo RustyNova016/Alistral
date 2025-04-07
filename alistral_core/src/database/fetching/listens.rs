@@ -2,13 +2,17 @@ use macon::Builder;
 use musicbrainz_db_lite::api::listenbrainz::listen::fetching::query::ListenFetchAPIQuery;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
+use musicbrainz_db_lite::RowId;
 use tracing::instrument;
 use tuillez::pg_counted;
 use tuillez::pg_inc;
 
+use crate::datastructures::entity_with_listens::collection::EntityWithListensCollection;
+use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListenStrategy;
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
-use crate::datastructures::entity_with_listens::traits::FromListenCollection;
+use crate::datastructures::listen_collection::traits::ListenCollectionReadable;
 use crate::datastructures::listen_collection::ListenCollection;
+use crate::datastructures::listen_sorter::ListenSortingStrategy;
 use crate::AlistralClient;
 
 #[derive(Builder)]
@@ -74,16 +78,20 @@ impl ListenFetchQuery {
     pub async fn get_recordings_with_listens(
         client: &AlistralClient,
         user: String,
+        strat: &RecordingWithListenStrategy<'_>,
     ) -> Result<RecordingWithListensCollection, crate::Error> {
-        Self::get_entity_with_listens(client, user).await
+        Self::get_entity_with_listens(client, user, strat).await
     }
 
-    pub async fn get_entity_with_listens<T>(
+    pub async fn get_entity_with_listens<Ent, Lis, S>(
         client: &AlistralClient,
         user: String,
-    ) -> Result<T, crate::Error>
+        strat: &S,
+    ) -> Result<EntityWithListensCollection<Ent, Lis>, crate::Error>
     where
-        T: FromListenCollection,
+        Ent: RowId,
+        Lis: ListenCollectionReadable,
+        S: ListenSortingStrategy<Ent, Lis>,
     {
         let query = Self {
             fetch_recordings_redirects: false,
@@ -98,7 +106,7 @@ impl ListenFetchQuery {
             )
             .await?;
 
-        T::from_listencollection(client, listens).await
+        EntityWithListensCollection::from_listencollection(listens, strat).await
     }
 }
 

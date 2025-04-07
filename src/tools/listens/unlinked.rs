@@ -26,7 +26,7 @@ pub async fn unmapped_command(
         .await
         .expect("Couldn't fetch listens");
 
-    let unlinkeds = MessybrainzWithListensCollection::from_listencollection(conn, listens)
+    let unlinkeds = MessybrainzWithListensCollection::from_listencollection_default(conn, listens)
         .await
         .expect("Couldn't associate the listen to their messybrainz data");
     //let unlinked_count = unlinkeds.listen_count();

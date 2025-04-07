@@ -1,4 +1,5 @@
 use itertools::Itertools as _;
+use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use musicbrainz_db_lite::models::musicbrainz::work::Work;
 use tracing::instrument;
@@ -10,43 +11,55 @@ use tuillez::pg_spinner;
 
 use crate::database::fetching::recordings::fetch_recordings_as_complete;
 use crate::datastructures::entity_with_listens::collection::EntityWithListensCollection;
+use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListenStrategy;
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
-use crate::datastructures::entity_with_listens::traits::FromListenCollection;
 use crate::datastructures::entity_with_listens::work::WorkWithListens;
 use crate::datastructures::listen_collection::ListenCollection;
+use crate::datastructures::listen_sorter::ListenSortingStrategy;
+use crate::AlistralClient;
 
 pub mod work_with_recordings;
 
 pub type WorkWithListensCollection = EntityWithListensCollection<Work, ListenCollection>;
 
-impl WorkWithListensCollection {
-    pub async fn from_listencollection(
-        conn: &mut sqlx::SqliteConnection,
-        client: &crate::AlistralClient,
-        listens: ListenCollection,
-    ) -> Result<WorkWithListensCollection, crate::Error> {
-        let recordings =
-            RecordingWithListensCollection::from_listencollection(conn, client, listens).await?;
-        Self::from_recording_with_listens(conn, client, recordings).await
+pub struct WorkWithListenStrategy<'l> {
+    pub(super) client: &'l AlistralClient,
+    recording_strat: RecordingWithListenStrategy<'l>,
+}
+
+impl<'l> WorkWithListenStrategy<'l> {
+    pub fn new(
+        client: &'l AlistralClient,
+        recording_strat: RecordingWithListenStrategy<'l>,
+    ) -> Self {
+        Self {
+            client,
+            recording_strat,
+        }
     }
+}
 
-    #[instrument(skip(client), fields(indicatif.pb_show = tracing::field::Empty))]
-    pub async fn from_recording_with_listens(
-        conn: &mut sqlx::SqliteConnection,
-        client: &crate::AlistralClient,
-        recordings: RecordingWithListensCollection,
-    ) -> Result<WorkWithListensCollection, crate::Error> {
-        pg_spinner!("Compiling work listens data");
-        // Prefetch Releases
+impl ListenSortingStrategy<Work, ListenCollection> for WorkWithListenStrategy<'_> {
+    #[instrument(skip(self), fields(indicatif.pb_show = tracing::field::Empty))]
+    async fn sort_insert_listens(
+        &self,
+        data: &mut EntityWithListensCollection<Work, ListenCollection>,
+        listens: Vec<Listen>,
+    ) -> Result<(), crate::Error> {
+        pg_spinner!("Compiling work listen data");
+        // Convert Recordings
+        let recordings =
+            RecordingWithListensCollection::from_listens(listens, &self.recording_strat).await?;
+
         let recording_refs = recordings.iter_entities().collect_vec();
-        fetch_recordings_as_complete(conn, client, &recording_refs).await?;
+        fetch_recordings_as_complete(self.client, &recording_refs).await?;
 
-        // Load Releases
+        let conn = &mut *self.client.musicbrainz_db.get_raw_connection().await?;
+
+        // Load artists
         let results = Recording::get_works_as_batch(conn, &recording_refs).await?;
 
-        // Convert releases
-        let mut out = WorkWithListensCollection::new();
-
+        // Convert artists
         for (_, (recording, works)) in results {
             for work in works {
                 // Get listens
@@ -59,20 +72,27 @@ impl WorkWithListensCollection {
                     .listens()
                     .clone();
 
-                // Create the entity
-                let new = WorkWithListens {
+                // Save it
+                data.insert_or_merge_entity(WorkWithListens {
                     entity: work,
                     listens,
-                };
-
-                // Save it
-                out.insert_or_merge_entity(new);
+                });
             }
         }
 
-        Ok(out)
+        Ok(())
     }
 
+    async fn sort_insert_listen(
+        &self,
+        data: &mut EntityWithListensCollection<Work, ListenCollection>,
+        listen: Listen,
+    ) -> Result<(), crate::Error> {
+        Self::sort_insert_listens(self, data, vec![listen]).await
+    }
+}
+
+impl WorkWithListensCollection {
     #[instrument(skip(client), fields(indicatif.pb_show = tracing::field::Empty))]
     pub async fn add_parents_recursive(
         &mut self,
@@ -101,19 +121,5 @@ impl WorkWithListensCollection {
         }
 
         Ok(())
-    }
-}
-
-impl FromListenCollection for WorkWithListensCollection {
-    async fn from_listencollection(
-        client: &crate::AlistralClient,
-        listens: ListenCollection,
-    ) -> Result<Self, crate::Error> {
-        Self::from_listencollection(
-            client.musicbrainz_db.get_raw_connection().await?.as_mut(),
-            client,
-            listens,
-        )
-        .await
     }
 }

@@ -7,16 +7,19 @@ use itertools::Itertools;
 use tuillez::formatter::FormatWithAsync;
 
 use crate::ALISTRAL_CLIENT;
+use crate::database::interfaces::statistics_data::release_strategy;
 use crate::utils::cli_paging::CLIPager;
 use crate::utils::constants::LISTENBRAINZ_FMT;
 
 pub async fn stats_releases(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
-    let mut groups =
-        ReleaseWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT.core, listens)
-            .await
-            .expect("Error while fetching recordings")
-            .into_iter()
-            .collect_vec();
+    let mut groups = ReleaseWithListensCollection::from_listencollection(
+        listens,
+        &release_strategy(&ALISTRAL_CLIENT),
+    )
+    .await
+    .expect("Error while fetching releases")
+    .into_iter()
+    .collect_vec();
     groups.sort_by_key(|a| Reverse(a.listen_count()));
 
     let mut pager = CLIPager::new(10);

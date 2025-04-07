@@ -4,6 +4,7 @@ use alistral_core::datastructures::entity_with_listens::recording::collection::R
 use alistral_core::datastructures::listen_collection::ListenCollection;
 
 use crate::ALISTRAL_CLIENT;
+use crate::database::interfaces::statistics_data::recording_strategy;
 
 pub async fn get_test_user_listens() -> ListenCollection {
     ListenFetchQuery::builder()
@@ -25,13 +26,8 @@ pub async fn get_test_user_listens() -> ListenCollection {
 
 pub async fn get_test_user_recording_with_listens() -> RecordingWithListensCollection {
     RecordingWithListensCollection::from_listencollection(
-        &mut ALISTRAL_CLIENT
-            .musicbrainz_db
-            .get_raw_connection()
-            .await
-            .expect("Couldn't connect to the database"),
-        &ALISTRAL_CLIENT.core,
         get_test_user_listens().await,
+        &recording_strategy(&ALISTRAL_CLIENT),
     )
     .await
     .expect("Couldn't get test Recording with listens")

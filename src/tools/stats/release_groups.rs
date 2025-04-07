@@ -7,17 +7,17 @@ use itertools::Itertools;
 use tuillez::formatter::FormatWithAsync;
 
 use crate::ALISTRAL_CLIENT;
+use crate::database::interfaces::statistics_data::release_group_strategy;
 use crate::utils::cli_paging::CLIPager;
 use crate::utils::constants::LISTENBRAINZ_FMT;
 
 pub async fn stats_release_groups(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
     let mut groups = ReleaseGroupWithListensCollection::from_listencollection(
-        conn,
-        &ALISTRAL_CLIENT.core,
         listens,
+        &release_group_strategy(&ALISTRAL_CLIENT),
     )
     .await
-    .expect("Error while fetching recordings")
+    .expect("Error while fetching release groups")
     .into_iter()
     .collect_vec();
     groups.sort_by_key(|a| Reverse(a.listen_count()));

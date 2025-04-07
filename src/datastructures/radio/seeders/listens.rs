@@ -7,6 +7,7 @@ use macon::Builder;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 
 use crate::ALISTRAL_CLIENT;
+use crate::database::interfaces::statistics_data::recording_strategy;
 use crate::database::listenbrainz::listens::fetch_latest_listens_of_user;
 
 use super::SeederSettings;
@@ -73,9 +74,8 @@ impl ListenSeeder {
         .into();
 
         let mut recordings = RecordingWithListensCollection::from_listencollection(
-            conn,
-            &ALISTRAL_CLIENT.core,
             listens,
+            &recording_strategy(&ALISTRAL_CLIENT),
         )
         .await?;
         let minimum_listens = self.get_minimum_listens(conn).await?;
@@ -125,9 +125,8 @@ impl ListenSeeder {
         .into();
 
         let mapped = RecordingWithListensCollection::from_listencollection(
-            conn,
-            &ALISTRAL_CLIENT.core,
             listens,
+            &recording_strategy(&ALISTRAL_CLIENT),
         )
         .await?
         .into_iter()

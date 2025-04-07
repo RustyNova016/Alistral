@@ -11,7 +11,7 @@ pub type MessybrainzWithListensCollection =
     EntityWithListensCollection<MessybrainzSubmission, ListenCollection>;
 
 impl MessybrainzWithListensCollection {
-    pub async fn from_listencollection(
+    pub async fn from_listencollection_default(
         conn: &mut sqlx::SqliteConnection,
         listens: ListenCollection,
     ) -> Result<Self, crate::Error> {
