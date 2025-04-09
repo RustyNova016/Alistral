@@ -8,6 +8,7 @@ use listenbrainz::raw::Client as ListenbrainzClient;
 use musicbrainz_db_lite::DBClient;
 use musicbrainz_db_lite::client::MusicBrainzClient;
 use tuillez::fatal_error::IntoFatal;
+use yumako_jams::client::YumakoClient;
 
 use crate::database::DB_LOCATION;
 use crate::models::config::Config;
@@ -26,6 +27,7 @@ pub struct AlistralCliClient {
     pub interzic: Arc<InterzicClient>,
     pub listenbrainz: Arc<ListenbrainzClient>,
     pub musicbrainz_db: Arc<DBClient>,
+    pub yumako_jams: Arc<YumakoClient>,
 }
 
 impl AlistralCliClient {
@@ -38,6 +40,7 @@ impl AlistralCliClient {
         let interzic =
             Self::create_interzic(musicbrainz, listenbrainz.clone(), musicbrainz_db.clone()).await;
         let core = Self::create_core_client(musicbrainz_db.clone(), listenbrainz.clone());
+        let yumako_jams = Self::create_yumako_jams_client(core.clone());
 
         Ok(Self {
             config,
@@ -45,6 +48,7 @@ impl AlistralCliClient {
             interzic,
             listenbrainz,
             musicbrainz_db,
+            yumako_jams,
         })
     }
 
@@ -136,5 +140,9 @@ impl AlistralCliClient {
     /// Create the client as a blocking operation, or fancy panic if an error occur
     pub fn create_blocking_or_fatal() -> Self {
         block_on(Self::create_or_fatal())
+    }
+
+    pub fn create_yumako_jams_client(alistral_core: Arc<AlistralClient>) -> Arc<YumakoClient> {
+        Arc::new(YumakoClient { alistral_core })
     }
 }
