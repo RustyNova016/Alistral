@@ -15,6 +15,7 @@ use tracing::debug;
 use tracing::error;
 use tuillez::fatal_error::FatalError;
 use tuillez::fatal_error::IntoFatal;
+use tuillez::formatter::FormatWithAsync;
 use yumako_jams::RadioStream;
 use yumako_jams::json::radio::Radio;
 use yumako_jams::radio_item::RadioItem;
@@ -28,6 +29,7 @@ use crate::models::config::config_trait::ConfigFile as _;
 use crate::models::config::recording_timeout::RecordingTimeoutConfig;
 use crate::models::data_storage::DataStorage;
 use crate::tools::radio::convert_recordings;
+use crate::utils::constants::LISTENBRAINZ_FMT;
 use crate::utils::data_file::DataFile as _;
 
 #[derive(Parser, Debug, Clone)]
@@ -148,7 +150,7 @@ impl RadioYumakoCommand {
     ) -> Result<(), crate::Error> {
         match self.output {
             RadioOutput::List => {
-                print_radio(&radio_items, conn).await?;
+                print_radio(&radio_items).await?;
             }
             RadioOutput::Listenbrainz => {
                 Listenbrainz::create_playlist(
@@ -224,16 +226,12 @@ pub fn compilation_error(err: yumako_jams::Error) {
 
 async fn print_radio(
     radio: &Vec<RadioItem>,
-    conn: &mut sqlx::SqliteConnection,
 ) -> Result<(), crate::Error> {
     for track in radio {
         println!(
             "[{}] {}",
             track.score.round_sf(3).unwrap(),
-            track
-                .entity()
-                .pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, true)
-                .await?
+            track.entity().format_with_async(&LISTENBRAINZ_FMT).await?
         )
     }
 

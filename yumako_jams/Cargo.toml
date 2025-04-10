@@ -26,6 +26,8 @@ rand = "0.9.0"
 sqlx = "0.8.3"
 itertools = "0.14.0"
 priority-queue = "2.3.0"
+toml = "0.8.20"
+reqwest = "0.12.15"
 
 [lints]
 workspace = true

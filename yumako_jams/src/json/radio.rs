@@ -49,6 +49,8 @@ impl Radio {
         // Read the JSON contents of the file as an instance of `User`.
         serde_json::from_reader(reader).map_err(crate::Error::RadioReadError)
     }
+
+    
 }
 
 fn default_description() -> String {
