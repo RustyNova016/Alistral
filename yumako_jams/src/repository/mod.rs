@@ -2,10 +2,11 @@ use crate::repository::error::RepositoryError;
 use crate::repository::repository_file::RepositoryFile;
 
 pub mod error;
+pub mod radio_declaration;
 pub mod repository_file;
 
 pub struct RadioRepository {
-    remote_location: String
+    remote_location: String,
 }
 
 impl RadioRepository {
