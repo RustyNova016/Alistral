@@ -59,7 +59,7 @@ fn get_stream_from_artist(
 ) -> BoxStream<'_, Result<Recording, crate::Error>> {
     try_fn_stream(|emit| async move {
         let conn = &mut client.get_db_lite_raw_conn().await?;
-        let stream = artist.browse_or_fetch_artist_recordings(conn);
+        let stream = artist.browse_or_fetch_artist_recordings(conn, client.alistral_core.musicbrainz_db.clone());
 
         pin_mut!(stream);
         while let Some(item) = stream.next().await {

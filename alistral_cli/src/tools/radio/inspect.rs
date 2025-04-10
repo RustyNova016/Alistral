@@ -22,7 +22,7 @@ pub struct RadioInspectCommand {
 }
 
 impl RadioInspectCommand {
-    pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> Result<(), crate::Error> {
+    pub async fn run(&self) -> Result<(), crate::Error> {
         let radio_schema =
             Radio::from_file(format!("./yumako_jams/exemples/{}.json", self.radio_name))
                 .expect_fatal("Couldn't read the radio")?;

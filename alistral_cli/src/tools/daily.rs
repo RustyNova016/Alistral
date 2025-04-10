@@ -12,7 +12,7 @@ use itertools::Itertools;
 use musicbrainz_db_lite::models::musicbrainz::release_group::ReleaseGroup;
 use tracing::instrument;
 use tuillez::OwoColorize as _;
-use tuillez::formatter::FormatWithAsync;
+use tuillez::formatter::FormatWithAsync as _;
 
 use crate::ALISTRAL_CLIENT;
 use crate::api::listenbrainz::fresh_releases::FreshReleaseRelease;

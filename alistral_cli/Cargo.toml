@@ -17,6 +17,7 @@ interzic = { path = "../interzic", optional = true }
 tuillez = { path = "../tuillez" }
 musicbrainz-db-lite = { path = "../musicbrainz_db_lite", features = ["pretty_format"] }
 symphonize = { path = "../symphonize", optional = true}
+yumako_jams = { path = "../yumako_jams" }
 
 # Musicbrainz dependencies
 #listenbrainz = "0.8.1"
@@ -74,7 +75,7 @@ tracing-indicatif = "0.3.11"
 # Other
 
 [features]
-#default = ["clippy"]
+default = ["radio"]
 full = ["clippy", "musicbrainz", "lookup", "stats"]
 musicbrainz = []
 clippy = ["musicbrainz", "symphonize"]

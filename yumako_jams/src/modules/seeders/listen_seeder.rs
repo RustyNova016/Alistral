@@ -1,4 +1,5 @@
 use alistral_core::database::fetching::listens::ListenFetchQuery;
+use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListenStrategy;
 use async_fn_stream::try_fn_stream;
 use futures::StreamExt;
 use serde::Deserialize;
@@ -22,9 +23,9 @@ impl RadioModule for ListenSeeder {
     ) -> LayerResult<'a> {
         Ok(try_fn_stream(async |emitter| {
             let tracks = ListenFetchQuery::get_recordings_with_listens(
-                &mut *client.get_db_lite_raw_conn().await?,
                 &client.alistral_core,
                 self.user,
+                &RecordingWithListenStrategy::new(&client.alistral_core)
             )
             .await?
             .into_iter();

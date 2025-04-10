@@ -1,4 +1,3 @@
-pub mod parsers;
 use std::io;
 
 use cache::CacheCommand;
@@ -47,6 +46,8 @@ pub mod lookup;
 pub mod mapping;
 #[cfg(feature = "musicbrainz")]
 pub mod musicbrainz;
+#[cfg(feature = "radio")]
+pub mod parsers;
 #[cfg(feature = "radio")]
 pub mod radio;
 pub mod unstable;

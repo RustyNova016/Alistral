@@ -8,7 +8,6 @@ members = [
     "musicbrainz_db_lite/musicbrainz_db_lite_macros", 
     "musicbrainz_db_lite/musicbrainz_db_lite_schema", 
     "symphonize", 
-    "sequelles",
     "yumako_jams"
 ]
 resolver = "3"
