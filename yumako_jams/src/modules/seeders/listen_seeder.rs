@@ -22,7 +22,6 @@ impl RadioModule for ListenSeeder {
     ) -> LayerResult<'a> {
         Ok(try_fn_stream(async |emitter| {
             let tracks = ListenFetchQuery::get_recordings_with_listens(
-                &mut *client.get_db_lite_raw_conn().await?,
                 &client.alistral_core,
                 self.user,
             )
