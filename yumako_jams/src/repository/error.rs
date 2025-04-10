@@ -6,5 +6,11 @@ pub enum RepositoryError {
     ReqwestError(#[from] reqwest::Error),
 
     #[error("Couldn't read the repository file")]
-    RepoFileRead
+    RepoFileRead,
+
+    #[error("Couldn't save radio file:\n {0}")]
+    RadioFileReadError(crate::Error),
+
+    #[error("Invalid repository name")]
+    RepositoryNameError,
 }
