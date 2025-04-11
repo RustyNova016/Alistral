@@ -1,19 +1,19 @@
 use core::cmp::Reverse;
 
-use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use alistral_core::datastructures::entity_with_listens::work::collection::WorkWithListensCollection;
 use alistral_core::datastructures::listen_collection::ListenCollection;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use itertools::Itertools;
 
 use crate::ALISTRAL_CLIENT;
+use crate::database::interfaces::statistics_data::work_strategy;
 use crate::utils::cli_paging::CLIPager;
 
-pub async fn stats_works(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
+pub async fn stats_works(_conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
     let mut groups =
-        WorkWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT.core, listens)
+        WorkWithListensCollection::from_listencollection(listens, &work_strategy(&ALISTRAL_CLIENT))
             .await
-            .expect("Error while fetching recordings")
+            .expect("Error while fetching works")
             .into_iter()
             .collect_vec();
     groups.sort_by_key(|a| Reverse(a.listen_count()));
@@ -42,18 +42,10 @@ pub async fn stats_works(conn: &mut sqlx::SqliteConnection, listens: ListenColle
 }
 
 pub async fn stats_works_recursive(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
-    let recordings =
-        RecordingWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT.core, listens)
+    let mut groups =
+        WorkWithListensCollection::from_listencollection(listens, &work_strategy(&ALISTRAL_CLIENT))
             .await
-            .expect("Error while fetching recordings");
-
-    let mut groups = WorkWithListensCollection::from_recording_with_listens(
-        conn,
-        &ALISTRAL_CLIENT.core,
-        recordings,
-    )
-    .await
-    .expect("Error while fetching works");
+            .expect("Error while fetching works");
 
     groups
         .add_parents_recursive(conn, &ALISTRAL_CLIENT.core)

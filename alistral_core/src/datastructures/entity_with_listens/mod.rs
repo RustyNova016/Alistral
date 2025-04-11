@@ -19,11 +19,6 @@ pub mod traits;
 pub mod work;
 
 /// A structure representing an entity with associated listens.
-///
-/// # Fields
-///
-/// * `entity` - The entity of type `Ent`.
-/// * `listens` - The listens associated with the entity of type `Lis`.
 #[derive(Debug, Clone)]
 pub struct EntityWithListens<Ent, Lis>
 where

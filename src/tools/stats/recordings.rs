@@ -9,16 +9,19 @@ use tuillez::extensions::chrono_exts::DurationExt as _;
 use tuillez::formatter::FormatWithAsync;
 
 use crate::ALISTRAL_CLIENT;
+use crate::database::interfaces::statistics_data::recording_strategy;
 use crate::utils::cli_paging::CLIPager;
 use crate::utils::constants::LISTENBRAINZ_FMT;
 
-pub async fn stats_recording(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
-    let mut groups =
-        RecordingWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT.core, listens)
-            .await
-            .expect("Error while fetching recordings")
-            .into_iter()
-            .collect_vec();
+pub async fn stats_recording(_conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
+    let mut groups = RecordingWithListensCollection::from_listencollection(
+        listens,
+        &recording_strategy(&ALISTRAL_CLIENT),
+    )
+    .await
+    .expect("Error while fetching recordings")
+    .into_iter()
+    .collect_vec();
     groups.sort_by_key(|a| Reverse(a.listen_count()));
 
     let mut pager = CLIPager::new(10);
@@ -31,7 +34,7 @@ pub async fn stats_recording(conn: &mut sqlx::SqliteConnection, listens: ListenC
                 .entity()
                 .format_with_async(&LISTENBRAINZ_FMT)
                 .await
-                .expect("Error getting formated recording name"),
+                .expect("Error getting formatted recording name"),
         );
 
         if !pager.inc() {
@@ -40,13 +43,15 @@ pub async fn stats_recording(conn: &mut sqlx::SqliteConnection, listens: ListenC
     }
 }
 
-pub async fn stats_recording_time(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
-    let mut groups =
-        RecordingWithListensCollection::from_listencollection(conn, &ALISTRAL_CLIENT.core, listens)
-            .await
-            .expect("Error while fetching recordings")
-            .into_iter()
-            .collect_vec();
+pub async fn stats_recording_time(_conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
+    let mut groups = RecordingWithListensCollection::from_listencollection(
+        listens,
+        &recording_strategy(&ALISTRAL_CLIENT),
+    )
+    .await
+    .expect("Error while fetching recordings")
+    .into_iter()
+    .collect_vec();
     groups.sort_by_key(|a| Reverse(a.get_time_listened()));
 
     let mut pager = CLIPager::new(10);

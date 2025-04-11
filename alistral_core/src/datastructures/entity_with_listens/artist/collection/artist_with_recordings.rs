@@ -1,4 +1,5 @@
 use itertools::Itertools as _;
+use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::artist::Artist;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use tracing::instrument;
@@ -7,34 +8,54 @@ use tuillez::pg_spinner;
 use crate::database::fetching::recordings::fetch_recordings_as_complete;
 use crate::datastructures::entity_with_listens::artist::artist_with_recordings::ArtistWithRecordings;
 use crate::datastructures::entity_with_listens::collection::EntityWithListensCollection;
+use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListenStrategy;
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
-use crate::datastructures::entity_with_listens::traits::FromListenCollection;
-use crate::datastructures::listen_collection::ListenCollection;
+use crate::datastructures::listen_sorter::ListenSortingStrategy;
+use crate::AlistralClient;
 
 pub type ArtistWithRecordingsCollection =
     EntityWithListensCollection<Artist, RecordingWithListensCollection>;
 
-impl ArtistWithRecordingsCollection {
-    #[instrument(skip_all, fields(indicatif.pb_show = tracing::field::Empty))]
-    pub async fn from_listencollection(
-        conn: &mut sqlx::SqliteConnection,
-        client: &crate::AlistralClient,
-        listens: ListenCollection,
-    ) -> Result<Self, crate::Error> {
+pub struct ArtistWithRecordingsStrategy<'l> {
+    pub(super) client: &'l AlistralClient,
+    recording_strat: RecordingWithListenStrategy<'l>,
+}
+
+impl<'l> ArtistWithRecordingsStrategy<'l> {
+    pub fn new(
+        client: &'l AlistralClient,
+        recording_strat: RecordingWithListenStrategy<'l>,
+    ) -> Self {
+        Self {
+            client,
+            recording_strat,
+        }
+    }
+}
+
+impl ListenSortingStrategy<Artist, RecordingWithListensCollection>
+    for ArtistWithRecordingsStrategy<'_>
+{
+    #[instrument(skip(self), fields(indicatif.pb_show = tracing::field::Empty))]
+    async fn sort_insert_listens(
+        &self,
+        data: &mut EntityWithListensCollection<Artist, RecordingWithListensCollection>,
+        listens: Vec<Listen>,
+    ) -> Result<(), crate::Error> {
+        pg_spinner!("Compiling artist listen data");
         // Convert Recordings
-        pg_spinner!("Compiling artist data");
         let recordings =
-            RecordingWithListensCollection::from_listencollection(conn, client, listens).await?;
+            RecordingWithListensCollection::from_listens(listens, &self.recording_strat).await?;
 
         let recording_refs = recordings.iter_entities().collect_vec();
-        fetch_recordings_as_complete(conn, client, &recording_refs).await?;
+        fetch_recordings_as_complete(self.client, &recording_refs).await?;
+
+        let conn = &mut *self.client.musicbrainz_db.get_raw_connection().await?;
 
         // Load artists
         let results = Recording::get_artist_from_credits_as_batch(conn, &recording_refs).await?;
 
         // Convert artists
-        let mut out = Self::new();
-
         for (_, (recording, artists)) in results {
             for artist in artists {
                 let recording = recordings
@@ -48,24 +69,18 @@ impl ArtistWithRecordingsCollection {
                     listens: recording.into(),
                 };
 
-                out.insert_or_merge_entity(artist_with_recordings);
+                data.insert_or_merge_entity(artist_with_recordings);
             }
         }
 
-        Ok(out)
+        Ok(())
     }
-}
 
-impl FromListenCollection for ArtistWithRecordingsCollection {
-    async fn from_listencollection(
-        client: &crate::AlistralClient,
-        listens: ListenCollection,
-    ) -> Result<Self, crate::Error> {
-        Self::from_listencollection(
-            client.musicbrainz_db.get_raw_connection().await?.as_mut(),
-            client,
-            listens,
-        )
-        .await
+    async fn sort_insert_listen(
+        &self,
+        data: &mut EntityWithListensCollection<Artist, RecordingWithListensCollection>,
+        listen: Listen,
+    ) -> Result<(), crate::Error> {
+        Self::sort_insert_listens(self, data, vec![listen]).await
     }
 }

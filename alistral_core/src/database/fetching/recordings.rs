@@ -28,7 +28,6 @@ pub async fn prefetch_recordings_of_listens(
 
 #[instrument(skip(client), fields(indicatif.pb_show = tracing::field::Empty))]
 pub async fn fetch_recordings_as_complete(
-    conn: &mut sqlx::SqliteConnection,
     client: &crate::AlistralClient,
     recordings: &[&Recording],
 ) -> Result<(), musicbrainz_db_lite::Error> {
@@ -40,6 +39,8 @@ pub async fn fetch_recordings_as_complete(
 
     pg_counted!(uncompletes.len(), "Fetching recordings");
     info!("Fetching full recording data");
+
+    let conn = &mut *client.musicbrainz_db.get_raw_connection().await?;
 
     for recording in uncompletes {
         recording
