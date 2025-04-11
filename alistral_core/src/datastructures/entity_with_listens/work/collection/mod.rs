@@ -25,6 +25,7 @@ pub type WorkWithListensCollection = EntityWithListensCollection<Work, ListenCol
 pub struct WorkWithListenStrategy<'l> {
     pub(super) client: &'l AlistralClient,
     recording_strat: RecordingWithListenStrategy<'l>,
+    recursive_parents: bool,
 }
 
 impl<'l> WorkWithListenStrategy<'l> {
@@ -35,7 +36,13 @@ impl<'l> WorkWithListenStrategy<'l> {
         Self {
             client,
             recording_strat,
+            recursive_parents: false,
         }
+    }
+
+    pub fn with_recursive_parents(mut self) -> Self {
+        self.recursive_parents = true;
+        self
     }
 }
 
@@ -78,6 +85,10 @@ impl ListenSortingStrategy<Work, ListenCollection> for WorkWithListenStrategy<'_
                     listens,
                 });
             }
+        }
+
+        if self.recursive_parents {
+            data.add_parents_recursive(conn, self.client).await?;
         }
 
         Ok(())
