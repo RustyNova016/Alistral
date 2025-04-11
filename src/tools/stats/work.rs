@@ -41,27 +41,25 @@ pub async fn stats_works(_conn: &mut sqlx::SqliteConnection, listens: ListenColl
     }
 }
 
-pub async fn stats_works_recursive(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
-    let mut groups =
-        WorkWithListensCollection::from_listencollection(listens, &work_strategy(&ALISTRAL_CLIENT))
-            .await
-            .expect("Error while fetching works");
+pub async fn stats_works_recursive(_conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
+    let strategy = work_strategy(&ALISTRAL_CLIENT).with_recursive_parents();
 
-    groups
-        .add_parents_recursive(conn, &ALISTRAL_CLIENT.core)
+    let mut groups = WorkWithListensCollection::from_listencollection(listens, &strategy)
         .await
-        .expect("Couldn't add parents");
+        .expect("Error while fetching works")
+        .0
+        .into_values()
+        .collect_vec();
 
-    let mut as_vec = groups.0.into_values().collect_vec();
-    as_vec.sort_by_key(|a| Reverse(a.listen_count()));
+    groups.sort_by_key(|a| Reverse(a.listen_count()));
 
     let mut pager = CLIPager::new(10);
 
-    if as_vec.is_empty() {
+    if groups.is_empty() {
         println!("No works have been found");
     }
 
-    for group in as_vec {
+    for group in groups {
         println!(
             "[{}] {}",
             group.listen_count(),
