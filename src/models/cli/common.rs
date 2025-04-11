@@ -38,8 +38,6 @@ impl Display for SortSorterBy {
     }
 }
 
-
-
 #[derive(ValueEnum, Clone, Debug, Copy, Default, IsVariant)]
 pub enum ConfigBool {
     #[default]

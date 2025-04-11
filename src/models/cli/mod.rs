@@ -162,18 +162,6 @@ pub enum Commands {
     Radio(RadioCommand),
 
     /// Shows top statistics for a specific target
-    ///
-    /// Target is the entity type to group the stats by. Currently, those entities stats are implemented:
-    ///
-    /// - Recordings (`recording`)
-    ///
-    /// - Artists (`artist`)
-    ///
-    /// - Releases (`release`)
-    ///
-    /// - Release Groups (`release_group`)
-    ///
-    /// - Works (`work`)
     Stats(StatsCommand),
 
     Unstable(UnstableCommand),

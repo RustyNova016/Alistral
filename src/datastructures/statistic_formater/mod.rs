@@ -2,38 +2,37 @@ use core::marker::PhantomData;
 
 use alistral_core::datastructures::entity_with_listens::EntityWithListens;
 use alistral_core::datastructures::entity_with_listens::collection::EntityWithListensCollection;
-use alistral_core::datastructures::listen_collection::ListenCollection;
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use futures::Stream;
 use futures::StreamExt;
 use futures::TryStreamExt;
 use futures::stream;
 use musicbrainz_db_lite::RowId;
-use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 
 use crate::utils::cli_paging::CLIPager;
 
 pub mod listencount;
-pub mod recording;
+pub mod listenduration;
 
-pub struct StatisticFormater<T, Stats>
+pub struct StatisticFormater<Ent, Lis, Stats>
 where
-    T: RowId,
+    Ent: RowId,
+    Lis: ListenCollectionReadable,
     Stats: StatisticType,
 {
-    data: EntityWithListensCollection<T, ListenCollection>,
+    data: EntityWithListensCollection<Ent, Lis>,
     stat_type: PhantomData<Stats>,
+    #[allow(dead_code)] // Will be used later
     stat_output: StatisticOutput,
 }
 
-impl<T, Stats> StatisticFormater<T, Stats>
+impl<Ent, Lis, Stats> StatisticFormater<Ent, Lis, Stats>
 where
-    T: RowId,
+    Ent: RowId,
+    Lis: ListenCollectionReadable,
     Stats: StatisticType,
 {
-    pub fn new(
-        data: EntityWithListensCollection<T, ListenCollection>,
-        stat_output: StatisticOutput,
-    ) -> Self {
+    pub fn new(data: EntityWithListensCollection<Ent, Lis>, stat_output: StatisticOutput) -> Self {
         Self {
             data,
             stat_type: Default::default(),
@@ -42,10 +41,11 @@ where
     }
 }
 
-impl<T, Stats> StatisticFormater<T, Stats>
+impl<Ent, Lis, Stats> StatisticFormater<Ent, Lis, Stats>
 where
-    Self: StatFormatterVariant<T>,
-    T: RowId,
+    Self: StatFormatterVariant<Ent, Lis>,
+    Ent: RowId,
+    Lis: ListenCollectionReadable,
     Stats: StatisticType,
 {
     fn print_stream(&self) -> impl Stream<Item = Result<String, crate::Error>> {
@@ -76,12 +76,6 @@ where
     }
 }
 
-impl StatisticFormater<Recording, ListenCountStats> {
-    async fn a(&self) {
-        self.print_paged().await;
-    }
-}
-
 // Using a typestate pattern due to the different statistics having different trait bounds
 pub struct ListenCountStats;
 pub struct ListenDurationStats;
@@ -90,16 +84,16 @@ pub trait StatisticType {}
 impl StatisticType for ListenCountStats {}
 impl StatisticType for ListenDurationStats {}
 
-pub trait StatFormatterVariant<T>
+/// Trait for formatting specific statistic types
+pub trait StatFormatterVariant<Ent, Lis>
 where
-    T: RowId,
+    Ent: RowId,
+    Lis: ListenCollectionReadable,
 {
-    fn sort_elements(&self) -> Vec<&EntityWithListens<T, ListenCollection>>;
+    fn sort_elements(&self) -> Vec<&EntityWithListens<Ent, Lis>>;
 
-    async fn get_line(
-        &self,
-        element: &EntityWithListens<T, ListenCollection>,
-    ) -> Result<String, crate::Error>;
+    async fn get_line(&self, element: &EntityWithListens<Ent, Lis>)
+    -> Result<String, crate::Error>;
 }
 
 pub enum StatisticOutput {

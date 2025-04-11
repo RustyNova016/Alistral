@@ -1,28 +1,22 @@
-pub mod target_entity;
 use core::fmt::Display;
-use std::path::PathBuf;
 
+use alistral_core::database::fetching::listens::ListenFetchQuery;
 use alistral_core::datastructures::entity_with_listens::collection::EntityWithListensCollection;
 use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
-use alistral_core::datastructures::entity_with_listens::traits::FromListenCollection;
-use alistral_core::datastructures::entity_with_listens::work::WorkWithListens;
-use alistral_core::datastructures::entity_with_listens::work::collection::WorkWithListenStrategy;
-use alistral_core::datastructures::entity_with_listens::work::collection::WorkWithListensCollection;
+use alistral_core::datastructures::entity_with_listens::release::collection::ReleaseWithRecordingsCollection;
+use alistral_core::datastructures::entity_with_listens::work::collection::WorkWithRecordingsCollection;
+use alistral_core::datastructures::entity_with_listens::work::collection::WorkWithRecordingsStrategy;
 use alistral_core::datastructures::listen_collection::ListenCollection;
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use clap::Parser;
 use clap::ValueEnum;
 use derive_more::IsVariant;
-
-use alistral_core::database::fetching::listens::ListenFetchQuery;
-use alistral_core::database::fetching::listens::ListenFetchQueryReturn;
 use musicbrainz_db_lite::RowId;
-use musicbrainz_db_lite::models::musicbrainz::MusicbrainzFormater;
 use musicbrainz_db_lite::models::musicbrainz::artist::Artist;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use musicbrainz_db_lite::models::musicbrainz::release::Release;
 use musicbrainz_db_lite::models::musicbrainz::release_group::ReleaseGroup;
 use musicbrainz_db_lite::models::musicbrainz::work::Work;
-use tuillez::formatter::FormatWithAsync;
 
 use crate::ALISTRAL_CLIENT;
 use crate::database::interfaces::statistics_data::artist_stats;
@@ -30,22 +24,15 @@ use crate::database::interfaces::statistics_data::recording_stats;
 use crate::database::interfaces::statistics_data::recording_strategy;
 use crate::database::interfaces::statistics_data::release_group_stats;
 use crate::database::interfaces::statistics_data::release_stats;
-use crate::database::interfaces::statistics_data::release_strategy;
-use crate::database::interfaces::statistics_data::work_stats;
 use crate::datastructures::statistic_formater::ListenCountStats;
 use crate::datastructures::statistic_formater::ListenDurationStats;
 use crate::datastructures::statistic_formater::StatFormatterVariant;
 use crate::datastructures::statistic_formater::StatisticFormater;
 use crate::datastructures::statistic_formater::StatisticOutput;
 use crate::datastructures::statistic_formater::StatisticType;
-use crate::models::cli::common::SortSorterBy;
 use crate::models::config::Config;
 
-mod artists;
-mod recordings;
-mod release_groups;
-mod releases;
-mod work;
+pub mod target_entity;
 
 #[derive(Parser, Debug, Clone)]
 pub struct StatsCommand {
@@ -119,48 +106,84 @@ impl StatsCommand {
         match (self.sort_by, self.target) {
             (SortBy::ListenCount, StatsTarget::Artist) => {
                 let data = artist_stats(&ALISTRAL_CLIENT, user.clone()).await?;
-                self.run_stats::<Artist, ListenCountStats>(data).await
+                self.run_stats::<Artist, RecordingWithListensCollection, ListenCountStats>(data)
+                    .await
             }
             (SortBy::ListenCount, StatsTarget::Recording) => {
                 let data = recording_stats(&ALISTRAL_CLIENT, user.clone()).await?;
-                self.run_stats::<Recording, ListenCountStats>(data).await
+                self.run_stats::<Recording, ListenCollection, ListenCountStats>(data)
+                    .await
             }
             (SortBy::ListenCount, StatsTarget::Release) => {
                 let data = release_stats(&ALISTRAL_CLIENT, user.clone()).await?;
-                self.run_stats::<Release, ListenCountStats>(data).await
+                self.run_stats::<Release, RecordingWithListensCollection, ListenCountStats>(data)
+                    .await
             }
             (SortBy::ListenCount, StatsTarget::ReleaseGroup) => {
                 let data = release_group_stats(&ALISTRAL_CLIENT, user.clone()).await?;
-                self.run_stats::<ReleaseGroup, ListenCountStats>(data).await
+                self.run_stats::<ReleaseGroup, ReleaseWithRecordingsCollection, ListenCountStats>(
+                    data,
+                )
+                .await
             }
             (SortBy::ListenCount, StatsTarget::Work) => {
                 let data = self.work_stats(user).await?;
-                self.run_stats::<Work, ListenCountStats>(data).await
+                self.run_stats::<Work, RecordingWithListensCollection, ListenCountStats>(data)
+                    .await
             }
-            _ => {
-                println!(
-                    "This type of statistic is not implemented for this entity. If you believe it should be able to exist, feel free to create an issue"
-                );
-                Ok(())
+            (SortBy::ListenDuration, StatsTarget::Artist) => {
+                let data = artist_stats(&ALISTRAL_CLIENT, user).await?;
+
+                self.run_stats::<Artist, RecordingWithListensCollection, ListenDurationStats>(data)
+                    .await
             }
+            (SortBy::ListenDuration, StatsTarget::Recording) => {
+                let data = recording_stats(&ALISTRAL_CLIENT, user.clone()).await?;
+                self.run_stats::<Recording, ListenCollection, ListenDurationStats>(data)
+                    .await
+            }
+            (SortBy::ListenDuration, StatsTarget::Release) => {
+                let data = release_stats(&ALISTRAL_CLIENT, user.clone()).await?;
+
+                self.run_stats::<Release, RecordingWithListensCollection, ListenDurationStats>(data)
+                    .await
+            }
+            (SortBy::ListenDuration, StatsTarget::ReleaseGroup) => {
+                let data = release_group_stats(&ALISTRAL_CLIENT, user.clone()).await?;
+                self.run_stats::<ReleaseGroup, ReleaseWithRecordingsCollection, ListenDurationStats>(
+                    data,
+                )
+                .await
+            }
+            (SortBy::ListenDuration, StatsTarget::Work) => {
+                let data = self.work_stats(user).await?;
+                self.run_stats::<Work, RecordingWithListensCollection, ListenDurationStats>(data)
+                    .await
+            } // _ => {
+              //     println!(
+              //         "This type of statistic is not implemented for this entity. If you believe it should be able to exist, feel free to create an issue"
+              //     );
+              //     Ok(())
+              // }
         }
     }
 
-    async fn run_stats<Ent, S>(
+    async fn run_stats<Ent, Lis, S>(
         &self,
-        data: EntityWithListensCollection<Ent, ListenCollection>,
+        data: EntityWithListensCollection<Ent, Lis>,
     ) -> Result<(), crate::Error>
     where
         Ent: RowId,
+        Lis: ListenCollectionReadable,
         S: StatisticType,
-        StatisticFormater<Ent, S>: StatFormatterVariant<Ent>,
+        StatisticFormater<Ent, Lis, S>: StatFormatterVariant<Ent, Lis>,
     {
-        let stats = StatisticFormater::<Ent, S>::new(data, StatisticOutput::Print);
+        let stats = StatisticFormater::<Ent, Lis, S>::new(data, StatisticOutput::Print);
 
         stats.print_paged().await
     }
 
-    async fn work_stats(&self, user: String) -> Result<WorkWithListensCollection, crate::Error> {
+    async fn work_stats(&self, user: String) -> Result<WorkWithRecordingsCollection, crate::Error> {
         Ok(ListenFetchQuery::get_entity_with_listens(
             &ALISTRAL_CLIENT.core,
             user,
@@ -169,8 +192,8 @@ impl StatsCommand {
         .await?)
     }
 
-    fn work_strategy(&self) -> WorkWithListenStrategy {
-        let mut strat = WorkWithListenStrategy::new(
+    fn work_strategy(&self) -> WorkWithRecordingsStrategy {
+        let mut strat = WorkWithRecordingsStrategy::new(
             &ALISTRAL_CLIENT.core,
             recording_strategy(&ALISTRAL_CLIENT),
         );

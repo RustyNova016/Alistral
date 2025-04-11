@@ -800,42 +800,29 @@ Generate playlists based on the listened recordings of two users
 
 Shows top statistics for a specific target
 
-Target is the entity type to group the stats by. Currently, those entities stats are implemented:
-
-- Recordings (`recording`)
-
-- Artists (`artist`)
-
-- Releases (`release`)
-
-- Release Groups (`release_group`)
-
-- Works (`work`)
-
-**Usage:** `alistral stats [OPTIONS] <TARGET> [USERNAME]`
+**Usage:** `alistral stats [OPTIONS] <TARGET>`
 
 ###### **Arguments:**
 
 * `<TARGET>` — The type of entity to sort by
 
-  Possible values: `recording`, `recording-playtime`, `artist`, `release`, `release-group`, `work`, `work-recursive`
+  Possible values: `recording`, `artist`, `release`, `release-group`, `work`
 
-* `<USERNAME>` — Name of the user to fetch stats listen from
 
 ###### **Options:**
 
-* `-s`, `--sort <SORT>` — Sort by:
+* `-u`, `--username <USERNAME>` — Name of the user to fetch stats listen from
+* `-s`, `--sort-by <SORT_BY>` — The type of sorting to use
 
-  Default value: `count`
+  Default value: `listen-count`
 
   Possible values:
-  - `count`:
-    The count of listens for this element. This is descending by default
-  - `name`:
-    The name of the associated element
-  - `oldest`:
-    The oldest element
+  - `listen-count`:
+    The number of times the entity has been listened to
+  - `listen-duration`:
+    The total duration this entity has been listened for
 
+* `--w-recursive` — Recursively add parent works to work stats
 
 
 
