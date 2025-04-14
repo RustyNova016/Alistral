@@ -38,31 +38,6 @@ impl Display for SortSorterBy {
     }
 }
 
-#[derive(ValueEnum, Clone, Debug, Copy, IsVariant)]
-pub enum StatsTarget {
-    Recording,
-    RecordingPlaytime,
-    Artist,
-    Release,
-    ReleaseGroup,
-    Work,
-    WorkRecursive,
-}
-
-impl StatsTarget {
-    pub fn to_str(&self) -> &str {
-        match self {
-            Self::Recording => "recording",
-            Self::RecordingPlaytime => "recording_time",
-            Self::Artist => "artist",
-            Self::Release => "release",
-            Self::ReleaseGroup => "release_group",
-            Self::Work => "work",
-            Self::WorkRecursive => "work_recursive",
-        }
-    }
-}
-
 #[derive(ValueEnum, Clone, Debug, Copy, Default, IsVariant)]
 pub enum ConfigBool {
     #[default]

@@ -3,8 +3,11 @@ use alistral_core::datastructures::entity_with_listens::artist::collection::Arti
 use alistral_core::datastructures::entity_with_listens::artist::collection::ArtistWithRecordingsStrategy;
 use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListenStrategy;
 use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
+use alistral_core::datastructures::entity_with_listens::release::collection::ReleaseWithRecordingsCollection;
 use alistral_core::datastructures::entity_with_listens::release::collection::ReleaseWithRecordingsStrategy;
+use alistral_core::datastructures::entity_with_listens::release_group::collection::ReleaseGroupWithReleasesCollection;
 use alistral_core::datastructures::entity_with_listens::release_group::collection::ReleaseGroupWithReleasesStrategy;
+use alistral_core::datastructures::entity_with_listens::work::collection::WorkWithRecordingsCollection;
 use alistral_core::datastructures::entity_with_listens::work::collection::WorkWithRecordingsStrategy;
 
 use crate::models::client::AlistralCliClient;
@@ -33,7 +36,7 @@ pub fn work_strategy(client: &AlistralCliClient) -> WorkWithRecordingsStrategy {
 
 // === Default stats fetching ===
 
-pub async fn artist_recording_stats(
+pub async fn artist_stats(
     client: &AlistralCliClient,
     user: String,
 ) -> Result<ArtistWithRecordingsCollection, crate::Error> {
@@ -47,6 +50,33 @@ pub async fn recording_stats(
     user: String,
 ) -> Result<RecordingWithListensCollection, crate::Error> {
     let strategy = recording_strategy(client);
+
+    Ok(ListenFetchQuery::get_entity_with_listens(&client.core, user, &strategy).await?)
+}
+
+pub async fn release_stats(
+    client: &AlistralCliClient,
+    user: String,
+) -> Result<ReleaseWithRecordingsCollection, crate::Error> {
+    let strategy = release_strategy(client);
+
+    Ok(ListenFetchQuery::get_entity_with_listens(&client.core, user, &strategy).await?)
+}
+
+pub async fn release_group_stats(
+    client: &AlistralCliClient,
+    user: String,
+) -> Result<ReleaseGroupWithReleasesCollection, crate::Error> {
+    let strategy = release_group_strategy(client);
+
+    Ok(ListenFetchQuery::get_entity_with_listens(&client.core, user, &strategy).await?)
+}
+
+pub async fn work_stats(
+    client: &AlistralCliClient,
+    user: String,
+) -> Result<WorkWithRecordingsCollection, crate::Error> {
+    let strategy = work_strategy(client);
 
     Ok(ListenFetchQuery::get_entity_with_listens(&client.core, user, &strategy).await?)
 }
