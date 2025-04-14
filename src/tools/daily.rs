@@ -1,8 +1,8 @@
 use core::cmp::Reverse;
 
-use alistral_core::datastructures::entity_with_listens::artist::collection::artist_with_recordings::ArtistWithRecordingsCollection;
-use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
+use alistral_core::datastructures::entity_with_listens::artist::collection::ArtistWithRecordingsCollection;
 use alistral_core::datastructures::listen_collection::ListenCollection;
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use chrono::DateTime;
 use chrono::Datelike;
 use chrono::NaiveDate;
@@ -17,7 +17,7 @@ use tuillez::formatter::FormatWithAsync;
 use crate::ALISTRAL_CLIENT;
 use crate::api::listenbrainz::fresh_releases::FreshReleaseRelease;
 use crate::api::listenbrainz::fresh_releases::FreshReleaseRequest;
-use crate::database::interfaces::statistics_data::artist_recording_strategy;
+use crate::database::interfaces::statistics_data::artist_strategy;
 use crate::database::interfaces::statistics_data::recording_stats;
 use crate::database::musicbrainz::anniversaries::get_recordings_aniversaries;
 use crate::models::config::Config;
@@ -160,7 +160,7 @@ async fn get_fresh_releases(
     //TODO: #529 Daily: Prevent recompiling recording with listens
     let artists = ArtistWithRecordingsCollection::from_listencollection(
         listens,
-        &artist_recording_strategy(&ALISTRAL_CLIENT),
+        &artist_strategy(&ALISTRAL_CLIENT),
     )
     .await
     .expect("Couldn't get the listened artists");

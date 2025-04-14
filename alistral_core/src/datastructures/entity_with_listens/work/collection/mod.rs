@@ -4,7 +4,7 @@ use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use musicbrainz_db_lite::models::musicbrainz::work::Work;
 use tracing::instrument;
 use tracing::Span;
-use tracing_indicatif::span_ext::IndicatifSpanExt;
+use tracing_indicatif::span_ext::IndicatifSpanExt as _;
 use tuillez::pg_counted;
 use tuillez::pg_inc;
 use tuillez::pg_spinner;
@@ -13,22 +13,20 @@ use crate::database::fetching::recordings::fetch_recordings_as_complete;
 use crate::datastructures::entity_with_listens::collection::EntityWithListensCollection;
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListenStrategy;
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
-use crate::datastructures::entity_with_listens::work::WorkWithListens;
-use crate::datastructures::listen_collection::ListenCollection;
+use crate::datastructures::entity_with_listens::work::WorkWithRecordings;
 use crate::datastructures::listen_sorter::ListenSortingStrategy;
 use crate::AlistralClient;
 
-pub mod work_with_recordings;
+pub type WorkWithRecordingsCollection =
+    EntityWithListensCollection<Work, RecordingWithListensCollection>;
 
-pub type WorkWithListensCollection = EntityWithListensCollection<Work, ListenCollection>;
-
-pub struct WorkWithListenStrategy<'l> {
+pub struct WorkWithRecordingsStrategy<'l> {
     pub(super) client: &'l AlistralClient,
     recording_strat: RecordingWithListenStrategy<'l>,
     recursive_parents: bool,
 }
 
-impl<'l> WorkWithListenStrategy<'l> {
+impl<'l> WorkWithRecordingsStrategy<'l> {
     pub fn new(
         client: &'l AlistralClient,
         recording_strat: RecordingWithListenStrategy<'l>,
@@ -46,11 +44,13 @@ impl<'l> WorkWithListenStrategy<'l> {
     }
 }
 
-impl ListenSortingStrategy<Work, ListenCollection> for WorkWithListenStrategy<'_> {
+impl ListenSortingStrategy<Work, RecordingWithListensCollection>
+    for WorkWithRecordingsStrategy<'_>
+{
     #[instrument(skip(self), fields(indicatif.pb_show = tracing::field::Empty))]
     async fn sort_insert_listens(
         &self,
-        data: &mut EntityWithListensCollection<Work, ListenCollection>,
+        data: &mut EntityWithListensCollection<Work, RecordingWithListensCollection>,
         listens: Vec<Listen>,
     ) -> Result<(), crate::Error> {
         pg_spinner!("Compiling work listen data");
@@ -69,20 +69,17 @@ impl ListenSortingStrategy<Work, ListenCollection> for WorkWithListenStrategy<'_
         // Convert artists
         for (_, (recording, works)) in results {
             for work in works {
-                // Get listens
-                let listens = recordings
+                let recording = recordings
                     .0
                     .get(&recording.id)
                     .expect(
                         "The release has been fetched from the recording, so it should be there",
                     )
-                    .listens()
                     .clone();
 
-                // Save it
-                data.insert_or_merge_entity(WorkWithListens {
+                data.insert_or_merge_entity(WorkWithRecordings {
                     entity: work,
-                    listens,
+                    listens: recording.into(),
                 });
             }
         }
@@ -96,14 +93,14 @@ impl ListenSortingStrategy<Work, ListenCollection> for WorkWithListenStrategy<'_
 
     async fn sort_insert_listen(
         &self,
-        data: &mut EntityWithListensCollection<Work, ListenCollection>,
+        data: &mut EntityWithListensCollection<Work, RecordingWithListensCollection>,
         listen: Listen,
     ) -> Result<(), crate::Error> {
         Self::sort_insert_listens(self, data, vec![listen]).await
     }
 }
 
-impl WorkWithListensCollection {
+impl WorkWithRecordingsCollection {
     #[instrument(skip(client), fields(indicatif.pb_show = tracing::field::Empty))]
     pub async fn add_parents_recursive(
         &mut self,

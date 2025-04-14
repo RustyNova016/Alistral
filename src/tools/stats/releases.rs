@@ -1,6 +1,6 @@
 use core::cmp::Reverse;
 
-use alistral_core::datastructures::entity_with_listens::release::collection::ReleaseWithListensCollection;
+use alistral_core::datastructures::entity_with_listens::release::collection::ReleaseWithRecordingsCollection;
 use alistral_core::datastructures::listen_collection::ListenCollection;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use itertools::Itertools;
@@ -12,7 +12,7 @@ use crate::utils::cli_paging::CLIPager;
 use crate::utils::constants::LISTENBRAINZ_FMT;
 
 pub async fn stats_releases(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
-    let mut groups = ReleaseWithListensCollection::from_listencollection(
+    let mut groups = ReleaseWithRecordingsCollection::from_listencollection(
         listens,
         &release_strategy(&ALISTRAL_CLIENT),
     )
