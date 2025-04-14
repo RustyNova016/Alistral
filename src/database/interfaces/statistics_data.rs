@@ -3,8 +3,8 @@ use alistral_core::datastructures::entity_with_listens::artist::collection::Arti
 use alistral_core::datastructures::entity_with_listens::artist::collection::ArtistWithRecordingsStrategy;
 use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListenStrategy;
 use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
-use alistral_core::datastructures::entity_with_listens::release::collection::ReleaseWithListensStrategy;
-use alistral_core::datastructures::entity_with_listens::release_group::collection::ReleaseGroupWithListensStrategy;
+use alistral_core::datastructures::entity_with_listens::release::collection::ReleaseWithRecordingsStrategy;
+use alistral_core::datastructures::entity_with_listens::release_group::collection::ReleaseGroupWithReleasesStrategy;
 use alistral_core::datastructures::entity_with_listens::work::collection::WorkWithListenStrategy;
 use alistral_core::datastructures::entity_with_listens::work::collection::work_with_recordings::WorkWithRecordingsStrategy;
 
@@ -20,12 +20,12 @@ pub fn recording_strategy(client: &AlistralCliClient) -> RecordingWithListenStra
     RecordingWithListenStrategy::new(client.core.as_ref())
 }
 
-pub fn release_strategy(client: &AlistralCliClient) -> ReleaseWithListensStrategy {
-    ReleaseWithListensStrategy::new(client.core.as_ref(), recording_strategy(client))
+pub fn release_strategy(client: &AlistralCliClient) -> ReleaseWithRecordingsStrategy {
+    ReleaseWithRecordingsStrategy::new(client.core.as_ref(), recording_strategy(client))
 }
 
-pub fn release_group_strategy(client: &AlistralCliClient) -> ReleaseGroupWithListensStrategy {
-    ReleaseGroupWithListensStrategy::new(client.core.as_ref(), release_strategy(client))
+pub fn release_group_strategy(client: &AlistralCliClient) -> ReleaseGroupWithReleasesStrategy {
+    ReleaseGroupWithReleasesStrategy::new(client.core.as_ref(), release_strategy(client))
 }
 
 pub fn work_strategy(client: &AlistralCliClient) -> WorkWithListenStrategy {

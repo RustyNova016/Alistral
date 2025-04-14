@@ -9,19 +9,19 @@ use crate::database::fetching::recordings::fetch_recordings_as_complete;
 use crate::datastructures::entity_with_listens::collection::EntityWithListensCollection;
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListenStrategy;
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
-use crate::datastructures::entity_with_listens::release::ReleaseWithListens;
-use crate::datastructures::listen_collection::ListenCollection;
+use crate::datastructures::entity_with_listens::release::ReleaseWithRecordings;
 use crate::datastructures::listen_sorter::ListenSortingStrategy;
 use crate::AlistralClient;
 
-pub type ReleaseWithListensCollection = EntityWithListensCollection<Release, ListenCollection>;
+pub type ReleaseWithRecordingsCollection =
+    EntityWithListensCollection<Release, RecordingWithListensCollection>;
 
-pub struct ReleaseWithListensStrategy<'l> {
+pub struct ReleaseWithRecordingsStrategy<'l> {
     pub(super) client: &'l AlistralClient,
     recording_strat: RecordingWithListenStrategy<'l>,
 }
 
-impl<'l> ReleaseWithListensStrategy<'l> {
+impl<'l> ReleaseWithRecordingsStrategy<'l> {
     pub fn new(
         client: &'l AlistralClient,
         recording_strat: RecordingWithListenStrategy<'l>,
@@ -33,11 +33,13 @@ impl<'l> ReleaseWithListensStrategy<'l> {
     }
 }
 
-impl ListenSortingStrategy<Release, ListenCollection> for ReleaseWithListensStrategy<'_> {
+impl ListenSortingStrategy<Release, RecordingWithListensCollection>
+    for ReleaseWithRecordingsStrategy<'_>
+{
     #[instrument(skip(self), fields(indicatif.pb_show = tracing::field::Empty))]
     async fn sort_insert_listens(
         &self,
-        data: &mut EntityWithListensCollection<Release, ListenCollection>,
+        data: &mut EntityWithListensCollection<Release, RecordingWithListensCollection>,
         listens: Vec<Listen>,
     ) -> Result<(), crate::Error> {
         pg_spinner!("Compiling releases listen data");
@@ -62,12 +64,11 @@ impl ListenSortingStrategy<Release, ListenCollection> for ReleaseWithListensStra
                     .expect(
                         "The release has been fetched from the recording, so it should be there",
                     )
-                    .listens
                     .clone();
 
-                data.insert_or_merge_entity(ReleaseWithListens {
+                data.insert_or_merge_entity(ReleaseWithRecordings {
                     entity: release,
-                    listens,
+                    listens: listens.into(),
                 });
             }
         }
@@ -77,7 +78,7 @@ impl ListenSortingStrategy<Release, ListenCollection> for ReleaseWithListensStra
 
     async fn sort_insert_listen(
         &self,
-        data: &mut EntityWithListensCollection<Release, ListenCollection>,
+        data: &mut EntityWithListensCollection<Release, RecordingWithListensCollection>,
         listen: Listen,
     ) -> Result<(), crate::Error> {
         Self::sort_insert_listens(self, data, vec![listen]).await
