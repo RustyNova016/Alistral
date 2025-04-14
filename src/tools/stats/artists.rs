@@ -1,6 +1,6 @@
 use core::cmp::Reverse;
 
-use alistral_core::datastructures::entity_with_listens::artist::collection::ArtistWithListensCollection;
+use alistral_core::datastructures::entity_with_listens::artist::collection::ArtistWithRecordingsCollection;
 use alistral_core::datastructures::listen_collection::ListenCollection;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use itertools::Itertools;
@@ -12,7 +12,7 @@ use crate::utils::cli_paging::CLIPager;
 use crate::utils::constants::LISTENBRAINZ_FMT;
 
 pub async fn stats_artist(conn: &mut sqlx::SqliteConnection, listens: ListenCollection) {
-    let mut groups = ArtistWithListensCollection::from_listencollection(
+    let mut groups = ArtistWithRecordingsCollection::from_listencollection(
         listens,
         &artist_strategy(&ALISTRAL_CLIENT),
     )

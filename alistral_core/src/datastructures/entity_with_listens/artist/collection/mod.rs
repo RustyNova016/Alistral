@@ -6,24 +6,22 @@ use tracing::instrument;
 use tuillez::pg_spinner;
 
 use crate::database::fetching::recordings::fetch_artists_of_recordings;
-use crate::datastructures::entity_with_listens::artist::ArtistWithListens;
+use crate::datastructures::entity_with_listens::artist::artist_with_recordings::ArtistWithRecordings;
 use crate::datastructures::entity_with_listens::collection::EntityWithListensCollection;
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListenStrategy;
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
-use crate::datastructures::listen_collection::ListenCollection;
 use crate::datastructures::listen_sorter::ListenSortingStrategy;
 use crate::AlistralClient;
 
-pub mod artist_with_recordings;
+pub type ArtistWithRecordingsCollection =
+    EntityWithListensCollection<Artist, RecordingWithListensCollection>;
 
-pub type ArtistWithListensCollection = EntityWithListensCollection<Artist, ListenCollection>;
-
-pub struct ArtistWithListenStrategy<'l> {
+pub struct ArtistWithRecordingsStrategy<'l> {
     pub(super) client: &'l AlistralClient,
     recording_strat: RecordingWithListenStrategy<'l>,
 }
 
-impl<'l> ArtistWithListenStrategy<'l> {
+impl<'l> ArtistWithRecordingsStrategy<'l> {
     pub fn new(
         client: &'l AlistralClient,
         recording_strat: RecordingWithListenStrategy<'l>,
@@ -35,11 +33,13 @@ impl<'l> ArtistWithListenStrategy<'l> {
     }
 }
 
-impl ListenSortingStrategy<Artist, ListenCollection> for ArtistWithListenStrategy<'_> {
+impl ListenSortingStrategy<Artist, RecordingWithListensCollection>
+    for ArtistWithRecordingsStrategy<'_>
+{
     #[instrument(skip(self), fields(indicatif.pb_show = tracing::field::Empty))]
     async fn sort_insert_listens(
         &self,
-        data: &mut EntityWithListensCollection<Artist, ListenCollection>,
+        data: &mut EntityWithListensCollection<Artist, RecordingWithListensCollection>,
         listens: Vec<Listen>,
     ) -> Result<(), crate::Error> {
         pg_spinner!("Compiling artist listen data");
@@ -58,17 +58,18 @@ impl ListenSortingStrategy<Artist, ListenCollection> for ArtistWithListenStrateg
         // Convert artists
         for (_, (recording, artists)) in results {
             for artist in artists {
-                let listens = recordings
+                let recording = recordings
                     .0
                     .get(&recording.id)
                     .expect("The artist has been fetched from the recording, so it should be there")
-                    .listens
                     .clone();
 
-                data.insert_or_merge_entity(ArtistWithListens {
+                let artist_with_recordings = ArtistWithRecordings {
                     entity: artist,
-                    listens,
-                });
+                    listens: recording.into(),
+                };
+
+                data.insert_or_merge_entity(artist_with_recordings);
             }
         }
 
@@ -77,7 +78,7 @@ impl ListenSortingStrategy<Artist, ListenCollection> for ArtistWithListenStrateg
 
     async fn sort_insert_listen(
         &self,
-        data: &mut EntityWithListensCollection<Artist, ListenCollection>,
+        data: &mut EntityWithListensCollection<Artist, RecordingWithListensCollection>,
         listen: Listen,
     ) -> Result<(), crate::Error> {
         Self::sort_insert_listens(self, data, vec![listen]).await
