@@ -1,11 +1,16 @@
+use futures::stream;
+use futures::StreamExt as _;
+use futures::TryStreamExt as _;
 use itertools::Itertools as _;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
+use musicbrainz_db_lite::models::musicbrainz::artist::Artist;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use tracing::info;
 use tracing::instrument;
 use tracing::Span;
 use tracing_indicatif::span_ext::IndicatifSpanExt;
 use tuillez::pg_counted;
+use tuillez::pg_inc;
 
 /// Prefetch all the recordings of a list of listens
 #[instrument(skip(client), fields(indicatif.pb_show = tracing::field::Empty))]
@@ -50,4 +55,33 @@ pub async fn fetch_recordings_as_complete(
     }
 
     Ok(())
+}
+
+#[instrument(skip(client), fields(indicatif.pb_show = tracing::field::Empty))]
+pub async fn fetch_artists_of_recordings(
+    client: &crate::AlistralClient,
+    recordings: &[&Recording],
+) -> Result<(), crate::Error> {
+    pg_counted!(recordings.len(), "Fetching artists");
+
+    //TODO: Turn the stream from Recording -> ArtistCredits -> Unique -> Fetch
+    stream::iter(recordings)
+        .map(async |recording| -> Result<(), crate::Error> {
+            let conn = &mut *client.musicbrainz_db.get_raw_connection().await?;
+
+            let credits = recording
+                .get_artist_credits_or_fetch(conn, &client.musicbrainz_db)
+                .await?;
+
+            for credit in credits.1 {
+                Artist::get_or_fetch(conn, &client.musicbrainz_db, &credit.artist_gid).await?;
+            }
+
+            pg_inc!();
+
+            Ok(())
+        })
+        .buffered(8)
+        .try_collect()
+        .await
 }
