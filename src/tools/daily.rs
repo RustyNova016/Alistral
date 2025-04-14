@@ -1,9 +1,8 @@
 use core::cmp::Reverse;
 
-use alistral_core::database::fetching::listens::ListenFetchQuery;
-use alistral_core::datastructures::entity_with_listens::artist::collection::artist_with_recordings::ArtistWithRecordingsCollection;
-use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
+use alistral_core::datastructures::entity_with_listens::artist::collection::ArtistWithRecordingsCollection;
 use alistral_core::datastructures::listen_collection::ListenCollection;
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use chrono::DateTime;
 use chrono::Datelike;
 use chrono::NaiveDate;
@@ -13,22 +12,22 @@ use color_eyre::owo_colors::OwoColorize;
 use itertools::Itertools;
 use musicbrainz_db_lite::models::musicbrainz::release_group::ReleaseGroup;
 use tracing::instrument;
+use tuillez::formatter::FormatWithAsync;
 
 use crate::ALISTRAL_CLIENT;
 use crate::api::listenbrainz::fresh_releases::FreshReleaseRelease;
 use crate::api::listenbrainz::fresh_releases::FreshReleaseRequest;
+use crate::database::interfaces::statistics_data::artist_strategy;
+use crate::database::interfaces::statistics_data::recording_stats;
 use crate::database::musicbrainz::anniversaries::get_recordings_aniversaries;
 use crate::models::config::Config;
+use crate::utils::constants::LISTENBRAINZ_FMT;
 
 #[instrument]
 pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
-    let recordings = ListenFetchQuery::get_recordings_with_listens(
-        conn,
-        &ALISTRAL_CLIENT.core,
-        username.to_string(),
-    )
-    .await
-    .expect("Couldn't fetch the listened recordings");
+    let recordings = recording_stats(&ALISTRAL_CLIENT, username.to_string())
+        .await
+        .expect("Couldn't fetch the listened recordings");
 
     // release days
     let today = Utc::now();
@@ -42,7 +41,7 @@ pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
         .filter_map(|rec| recordings.get_by_id(rec.id))
         .collect_vec();
 
-    let fresh_releases = get_fresh_releases(conn, recordings.clone().into(), today).await;
+    let fresh_releases = get_fresh_releases(recordings.clone().into(), today).await;
 
     println!();
 
@@ -55,7 +54,7 @@ pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
             println!(
                 "   - {} ({}, {} Listens)",
                 rec.recording()
-                    .pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, true)
+                    .format_with_async(&LISTENBRAINZ_FMT)
                     .await
                     .expect("Couldn't get artist credits"),
                 Utc.timestamp_opt(rec.recording().first_release_date.unwrap(), 0)
@@ -91,7 +90,7 @@ pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
             println!(
                 "   - {} ({}, {} Listens)",
                 rec.recording()
-                    .pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, true)
+                    .format_with_async(&LISTENBRAINZ_FMT)
                     .await
                     .expect("Couldn't get artist credits"),
                 rec.oldest_listen_date()
@@ -125,7 +124,7 @@ pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
 
             println!(
                 "   - {} {}",
-                rg.pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, true)
+                rg.format_with_async(&LISTENBRAINZ_FMT)
                     .await
                     .expect("Couldn't get artist credits"),
                 format!(
@@ -143,7 +142,6 @@ pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
 
 #[instrument(skip_all)]
 async fn get_fresh_releases(
-    conn: &mut sqlx::SqliteConnection,
     listens: ListenCollection,
     today: DateTime<Utc>,
 ) -> Vec<FreshReleaseRelease> {
@@ -160,10 +158,12 @@ async fn get_fresh_releases(
         .releases;
 
     //TODO: #529 Daily: Prevent recompiling recording with listens
-    let artists =
-        ArtistWithRecordingsCollection::from_listencollection(conn, &ALISTRAL_CLIENT.core, listens)
-            .await
-            .expect("Couldn't get the listened artists");
+    let artists = ArtistWithRecordingsCollection::from_listencollection(
+        listens,
+        &artist_strategy(&ALISTRAL_CLIENT),
+    )
+    .await
+    .expect("Couldn't get the listened artists");
 
     let min_avg = Config::load_or_panic()
         .read_or_panic()

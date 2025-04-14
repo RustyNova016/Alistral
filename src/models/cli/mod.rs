@@ -1,4 +1,3 @@
-pub mod interzic;
 use std::io;
 
 use cache::CacheCommand;
@@ -11,8 +10,6 @@ use clap_complete::Shell;
 use clap_complete::generate;
 use clap_verbosity_flag::InfoLevel;
 use clap_verbosity_flag::Verbosity;
-use common::SortSorterBy;
-use common::StatsTarget;
 use config::ConfigCli;
 use listens::ListenCommand;
 use lookup::LookupCommand;
@@ -28,13 +25,14 @@ use crate::tools::bumps::bump_down_command;
 use crate::tools::compatibility::compatibility_command;
 use crate::tools::daily::daily_report;
 use crate::tools::playlist::PlaylistCommand;
-use crate::tools::stats::stats_command;
+use crate::tools::stats::StatsCommand;
 
 use super::config::Config;
 
 pub mod cache;
 pub mod common;
 pub mod config;
+pub mod interzic;
 pub mod listens;
 pub mod lookup;
 pub mod mapping;
@@ -164,31 +162,7 @@ pub enum Commands {
     Radio(RadioCommand),
 
     /// Shows top statistics for a specific target
-    ///
-    /// Target is the entity type to group the stats by. Currently, those entities stats are implemented:
-    ///
-    /// - Recordings (`recording`)
-    ///
-    /// - Artists (`artist`)
-    ///
-    /// - Releases (`release`)
-    ///
-    /// - Release Groups (`release_group`)
-    ///
-    /// - Works (`work`)
-    Stats {
-        //#[command(subcommand)]
-        //command: StatsCommand,
-        /// The type of entity to sort by.
-        target: StatsTarget,
-
-        /// Name of the user to fetch stats listen from
-        username: Option<String>,
-
-        /// Sort by:
-        #[arg(short, long, default_value_t = SortSorterBy::Count)]
-        sort: SortSorterBy,
-    },
+    Stats(StatsCommand),
 
     Unstable(UnstableCommand),
 }
@@ -196,19 +170,7 @@ pub enum Commands {
 impl Commands {
     pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> Result<(), FatalError> {
         match self {
-            Self::Stats {
-                username,
-                target,
-                sort,
-            } => {
-                stats_command(
-                    conn,
-                    &Config::check_username(username).to_lowercase(),
-                    *target,
-                    *sort,
-                )
-                .await;
-            }
+            Self::Stats(val) => val.run(conn).await?,
 
             Self::Compatibility { user_a, user_b } => {
                 compatibility_command(conn, user_a, user_b).await;

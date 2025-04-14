@@ -1,3 +1,4 @@
+use musicbrainz_db_lite::database::raw_conn_pool::RawPoolError;
 use std::io;
 use thiserror::Error;
 use tuillez::extensions::chrono_exts::TimeError;
@@ -61,6 +62,9 @@ pub enum Error {
 
     #[error(transparent)]
     FatalError(#[from] FatalError),
+
+    #[error(transparent)]
+    RawConnectionError(#[from] RawPoolError),
 }
 
 impl From<Error> for FatalError {

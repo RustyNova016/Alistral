@@ -1,3 +1,4 @@
+pub mod formating;
 use core::fmt;
 use std::io;
 

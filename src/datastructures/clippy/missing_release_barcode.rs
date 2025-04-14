@@ -1,9 +1,10 @@
 use musicbrainz_db_lite::models::musicbrainz::main_entities::MainEntity;
 use musicbrainz_db_lite::models::musicbrainz::release::Release;
+use tuillez::formatter::FormatWithAsync;
 
-use crate::ALISTRAL_CLIENT;
 use crate::models::clippy::lint_severity::LintSeverity;
 use crate::models::clippy::{MbClippyLint, MbClippyLintLink};
+use crate::utils::constants::MUSIBRAINZ_FMT;
 
 pub struct MissingBarcodeLint {
     release: Release,
@@ -35,14 +36,12 @@ impl MbClippyLint for MissingBarcodeLint {
 
     async fn get_body(
         &self,
-        conn: &mut sqlx::SqliteConnection,
+        _conn: &mut sqlx::SqliteConnection,
     ) -> Result<impl std::fmt::Display, crate::Error> {
         Ok(format!(
             "Release \"{}\" has no barcode
 -> No barcode has been entered for this release, nor has been set has not having one.",
-            self.release
-                .pretty_format_with_credits(conn, &ALISTRAL_CLIENT.musicbrainz_db, false)
-                .await?
+            self.release.format_with_async(&MUSIBRAINZ_FMT).await?
         ))
     }
 

@@ -9,22 +9,44 @@ use tuillez::pg_spinner;
 
 use crate::database::fetching::recordings::prefetch_recordings_of_listens;
 use crate::datastructures::entity_with_listens::collection::EntityWithListensCollection;
+use crate::datastructures::entity_with_listens::recording::RecordingWithListens;
+use crate::datastructures::entity_with_listens::traits::IterRecordingWithListens;
 use crate::datastructures::listen_collection::ListenCollection;
+use crate::datastructures::listen_sorter::ListenSortingStrategy;
+use crate::AlistralClient;
 
 pub type RecordingWithListensCollection = EntityWithListensCollection<Recording, ListenCollection>;
 
-impl RecordingWithListensCollection {
-    #[instrument(skip(client), fields(indicatif.pb_show = tracing::field::Empty))]
-    pub async fn from_listencollection(
-        conn: &mut sqlx::SqliteConnection,
-        client: &crate::AlistralClient,
-        listens: ListenCollection,
-    ) -> Result<Self, crate::Error> {
+impl IterRecordingWithListens for RecordingWithListensCollection {
+    fn iter_recording_with_listens(&self) -> impl Iterator<Item = &RecordingWithListens> {
+        self.0.values()
+    }
+}
+
+pub struct RecordingWithListenStrategy<'l> {
+    pub(super) client: &'l AlistralClient,
+}
+
+impl<'l> RecordingWithListenStrategy<'l> {
+    pub fn new(client: &'l AlistralClient) -> Self {
+        Self { client }
+    }
+}
+
+impl ListenSortingStrategy<Recording, ListenCollection> for RecordingWithListenStrategy<'_> {
+    #[instrument(skip(self), fields(indicatif.pb_show = tracing::field::Empty))]
+    async fn sort_insert_listens(
+        &self,
+        data: &mut EntityWithListensCollection<Recording, ListenCollection>,
+        listens: Vec<Listen>,
+    ) -> Result<(), crate::Error> {
         // If empty, early return
         if listens.is_empty() {
-            return Ok(Default::default());
+            return Ok(());
         }
+
         pg_spinner!("Compiling recording listens data");
+        let conn = &mut *self.client.musicbrainz_db.get_raw_connection().await?;
 
         // Prefetch the missing data
         let user_name = listens
@@ -37,30 +59,41 @@ impl RecordingWithListensCollection {
             .await?
             .ok_or(crate::Error::MissingUserError(user_name.clone()))?;
 
-        prefetch_recordings_of_listens(conn, client, user.id, &listens.data).await?;
+        prefetch_recordings_of_listens(conn, self.client, user.id, &listens).await?;
 
-        Ok(Self::compile(
-            Listen::get_recordings_as_batch(conn, user.id, &listens.data).await?,
+        compile(
+            data,
+            Listen::get_recordings_as_batch(conn, user.id, &listens).await?,
             listens,
-        ))
+        );
+        Ok(())
     }
 
-    #[instrument(fields(indicatif.pb_show = tracing::field::Empty))]
-    fn compile(relations: Vec<JoinRelation<i64, Recording>>, listens: ListenCollection) -> Self {
-        pg_counted!(relations.len(), "Loading listens data");
-        let mut out = Self::new();
-
-        relations
-            .into_iter()
-            .map(|join| {
-                let listen = listens.iter().find(|l| l.id == join.original_id).unwrap();
-                (listen.clone(), join.data)
-            })
-            .for_each(|(listen, recording)| {
-                out.insert_or_merge_listen(recording, listen);
-                pg_inc!()
-            });
-
-        out
+    async fn sort_insert_listen(
+        &self,
+        data: &mut EntityWithListensCollection<Recording, ListenCollection>,
+        listen: Listen,
+    ) -> Result<(), crate::Error> {
+        Self::sort_insert_listens(self, data, vec![listen]).await
     }
+}
+
+#[instrument(fields(indicatif.pb_show = tracing::field::Empty))]
+fn compile(
+    data: &mut EntityWithListensCollection<Recording, ListenCollection>,
+    relations: Vec<JoinRelation<i64, Recording>>,
+    listens: Vec<Listen>,
+) {
+    pg_counted!(relations.len(), "Loading listens data");
+
+    relations
+        .into_iter()
+        .map(|join| {
+            let listen = listens.iter().find(|l| l.id == join.original_id).unwrap();
+            (listen.clone(), join.data)
+        })
+        .for_each(|(listen, recording)| {
+            data.insert_or_merge_listen(recording, listen);
+            pg_inc!()
+        });
 }

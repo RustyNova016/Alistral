@@ -2,6 +2,7 @@ pub mod error;
 #[cfg(feature = "extensions")]
 pub mod extensions;
 pub mod fatal_error;
+pub mod formatter;
 pub mod macros;
 pub mod styles;
 pub mod utils;

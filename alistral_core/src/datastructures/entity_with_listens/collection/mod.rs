@@ -3,7 +3,6 @@ use core::fmt::Debug;
 
 use ahash::HashMap;
 use ahash::HashMapExt as _;
-use chrono::Duration;
 use futures::stream;
 use futures::Stream;
 use itertools::Itertools as _;
@@ -13,11 +12,14 @@ use rust_decimal::Decimal;
 
 use crate::datastructures::listen_collection::traits::ListenCollectionReadable;
 use crate::datastructures::listen_collection::ListenCollection;
+use crate::datastructures::listen_sorter::ListenSortingStrategy;
 use crate::traits::mergable::Mergable;
 
-use super::traits::ListenCollWithTime;
 use super::EntityWithListens;
 
+pub mod converters;
+
+/// An indexed collection of [`EntityWithListens`]
 #[derive(Debug, Clone)]
 pub struct EntityWithListensCollection<Ent, Lis>(pub HashMap<i64, EntityWithListens<Ent, Lis>>)
 where
@@ -122,6 +124,49 @@ where
 
         None
     }
+
+    /// Insert a listen with a specific sorting strategy
+    pub async fn insert_listen_with<T>(
+        &mut self,
+        listen: Listen,
+        strategy: &T,
+    ) -> Result<(), crate::Error>
+    where
+        T: ListenSortingStrategy<Ent, Lis>,
+    {
+        strategy.sort_insert_listen(self, listen).await
+    }
+
+    /// Insert a collection of listens with a specific sorting strategy
+    pub async fn insert_listens_with<T>(
+        &mut self,
+        listens: Vec<Listen>,
+        strategy: &T,
+    ) -> Result<(), crate::Error>
+    where
+        T: ListenSortingStrategy<Ent, Lis>,
+    {
+        strategy.sort_insert_listens(self, listens).await
+    }
+
+    pub async fn from_listens<S>(listens: Vec<Listen>, strat: &S) -> Result<Self, crate::Error>
+    where
+        S: ListenSortingStrategy<Ent, Lis>,
+    {
+        let mut new = Self::new();
+        new.insert_listens_with(listens, strat).await?;
+        Ok(new)
+    }
+
+    pub async fn from_listencollection<S>(
+        listens: ListenCollection,
+        strat: &S,
+    ) -> Result<Self, crate::Error>
+    where
+        S: ListenSortingStrategy<Ent, Lis>,
+    {
+        Self::from_listens(listens.data, strat).await
+    }
 }
 
 impl<Ent, Lis> Default for EntityWithListensCollection<Ent, Lis>
@@ -141,49 +186,6 @@ where
 {
     fn iter_listens(&self) -> impl Iterator<Item = &Listen> {
         self.iter().flat_map(|lis| lis.iter_listens())
-    }
-}
-
-impl<Ent, Lis> ListenCollWithTime for EntityWithListensCollection<Ent, Lis>
-where
-    Ent: RowId,
-    Lis: ListenCollectionReadable,
-    EntityWithListens<Ent, Lis>: ListenCollWithTime,
-{
-    fn get_time_listened(&self) -> Option<Duration> {
-        self.iter()
-            .map(|val: &EntityWithListens<Ent, Lis>| val.get_time_listened())
-            .sum()
-    }
-}
-
-impl<Ent, Lis> From<Vec<EntityWithListens<Ent, Lis>>> for EntityWithListensCollection<Ent, Lis>
-where
-    Ent: RowId,
-    Lis: ListenCollectionReadable,
-    EntityWithListens<Ent, Lis>: Mergable + Clone,
-{
-    fn from(value: Vec<EntityWithListens<Ent, Lis>>) -> Self {
-        let mut new = Self::default();
-
-        for ent in value {
-            new.insert_or_merge_entity(ent);
-        }
-
-        new
-    }
-}
-
-impl<Ent, Lis> From<EntityWithListens<Ent, Lis>> for EntityWithListensCollection<Ent, Lis>
-where
-    Ent: RowId,
-    Lis: ListenCollectionReadable,
-    EntityWithListens<Ent, Lis>: Mergable + Clone,
-{
-    fn from(value: EntityWithListens<Ent, Lis>) -> Self {
-        let mut new = Self::default();
-        new.insert_or_merge_entity(value);
-        new
     }
 }
 
@@ -207,15 +209,5 @@ where
     type IntoIter = std::collections::hash_map::IntoValues<i64, Self::Item>;
     fn into_iter(self) -> Self::IntoIter {
         self.0.into_values()
-    }
-}
-
-impl<Ent, Lis> From<EntityWithListensCollection<Ent, Lis>> for ListenCollection
-where
-    Ent: RowId,
-    Lis: ListenCollectionReadable + IntoIterator<Item = Listen>,
-{
-    fn from(value: EntityWithListensCollection<Ent, Lis>) -> Self {
-        value.into_iter().flat_map(ListenCollection::from).collect()
     }
 }

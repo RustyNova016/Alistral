@@ -1,4 +1,3 @@
-pub mod musicbrainz;
 use std::fs::{self};
 use std::path::PathBuf;
 use std::sync::LazyLock;
@@ -6,7 +5,9 @@ use std::sync::LazyLock;
 use directories::BaseDirs;
 
 pub mod cleanup;
+pub mod interfaces;
 pub mod listenbrainz;
+pub mod musicbrainz;
 
 pub static RELEASE_DB_LOCATION: LazyLock<PathBuf> = LazyLock::new(|| {
     let mut path = BaseDirs::new()

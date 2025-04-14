@@ -5,6 +5,8 @@ use chrono::Utc;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::RowId;
 
+use crate::datastructures::entity_with_listens::recording::RecordingWithListens;
+use crate::datastructures::entity_with_listens::traits::IterRecordingWithListens;
 use crate::traits::mergable::Mergable;
 
 use super::listen_collection::traits::ListenCollectionReadable;
@@ -15,15 +17,11 @@ pub mod collection;
 pub mod entity_as_listens;
 pub mod recording;
 pub mod release;
+pub mod statistic_data;
 pub mod traits;
 pub mod work;
 
 /// A structure representing an entity with associated listens.
-///
-/// # Fields
-///
-/// * `entity` - The entity of type `Ent`.
-/// * `listens` - The listens associated with the entity of type `Lis`.
 #[derive(Debug, Clone)]
 pub struct EntityWithListens<Ent, Lis>
 where
@@ -130,5 +128,15 @@ where
 {
     fn from(value: EntityWithListens<Ent, Lis>) -> Self {
         value.listens.into_iter().collect()
+    }
+}
+
+impl<Ent, Lis> IterRecordingWithListens for EntityWithListens<Ent, Lis>
+where
+    Ent: RowId,
+    Lis: ListenCollectionReadable + IterRecordingWithListens,
+{
+    fn iter_recording_with_listens(&self) -> impl Iterator<Item = &RecordingWithListens> {
+        self.listens.iter_recording_with_listens()
     }
 }
