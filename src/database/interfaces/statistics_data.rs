@@ -5,8 +5,7 @@ use alistral_core::datastructures::entity_with_listens::recording::collection::R
 use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use alistral_core::datastructures::entity_with_listens::release::collection::ReleaseWithRecordingsStrategy;
 use alistral_core::datastructures::entity_with_listens::release_group::collection::ReleaseGroupWithReleasesStrategy;
-use alistral_core::datastructures::entity_with_listens::work::collection::WorkWithListenStrategy;
-use alistral_core::datastructures::entity_with_listens::work::collection::work_with_recordings::WorkWithRecordingsStrategy;
+use alistral_core::datastructures::entity_with_listens::work::collection::WorkWithRecordingsStrategy;
 
 use crate::models::client::AlistralCliClient;
 
@@ -28,11 +27,7 @@ pub fn release_group_strategy(client: &AlistralCliClient) -> ReleaseGroupWithRel
     ReleaseGroupWithReleasesStrategy::new(client.core.as_ref(), release_strategy(client))
 }
 
-pub fn work_strategy(client: &AlistralCliClient) -> WorkWithListenStrategy {
-    WorkWithListenStrategy::new(client.core.as_ref(), recording_strategy(client))
-}
-
-pub fn work_recording_strategy(client: &AlistralCliClient) -> WorkWithRecordingsStrategy {
+pub fn work_strategy(client: &AlistralCliClient) -> WorkWithRecordingsStrategy {
     WorkWithRecordingsStrategy::new(client.core.as_ref(), recording_strategy(client))
 }
 
