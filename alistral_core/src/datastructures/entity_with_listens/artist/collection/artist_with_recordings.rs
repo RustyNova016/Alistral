@@ -5,7 +5,7 @@ use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use tracing::instrument;
 use tuillez::pg_spinner;
 
-use crate::database::fetching::recordings::fetch_recordings_as_complete;
+use crate::database::fetching::recordings::fetch_artists_of_recordings;
 use crate::datastructures::entity_with_listens::artist::artist_with_recordings::ArtistWithRecordings;
 use crate::datastructures::entity_with_listens::collection::EntityWithListensCollection;
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListenStrategy;
@@ -48,7 +48,7 @@ impl ListenSortingStrategy<Artist, RecordingWithListensCollection>
             RecordingWithListensCollection::from_listens(listens, &self.recording_strat).await?;
 
         let recording_refs = recordings.iter_entities().collect_vec();
-        fetch_recordings_as_complete(self.client, &recording_refs).await?;
+        fetch_artists_of_recordings(self.client, &recording_refs).await?;
 
         let conn = &mut *self.client.musicbrainz_db.get_raw_connection().await?;
 
