@@ -22,7 +22,7 @@ google-youtube3 = "6.0.0"
 
 # --- Other crates ---
 regex = "1.11.1"
-sqlx = "0.8.3"
+sqlx = "0.8.4"
 thiserror = "2.0.0"
 governor = "0.8.1"
 serde = "1.0.218"
