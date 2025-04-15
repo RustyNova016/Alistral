@@ -62,7 +62,7 @@ impl ListenSortingStrategy<ReleaseGroup, ReleaseWithRecordingsCollection>
             for release_group in release_groups {
                 let release = releases.get_by_id(release.id).expect("The release group has been fetched from the release, so it should be there").clone();
 
-                data.insert_or_merge_entity(ReleaseGroupWithReleases {
+                data.insert_or_merge_entity_stats(ReleaseGroupWithReleases {
                     entity: release_group,
                     listens: release.into(),
                 });

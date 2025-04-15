@@ -21,7 +21,7 @@ where
         let mut new = Self::default();
 
         for ent in value {
-            new.insert_or_merge_entity(ent);
+            new.insert_or_merge_entity_stats(ent);
         }
 
         new
@@ -36,7 +36,7 @@ where
 {
     fn from(value: EntityWithListens<Ent, Lis>) -> Self {
         let mut new = Self::default();
-        new.insert_or_merge_entity(value);
+        new.insert_or_merge_entity_stats(value);
         new
     }
 }

@@ -66,7 +66,7 @@ impl ListenSortingStrategy<Release, RecordingWithListensCollection>
                     )
                     .clone();
 
-                data.insert_or_merge_entity(ReleaseWithRecordings {
+                data.insert_or_merge_entity_stats(ReleaseWithRecordings {
                     entity: release,
                     listens: listens.into(),
                 });

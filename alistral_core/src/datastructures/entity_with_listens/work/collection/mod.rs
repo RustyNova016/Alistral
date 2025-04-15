@@ -77,7 +77,7 @@ impl ListenSortingStrategy<Work, RecordingWithListensCollection>
                     )
                     .clone();
 
-                data.insert_or_merge_entity(WorkWithRecordings {
+                data.insert_or_merge_entity_stats(WorkWithRecordings {
                     entity: work,
                     listens: recording.into(),
                 });
@@ -120,7 +120,7 @@ impl WorkWithRecordingsCollection {
 
             for new_work in new_works {
                 queue.push(new_work.clone());
-                self.insert_or_merge_entity(new_work);
+                self.insert_or_merge_entity_stats(new_work);
                 count += 1;
             }
             pg_inc!();
