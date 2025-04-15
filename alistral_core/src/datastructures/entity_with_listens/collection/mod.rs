@@ -1,8 +1,8 @@
 use core::cmp::Reverse;
 use core::fmt::Debug;
+use std::collections::hash_map::IntoValues;
+use std::collections::HashMap;
 
-use ahash::HashMap;
-use ahash::HashMapExt as _;
 use futures::stream;
 use futures::Stream;
 use itertools::Itertools as _;
@@ -63,12 +63,12 @@ where
         EntityWithListens<Ent, Lis>: Mergable + Clone,
     {
         for entity in value.into_iter() {
-            self.insert_or_merge_entity(entity);
+            self.insert_or_merge_entity_stats(entity);
         }
     }
 
     /// Insert a EntityWithListens, and merge if it doesn't exists
-    pub fn insert_or_merge_entity(&mut self, value: EntityWithListens<Ent, Lis>)
+    pub fn insert_or_merge_entity_stats(&mut self, value: EntityWithListens<Ent, Lis>)
     where
         EntityWithListens<Ent, Lis>: Mergable + Clone,
     {
@@ -83,9 +83,32 @@ where
         EntityWithListens<Ent, Lis>: Mergable + Clone,
         Lis: From<Listen>,
     {
-        self.insert_or_merge_entity(EntityWithListens {
+        self.insert_or_merge_entity_stats(EntityWithListens {
             entity,
             listens: listen.into(),
+        });
+    }
+
+    pub fn insert_or_merge_listens(&mut self, entity: Ent, listens: Vec<Listen>)
+    where
+        EntityWithListens<Ent, Lis>: Mergable + Clone,
+        Lis: From<Vec<Listen>>,
+    {
+        self.insert_or_merge_entity_stats(EntityWithListens {
+            entity,
+            listens: listens.into(),
+        });
+    }
+
+    /// Insert a Entity with zero listens, and merge if it doesn't exists
+    pub fn insert_or_merge_entity(&mut self, entity: Ent)
+    where
+        EntityWithListens<Ent, Lis>: Mergable + Clone,
+        Lis: Default,
+    {
+        self.insert_or_merge_entity_stats(EntityWithListens {
+            entity,
+            listens: Default::default(),
         });
     }
 
@@ -206,7 +229,7 @@ where
     Lis: ListenCollectionReadable,
 {
     type Item = EntityWithListens<Ent, Lis>;
-    type IntoIter = std::collections::hash_map::IntoValues<i64, Self::Item>;
+    type IntoIter = IntoValues<i64, Self::Item>;
     fn into_iter(self) -> Self::IntoIter {
         self.0.into_values()
     }

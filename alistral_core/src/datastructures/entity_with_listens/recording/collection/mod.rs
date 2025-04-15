@@ -1,3 +1,4 @@
+use itertools::Itertools;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use musicbrainz_db_lite::models::musicbrainz::user::User;
@@ -86,14 +87,13 @@ fn compile(
 ) {
     pg_counted!(relations.len(), "Loading listens data");
 
-    relations
+    let id_map = relations
         .into_iter()
-        .map(|join| {
-            let listen = listens.iter().find(|l| l.id == join.original_id).unwrap();
-            (listen.clone(), join.data)
-        })
-        .for_each(|(listen, recording)| {
-            data.insert_or_merge_listen(recording, listen);
-            pg_inc!()
-        });
+        .map(|join| (join.original_id, join.data))
+        .into_group_map();
+
+    for (key, chunk) in &listens.into_iter().chunk_by(|l| id_map.get(&l.id).unwrap()) {
+        data.insert_or_merge_listens(key.first().unwrap().clone(), chunk.collect_vec());
+        pg_inc!()
+    }
 }

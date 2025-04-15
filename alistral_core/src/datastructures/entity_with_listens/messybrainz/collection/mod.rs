@@ -26,7 +26,7 @@ impl MessybrainzWithListensCollection {
                 let mut listens = ListenCollection::default();
                 listens.push(listen.to_owned().to_owned());
 
-                out.insert_or_merge_entity(MessybrainzWithListens {
+                out.insert_or_merge_entity_stats(MessybrainzWithListens {
                     entity: messybrainz_data,
                     listens,
                 });

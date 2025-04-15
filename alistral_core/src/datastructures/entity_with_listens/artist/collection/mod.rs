@@ -69,7 +69,7 @@ impl ListenSortingStrategy<Artist, RecordingWithListensCollection>
                     listens: recording.into(),
                 };
 
-                data.insert_or_merge_entity(artist_with_recordings);
+                data.insert_or_merge_entity_stats(artist_with_recordings);
             }
         }
 
