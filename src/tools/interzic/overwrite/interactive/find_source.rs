@@ -13,8 +13,7 @@ pub(super) async fn get_source_id(user: Option<&str>) -> Result<Option<String>, 
     );
     let id = Text::new("ID: ").prompt()?;
 
-    println!();
-    println!("Select the origin of the id");
+   
     let origin = select_enum::<IdOrigin>("Origin:").prompt()?;
 
     match origin {
@@ -44,6 +43,8 @@ async fn prompt_mbid_from_youtube(
             format!("{} - {}", rec.artist_credits, rec.title)
         })
         .prompt()?
-        .to_string(),
+        .into_data()
+        .mbid
+        .expect("The recording should have an MBID"),
     ))
 }

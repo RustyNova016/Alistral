@@ -1,7 +1,6 @@
 use inquire::InquireError;
 use interzic::models::services::youtube::error::InterzicYoutubeError;
 use musicbrainz_db_lite::database::raw_conn_pool::RawPoolError;
-use musicbrainz_db_lite::database::raw_conn_pool::RawPoolError;
 use std::io;
 use thiserror::Error;
 use tuillez::extensions::chrono_exts::TimeError;
@@ -85,8 +84,7 @@ impl From<InterzicYoutubeError> for Error {
         interzic::Error::from(value).into()
     }
 
-    #[error(transparent)]
-    RawConnectionError(#[from] RawPoolError),
+
 }
 
 impl From<Error> for FatalError {
