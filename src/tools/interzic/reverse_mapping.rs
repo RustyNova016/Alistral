@@ -3,7 +3,7 @@ use interzic::models::services::youtube::Youtube;
 use tuillez::fatal_error::OptIntoFatal;
 
 use crate::ALISTRAL_CLIENT;
-use crate::tools::interzic::get_mapping::InterzicMappingTarget;
+use crate::tools::interzic::InterzicMappingTarget;
 
 #[derive(Parser, Debug, Clone)]
 pub struct ReverseMappingCommand {

@@ -54,6 +54,11 @@ impl Youtube {
         None
     }
 
+    pub fn extract_id_from_text_or_error(text: &str) -> Result<String, InterzicYoutubeError> {
+        Self::extract_id_from_text(text)
+            .ok_or(InterzicYoutubeError::ExtractIdError(text.to_string()))
+    }
+
     pub fn extract_id_from_url(url: &str) -> Option<String> {
         if let Some(capt) = YOUTUBE_URL_ID_REGEX.captures_iter(url).next() {
             return capt.get(7).map(|m| m.as_str().to_string()); // Capture group 7 is the one containing the id
