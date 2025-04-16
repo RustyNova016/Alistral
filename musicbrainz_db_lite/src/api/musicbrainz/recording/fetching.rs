@@ -10,7 +10,29 @@ impl Recording {
         client: &DBClient,
         mbid: &str,
     ) -> Result<Option<Recording>, Error> {
-        let data = MSRecording::fetch()
+        let data = Self::fetch(client, mbid).await;
+
+        match data {
+            Ok(data) => {
+                let mut data = data.save(conn).await?;
+                data.reset_full_update_date(conn).await?;
+
+                Self::set_redirection(conn, mbid, data.id).await?;
+
+                Ok(Some(data))
+            }
+            Err(musicbrainz_rs_nova::Error::NotFound(_)) => {
+                // TODO: Set deleted
+                Ok(None)
+            }
+            Err(err) => Err(err.into()),
+        }
+    }
+    pub async fn fetch(
+        client: &DBClient,
+        mbid: &str,
+    ) -> Result<MSRecording, musicbrainz_rs_nova::Error> {
+        MSRecording::fetch()
             .id(mbid)
             .with_aliases()
             .with_annotations()
@@ -38,23 +60,7 @@ impl Recording {
             .with_work_level_relations()
             .with_medias()
             .execute_with_client(&client.musicbrainz_client)
-            .await;
-
-        match data {
-            Ok(data) => {
-                let mut data = data.save(conn).await?;
-                data.reset_full_update_date(conn).await?;
-
-                Self::set_redirection(conn, mbid, data.id).await?;
-
-                Ok(Some(data))
-            }
-            Err(musicbrainz_rs_nova::Error::NotFound(_)) => {
-                // TODO: Set deleted
-                Ok(None)
-            }
-            Err(err) => Err(err.into()),
-        }
+            .await
     }
 }
 

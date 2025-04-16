@@ -2,9 +2,12 @@ use musicbrainz_db_lite::models::musicbrainz::main_entities::MainEntity;
 use musicbrainz_db_lite::models::musicbrainz::release::Release;
 use tuillez::formatter::FormatWithAsync;
 
-use crate::models::clippy::lint_severity::LintSeverity;
-use crate::models::clippy::{MbClippyLint, MbClippyLintLink};
-use crate::utils::constants::MUSIBRAINZ_FMT;
+use crate::clippy::clippy_lint::MbClippyLint;
+use crate::clippy::lint_hint::MbClippyLintHint;
+use crate::clippy::lint_link::MbClippyLintLink;
+use crate::clippy::lint_severity::LintSeverity;
+use crate::utils::formater;
+use crate::SymphonyzeClient;
 
 pub struct MissingBarcodeLint {
     release: Release,
@@ -16,7 +19,7 @@ impl MbClippyLint for MissingBarcodeLint {
     }
 
     async fn check(
-        _conn: &mut sqlx::SqliteConnection,
+        _client: &SymphonyzeClient,
         entity: &MainEntity,
     ) -> Result<Option<Self>, crate::Error> {
         let MainEntity::Release(release) = entity else {
@@ -36,18 +39,18 @@ impl MbClippyLint for MissingBarcodeLint {
 
     async fn get_body(
         &self,
-        _conn: &mut sqlx::SqliteConnection,
+        client: &SymphonyzeClient,
     ) -> Result<impl std::fmt::Display, crate::Error> {
         Ok(format!(
             "Release \"{}\" has no barcode
 -> No barcode has been entered for this release, nor has been set has not having one.",
-            self.release.format_with_async(&MUSIBRAINZ_FMT).await?
+            self.release.format_with_async(&formater(client)).await?
         ))
     }
 
     async fn get_links(
         &self,
-        _conn: &mut sqlx::SqliteConnection,
+        _client: &SymphonyzeClient,
     ) -> Result<Vec<MbClippyLintLink>, crate::Error> {
         let mut out = Vec::new();
 
@@ -66,8 +69,8 @@ impl MbClippyLint for MissingBarcodeLint {
 
     async fn get_hints(
         &self,
-        _conn: &mut sqlx::SqliteConnection,
-    ) -> Result<Vec<crate::models::clippy::MbClippyLintHint>, crate::Error> {
+        _client: &SymphonyzeClient,
+    ) -> Result<Vec<MbClippyLintHint>, crate::Error> {
         let hints = Vec::new();
 
         // TODO: #525 missing_release_barcode: add hint to use harmony to find it if possible
@@ -75,7 +78,7 @@ impl MbClippyLint for MissingBarcodeLint {
         Ok(hints)
     }
 
-    fn get_severity(&self) -> crate::models::clippy::lint_severity::LintSeverity {
+    fn get_severity(&self) -> LintSeverity {
         LintSeverity::MissingData
     }
 }

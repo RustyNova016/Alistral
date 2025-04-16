@@ -1,10 +1,12 @@
-use color_eyre::owo_colors::OwoColorize;
 use musicbrainz_db_lite::models::musicbrainz::main_entities::MainEntity;
 use musicbrainz_db_lite::models::musicbrainz::work::Work;
+use owo_colors::OwoColorize as _;
 
-use crate::models::clippy::MbClippyLint;
-use crate::models::clippy::MbClippyLintLink;
-use crate::models::clippy::lint_severity::LintSeverity;
+use crate::clippy::clippy_lint::MbClippyLint;
+use crate::clippy::lint_hint::MbClippyLintHint;
+use crate::clippy::lint_link::MbClippyLintLink;
+use crate::clippy::lint_severity::LintSeverity;
+use crate::SymphonyzeClient;
 
 pub struct SoundtrackWithoutDisambiguationLint {
     work: Work,
@@ -16,7 +18,7 @@ impl MbClippyLint for SoundtrackWithoutDisambiguationLint {
     }
 
     async fn check(
-        _conn: &mut sqlx::SqliteConnection,
+        _client: &SymphonyzeClient,
         entity: &musicbrainz_db_lite::models::musicbrainz::main_entities::MainEntity,
     ) -> Result<Option<Self>, crate::Error> {
         let MainEntity::Work(work) = entity else {
@@ -34,7 +36,7 @@ impl MbClippyLint for SoundtrackWithoutDisambiguationLint {
 
     async fn get_body(
         &self,
-        _conn: &mut sqlx::SqliteConnection,
+        _client: &SymphonyzeClient,
     ) -> Result<impl std::fmt::Display, crate::Error> {
         Ok(format!("Work \"{}\" has type `Soundtrack` and has no disambiguation. 
  -> Style guidelines for soundtrack works require the name of the original work to be in the disambiguation. 
@@ -44,15 +46,15 @@ impl MbClippyLint for SoundtrackWithoutDisambiguationLint {
 
     async fn get_hints(
         &self,
-        _conn: &mut sqlx::SqliteConnection,
-    ) -> Result<Vec<crate::models::clippy::MbClippyLintHint>, crate::Error> {
+        _client: &SymphonyzeClient,
+    ) -> Result<Vec<MbClippyLintHint>, crate::Error> {
         Ok(Vec::new())
     }
 
     async fn get_links(
         &self,
-        _conn: &mut sqlx::SqliteConnection,
-    ) -> Result<Vec<crate::models::clippy::MbClippyLintLink>, crate::Error> {
+        _client: &SymphonyzeClient,
+    ) -> Result<Vec<MbClippyLintLink>, crate::Error> {
         Ok(vec![
             MbClippyLintLink {
                 name: "Style Guidelines".truecolor(232, 133, 58).to_string(),
@@ -66,7 +68,7 @@ impl MbClippyLint for SoundtrackWithoutDisambiguationLint {
         ])
     }
 
-    fn get_severity(&self) -> crate::models::clippy::lint_severity::LintSeverity {
+    fn get_severity(&self) -> LintSeverity {
         LintSeverity::StyleIssue
     }
 }
