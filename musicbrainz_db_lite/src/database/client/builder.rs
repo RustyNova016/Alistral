@@ -78,8 +78,10 @@ impl<MBClient, LBClient> ClientBuilder<DatabaseFile, (), MBClient, LBClient> {
         .journal_mode(SqliteJournalMode::Wal)
         .busy_timeout(Duration::from_millis(60000));
 
+        let connection = PoolManager::create_pool(optconn);
+        connection.resize(64);
         Ok(ClientBuilder {
-            connection: PoolManager::create_pool(optconn),
+            connection,
             database_location: self.database_location,
             database_type: self.database_type,
             musicbrainz_client: self.musicbrainz_client,
@@ -113,6 +115,7 @@ impl<MBClient, LBClient> ClientBuilder<InMemory, (), MBClient, LBClient> {
         musicbrainz_db_lite_schema::create_and_migrate(&mut *pool.get_raw_connection().await?)
             .await?;
 
+        pool.resize(64);
         Ok(ClientBuilder {
             connection: pool,
             database_location: self.database_location,

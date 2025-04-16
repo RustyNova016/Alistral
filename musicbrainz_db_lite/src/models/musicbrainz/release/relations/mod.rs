@@ -1,9 +1,17 @@
-pub mod label_infos;
+use std::sync::Arc;
+
+use futures::channel::mpsc::Sender;
+use futures::SinkExt as _;
 use sqlx::SqliteConnection;
+
+use crate::models::musicbrainz::main_entities::MainEntity;
+use crate::DBClient;
+use crate::FetchAsComplete;
 
 use super::Media;
 use super::Release;
 
+pub mod label_infos;
 pub mod labels;
 pub mod recording;
 pub mod release_group;
@@ -31,5 +39,24 @@ impl Release {
         .bind(id)
         .fetch_all(conn)
         .await?)
+    }
+
+    pub async fn get_crawler(
+        &self,
+        client: Arc<DBClient>,
+        mut sender: Sender<Arc<MainEntity>>,
+    ) -> Result<(), crate::Error> {
+        Self::fetch_as_complete_as_task(client.clone(), &self.mbid).await?;
+
+        let recordings = self
+            .get_recordings_or_fetch(&mut *client.get_raw_connection().await?, &client)
+            .await?;
+        for recording in recordings {
+            sender
+                .send(Arc::new(MainEntity::Recording(recording)))
+                .await?;
+        }
+
+        Ok(())
     }
 }

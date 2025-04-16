@@ -26,6 +26,7 @@ impl Artist {
         }
     }
 
+    #[tracing::instrument]
     pub async fn save_api_response(
         conn: &mut SqliteConnection,
         value: MBArtist,
@@ -40,6 +41,7 @@ impl Artist {
     }
 
     /// Save a recording from the api data. It also save the relationships
+    #[tracing::instrument]
     pub async fn save_api_response_recursive(
         conn: &mut SqliteConnection,
         value: MBArtist,

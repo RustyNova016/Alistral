@@ -1,3 +1,4 @@
+use std::path::PathBuf;
 use std::sync::Arc;
 use std::sync::LazyLock;
 
@@ -17,6 +18,7 @@ use crate::utils::constants::INTERZIC_DB;
 use crate::utils::constants::TOKENCACHE;
 use crate::utils::constants::YT_SECRET_FILE;
 use crate::utils::env::in_offline_mode;
+use crate::utils::env::temp_database;
 
 pub static ALISTRAL_CLIENT: LazyLock<AlistralCliClient> =
     LazyLock::new(AlistralCliClient::create_blocking_or_fatal);
@@ -67,9 +69,13 @@ impl AlistralCliClient {
         listenbrainz: Arc<ListenbrainzClient>,
     ) -> Arc<DBClient> {
         //TODO: set db loaction in config
+        let mut location = DB_LOCATION.to_path_buf();
+        if temp_database() {
+            location = PathBuf::from("./temp.db");
+        }
 
         let musicbrainz_db = DBClient::builder()
-            .as_file(DB_LOCATION.to_path_buf())
+            .as_file(location)
             .create_file()
             .expect("Couldn't create database file");
 

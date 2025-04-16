@@ -10,8 +10,10 @@ use super::recording::Recording;
 use super::release::Release;
 use super::work::Work;
 
+pub mod crawler;
+
 /// Contain any of the main entities
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub enum MainEntity {
     Artist(Artist),
     Label(Label),
@@ -41,6 +43,16 @@ impl MainEntity {
         }
 
         Ok(())
+    }
+
+    pub fn get_unique_id(&self) -> String {
+        match self {
+            MainEntity::Artist(val) => format!("artist_{}", val.mbid),
+            MainEntity::Label(val) => format!("label_{}", val.mbid),
+            MainEntity::Recording(val) => format!("recording_{}", val.mbid),
+            MainEntity::Release(val) => format!("release_{}", val.mbid),
+            MainEntity::Work(val) => format!("work_{}", val.mbid),
+        }
     }
 }
 

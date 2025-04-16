@@ -1,5 +1,3 @@
-pub mod display;
-pub mod finds;
 use musicbrainz_db_lite_macros::{MainEntity, Upsert};
 use sqlx::prelude::FromRow;
 
@@ -9,6 +7,10 @@ use crate::models::shared_traits::has_tags::HasTags;
 use crate::utils::macros::{get_and_fetch::impl_get_and_fetch, impl_redirections};
 
 use super::relations::impl_relations::impl_relations;
+
+pub mod crawler;
+pub mod display;
+pub mod finds;
 
 #[derive(Debug, Default, Clone, PartialEq, Eq, FromRow, Upsert, MainEntity)]
 #[database(

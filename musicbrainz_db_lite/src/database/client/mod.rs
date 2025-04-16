@@ -35,6 +35,14 @@ impl DBClient {
         self.connection.get_raw_connection().await
     }
 
+    pub async fn get_raw_connection_as_task(
+        self: Arc<Self>,
+    ) -> Result<Object<RawPoolManager>, PoolError<sqlx::Error>> {
+        tokio::spawn(async move { self.connection.get_raw_connection().await })
+            .await
+            .unwrap()
+    }
+
     #[cfg(test)]
     /// Create an in memory database with the default MB client
     pub async fn connect_in_memory_and_create() -> Result<Self, crate::Error> {

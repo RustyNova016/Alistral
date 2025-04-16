@@ -46,6 +46,7 @@ indicatif = { version = "0.17.11", features = [
     "futures",
 ] }
 tokio = { version = "1.44.2", features = ["full"] }
+#tokio = { version = "1.44.2", features = ["full", "tracing"] }
 rayon = "1.10.0"
 reqwest = { version = "0.12.13", features = ["json"] }
 rand = "0.8.5"
@@ -68,6 +69,8 @@ strsim = "0.11.1"
 strum_macros = "0.27.1"
 tracing-indicatif = "0.3.9"
 clap-verbosity-flag = { version = "3.0.2", default-features = false, features = ["tracing"] }
+dotenvy = "0.15.7"
+streamies = "0.2.2"
 
 # The profile that 'cargo dist' will build with
 [profile.dist]
