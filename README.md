@@ -15,6 +15,21 @@ The documentation book can be found [here](https://rustynova016.github.io/Alistr
 Full markdown help can be found under [docs/CommandLineHelp.md](https://github.com/RustyNova016/alistral/blob/master/docs/CommandLineHelp.md), but full `--help` support exists too. 
 
 # (Some) Tools
+## Daily
+
+Gives a daily recap containing the latest releases, track birthdays and discovery anniversaries
+
+[Read more](https://rustynova016.github.io/Alistral/daily.html) | [Usage](https://github.com/RustyNova016/alistral/blob/master/docs/CommandLineHelp.md#alistral-daily)
+
+## Statistics
+
+An extended statistic calculator that calculate fresh statistics in a blink
+of an eye! (Data fetching not counted)
+Supports a wider range of entities like releases, works, or even tags.
+
+[Read more](https://rustynova016.github.io/Alistral/stats/stats.html) | [Usage](https://github.com/RustyNova016/alistral/blob/master/docs/CommandLineHelp.md#alistral-stats)
+
+
 ## Unmapped listens 
 
 [Usage > Command Line documentation](https://github.com/RustyNova016/alistral/blob/master/docs/CommandLineHelp.md#alistral-mapping-list-unmapped)
@@ -41,14 +56,6 @@ Total: 8 unlinked recordings
 [Usage > Command Line documentation](https://github.com/RustyNova016/alistral/blob/master/docs/CommandLineHelp.md#alistral-mapping-mapper)
 
 This tool allows for easy and faster mapping of recordings. It goes through each unmapped recordings, and give a few suggested recordings for the mapping. This is the exact same as mapping recording in the web UI.
-
-## Statistics
-
-An extended statistic calculator that calculate fresh statistics in a blink
-of an eye! (Data fetching not counted)
-Supports a wider range of entities like releases, works, or even tags.
-
-[Read more](https://rustynova016.github.io/Alistral/stats/stats.html) | [Usage](https://github.com/RustyNova016/alistral/blob/master/docs/CommandLineHelp.md#alistral-stats)
 
 ## Radio
 
