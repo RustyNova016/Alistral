@@ -19,6 +19,7 @@ pub(super) async fn display_wrong_mapping(
     messybrainz_data: &MessybrainzSubmission,
     recording: &Recording,
     listen: &Listen,
+    username: &str,
 ) -> bool {
     println!();
     println!("{}", "Wrong mapping".to_string().as_title());
@@ -67,7 +68,8 @@ pub(super) async fn display_wrong_mapping(
         hyperlink_rename(
             &"See listen on listenbrainz".to_string(),
             &format!(
-                "https://listenbrainz.org/user/RustyNova/?max_ts={}",
+                "https://listenbrainz.org/user/{}/?max_ts={}",
+                username,
                 listen.listened_at + 1
             )
         )
