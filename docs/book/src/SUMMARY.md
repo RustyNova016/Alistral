@@ -5,6 +5,7 @@
 [--help](CommandLineHelp.md)
 
 # Commands
+- [daily](./daily.md)
 - [interzic](./interzic/interzic.md)
 - [listens](./listens/listens.md)
 - [stats](./stats/stats.md)
