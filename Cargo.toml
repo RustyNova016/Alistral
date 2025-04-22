@@ -2,11 +2,15 @@
 name = "alistral"
 version = "0.5.7"
 edition = "2024"
+homepage = "https://rustynova016.github.io/Alistral/"
 repository = "https://github.com/RustyNova016/alistral"
 publish = true
 license = "MIT"
 description = "A CLI app containing a set of useful tools for Listenbrainz"
 rust-version = "1.85.0"
+authors = ["RustyNova <rusty.nova.jsb@gmail.com>"]
+keywords = ["cli", "listenbrainz", "metabrainz"]
+categories = ["command-line-utilities"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -76,6 +80,9 @@ lto = "thin"
 
 [lints.rust]
 async_fn_in_trait = { level = "allow", priority = 1 }
+
+[package.metadata.deb]
+maintainer = "RustyNova <rusty.nova.jsb@gmail.com>"
 
 # --- Workspace ---
 
