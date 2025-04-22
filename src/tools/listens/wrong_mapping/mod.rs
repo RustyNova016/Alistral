@@ -65,6 +65,7 @@ pub async fn wrong_mapping(conn: &mut sqlx::SqliteConnection, username: String) 
                 &messybrainz_data,
                 &recording,
                 listen,
+                &username,
             )
             .await;
             if !continu {
