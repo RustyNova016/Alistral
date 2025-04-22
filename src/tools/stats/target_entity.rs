@@ -8,6 +8,7 @@ pub enum StatsTarget {
     ReleaseGroup,
     Work,
     WorkRecursive,
+    Tag,
 }
 
 impl StatsTarget {
@@ -19,6 +20,7 @@ impl StatsTarget {
             Self::ReleaseGroup => "release_group",
             Self::Work => "work",
             Self::WorkRecursive => "work_recursive",
+            Self::Tag => "tag",
         }
     }
 }

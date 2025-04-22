@@ -6,6 +6,8 @@ use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use serde::Deserialize;
 use serde::Serialize;
 
+use crate::traits::mergable::Mergable;
+
 pub mod traits;
 
 #[derive(Debug, Clone, PartialEq, Eq, Default, Deserialize, Serialize)]
@@ -114,5 +116,11 @@ impl FromIterator<Listen> for ListenCollection {
         }
 
         this
+    }
+}
+
+impl Mergable for ListenCollection {
+    fn merge(&mut self, other: Self) {
+        self.merge_by_index(other);
     }
 }

@@ -1,7 +1,11 @@
 use sqlx::prelude::FromRow;
+use tuillez::formatter::FormatWithAsync;
 
+use crate::models::musicbrainz::MusicbrainzFormater;
 use crate::models::shared_traits::has_tags::HasTags;
 use crate::RowId;
+
+pub mod query;
 
 #[derive(PartialEq, Eq, Debug, Clone, FromRow)]
 pub struct Tag {
@@ -53,5 +57,17 @@ impl Tag {
 impl RowId for Tag {
     fn get_row_id(&self) -> i64 {
         self.id
+    }
+}
+
+#[cfg(feature = "pretty_format")]
+impl FormatWithAsync<MusicbrainzFormater<'_>> for Tag {
+    type Error = crate::Error;
+
+    async fn format_with_async(
+        &self,
+        _ft: &MusicbrainzFormater<'_>,
+    ) -> Result<String, Self::Error> {
+        Ok(self.name.to_string())
     }
 }

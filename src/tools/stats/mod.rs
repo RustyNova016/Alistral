@@ -1,11 +1,9 @@
 use core::fmt::Display;
 
-use alistral_core::database::fetching::listens::ListenFetchQuery;
 use alistral_core::datastructures::entity_with_listens::collection::EntityWithListensCollection;
 use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use alistral_core::datastructures::entity_with_listens::release::collection::ReleaseWithRecordingsCollection;
-use alistral_core::datastructures::entity_with_listens::work::collection::WorkWithRecordingsCollection;
-use alistral_core::datastructures::entity_with_listens::work::collection::WorkWithRecordingsStrategy;
+use alistral_core::datastructures::entity_with_listens::tags::id::SimpleTag;
 use alistral_core::datastructures::listen_collection::ListenCollection;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use clap::Parser;
@@ -21,7 +19,6 @@ use musicbrainz_db_lite::models::musicbrainz::work::Work;
 use crate::ALISTRAL_CLIENT;
 use crate::database::interfaces::statistics_data::artist_stats;
 use crate::database::interfaces::statistics_data::recording_stats;
-use crate::database::interfaces::statistics_data::recording_strategy;
 use crate::database::interfaces::statistics_data::release_group_stats;
 use crate::database::interfaces::statistics_data::release_stats;
 use crate::datastructures::statistic_formater::ListenCountStats;
@@ -32,6 +29,7 @@ use crate::datastructures::statistic_formater::StatisticOutput;
 use crate::datastructures::statistic_formater::StatisticType;
 use crate::models::config::Config;
 
+pub mod stats_compiling;
 pub mod target_entity;
 
 #[derive(Parser, Debug, Clone)]
@@ -79,6 +77,7 @@ pub enum StatsTarget {
     Release,
     ReleaseGroup,
     Work,
+    Tag,
 }
 
 impl StatsTarget {
@@ -89,6 +88,7 @@ impl StatsTarget {
             Self::Release => "release",
             Self::ReleaseGroup => "release_group",
             Self::Work => "work",
+            Self::Tag => "tag",
         }
     }
 }
@@ -131,6 +131,11 @@ impl StatsCommand {
                 self.run_stats::<Work, RecordingWithListensCollection, ListenCountStats>(data)
                     .await
             }
+            (SortBy::ListenCount, StatsTarget::Tag) => {
+                let data = self.tag_stats(user).await?;
+                self.run_stats::<SimpleTag, RecordingWithListensCollection, ListenCountStats>(data)
+                    .await
+            }
             (SortBy::ListenDuration, StatsTarget::Artist) => {
                 let data = artist_stats(&ALISTRAL_CLIENT, user).await?;
 
@@ -159,6 +164,13 @@ impl StatsCommand {
                 let data = self.work_stats(user).await?;
                 self.run_stats::<Work, RecordingWithListensCollection, ListenDurationStats>(data)
                     .await
+            }
+            (SortBy::ListenDuration, StatsTarget::Tag) => {
+                let data = self.tag_stats(user).await?;
+                self.run_stats::<SimpleTag, RecordingWithListensCollection, ListenDurationStats>(
+                    data,
+                )
+                .await
             } // _ => {
               //     println!(
               //         "This type of statistic is not implemented for this entity. If you believe it should be able to exist, feel free to create an issue"
@@ -181,28 +193,6 @@ impl StatsCommand {
         let stats = StatisticFormater::<Ent, Lis, S>::new(data, StatisticOutput::Print);
 
         stats.print_paged().await
-    }
-
-    async fn work_stats(&self, user: String) -> Result<WorkWithRecordingsCollection, crate::Error> {
-        Ok(ListenFetchQuery::get_entity_with_listens(
-            &ALISTRAL_CLIENT.core,
-            user,
-            &self.work_strategy(),
-        )
-        .await?)
-    }
-
-    fn work_strategy(&self) -> WorkWithRecordingsStrategy {
-        let mut strat = WorkWithRecordingsStrategy::new(
-            &ALISTRAL_CLIENT.core,
-            recording_strategy(&ALISTRAL_CLIENT),
-        );
-
-        if self.w_recursive {
-            strat = strat.with_recursive_parents()
-        }
-
-        strat
     }
 }
 

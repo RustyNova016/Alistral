@@ -806,7 +806,7 @@ Shows top statistics for a specific target
 
 * `<TARGET>` — The type of entity to sort by
 
-  Possible values: `recording`, `artist`, `release`, `release-group`, `work`
+  Possible values: `recording`, `artist`, `release`, `release-group`, `work`, `tag`
 
 
 ###### **Options:**
