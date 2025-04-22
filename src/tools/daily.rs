@@ -43,8 +43,6 @@ pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
 
     let fresh_releases = get_fresh_releases(recordings.clone().into(), today).await;
 
-    println!();
-
     if !anniversary_recordings.is_empty() {
         println!("{}", " Today in history 🎂 ".on_green().black().bold());
 
@@ -63,9 +61,9 @@ pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
                 rec.listen_count()
             );
         }
-    }
 
-    println!();
+        println!();
+    }
 
     let mut first_discoveries = recordings
         .iter()
