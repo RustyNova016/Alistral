@@ -6,7 +6,7 @@ updates:
     schedule:
       interval: daily
     open-pull-requests-limit: 10
-    target-branch: develop
+    target-branch: master
 
   # Maintain dependencies for GitHub Actions
   - package-ecosystem: github-actions
@@ -14,4 +14,4 @@ updates:
     schedule:
       interval: daily
     open-pull-requests-limit: 10
-    target-branch: develop
+    target-branch: master

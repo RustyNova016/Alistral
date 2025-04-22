@@ -1,29 +1,20 @@
 # Alistral
 
-[![CI builder](https://github.com/RustyNova016/alistral/actions/workflows/rust.yml/badge.svg)](https://github.com/RustyNova016/alistral/actions/workflows/rust.yml) [![Read the docs](https://readthedocs.org/projects/alistral/badge/?version=latest)](https://alistral.readthedocs.io/en/latest/?badge=latest)
+[![CI builder](https://github.com/RustyNova016/alistral/actions/workflows/rust.yml/badge.svg)](https://github.com/RustyNova016/alistral/actions/workflows/rust.yml)
 
 A collection of CLI based tools for Listenbrainz.
 
 # Installing
-## Builds
-The latest build can be found in the [release](https://github.com/RustyNova016/alistral/releases) tab
 
-## Manual build
-```shell
-git clone https://github.com/RustyNova016/alistral.git
-cd ./alistral
-git checkout master
-export SQLX_OFFLINE=true
-cargo build --release
-```
+Check out the guide [here](https://rustynova016.github.io/Alistral/installing.html)
 
 # Usage
 
-Documentation book can be found [here](https://rustynova016.github.io/Alistral/)
+The documentation book can be found [here](https://rustynova016.github.io/Alistral/)
 
 Full markdown help can be found under [docs/CommandLineHelp.md](https://github.com/RustyNova016/alistral/blob/master/docs/CommandLineHelp.md), but full `--help` support exists too. 
 
-# Tools
+# (Some) Tools
 ## Unmapped listens 
 
 [Usage > Command Line documentation](https://github.com/RustyNova016/alistral/blob/master/docs/CommandLineHelp.md#alistral-mapping-list-unmapped)
@@ -53,11 +44,11 @@ This tool allows for easy and faster mapping of recordings. It goes through each
 
 ## Statistics
 
-[Usage > Command Line documentation](https://github.com/RustyNova016/alistral/blob/master/docs/CommandLineHelp.md#alistral-stats)
+An extended statistic calculator that calculate fresh statistics in a blink
+of an eye! (Data fetching not counted)
+Supports a wider range of entities like releases, works, or even tags.
 
-While ListenBrainz have its own statistic page, it only refreshes daily, and is limited to only some entities. Furthermore, bugs in ListenBrainz statitics lead to misleading result.
-
-This calculator aims to be most accurate possible, and will display your top listens for you.
+[Read more](https://rustynova016.github.io/Alistral/stats/stats.html) | [Usage](https://github.com/RustyNova016/alistral/blob/master/docs/CommandLineHelp.md#alistral-stats)
 
 ## Radio
 
@@ -136,5 +127,5 @@ $ . ./alistral.fish
 This project is in beta. There's a lot of features I'd like to add, and need a lot of testing before 1.0. If you find a bug, or have a feature request, feel free to create (and spam) a new issue.
 
 # See also
-- [musicbrainz_rs_nova](https://github.com/RustyNova016/musicbrainz_rs_nova): A fork of musicbrainz-rs as the original project seems to have staled
+- [musicbrainz_rs](https://github.com/RustyNova016/musicbrainz_rs): API binding for Musicbrainz
 - [listenbrainz-rs](https://github.com/InputUsername/listenbrainz-rs): API bindings for listenbrainz

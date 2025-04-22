@@ -2,6 +2,7 @@
 
 [Welcome](hello.md)
 [Help](CommandLineHelp.md)
+[Installing](installing.md)
 
 # Commands
 - [interzic](./interzic/interzic.md)
