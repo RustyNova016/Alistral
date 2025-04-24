@@ -8,6 +8,8 @@ use crate::models::musicbrainz::release::Media;
 use crate::models::musicbrainz::release::Release;
 use crate::models::musicbrainz::release_group::ReleaseGroup;
 use crate::models::musicbrainz::tags::Tag;
+use crate::models::shared_traits::fetch_and_save::FetchAndSave;
+use crate::models::shared_traits::save_from::SaveFrom;
 use crate::utils::date_utils::date_to_timestamp;
 use crate::Error;
 
@@ -105,5 +107,31 @@ impl Release {
         }
 
         Ok(new_value)
+    }
+}
+
+impl FetchAndSave<MBRelease> for Release {
+    async fn set_redirection(
+        conn: &mut sqlx::SqliteConnection,
+        mbid: &str,
+        id: i64,
+    ) -> Result<(), sqlx::Error> {
+        Self::set_redirection(conn, mbid, id).await
+    }
+
+    async fn set_full_update(
+        &mut self,
+        conn: &mut sqlx::SqliteConnection,
+    ) -> Result<(), sqlx::Error> {
+        self.reset_full_update_date(conn).await
+    }
+}
+
+impl SaveFrom<MBRelease> for Release {
+    async fn save_from(
+        conn: &mut sqlx::SqliteConnection,
+        value: MBRelease,
+    ) -> Result<Self, crate::Error> {
+        Self::save_api_response_recursive(conn, value).await
     }
 }

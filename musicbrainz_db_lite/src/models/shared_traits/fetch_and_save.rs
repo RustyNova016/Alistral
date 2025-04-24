@@ -1,0 +1,109 @@
+use core::future::Future;
+use std::sync::Arc;
+
+use crate::models::shared_traits::fetch_mbid::FetchMBID;
+use crate::models::shared_traits::save_from::SaveFrom;
+use crate::DBClient;
+use crate::RowId;
+
+pub trait FetchAndSave<U>
+where
+    Self: Sized + FetchMBID<U> + SaveFrom<U> + RowId,
+    U: Send,
+{
+    /// Fetch save an entity using a premade connection
+    fn fetch_and_save_with_conn(
+        conn: &mut sqlx::SqliteConnection,
+        client: &crate::DBClient,
+        mbid: &str,
+    ) -> impl std::future::Future<Output = Result<Option<Self>, crate::Error>> + Send
+    where
+        Self: std::marker::Send,
+    {
+        async {
+            let data = Self::fetch_from_mbid(client, mbid).await;
+
+            match data {
+                Ok(data) => {
+                    let mut data = Self::save_from(conn, data).await?;
+                    data.set_full_update(conn).await?;
+
+                    Self::set_redirection(conn, mbid, data.get_row_id()).await?;
+
+                    Ok(Some(data))
+                }
+                Err(musicbrainz_rs_nova::Error::NotFound(_)) => {
+                    // TODO: Set deleted
+                    Ok(None)
+                }
+                Err(err) => Err(err.into()),
+            }
+        }
+    }
+
+    /// Fetch save an entity using the connection pool of the client
+    fn fetch_and_save_with_pool(
+        client: &crate::DBClient,
+        mbid: &str,
+    ) -> impl std::future::Future<Output = Result<Option<Self>, crate::Error>> + Send
+    where
+        Self: Send,
+    {
+        async {
+            let conn = &mut client.get_raw_connection().await?;
+            Self::fetch_and_save_with_conn(conn, client, mbid).await
+        }
+    }
+
+    /// Fetch save an entity using the connection pool of the client, and create a tokio task for it.
+    /// This allows to send save requests that are sure to complete (and unlock the database)
+    /// even if the returned future isn't polled anymore
+    fn fetch_and_save_as_task(
+        client: Arc<DBClient>,
+        mbid: &str,
+    ) -> impl std::future::Future<Output = Result<Option<Self>, crate::Error>> + Send
+    where
+        Self: Send + 'static,
+        U: 'static,
+    {
+        async {
+            let data = Self::fetch_from_mbid(client.as_ref(), mbid).await;
+
+            match data {
+                Ok(data) => {
+                    let mbid = mbid.to_string();
+
+                    tokio::spawn(async move {
+                        let conn = &mut client.get_raw_connection().await?;
+                        let mut data = Self::save_from(conn, data).await?;
+                        data.set_full_update(conn).await?;
+
+                        Self::set_redirection(conn, &mbid, data.get_row_id()).await?;
+
+                        Ok(Some(data))
+                    })
+                    .await
+                    .unwrap()
+                }
+                Err(musicbrainz_rs_nova::Error::NotFound(_)) => {
+                    // TODO: Set deleted
+                    Ok(None)
+                }
+                Err(err) => Err(err.into()),
+            }
+        }
+    }
+
+    /// Reset the "full update" date in the database. This should only be called after a full update of the entity.
+    fn set_full_update(
+        &mut self,
+        conn: &mut sqlx::SqliteConnection,
+    ) -> impl Future<Output = Result<(), sqlx::Error>> + Send;
+
+    /// Set the MBID redirection from a given MBID to the current entity's rowid
+    fn set_redirection(
+        conn: &mut sqlx::SqliteConnection,
+        mbid: &str,
+        id: i64,
+    ) -> impl Future<Output = Result<(), sqlx::Error>> + Send;
+}

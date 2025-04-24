@@ -1,34 +1,12 @@
 use crate::database::client::DBClient;
-use crate::{api::SaveToDatabase, models::musicbrainz::recording::Recording, Error};
+use crate::models::shared_traits::fetch_and_save::FetchAndSave;
+use crate::models::shared_traits::fetch_mbid::FetchMBID;
+use crate::{models::musicbrainz::recording::Recording, Error};
 use musicbrainz_rs_nova::{entity::recording::Recording as MSRecording, Fetch};
 use sqlx::SqliteConnection;
 
-impl Recording {
-    /// Fetch a recording with all relationships. Then save to the db
-    pub async fn fetch_and_save(
-        conn: &mut SqliteConnection,
-        client: &DBClient,
-        mbid: &str,
-    ) -> Result<Option<Recording>, Error> {
-        let data = Self::fetch(client, mbid).await;
-
-        match data {
-            Ok(data) => {
-                let mut data = data.save(conn).await?;
-                data.reset_full_update_date(conn).await?;
-
-                Self::set_redirection(conn, mbid, data.id).await?;
-
-                Ok(Some(data))
-            }
-            Err(musicbrainz_rs_nova::Error::NotFound(_)) => {
-                // TODO: Set deleted
-                Ok(None)
-            }
-            Err(err) => Err(err.into()),
-        }
-    }
-    pub async fn fetch(
+impl FetchMBID<MSRecording> for Recording {
+    async fn fetch_from_mbid(
         client: &DBClient,
         mbid: &str,
     ) -> Result<MSRecording, musicbrainz_rs_nova::Error> {
@@ -61,6 +39,17 @@ impl Recording {
             .with_medias()
             .execute_with_client(&client.musicbrainz_client)
             .await
+    }
+}
+
+impl Recording {
+    /// Fetch a recording with all relationships. Then save to the db
+    pub async fn fetch_and_save(
+        conn: &mut SqliteConnection,
+        client: &DBClient,
+        mbid: &str,
+    ) -> Result<Option<Recording>, Error> {
+        Self::fetch_and_save_with_conn(conn, client, mbid).await
     }
 }
 

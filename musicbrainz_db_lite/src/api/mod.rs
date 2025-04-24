@@ -4,6 +4,7 @@ pub mod listenbrainz;
 pub mod musicbrainz;
 
 /// This trait is implemented by all the entities that are able to be saved to the database
+#[deprecated]
 pub trait SaveToDatabase {
     type ReturnedData;
 

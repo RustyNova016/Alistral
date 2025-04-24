@@ -1,16 +1,16 @@
 use musicbrainz_rs_nova::{entity::label::Label as MBLabel, Fetch};
 
 use crate::database::client::DBClient;
-use crate::{api::SaveToDatabase, models::musicbrainz::label::Label};
+use crate::models::musicbrainz::label::Label;
+use crate::models::shared_traits::fetch_and_save::FetchAndSave;
+use crate::models::shared_traits::fetch_mbid::FetchMBID;
 
-impl Label {
-    // TODO: #51 Fix missing relations
-    pub async fn fetch_and_save(
-        conn: &mut sqlx::SqliteConnection,
+impl FetchMBID<MBLabel> for Label {
+    async fn fetch_from_mbid(
         client: &DBClient,
         mbid: &str,
-    ) -> Result<Option<Self>, crate::Error> {
-        let data = MBLabel::fetch()
+    ) -> Result<MBLabel, musicbrainz_rs_nova::Error> {
+        MBLabel::fetch()
             .id(mbid)
             .with_aliases()
             .with_annotations()
@@ -25,34 +25,17 @@ impl Label {
             .with_tags()
             .with_url_relations()
             .execute_with_client(&client.musicbrainz_client)
-            .await;
-
-        match data {
-            Ok(data) => {
-                let mut data = data.save(conn).await?;
-                data.reset_full_update_date(conn).await?;
-
-                Self::set_redirection(conn, mbid, data.id).await?;
-
-                Ok(Some(data))
-            }
-            Err(musicbrainz_rs_nova::Error::NotFound(_)) => {
-                // TODO: Set deleted
-                Ok(None)
-            }
-            Err(err) => Err(err.into()),
-        }
+            .await
     }
 }
 
-impl SaveToDatabase for MBLabel {
-    type ReturnedData = Label;
-
-    async fn save(
-        self,
+impl Label {
+    pub async fn fetch_and_save(
         conn: &mut sqlx::SqliteConnection,
-    ) -> Result<Self::ReturnedData, crate::Error> {
-        Label::save_api_response_recursive(conn, self).await
+        client: &DBClient,
+        mbid: &str,
+    ) -> Result<Option<Self>, crate::Error> {
+        Self::fetch_and_save_with_conn(conn, client, mbid).await
     }
 }
 

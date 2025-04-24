@@ -98,7 +98,7 @@ impl RadioCircle {
             artist.format_with_async(&LISTENBRAINZ_FMT).await?
         );
         let mut recordings: Vec<Recording> = artist
-            .browse_or_fetch_artist_recordings(conn)
+            .browse_or_fetch_artist_recordings(conn, ALISTRAL_CLIENT.musicbrainz_db.clone())
             .try_collect()
             .await?;
 

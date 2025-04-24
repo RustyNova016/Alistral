@@ -1,18 +1,18 @@
 use musicbrainz_rs_nova::entity::release_group::ReleaseGroup as MBReleaseGroup;
 use musicbrainz_rs_nova::Fetch;
 
-use crate::api::SaveToDatabase;
 use crate::database::client::DBClient;
 use crate::models::musicbrainz::release_group::ReleaseGroup;
+use crate::models::shared_traits::fetch_and_save::FetchAndSave;
+use crate::models::shared_traits::fetch_mbid::FetchMBID;
 use crate::Error;
 
-impl ReleaseGroup {
-    pub async fn fetch_and_save(
-        conn: &mut sqlx::SqliteConnection,
+impl FetchMBID<MBReleaseGroup> for ReleaseGroup {
+    async fn fetch_from_mbid(
         client: &DBClient,
         mbid: &str,
-    ) -> Result<Option<Self>, Error> {
-        let data = MBReleaseGroup::fetch()
+    ) -> Result<MBReleaseGroup, musicbrainz_rs_nova::Error> {
+        MBReleaseGroup::fetch()
             .id(mbid)
             .with_aliases()
             .with_annotations()
@@ -26,34 +26,17 @@ impl ReleaseGroup {
             .with_tags()
             .with_url_relations()
             .execute_with_client(&client.musicbrainz_client)
-            .await;
-
-        match data {
-            Ok(data) => {
-                let mut data = data.save(conn).await?;
-                data.reset_full_update_date(conn).await?;
-
-                Self::set_redirection(conn, mbid, data.id).await?;
-
-                Ok(Some(data))
-            }
-            Err(musicbrainz_rs_nova::Error::NotFound(_)) => {
-                // TODO: Set deleted
-                Ok(None)
-            }
-            Err(err) => Err(err.into()),
-        }
+            .await
     }
 }
 
-impl SaveToDatabase for MBReleaseGroup {
-    type ReturnedData = ReleaseGroup;
-
-    async fn save(
-        self,
+impl ReleaseGroup {
+    pub async fn fetch_and_save(
         conn: &mut sqlx::SqliteConnection,
-    ) -> Result<Self::ReturnedData, crate::Error> {
-        ReleaseGroup::save_api_response_recursive(conn, self).await
+        client: &DBClient,
+        mbid: &str,
+    ) -> Result<Option<Self>, Error> {
+        Self::fetch_and_save_with_conn(conn, client, mbid).await
     }
 }
 

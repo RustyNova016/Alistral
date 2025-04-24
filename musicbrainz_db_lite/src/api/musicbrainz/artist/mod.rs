@@ -1,10 +1,11 @@
 use musicbrainz_rs_nova::entity::artist::Artist as MBArtist;
 use sqlx::SqliteConnection;
 
-use crate::api::SaveToDatabase;
 use crate::models::musicbrainz::artist::Artist;
 use crate::models::musicbrainz::genre::genre_tag::GenreTag;
 use crate::models::musicbrainz::tags::Tag;
+use crate::models::shared_traits::fetch_and_save::FetchAndSave;
+use crate::models::shared_traits::save_from::SaveFrom;
 use crate::Error;
 
 pub mod browse;
@@ -74,10 +75,28 @@ impl Artist {
     }
 }
 
-impl SaveToDatabase for MBArtist {
-    type ReturnedData = Artist;
+impl FetchAndSave<MBArtist> for Artist {
+    async fn set_redirection(
+        conn: &mut sqlx::SqliteConnection,
+        mbid: &str,
+        id: i64,
+    ) -> Result<(), sqlx::Error> {
+        Self::set_redirection(conn, mbid, id).await
+    }
 
-    async fn save(self, client: &mut SqliteConnection) -> Result<Self::ReturnedData, crate::Error> {
-        Artist::save_api_response(client, self).await
+    async fn set_full_update(
+        &mut self,
+        conn: &mut sqlx::SqliteConnection,
+    ) -> Result<(), sqlx::Error> {
+        self.reset_full_update_date(conn).await
+    }
+}
+
+impl SaveFrom<MBArtist> for Artist {
+    async fn save_from(
+        conn: &mut sqlx::SqliteConnection,
+        value: MBArtist,
+    ) -> Result<Self, crate::Error> {
+        Self::save_api_response_recursive(conn, value).await
     }
 }
