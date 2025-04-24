@@ -1,6 +1,7 @@
 use std::collections::VecDeque;
 
 use alistral_core::cli::colors::AlistralColors as _;
+use clap::Parser;
 use color_eyre::owo_colors::OwoColorize as _;
 use futures::TryStreamExt;
 use musicbrainz_db_lite::models::musicbrainz::main_entities::MainEntity;
@@ -17,15 +18,62 @@ use tuillez::formatter::FormatWithAsync;
 
 use crate::ALISTRAL_CLIENT;
 use crate::utils::cli::await_next;
+use crate::utils::cli::read_mbid_from_input;
 use crate::utils::constants::MUSIBRAINZ_FMT;
 use crate::utils::whitelist_blacklist::WhitelistBlacklist;
 
-pub async fn mb_clippy(
-    conn: &mut sqlx::SqliteConnection,
-    start_mbid: &str,
-    new_first: bool,
-    filter: &WhitelistBlacklist<String>,
-) {
+#[derive(Parser, Debug, Clone)]
+/// Search for potential mistakes, missing data and style issues. This allows to quickly pin down errors that can be corrected
+///
+/// ⚠️ All tips are suggestions. Take them with a grain of salt. If you are unsure, it's preferable to skip.
+pub struct MusicbrainzClippyCommand {
+    /// The MBID of a recording to start from
+    pub start_mbid: Option<String>,
+
+    /// Whether to check FILO (first in, last out) instead of FIFO (first in, first out)
+    #[arg(short, long)]
+    pub new_first: bool,
+
+    /// List of lints that should only be checked (Note: Put this argument last or before another argument)
+    #[arg(short, long, num_args = 0..)]
+    pub whitelist: Option<Vec<String>>,
+
+    /// List of lints that should not be checked (Note: Put this argument last or before another argument)
+    #[arg(short, long, num_args = 0..)]
+    pub blacklist: Option<Vec<String>>,
+}
+
+impl MusicbrainzClippyCommand {
+    pub async fn run(&self) {
+        let mbid = self
+            .start_mbid
+            .clone()
+            .unwrap_or_else(|| "8f3471b5-7e6a-48da-86a9-c1c07a0f47ae".to_string());
+
+        let filter = if let Some(whitelist) = self.whitelist.clone() {
+            WhitelistBlacklist::WhiteList(whitelist.clone())
+        } else if let Some(blacklist) = self.blacklist.clone() {
+            WhitelistBlacklist::BlackList(blacklist.clone())
+        } else {
+            WhitelistBlacklist::BlackList(Vec::new())
+        };
+
+        mb_clippy(
+            &read_mbid_from_input(&mbid).expect("Couldn't read mbid"),
+            self.new_first,
+            &filter,
+        )
+        .await;
+    }
+}
+
+pub async fn mb_clippy(start_mbid: &str, new_first: bool, filter: &WhitelistBlacklist<String>) {
+    let conn = &mut ALISTRAL_CLIENT
+        .musicbrainz_db
+        .get_raw_connection()
+        .await
+        .expect("Couldn't acquire a connection");
+
     let start_node = Recording::fetch_and_save(conn, &ALISTRAL_CLIENT.musicbrainz_db, start_mbid)
         .await
         .unwrap()
