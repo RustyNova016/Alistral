@@ -1,9 +1,14 @@
+pub mod completeness;
+pub mod fetch_and_save;
+pub mod fetch_mbid;
 pub mod find_by;
 pub mod find_by_mbid;
 pub mod find_by_rowid;
+pub mod get_or_fetch;
 pub mod has_genre;
 pub mod has_table;
 pub mod has_tags;
+pub mod save_from;
 
 pub trait RowId {
     /// Returns an unique i64 number that identify the row

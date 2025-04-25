@@ -233,7 +233,7 @@ async fn get_new_nodes(
         }
         MainEntity::Artist(val) => {
             let recordings: Vec<Recording> = val
-                .browse_or_fetch_artist_recordings(conn)
+                .browse_or_fetch_artist_recordings(conn, ALISTRAL_CLIENT.musicbrainz_db.clone())
                 .try_collect()
                 .await?;
             for recording in recordings {

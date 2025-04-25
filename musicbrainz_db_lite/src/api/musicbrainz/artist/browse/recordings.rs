@@ -1,4 +1,5 @@
 use std::collections::HashSet;
+use std::sync::Arc;
 
 use async_fn_stream::fn_stream;
 use async_fn_stream::try_fn_stream;
@@ -8,15 +9,16 @@ use futures::StreamExt;
 use musicbrainz_rs_nova::entity::recording::Recording as MSRecording;
 use musicbrainz_rs_nova::Browse;
 
-use crate::api::SaveToDatabase;
 use crate::models::musicbrainz::artist::Artist;
 use crate::models::musicbrainz::recording::Recording;
+use crate::models::shared_traits::save_from::SaveFrom as _;
+use crate::DBClient;
 
 impl Artist {
     /// Fetch all the artist's recordings into a stream. it returns a stream of tuple containing (Recording, Total Recordings)
     pub fn fetch_artist_recordings<'conn>(
         &self,
-        conn: &'conn mut sqlx::SqliteConnection,
+        client: Arc<DBClient>,
     ) -> impl Stream<Item = Result<(Recording, i32), crate::Error>> + use<'_, 'conn> {
         try_fn_stream(|emitter| async move {
             let mut progress = 0;
@@ -46,7 +48,7 @@ impl Artist {
                     .with_work_relations()
                     .limit(90)
                     .offset(offset as u16)
-                    .execute()
+                    .execute_with_client(&client.musicbrainz_client)
                     .await?;
 
                 progress += results.entities.len();
@@ -54,7 +56,7 @@ impl Artist {
                 total = results.count;
 
                 for result in results.entities {
-                    let data = result.save(conn).await?;
+                    let data = Recording::save_from_as_task(client.clone(), result).await?;
 
                     emitter.emit((data, total)).await
                 }
@@ -108,6 +110,7 @@ impl Artist {
     pub fn browse_or_fetch_artist_recordings<'this, 'conn>(
         &'this self,
         conn: &'conn mut sqlx::SqliteConnection,
+        client: Arc<DBClient>,
     ) -> impl Stream<Item = Result<Recording, crate::Error>> + use<'this, 'conn> {
         try_fn_stream(|emitter| async move {
             let mut unique = HashSet::new();
@@ -125,7 +128,7 @@ impl Artist {
             } // We use a scope to drop any shadowed `stream` variable that is caused by `pin_mut!`. This allows us to gain back our `&mut conn`
 
             // We browsed the cache. Now let's browse from MB
-            let mb_stream = self.fetch_artist_recordings(conn);
+            let mb_stream = self.fetch_artist_recordings(client);
             pin_mut!(mb_stream);
 
             while let Some(data) = mb_stream.next().await {

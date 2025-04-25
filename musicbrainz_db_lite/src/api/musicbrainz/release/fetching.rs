@@ -1,20 +1,19 @@
 use crate::database::client::DBClient;
+use crate::models::shared_traits::fetch_and_save::FetchAndSave;
+use crate::models::shared_traits::fetch_mbid::FetchMBID;
 use crate::{
-    api::SaveToDatabase,
     models::musicbrainz::release::{Release, Track},
     Error,
 };
 use musicbrainz_rs_nova::{entity::release::Release as MBRelease, Fetch};
-use sqlx::Connection;
 use sqlx::SqliteConnection;
 
-impl Release {
-    pub async fn fetch_and_save(
-        conn: &mut SqliteConnection,
+impl FetchMBID<MBRelease> for Release {
+    async fn fetch_from_mbid(
         client: &DBClient,
         mbid: &str,
-    ) -> Result<Option<Self>, Error> {
-        let data = MBRelease::fetch()
+    ) -> Result<MBRelease, musicbrainz_rs_nova::Error> {
+        MBRelease::fetch()
             .id(mbid)
             .with_aliases()
             .with_annotations()
@@ -32,33 +31,17 @@ impl Release {
             .with_work_level_relations()
             .with_work_relations()
             .execute_with_client(&client.musicbrainz_client)
-            .await;
-
-        match data {
-            Ok(data) => {
-                let mut trans = conn.begin().await?;
-                let mut data = data.save(&mut trans).await?;
-                data.reset_full_update_date(&mut trans).await?;
-
-                Self::set_redirection(&mut trans, mbid, data.id).await?;
-                trans.commit().await?;
-
-                Ok(Some(data))
-            }
-            Err(musicbrainz_rs_nova::Error::NotFound(_)) => {
-                // TODO: Set deleted
-                Ok(None)
-            }
-            Err(err) => Err(err.into()),
-        }
+            .await
     }
 }
 
-impl SaveToDatabase for MBRelease {
-    type ReturnedData = Release;
-
-    async fn save(self, conn: &mut SqliteConnection) -> Result<Self::ReturnedData, crate::Error> {
-        Release::save_api_response_recursive(conn, self).await
+impl Release {
+    pub async fn fetch_and_save(
+        conn: &mut SqliteConnection,
+        client: &DBClient,
+        mbid: &str,
+    ) -> Result<Option<Self>, Error> {
+        Self::fetch_and_save_with_conn(conn, client, mbid).await
     }
 }
 

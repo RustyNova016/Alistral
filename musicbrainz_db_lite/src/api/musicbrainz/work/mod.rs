@@ -4,6 +4,9 @@ use musicbrainz_rs_nova::entity::work::Work as MBWork;
 use crate::models::musicbrainz::genre::genre_tag::GenreTag;
 use crate::models::musicbrainz::tags::Tag;
 use crate::models::musicbrainz::work::Work;
+use crate::models::shared_traits::completeness::CompletenessFlag;
+use crate::models::shared_traits::fetch_and_save::FetchAndSave;
+use crate::models::shared_traits::save_from::SaveFrom;
 use crate::utils::strip_quotes;
 use crate::Error;
 
@@ -78,5 +81,37 @@ impl Work {
         }
 
         Ok(new_value)
+    }
+}
+
+impl FetchAndSave<MBWork> for Work {
+    async fn set_redirection(
+        conn: &mut sqlx::SqliteConnection,
+        mbid: &str,
+        id: i64,
+    ) -> Result<(), sqlx::Error> {
+        Self::set_redirection(conn, mbid, id).await
+    }
+}
+
+impl CompletenessFlag for Work {
+    async fn set_full_update(
+        &mut self,
+        conn: &mut sqlx::SqliteConnection,
+    ) -> Result<(), sqlx::Error> {
+        self.reset_full_update_date(conn).await
+    }
+
+    fn is_complete(&self) -> bool {
+        self.full_update_date.is_some()
+    }
+}
+
+impl SaveFrom<MBWork> for Work {
+    async fn save_from(
+        conn: &mut sqlx::SqliteConnection,
+        value: MBWork,
+    ) -> Result<Self, crate::Error> {
+        Self::save_api_response_recursive(conn, value).await
     }
 }
