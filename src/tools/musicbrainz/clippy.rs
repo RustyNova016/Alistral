@@ -1,11 +1,15 @@
-use std::collections::VecDeque;
+use std::sync::Arc;
 
 use alistral_core::cli::colors::AlistralColors as _;
 use clap::Parser;
 use color_eyre::owo_colors::OwoColorize as _;
+use futures::StreamExt;
 use futures::TryStreamExt;
+use futures::pin_mut;
 use musicbrainz_db_lite::models::musicbrainz::main_entities::MainEntity;
+use musicbrainz_db_lite::models::musicbrainz::main_entities::crawler::crawler;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
+use streamies::TryStreamies;
 use symphonize::clippy::clippy_lint::MbClippyLint;
 use symphonize::clippy::lints::missing_release_barcode::MissingBarcodeLint;
 use symphonize::clippy::lints::missing_remix_rel::MissingRemixRelLint;
@@ -13,7 +17,6 @@ use symphonize::clippy::lints::missing_remixer_rel::MissingRemixerRelLint;
 use symphonize::clippy::lints::missing_work::MissingWorkLint;
 use symphonize::clippy::lints::soundtrack_without_disambiguation::SoundtrackWithoutDisambiguationLint;
 use symphonize::clippy::lints::suspicious_remix::SuspiciousRemixLint;
-use tracing::info;
 use tuillez::formatter::FormatWithAsync;
 
 use crate::ALISTRAL_CLIENT;
@@ -29,10 +32,6 @@ use crate::utils::whitelist_blacklist::WhitelistBlacklist;
 pub struct MusicbrainzClippyCommand {
     /// The MBID of a recording to start from
     pub start_mbid: Option<String>,
-
-    /// Whether to check FILO (first in, last out) instead of FIFO (first in, first out)
-    #[arg(short, long)]
-    pub new_first: bool,
 
     /// List of lints that should only be checked (Note: Put this argument last or before another argument)
     #[arg(short, long, num_args = 0..)]
@@ -60,14 +59,13 @@ impl MusicbrainzClippyCommand {
 
         mb_clippy(
             &read_mbid_from_input(&mbid).expect("Couldn't read mbid"),
-            self.new_first,
             &filter,
         )
         .await;
     }
 }
 
-pub async fn mb_clippy(start_mbid: &str, new_first: bool, filter: &WhitelistBlacklist<String>) {
+pub async fn mb_clippy(start_mbid: &str, filter: &WhitelistBlacklist<String>) {
     let conn = &mut ALISTRAL_CLIENT
         .musicbrainz_db
         .get_raw_connection()
@@ -79,55 +77,58 @@ pub async fn mb_clippy(start_mbid: &str, new_first: bool, filter: &WhitelistBlac
         .unwrap()
         .expect("Couldn't find MBID");
 
-    let mut queue = VecDeque::new();
-    queue.push_back(MainEntity::Recording(start_node));
-    let mut seen = Vec::new();
+    let crawler = crawler(
+        ALISTRAL_CLIENT.musicbrainz_db.clone(),
+        Arc::new(MainEntity::Recording(start_node)),
+    );
 
-    while let Some(mut entity) = get_new_element(&mut queue, new_first) {
-        if seen
-            .iter()
-            .any(|done: &MainEntity| done.is_equal_by_mbid(&entity))
-        {
-            continue;
-        }
+    let crawler = crawler
+        .inspect(|_| {})
+        .map_ok(|entity| check_entity(filter, entity))
+        .extract_future_ok()
+        .buffer_unordered(8);
 
-        entity
-            .refetch_and_load(conn, &ALISTRAL_CLIENT.musicbrainz_db)
-            .await
-            .expect("Couldn't fetch entity");
+    pin_mut!(crawler);
 
-        check_lint::<MissingWorkLint>(conn, &mut entity, filter).await;
-        check_lint::<MissingBarcodeLint>(conn, &mut entity, filter).await;
-        check_lint::<SuspiciousRemixLint>(conn, &mut entity, filter).await;
-        check_lint::<MissingRemixRelLint>(conn, &mut entity, filter).await;
-        check_lint::<MissingRemixerRelLint>(conn, &mut entity, filter).await;
-        check_lint::<SoundtrackWithoutDisambiguationLint>(conn, &mut entity, filter).await;
-
-        println!(
-            "Checked {}",
-            entity
-                .format_with_async(&MUSIBRAINZ_FMT)
-                .await
-                .expect("Error while formating the name of the entity")
-        );
-        println!();
-
-        get_new_nodes(conn, &entity, &mut queue)
-            .await
-            .expect("Couldn't get new items to process");
-
-        seen.push(entity);
-    }
+    while let Some(_entity) = crawler
+        .try_next()
+        .await
+        .expect("Couldn't get the next item")
+    {}
 
     println!("No more data to process");
 }
 
-fn get_new_element(queue: &mut VecDeque<MainEntity>, new_first: bool) -> Option<MainEntity> {
-    if new_first {
-        queue.pop_front()
-    } else {
-        queue.pop_back()
-    }
+async fn check_entity(filter: &WhitelistBlacklist<String>, entity: Arc<MainEntity>) {
+    let conn = &mut ALISTRAL_CLIENT
+        .musicbrainz_db
+        .clone()
+        .get_raw_connection_as_task()
+        .await
+        .expect("Couldn't acquire a connection");
+
+    let mut entity = entity.as_ref().to_owned();
+
+    entity
+        .refetch_and_load(conn, &ALISTRAL_CLIENT.musicbrainz_db)
+        .await
+        .expect("Couldn't fetch entity");
+
+    check_lint::<MissingWorkLint>(conn, &mut entity, filter).await;
+    check_lint::<MissingBarcodeLint>(conn, &mut entity, filter).await;
+    check_lint::<SuspiciousRemixLint>(conn, &mut entity, filter).await;
+    check_lint::<MissingRemixRelLint>(conn, &mut entity, filter).await;
+    check_lint::<MissingRemixerRelLint>(conn, &mut entity, filter).await;
+    check_lint::<SoundtrackWithoutDisambiguationLint>(conn, &mut entity, filter).await;
+
+    println!(
+        "Checked {}",
+        entity
+            .format_with_async(&MUSIBRAINZ_FMT)
+            .await
+            .expect("Error while formating the name of the entity")
+    );
+    println!();
 }
 
 async fn check_lint<L: MbClippyLint>(
@@ -191,59 +192,6 @@ async fn check_lint<L: MbClippyLint>(
         .refetch_and_load(conn, &ALISTRAL_CLIENT.musicbrainz_db)
         .await
         .expect("Couldn't fetch entity");
-}
-
-async fn get_new_nodes(
-    conn: &mut sqlx::SqliteConnection,
-    entity: &MainEntity,
-    queue: &mut VecDeque<MainEntity>,
-) -> Result<(), crate::Error> {
-    info!("Getting new data...");
-
-    match entity {
-        MainEntity::Recording(val) => {
-            let artists = val
-                .get_artists_or_fetch(conn, &ALISTRAL_CLIENT.musicbrainz_db)
-                .await?;
-            for artist in artists {
-                queue.push_front(MainEntity::Artist(artist));
-            }
-
-            let releases = val
-                .get_releases_or_fetch(conn, &ALISTRAL_CLIENT.musicbrainz_db)
-                .await?;
-            for release in releases {
-                queue.push_front(MainEntity::Release(release));
-            }
-
-            let works = val
-                .get_works_or_fetch(conn, &ALISTRAL_CLIENT.musicbrainz_db)
-                .await?;
-            for work in works {
-                queue.push_front(MainEntity::Work(work));
-            }
-        }
-        MainEntity::Release(val) => {
-            let recordings = val
-                .get_recordings_or_fetch(conn, &ALISTRAL_CLIENT.musicbrainz_db)
-                .await?;
-            for recording in recordings {
-                queue.push_front(MainEntity::Recording(recording));
-            }
-        }
-        MainEntity::Artist(val) => {
-            let recordings: Vec<Recording> = val
-                .browse_or_fetch_artist_recordings(conn, ALISTRAL_CLIENT.musicbrainz_db.clone())
-                .try_collect()
-                .await?;
-            for recording in recordings {
-                queue.push_front(MainEntity::Recording(recording));
-            }
-        }
-        _ => {}
-    }
-
-    Ok(())
 }
 
 // #[cfg(test)]

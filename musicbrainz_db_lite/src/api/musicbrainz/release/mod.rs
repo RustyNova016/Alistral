@@ -1,4 +1,5 @@
 use musicbrainz_rs_nova::entity::release::Release as MBRelease;
+use sqlx::Acquire;
 use sqlx::SqliteConnection;
 
 use crate::models::musicbrainz::artist_credit::ArtistCredits;
@@ -59,33 +60,35 @@ impl Release {
         conn: &mut SqliteConnection,
         value: MBRelease,
     ) -> Result<Self, crate::Error> {
-        let mut new_value = Release::save_api_response(conn, value.clone()).await?;
+        let mut conn = conn.begin().await?;
+
+        let mut new_value = Release::save_api_response(&mut conn, value.clone()).await?;
 
         // Save relations
         if let Some(artist_credits) = value.artist_credit.clone() {
-            let credits = ArtistCredits::save_api_response(conn, artist_credits).await?;
-            new_value.set_artist_credits(conn, credits.0).await?;
+            let credits = ArtistCredits::save_api_response(&mut conn, artist_credits).await?;
+            new_value.set_artist_credits(&mut conn, credits.0).await?;
         }
 
         if let Some(values) = value.media.clone() {
-            Media::save_api_response(conn, values, new_value.id).await?;
+            Media::save_api_response(&mut conn, values, new_value.id).await?;
         }
 
         if let Some(values) = value.label_info {
-            LabelInfo::save_api_response(conn, values, new_value.id).await?;
+            LabelInfo::save_api_response(&mut conn, values, new_value.id).await?;
         }
 
         if let Some(release_group) = value.release_group.clone() {
-            let release_group = ReleaseGroup::save_api_response(conn, release_group).await?;
+            let release_group = ReleaseGroup::save_api_response(&mut conn, release_group).await?;
             new_value.release_group = Some(release_group.id);
-            new_value.upsert(conn).await?;
+            new_value.upsert(&mut conn).await?;
         }
 
         if let Some(relations) = value.relations {
             // Remove all the old relations
-            new_value.delete_all_relations(conn).await?;
+            new_value.delete_all_relations(&mut conn).await?;
             for rel in relations {
-                match new_value.save_relation(conn, rel).await {
+                match new_value.save_relation(&mut conn, rel).await {
                     Ok(_) => {}
                     Err(Error::RelationNotImplemented) => {}
                     Err(err) => {
@@ -97,15 +100,17 @@ impl Release {
 
         if let Some(tags) = value.tags {
             for tag in tags {
-                Tag::save_api_response::<Self>(conn, tag, &new_value).await?;
+                Tag::save_api_response::<Self>(&mut conn, tag, &new_value).await?;
             }
         }
 
         if let Some(genres) = value.genres {
             for genre in genres {
-                GenreTag::save_api_response::<Self>(conn, genre, &new_value).await?;
+                GenreTag::save_api_response::<Self>(&mut conn, genre, &new_value).await?;
             }
         }
+
+        conn.commit().await?;
 
         Ok(new_value)
     }

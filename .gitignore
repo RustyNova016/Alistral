@@ -3,3 +3,4 @@
 debug_db.db
 .env
 .envrc
+temp.db

@@ -1,3 +1,4 @@
+#[derive(Clone)]
 pub enum WhitelistBlacklist<T> {
     WhiteList(Vec<T>),
     BlackList(Vec<T>),

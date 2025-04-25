@@ -1,4 +1,10 @@
 pub mod fetching;
+
+use musicbrainz_rs_nova::entity::recording::Recording as MBRecording;
+use musicbrainz_rs_nova::entity::release::Release as MBRelease;
+use sqlx::Acquire;
+use sqlx::SqliteConnection;
+
 use crate::models::musicbrainz::genre::genre_tag::GenreTag;
 use crate::models::musicbrainz::tags::Tag;
 use crate::models::shared_traits::completeness::CompletenessFlag;
@@ -13,9 +19,6 @@ use crate::{
     },
     utils::date_utils::date_to_timestamp,
 };
-use musicbrainz_rs_nova::entity::recording::Recording as MBRecording;
-use musicbrainz_rs_nova::entity::release::Release as MBRelease;
-use sqlx::SqliteConnection;
 
 impl Recording {
     pub async fn save_api_response(
@@ -54,32 +57,34 @@ impl Recording {
         conn: &mut SqliteConnection,
         value: MBRecording,
     ) -> Result<Self, crate::Error> {
+        let mut conn = conn.begin().await?;
+
         // Save the recording
-        let mut new_value = Recording::save_api_response(&mut *conn, value.clone()).await?;
+        let mut new_value = Recording::save_api_response(&mut conn, value.clone()).await?;
 
         // Save relations
         if let Some(artist_credits) = value.artist_credit.clone() {
-            let credits = ArtistCredits::save_api_response(conn, artist_credits).await?;
-            new_value.set_artist_credits(conn, credits.0).await?;
+            let credits = ArtistCredits::save_api_response(&mut conn, artist_credits).await?;
+            new_value.set_artist_credits(&mut conn, credits.0).await?;
         }
 
         if let Some(releases) = value.releases.clone() {
             for release in releases {
                 let gids = get_track_gids_from_release(release.clone());
-                Release::save_api_response_recursive(conn, release).await?;
+                Release::save_api_response_recursive(&mut conn, release).await?;
 
                 for gid in gids {
                     //TODO: Improve flow to prevent updating after insert, thus making `tracks`.`recording` non optional
-                    Track::set_recording_id_from_gid(conn, new_value.id, &gid).await?;
+                    Track::set_recording_id_from_gid(&mut conn, new_value.id, &gid).await?;
                 }
             }
         }
 
         if let Some(relations) = value.relations {
             // Remove all the old relations
-            new_value.delete_all_relations(conn).await?;
+            new_value.delete_all_relations(&mut conn).await?;
             for rel in relations {
-                match new_value.save_relation(conn, rel).await {
+                match new_value.save_relation(&mut conn, rel).await {
                     Ok(_) => {}
                     Err(Error::RelationNotImplemented) => {}
                     Err(err) => {
@@ -91,15 +96,17 @@ impl Recording {
 
         if let Some(tags) = value.tags {
             for tag in tags {
-                Tag::save_api_response::<Self>(conn, tag, &new_value).await?;
+                Tag::save_api_response::<Self>(&mut conn, tag, &new_value).await?;
             }
         }
 
         if let Some(genres) = value.genres {
             for genre in genres {
-                GenreTag::save_api_response::<Self>(conn, genre, &new_value).await?;
+                GenreTag::save_api_response::<Self>(&mut conn, genre, &new_value).await?;
             }
         }
+
+        conn.commit().await?;
 
         Ok(new_value)
     }

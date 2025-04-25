@@ -15,15 +15,18 @@ pub mod testing;
 pub mod tools;
 pub mod utils;
 
-use crate::interface::tracing::init_tracer;
 pub use crate::models::client::ALISTRAL_CLIENT;
-use crate::models::client::AlistralCliClient;
 pub use crate::models::error::Error;
+
+use crate::interface::tracing::init_tracer;
+use crate::models::client::AlistralCliClient;
 
 #[tokio::main]
 async fn main() {
+    dotenvy::dotenv().unwrap();
     let cli = Cli::parse();
     init_tracer(&cli);
+    //console_subscriber::init();
 
     if run_cli(cli).await {
         post_run().await

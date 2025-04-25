@@ -14,3 +14,10 @@ pub(crate) fn strip_quotes(mut string: String) -> String {
 
     string
 }
+
+pub async fn force_write_transaction(conn: &mut sqlx::SqliteConnection) {
+    sqlx::query("UPDATE `_sqlx_migrations` SET version = 99 WHERE version = 0 ")
+        .execute(conn)
+        .await
+        .unwrap();
+}

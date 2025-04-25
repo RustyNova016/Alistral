@@ -1,4 +1,5 @@
 use deadpool::managed::PoolError;
+use futures::channel::mpsc::SendError;
 use thiserror::Error;
 
 use crate::api::listenbrainz::listen::fetching::query::ListenFetchQueryError;
@@ -47,4 +48,7 @@ pub enum Error {
 
     #[error("Listenbrainz returned an error while fetching listens: {0}")]
     ListenFetchingError(String),
+
+    #[error(transparent)]
+    SendError(#[from] SendError),
 }
