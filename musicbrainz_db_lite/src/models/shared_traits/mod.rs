@@ -1,3 +1,4 @@
+pub mod get_or_fetch;
 pub mod fetch_and_save;
 pub mod fetch_mbid;
 pub mod find_by;
