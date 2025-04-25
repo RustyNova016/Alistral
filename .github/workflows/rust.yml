@@ -36,40 +36,10 @@ jobs:
       - uses: taiki-e/install-action@cargo-hack
 
       - name: Build tests
-        run: cargo hack build --feature-powerset  --ignore-private
+        run: cargo hack build --ignore-private
         
       - name: Run tests
-        run: cargo hack test --feature-powerset  --ignore-private
-
-  # unstable_tests:
-  #   env: 
-  #     SQLX_OFFLINE: true
-  #   runs-on: ${{ matrix.os }}
-  #   needs: stable_tests
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       rust: [beta, nightly]
-  #       os:
-  #         - windows-latest
-  #         - ubuntu-latest
-  #         - macos-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-
-  #     - run: rustup toolchain install stable --profile minimal --no-self-update
-
-  #     - uses: Swatinem/rust-cache@v2
-  #       with: 
-  #         key: "(${{ matrix.rust }} - ${{ matrix.os }})"
-
-  #     - uses: taiki-e/install-action@cargo-hack
-
-  #     - name: Build tests
-  #       run: cargo hack build --feature-powerset  --ignore-private
-        
-  #     - name: Run tests
-  #       run: cargo hack test --feature-powerset  --ignore-private
+        run: cargo hack test --ignore-private
 
   clippy:
     env: 
@@ -86,8 +56,10 @@ jobs:
 
       - uses: Swatinem/rust-cache@v2
 
+      - uses: taiki-e/install-action@cargo-hack
+
       - name: Run clippy
-        run: cargo clippy -- -D warnings
+        run: cargo hack clippy --feature-powerset -- -D warnings
 
   docs:
     name: Documentation
@@ -124,13 +96,36 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+
     - uses: Swatinem/rust-cache@v2
+
     - name: Install Rust
       uses: dtolnay/rust-toolchain@stable
+
     - name: Install cargo-msrv
       run: cargo install cargo-msrv --all-features
+
     - name: Run cargo-msrv
       run: cargo msrv verify --output-format json
+
     - name: Run cargo-msrv on verification failure
       if: ${{ failure() }}
       run: cargo msrv find --output-format json
+
+  
+  minimum_versions:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: dtolnay/rust-toolchain@nightly
+    - uses: Swatinem/rust-cache@v2
+    - uses: taiki-e/install-action@cargo-hack
+    - uses: taiki-e/install-action@cargo-minimal-versions
+    - run: cargo minimal-versions check --direct
+
+  semver_checks:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Check semver
+      uses: obi1kenobi/cargo-semver-checks-action@v2
