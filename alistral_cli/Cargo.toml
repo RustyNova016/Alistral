@@ -1,0 +1,80 @@
+[package]
+name = "alistral"
+version = "0.5.7"
+edition = "2024"
+repository = "https://github.com/RustyNova016/alistral"
+publish = true
+license = "MIT"
+description = "A CLI app containing a set of useful tools for Listenbrainz"
+rust-version = "1.85.1"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+# Workspace dependencies
+alistral_core = { path = "../alistral_core" }
+interzic = { path = "../interzic" }
+tuillez = { path = "../tuillez" }
+musicbrainz-db-lite = { path = "../musicbrainz_db_lite", features = ["pretty_format"] }
+symphonize = { path = "../symphonize" }
+
+# Musicbrainz dependencies
+#listenbrainz = "0.8.1"
+listenbrainz = { branch = "alistral_version", git = "https://github.com/RustyNova016/listenbrainz-rs.git", default-features = false, features = ["tls-native"]}
+
+derive_builder = "0.20.2"
+inquire = "0.7.5"
+itertools = "0.14.0"
+color-eyre = "0.6.3"
+rust_decimal = "1.36.0"
+rust_decimal_macros = "1.36.0"
+clap = { version = "4.5.37", features = [
+    "unicode",
+    "wrap_help",
+    "derive",
+    "color",
+] }
+clap_complete = "4.5.47"
+chrono = "0.4.40"
+serde = { version = "1.0.219", features = ["rc"] }
+serde_json = "1.0.140"
+extend = "1.2.0"
+directories = "6.0.0"
+indicatif = { version = "0.17.11", features = [
+    "rayon",
+    "improved_unicode",
+    "futures",
+] }
+tokio = { version = "1.44.2", features = ["full"] }
+rayon = "1.10.0"
+reqwest = { version = "0.12.13", features = ["json"] }
+rand = "0.8.5"
+thiserror = "2.0.12"
+derive_more = { version = "2.0.1", features = ["full"] }
+derive-new = "0.7.0"
+derive-getters = "0.5.0"
+futures = "0.3.31"
+regex = "1.11.1"
+clap-markdown = "0.1.4"
+serial_test = "3.2.0"
+sqlx = { version = "0.8.5", features = ["runtime-tokio", "macros"] }
+tracing = "0.1.41"
+tracing-subscriber = "0.3.19"
+macon = "1.3.0"
+async-fn-stream = "0.2.2"
+zip = "2.6.0"
+indoc = "2.0.6"
+strsim = "0.11.1"
+strum_macros = "0.27.1"
+tracing-indicatif = "0.3.9"
+clap-verbosity-flag = { version = "3.0.2", default-features = false, features = ["tracing"] }
+dotenvy = "0.15.7"
+streamies = "0.2.2"
+
+# The profile that 'cargo dist' will build with
+[profile.dist]
+inherits = "release"
+lto = "thin"
+
+[lints.rust]
+async_fn_in_trait = { level = "allow", priority = 1 }
