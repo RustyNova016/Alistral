@@ -35,7 +35,7 @@ impl managed::Manager for RawPoolManager {
     }
 }
 
-/// A connection pool of raw `SqliteConnection`. Prefer using [`DBLitePool`] instead
+/// A connection pool of raw `SqliteConnection`.
 pub type RawConnectionPool = managed::Pool<RawPoolManager>;
 
 pub type RawPoolError = PoolError<sqlx::Error>;
