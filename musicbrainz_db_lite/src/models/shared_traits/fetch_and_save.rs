@@ -1,14 +1,16 @@
 use core::future::Future;
 use std::sync::Arc;
 
+use crate::models::shared_traits::completeness::CompletenessFlag;
 use crate::models::shared_traits::fetch_mbid::FetchMBID;
 use crate::models::shared_traits::save_from::SaveFrom;
+use crate::models::shared_traits::HasMBID;
 use crate::DBClient;
 use crate::RowId;
 
 pub trait FetchAndSave<U>
 where
-    Self: Sized + FetchMBID<U> + SaveFrom<U> + RowId,
+    Self: Sized + FetchMBID<U> + SaveFrom<U> + RowId + CompletenessFlag,
     U: Send,
 {
     /// Fetch save an entity using a premade connection
@@ -94,16 +96,57 @@ where
         }
     }
 
-    /// Reset the "full update" date in the database. This should only be called after a full update of the entity.
-    fn set_full_update(
-        &mut self,
-        conn: &mut sqlx::SqliteConnection,
-    ) -> impl Future<Output = Result<(), sqlx::Error>> + Send;
-
     /// Set the MBID redirection from a given MBID to the current entity's rowid
     fn set_redirection(
         conn: &mut sqlx::SqliteConnection,
         mbid: &str,
         id: i64,
     ) -> impl Future<Output = Result<(), sqlx::Error>> + Send;
+
+    // Refresh the data in the database by refetching the entity, using an existing connection
+    fn refetch_with_conn(
+        &self,
+        conn: &mut sqlx::SqliteConnection,
+        client: &crate::DBClient,
+    ) -> impl std::future::Future<Output = Result<Self, crate::Error>> + Send
+    where
+        Self: HasMBID + Send + Sync,
+    {
+        async {
+            Self::fetch_and_save_with_conn(conn, client, self.get_mbid())
+                .await?
+                .ok_or(crate::Error::UnknownUpstream(self.get_mbid().to_string()))
+        }
+    }
+
+    // Refresh the data in the database by refetching the entity, using the client's connection pool
+    fn refetch_with_pool(
+        &self,
+        client: &crate::DBClient,
+    ) -> impl std::future::Future<Output = Result<Self, crate::Error>> + Send
+    where
+        Self: HasMBID + Send + Sync,
+    {
+        async {
+            Self::fetch_and_save_with_pool(client, self.get_mbid())
+                .await?
+                .ok_or(crate::Error::UnknownUpstream(self.get_mbid().to_string()))
+        }
+    }
+
+    // Refresh the data in the database by refetching the entity, using a tokio task for **saving** the entity to the database. Fetching remains a regular future
+    fn refetch_as_task(
+        &self,
+        client: Arc<crate::DBClient>,
+    ) -> impl std::future::Future<Output = Result<Self, crate::Error>> + Send
+    where
+        Self: HasMBID + Send + Sync + 'static,
+        U: 'static,
+    {
+        async {
+            Self::fetch_and_save_as_task(client, self.get_mbid())
+                .await?
+                .ok_or(crate::Error::UnknownUpstream(self.get_mbid().to_string()))
+        }
+    }
 }

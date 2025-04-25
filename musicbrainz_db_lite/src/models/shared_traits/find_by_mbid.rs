@@ -7,8 +7,6 @@ pub trait FindByMBID: Sized {
         conn: &mut sqlx::SqliteConnection,
         id: &str,
     ) -> impl std::future::Future<Output = Result<Option<Self>, crate::Error>> + Send;
-
-    
 }
 
 pub struct MBID(String);

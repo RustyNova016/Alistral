@@ -3,6 +3,7 @@ pub mod fetching;
 use crate::models::musicbrainz::genre::genre_tag::GenreTag;
 use crate::models::musicbrainz::tags::Tag;
 use crate::models::musicbrainz::{label::Label, release::Release};
+use crate::models::shared_traits::completeness::CompletenessFlag;
 use crate::models::shared_traits::fetch_and_save::FetchAndSave;
 use crate::models::shared_traits::save_from::SaveFrom;
 use crate::Error;
@@ -92,12 +93,18 @@ impl FetchAndSave<MBLabel> for Label {
     ) -> Result<(), sqlx::Error> {
         Self::set_redirection(conn, mbid, id).await
     }
+}
 
+impl CompletenessFlag for Label {
     async fn set_full_update(
         &mut self,
         conn: &mut sqlx::SqliteConnection,
     ) -> Result<(), sqlx::Error> {
         self.reset_full_update_date(conn).await
+    }
+
+    fn is_complete(&self) -> bool {
+        self.full_update_date.is_some()
     }
 }
 
