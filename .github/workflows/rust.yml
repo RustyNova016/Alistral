@@ -34,9 +34,6 @@ jobs:
           key: "(${{ matrix.os }})"
 
       - uses: taiki-e/install-action@cargo-hack
-
-      - name: Build tests
-        run: cargo hack build --ignore-private
         
       - name: Run tests
         run: cargo hack test --ignore-private
@@ -106,14 +103,12 @@ jobs:
       run: cargo install cargo-msrv --all-features
 
     - name: Run cargo-msrv
-      run: cargo msrv verify --output-format json
-
-    - name: Run cargo-msrv on verification failure
-      if: ${{ failure() }}
-      run: cargo msrv find --output-format json
+      run: /bin/bash ./scripts/ci/msrv.sh
 
   
   minimum_versions:
+    env: 
+      SQLX_OFFLINE: true
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -121,11 +116,27 @@ jobs:
     - uses: Swatinem/rust-cache@v2
     - uses: taiki-e/install-action@cargo-hack
     - uses: taiki-e/install-action@cargo-minimal-versions
-    - run: cargo minimal-versions check --direct
+    - name: Run cargo-minimal-versions
+      run: /bin/bash ./scripts/ci/minimum_versions.sh
 
   semver_checks:
+    env: 
+      SQLX_OFFLINE: true
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Check semver
-      uses: obi1kenobi/cargo-semver-checks-action@v2
+    - name: Install cargo-semver-checks
+      run: cargo install cargo-semver-checks --locked
+    - name: Run cargo-semver-checks
+      run: /bin/bash ./scripts/ci/sem_ver.sh
+
+  dependancies:
+    env: 
+      SQLX_OFFLINE: true
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install cargo-machete
+      run: cargo install cargo-machete --locked
+    - name: Run cargo-machete
+      run: /bin/bash ./scripts/ci/udeps.sh

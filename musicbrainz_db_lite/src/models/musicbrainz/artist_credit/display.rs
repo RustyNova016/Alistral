@@ -1,4 +1,5 @@
 use core::fmt::Display;
+#[cfg(feature = "pretty_format")]
 use core::fmt::Write;
 
 #[cfg(feature = "pretty_format")]

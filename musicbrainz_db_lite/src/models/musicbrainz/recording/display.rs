@@ -3,6 +3,7 @@ use tuillez::formatter::FormatWithAsync;
 
 #[cfg(feature = "pretty_format")]
 use crate::models::musicbrainz::MusicbrainzFormater;
+#[cfg(feature = "pretty_format")]
 use crate::models::musicbrainz::recording::Recording;
 
 #[cfg(feature = "pretty_format")]

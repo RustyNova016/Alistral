@@ -1,18 +1,22 @@
 //TODO: Proper Rate Limiter
 //pub mod rate_limiter;
-pub mod api;
-pub mod query;
+
 use chrono::DateTime;
 use chrono::Utc;
 use listenbrainz::raw::Client;
+
 use tracing::info;
 use tracing::instrument;
+
 use tuillez::pg_spinner;
 
 use crate::DBClient;
 use crate::Error;
 use crate::api::listenbrainz::listen_collection::SaveListenPayload;
 use crate::models::listenbrainz::listen::Listen;
+
+pub mod api;
+pub mod query;
 
 impl Listen {
     /// Fetch the latest listens for the provided user. If the user has no listens, it will do a full listen fetch.

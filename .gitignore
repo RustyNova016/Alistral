@@ -1,4 +1,11 @@
 /target
+/alistral_cli/target
+/alistral_core/target
+/interzic/target
+/musicbrainz_db_lite/target
+/symphonize/target
+/tuillez/target
+
 /.vscode
 debug_db.db
 .env
