@@ -68,3 +68,4 @@ impl HasTable for Recording {
 
 impl HasTags for Recording {}
 impl HasGenres for Recording {}
+impl crate::MBIDRedirection for Recording {}

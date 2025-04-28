@@ -45,3 +45,4 @@ impl HasTable for Work {
 
 impl HasTags for Work {}
 impl HasGenres for Work {}
+impl crate::MBIDRedirection for Work {}
