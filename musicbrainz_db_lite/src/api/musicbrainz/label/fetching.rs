@@ -1,4 +1,4 @@
-use musicbrainz_rs_nova::{entity::label::Label as MBLabel, Fetch};
+use musicbrainz_rs_nova::{Fetch, entity::label::Label as MBLabel};
 
 use crate::database::client::DBClient;
 use crate::models::musicbrainz::label::Label;

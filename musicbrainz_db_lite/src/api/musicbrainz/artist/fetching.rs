@@ -1,12 +1,12 @@
-use musicbrainz_rs_nova::entity::artist::Artist as MBArtist;
 use musicbrainz_rs_nova::Fetch;
+use musicbrainz_rs_nova::entity::artist::Artist as MBArtist;
 use sqlx::SqliteConnection;
 
+use crate::Error;
 use crate::database::client::DBClient;
 use crate::models::musicbrainz::artist::Artist;
 use crate::models::shared_traits::fetch_and_save::FetchAndSave;
 use crate::models::shared_traits::fetch_mbid::FetchMBID;
-use crate::Error;
 
 impl FetchMBID<MBArtist> for Artist {
     async fn fetch_from_mbid(

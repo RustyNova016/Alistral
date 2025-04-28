@@ -1,5 +1,5 @@
 macro_rules! impl_artist_credits {
-    ($row_struct: ty, $entity_table_name: expr) => {
+    ($row_struct: ty, $entity_table_name: expr_2021) => {
         impl $row_struct {
             pub async fn get_artist_credits(
                 &self,

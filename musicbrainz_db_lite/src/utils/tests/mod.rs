@@ -10,7 +10,10 @@ pub struct RelationAssertion<'l> {
 impl RelationAssertion<'_> {
     pub fn assert_has_element_with_mbid<T: HasMBID>(&self, items: &[T]) {
         if items.iter().all(|i| i.get_mbid() != self.right_id) {
-            panic!("Assertion `has_element_with_mbid` failed. All elements provided lacks the MBID \"{}\"", self.right_id);
+            panic!(
+                "Assertion `has_element_with_mbid` failed. All elements provided lacks the MBID \"{}\"",
+                self.right_id
+            );
         }
     }
 
@@ -33,6 +36,8 @@ impl RelationAssertion<'_> {
 
 pub fn assert_has_element_with_mbid<T: HasMBID>(items: &[T], mbid: &str) {
     if items.iter().all(|i| i.get_mbid() != mbid) {
-        panic!("Assertion `has_element_with_mbid` failed. All elements provided lacks the MBID \"{mbid}\"");
+        panic!(
+            "Assertion `has_element_with_mbid` failed. All elements provided lacks the MBID \"{mbid}\""
+        );
     }
 }

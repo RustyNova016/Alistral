@@ -1,10 +1,10 @@
 pub mod save_relations;
 use musicbrainz_rs_nova::entity::relations::Relation as MBRelation;
 
-use crate::models::musicbrainz::relations::traits::HasRelation;
-use crate::models::musicbrainz::relations::Relation;
-use crate::utils::date_utils::date_to_timestamp;
 use crate::RowId;
+use crate::models::musicbrainz::relations::Relation;
+use crate::models::musicbrainz::relations::traits::HasRelation;
+use crate::utils::date_utils::date_to_timestamp;
 
 impl<T, U> Relation<T, U>
 where

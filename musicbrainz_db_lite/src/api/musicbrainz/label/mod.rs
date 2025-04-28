@@ -1,12 +1,12 @@
 pub mod fetching;
 
+use crate::Error;
 use crate::models::musicbrainz::genre::genre_tag::GenreTag;
 use crate::models::musicbrainz::tags::Tag;
 use crate::models::musicbrainz::{label::Label, release::Release};
 use crate::models::shared_traits::completeness::CompletenessFlag;
 use crate::models::shared_traits::fetch_and_save::FetchAndSave;
 use crate::models::shared_traits::save_from::SaveFrom;
-use crate::Error;
 use musicbrainz_rs_nova::entity::label::Label as MBLabel;
 use sqlx::SqliteConnection;
 

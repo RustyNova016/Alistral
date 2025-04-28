@@ -1,21 +1,21 @@
 use core::future::ready;
 use std::sync::Arc;
 
-use futures::channel::mpsc::channel;
-use futures::channel::mpsc::unbounded;
-use futures::channel::mpsc::Sender;
-use futures::channel::mpsc::UnboundedReceiver;
-use futures::channel::mpsc::UnboundedSender;
-use futures::stream::select;
 use futures::FutureExt;
 use futures::SinkExt as _;
 use futures::Stream;
 use futures::StreamExt;
 use futures::TryStreamExt;
+use futures::channel::mpsc::Sender;
+use futures::channel::mpsc::UnboundedReceiver;
+use futures::channel::mpsc::UnboundedSender;
+use futures::channel::mpsc::channel;
+use futures::channel::mpsc::unbounded;
+use futures::stream::select;
 use streamies::Streamies as _;
 
-use crate::models::musicbrainz::main_entities::MainEntity;
 use crate::DBClient;
+use crate::models::musicbrainz::main_entities::MainEntity;
 
 pub fn crawler(
     client: Arc<DBClient>,

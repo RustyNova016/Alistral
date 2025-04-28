@@ -1,9 +1,9 @@
 use musicbrainz_rs_nova::entity::genre::Genre as MBGenre;
 
-use crate::models::musicbrainz::genre::genre_tag::GenreTag;
-use crate::models::musicbrainz::genre::Genre;
-use crate::models::shared_traits::has_genre::HasGenres;
 use crate::RowId;
+use crate::models::musicbrainz::genre::Genre;
+use crate::models::musicbrainz::genre::genre_tag::GenreTag;
+use crate::models::shared_traits::has_genre::HasGenres;
 
 impl Genre {
     pub async fn save_api_response(

@@ -1,8 +1,8 @@
-use sqlx::sqlite::SqliteRow;
 use sqlx::FromRow;
+use sqlx::sqlite::SqliteRow;
 
-use crate::models::musicbrainz::relations::traits::HasRelation;
 use crate::models::musicbrainz::relations::Relation;
+use crate::models::musicbrainz::relations::traits::HasRelation;
 use crate::models::shared_traits::has_table::HasTable;
 
 impl<T, U> Relation<T, U>

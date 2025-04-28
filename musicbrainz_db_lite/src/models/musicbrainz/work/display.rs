@@ -1,7 +1,7 @@
 use tuillez::formatter::FormatWithAsync;
 
-use crate::models::musicbrainz::work::Work;
 use crate::models::musicbrainz::MusicbrainzFormater;
+use crate::models::musicbrainz::work::Work;
 
 impl Work {
     #[cfg(feature = "pretty_format")]

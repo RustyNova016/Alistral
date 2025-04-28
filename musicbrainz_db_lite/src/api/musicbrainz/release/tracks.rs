@@ -1,5 +1,5 @@
 use musicbrainz_rs_nova::entity::release::Track as MBTrack;
-use sqlx::{sqlite::SqliteQueryResult, SqliteConnection};
+use sqlx::{SqliteConnection, sqlite::SqliteQueryResult};
 
 use crate::models::musicbrainz::{
     artist_credit::ArtistCredits, recording::Recording, release::Track,

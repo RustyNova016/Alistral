@@ -1,12 +1,12 @@
 use std::sync::Arc;
 
-use futures::channel::mpsc::Sender;
 use futures::SinkExt as _;
+use futures::channel::mpsc::Sender;
 use sqlx::SqliteConnection;
 
-use crate::models::musicbrainz::main_entities::MainEntity;
 use crate::DBClient;
 use crate::FetchAsComplete;
+use crate::models::musicbrainz::main_entities::MainEntity;
 
 use super::Media;
 use super::Release;

@@ -12,17 +12,17 @@ use governor::RateLimiter;
 use listenbrainz::raw::response::UserListensListen;
 use sqlx::Acquire;
 use thiserror::Error;
+use tracing::Span;
 use tracing::debug;
 use tracing::instrument;
-use tracing::Span;
 use tuillez::pg_counted;
 use tuillez::pg_inc;
 use tuillez::pg_spinner;
 use tuillez::tracing_indicatif::span_ext::IndicatifSpanExt;
 
+use crate::DBClient;
 use crate::api::listenbrainz::listen::fetching::api::fetch_user_listens;
 use crate::models::listenbrainz::listen::Listen;
-use crate::DBClient;
 
 pub struct ListenFetchAPIQuery {
     user: String,

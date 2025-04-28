@@ -1,7 +1,7 @@
 pub mod artist_credits;
 pub mod get_and_fetch;
 macro_rules! impl_redirections {
-    ($row_struct: ty, $entity_table_name: expr) => {
+    ($row_struct: ty, $entity_table_name: expr_2021) => {
         impl $row_struct {
             /// Add an mbid in the redirect pool if it isn't in yet.
             pub async fn add_redirect_mbid(

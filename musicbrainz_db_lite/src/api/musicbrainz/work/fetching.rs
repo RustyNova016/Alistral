@@ -1,11 +1,11 @@
-use musicbrainz_rs_nova::entity::work::Work as MBWork;
 use musicbrainz_rs_nova::Fetch;
+use musicbrainz_rs_nova::entity::work::Work as MBWork;
 
+use crate::Error;
 use crate::database::client::DBClient;
 use crate::models::musicbrainz::work::Work;
 use crate::models::shared_traits::fetch_and_save::FetchAndSave;
 use crate::models::shared_traits::fetch_mbid::FetchMBID;
-use crate::Error;
 
 impl FetchMBID<MBWork> for Work {
     async fn fetch_from_mbid(

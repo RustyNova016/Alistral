@@ -1,9 +1,9 @@
 use sqlx::prelude::FromRow;
 use tuillez::formatter::FormatWithAsync;
 
+use crate::RowId;
 use crate::models::musicbrainz::MusicbrainzFormater;
 use crate::models::shared_traits::has_tags::HasTags;
-use crate::RowId;
 
 pub mod query;
 

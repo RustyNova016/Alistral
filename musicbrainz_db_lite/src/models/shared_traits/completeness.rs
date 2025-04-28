@@ -1,8 +1,8 @@
 use core::future::Future;
 use std::sync::Arc;
 
-use crate::models::shared_traits::get_or_fetch::GetOrFetch;
 use crate::models::shared_traits::HasMBID;
+use crate::models::shared_traits::get_or_fetch::GetOrFetch;
 
 pub trait CompletenessFlag {
     /// Reset the "full update" date in the database. This should only be called after a full update of the entity.

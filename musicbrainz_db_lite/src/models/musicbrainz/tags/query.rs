@@ -1,9 +1,9 @@
 use itertools::Itertools as _;
 
+use crate::RowId;
 use crate::models::musicbrainz::tags::Tag;
 use crate::models::shared_traits::has_tags::HasTags;
 use crate::utils::sqlx_utils::entity_relations::JoinRelation;
-use crate::RowId;
 
 impl Tag {
     pub async fn query_batch<T>(

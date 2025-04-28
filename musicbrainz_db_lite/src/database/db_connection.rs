@@ -2,11 +2,11 @@ use std::sync::Arc;
 
 use async_fn_stream::try_fn_stream;
 use futures::TryStreamExt as _;
-use sqlx::sqlite::SqliteConnectOptions;
 use sqlx::Connection as _;
 use sqlx::Executor;
 use sqlx::Sqlite;
 use sqlx::SqliteConnection;
+use sqlx::sqlite::SqliteConnectOptions;
 use tokio::sync::Mutex;
 use tokio::sync::OwnedMutexGuard;
 

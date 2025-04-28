@@ -1,6 +1,7 @@
 pub mod fetching;
 use musicbrainz_rs_nova::entity::work::Work as MBWork;
 
+use crate::Error;
 use crate::models::musicbrainz::genre::genre_tag::GenreTag;
 use crate::models::musicbrainz::tags::Tag;
 use crate::models::musicbrainz::work::Work;
@@ -8,7 +9,6 @@ use crate::models::shared_traits::completeness::CompletenessFlag;
 use crate::models::shared_traits::fetch_and_save::FetchAndSave;
 use crate::models::shared_traits::save_from::SaveFrom;
 use crate::utils::strip_quotes;
-use crate::Error;
 
 impl Work {
     /// Save an api response into the database

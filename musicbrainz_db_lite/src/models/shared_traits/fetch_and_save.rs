@@ -1,12 +1,12 @@
 use core::future::Future;
 use std::sync::Arc;
 
+use crate::DBClient;
+use crate::RowId;
+use crate::models::shared_traits::HasMBID;
 use crate::models::shared_traits::completeness::CompletenessFlag;
 use crate::models::shared_traits::fetch_mbid::FetchMBID;
 use crate::models::shared_traits::save_from::SaveFrom;
-use crate::models::shared_traits::HasMBID;
-use crate::DBClient;
-use crate::RowId;
 
 pub trait FetchAndSave<U>
 where

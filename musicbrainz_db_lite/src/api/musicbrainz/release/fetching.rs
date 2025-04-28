@@ -2,10 +2,10 @@ use crate::database::client::DBClient;
 use crate::models::shared_traits::fetch_and_save::FetchAndSave;
 use crate::models::shared_traits::fetch_mbid::FetchMBID;
 use crate::{
-    models::musicbrainz::release::{Release, Track},
     Error,
+    models::musicbrainz::release::{Release, Track},
 };
-use musicbrainz_rs_nova::{entity::release::Release as MBRelease, Fetch};
+use musicbrainz_rs_nova::{Fetch, entity::release::Release as MBRelease};
 use sqlx::SqliteConnection;
 
 impl FetchMBID<MBRelease> for Release {

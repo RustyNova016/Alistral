@@ -1,11 +1,11 @@
-use musicbrainz_rs_nova::entity::release_group::ReleaseGroup as MBReleaseGroup;
 use musicbrainz_rs_nova::Fetch;
+use musicbrainz_rs_nova::entity::release_group::ReleaseGroup as MBReleaseGroup;
 
+use crate::Error;
 use crate::database::client::DBClient;
 use crate::models::musicbrainz::release_group::ReleaseGroup;
 use crate::models::shared_traits::fetch_and_save::FetchAndSave;
 use crate::models::shared_traits::fetch_mbid::FetchMBID;
-use crate::Error;
 
 impl FetchMBID<MBReleaseGroup> for ReleaseGroup {
     async fn fetch_from_mbid(

@@ -1,11 +1,11 @@
 use std::collections::HashMap;
 
 use itertools::Itertools as _;
-use sqlx::sqlite::SqliteRow;
 use sqlx::FromRow;
+use sqlx::sqlite::SqliteRow;
 
-use crate::models::musicbrainz::relations::traits::HasRelation;
 use crate::models::musicbrainz::relations::Relation;
+use crate::models::musicbrainz::relations::traits::HasRelation;
 use crate::models::shared_traits::has_table::HasTable;
 use crate::utils::sqlx_utils::entity_relations::JoinCollection;
 use crate::utils::sqlx_utils::entity_relations::JoinRelation;

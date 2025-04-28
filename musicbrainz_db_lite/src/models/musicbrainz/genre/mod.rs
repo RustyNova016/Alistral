@@ -2,8 +2,8 @@ pub mod finds;
 pub mod genre_tag;
 use sqlx::prelude::FromRow;
 
-use crate::models::shared_traits::has_table::HasTable;
 use crate::RowId;
+use crate::models::shared_traits::has_table::HasTable;
 
 use super::relations::impl_relations::impl_relations;
 

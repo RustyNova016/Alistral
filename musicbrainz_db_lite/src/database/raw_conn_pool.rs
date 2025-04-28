@@ -1,9 +1,9 @@
 use deadpool::managed;
 use deadpool::managed::Object;
 use deadpool::managed::PoolError;
-use sqlx::sqlite::SqliteConnectOptions;
 use sqlx::Connection as _;
 use sqlx::SqliteConnection;
+use sqlx::sqlite::SqliteConnectOptions;
 
 #[derive(Debug)]
 pub struct RawPoolManager {

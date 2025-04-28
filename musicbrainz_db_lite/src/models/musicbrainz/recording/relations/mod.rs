@@ -1,16 +1,16 @@
 use std::collections::HashMap;
 use std::sync::Arc;
 
-use futures::channel::mpsc::Sender;
 use futures::SinkExt as _;
+use futures::channel::mpsc::Sender;
 use itertools::Itertools;
 use sqlx::SqliteConnection;
 
+use crate::DBClient;
+use crate::FetchAsComplete;
 use crate::models::musicbrainz::main_entities::MainEntity;
 use crate::models::musicbrainz::release::Release;
 use crate::utils::sqlx_utils::entity_relations::{JoinCollection, JoinRelation};
-use crate::DBClient;
-use crate::FetchAsComplete;
 
 use super::Recording;
 
