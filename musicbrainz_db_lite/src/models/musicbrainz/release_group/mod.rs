@@ -52,3 +52,4 @@ impl HasTable for ReleaseGroup {
 
 impl HasTags for ReleaseGroup {}
 impl HasGenres for ReleaseGroup {}
+impl crate::MBIDRedirection for ReleaseGroup {}

@@ -13,3 +13,4 @@ pub use crate::models::shared_traits::RowId;
 pub use crate::models::shared_traits::completeness::CompletenessFlag;
 pub use crate::models::shared_traits::completeness::FetchAsComplete;
 pub use crate::models::shared_traits::get_or_fetch::GetOrFetch;
+pub use crate::models::shared_traits::mbid_redirection::MBIDRedirection;

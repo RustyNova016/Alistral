@@ -139,3 +139,4 @@ impl HasTable for Release {
 
 impl HasTags for Release {}
 impl HasGenres for Release {}
+impl crate::MBIDRedirection for Release {}

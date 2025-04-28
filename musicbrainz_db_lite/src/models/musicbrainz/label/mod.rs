@@ -48,3 +48,4 @@ impl HasTable for Label {
 
 impl HasTags for Label {}
 impl HasGenres for Label {}
+impl crate::MBIDRedirection for Label {}

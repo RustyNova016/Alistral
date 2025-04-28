@@ -1,5 +1,6 @@
 pub mod artist_credits;
 pub mod get_and_fetch;
+pub mod hardlink_methods;
 macro_rules! impl_redirections {
     ($row_struct: ty, $entity_table_name: expr_2021) => {
         impl $row_struct {
