@@ -6,8 +6,8 @@ use crate::clippy::lint_hint::MbClippyLintHint;
 use crate::clippy::lint_link::MbClippyLintLink;
 use crate::clippy::lint_severity::LintSeverity;
 
-use crate::utils::formater;
 use crate::SymphonyzeClient;
+use crate::utils::formater;
 
 pub struct MissingRemixerRelLint {
     recording: Recording,

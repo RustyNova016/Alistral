@@ -2,11 +2,11 @@ use musicbrainz_db_lite::models::musicbrainz::main_entities::MainEntity;
 use musicbrainz_db_lite::models::musicbrainz::work::Work;
 use owo_colors::OwoColorize as _;
 
+use crate::SymphonyzeClient;
 use crate::clippy::clippy_lint::MbClippyLint;
 use crate::clippy::lint_hint::MbClippyLintHint;
 use crate::clippy::lint_link::MbClippyLintLink;
 use crate::clippy::lint_severity::LintSeverity;
-use crate::SymphonyzeClient;
 
 pub struct SoundtrackWithoutDisambiguationLint {
     work: Work,
