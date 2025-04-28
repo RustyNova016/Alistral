@@ -1,7 +1,9 @@
 use sqlx::prelude::FromRow;
+#[cfg(feature = "pretty_format")]
 use tuillez::formatter::FormatWithAsync;
 
 use crate::RowId;
+#[cfg(feature = "pretty_format")]
 use crate::models::musicbrainz::MusicbrainzFormater;
 use crate::models::shared_traits::has_tags::HasTags;
 

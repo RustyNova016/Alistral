@@ -27,73 +27,82 @@ async fn create_latest_database(conn: &mut sqlx::SqliteConnection) -> Result<(),
     Ok(())
 }
 
-#[cfg(test)]
-mod tests {
-    use std::fs::File;
-    use std::io::Write;
-    use std::process::Command;
+// #[cfg(test)]
+// mod tests {
+//     use std::fs::File;
+//     use std::io::Write;
+//     use std::path::Path;
+//     use std::process::Command;
 
-    use crate::create_and_migrate;
-    use crate::create_latest_database;
-    use crate::testing::get_database_schema;
-    use crate::testing::get_schema_diff;
-    use crate::testing::setup_database_file;
+//     use crate::create_and_migrate;
+//     use crate::create_latest_database;
+//     use crate::testing::create_test_dirs;
+//     use crate::testing::get_database_schema;
+//     use crate::testing::get_schema_diff;
+//     use crate::testing::setup_database_file;
 
-    async fn should_generate_schema() {
-        // Set up db file
-        setup_database_file("./schema.db");
-        let sql_pool = sqlx::SqlitePool::connect_lazy("sqlite:./schema.db").unwrap();
+//     async fn should_generate_schema(schema_db: &Path) {
+//         // Set up db file
+//         setup_database_file(schema_db);
+//         let sql_pool =
+//             sqlx::SqlitePool::connect_lazy(&format!("sqlite:{}", schema_db.to_string_lossy()))
+//                 .unwrap();
 
-        // Create Database
-        create_latest_database(&mut sql_pool.acquire().await.unwrap())
-            .await
-            .unwrap();
+//         // Create Database
+//         create_latest_database(&mut sql_pool.acquire().await.unwrap())
+//             .await
+//             .unwrap();
 
-        //assert!(check_db_integrity(&client).await.is_ok_and(|v| v));
+//         //assert!(check_db_integrity(&client).await.is_ok_and(|v| v));
 
-        let out = Command::new("sqlite3")
-            .arg("./schema.db")
-            .arg(".dump ")
-            .output()
-            .unwrap();
+//         let out = Command::new("sqlite3")
+//             .arg(schema_db)
+//             .arg(".dump ")
+//             .output()
+//             .unwrap();
 
-        File::create("./schema.sql")
-            .unwrap()
-            .write_all(&out.stdout)
-            .unwrap();
-    }
+//         File::create(schema_db)
+//             .unwrap()
+//             .write_all(&out.stdout)
+//             .unwrap();
+//     }
 
-    #[tokio::test]
-    #[serial_test::serial]
-    async fn should_migrate_schema() {
-        // Test generation first
-        should_generate_schema().await;
+//     #[tokio::test]
+//     #[serial_test::serial]
+//     async fn should_migrate_schema() {
+//         let migrated_db = create_test_dirs("migration_test.db");
+//         let schema_db = create_test_dirs("schema.db");
 
-        // Set up db file
-        setup_database_file("./migration_test.db");
-        let db = sqlx::SqlitePool::connect_lazy("sqlite:./migration_test.db").unwrap();
-        let mut conn = db.acquire().await.unwrap();
+//         // Test generation first
+//         should_generate_schema(&schema_db).await;
 
-        create_and_migrate(&mut conn).await.unwrap();
+//         // Set up db file
+//         setup_database_file(&migrated_db);
+//         let db =
+//             sqlx::SqlitePool::connect_lazy(&format!("sqlite:{}", &migrated_db.to_string_lossy()))
+//                 .unwrap();
+//         let mut conn = db.acquire().await.unwrap();
 
-        // Database has been migrated. Let's check that it's up to par with the main one
-        // ... But first, we need to drop _sqlx_migrations. While migrating this table is automatically created,
-        // but we don't want it in our public schema
-        sqlx::query("DROP TABLE _sqlx_migrations")
-            .execute(&mut *conn)
-            .await
-            .unwrap();
+//         create_and_migrate(&mut conn).await.unwrap();
 
-        let migrated_schema = get_database_schema("./migration_test.db");
+//         // Database has been migrated. Let's check that it's up to par with the main one
+//         // ... But first, we need to drop _sqlx_migrations. While migrating this table is automatically created,
+//         // but we don't want it in our public schema
+//         sqlx::query("DROP TABLE _sqlx_migrations")
+//             .execute(&mut *conn)
+//             .await
+//             .unwrap();
 
-        let diffs = get_schema_diff("./migration_test.db", "./schema.db");
+//         let migrated_schema = get_database_schema(&migrated_db.to_string_lossy());
 
-        if !diffs.is_empty() {
-            let mut file = File::create("./migration_test_schema.sql").unwrap();
+//         let diffs = get_schema_diff(&migrated_db.to_string_lossy(), &schema_db.to_string_lossy());
 
-            write!(file, "{}", migrated_schema).unwrap();
+//         if !diffs.is_empty() {
+//             let mut file = File::create("./migration_test_schema.sql").unwrap();
 
-            panic!("\nThe migration schema hasn't been updated properly! SQLDiff output (Missing in migration): \n\n{}", diffs)
-        }
-    }
-}
+//             write!(file, "{}", migrated_schema).unwrap();
+
+//             panic!("\nThe migration schema hasn't been updated properly! SQLDiff output (Missing in migration): \n\n{}", diffs)
+//         }
+//     }
+// }

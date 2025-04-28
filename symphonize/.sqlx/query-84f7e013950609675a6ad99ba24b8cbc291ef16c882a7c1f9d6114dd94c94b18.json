@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "DELETE FROM `listens` WHERE listened_at > ? AND listened_at < ? AND `user` = ?",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 3
+    },
+    "nullable": []
+  },
+  "hash": "84f7e013950609675a6ad99ba24b8cbc291ef16c882a7c1f9d6114dd94c94b18"
+}

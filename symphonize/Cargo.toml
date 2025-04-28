@@ -2,6 +2,7 @@
 name = "symphonize"
 version = "0.1.0"
 edition = "2024"
+rust-version = "1.85.1"
 
 [dependencies]
 musicbrainz-db-lite = { path = "../musicbrainz_db_lite" }
@@ -11,6 +12,3 @@ thiserror = "2.0.11"
 sqlx = "0.8.3"
 owo-colors = "4.2.0"
 regex = "1.11.1"
-
-[lints]
-workspace = true

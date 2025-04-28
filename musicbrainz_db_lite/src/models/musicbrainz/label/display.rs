@@ -1,6 +1,9 @@
+#[cfg(feature = "pretty_format")]
 use tuillez::formatter::FormatWithAsync;
 
+#[cfg(feature = "pretty_format")]
 use crate::models::musicbrainz::MusicbrainzFormater;
+#[cfg(feature = "pretty_format")]
 use crate::models::musicbrainz::label::Label;
 
 #[cfg(feature = "pretty_format")]

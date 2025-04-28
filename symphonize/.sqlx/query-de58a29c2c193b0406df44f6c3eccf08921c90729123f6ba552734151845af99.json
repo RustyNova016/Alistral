@@ -1,0 +1,56 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT * FROM `messybrainz_submission` WHERE id = ?",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "msid",
+        "ordinal": 1,
+        "type_info": "Text"
+      },
+      {
+        "name": "recording",
+        "ordinal": 2,
+        "type_info": "Text"
+      },
+      {
+        "name": "artist_credit",
+        "ordinal": 3,
+        "type_info": "Text"
+      },
+      {
+        "name": "release",
+        "ordinal": 4,
+        "type_info": "Text"
+      },
+      {
+        "name": "track_number",
+        "ordinal": 5,
+        "type_info": "Text"
+      },
+      {
+        "name": "duration",
+        "ordinal": 6,
+        "type_info": "Integer"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true
+    ]
+  },
+  "hash": "de58a29c2c193b0406df44f6c3eccf08921c90729123f6ba552734151845af99"
+}
