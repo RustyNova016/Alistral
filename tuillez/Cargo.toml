@@ -2,6 +2,7 @@
 name = "tuillez"
 version = "0.1.0"
 edition = "2021"
+rust-version = "1.81.0"
 
 [dependencies]
 color-backtrace = {git = "https://github.com/RustyNova016/color-backtrace.git", branch = "example", default-features = false, features = ["use-btparse-crate"]}
