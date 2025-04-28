@@ -52,6 +52,10 @@ macro_rules! impl_relations {
                 get_release_group_relations
             );
             crate::models::musicbrainz::relations::impl_relations::impl_inner_relation!(
+                crate::models::musicbrainz::url::Url,
+                get_url_relations
+            );
+            crate::models::musicbrainz::relations::impl_relations::impl_inner_relation!(
                 crate::models::musicbrainz::work::Work,
                 get_work_relations
             );
@@ -83,6 +87,10 @@ macro_rules! impl_relations {
                 delete_release_group_relations
             );
             crate::models::musicbrainz::relations::impl_relations::impl_inner_delete_relations!(
+                crate::models::musicbrainz::url::Url,
+                delete_url_relations
+            );
+            crate::models::musicbrainz::relations::impl_relations::impl_inner_delete_relations!(
                 crate::models::musicbrainz::work::Work,
                 delete_work_relations
             );
@@ -97,6 +105,7 @@ macro_rules! impl_relations {
                 self.delete_recording_relations(conn).await?;
                 self.delete_release_relations(conn).await?;
                 self.delete_release_group_relations(conn).await?;
+                self.delete_url_relations(conn).await?;
                 self.delete_work_relations(conn).await?;
                 Ok(())
             }

@@ -272,6 +272,7 @@ use crate::models::musicbrainz::label::Label;
 use crate::models::musicbrainz::recording::Recording;
 use crate::models::musicbrainz::release::Release;
 use crate::models::musicbrainz::release_group::ReleaseGroup;
+use crate::models::musicbrainz::url::Url;
 use crate::models::musicbrainz::work::Work;
 use crate::models::shared_traits::has_table::HasTable;
 use crate::utils::sqlx_utils::entity_relations::JoinCollection;
@@ -290,6 +291,8 @@ impl_has_relation!(Artist, Release);
 impl_reverse_has_relation!(Artist, Release);
 impl_has_relation!(Artist, ReleaseGroup);
 impl_reverse_has_relation!(Artist, ReleaseGroup);
+impl_has_relation!(Artist, Url);
+impl_reverse_has_relation!(Artist, Url);
 impl_has_relation!(Artist, Work);
 impl_reverse_has_relation!(Artist, Work);
 
@@ -302,6 +305,8 @@ impl_has_relation!(Genre, Release);
 impl_reverse_has_relation!(Genre, Release);
 impl_has_relation!(Genre, ReleaseGroup);
 impl_reverse_has_relation!(Genre, ReleaseGroup);
+impl_has_relation!(Genre, Url);
+impl_reverse_has_relation!(Genre, Url);
 impl_has_relation!(Genre, Work);
 impl_reverse_has_relation!(Genre, Work);
 
@@ -312,6 +317,8 @@ impl_has_relation!(Label, Release);
 impl_reverse_has_relation!(Label, Release);
 impl_has_relation!(Label, ReleaseGroup);
 impl_reverse_has_relation!(Label, ReleaseGroup);
+impl_has_relation!(Label, Url);
+impl_reverse_has_relation!(Label, Url);
 impl_has_relation!(Label, Work);
 impl_reverse_has_relation!(Label, Work);
 
@@ -320,17 +327,27 @@ impl_has_relation!(Recording, Release);
 impl_reverse_has_relation!(Recording, Release);
 impl_has_relation!(Recording, ReleaseGroup);
 impl_reverse_has_relation!(Recording, ReleaseGroup);
+impl_has_relation!(Recording, Url);
+impl_reverse_has_relation!(Recording, Url);
 impl_has_relation!(Recording, Work);
 impl_reverse_has_relation!(Recording, Work);
 
 impl_has_self_relation!(Release, Release);
 impl_has_relation!(Release, ReleaseGroup);
 impl_reverse_has_relation!(Release, ReleaseGroup);
+impl_has_relation!(Release, Url);
+impl_reverse_has_relation!(Release, Url);
 impl_has_relation!(Release, Work);
 impl_reverse_has_relation!(Release, Work);
 
 impl_has_self_relation!(ReleaseGroup, ReleaseGroup);
+impl_has_relation!(ReleaseGroup, Url);
+impl_reverse_has_relation!(ReleaseGroup, Url);
 impl_has_relation!(ReleaseGroup, Work);
 impl_reverse_has_relation!(ReleaseGroup, Work);
+
+impl_has_self_relation!(Url, Url);
+impl_has_relation!(Url, Work);
+impl_reverse_has_relation!(Url, Work);
 
 impl_has_self_relation!(Work, Work);

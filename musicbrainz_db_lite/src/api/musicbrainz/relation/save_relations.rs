@@ -87,6 +87,21 @@ macro_rules! impl_save_relation {
                             &entity1,
                         )
                         .await?;
+                    },
+                        musicbrainz_rs_nova::entity::relations::RelationContent::Url(value) => {
+                        let entity1 =
+                            <crate::Url as crate::SaveFrom<musicbrainz_rs_nova::entity::url::Url>>::save_from(
+                                conn, *value,
+                            )
+                            .await?;
+
+                        crate::models::musicbrainz::relations::Relation::save_api_response_inner(
+                            conn,
+                            api_relation,
+                            self,
+                            &entity1,
+                        )
+                        .await?;
                     }
                     musicbrainz_rs_nova::entity::relations::RelationContent::Work(value) => {
                         let entity1 =
@@ -113,6 +128,7 @@ use crate::models::musicbrainz::label::Label;
 use crate::models::musicbrainz::recording::Recording;
 use crate::models::musicbrainz::release::Release;
 use crate::models::musicbrainz::release_group::ReleaseGroup;
+//use crate::models::musicbrainz::url::Url;
 use crate::models::musicbrainz::work::Work;
 pub(crate) use impl_save_relation;
 
@@ -121,4 +137,5 @@ impl_save_relation!(Label);
 impl_save_relation!(Recording);
 impl_save_relation!(Release);
 impl_save_relation!(ReleaseGroup);
+//impl_save_relation!(Url);
 impl_save_relation!(Work);
