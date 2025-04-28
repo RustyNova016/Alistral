@@ -2,12 +2,12 @@ pub mod builder;
 use std::path::Path;
 use std::sync::Arc;
 
+use google_youtube3::YouTube;
 use google_youtube3::hyper_rustls;
 use google_youtube3::hyper_rustls::HttpsConnector;
 use google_youtube3::hyper_util;
 use google_youtube3::hyper_util::client::legacy::connect::HttpConnector;
 use google_youtube3::yup_oauth2;
-use google_youtube3::YouTube;
 use musicbrainz_db_lite::DBClient;
 use musicbrainz_rs::client::MusicBrainzClient;
 

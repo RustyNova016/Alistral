@@ -8,16 +8,16 @@ use tracing::warn;
 use tuillez::pg_counted;
 use tuillez::pg_inc;
 
+use crate::InterzicClient;
 use crate::client::YoutubeClient;
 use crate::models::messy_recording::MessyRecording;
 use crate::models::playlist_stub::PlaylistStub;
-use crate::models::services::youtube::error::is_add_404_video_error;
+use crate::models::services::youtube::Youtube;
 use crate::models::services::youtube::error::InterzicYoutubeError;
 use crate::models::services::youtube::error::YoutubeError;
+use crate::models::services::youtube::error::is_add_404_video_error;
 use crate::models::services::youtube::playlists::YoutubeRateLimit;
-use crate::models::services::youtube::Youtube;
 use crate::try_err;
-use crate::InterzicClient;
 
 impl Youtube {
     #[instrument(skip(client), fields(indicatif.pb_show = tracing::field::Empty))]

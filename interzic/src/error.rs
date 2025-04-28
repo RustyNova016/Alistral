@@ -35,9 +35,7 @@ pub enum Error {
     )]
     MissingMusicbrainzDbLiteClient,
 
-    #[error(
-        "This action require a musicbrainz_rs client, but it wasn't set up in the main client"
-    )]
+    #[error("This action require a musicbrainz_rs client, but it wasn't set up in the main client")]
     MissingMusicbrainzClient,
 
     // --- Service Errors ---

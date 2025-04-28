@@ -1,5 +1,5 @@
-use crate::models::messy_recording::MessyRecording;
 use crate::InterzicClient;
+use crate::models::messy_recording::MessyRecording;
 
 #[derive(Debug, Clone)]
 pub struct PlaylistStub {
