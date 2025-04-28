@@ -1,8 +1,8 @@
 [package]
 name = "musicbrainz-db-lite"
 version = "0.1.0"
-edition = "2021"
-rust-version = "1.82.0"
+edition = "2024"
+rust-version = "1.85.1"
 
 [dependencies]
 musicbrainz_db_lite_macros = { path = "./musicbrainz_db_lite_macros" }

@@ -1,6 +1,6 @@
 use crate::models::musicbrainz::user::User;
 use futures::stream::BoxStream;
-use sqlx::{query_scalar, SqliteConnection};
+use sqlx::{SqliteConnection, query_scalar};
 
 use super::Listen;
 

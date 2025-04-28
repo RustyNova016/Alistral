@@ -1,8 +1,8 @@
 use crate::database::client::DBClient;
 use crate::models::shared_traits::fetch_and_save::FetchAndSave;
 use crate::models::shared_traits::fetch_mbid::FetchMBID;
-use crate::{models::musicbrainz::recording::Recording, Error};
-use musicbrainz_rs_nova::{entity::recording::Recording as MSRecording, Fetch};
+use crate::{Error, models::musicbrainz::recording::Recording};
+use musicbrainz_rs_nova::{Fetch, entity::recording::Recording as MSRecording};
 use sqlx::SqliteConnection;
 
 impl FetchMBID<MSRecording> for Recording {

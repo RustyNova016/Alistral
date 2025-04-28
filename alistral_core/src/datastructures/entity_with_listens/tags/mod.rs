@@ -2,22 +2,22 @@ pub mod id;
 use core::marker::PhantomData;
 
 use itertools::Itertools as _;
+use musicbrainz_db_lite::RowId;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::tags::Tag;
 use musicbrainz_db_lite::models::shared_traits::has_tags::HasTags;
 use musicbrainz_db_lite::utils::sqlx_utils::entity_relations::JoinRelation;
-use musicbrainz_db_lite::RowId;
 use tracing::instrument;
 use tuillez::pg_counted;
 use tuillez::pg_inc;
 use tuillez::pg_spinner;
 
+use crate::AlistralClient;
 use crate::datastructures::entity_with_listens::collection::EntityWithListensCollection;
 use crate::datastructures::entity_with_listens::tags::id::SimpleTag;
 use crate::datastructures::listen_collection::traits::ListenCollectionReadable;
 use crate::datastructures::listen_sorter::ListenSortingStrategy;
 use crate::traits::mergable::Mergable;
-use crate::AlistralClient;
 
 use crate::datastructures::entity_with_listens::EntityWithListens;
 

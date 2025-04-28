@@ -1,7 +1,7 @@
 pub mod fetching;
+use crate::Error;
 use crate::models::listenbrainz::msid_mapping::MsidMapping;
 use crate::models::musicbrainz::recording::Recording;
-use crate::Error;
 use listenbrainz::raw::response::UserListensListen;
 use sqlx::SqliteConnection;
 

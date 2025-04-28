@@ -4,8 +4,8 @@ use musicbrainz_db_lite::models::listenbrainz::messybrainz_submission::Messybrai
 
 use crate::datastructures::entity_with_listens::collection::EntityWithListensCollection;
 use crate::datastructures::entity_with_listens::messybrainz::MessybrainzWithListens;
-use crate::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use crate::datastructures::listen_collection::ListenCollection;
+use crate::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 
 pub type MessybrainzWithListensCollection =
     EntityWithListensCollection<MessybrainzSubmission, ListenCollection>;

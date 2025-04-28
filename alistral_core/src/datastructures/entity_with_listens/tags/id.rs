@@ -3,8 +3,8 @@ use std::sync::Arc;
 use std::sync::LazyLock;
 use std::sync::Mutex;
 
-use musicbrainz_db_lite::models::musicbrainz::MusicbrainzFormater;
 use musicbrainz_db_lite::RowId;
+use musicbrainz_db_lite::models::musicbrainz::MusicbrainzFormater;
 use tuillez::formatter::FormatWithAsync;
 
 pub(crate) static TAG_IDS: LazyLock<Arc<Mutex<HashMap<String, i64>>>> =

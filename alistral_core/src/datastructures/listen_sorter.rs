@@ -1,7 +1,7 @@
 use core::future::Future;
 
-use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::RowId;
+use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 
 use crate::datastructures::entity_with_listens::collection::EntityWithListensCollection;
 use crate::datastructures::listen_collection::traits::ListenCollectionReadable;

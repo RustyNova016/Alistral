@@ -3,9 +3,9 @@ use tracing::instrument;
 use tuillez::pg_counted;
 use tuillez::pg_inc;
 
+use crate::InterzicClient;
 use crate::models::messy_recording::MessyRecording;
 use crate::models::services::musicbrainz::Musicbrainz;
-use crate::InterzicClient;
 
 impl Musicbrainz {
     #[instrument(skip(client), fields(indicatif.pb_show = tracing::field::Empty))]

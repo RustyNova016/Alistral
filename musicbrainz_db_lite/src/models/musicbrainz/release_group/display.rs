@@ -1,7 +1,7 @@
 use tuillez::formatter::FormatWithAsync;
 
-use crate::models::musicbrainz::release_group::ReleaseGroup;
 use crate::models::musicbrainz::MusicbrainzFormater;
+use crate::models::musicbrainz::release_group::ReleaseGroup;
 
 #[cfg(feature = "pretty_format")]
 impl FormatWithAsync<MusicbrainzFormater<'_>> for ReleaseGroup {

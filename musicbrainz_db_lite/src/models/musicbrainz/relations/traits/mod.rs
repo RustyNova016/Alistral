@@ -265,6 +265,7 @@ pub(crate) use impl_reverse_has_relation;
 use itertools::Itertools as _;
 use self_relation::impl_has_self_relation;
 
+use crate::RowId;
 use crate::models::musicbrainz::artist::Artist;
 use crate::models::musicbrainz::genre::Genre;
 use crate::models::musicbrainz::label::Label;
@@ -275,7 +276,6 @@ use crate::models::musicbrainz::work::Work;
 use crate::models::shared_traits::has_table::HasTable;
 use crate::utils::sqlx_utils::entity_relations::JoinCollection;
 use crate::utils::sqlx_utils::entity_relations::JoinRelation;
-use crate::RowId;
 
 use super::Relation;
 

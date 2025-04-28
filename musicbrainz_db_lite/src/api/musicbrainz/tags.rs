@@ -1,8 +1,8 @@
 use musicbrainz_rs_nova::entity::tag::Tag as MBTag;
 
+use crate::RowId;
 use crate::models::musicbrainz::tags::Tag;
 use crate::models::shared_traits::has_tags::HasTags;
-use crate::RowId;
 
 impl Tag {
     pub async fn save_api_response<T: HasTags + RowId>(

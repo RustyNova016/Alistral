@@ -1,7 +1,7 @@
 use crate::models::RowID;
 
-use super::find_by::FindBy;
 use super::RowId;
+use super::find_by::FindBy;
 
 pub trait FindByRowID: RowId + Sized {
     fn find_by_rowid(

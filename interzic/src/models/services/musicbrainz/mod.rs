@@ -1,12 +1,12 @@
 pub mod caching;
+use musicbrainz_rs::Fetch;
 use musicbrainz_rs::entity::recording::Recording;
 use musicbrainz_rs::entity::relations::RelationContent;
-use musicbrainz_rs::Fetch;
 
+use crate::InterzicClient;
 use crate::models::external_id::ExternalId;
 use crate::models::messy_recording::MessyRecording;
 use crate::models::services::youtube::Youtube;
-use crate::InterzicClient;
 
 pub struct Musicbrainz;
 

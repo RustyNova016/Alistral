@@ -2,12 +2,12 @@ use musicbrainz_db_lite::models::musicbrainz::main_entities::MainEntity;
 use musicbrainz_db_lite::models::musicbrainz::release::Release;
 use tuillez::formatter::FormatWithAsync;
 
+use crate::SymphonyzeClient;
 use crate::clippy::clippy_lint::MbClippyLint;
 use crate::clippy::lint_hint::MbClippyLintHint;
 use crate::clippy::lint_link::MbClippyLintLink;
 use crate::clippy::lint_severity::LintSeverity;
 use crate::utils::formater;
-use crate::SymphonyzeClient;
 
 pub struct MissingBarcodeLint {
     release: Release,

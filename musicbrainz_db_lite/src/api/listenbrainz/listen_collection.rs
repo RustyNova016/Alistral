@@ -4,8 +4,8 @@ use listenbrainz::raw::response::UserListensPayload;
 use sqlx::Connection;
 use sqlx::SqliteConnection;
 
-use crate::models::listenbrainz::listen::Listen;
 use crate::Error;
+use crate::models::listenbrainz::listen::Listen;
 
 #[ext(name = SaveListenPayload)]
 pub impl UserListensPayload {

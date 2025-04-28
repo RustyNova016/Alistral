@@ -1,8 +1,8 @@
 use tuillez::formatter::FormatWithAsync;
 
+use crate::RowId;
 use crate::models::musicbrainz::MusicbrainzFormater;
 use crate::models::shared_traits::HasMBID;
-use crate::RowId;
 
 use super::artist::Artist;
 use super::label::Label;

@@ -2,16 +2,16 @@ use core::ops::Mul;
 
 use chrono::Duration;
 use collection::RecordingWithListensCollection;
-use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use musicbrainz_db_lite::RowId;
+use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use rust_decimal::Decimal;
 use rust_decimal_macros::dec;
 
-use crate::datastructures::listen_collection::traits::ListenCollectionReadable;
 use crate::datastructures::listen_collection::ListenCollection;
+use crate::datastructures::listen_collection::traits::ListenCollectionReadable;
 
-use super::traits::ListenCollWithTime;
 use super::EntityWithListens;
+use super::traits::ListenCollWithTime;
 
 pub mod collection;
 

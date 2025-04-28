@@ -3,16 +3,16 @@ use std::sync::Arc;
 
 use async_fn_stream::fn_stream;
 use async_fn_stream::try_fn_stream;
-use futures::pin_mut;
 use futures::Stream;
 use futures::StreamExt;
-use musicbrainz_rs_nova::entity::recording::Recording as MSRecording;
+use futures::pin_mut;
 use musicbrainz_rs_nova::Browse;
+use musicbrainz_rs_nova::entity::recording::Recording as MSRecording;
 
+use crate::DBClient;
 use crate::models::musicbrainz::artist::Artist;
 use crate::models::musicbrainz::recording::Recording;
 use crate::models::shared_traits::save_from::SaveFrom as _;
-use crate::DBClient;
 
 impl Artist {
     /// Fetch all the artist's recordings into a stream. it returns a stream of tuple containing (Recording, Total Recordings)

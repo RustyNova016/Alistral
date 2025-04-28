@@ -4,8 +4,8 @@ use listenbrainz::raw::request::PlaylistCreatePlaylistExtension;
 use listenbrainz::raw::request::PlaylistCreatePlaylistExtensionInner;
 use listenbrainz::raw::request::PlaylistCreatePlaylistTrack;
 
-use crate::models::playlist_stub::PlaylistStub;
 use crate::InterzicClient;
+use crate::models::playlist_stub::PlaylistStub;
 
 pub struct Listenbrainz;
 

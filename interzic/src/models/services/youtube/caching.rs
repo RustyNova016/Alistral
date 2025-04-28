@@ -1,6 +1,6 @@
+use crate::InterzicClient;
 use crate::models::external_id::ExternalId;
 use crate::models::services::youtube::Youtube;
-use crate::InterzicClient;
 
 impl Youtube {
     pub async fn save_ext_id(

@@ -3,8 +3,8 @@ use core::fmt::Write;
 
 use tuillez::formatter::FormatWithAsync;
 
-use crate::models::musicbrainz::artist_credit::ArtistCredits;
 use crate::models::musicbrainz::MusicbrainzFormater;
+use crate::models::musicbrainz::artist_credit::ArtistCredits;
 
 impl Display for ArtistCredits {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {

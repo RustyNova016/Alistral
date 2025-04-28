@@ -9,10 +9,10 @@ use tracing::info;
 use tracing::instrument;
 use tuillez::pg_spinner;
 
-use crate::api::listenbrainz::listen_collection::SaveListenPayload;
-use crate::models::listenbrainz::listen::Listen;
 use crate::DBClient;
 use crate::Error;
+use crate::api::listenbrainz::listen_collection::SaveListenPayload;
+use crate::models::listenbrainz::listen::Listen;
 
 impl Listen {
     /// Fetch the latest listens for the provided user. If the user has no listens, it will do a full listen fetch.

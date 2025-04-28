@@ -2,20 +2,20 @@ use itertools::Itertools as _;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use musicbrainz_db_lite::models::musicbrainz::work::Work;
-use tracing::instrument;
 use tracing::Span;
+use tracing::instrument;
 use tracing_indicatif::span_ext::IndicatifSpanExt as _;
 use tuillez::pg_counted;
 use tuillez::pg_inc;
 use tuillez::pg_spinner;
 
+use crate::AlistralClient;
 use crate::database::fetching::recordings::fetch_recordings_as_complete;
 use crate::datastructures::entity_with_listens::collection::EntityWithListensCollection;
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListenStrategy;
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use crate::datastructures::entity_with_listens::work::WorkWithRecordings;
 use crate::datastructures::listen_sorter::ListenSortingStrategy;
-use crate::AlistralClient;
 
 pub type WorkWithRecordingsCollection =
     EntityWithListensCollection<Work, RecordingWithListensCollection>;

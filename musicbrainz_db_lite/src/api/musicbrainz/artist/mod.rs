@@ -1,13 +1,13 @@
 use musicbrainz_rs_nova::entity::artist::Artist as MBArtist;
 use sqlx::SqliteConnection;
 
+use crate::Error;
 use crate::models::musicbrainz::artist::Artist;
 use crate::models::musicbrainz::genre::genre_tag::GenreTag;
 use crate::models::musicbrainz::tags::Tag;
 use crate::models::shared_traits::completeness::CompletenessFlag;
 use crate::models::shared_traits::fetch_and_save::FetchAndSave;
 use crate::models::shared_traits::save_from::SaveFrom;
-use crate::Error;
 
 pub mod browse;
 pub mod fetching;
