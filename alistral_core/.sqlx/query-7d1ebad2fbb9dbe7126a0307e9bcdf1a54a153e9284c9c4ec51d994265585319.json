@@ -1,0 +1,44 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT * FROM `listens` WHERE LOWER(user) = LOWER(?) ORDER BY listened_at DESC LIMIT 1",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "listened_at",
+        "ordinal": 1,
+        "type_info": "Integer"
+      },
+      {
+        "name": "user",
+        "ordinal": 2,
+        "type_info": "Text"
+      },
+      {
+        "name": "recording_msid",
+        "ordinal": 3,
+        "type_info": "Text"
+      },
+      {
+        "name": "data",
+        "ordinal": 4,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "7d1ebad2fbb9dbe7126a0307e9bcdf1a54a153e9284c9c4ec51d994265585319"
+}

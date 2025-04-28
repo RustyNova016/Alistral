@@ -1,0 +1,44 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT * FROM msid_mapping WHERE recording_msid = ? AND user = ?;",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "recording_msid",
+        "ordinal": 1,
+        "type_info": "Text"
+      },
+      {
+        "name": "recording_mbid",
+        "ordinal": 2,
+        "type_info": "Text"
+      },
+      {
+        "name": "user",
+        "ordinal": 3,
+        "type_info": "Integer"
+      },
+      {
+        "name": "release_mbid",
+        "ordinal": 4,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "2650dc755a35a5e4da87e72f6065978efb2096a7ce39304bac7f49c63959c560"
+}
