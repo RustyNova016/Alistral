@@ -5,13 +5,13 @@ use musicbrainz_db_lite::models::musicbrainz::release::Release;
 use tracing::instrument;
 use tuillez::pg_spinner;
 
+use crate::AlistralClient;
 use crate::database::fetching::recordings::fetch_recordings_as_complete;
 use crate::datastructures::entity_with_listens::collection::EntityWithListensCollection;
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListenStrategy;
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use crate::datastructures::entity_with_listens::release::ReleaseWithRecordings;
 use crate::datastructures::listen_sorter::ListenSortingStrategy;
-use crate::AlistralClient;
 
 pub type ReleaseWithRecordingsCollection =
     EntityWithListensCollection<Release, RecordingWithListensCollection>;

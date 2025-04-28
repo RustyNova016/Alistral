@@ -1,13 +1,13 @@
-use futures::stream;
 use futures::StreamExt as _;
 use futures::TryStreamExt as _;
+use futures::stream;
 use itertools::Itertools as _;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::artist::Artist;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
+use tracing::Span;
 use tracing::info;
 use tracing::instrument;
-use tracing::Span;
 use tracing_indicatif::span_ext::IndicatifSpanExt;
 use tuillez::pg_counted;
 use tuillez::pg_inc;

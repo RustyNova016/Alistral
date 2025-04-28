@@ -1,8 +1,8 @@
 use itertools::Itertools as _;
 use musicbrainz_db_lite::models::musicbrainz::release::Release;
+use tracing::Span;
 use tracing::info;
 use tracing::instrument;
-use tracing::Span;
 use tracing_indicatif::span_ext::IndicatifSpanExt as _;
 use tuillez::pg_counted;
 

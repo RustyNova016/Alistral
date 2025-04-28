@@ -1,17 +1,17 @@
 use core::cmp::Reverse;
 use core::fmt::Debug;
-use std::collections::hash_map::IntoValues;
 use std::collections::HashMap;
+use std::collections::hash_map::IntoValues;
 
-use futures::stream;
 use futures::Stream;
+use futures::stream;
 use itertools::Itertools as _;
-use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::RowId;
+use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use rust_decimal::Decimal;
 
-use crate::datastructures::listen_collection::traits::ListenCollectionReadable;
 use crate::datastructures::listen_collection::ListenCollection;
+use crate::datastructures::listen_collection::traits::ListenCollectionReadable;
 use crate::datastructures::listen_sorter::ListenSortingStrategy;
 use crate::traits::mergable::Mergable;
 

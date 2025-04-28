@@ -3,8 +3,8 @@ use chrono::Duration;
 use chrono::Utc;
 use itertools::Itertools;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
-use rust_decimal::prelude::FromPrimitive as _;
 use rust_decimal::Decimal;
+use rust_decimal::prelude::FromPrimitive as _;
 
 use super::ListenCollection;
 

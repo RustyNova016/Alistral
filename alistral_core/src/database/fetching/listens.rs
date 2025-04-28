@@ -1,19 +1,19 @@
 use macon::Builder;
+use musicbrainz_db_lite::RowId;
 use musicbrainz_db_lite::api::listenbrainz::listen::fetching::query::ListenFetchAPIQuery;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
-use musicbrainz_db_lite::RowId;
 use tracing::instrument;
 use tuillez::pg_counted;
 use tuillez::pg_inc;
 
+use crate::AlistralClient;
 use crate::datastructures::entity_with_listens::collection::EntityWithListensCollection;
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListenStrategy;
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
-use crate::datastructures::listen_collection::traits::ListenCollectionReadable;
 use crate::datastructures::listen_collection::ListenCollection;
+use crate::datastructures::listen_collection::traits::ListenCollectionReadable;
 use crate::datastructures::listen_sorter::ListenSortingStrategy;
-use crate::AlistralClient;
 
 #[derive(Builder)]
 pub struct ListenFetchQuery {

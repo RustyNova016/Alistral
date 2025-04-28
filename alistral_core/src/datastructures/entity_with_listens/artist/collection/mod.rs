@@ -5,13 +5,13 @@ use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use tracing::instrument;
 use tuillez::pg_spinner;
 
+use crate::AlistralClient;
 use crate::database::fetching::recordings::fetch_artists_of_recordings;
 use crate::datastructures::entity_with_listens::artist::artist_with_recordings::ArtistWithRecordings;
 use crate::datastructures::entity_with_listens::collection::EntityWithListensCollection;
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListenStrategy;
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use crate::datastructures::listen_sorter::ListenSortingStrategy;
-use crate::AlistralClient;
 
 pub type ArtistWithRecordingsCollection =
     EntityWithListensCollection<Artist, RecordingWithListensCollection>;

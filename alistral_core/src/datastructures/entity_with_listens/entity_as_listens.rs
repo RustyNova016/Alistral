@@ -2,8 +2,8 @@ use itertools::Itertools as _;
 use musicbrainz_db_lite::RowId;
 use rust_decimal::Decimal;
 
-use crate::datastructures::entity_with_listens::collection::EntityWithListensCollection;
 use crate::datastructures::entity_with_listens::EntityWithListens;
+use crate::datastructures::entity_with_listens::collection::EntityWithListensCollection;
 use crate::datastructures::listen_collection::traits::ListenCollectionReadable;
 
 impl<EntMain, EntSub, Lis> EntityWithListens<EntMain, EntityWithListensCollection<EntSub, Lis>>

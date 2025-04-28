@@ -3,9 +3,9 @@
 use chrono::Duration;
 use musicbrainz_db_lite::RowId;
 
+use crate::datastructures::entity_with_listens::EntityWithListens;
 use crate::datastructures::entity_with_listens::traits::IterRecordingWithListens;
 use crate::datastructures::entity_with_listens::traits::ListenCollWithTime;
-use crate::datastructures::entity_with_listens::EntityWithListens;
 use crate::datastructures::listen_collection::traits::ListenCollectionReadable;
 
 impl<Ent, Lis> ListenCollWithTime for EntityWithListens<Ent, Lis>

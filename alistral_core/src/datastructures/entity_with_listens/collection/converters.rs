@@ -1,14 +1,14 @@
 //! Implementations for type convertions
 
-use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::RowId;
+use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 
+use crate::datastructures::entity_with_listens::EntityWithListens;
 use crate::datastructures::entity_with_listens::collection::EntityWithListensCollection;
 use crate::datastructures::entity_with_listens::recording::RecordingWithListens;
 use crate::datastructures::entity_with_listens::traits::IterRecordingWithListens;
-use crate::datastructures::entity_with_listens::EntityWithListens;
-use crate::datastructures::listen_collection::traits::ListenCollectionReadable;
 use crate::datastructures::listen_collection::ListenCollection;
+use crate::datastructures::listen_collection::traits::ListenCollectionReadable;
 use crate::traits::mergable::Mergable;
 
 impl<Ent, Lis> From<Vec<EntityWithListens<Ent, Lis>>> for EntityWithListensCollection<Ent, Lis>
