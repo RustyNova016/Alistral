@@ -1,4 +1,3 @@
-use core::marker::PhantomData;
 use core::str::FromStr as _;
 use core::time::Duration;
 use std::fs::File;
@@ -24,7 +23,7 @@ pub struct ClientBuilder<Loc = (), DbConn = (), MBClient = (), LBClient = ()> {
 
     pub listenbrainz_client: LBClient,
 
-    pub database_type: PhantomData<Loc>,
+    pub database_type: Loc,
 
     pub database_location: Option<PathBuf>,
 }
@@ -32,14 +31,31 @@ pub struct ClientBuilder<Loc = (), DbConn = (), MBClient = (), LBClient = ()> {
 // Type states types
 
 // --- Location
+#[derive(Debug, Default)]
 pub struct DatabaseFile;
-pub struct InMemory;
+#[derive(Debug, Default)]
+pub struct InMemory(Option<String>);
 
 impl<DbConn, MBClient, LBClient> ClientBuilder<(), DbConn, MBClient, LBClient> {
+    /// Create a DB pool with all the connections being distinct in memory databases
     pub fn in_memory(self) -> ClientBuilder<InMemory, DbConn, MBClient, LBClient> {
         ClientBuilder {
             connection: self.connection,
             database_type: Default::default(),
+            musicbrainz_client: self.musicbrainz_client,
+            listenbrainz_client: self.listenbrainz_client,
+            database_location: None,
+        }
+    }
+
+    /// Create a DB pool with all the connections pointing to the same in memory database
+    pub fn in_memory_with_name(
+        self,
+        name: String,
+    ) -> ClientBuilder<InMemory, DbConn, MBClient, LBClient> {
+        ClientBuilder {
+            connection: self.connection,
+            database_type: InMemory(Some(name)),
             musicbrainz_client: self.musicbrainz_client,
             listenbrainz_client: self.listenbrainz_client,
             database_location: None,
@@ -71,6 +87,7 @@ impl<MBClient, LBClient> ClientBuilder<DatabaseFile, (), MBClient, LBClient> {
 
     pub async fn connect(
         self,
+        pool_size: usize,
     ) -> Result<ClientBuilder<DatabaseFile, DBLitePool, MBClient, LBClient>, crate::Error> {
         let optconn = SqliteConnectOptions::from_str(
             self.database_location.clone().unwrap().to_str().unwrap(),
@@ -79,7 +96,7 @@ impl<MBClient, LBClient> ClientBuilder<DatabaseFile, (), MBClient, LBClient> {
         .busy_timeout(Duration::from_millis(60000));
 
         let connection = PoolManager::create_pool(optconn);
-        connection.resize(64);
+        connection.resize(pool_size);
         Ok(ClientBuilder {
             connection,
             database_location: self.database_location,
@@ -91,8 +108,9 @@ impl<MBClient, LBClient> ClientBuilder<DatabaseFile, (), MBClient, LBClient> {
 
     pub async fn connect_and_migrate(
         self,
+        pool_size: usize,
     ) -> Result<ClientBuilder<DatabaseFile, DBLitePool, MBClient, LBClient>, crate::Error> {
-        let new = self.connect().await?;
+        let new = self.connect(pool_size).await?;
 
         musicbrainz_db_lite_schema::create_and_migrate(
             &mut *new.connection.get_raw_connection().await?,
@@ -106,8 +124,14 @@ impl<MBClient, LBClient> ClientBuilder<DatabaseFile, (), MBClient, LBClient> {
 impl<MBClient, LBClient> ClientBuilder<InMemory, (), MBClient, LBClient> {
     pub async fn connect_and_migrate(
         self,
+        pool_size: usize,
     ) -> Result<ClientBuilder<InMemory, DBLitePool, MBClient, LBClient>, crate::Error> {
-        let optconn = SqliteConnectOptions::from_str(":memory:")?
+        let conn_str = match &self.database_type.0 {
+            None => ":memory:".to_string(),
+            Some(name) => format!("file:{}?mode=memory&cache=shared", name)
+        };
+
+        let optconn = SqliteConnectOptions::from_str(&conn_str)?
             .journal_mode(SqliteJournalMode::Wal)
             .busy_timeout(Duration::from_millis(60000));
 
@@ -115,7 +139,7 @@ impl<MBClient, LBClient> ClientBuilder<InMemory, (), MBClient, LBClient> {
         musicbrainz_db_lite_schema::create_and_migrate(&mut *pool.get_raw_connection().await?)
             .await?;
 
-        pool.resize(64);
+        pool.resize(pool_size);
         Ok(ClientBuilder {
             connection: pool,
             database_location: self.database_location,

@@ -1,3 +1,4 @@
+pub mod convert;
 #[cfg(feature = "pretty_format")]
 use tuillez::formatter::FormatWithAsync;
 

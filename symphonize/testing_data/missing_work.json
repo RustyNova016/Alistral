@@ -1,58 +1,166 @@
 {
-    "artist-credit": [
+    "recordings": [
         {
-            "name": "Alistral",
-            "artist": {
-                "type-id": null,
-                "aliases": [],
-                "disambiguation": "",
-                "sort-name": "Alistral",
-                "name": "Alistral",
-                "id": "06baf1f1-e9b3-40b7-8376-1f53a676a919",
-                "type": null,
-                "country": null
-            },
-            "joinphrase": ""
-        }
-    ],
-    "aliases": [],
-    "video": false,
-    "disambiguation": "",
-    "id": "51feae17-26bd-4aa9-bfaa-ef408df58293",
-    "title": "missing_work",
-    "releases": [
-        {
-            "packaging-id": null,
-            "id": "695b178b-68e7-4e28-a2b5-4a1b6027ed31",
-            "barcode": null,
-            "aliases": [],
-            "status-id": null,
-            "status": null,
-            "quality": "normal",
-            "packaging": null,
-            "disambiguation": "",
             "artist-credit": [
                 {
                     "name": "Alistral",
-                    "joinphrase": "",
                     "artist": {
-                        "aliases": [],
                         "type-id": null,
+                        "aliases": [],
                         "disambiguation": "",
                         "sort-name": "Alistral",
                         "name": "Alistral",
                         "id": "06baf1f1-e9b3-40b7-8376-1f53a676a919",
                         "type": null,
                         "country": null
+                    },
+                    "joinphrase": ""
+                }
+            ],
+            "aliases": [],
+            "video": false,
+            "disambiguation": "",
+            "id": "51feae17-26bd-4aa9-bfaa-ef408df58293",
+            "title": "missing_work",
+            "releases": [
+                {
+                    "packaging-id": null,
+                    "id": "695b178b-68e7-4e28-a2b5-4a1b6027ed31",
+                    "barcode": null,
+                    "aliases": [],
+                    "status-id": null,
+                    "status": null,
+                    "quality": "normal",
+                    "packaging": null,
+                    "disambiguation": "",
+                    "artist-credit": [
+                        {
+                            "name": "Alistral",
+                            "joinphrase": "",
+                            "artist": {
+                                "aliases": [],
+                                "type-id": null,
+                                "disambiguation": "",
+                                "sort-name": "Alistral",
+                                "name": "Alistral",
+                                "id": "06baf1f1-e9b3-40b7-8376-1f53a676a919",
+                                "type": null,
+                                "country": null
+                            }
+                        }
+                    ],
+                    "text-representation": {
+                        "language": null,
+                        "script": null
+                    },
+                    "title": "missing_work"
+                }
+            ],
+            "length": null
+        },
+        {
+            "video": false,
+            "artist-credit": [
+                {
+                    "joinphrase": "",
+                    "name": "Anomy5",
+                    "artist": {
+                        "sort-name": "Anomy5",
+                        "country": null,
+                        "type": null,
+                        "id": "d36992c0-8400-487e-8c0e-8732f332bee9",
+                        "type-id": null,
+                        "disambiguation": "",
+                        "aliases": [],
+                        "name": "Anomy5"
                     }
                 }
             ],
-            "text-representation": {
-                "language": null,
-                "script": null
-            },
-            "title": "missing_work"
+            "title": "Disaster",
+            "releases": [
+                {
+                    "text-representation": {
+                        "script": "Latn",
+                        "language": "eng"
+                    },
+                    "title": "Disaster",
+                    "packaging": "None",
+                    "date": "2024-05-03",
+                    "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+                    "id": "7da59d42-64d5-46e0-aa3d-0946f5ae6691",
+                    "disambiguation": "",
+                    "aliases": [],
+                    "quality": "normal",
+                    "barcode": "198475507220",
+                    "artist-credit": [
+                        {
+                            "joinphrase": "",
+                            "name": "Anomy5",
+                            "artist": {
+                                "type": null,
+                                "country": null,
+                                "sort-name": "Anomy5",
+                                "id": "d36992c0-8400-487e-8c0e-8732f332bee9",
+                                "disambiguation": "",
+                                "type-id": null,
+                                "name": "Anomy5",
+                                "aliases": []
+                            }
+                        }
+                    ],
+                    "country": "XW",
+                    "packaging-id": "119eba76-b343-3e02-a292-f0f00644bb9b",
+                    "status": "Official",
+                    "release-events": [
+                        {
+                            "date": "2024-05-03",
+                            "area": {
+                                "type": null,
+                                "sort-name": "[Worldwide]",
+                                "id": "525d4e18-3d00-31b9-a58b-a146a916de8f",
+                                "iso-3166-1-codes": [
+                                    "XW"
+                                ],
+                                "disambiguation": "",
+                                "type-id": null,
+                                "name": "[Worldwide]"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "id": "e8454ea9-b850-46b0-b8d8-22d024095819",
+            "length": 150929,
+            "disambiguation": "",
+            "relations": [
+                {
+                    "target-type": "work",
+                    "type": "performance",
+                    "attributes": [],
+                    "source-credit": "",
+                    "end": null,
+                    "attribute-ids": {},
+                    "attribute-values": {},
+                    "begin": null,
+                    "work": {
+                        "title": "Disaster",
+                        "language": null,
+                        "type": "Song",
+                        "attributes": [],
+                        "id": "cd99d944-9745-4364-b8c9-4b642b5234b6",
+                        "disambiguation": "",
+                        "type-id": "f061270a-2fd6-32f1-a641-f0f8676d14e6",
+                        "languages": [],
+                        "iswcs": []
+                    },
+                    "target-credit": "",
+                    "direction": "forward",
+                    "ended": false,
+                    "type-id": "a3005666-a872-32c3-ad06-98af558e99b0"
+                }
+            ],
+            "aliases": [],
+            "first-release-date": "2024-05-03"
         }
-    ],
-    "length": null
+    ]
 }

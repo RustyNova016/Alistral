@@ -12,3 +12,6 @@ thiserror = "2.0.11"
 sqlx = "0.8.3"
 owo-colors = "4.2.0"
 regex = "1.11.1"
+
+[dev-dependencies]
+tokio = "1.40.0"

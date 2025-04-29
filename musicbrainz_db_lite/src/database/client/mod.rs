@@ -50,7 +50,7 @@ impl DBClient {
             .in_memory()
             .set_default_mb_client()
             .set_default_lb_client()
-            .connect_and_migrate()
+            .connect_and_migrate(1)
             .await?
             .build())
     }

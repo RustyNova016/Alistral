@@ -1,4 +1,5 @@
 use musicbrainz_db_lite::models::musicbrainz::{main_entities::MainEntity, recording::Recording};
+use musicbrainz_db_lite::models::shared_traits::db_relation::RecordingWorkDBRel;
 use tuillez::formatter::FormatWithAsync;
 
 use crate::clippy::clippy_lint::MbClippyLint;
@@ -25,10 +26,11 @@ impl MbClippyLint for MissingWorkLint {
         let MainEntity::Recording(recording) = entity else {
             return Ok(None);
         };
-        let conn = &mut client.mb_database.get_raw_connection().await?;
 
         let work = recording
-            .get_works_or_fetch(conn, &client.mb_database)
+            .get_related_entity::<RecordingWorkDBRel>(
+                &mut *client.mb_database.get_raw_connection().await?,
+            )
             .await?;
 
         if !work.is_empty() {
@@ -95,5 +97,41 @@ impl MbClippyLint for MissingWorkLint {
 
     fn get_severity(&self) -> LintSeverity {
         LintSeverity::MissingData
+    }
+}
+
+#[cfg(test)]
+mod test {
+
+    use musicbrainz_db_lite::Recording;
+
+    use crate::SymphonyzeClient;
+    use crate::clippy::lints::missing_work::MissingWorkLint;
+    use crate::testing::should_trigger_lint;
+    use crate::testing::shouldnt_trigger_lint;
+    use crate::testing::test_name;
+
+    #[tokio::test]
+    async fn should_trigger() {
+        let client = SymphonyzeClient::get_testing_client(&test_name()).await;
+        client.load_test_data("missing_work.json").await;
+
+        should_trigger_lint::<MissingWorkLint, Recording>(
+            &client,
+            "51feae17-26bd-4aa9-bfaa-ef408df58293",
+        )
+        .await;
+    }
+
+    #[tokio::test]
+    async fn shouldnt_trigger() {
+        let client = SymphonyzeClient::get_testing_client(&test_name()).await;
+        client.load_test_data("missing_work.json").await;
+
+        shouldnt_trigger_lint::<MissingWorkLint, Recording>(
+            &client,
+            "e8454ea9-b850-46b0-b8d8-22d024095819",
+        )
+        .await;
     }
 }

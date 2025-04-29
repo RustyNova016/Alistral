@@ -86,5 +86,8 @@ where
 /// Entity (0:M) -> [`crate::ArtistCredit`] (M:1) -> [`crate::Artist`]
 pub struct ArtistFromCreditsRelation;
 
+/// Recording (1:M) -> Work
+pub struct RecordingWorkDBRel;
+
 /// Entity (0:M) -> [`crate::ArtistCredit`]
 pub struct ArtistCreditDBRel;
