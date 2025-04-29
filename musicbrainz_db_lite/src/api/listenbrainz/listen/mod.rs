@@ -1,5 +1,6 @@
 pub mod fetching;
 use crate::Error;
+use crate::MBIDRedirection as _;
 use crate::models::listenbrainz::msid_mapping::MsidMapping;
 use crate::models::musicbrainz::recording::Recording;
 use listenbrainz::raw::response::UserListensListen;

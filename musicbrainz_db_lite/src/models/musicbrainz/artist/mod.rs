@@ -1,11 +1,11 @@
 use musicbrainz_db_lite_macros::{MainEntity, Upsert};
 use sqlx::prelude::FromRow;
 
+use crate::MBIDRedirection;
 use crate::models::shared_traits::has_genre::HasGenres;
 use crate::models::shared_traits::has_table::HasTable;
 use crate::models::shared_traits::has_tags::HasTags;
 use crate::utils::macros::get_and_fetch::impl_get_and_fetch;
-use crate::utils::macros::impl_redirections;
 
 use super::relations::impl_relations::impl_relations;
 
@@ -32,10 +32,8 @@ pub struct Artist {
     pub full_update_date: Option<i64>,
 }
 
-impl_redirections!(Artist, "artists");
 impl_get_and_fetch!(Artist);
 impl_relations!(Artist);
-//impl_fetch_by_mbid!(Artist);
 
 impl crate::RowId for Artist {
     fn get_row_id(&self) -> i64 {
@@ -50,4 +48,4 @@ impl HasTable for Artist {
 
 impl HasTags for Artist {}
 impl HasGenres for Artist {}
-impl crate::MBIDRedirection for Artist {}
+impl MBIDRedirection for Artist {}

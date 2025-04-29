@@ -1,3 +1,4 @@
+use crate::MBIDRedirection;
 use crate::models::shared_traits::find_by_mbid::FindByMBID;
 use crate::models::shared_traits::find_by_rowid::FindByRowID;
 
@@ -17,6 +18,6 @@ impl FindByMBID for Label {
         conn: &mut sqlx::SqliteConnection,
         id: &str,
     ) -> Result<Option<Self>, crate::Error> {
-        Ok(Self::find_by_mbid(conn, id).await?)
+        Ok(<Self as MBIDRedirection>::find_by_mbid(conn, id).await?)
     }
 }

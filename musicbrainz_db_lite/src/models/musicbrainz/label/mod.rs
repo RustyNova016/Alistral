@@ -3,10 +3,11 @@ pub mod finds;
 use musicbrainz_db_lite_macros::{MainEntity, Upsert};
 use sqlx::FromRow;
 
+use crate::MBIDRedirection;
 use crate::models::shared_traits::has_genre::HasGenres;
 use crate::models::shared_traits::has_table::HasTable;
 use crate::models::shared_traits::has_tags::HasTags;
-use crate::utils::macros::{get_and_fetch::impl_get_and_fetch, impl_redirections};
+use crate::utils::macros::get_and_fetch::impl_get_and_fetch;
 
 use super::relations::impl_relations::impl_relations;
 
@@ -31,7 +32,6 @@ pub struct Label {
     pub full_update_date: Option<i64>,
 }
 
-impl_redirections!(Label, "labels");
 impl_get_and_fetch!(Label);
 impl_relations!(Label);
 
@@ -48,4 +48,4 @@ impl HasTable for Label {
 
 impl HasTags for Label {}
 impl HasGenres for Label {}
-impl crate::MBIDRedirection for Label {}
+impl MBIDRedirection for Label {}

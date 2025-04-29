@@ -4,6 +4,7 @@ use std::io::BufRead;
 use std::io::BufReader;
 use std::path::Path;
 
+use musicbrainz_db_lite::MBIDRedirection as _;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::listenbrainz::messybrainz_submission::MessybrainzSubmission;
 use musicbrainz_db_lite::models::listenbrainz::msid_mapping::MsidMapping;

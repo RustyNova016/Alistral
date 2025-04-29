@@ -2,6 +2,7 @@ use musicbrainz_rs_nova::entity::artist::Artist as MBArtist;
 use sqlx::SqliteConnection;
 
 use crate::Error;
+use crate::MBIDRedirection;
 use crate::models::musicbrainz::artist::Artist;
 use crate::models::musicbrainz::genre::genre_tag::GenreTag;
 use crate::models::musicbrainz::tags::Tag;
@@ -84,7 +85,7 @@ impl FetchAndSave<MBArtist> for Artist {
         mbid: &str,
         id: i64,
     ) -> Result<(), sqlx::Error> {
-        Self::set_redirection(conn, mbid, id).await
+        Self::link_mbid(conn, mbid, id).await
     }
 }
 

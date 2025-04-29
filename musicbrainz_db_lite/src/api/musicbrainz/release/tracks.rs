@@ -1,13 +1,14 @@
 use musicbrainz_rs_nova::entity::release::Track as MBTrack;
-use sqlx::{SqliteConnection, sqlite::SqliteQueryResult};
+use sqlx::sqlite::SqliteQueryResult;
 
-use crate::models::musicbrainz::{
-    artist_credit::ArtistCredits, recording::Recording, release::Track,
-};
+use crate::MBIDRedirection as _;
+use crate::models::musicbrainz::artist_credit::ArtistCredits;
+use crate::models::musicbrainz::recording::Recording;
+use crate::models::musicbrainz::release::Track;
 
 impl Track {
     pub async fn save_api_responses(
-        conn: &mut SqliteConnection,
+        conn: &mut sqlx::SqliteConnection,
         value: Vec<MBTrack>,
         media_id: i64,
     ) -> Result<Vec<Self>, crate::Error> {
@@ -51,7 +52,7 @@ impl Track {
 
     pub async fn set_recording_id(
         &self,
-        conn: &mut SqliteConnection,
+        conn: &mut sqlx::SqliteConnection,
         id: &str,
     ) -> Result<SqliteQueryResult, sqlx::Error> {
         sqlx::query!(
@@ -65,7 +66,7 @@ impl Track {
 
     /// Associate a track gid to a recording gid
     pub async fn set_recording_id_from_gid(
-        conn: &mut SqliteConnection,
+        conn: &mut sqlx::SqliteConnection,
         recording_id: i64,
         track_id: &str,
     ) -> Result<SqliteQueryResult, sqlx::Error> {
