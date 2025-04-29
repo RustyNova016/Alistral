@@ -1,6 +1,7 @@
 use musicbrainz_rs_nova::entity::release_group::ReleaseGroup as MBReleaseGroup;
 
 use crate::Error;
+use crate::MBIDRedirection as _;
 use crate::models::musicbrainz::artist_credit::ArtistCredits;
 use crate::models::musicbrainz::genre::genre_tag::GenreTag;
 use crate::models::musicbrainz::release::Release;
@@ -101,7 +102,7 @@ impl FetchAndSave<MBReleaseGroup> for ReleaseGroup {
         mbid: &str,
         id: i64,
     ) -> Result<(), sqlx::Error> {
-        Self::set_redirection(conn, mbid, id).await
+        Self::link_mbid(conn, mbid, id).await
     }
 }
 

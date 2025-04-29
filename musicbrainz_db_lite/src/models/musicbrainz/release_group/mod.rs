@@ -1,17 +1,17 @@
-pub mod display;
-pub mod finds;
-pub mod relations;
 use musicbrainz_db_lite_macros::{MainEntity, Upsert};
 use sqlx::FromRow;
 
+use crate::MBIDRedirection;
+use crate::models::musicbrainz::relations::impl_relations::impl_relations;
 use crate::models::shared_traits::has_genre::HasGenres;
 use crate::models::shared_traits::has_table::HasTable;
 use crate::models::shared_traits::has_tags::HasTags;
 use crate::utils::macros::artist_credits::impl_artist_credits;
 use crate::utils::macros::get_and_fetch::impl_get_and_fetch;
-use crate::utils::macros::impl_redirections;
 
-use super::relations::impl_relations::impl_relations;
+pub mod display;
+pub mod finds;
+pub mod relations;
 
 #[derive(Debug, Default, PartialEq, Eq, Clone, FromRow, Upsert, MainEntity)]
 #[database(
@@ -34,7 +34,6 @@ pub struct ReleaseGroup {
     pub full_update_date: Option<i64>,
 }
 
-impl_redirections!(ReleaseGroup, "release_groups");
 impl_get_and_fetch!(ReleaseGroup);
 impl_artist_credits!(ReleaseGroup, "release_groups");
 impl_relations!(ReleaseGroup);
@@ -52,4 +51,4 @@ impl HasTable for ReleaseGroup {
 
 impl HasTags for ReleaseGroup {}
 impl HasGenres for ReleaseGroup {}
-impl crate::MBIDRedirection for ReleaseGroup {}
+impl MBIDRedirection for ReleaseGroup {}

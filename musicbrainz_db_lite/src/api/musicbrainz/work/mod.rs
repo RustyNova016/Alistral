@@ -2,6 +2,7 @@ pub mod fetching;
 use musicbrainz_rs_nova::entity::work::Work as MBWork;
 
 use crate::Error;
+use crate::MBIDRedirection as _;
 use crate::models::musicbrainz::genre::genre_tag::GenreTag;
 use crate::models::musicbrainz::tags::Tag;
 use crate::models::musicbrainz::work::Work;
@@ -90,7 +91,7 @@ impl FetchAndSave<MBWork> for Work {
         mbid: &str,
         id: i64,
     ) -> Result<(), sqlx::Error> {
-        Self::set_redirection(conn, mbid, id).await
+        Self::link_mbid(conn, mbid, id).await
     }
 }
 

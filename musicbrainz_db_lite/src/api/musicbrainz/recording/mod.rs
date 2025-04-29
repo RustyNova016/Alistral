@@ -1,24 +1,22 @@
-pub mod fetching;
-
 use musicbrainz_rs_nova::entity::recording::Recording as MBRecording;
 use musicbrainz_rs_nova::entity::release::Release as MBRelease;
 use sqlx::Acquire;
 use sqlx::SqliteConnection;
 
 use crate::Error;
+use crate::models::musicbrainz::artist_credit::ArtistCredits;
 use crate::models::musicbrainz::genre::genre_tag::GenreTag;
+use crate::models::musicbrainz::recording::Recording;
+use crate::models::musicbrainz::release::Release;
+use crate::models::musicbrainz::release::Track;
 use crate::models::musicbrainz::tags::Tag;
 use crate::models::shared_traits::completeness::CompletenessFlag;
 use crate::models::shared_traits::fetch_and_save::FetchAndSave;
+use crate::models::shared_traits::mbid_redirection::MBIDRedirection;
 use crate::models::shared_traits::save_from::SaveFrom;
-use crate::{
-    models::musicbrainz::{
-        artist_credit::ArtistCredits,
-        recording::Recording,
-        release::{Release, Track},
-    },
-    utils::date_utils::date_to_timestamp,
-};
+use crate::utils::date_utils::date_to_timestamp;
+
+pub mod fetching;
 
 impl Recording {
     pub async fn save_api_response(
@@ -118,7 +116,7 @@ impl FetchAndSave<MBRecording> for Recording {
         mbid: &str,
         id: i64,
     ) -> Result<(), sqlx::Error> {
-        Self::set_redirection(conn, mbid, id).await
+        Self::link_mbid(conn, mbid, id).await
     }
 }
 

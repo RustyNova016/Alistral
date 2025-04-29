@@ -1,13 +1,14 @@
-pub mod display;
 use musicbrainz_db_lite_macros::{MainEntity, Upsert};
 use sqlx::FromRow;
 
+use crate::MBIDRedirection;
 use crate::models::musicbrainz::relations::impl_relations::impl_relations;
 use crate::models::shared_traits::has_genre::HasGenres;
 use crate::models::shared_traits::has_table::HasTable;
 use crate::models::shared_traits::has_tags::HasTags;
-use crate::utils::macros::{get_and_fetch::impl_get_and_fetch, impl_redirections};
+use crate::utils::macros::get_and_fetch::impl_get_and_fetch;
 
+pub mod display;
 pub mod finds;
 
 #[derive(Debug, Default, PartialEq, Eq, Clone, FromRow, Upsert, MainEntity)]
@@ -28,7 +29,6 @@ pub struct Work {
     pub full_update_date: Option<i64>,
 }
 
-impl_redirections!(Work, "Works");
 impl_get_and_fetch!(Work);
 impl_relations!(Work);
 
@@ -45,4 +45,4 @@ impl HasTable for Work {
 
 impl HasTags for Work {}
 impl HasGenres for Work {}
-impl crate::MBIDRedirection for Work {}
+impl MBIDRedirection for Work {}
