@@ -7,6 +7,7 @@ use crate::clippy::clippy_lint::MbClippyLint;
 use crate::clippy::lint_hint::MbClippyLintHint;
 use crate::clippy::lint_link::MbClippyLintLink;
 use crate::clippy::lint_severity::LintSeverity;
+use crate::clippy::lints::MusicbrainzLints;
 
 pub struct SoundtrackWithoutDisambiguationLint {
     work: Work,
@@ -70,5 +71,11 @@ impl MbClippyLint for SoundtrackWithoutDisambiguationLint {
 
     fn get_severity(&self) -> LintSeverity {
         LintSeverity::StyleIssue
+    }
+}
+
+impl From<SoundtrackWithoutDisambiguationLint> for MusicbrainzLints {
+    fn from(value: SoundtrackWithoutDisambiguationLint) -> Self {
+        Self::SoundtrackWithoutDisambiguationLint(value)
     }
 }

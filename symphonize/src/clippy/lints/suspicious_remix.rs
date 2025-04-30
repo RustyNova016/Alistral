@@ -8,6 +8,7 @@ use crate::clippy::clippy_lint::MbClippyLint;
 use crate::clippy::lint_hint::MbClippyLintHint;
 use crate::clippy::lint_link::MbClippyLintLink;
 use crate::clippy::lint_severity::LintSeverity;
+use crate::clippy::lints::MusicbrainzLints;
 use crate::utils::formater;
 
 pub struct SuspiciousRemixLint {
@@ -89,5 +90,11 @@ impl MbClippyLint for SuspiciousRemixLint {
 
     fn get_severity(&self) -> LintSeverity {
         LintSeverity::MissingRelation
+    }
+}
+
+impl From<SuspiciousRemixLint> for MusicbrainzLints {
+    fn from(value: SuspiciousRemixLint) -> Self {
+        Self::SuspiciousRemixLint(value)
     }
 }

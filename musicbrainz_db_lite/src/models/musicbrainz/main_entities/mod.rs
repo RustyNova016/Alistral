@@ -1,7 +1,10 @@
 pub mod convert;
+use std::sync::Arc;
+
 #[cfg(feature = "pretty_format")]
 use tuillez::formatter::FormatWithAsync;
 
+use crate::FetchAndSave;
 use crate::RowId;
 #[cfg(feature = "pretty_format")]
 use crate::models::musicbrainz::MusicbrainzFormater;
@@ -43,6 +46,31 @@ impl MainEntity {
             MainEntity::Recording(val) => val.refetch_and_load(conn, client).await?,
             MainEntity::Release(val) => val.refetch_and_load(conn, client).await?,
             MainEntity::Work(val) => val.refetch_and_load(conn, client).await?,
+        }
+
+        Ok(())
+    }
+
+    pub async fn refetch_and_load_as_task(
+        &mut self,
+        client: Arc<crate::DBClient>,
+    ) -> Result<(), crate::Error> {
+        match self {
+            MainEntity::Artist(val) => {
+                *self = MainEntity::Artist(val.refetch_as_task(client).await?);
+            }
+            MainEntity::Label(val) => {
+                *self = MainEntity::Label(val.refetch_as_task(client).await?);
+            }
+            MainEntity::Recording(val) => {
+                *self = MainEntity::Recording(val.refetch_as_task(client).await?);
+            }
+            MainEntity::Release(val) => {
+                *self = MainEntity::Release(val.refetch_as_task(client).await?);
+            }
+            MainEntity::Work(val) => {
+                *self = MainEntity::Work(val.refetch_as_task(client).await?);
+            }
         }
 
         Ok(())

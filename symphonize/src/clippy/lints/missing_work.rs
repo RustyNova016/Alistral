@@ -8,6 +8,7 @@ use crate::clippy::lint_link::MbClippyLintLink;
 use crate::clippy::lint_severity::LintSeverity;
 
 use crate::SymphonyzeClient;
+use crate::clippy::lints::MusicbrainzLints;
 use crate::utils::formater;
 
 pub struct MissingWorkLint {
@@ -97,6 +98,12 @@ impl MbClippyLint for MissingWorkLint {
 
     fn get_severity(&self) -> LintSeverity {
         LintSeverity::MissingData
+    }
+}
+
+impl From<MissingWorkLint> for MusicbrainzLints {
+    fn from(value: MissingWorkLint) -> Self {
+        Self::MissingWorkLint(value)
     }
 }
 

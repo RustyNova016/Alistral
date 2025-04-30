@@ -1,6 +1,7 @@
 use musicbrainz_rs_nova::Fetch as _;
 use musicbrainz_rs_nova::entity::recording::Recording as MSRecording;
 use sqlx::SqliteConnection;
+use tracing::debug;
 
 use crate::database::client::DBClient;
 use crate::models::musicbrainz::recording::Recording;
@@ -12,6 +13,7 @@ impl FetchMBID<MSRecording> for Recording {
         client: &DBClient,
         mbid: &str,
     ) -> Result<MSRecording, musicbrainz_rs_nova::Error> {
+        debug!("Sending fetch query for recording `{}`", mbid);
         MSRecording::fetch()
             .id(mbid)
             .with_aliases()

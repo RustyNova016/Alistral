@@ -128,7 +128,7 @@ impl<MBClient, LBClient> ClientBuilder<InMemory, (), MBClient, LBClient> {
     ) -> Result<ClientBuilder<InMemory, DBLitePool, MBClient, LBClient>, crate::Error> {
         let conn_str = match &self.database_type.0 {
             None => ":memory:".to_string(),
-            Some(name) => format!("file:{}?mode=memory&cache=shared", name)
+            Some(name) => format!("file:{}?mode=memory&cache=shared", name),
         };
 
         let optconn = SqliteConnectOptions::from_str(&conn_str)?
