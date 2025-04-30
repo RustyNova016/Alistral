@@ -6,6 +6,8 @@ use core::fmt::Write;
 use tuillez::formatter::FormatWithAsync;
 
 #[cfg(feature = "pretty_format")]
+use crate::ArtistCredit;
+#[cfg(feature = "pretty_format")]
 use crate::models::musicbrainz::MusicbrainzFormater;
 use crate::models::musicbrainz::artist_credit::ArtistCredits;
 
@@ -19,16 +21,16 @@ impl Display for ArtistCredits {
 }
 
 #[cfg(feature = "pretty_format")]
-impl FormatWithAsync<MusicbrainzFormater<'_>> for ArtistCredits {
+impl FormatWithAsync<MusicbrainzFormater> for Vec<ArtistCredit> {
     type Error = crate::Error;
 
-    async fn format_with_async(&self, ft: &MusicbrainzFormater<'_>) -> Result<String, Self::Error> {
+    async fn format_with_async(&self, ft: &MusicbrainzFormater) -> Result<String, Self::Error> {
         use owo_colors::OwoColorize as _;
         use tuillez::utils::hyperlink_rename;
 
         let mut out = String::new();
 
-        for credit in &self.1 {
+        for credit in self {
             let link = if !ft.listenbrainz_link {
                 format!("https://musicbrainz.org/artist/{}", &credit.artist_gid)
             } else {
@@ -44,5 +46,14 @@ impl FormatWithAsync<MusicbrainzFormater<'_>> for ArtistCredits {
             .expect("Display format is infaillible");
         }
         Ok(out)
+    }
+}
+
+#[cfg(feature = "pretty_format")]
+impl FormatWithAsync<MusicbrainzFormater> for ArtistCredits {
+    type Error = crate::Error;
+
+    async fn format_with_async(&self, ft: &MusicbrainzFormater) -> Result<String, Self::Error> {
+        self.1.format_with_async(ft).await
     }
 }

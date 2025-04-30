@@ -1,9 +1,13 @@
 use std::fmt::Display;
 
 use sqlx::SqliteConnection;
+use sqlx::prelude::FromRow;
+
+use crate::models::shared_traits::has_table::HasTable;
 
 pub mod display;
 
+#[derive(Debug, Clone, PartialEq, Eq, FromRow)]
 pub struct ArtistCredit {
     pub artist_credit: i64,
     pub position: i64,
@@ -14,6 +18,12 @@ pub struct ArtistCredit {
 
 impl ArtistCredit {}
 
+impl HasTable for ArtistCredit {
+    const TABLE_NAME: &str = "artist_credits_item";
+    const FOREIGN_FIELD_NAME: &str = "artist_credits_item";
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, FromRow)]
 pub struct ArtistCredits(pub i64, pub Vec<ArtistCredit>);
 
 impl ArtistCredits {

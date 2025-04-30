@@ -10,14 +10,14 @@ use crate::ALISTRAL_CLIENT;
 pub static MUSIBRAINZ_FMT: LazyLock<MusicbrainzFormater> = LazyLock::new(|| MusicbrainzFormater {
     artist_credits: true,
     listenbrainz_link: false,
-    client: &ALISTRAL_CLIENT.musicbrainz_db,
+    client: ALISTRAL_CLIENT.musicbrainz_db.clone(),
 });
 
 pub static LISTENBRAINZ_FMT: LazyLock<MusicbrainzFormater> =
     LazyLock::new(|| MusicbrainzFormater {
         artist_credits: true,
         listenbrainz_link: true,
-        client: &ALISTRAL_CLIENT.musicbrainz_db,
+        client: ALISTRAL_CLIENT.musicbrainz_db.clone(),
     });
 
 pub static CONFIG_DIR: LazyLock<PathBuf> = LazyLock::new(|| {
