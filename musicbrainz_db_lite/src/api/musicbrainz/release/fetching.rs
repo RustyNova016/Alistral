@@ -1,12 +1,12 @@
+use musicbrainz_rs_nova::Fetch as _;
+use sqlx::SqliteConnection;
+
+use crate::MBRelease;
+use crate::Release;
+use crate::Track;
 use crate::database::client::DBClient;
 use crate::models::shared_traits::fetch_and_save::FetchAndSave;
 use crate::models::shared_traits::fetch_mbid::FetchMBID;
-use crate::{
-    Error,
-    models::musicbrainz::release::{Release, Track},
-};
-use musicbrainz_rs_nova::{Fetch, entity::release::Release as MBRelease};
-use sqlx::SqliteConnection;
 
 impl FetchMBID<MBRelease> for Release {
     async fn fetch_from_mbid(
@@ -40,7 +40,7 @@ impl Release {
         conn: &mut SqliteConnection,
         client: &DBClient,
         mbid: &str,
-    ) -> Result<Option<Self>, Error> {
+    ) -> Result<Option<Self>, crate::Error> {
         Self::fetch_and_save_with_conn(conn, client, mbid).await
     }
 }

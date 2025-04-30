@@ -67,7 +67,7 @@ pub fn impl_update_date(struct_name: &Ident, table_name: &str, pk: &str) -> Toke
 
         /// Refresh the data in the database by refetching the entity
         pub async fn refetch(&self, conn: &mut sqlx::SqliteConnection, client: &crate::DBClient) -> Result<Self, crate::Error> {
-            Self::fetch_and_save(conn, client, &self.mbid).await?.ok_or(crate::Error::UnknownUpstream(self.mbid.clone()))
+            Self::fetch_and_save(conn, client, &self.mbid).await?.ok_or(crate::Error::NotFoundInUpstream(self.mbid.clone()))
         }
 
         /// Refetch the entity and replace the inner values with the new ones

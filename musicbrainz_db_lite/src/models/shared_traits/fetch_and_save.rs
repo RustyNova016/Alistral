@@ -115,7 +115,9 @@ where
         async {
             Self::fetch_and_save_with_conn(conn, client, self.get_mbid())
                 .await?
-                .ok_or(crate::Error::UnknownUpstream(self.get_mbid().to_string()))
+                .ok_or(crate::Error::NotFoundInUpstream(
+                    self.get_mbid().to_string(),
+                ))
         }
     }
 
@@ -130,7 +132,9 @@ where
         async {
             Self::fetch_and_save_with_pool(client, self.get_mbid())
                 .await?
-                .ok_or(crate::Error::UnknownUpstream(self.get_mbid().to_string()))
+                .ok_or(crate::Error::NotFoundInUpstream(
+                    self.get_mbid().to_string(),
+                ))
         }
     }
 
@@ -146,7 +150,9 @@ where
         async {
             Self::fetch_and_save_as_task(client, self.get_mbid())
                 .await?
-                .ok_or(crate::Error::UnknownUpstream(self.get_mbid().to_string()))
+                .ok_or(crate::Error::NotFoundInUpstream(
+                    self.get_mbid().to_string(),
+                ))
         }
     }
 }

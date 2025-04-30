@@ -7,12 +7,6 @@ use sqlx::FromRow;
 
 use crate::RowId;
 
-#[derive(Clone, PartialEq, Eq, Hash)]
-#[deprecated]
-pub struct EntityRelations<T, U> {
-    pub relations: Vec<(T, U)>,
-}
-
 pub fn inner_join_values<IdT, T, U, IteT, IteU>(left: IteT, mut right: IteU) -> Vec<(T, U)>
 where
     IdT: Eq,
@@ -28,16 +22,76 @@ where
     .collect_vec()
 }
 
+/// Represent a returned row during a many to many query.
 #[derive(Clone, PartialEq, Eq, Hash, Debug, FromRow)]
 pub struct JoinRelation<T, U> {
+    /// The row ID of the entity having been queried
     pub original_id: T,
+
+    /// The associated entity
     #[sqlx(flatten)]
     pub data: U,
 }
 
+/// A collection of [`JoinRelation`]
 #[derive(Clone, PartialEq, Eq, Hash, Debug)]
 pub struct JoinCollection<T, U> {
     joins: Vec<JoinRelation<T, U>>,
+}
+
+impl<R> JoinCollection<i64, R>
+where
+    R: RowId + Eq + Hash,
+{
+    /// Associate the left entity's rowids to right entities
+    pub fn into_lid_hashmap(self) -> HashMap<i64, Vec<R>> {
+        self.joins
+            .into_iter()
+            .map(|join| (join.original_id, join.data))
+            .into_group_map()
+    }
+
+    // /// Associate the right entity's rowids to left entities
+    // pub fn into_rid_hashmap<L>(&self, left_entities: Vec<L>) -> HashMap<i64, Vec<L>>
+    // where
+    //     L: RowId,
+    //     R: RowId
+    // {
+    //     for rid in self.joins.iter().map(|join| join.data.get_row_id()) {
+
+    //     }
+    // }
+
+    /// Convert the join into a hashmap. This implies that:
+    /// - Right has many Left
+    /// - Left has one Right
+    ///
+    /// ex: a Release (Right) has many Tracks (Left)
+    pub fn into_inner_many_to_one_hashmap<L>(self, left_entities: Vec<L>) -> HashMap<R, Vec<L>>
+    where
+        L: RowId,
+    {
+        // Construct an
+        let mut l_index = left_entities
+            .into_iter()
+            .into_group_map_by(|ent| ent.get_row_id());
+
+        let mut output = HashMap::new();
+        for (l_id, right) in self.into_id_values() {
+            let entry: &mut Vec<L> = output.entry(right).or_default();
+            if let Some(left) = l_index.remove(&l_id) {
+                entry.extend(left)
+            }
+        }
+
+        output
+    }
+
+    fn into_id_values(self) -> impl Iterator<Item = (i64, R)> {
+        self.joins
+            .into_iter()
+            .map(|join| (join.original_id, join.data))
+    }
 }
 
 impl<LId, R: Clone> JoinCollection<LId, R> {
