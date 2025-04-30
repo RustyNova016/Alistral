@@ -4,6 +4,8 @@ use itertools::Itertools;
 
 use crate::models::musicbrainz::artist::Artist;
 use crate::models::musicbrainz::recording::Recording;
+use crate::models::shared_traits::db_relation::ArtistFromCreditsRelation;
+use crate::models::shared_traits::db_relation::DBRelation;
 use crate::utils::sqlx_utils::entity_relations::JoinCollection;
 use crate::utils::sqlx_utils::entity_relations::JoinRelation;
 
@@ -73,5 +75,16 @@ impl Recording {
         .await?;
 
         Ok(JoinCollection::from(joins).into_hashmap(recordings, |id, value| &value.id == id))
+    }
+}
+
+impl DBRelation<ArtistFromCreditsRelation> for Recording {
+    type ReturnedType = Artist;
+
+    fn get_join_statement() -> &'static str {
+        "INNER JOIN artist_credits ON recordings.artist_credit = artist_credits.id
+        INNER JOIN artist_credits_item ON artist_credits.id = artist_credits_item.artist_credit
+        INNER JOIN artists_gid_redirect ON artist_credits_item.artist_gid = artists_gid_redirect.gid
+        INNER JOIN artists ON artists_gid_redirect.new_id = artists.id"
     }
 }

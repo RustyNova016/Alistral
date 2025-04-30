@@ -1,20 +1,15 @@
 use std::collections::HashMap;
-use std::sync::Arc;
 
-use futures::SinkExt as _;
-use futures::channel::mpsc::Sender;
 use itertools::Itertools;
 use sqlx::SqliteConnection;
 
-use crate::DBClient;
-use crate::FetchAsComplete;
-use crate::models::musicbrainz::main_entities::MainEntity;
 use crate::models::musicbrainz::release::Release;
 use crate::utils::sqlx_utils::entity_relations::{JoinCollection, JoinRelation};
 
 use super::Recording;
 
 pub mod artist;
+pub mod crawler;
 pub mod work;
 
 impl Recording {
@@ -80,36 +75,6 @@ impl Recording {
         .await?;
 
         Ok(JoinCollection::from(joins).into_hashmap(recordings, |id, value| &value.id == id))
-    }
-
-    pub async fn get_crawler(
-        &self,
-        client: Arc<DBClient>,
-        mut sender: Sender<Arc<MainEntity>>,
-    ) -> Result<(), crate::Error> {
-        Self::fetch_as_complete_as_task(client.clone(), &self.mbid).await?;
-        let artists = self
-            .get_artists_or_fetch(&mut *client.get_raw_connection().await?, &client)
-            .await?;
-        for artist in artists {
-            sender.send(Arc::new(MainEntity::Artist(artist))).await?;
-        }
-
-        let releases = self
-            .get_releases_or_fetch(&mut *client.get_raw_connection().await?, &client)
-            .await?;
-        for release in releases {
-            sender.send(Arc::new(MainEntity::Release(release))).await?;
-        }
-
-        let works = self
-            .get_works_or_fetch(&mut *client.get_raw_connection().await?, &client)
-            .await?;
-        for work in works {
-            sender.send(Arc::new(MainEntity::Work(work))).await?;
-        }
-
-        Ok(())
     }
 }
 

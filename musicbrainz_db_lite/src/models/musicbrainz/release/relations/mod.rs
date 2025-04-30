@@ -46,7 +46,7 @@ impl Release {
         client: Arc<DBClient>,
         mut sender: Sender<Arc<MainEntity>>,
     ) -> Result<(), crate::Error> {
-        Self::fetch_as_complete_as_task(client.clone(), &self.mbid).await?;
+        Self::fetch_mbid_as_complete_as_task(client.clone(), &self.mbid).await?;
 
         let recordings = self
             .get_recordings_or_fetch(&mut *client.get_raw_connection().await?, &client)

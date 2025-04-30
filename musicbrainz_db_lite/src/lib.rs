@@ -33,7 +33,17 @@ pub use crate::models::shared_traits::HasMBID;
 pub use crate::models::shared_traits::RowId;
 pub use crate::models::shared_traits::completeness::CompletenessFlag;
 pub use crate::models::shared_traits::completeness::FetchAsComplete;
+pub use crate::models::shared_traits::db_relation::DBRelation;
+pub use crate::models::shared_traits::db_relation::complete_fetch::DBRelationFetch;
 pub use crate::models::shared_traits::fetch_and_save::FetchAndSave;
 pub use crate::models::shared_traits::get_or_fetch::GetOrFetch;
 pub use crate::models::shared_traits::mbid_redirection::MBIDRedirection;
 pub use crate::models::shared_traits::save_from::SaveFrom;
+
+// === Utils ===
+pub use utils::sqlx_utils::joins::JoinCollection;
+pub use utils::sqlx_utils::joins::JoinRelation;
+
+// === Internal Reexports ===
+pub(crate) type MBRecording = musicbrainz_rs_nova::entity::recording::Recording;
+pub(crate) type MBRelease = musicbrainz_rs_nova::entity::release::Release;

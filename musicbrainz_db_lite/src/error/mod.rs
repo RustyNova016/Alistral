@@ -29,7 +29,7 @@ pub enum Error {
     #[error(
         "The MBID {0} wasn't found in Musicbrainz, but found in the local database. Hint: The upstream MBID might have been deleted"
     )]
-    UnknownUpstream(String),
+    NotFoundInUpstream(String),
 
     // Temporary errors
     #[error("Tried to insert a relation that is not yet implemented")]
