@@ -5,12 +5,14 @@ use tuillez::formatter::FormatWithAsync;
 use crate::models::musicbrainz::MusicbrainzFormater;
 #[cfg(feature = "pretty_format")]
 use crate::models::musicbrainz::release::Release;
+#[cfg(feature = "pretty_format")]
+use crate::models::shared_traits::db_relation::ArtistCreditDBRel;
 
 #[cfg(feature = "pretty_format")]
-impl FormatWithAsync<MusicbrainzFormater<'_>> for Release {
+impl FormatWithAsync<MusicbrainzFormater> for Release {
     type Error = crate::Error;
 
-    async fn format_with_async(&self, ft: &MusicbrainzFormater<'_>) -> Result<String, Self::Error> {
+    async fn format_with_async(&self, ft: &MusicbrainzFormater) -> Result<String, Self::Error> {
         use owo_colors::OwoColorize as _;
         use tuillez::utils::hyperlink_rename;
 
@@ -34,13 +36,10 @@ impl FormatWithAsync<MusicbrainzFormater<'_>> for Release {
             Ok(format!(
                 "{} by {}",
                 name_format,
-                self.get_artist_credits_or_fetch(
-                    ft.client.get_raw_connection().await?.as_mut(),
-                    ft.client
-                )
-                .await?
-                .format_with_async(ft)
-                .await?
+                self.get_related_entity_or_fetch_as_task::<ArtistCreditDBRel>(&ft.client)
+                    .await?
+                    .format_with_async(ft)
+                    .await?
             ))
         } else {
             Ok(name_format)

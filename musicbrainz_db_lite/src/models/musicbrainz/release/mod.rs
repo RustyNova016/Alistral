@@ -8,10 +8,12 @@ use sqlx::FromRow;
 pub mod relations;
 
 use crate::MBIDRedirection;
+use crate::MBRelease;
 use crate::models::musicbrainz::relations::impl_relations::impl_relations;
 use crate::models::shared_traits::has_genre::HasGenres;
 use crate::models::shared_traits::has_table::HasTable;
 use crate::models::shared_traits::has_tags::HasTags;
+use crate::utils::macros::hardlink_methods::impl_db_relation_fetch_methods;
 use crate::utils::macros::{
     artist_credits::impl_artist_credits, get_and_fetch::impl_get_and_fetch,
 };
@@ -52,6 +54,7 @@ pub struct Release {
 impl_artist_credits!(Release, "releases");
 impl_get_and_fetch!(Release);
 impl_relations!(Release);
+impl_db_relation_fetch_methods!(Release, MBRelease);
 
 impl crate::RowId for Release {
     fn get_row_id(&self) -> i64 {

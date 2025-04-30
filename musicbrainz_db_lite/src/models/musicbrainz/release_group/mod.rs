@@ -2,12 +2,14 @@ use musicbrainz_db_lite_macros::{MainEntity, Upsert};
 use sqlx::FromRow;
 
 use crate::MBIDRedirection;
+use crate::MBReleaseGroup;
 use crate::models::musicbrainz::relations::impl_relations::impl_relations;
 use crate::models::shared_traits::has_genre::HasGenres;
 use crate::models::shared_traits::has_table::HasTable;
 use crate::models::shared_traits::has_tags::HasTags;
 use crate::utils::macros::artist_credits::impl_artist_credits;
 use crate::utils::macros::get_and_fetch::impl_get_and_fetch;
+use crate::utils::macros::hardlink_methods::impl_db_relation_fetch_methods;
 
 pub mod display;
 pub mod finds;
@@ -37,6 +39,7 @@ pub struct ReleaseGroup {
 impl_get_and_fetch!(ReleaseGroup);
 impl_artist_credits!(ReleaseGroup, "release_groups");
 impl_relations!(ReleaseGroup);
+impl_db_relation_fetch_methods!(ReleaseGroup, MBReleaseGroup);
 
 impl crate::RowId for ReleaseGroup {
     fn get_row_id(&self) -> i64 {

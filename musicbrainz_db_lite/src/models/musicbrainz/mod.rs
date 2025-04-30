@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use crate::DBClient;
 
 pub mod artist;
@@ -14,8 +16,8 @@ pub mod url;
 pub mod user;
 pub mod work;
 
-pub struct MusicbrainzFormater<'l> {
-    pub client: &'l DBClient,
+pub struct MusicbrainzFormater {
+    pub client: Arc<DBClient>,
 
     /// Use Listenbrainz URLs instead of Musicbrainz
     pub listenbrainz_link: bool,

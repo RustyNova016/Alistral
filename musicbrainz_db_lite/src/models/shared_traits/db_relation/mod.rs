@@ -83,5 +83,8 @@ where
     }
 }
 
-/// Represent the relation between an entity and their artist credits
+/// Entity (0:M) -> [`crate::ArtistCredit`] (M:1) -> [`crate::Artist`]
 pub struct ArtistFromCreditsRelation;
+
+/// Entity (0:M) -> [`crate::ArtistCredit`]
+pub struct ArtistCreditDBRel;

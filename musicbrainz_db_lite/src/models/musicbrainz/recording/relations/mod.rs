@@ -3,7 +3,10 @@ use std::collections::HashMap;
 use itertools::Itertools;
 use sqlx::SqliteConnection;
 
+use crate::ArtistCredit;
+use crate::DBRelation;
 use crate::models::musicbrainz::release::Release;
+use crate::models::shared_traits::db_relation::ArtistCreditDBRel;
 use crate::utils::sqlx_utils::entity_relations::{JoinCollection, JoinRelation};
 
 use super::Recording;
@@ -75,6 +78,15 @@ impl Recording {
         .await?;
 
         Ok(JoinCollection::from(joins).into_hashmap(recordings, |id, value| &value.id == id))
+    }
+}
+
+impl DBRelation<ArtistCreditDBRel> for Recording {
+    type ReturnedType = ArtistCredit;
+
+    fn get_join_statement() -> &'static str {
+        "INNER JOIN artist_credits ON recordings.artist_credit = artist_credits.id
+        INNER JOIN artist_credits_item ON artist_credits.id = artist_credits_item.artist_credit"
     }
 }
 

@@ -24,13 +24,10 @@ impl Work {
 }
 
 #[cfg(feature = "pretty_format")]
-impl FormatWithAsync<MusicbrainzFormater<'_>> for Work {
+impl FormatWithAsync<MusicbrainzFormater> for Work {
     type Error = crate::Error;
 
-    async fn format_with_async(
-        &self,
-        _ft: &MusicbrainzFormater<'_>,
-    ) -> Result<String, Self::Error> {
+    async fn format_with_async(&self, _ft: &MusicbrainzFormater) -> Result<String, Self::Error> {
         use owo_colors::OwoColorize as _;
         use tuillez::utils::hyperlink_rename;
 

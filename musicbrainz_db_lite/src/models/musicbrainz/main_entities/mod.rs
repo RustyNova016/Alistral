@@ -83,10 +83,10 @@ impl HasMBID for MainEntity {
 }
 
 #[cfg(feature = "pretty_format")]
-impl FormatWithAsync<MusicbrainzFormater<'_>> for MainEntity {
+impl FormatWithAsync<MusicbrainzFormater> for MainEntity {
     type Error = crate::Error;
 
-    async fn format_with_async(&self, ft: &MusicbrainzFormater<'_>) -> Result<String, Self::Error> {
+    async fn format_with_async(&self, ft: &MusicbrainzFormater) -> Result<String, Self::Error> {
         let out = match self {
             MainEntity::Artist(val) => val.format_with_async(ft).await?,
             MainEntity::Label(val) => val.format_with_async(ft).await?,

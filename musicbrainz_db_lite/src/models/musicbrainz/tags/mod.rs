@@ -63,13 +63,10 @@ impl RowId for Tag {
 }
 
 #[cfg(feature = "pretty_format")]
-impl FormatWithAsync<MusicbrainzFormater<'_>> for Tag {
+impl FormatWithAsync<MusicbrainzFormater> for Tag {
     type Error = crate::Error;
 
-    async fn format_with_async(
-        &self,
-        _ft: &MusicbrainzFormater<'_>,
-    ) -> Result<String, Self::Error> {
+    async fn format_with_async(&self, _ft: &MusicbrainzFormater) -> Result<String, Self::Error> {
         Ok(self.name.to_string())
     }
 }

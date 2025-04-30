@@ -15,7 +15,7 @@ use crate::datastructures::statistic_formater::StatisticFormater;
 use crate::utils::constants::LISTENBRAINZ_FMT;
 
 pub struct ListenDurationFormatter<'l> {
-    pub mb_format: &'l MusicbrainzFormater<'l>,
+    pub mb_format: &'l MusicbrainzFormater,
 }
 
 pub static LISTENDURATION_FMT: LazyLock<ListenDurationFormatter> =
@@ -28,9 +28,9 @@ pub static LISTENDURATION_FMT: LazyLock<ListenDurationFormatter> =
 impl<'l, Ent, Lis> FormatWithAsync<ListenDurationFormatter<'l>> for EntityWithListens<Ent, Lis>
 where
     Self: ListenCollWithTime,
-    Ent: RowId + FormatWithAsync<MusicbrainzFormater<'l>> + Sync,
+    Ent: RowId + FormatWithAsync<MusicbrainzFormater> + Sync,
     Lis: ListenCollectionReadable + Sync,
-    crate::Error: From<<Ent as FormatWithAsync<MusicbrainzFormater<'l>>>::Error>,
+    crate::Error: From<<Ent as FormatWithAsync<MusicbrainzFormater>>::Error>,
 {
     type Error = crate::Error;
 
@@ -54,10 +54,10 @@ where
 
 impl<Ent, Lis> StatFormatterVariant<Ent, Lis> for StatisticFormater<Ent, Lis, ListenDurationStats>
 where
-    Ent: RowId + for<'a> FormatWithAsync<MusicbrainzFormater<'a>> + Sync,
+    Ent: RowId + for<'a> FormatWithAsync<MusicbrainzFormater> + Sync,
     Lis: ListenCollectionReadable + Sync,
     EntityWithListens<Ent, Lis>: ListenCollWithTime,
-    crate::Error: for<'a> From<<Ent as FormatWithAsync<MusicbrainzFormater<'a>>>::Error>,
+    crate::Error: for<'a> From<<Ent as FormatWithAsync<MusicbrainzFormater>>::Error>,
 {
     fn sort_elements(&self) -> Vec<&EntityWithListens<Ent, Lis>> {
         let mut data = self.data.iter().collect_vec();
