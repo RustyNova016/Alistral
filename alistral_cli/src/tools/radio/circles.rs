@@ -7,7 +7,7 @@ use itertools::Itertools;
 use musicbrainz_db_lite::models::musicbrainz::artist::Artist;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use rand::prelude::SliceRandom;
-use rand::thread_rng;
+use rand::rng;
 use tracing::info;
 use tracing::warn;
 use tuillez::formatter::FormatWithAsync;
@@ -102,7 +102,8 @@ impl RadioCircle {
             .try_collect()
             .await?;
 
-        recordings.shuffle(&mut thread_rng());
+        let mut rng = rng();
+        recordings.shuffle(&mut rng);
 
         for recording in recordings {
             if self.recording_blacklist.contains(&recording.mbid) {
@@ -120,14 +121,15 @@ impl RadioCircle {
         conn: &mut sqlx::SqliteConnection,
         mut recordings: Vec<&Recording>,
     ) -> Result<Option<Artist>, crate::Error> {
-        recordings.shuffle(&mut thread_rng());
+        let mut rng = rng();
+        recordings.shuffle(&mut rng);
 
         for recording in recordings {
             let mut artists = recording
                 .get_artists_or_fetch(conn, &ALISTRAL_CLIENT.musicbrainz_db)
                 .await?;
 
-            artists.shuffle(&mut thread_rng());
+            artists.shuffle(&mut rng);
 
             for artist in artists {
                 if self.artist_blacklist.contains(&artist.mbid) {
