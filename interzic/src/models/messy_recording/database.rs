@@ -7,7 +7,7 @@ use sqlx::Sqlite;
 use crate::models::messy_recording::MessyRecording;
 
 impl MessyRecording {
-    pub async fn upsert<'a, A>(self, conn: A) -> Result<MessyRecording, sqlx::Error>
+    pub async fn upsert<'a, A>(self, conn: A) -> Result<MessyRecording, crate::Error>
     where
         A: Acquire<'a, Database = Sqlite>,
     {
@@ -26,12 +26,13 @@ impl MessyRecording {
                 `release` = excluded.`release`,
                 `mbid` = excluded.`mbid` RETURNING *;",
         )
-        .bind(self.title)
-        .bind(self.artist_credits)
-        .bind(self.release)
-        .bind(self.mbid)
+        .bind(self.title.clone())
+        .bind(self.artist_credits.clone())
+        .bind(self.release.clone())
+        .bind(self.mbid.clone())
         .fetch_one(&mut *conn)
         .await
+        .map_err(|err| crate::Error::MessyRecordingSaveError(err, self))
     }
 
     /// Return all the recordings that are mapped to this `ext_id`.

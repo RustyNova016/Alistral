@@ -1,6 +1,7 @@
 use std::io;
 use thiserror::Error;
 
+use crate::models::messy_recording::MessyRecording;
 use crate::models::services::youtube::error::InterzicYoutubeError;
 
 #[derive(Error, Debug)]
@@ -37,6 +38,9 @@ pub enum Error {
 
     #[error("This action require a musicbrainz_rs client, but it wasn't set up in the main client")]
     MissingMusicbrainzClient,
+
+    #[error("A messy recording couldn't be saved: Error: {0} Recording: {1}")]
+    MessyRecordingSaveError(sqlx::Error, MessyRecording),
 
     // --- Service Errors ---
     #[error(transparent)]
