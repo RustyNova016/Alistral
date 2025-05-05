@@ -7,6 +7,7 @@ use crate::clippy::lint_link::MbClippyLintLink;
 use crate::clippy::lint_severity::LintSeverity;
 
 use crate::SymphonyzeClient;
+use crate::clippy::lints::MusicbrainzLints;
 use crate::utils::formater;
 
 pub struct MissingRemixerRelLint {
@@ -96,5 +97,11 @@ impl MbClippyLint for MissingRemixerRelLint {
 
     fn get_severity(&self) -> LintSeverity {
         LintSeverity::MissingRelation
+    }
+}
+
+impl From<MissingRemixerRelLint> for MusicbrainzLints {
+    fn from(value: MissingRemixerRelLint) -> Self {
+        Self::MissingRemixerRelLint(value)
     }
 }

@@ -3,7 +3,9 @@ use std::collections::HashMap;
 use itertools::Itertools;
 use sqlx::SqliteConnection;
 
+use crate::DBRelation;
 use crate::models::musicbrainz::work::Work;
+use crate::models::shared_traits::db_relation::RecordingWorkDBRel;
 use crate::utils::sqlx_utils::entity_relations::{JoinCollection, JoinRelation};
 
 use super::Recording;
@@ -69,6 +71,15 @@ impl Recording {
         .await?;
 
         Ok(JoinCollection::from(joins).into_hashmap(recordings, |id, value| &value.id == id))
+    }
+}
+
+impl DBRelation<RecordingWorkDBRel> for Recording {
+    type ReturnedType = Work;
+
+    fn get_join_statement() -> &'static str {
+        "INNER JOIN l_recordings_works as rel ON rel.entity0 = recordings.id
+        INNER JOIN works ON works.id = rel.entity1"
     }
 }
 

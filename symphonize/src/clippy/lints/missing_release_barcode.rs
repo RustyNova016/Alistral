@@ -7,6 +7,7 @@ use crate::clippy::clippy_lint::MbClippyLint;
 use crate::clippy::lint_hint::MbClippyLintHint;
 use crate::clippy::lint_link::MbClippyLintLink;
 use crate::clippy::lint_severity::LintSeverity;
+use crate::clippy::lints::MusicbrainzLints;
 use crate::utils::formater;
 
 pub struct MissingBarcodeLint {
@@ -80,5 +81,11 @@ impl MbClippyLint for MissingBarcodeLint {
 
     fn get_severity(&self) -> LintSeverity {
         LintSeverity::MissingData
+    }
+}
+
+impl From<MissingBarcodeLint> for MusicbrainzLints {
+    fn from(value: MissingBarcodeLint) -> Self {
+        Self::MissingBarcodeLint(value)
     }
 }

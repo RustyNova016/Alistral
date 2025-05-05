@@ -1,15 +1,19 @@
+use musicbrainz_rs_nova::Fetch as _;
+use musicbrainz_rs_nova::entity::recording::Recording as MSRecording;
+use sqlx::SqliteConnection;
+use tracing::debug;
+
 use crate::database::client::DBClient;
+use crate::models::musicbrainz::recording::Recording;
 use crate::models::shared_traits::fetch_and_save::FetchAndSave;
 use crate::models::shared_traits::fetch_mbid::FetchMBID;
-use crate::{Error, models::musicbrainz::recording::Recording};
-use musicbrainz_rs_nova::{Fetch, entity::recording::Recording as MSRecording};
-use sqlx::SqliteConnection;
 
 impl FetchMBID<MSRecording> for Recording {
     async fn fetch_from_mbid(
         client: &DBClient,
         mbid: &str,
     ) -> Result<MSRecording, musicbrainz_rs_nova::Error> {
+        debug!("Sending fetch query for recording `{}`", mbid);
         MSRecording::fetch()
             .id(mbid)
             .with_aliases()
@@ -48,7 +52,7 @@ impl Recording {
         conn: &mut SqliteConnection,
         client: &DBClient,
         mbid: &str,
-    ) -> Result<Option<Recording>, Error> {
+    ) -> Result<Option<Recording>, crate::Error> {
         Self::fetch_and_save_with_conn(conn, client, mbid).await
     }
 }

@@ -80,7 +80,7 @@ impl AlistralCliClient {
             .expect("Couldn't create database file");
 
         let musicbrainz_db = musicbrainz_db
-            .connect_and_migrate()
+            .connect_and_migrate(64)
             .await
             .expect("Couldn't connect to database")
             .set_mb_client(musicbrainz)

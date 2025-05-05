@@ -8,6 +8,7 @@ use futures::StreamExt;
 use futures::pin_mut;
 use musicbrainz_rs_nova::Browse;
 use musicbrainz_rs_nova::entity::recording::Recording as MSRecording;
+use tracing::debug;
 
 use crate::DBClient;
 use crate::models::musicbrainz::artist::Artist;
@@ -26,6 +27,7 @@ impl Artist {
             let mut total = 1;
 
             while (progress as i32) < total {
+                debug!("Sending browse query for artist `{}`", &self.mbid);
                 let results = MSRecording::browse()
                     .by_artist(&self.mbid)
                     .with_artist_credits()
