@@ -5,12 +5,14 @@ use futures::stream;
 use musicbrainz_db_lite::MainEntity;
 use symphonize::clippy::clippy_lint::MbClippyLint;
 use symphonize::clippy::lints::dash_eti::DashETILint;
+use symphonize::clippy::lints::dash_eti::DashETILintRes;
+use symphonize::clippy::lints::missing_release_barcode::MissingBarcodeLint;
 use tracing::debug;
 use tuillez::formatter::FormatWithAsync;
 
-use crate::tools::musicbrainz::clippy::display::print_lint;
-use crate::tools::musicbrainz::clippy::display::LintActions;
 use crate::ALISTRAL_CLIENT;
+use crate::tools::musicbrainz::clippy::display::LintActions;
+use crate::tools::musicbrainz::clippy::display::print_lint;
 use crate::utils::constants::MUSIBRAINZ_FMT;
 use crate::utils::whitelist_blacklist::WhitelistBlacklist;
 
@@ -59,7 +61,9 @@ async fn process_lint_lazy<L: MbClippyLint>(
 pub(super) async fn process_lints(entity: Arc<MainEntity>, filter: &WhitelistBlacklist<String>) {
     let entity = &mut entity.as_ref().clone();
 
-    process_lint::<DashETILint>(entity, filter).await;
+    let lints = vec![DashETILint, MissingBarcodeLint];
+
+    process_lint::<DashETILintRes>(entity, filter).await;
 }
 
 enum LintProcessAction {

@@ -5,17 +5,22 @@ use tuillez::formatter::FormatWithAsync;
 use crate::clippy::clippy_lint::MbClippyLint;
 use crate::clippy::lint_hint::MbClippyLintHint;
 use crate::clippy::lint_link::MbClippyLintLink;
+use crate::clippy::lint_result::LintResult;
 use crate::clippy::lint_severity::LintSeverity;
 
 use crate::SymphonyzeClient;
 use crate::clippy::lints::MusicbrainzLints;
 use crate::utils::formater;
 
-pub struct MissingWorkLint {
+pub struct MissingWorkLint;
+
+pub struct MissingWorkLintRes {
     recording: Recording,
 }
 
 impl MbClippyLint for MissingWorkLint {
+    type Result = MissingWorkLintRes;
+
     fn get_name() -> &'static str {
         "missing_recording_work"
     }
@@ -38,7 +43,7 @@ impl MbClippyLint for MissingWorkLint {
     async fn check(
         client: &SymphonyzeClient,
         entity: &MainEntity,
-    ) -> Result<Vec<Self>, crate::Error> {
+    ) -> Result<Vec<MissingWorkLintRes>, crate::Error> {
         let MainEntity::Recording(recording) = entity else {
             return Ok(Vec::new());
         };
@@ -53,13 +58,17 @@ impl MbClippyLint for MissingWorkLint {
             return Ok(Vec::new());
         }
 
-        let missing_work_lint = Self {
+        let missing_work_lint = MissingWorkLintRes {
             recording: recording.clone(),
         };
 
         Ok(vec![missing_work_lint])
     }
-
+}
+impl LintResult for MissingWorkLintRes {
+        fn get_name() -> &'static str {
+        MissingWorkLint::get_name()
+    }
     async fn get_body(
         &self,
         client: &SymphonyzeClient,
@@ -116,11 +125,6 @@ impl MbClippyLint for MissingWorkLint {
     }
 }
 
-impl From<MissingWorkLint> for MusicbrainzLints {
-    fn from(value: MissingWorkLint) -> Self {
-        Self::MissingWorkLint(value)
-    }
-}
 
 #[cfg(test)]
 mod test {

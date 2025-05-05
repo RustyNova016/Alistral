@@ -5,17 +5,21 @@ use tuillez::formatter::FormatWithAsync;
 use crate::clippy::clippy_lint::MbClippyLint;
 use crate::clippy::lint_hint::MbClippyLintHint;
 use crate::clippy::lint_link::MbClippyLintLink;
+use crate::clippy::lint_result::LintResult;
 use crate::clippy::lint_severity::LintSeverity;
 
 use crate::SymphonyzeClient;
 use crate::clippy::lints::MusicbrainzLints;
 use crate::utils::formater;
 
-pub struct MissingRemixerRelLint {
+pub struct MissingRemixerRelLint;
+
+pub struct MissingRemixerRelLintRes {
     recording: Recording,
 }
 
 impl MbClippyLint for MissingRemixerRelLint {
+    type Result = MissingRemixerRelLintRes;
     fn get_name() -> &'static str {
         "missing_remixer_rel"
     }
@@ -38,7 +42,7 @@ impl MbClippyLint for MissingRemixerRelLint {
     async fn check(
         client: &SymphonyzeClient,
         entity: &MainEntity,
-    ) -> Result<Vec<Self>, crate::Error> {
+    ) -> Result<Vec<MissingRemixerRelLintRes>, crate::Error> {
         let MainEntity::Recording(recording) = entity else {
             return Ok(Vec::new());
         };
@@ -64,13 +68,18 @@ impl MbClippyLint for MissingRemixerRelLint {
             }
         }
 
-        let lint = Self {
+        let lint = MissingRemixerRelLintRes {
             recording: recording.clone(),
         };
 
         Ok(vec![lint])
     }
+}
 
+impl LintResult for MissingRemixerRelLintRes {
+        fn get_name() -> &'static str {
+        MissingRemixerRelLint::get_name()
+    }
     async fn get_body(
         &self,
         client: &SymphonyzeClient,
@@ -116,8 +125,3 @@ impl MbClippyLint for MissingRemixerRelLint {
     }
 }
 
-impl From<MissingRemixerRelLint> for MusicbrainzLints {
-    fn from(value: MissingRemixerRelLint) -> Self {
-        Self::MissingRemixerRelLint(value)
-    }
-}

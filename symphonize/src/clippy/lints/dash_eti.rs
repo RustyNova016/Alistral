@@ -7,15 +7,15 @@ use crate::SymphonyzeClient;
 use crate::clippy::clippy_lint::MbClippyLint;
 use crate::clippy::lint_hint::MbClippyLintHint;
 use crate::clippy::lint_link::MbClippyLintLink;
+use crate::clippy::lint_result::LintResult;
 use crate::clippy::lint_severity::LintSeverity;
 use crate::utils::formater;
 
-pub struct DashETILint {
-    recording: Recording,
-    eti: String,
-}
+pub struct DashETILint;
 
 impl MbClippyLint for DashETILint {
+    type Result = DashETILintRes;
+
     fn get_name() -> &'static str {
         "dash_eti"
     }
@@ -23,7 +23,7 @@ impl MbClippyLint for DashETILint {
     async fn check(
         _client: &SymphonyzeClient,
         entity: &MainEntity,
-    ) -> Result<Vec<Self>, crate::Error> {
+    ) -> Result<Vec<DashETILintRes>, crate::Error> {
         let MainEntity::Recording(recording) = entity else {
             return Ok(Vec::new());
         };
@@ -40,10 +40,21 @@ impl MbClippyLint for DashETILint {
                 .expect("The regex should return this capture group"),
         };
 
-        Ok(vec![Self {
+        Ok(vec![DashETILintRes {
             recording: recording.clone(),
             eti: eti.as_str().to_string(),
         }])
+    }
+}
+
+pub struct DashETILintRes {
+    recording: Recording,
+    eti: String,
+}
+
+impl LintResult for DashETILintRes {
+    fn get_name() -> &'static str {
+        DashETILint::get_name()
     }
 
     async fn get_body(

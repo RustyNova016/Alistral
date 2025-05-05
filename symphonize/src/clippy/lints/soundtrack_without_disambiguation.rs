@@ -6,14 +6,19 @@ use crate::SymphonyzeClient;
 use crate::clippy::clippy_lint::MbClippyLint;
 use crate::clippy::lint_hint::MbClippyLintHint;
 use crate::clippy::lint_link::MbClippyLintLink;
+use crate::clippy::lint_result::LintResult;
 use crate::clippy::lint_severity::LintSeverity;
 use crate::clippy::lints::MusicbrainzLints;
 
-pub struct SoundtrackWithoutDisambiguationLint {
+pub struct SoundtrackWithoutDisambiguationLint;
+
+pub struct SoundtrackWithoutDisambiguationLintRes {
     work: Work,
 }
 
 impl MbClippyLint for SoundtrackWithoutDisambiguationLint {
+    type Result = SoundtrackWithoutDisambiguationLintRes;
+
     fn get_name() -> &'static str {
         "soundtrack_without_disambiguation"
     }
@@ -21,7 +26,7 @@ impl MbClippyLint for SoundtrackWithoutDisambiguationLint {
     async fn check(
         _client: &SymphonyzeClient,
         entity: &musicbrainz_db_lite::models::musicbrainz::main_entities::MainEntity,
-    ) -> Result<Vec<Self>, crate::Error> {
+    ) -> Result<Vec<SoundtrackWithoutDisambiguationLintRes>, crate::Error> {
         let MainEntity::Work(work) = entity else {
             return Ok(Vec::new());
         };
@@ -32,9 +37,16 @@ impl MbClippyLint for SoundtrackWithoutDisambiguationLint {
             return Ok(Vec::new());
         }
 
-        Ok(vec![Self { work: work.clone() }])
+        Ok(vec![SoundtrackWithoutDisambiguationLintRes {
+            work: work.clone(),
+        }])
     }
+}
 
+impl LintResult for SoundtrackWithoutDisambiguationLintRes {
+        fn get_name() -> &'static str {
+        SoundtrackWithoutDisambiguationLint::get_name()
+    }
     async fn get_body(
         &self,
         _client: &SymphonyzeClient,
@@ -74,8 +86,3 @@ impl MbClippyLint for SoundtrackWithoutDisambiguationLint {
     }
 }
 
-impl From<SoundtrackWithoutDisambiguationLint> for MusicbrainzLints {
-    fn from(value: SoundtrackWithoutDisambiguationLint) -> Self {
-        Self::SoundtrackWithoutDisambiguationLint(value)
-    }
-}

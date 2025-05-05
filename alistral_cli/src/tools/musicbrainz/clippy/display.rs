@@ -2,6 +2,7 @@ use core::fmt::Write as _;
 
 use alistral_core::cli::colors::AlistralColors as _;
 use symphonize::clippy::clippy_lint::MbClippyLint;
+use symphonize::clippy::lint_result::LintResult;
 use tuillez::OwoColorize as _;
 use tuillez::extensions::inquire_ext::select_enum::select_enum;
 
@@ -14,13 +15,13 @@ pub(super) enum LintActions {
     Exit,
 }
 
-pub(super) async fn print_lint<L: MbClippyLint>(lint: &L) -> LintActions {
+pub(super) async fn print_lint<L: LintResult>(lint: &L) -> LintActions {
     println!("{}", format_lint(lint).await);
 
     select_enum::<LintActions>("")
 }
 
-pub(super) async fn format_lint<L: MbClippyLint>(lint: &L) -> String {
+pub(super) async fn format_lint<L: LintResult>(lint: &L) -> String {
     let mut report = String::new();
     writeln!(
         &mut report,

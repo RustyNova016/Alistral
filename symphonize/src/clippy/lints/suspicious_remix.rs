@@ -7,15 +7,20 @@ use crate::SymphonyzeClient;
 use crate::clippy::clippy_lint::MbClippyLint;
 use crate::clippy::lint_hint::MbClippyLintHint;
 use crate::clippy::lint_link::MbClippyLintLink;
+use crate::clippy::lint_result::LintResult;
 use crate::clippy::lint_severity::LintSeverity;
 use crate::clippy::lints::MusicbrainzLints;
 use crate::utils::formater;
 
-pub struct SuspiciousRemixLint {
+pub struct SuspiciousRemixLint;
+
+pub struct SuspiciousRemixLintRes {
     recording: Recording,
 }
 
 impl MbClippyLint for SuspiciousRemixLint {
+    type Result = SuspiciousRemixLintRes;
+
     fn get_name() -> &'static str {
         "suspicious_remix"
     }
@@ -23,7 +28,7 @@ impl MbClippyLint for SuspiciousRemixLint {
     async fn check(
         client: &SymphonyzeClient,
         entity: &musicbrainz_db_lite::models::musicbrainz::main_entities::MainEntity,
-    ) -> Result<Vec<Self>, crate::Error> {
+    ) -> Result<Vec<SuspiciousRemixLintRes>, crate::Error> {
         let MainEntity::Recording(recording) = entity else {
             return Ok(Vec::new());
         };
@@ -42,11 +47,17 @@ impl MbClippyLint for SuspiciousRemixLint {
             return Ok(Vec::new());
         }
 
-        Ok(vec![Self {
+        Ok(vec![SuspiciousRemixLintRes {
             recording: recording.clone(),
         }])
     }
+}
 
+impl LintResult for SuspiciousRemixLintRes {
+    fn get_name() -> &'static str {
+        SuspiciousRemixLint::get_name()
+    }
+    
     async fn get_body(
         &self,
 
@@ -93,8 +104,3 @@ impl MbClippyLint for SuspiciousRemixLint {
     }
 }
 
-impl From<SuspiciousRemixLint> for MusicbrainzLints {
-    fn from(value: SuspiciousRemixLint) -> Self {
-        Self::SuspiciousRemixLint(value)
-    }
-}
