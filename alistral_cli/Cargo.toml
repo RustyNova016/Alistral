@@ -24,7 +24,6 @@ listenbrainz = { branch = "alistral_version", git = "https://github.com/RustyNov
 
 inquire = "0.7.5"
 itertools = "0.14.0"
-color-eyre = "0.6.3"
 rust_decimal = "1.36.0"
 rust_decimal_macros = "1.36.0"
 clap = { version = "4.5.37", features = [

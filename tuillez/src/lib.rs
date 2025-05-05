@@ -10,6 +10,8 @@ pub mod utils;
 pub use crate::error::Error;
 pub use crate::styles::SPINNER_STYLE;
 
+pub use owo_colors::OwoColorize;
+
 pub mod tracing_indicatif {
     pub use tracing_indicatif::*;
 }

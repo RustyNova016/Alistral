@@ -3,7 +3,6 @@ use std::sync::Arc;
 
 use alistral_core::cli::colors::AlistralColors as _;
 use clap::Parser;
-use color_eyre::owo_colors::OwoColorize as _;
 use futures::StreamExt;
 use futures::TryStreamExt;
 use futures::pin_mut;
@@ -19,6 +18,7 @@ use symphonize::clippy::lints::missing_work::MissingWorkLint;
 use symphonize::clippy::lints::soundtrack_without_disambiguation::SoundtrackWithoutDisambiguationLint;
 use symphonize::clippy::lints::suspicious_remix::SuspiciousRemixLint;
 use tracing::debug;
+use tuillez::OwoColorize as _;
 use tuillez::formatter::FormatWithAsync;
 
 use crate::ALISTRAL_CLIENT;
