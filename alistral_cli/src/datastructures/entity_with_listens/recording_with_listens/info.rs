@@ -1,9 +1,9 @@
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use chrono::Duration;
 use chrono::Local;
-use color_eyre::owo_colors::OwoColorize;
 use indoc::formatdoc;
 use rust_decimal::Decimal;
+use tuillez::OwoColorize as _;
 use tuillez::extensions::chrono_exts::DateTimeUtcExt as _;
 use tuillez::extensions::chrono_exts::DurationExt as _;
 

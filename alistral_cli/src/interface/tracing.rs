@@ -1,7 +1,6 @@
 use core::fmt;
 
 use alistral_core::cli::colors::AlistralColors as _;
-use color_eyre::owo_colors::OwoColorize;
 use tracing::Event;
 use tracing::Level;
 use tracing::Metadata;
@@ -17,6 +16,7 @@ use tracing_subscriber::fmt::format;
 use tracing_subscriber::layer::SubscriberExt as _;
 use tracing_subscriber::registry::LookupSpan;
 use tracing_subscriber::util::SubscriberInitExt as _;
+use tuillez::OwoColorize as _;
 use tuillez::styles::COUNT_STYLE;
 
 use crate::models::cli::Cli;

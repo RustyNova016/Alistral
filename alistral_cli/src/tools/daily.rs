@@ -8,10 +8,10 @@ use chrono::Datelike;
 use chrono::NaiveDate;
 use chrono::TimeZone;
 use chrono::Utc;
-use color_eyre::owo_colors::OwoColorize;
 use itertools::Itertools;
 use musicbrainz_db_lite::models::musicbrainz::release_group::ReleaseGroup;
 use tracing::instrument;
+use tuillez::OwoColorize as _;
 use tuillez::formatter::FormatWithAsync;
 
 use crate::ALISTRAL_CLIENT;
