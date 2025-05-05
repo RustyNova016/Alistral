@@ -140,6 +140,10 @@ async fn process_lint<L: MbClippyLint>(
         entity.get_unique_id()
     );
 
+    L::prefetch_entities(&ALISTRAL_CLIENT.symphonize, entity)
+        .await
+        .expect("Couldn't get data for the lint");
+
     let Some(_lint) = L::check(&ALISTRAL_CLIENT.symphonize, entity)
         .await
         .expect("Error while processing lint")

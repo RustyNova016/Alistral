@@ -11,6 +11,14 @@ pub trait MbClippyLint
 where
     Self: Sized,
 {
+    /// Fetch all the required entities that the lint requires if they aren't alreasy in the database.
+    fn prefetch_entities(
+        _client: &SymphonyzeClient,
+        _entity: &MainEntity,
+    ) -> impl std::future::Future<Output = Result<(), crate::Error>> + Send {
+        async { Ok(()) }
+    }
+
     fn check(
         client: &SymphonyzeClient,
         entity: &MainEntity,

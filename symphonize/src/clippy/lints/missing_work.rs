@@ -20,6 +20,21 @@ impl MbClippyLint for MissingWorkLint {
         "missing_recording_work"
     }
 
+    async fn prefetch_entities(
+        client: &SymphonyzeClient,
+        entity: &MainEntity,
+    ) -> Result<(), crate::Error> {
+        let MainEntity::Recording(recording) = entity else {
+            return Ok(());
+        };
+
+        recording
+            .get_related_entity_or_fetch_as_task::<RecordingWorkDBRel>(&client.mb_database)
+            .await?;
+
+        Ok(())
+    }
+
     async fn check(
         client: &SymphonyzeClient,
         entity: &MainEntity,

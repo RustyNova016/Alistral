@@ -1,3 +1,4 @@
+use musicbrainz_db_lite::FetchAsComplete as _;
 use musicbrainz_db_lite::models::musicbrainz::{main_entities::MainEntity, recording::Recording};
 use tuillez::formatter::FormatWithAsync;
 
@@ -17,6 +18,21 @@ pub struct MissingRemixerRelLint {
 impl MbClippyLint for MissingRemixerRelLint {
     fn get_name() -> &'static str {
         "missing_remixer_rel"
+    }
+
+    async fn prefetch_entities(
+        client: &SymphonyzeClient,
+        entity: &MainEntity,
+    ) -> Result<(), crate::Error> {
+        let MainEntity::Recording(recording) = entity else {
+            return Ok(());
+        };
+
+        recording
+            .fetch_as_complete_as_task(client.mb_database.clone())
+            .await?;
+
+        Ok(())
     }
 
     async fn check(
