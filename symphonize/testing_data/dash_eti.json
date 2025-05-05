@@ -1,0 +1,398 @@
+{
+    "releases": [
+        {
+            "text-representation": {
+                "language": "eng",
+                "script": "Latn"
+            },
+            "packaging-id": null,
+            "title": "dash_eti test",
+            "status": "Official",
+            "id": "a4e750e7-1a38-4274-8ff6-45e621b9fa4d",
+            "disambiguation": "",
+            "cover-art-archive": {
+                "back": false,
+                "artwork": false,
+                "count": 0,
+                "darkened": false,
+                "front": false
+            },
+            "barcode": null,
+            "quality": "normal",
+            "date": "",
+            "packaging": null,
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "country": "XW",
+            "aliases": [],
+            "artist-credit": [
+                {
+                    "joinphrase": "",
+                    "name": "Alistral",
+                    "artist": {
+                        "aliases": [],
+                        "id": "06baf1f1-e9b3-40b7-8376-1f53a676a919",
+                        "name": "Alistral",
+                        "country": null,
+                        "sort-name": "Alistral",
+                        "type": null,
+                        "disambiguation": "",
+                        "type-id": null
+                    }
+                }
+            ],
+            "release-events": [
+                {
+                    "date": "",
+                    "area": {
+                        "disambiguation": "",
+                        "type-id": null,
+                        "sort-name": "[Worldwide]",
+                        "type": null,
+                        "name": "[Worldwide]",
+                        "iso-3166-1-codes": [
+                            "XW"
+                        ],
+                        "id": "525d4e18-3d00-31b9-a58b-a146a916de8f"
+                    }
+                }
+            ],
+            "media": [
+                {
+                    "track-count": 7,
+                    "discs": [],
+                    "title": "",
+                    "tracks": [
+                        {
+                            "position": 1,
+                            "recording": {
+                                "video": false,
+                                "title": "Shouldn't Trigger",
+                                "aliases": [],
+                                "artist-credit": [
+                                    {
+                                        "name": "Alistral",
+                                        "artist": {
+                                            "type-id": null,
+                                            "disambiguation": "",
+                                            "type": null,
+                                            "sort-name": "Alistral",
+                                            "country": null,
+                                            "name": "Alistral",
+                                            "id": "06baf1f1-e9b3-40b7-8376-1f53a676a919"
+                                        },
+                                        "joinphrase": ""
+                                    }
+                                ],
+                                "id": "b1319ac4-d7e1-4496-9db6-2a76c3221b88",
+                                "disambiguation": "",
+                                "length": null
+                            },
+                            "length": null,
+                            "id": "8c240ca9-26ee-4af1-8af2-00e7c713e04e",
+                            "artist-credit": [
+                                {
+                                    "name": "Alistral",
+                                    "artist": {
+                                        "name": "Alistral",
+                                        "country": null,
+                                        "aliases": [],
+                                        "id": "06baf1f1-e9b3-40b7-8376-1f53a676a919",
+                                        "disambiguation": "",
+                                        "type-id": null,
+                                        "sort-name": "Alistral",
+                                        "type": null
+                                    },
+                                    "joinphrase": ""
+                                }
+                            ],
+                            "number": "1",
+                            "title": "Shouldn't Trigger"
+                        },
+                        {
+                            "id": "166c0a33-4370-4c53-bfb6-af0fd23a0311",
+                            "artist-credit": [
+                                {
+                                    "joinphrase": "",
+                                    "artist": {
+                                        "type": null,
+                                        "sort-name": "Alistral",
+                                        "type-id": null,
+                                        "disambiguation": "",
+                                        "id": "06baf1f1-e9b3-40b7-8376-1f53a676a919",
+                                        "aliases": [],
+                                        "country": null,
+                                        "name": "Alistral"
+                                    },
+                                    "name": "Alistral"
+                                }
+                            ],
+                            "number": "2",
+                            "title": "Shouldn't Trigger - The Extra",
+                            "position": 2,
+                            "recording": {
+                                "length": null,
+                                "disambiguation": "",
+                                "title": "Shouldn't Trigger - The Extra",
+                                "video": false,
+                                "artist-credit": [
+                                    {
+                                        "joinphrase": "",
+                                        "name": "Alistral",
+                                        "artist": {
+                                            "name": "Alistral",
+                                            "country": null,
+                                            "id": "06baf1f1-e9b3-40b7-8376-1f53a676a919",
+                                            "disambiguation": "",
+                                            "type-id": null,
+                                            "sort-name": "Alistral",
+                                            "type": null
+                                        }
+                                    }
+                                ],
+                                "id": "3711a2a2-7e39-4f18-b970-679d91f0794f",
+                                "aliases": []
+                            },
+                            "length": null
+                        },
+                        {
+                            "recording": {
+                                "length": null,
+                                "disambiguation": "",
+                                "video": false,
+                                "title": "Should Trigger - Original Mix",
+                                "aliases": [],
+                                "id": "857b3c6e-ae47-4365-94d4-49fcfdbfbaa4",
+                                "artist-credit": [
+                                    {
+                                        "joinphrase": "",
+                                        "artist": {
+                                            "id": "06baf1f1-e9b3-40b7-8376-1f53a676a919",
+                                            "name": "Alistral",
+                                            "country": null,
+                                            "sort-name": "Alistral",
+                                            "type": null,
+                                            "disambiguation": "",
+                                            "type-id": null
+                                        },
+                                        "name": "Alistral"
+                                    }
+                                ]
+                            },
+                            "position": 3,
+                            "length": null,
+                            "artist-credit": [
+                                {
+                                    "joinphrase": "",
+                                    "name": "Alistral",
+                                    "artist": {
+                                        "disambiguation": "",
+                                        "type-id": null,
+                                        "sort-name": "Alistral",
+                                        "type": null,
+                                        "name": "Alistral",
+                                        "country": null,
+                                        "aliases": [],
+                                        "id": "06baf1f1-e9b3-40b7-8376-1f53a676a919"
+                                    }
+                                }
+                            ],
+                            "id": "a6a8b298-db6b-4389-9231-df42a37948be",
+                            "number": "3",
+                            "title": "Should Trigger - Original Mix"
+                        },
+                        {
+                            "length": null,
+                            "recording": {
+                                "disambiguation": "",
+                                "length": null,
+                                "title": "Should Trigger - sped up",
+                                "video": false,
+                                "artist-credit": [
+                                    {
+                                        "name": "Alistral",
+                                        "artist": {
+                                            "disambiguation": "",
+                                            "type-id": null,
+                                            "sort-name": "Alistral",
+                                            "type": null,
+                                            "name": "Alistral",
+                                            "country": null,
+                                            "id": "06baf1f1-e9b3-40b7-8376-1f53a676a919"
+                                        },
+                                        "joinphrase": ""
+                                    }
+                                ],
+                                "id": "7972f99c-8015-4b37-972c-875b4fb421c6",
+                                "aliases": []
+                            },
+                            "position": 4,
+                            "number": "4",
+                            "id": "1a08980b-2c4d-40c1-9348-92a4bf136e40",
+                            "artist-credit": [
+                                {
+                                    "artist": {
+                                        "disambiguation": "",
+                                        "type-id": null,
+                                        "sort-name": "Alistral",
+                                        "type": null,
+                                        "name": "Alistral",
+                                        "country": null,
+                                        "aliases": [],
+                                        "id": "06baf1f1-e9b3-40b7-8376-1f53a676a919"
+                                    },
+                                    "name": "Alistral",
+                                    "joinphrase": ""
+                                }
+                            ],
+                            "title": "Should Trigger - sped up"
+                        },
+                        {
+                            "length": null,
+                            "recording": {
+                                "artist-credit": [
+                                    {
+                                        "artist": {
+                                            "disambiguation": "",
+                                            "type-id": null,
+                                            "sort-name": "Alistral",
+                                            "type": null,
+                                            "name": "Alistral",
+                                            "country": null,
+                                            "id": "06baf1f1-e9b3-40b7-8376-1f53a676a919"
+                                        },
+                                        "name": "Alistral",
+                                        "joinphrase": ""
+                                    }
+                                ],
+                                "id": "43bc29ef-6565-4fa3-a033-9e7d8f61f8e2",
+                                "aliases": [],
+                                "title": "Should Trigger - slowed down",
+                                "video": false,
+                                "disambiguation": "",
+                                "length": null
+                            },
+                            "position": 5,
+                            "title": "Should Trigger - slowed down",
+                            "number": "5",
+                            "id": "2ecb3065-038e-44f0-a557-65440601eaa3",
+                            "artist-credit": [
+                                {
+                                    "joinphrase": "",
+                                    "artist": {
+                                        "id": "06baf1f1-e9b3-40b7-8376-1f53a676a919",
+                                        "aliases": [],
+                                        "country": null,
+                                        "name": "Alistral",
+                                        "type": null,
+                                        "sort-name": "Alistral",
+                                        "type-id": null,
+                                        "disambiguation": ""
+                                    },
+                                    "name": "Alistral"
+                                }
+                            ]
+                        },
+                        {
+                            "length": null,
+                            "recording": {
+                                "title": "Should Trigger - extra slowed down",
+                                "video": false,
+                                "id": "3d1026b2-1cf6-40da-bd54-634d3c3799b1",
+                                "artist-credit": [
+                                    {
+                                        "joinphrase": "",
+                                        "name": "Alistral",
+                                        "artist": {
+                                            "type": null,
+                                            "sort-name": "Alistral",
+                                            "type-id": null,
+                                            "disambiguation": "",
+                                            "id": "06baf1f1-e9b3-40b7-8376-1f53a676a919",
+                                            "country": null,
+                                            "name": "Alistral"
+                                        }
+                                    }
+                                ],
+                                "aliases": [],
+                                "length": null,
+                                "disambiguation": ""
+                            },
+                            "position": 6,
+                            "number": "6",
+                            "artist-credit": [
+                                {
+                                    "joinphrase": "",
+                                    "artist": {
+                                        "id": "06baf1f1-e9b3-40b7-8376-1f53a676a919",
+                                        "aliases": [],
+                                        "country": null,
+                                        "name": "Alistral",
+                                        "type": null,
+                                        "sort-name": "Alistral",
+                                        "type-id": null,
+                                        "disambiguation": ""
+                                    },
+                                    "name": "Alistral"
+                                }
+                            ],
+                            "id": "5e77907a-bf67-48a3-a3a9-5967161e5083",
+                            "title": "Should Trigger - extra slowed down"
+                        },
+                        {
+                            "title": "Should Trigger - Test Remix",
+                            "id": "ab4375f5-b5e0-4244-bdc3-41ba96cbb73e",
+                            "artist-credit": [
+                                {
+                                    "name": "Alistral",
+                                    "artist": {
+                                        "id": "06baf1f1-e9b3-40b7-8376-1f53a676a919",
+                                        "aliases": [],
+                                        "country": null,
+                                        "name": "Alistral",
+                                        "type": null,
+                                        "sort-name": "Alistral",
+                                        "type-id": null,
+                                        "disambiguation": ""
+                                    },
+                                    "joinphrase": ""
+                                }
+                            ],
+                            "number": "7",
+                            "recording": {
+                                "length": null,
+                                "disambiguation": "",
+                                "video": false,
+                                "title": "Should Trigger - Test Remix",
+                                "aliases": [],
+                                "id": "4e29b6c3-167d-4743-a749-198dd44b5691",
+                                "artist-credit": [
+                                    {
+                                        "artist": {
+                                            "id": "06baf1f1-e9b3-40b7-8376-1f53a676a919",
+                                            "name": "Alistral",
+                                            "country": null,
+                                            "sort-name": "Alistral",
+                                            "type": null,
+                                            "disambiguation": "",
+                                            "type-id": null
+                                        },
+                                        "name": "Alistral",
+                                        "joinphrase": ""
+                                    }
+                                ]
+                            },
+                            "position": 7,
+                            "length": null
+                        }
+                    ],
+                    "format-id": "907a28d9-b3b2-3ef6-89a8-7b18d91d4794",
+                    "format": "Digital Media",
+                    "position": 1,
+                    "track-offset": 0
+                }
+            ],
+            "label-info": [],
+            "asin": null
+        }
+    ]
+}

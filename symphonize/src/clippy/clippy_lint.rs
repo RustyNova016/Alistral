@@ -6,11 +6,10 @@ use crate::client::SymphonyzeClient;
 use crate::clippy::lint_hint::MbClippyLintHint;
 use crate::clippy::lint_link::MbClippyLintLink;
 use crate::clippy::lint_severity::LintSeverity;
-use crate::clippy::lints::MusicbrainzLints;
 
 pub trait MbClippyLint
 where
-    Self: Sized + Into<MusicbrainzLints>,
+    Self: Sized,
 {
     fn check(
         client: &SymphonyzeClient,
