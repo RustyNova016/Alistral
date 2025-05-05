@@ -79,7 +79,7 @@ dependencies = [
  "listenbrainz",
  "macon",
  "musicbrainz-db-lite",
- "rand 0.8.5",
+ "rand 0.9.1",
  "regex",
  "reqwest",
  "rust_decimal",
