@@ -21,18 +21,18 @@ impl MbClippyLint for SoundtrackWithoutDisambiguationLint {
     async fn check(
         _client: &SymphonyzeClient,
         entity: &musicbrainz_db_lite::models::musicbrainz::main_entities::MainEntity,
-    ) -> Result<Option<Self>, crate::Error> {
+    ) -> Result<Vec<Self>, crate::Error> {
         let MainEntity::Work(work) = entity else {
-            return Ok(None);
+            return Ok(Vec::new());
         };
 
         if work.work_type.as_ref().is_none_or(|t| t != "Soundtrack")
             || work.disambiguation.as_ref().is_some_and(|d| !d.is_empty())
         {
-            return Ok(None);
+            return Ok(Vec::new());
         }
 
-        Ok(Some(Self { work: work.clone() }))
+        Ok(vec![Self { work: work.clone() }])
     }
 
     async fn get_body(

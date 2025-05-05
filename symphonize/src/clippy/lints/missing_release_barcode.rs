@@ -22,20 +22,20 @@ impl MbClippyLint for MissingBarcodeLint {
     async fn check(
         _client: &SymphonyzeClient,
         entity: &MainEntity,
-    ) -> Result<Option<Self>, crate::Error> {
+    ) -> Result<Vec<Self>, crate::Error> {
         let MainEntity::Release(release) = entity else {
-            return Ok(None);
+            return Ok(Vec::new());
         };
 
         if release.barcode.as_ref().is_some() {
-            return Ok(None);
+            return Ok(Vec::new());
         }
 
         let missing_work_lint = Self {
             release: release.clone(),
         };
 
-        Ok(Some(missing_work_lint))
+        Ok(vec![missing_work_lint])
     }
 
     async fn get_body(

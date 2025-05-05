@@ -1,3 +1,5 @@
+pub mod display;
+pub mod processing;
 use core::fmt::Write as _;
 use std::sync::Arc;
 

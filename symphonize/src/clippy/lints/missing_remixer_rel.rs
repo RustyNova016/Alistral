@@ -38,9 +38,9 @@ impl MbClippyLint for MissingRemixerRelLint {
     async fn check(
         client: &SymphonyzeClient,
         entity: &MainEntity,
-    ) -> Result<Option<Self>, crate::Error> {
+    ) -> Result<Vec<Self>, crate::Error> {
         let MainEntity::Recording(recording) = entity else {
-            return Ok(None);
+            return Ok(Vec::new());
         };
         let conn = &mut client.mb_database.get_raw_connection().await?;
 
@@ -53,14 +53,14 @@ impl MbClippyLint for MissingRemixerRelLint {
         }
 
         if !is_remix {
-            return Ok(None);
+            return Ok(Vec::new());
         }
 
         let artist_relations = recording.get_artist_relations(conn).await?;
         // Check if a remixer relationship is missing
         for relation in artist_relations {
             if relation.is_remixer_rel(recording) {
-                return Ok(None);
+                return Ok(Vec::new());
             }
         }
 
@@ -68,7 +68,7 @@ impl MbClippyLint for MissingRemixerRelLint {
             recording: recording.clone(),
         };
 
-        Ok(Some(lint))
+        Ok(vec![lint])
     }
 
     async fn get_body(

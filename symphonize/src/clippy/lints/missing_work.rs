@@ -38,9 +38,9 @@ impl MbClippyLint for MissingWorkLint {
     async fn check(
         client: &SymphonyzeClient,
         entity: &MainEntity,
-    ) -> Result<Option<Self>, crate::Error> {
+    ) -> Result<Vec<Self>, crate::Error> {
         let MainEntity::Recording(recording) = entity else {
-            return Ok(None);
+            return Ok(Vec::new());
         };
 
         let work = recording
@@ -50,14 +50,14 @@ impl MbClippyLint for MissingWorkLint {
             .await?;
 
         if !work.is_empty() {
-            return Ok(None);
+            return Ok(Vec::new());
         }
 
         let missing_work_lint = Self {
             recording: recording.clone(),
         };
 
-        Ok(Some(missing_work_lint))
+        Ok(vec![missing_work_lint])
     }
 
     async fn get_body(

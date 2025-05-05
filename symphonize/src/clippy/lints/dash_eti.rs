@@ -23,9 +23,9 @@ impl MbClippyLint for DashETILint {
     async fn check(
         _client: &SymphonyzeClient,
         entity: &MainEntity,
-    ) -> Result<Option<Self>, crate::Error> {
+    ) -> Result<Vec<Self>, crate::Error> {
         let MainEntity::Recording(recording) = entity else {
-            return Ok(None);
+            return Ok(Vec::new());
         };
 
         // Check if the title has a common spotify "- ETI"
@@ -34,16 +34,16 @@ impl MbClippyLint for DashETILint {
                 .unwrap();
 
         let eti = match regex.captures(&recording.title) {
-            None => return Ok(None),
+            None => return Ok(Vec::new()),
             Some(val) => val
                 .get(0)
                 .expect("The regex should return this capture group"),
         };
 
-        Ok(Some(Self {
+        Ok(vec![Self {
             recording: recording.clone(),
             eti: eti.as_str().to_string(),
-        }))
+        }])
     }
 
     async fn get_body(

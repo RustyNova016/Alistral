@@ -14,7 +14,7 @@ where
         .unwrap()
         .unwrap();
 
-    Lint::check(client, &data.into()).await.unwrap().is_some()
+    !Lint::check(client, &data.into()).await.unwrap().is_empty()
 }
 
 pub async fn should_trigger_lint<Lint, Entity>(client: &SymphonyzeClient, mbid: &str)

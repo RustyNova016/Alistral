@@ -19,10 +19,11 @@ where
         async { Ok(()) }
     }
 
+    /// Check if the entity triggers the lint, and output lints entities for each problem encountered
     fn check(
         client: &SymphonyzeClient,
         entity: &MainEntity,
-    ) -> impl std::future::Future<Output = Result<Option<Self>, crate::Error>> + Send;
+    ) -> impl std::future::Future<Output = Result<Vec<Self>, crate::Error>> + Send;
 
     fn get_name() -> &'static str;
 

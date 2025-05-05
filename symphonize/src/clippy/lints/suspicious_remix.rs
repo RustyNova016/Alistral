@@ -23,28 +23,28 @@ impl MbClippyLint for SuspiciousRemixLint {
     async fn check(
         client: &SymphonyzeClient,
         entity: &musicbrainz_db_lite::models::musicbrainz::main_entities::MainEntity,
-    ) -> Result<Option<Self>, crate::Error> {
+    ) -> Result<Vec<Self>, crate::Error> {
         let MainEntity::Recording(recording) = entity else {
-            return Ok(None);
+            return Ok(Vec::new());
         };
 
         // Check if the title is suspiciously like a remix or vip
         let regex = Regex::new(r"(?mi)(((\(|\s))remix(\)|$))|(((\(|\s))vip(\)|$))").unwrap();
 
         if !regex.is_match(&recording.title) {
-            return Ok(None);
+            return Ok(Vec::new());
         }
 
         let conn = &mut client.mb_database.get_raw_connection().await?;
 
         // Then check if the links have been set
         if recording.is_remix(conn).await? {
-            return Ok(None);
+            return Ok(Vec::new());
         }
 
-        Ok(Some(Self {
+        Ok(vec![Self {
             recording: recording.clone(),
-        }))
+        }])
     }
 
     async fn get_body(
