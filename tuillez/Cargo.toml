@@ -16,6 +16,8 @@ chrono = {version = "0.4.40", optional = true}
 rust_decimal = {version = "1.36.0", optional = true}
 rust_decimal_macros = {version = "1.36.0", optional = true}
 humantime = {version = "2.1.0", optional = true}
+inquire = "0.7.5"
+strum = "0.27.1"
 
 [features]
 default = ["chrono_ext"]

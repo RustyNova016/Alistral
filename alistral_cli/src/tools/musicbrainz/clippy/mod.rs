@@ -25,6 +25,7 @@ use tuillez::OwoColorize as _;
 use tuillez::formatter::FormatWithAsync;
 
 use crate::ALISTRAL_CLIENT;
+use crate::tools::musicbrainz::clippy::processing::process_lints_lazy;
 use crate::utils::cli::await_next;
 use crate::utils::cli::read_mbid_from_input;
 use crate::utils::constants::MUSIBRAINZ_FMT;
@@ -88,6 +89,8 @@ pub async fn mb_clippy(start_mbid: &str, filter: &WhitelistBlacklist<String>) {
     );
 
     let crawler = crawler
+        // Remove all the entities that don't trigger any lint with the cached data
+        .try_filter(|entity| process_lints_lazy(entity.clone(), filter))
         .map_ok(|entity| process_lints(entity.clone(), filter))
         .extract_future_ok()
         .buffer_unordered(8);

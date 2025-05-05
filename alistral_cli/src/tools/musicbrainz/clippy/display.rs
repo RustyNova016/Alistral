@@ -3,20 +3,21 @@ use core::fmt::Write as _;
 use alistral_core::cli::colors::AlistralColors as _;
 use symphonize::clippy::clippy_lint::MbClippyLint;
 use tuillez::OwoColorize as _;
+use tuillez::extensions::inquire_ext::select_enum::select_enum;
 
-use crate::utils::cli::await_next;
 use crate::ALISTRAL_CLIENT;
 
 /// Actions to take after displaying a lint
 pub(super) enum LintActions {
-    Continue,
-    Exit
+    Done,
+    //Skip,
+    Exit,
 }
 
-pub(super) async fn print_lint<L: MbClippyLint>(lint: &L) {
-    println!("{}\n[Enter to continue]", format_lint(lint).await);
-    
-    
+pub(super) async fn print_lint<L: MbClippyLint>(lint: &L) -> LintActions {
+    println!("{}", format_lint(lint).await);
+
+    select_enum::<LintActions>("")
 }
 
 pub(super) async fn format_lint<L: MbClippyLint>(lint: &L) -> String {
