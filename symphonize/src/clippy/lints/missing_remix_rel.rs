@@ -1,30 +1,47 @@
+use musicbrainz_db_lite::FetchAsComplete;
 use musicbrainz_db_lite::models::musicbrainz::{main_entities::MainEntity, recording::Recording};
 use tuillez::formatter::FormatWithAsync;
 
 use crate::clippy::clippy_lint::MbClippyLint;
 use crate::clippy::lint_hint::MbClippyLintHint;
 use crate::clippy::lint_link::MbClippyLintLink;
+use crate::clippy::lint_result::LintResult;
 use crate::clippy::lint_severity::LintSeverity;
 
 use crate::SymphonyzeClient;
 use crate::clippy::lints::MusicbrainzLints;
 use crate::utils::formater;
 
-pub struct MissingRemixRelLint {
-    recording: Recording,
-}
+pub struct MissingRemixRelLint;
 
 impl MbClippyLint for MissingRemixRelLint {
+    type Result = MissingRemixRelLintRes;
+
     fn get_name() -> &'static str {
         "missing_remix_rel"
+    }
+
+    async fn prefetch_entities(
+        client: &SymphonyzeClient,
+        entity: &MainEntity,
+    ) -> Result<(), crate::Error> {
+        let MainEntity::Recording(recording) = entity else {
+            return Ok(());
+        };
+
+        recording
+            .fetch_as_complete_as_task(client.mb_database.clone())
+            .await?;
+
+        Ok(())
     }
 
     async fn check(
         client: &SymphonyzeClient,
         entity: &MainEntity,
-    ) -> Result<Option<Self>, crate::Error> {
+    ) -> Result<Vec<MissingRemixRelLintRes>, crate::Error> {
         let MainEntity::Recording(recording) = entity else {
-            return Ok(None);
+            return Ok(Vec::new());
         };
 
         let conn = &mut client.mb_database.get_raw_connection().await?;
@@ -37,22 +54,32 @@ impl MbClippyLint for MissingRemixRelLint {
         }
 
         if !is_remix {
-            return Ok(None);
+            return Ok(Vec::new());
         }
 
         let artist_relations = recording.get_recording_relations(conn).await?;
         // Check if a remixer relationship is missing
         for relation in artist_relations {
             if relation.is_remix_of_rel(recording) {
-                return Ok(None);
+                return Ok(Vec::new());
             }
         }
 
-        let lint = Self {
+        let lint = MissingRemixRelLintRes {
             recording: recording.clone(),
         };
 
-        Ok(Some(lint))
+        Ok(vec![lint])
+    }
+}
+
+pub struct MissingRemixRelLintRes {
+    recording: Recording,
+}
+
+impl LintResult for MissingRemixRelLintRes {
+    fn get_name() -> &'static str {
+        MissingRemixRelLint::get_name()
     }
 
     async fn get_body(
@@ -97,11 +124,5 @@ impl MbClippyLint for MissingRemixRelLint {
 
     fn get_severity(&self) -> LintSeverity {
         LintSeverity::MissingRelation
-    }
-}
-
-impl From<MissingRemixRelLint> for MusicbrainzLints {
-    fn from(value: MissingRemixRelLint) -> Self {
-        Self::MissingRemixRelLint(value)
     }
 }

@@ -1,5 +1,7 @@
 use musicbrainz_db_lite::MainEntity;
 use musicbrainz_db_lite::Recording;
+use musicbrainz_db_lite::models::musicbrainz::recording::relations::release::RecordingReleasesDBRel;
+use musicbrainz_db_lite::models::shared_traits::db_relation::EntityURLDBRel;
 use regex::Regex;
 use tuillez::formatter::FormatWithAsync;
 
@@ -10,51 +12,103 @@ use crate::clippy::lint_link::MbClippyLintLink;
 use crate::clippy::lint_result::LintResult;
 use crate::clippy::lint_severity::LintSeverity;
 use crate::utils::formater;
+use crate::utils::is_release_harmony_compatible;
 
-pub struct DashETILint;
+pub struct MissingRecordingLinksLint;
 
-impl MbClippyLint for DashETILint {
-    type Result = DashETILintRes;
+impl MbClippyLint for MissingRecordingLinksLint {
+    type Result = MissingRecordingLinksLintRes;
 
     fn get_name() -> &'static str {
-        "dash_eti"
+        "missing_recording_links"
     }
 
     async fn check(
-        _client: &SymphonyzeClient,
+        client: &SymphonyzeClient,
         entity: &MainEntity,
-    ) -> Result<Vec<DashETILintRes>, crate::Error> {
+    ) -> Result<Vec<MissingRecordingLinksLintRes>, crate::Error> {
         let MainEntity::Recording(recording) = entity else {
             return Ok(Vec::new());
         };
 
-        // Check if the title has a common spotify "- ETI"
-        let regex =
-            Regex::new(r"(?i).+ - (original mix|sped up|slowed down|extra slowed down|(.+remix))$")
-                .unwrap();
+        let recording_urls = recording
+            .get_related_entity_or_fetch_as_task::<EntityURLDBRel>(&client.mb_database)
+            .await?;
 
-        let eti = match regex.captures(&recording.title) {
-            None => return Ok(Vec::new()),
-            Some(val) => val
-                .get(0)
-                .expect("The regex should return this capture group"),
-        };
+        let releases = recording
+            .get_related_entity_or_fetch_as_task::<RecordingReleasesDBRel>(&client.mb_database)
+            .await?;
 
-        Ok(vec![DashETILintRes {
-            recording: recording.clone(),
-            eti: eti.as_str().to_string(),
-        }])
+        let mut lints = Vec::new();
+
+        for release in releases {
+            if !is_release_harmony_compatible(&client, &release).await? {
+                continue;
+            }
+
+            let release_urls = release
+                .get_related_entity_or_fetch_as_task::<EntityURLDBRel>(&client.mb_database)
+                .await?;
+
+            for release_url in release_urls {
+                if !recording_urls.iter().any(|recording_url| {
+                    check_url_parity(&release_url.ressource, &recording_url.ressource)
+                }) {
+                    lints.push(MissingRecordingLinksLintRes {
+                        recording: recording.clone(),
+                        link: release_url.ressource.clone(),
+                    });
+                }
+            }
+        }
+
+        Ok(lints)
     }
 }
 
-pub struct DashETILintRes {
-    recording: Recording,
-    eti: String,
+/// Checks if an url on a release is matching an url on the recording.
+fn check_url_parity(release_url: &str, recording_url: &str) -> bool {
+    if same_start("https://open.spotify.com", release_url, recording_url) {
+        return true;
+    }
+
+    if same_start("https://www.deezer.com", release_url, recording_url) {
+        return true;
+    }
+
+    if same_start("https://music.apple.com", release_url, recording_url) {
+        return true;
+    }
+
+    if same_start("https://tidal.com", release_url, recording_url) {
+        return true;
+    }
+
+    if same_start("https://www.beatport.com", release_url, recording_url) {
+        return true;
+    }
+
+    if same_start("https://www.youtube.com", release_url, recording_url)
+        && release_url == recording_url
+    {
+        return true;
+    }
+
+    false
 }
 
-impl LintResult for DashETILintRes {
+fn same_start(domain: &str, release_url: &str, recording_url: &str) -> bool {
+    release_url.starts_with(domain) && recording_url.starts_with(domain)
+}
+
+pub struct MissingRecordingLinksLintRes {
+    recording: Recording,
+    link: String,
+}
+
+impl LintResult for MissingRecordingLinksLintRes {
     fn get_name() -> &'static str {
-        DashETILint::get_name()
+        MissingRecordingLinksLint::get_name()
     }
 
     async fn get_body(
@@ -62,11 +116,10 @@ impl LintResult for DashETILintRes {
         client: &SymphonyzeClient,
     ) -> Result<impl std::fmt::Display, crate::Error> {
         Ok(format!(
-            "Recording \"{}\" seems to have ETI after a dash (-). This is often seen on spotify imports as spotify uses this style of ETI
-    -> Convert the dash to parenthesis: `{} ({})`",
+            "Recording \"{}\" is available at `{}`, but doesn't have a link on the Recording level.
+    -> Add the link relationship to the recording",
             self.recording.format_with_async(&formater(client)).await?,
-                self.recording.title.clone().split(" - ").next().unwrap_or(""),
-                self.eti
+            self.link
         ))
     }
 

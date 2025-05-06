@@ -5,27 +5,47 @@ use tuillez::formatter::FormatWithAsync;
 use crate::clippy::clippy_lint::MbClippyLint;
 use crate::clippy::lint_hint::MbClippyLintHint;
 use crate::clippy::lint_link::MbClippyLintLink;
+use crate::clippy::lint_result::LintResult;
 use crate::clippy::lint_severity::LintSeverity;
 
 use crate::SymphonyzeClient;
 use crate::clippy::lints::MusicbrainzLints;
 use crate::utils::formater;
 
-pub struct MissingWorkLint {
+pub struct MissingWorkLint;
+
+pub struct MissingWorkLintRes {
     recording: Recording,
 }
 
 impl MbClippyLint for MissingWorkLint {
+    type Result = MissingWorkLintRes;
+
     fn get_name() -> &'static str {
         "missing_recording_work"
+    }
+
+    async fn prefetch_entities(
+        client: &SymphonyzeClient,
+        entity: &MainEntity,
+    ) -> Result<(), crate::Error> {
+        let MainEntity::Recording(recording) = entity else {
+            return Ok(());
+        };
+
+        recording
+            .get_related_entity_or_fetch_as_task::<RecordingWorkDBRel>(&client.mb_database)
+            .await?;
+
+        Ok(())
     }
 
     async fn check(
         client: &SymphonyzeClient,
         entity: &MainEntity,
-    ) -> Result<Option<Self>, crate::Error> {
+    ) -> Result<Vec<MissingWorkLintRes>, crate::Error> {
         let MainEntity::Recording(recording) = entity else {
-            return Ok(None);
+            return Ok(Vec::new());
         };
 
         let work = recording
@@ -35,16 +55,20 @@ impl MbClippyLint for MissingWorkLint {
             .await?;
 
         if !work.is_empty() {
-            return Ok(None);
+            return Ok(Vec::new());
         }
 
-        let missing_work_lint = Self {
+        let missing_work_lint = MissingWorkLintRes {
             recording: recording.clone(),
         };
 
-        Ok(Some(missing_work_lint))
+        Ok(vec![missing_work_lint])
     }
-
+}
+impl LintResult for MissingWorkLintRes {
+    fn get_name() -> &'static str {
+        MissingWorkLint::get_name()
+    }
     async fn get_body(
         &self,
         client: &SymphonyzeClient,
@@ -98,12 +122,6 @@ impl MbClippyLint for MissingWorkLint {
 
     fn get_severity(&self) -> LintSeverity {
         LintSeverity::MissingData
-    }
-}
-
-impl From<MissingWorkLint> for MusicbrainzLints {
-    fn from(value: MissingWorkLint) -> Self {
-        Self::MissingWorkLint(value)
     }
 }
 

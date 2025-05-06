@@ -6,14 +6,19 @@ use crate::SymphonyzeClient;
 use crate::clippy::clippy_lint::MbClippyLint;
 use crate::clippy::lint_hint::MbClippyLintHint;
 use crate::clippy::lint_link::MbClippyLintLink;
+use crate::clippy::lint_result::LintResult;
 use crate::clippy::lint_severity::LintSeverity;
 use crate::clippy::lints::MusicbrainzLints;
 
-pub struct SoundtrackWithoutDisambiguationLint {
+pub struct SoundtrackWithoutDisambiguationLint;
+
+pub struct SoundtrackWithoutDisambiguationLintRes {
     work: Work,
 }
 
 impl MbClippyLint for SoundtrackWithoutDisambiguationLint {
+    type Result = SoundtrackWithoutDisambiguationLintRes;
+
     fn get_name() -> &'static str {
         "soundtrack_without_disambiguation"
     }
@@ -21,20 +26,27 @@ impl MbClippyLint for SoundtrackWithoutDisambiguationLint {
     async fn check(
         _client: &SymphonyzeClient,
         entity: &musicbrainz_db_lite::models::musicbrainz::main_entities::MainEntity,
-    ) -> Result<Option<Self>, crate::Error> {
+    ) -> Result<Vec<SoundtrackWithoutDisambiguationLintRes>, crate::Error> {
         let MainEntity::Work(work) = entity else {
-            return Ok(None);
+            return Ok(Vec::new());
         };
 
         if work.work_type.as_ref().is_none_or(|t| t != "Soundtrack")
             || work.disambiguation.as_ref().is_some_and(|d| !d.is_empty())
         {
-            return Ok(None);
+            return Ok(Vec::new());
         }
 
-        Ok(Some(Self { work: work.clone() }))
+        Ok(vec![SoundtrackWithoutDisambiguationLintRes {
+            work: work.clone(),
+        }])
     }
+}
 
+impl LintResult for SoundtrackWithoutDisambiguationLintRes {
+    fn get_name() -> &'static str {
+        SoundtrackWithoutDisambiguationLint::get_name()
+    }
     async fn get_body(
         &self,
         _client: &SymphonyzeClient,
@@ -71,11 +83,5 @@ impl MbClippyLint for SoundtrackWithoutDisambiguationLint {
 
     fn get_severity(&self) -> LintSeverity {
         LintSeverity::StyleIssue
-    }
-}
-
-impl From<SoundtrackWithoutDisambiguationLint> for MusicbrainzLints {
-    fn from(value: SoundtrackWithoutDisambiguationLint) -> Self {
-        Self::SoundtrackWithoutDisambiguationLint(value)
     }
 }

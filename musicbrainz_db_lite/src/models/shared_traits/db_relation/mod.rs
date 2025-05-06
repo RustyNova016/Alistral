@@ -91,3 +91,6 @@ pub struct RecordingWorkDBRel;
 
 /// Entity (0:M) -> [`crate::ArtistCredit`]
 pub struct ArtistCreditDBRel;
+
+/// Entity (0:M) -> [`crate::Url`]
+pub struct EntityURLDBRel;

@@ -15,3 +15,11 @@ pub use owo_colors::OwoColorize;
 pub mod tracing_indicatif {
     pub use tracing_indicatif::*;
 }
+
+pub mod inquire {
+    pub use inquire::*;
+}
+
+pub mod strum {
+    pub use strum::*;
+}

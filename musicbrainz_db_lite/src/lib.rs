@@ -48,3 +48,4 @@ pub use utils::sqlx_utils::joins::JoinRelation;
 pub(crate) type MBRecording = musicbrainz_rs_nova::entity::recording::Recording;
 pub(crate) type MBRelease = musicbrainz_rs_nova::entity::release::Release;
 pub(crate) type MBReleaseGroup = musicbrainz_rs_nova::entity::release_group::ReleaseGroup;
+pub(crate) type MBWork = musicbrainz_rs_nova::entity::work::Work;

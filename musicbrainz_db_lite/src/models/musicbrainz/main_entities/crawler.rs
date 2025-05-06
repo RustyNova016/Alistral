@@ -81,6 +81,7 @@ async fn crawl_task(
                     MainEntity::Artist(val) => val.get_crawler(client.clone(), out_sender).await,
                     MainEntity::Recording(val) => val.get_crawler(client.clone(), out_sender).await,
                     MainEntity::Release(val) => val.get_crawler(client.clone(), out_sender).await,
+                    MainEntity::Work(val) => val.get_crawler(client.clone(), out_sender).await,
                     _ => Ok(()),
                 }
             }
