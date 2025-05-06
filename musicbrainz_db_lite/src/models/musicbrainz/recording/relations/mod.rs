@@ -1,3 +1,5 @@
+pub mod url;
+pub mod release;
 use std::collections::HashMap;
 
 use itertools::Itertools;
@@ -81,14 +83,7 @@ impl Recording {
     }
 }
 
-impl DBRelation<ArtistCreditDBRel> for Recording {
-    type ReturnedType = ArtistCredit;
 
-    fn get_join_statement() -> &'static str {
-        "INNER JOIN artist_credits ON recordings.artist_credit = artist_credits.id
-        INNER JOIN artist_credits_item ON artist_credits.id = artist_credits_item.artist_credit"
-    }
-}
 
 #[cfg(test)]
 mod tests {
