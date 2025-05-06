@@ -78,7 +78,7 @@ pub struct MissingRemixRelLintRes {
 }
 
 impl LintResult for MissingRemixRelLintRes {
-        fn get_name() -> &'static str {
+    fn get_name() -> &'static str {
         MissingRemixRelLint::get_name()
     }
 
@@ -126,4 +126,3 @@ impl LintResult for MissingRemixRelLintRes {
         LintSeverity::MissingRelation
     }
 }
-

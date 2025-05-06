@@ -77,7 +77,7 @@ impl MbClippyLint for MissingRemixerRelLint {
 }
 
 impl LintResult for MissingRemixerRelLintRes {
-        fn get_name() -> &'static str {
+    fn get_name() -> &'static str {
         MissingRemixerRelLint::get_name()
     }
     async fn get_body(
@@ -124,4 +124,3 @@ impl LintResult for MissingRemixerRelLintRes {
         LintSeverity::MissingRelation
     }
 }
-

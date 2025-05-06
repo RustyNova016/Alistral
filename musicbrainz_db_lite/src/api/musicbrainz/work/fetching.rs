@@ -1,7 +1,7 @@
 use musicbrainz_rs_nova::Fetch;
-use musicbrainz_rs_nova::entity::work::Work as MBWork;
 
 use crate::Error;
+use crate::MBWork;
 use crate::database::client::DBClient;
 use crate::models::musicbrainz::work::Work;
 use crate::models::shared_traits::fetch_and_save::FetchAndSave;

@@ -13,9 +13,8 @@
 // pub struct DashETILint;
 
 // impl MbClippyLint for DashETILint {
-    
-// }
 
+// }
 
 // pub struct DashETILintRes {
 //     recording: Recording,

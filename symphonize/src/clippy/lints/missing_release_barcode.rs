@@ -39,7 +39,6 @@ impl MbClippyLint for MissingBarcodeLint {
     }
 }
 
-
 pub struct MissingBarcodeLintRes {
     release: Release,
 }

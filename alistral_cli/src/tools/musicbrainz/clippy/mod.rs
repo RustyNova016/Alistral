@@ -1,5 +1,3 @@
-pub mod display;
-pub mod processing;
 use core::fmt::Write as _;
 use std::sync::Arc;
 
@@ -25,11 +23,14 @@ use tuillez::OwoColorize as _;
 use tuillez::formatter::FormatWithAsync;
 
 use crate::ALISTRAL_CLIENT;
-use crate::tools::musicbrainz::clippy::processing::process_lints_lazy;
+use crate::tools::musicbrainz::clippy::processing::process_lints;
 use crate::utils::cli::await_next;
 use crate::utils::cli::read_mbid_from_input;
 use crate::utils::constants::MUSIBRAINZ_FMT;
 use crate::utils::whitelist_blacklist::WhitelistBlacklist;
+
+pub mod display;
+pub mod processing;
 
 #[derive(Parser, Debug, Clone)]
 /// Search for potential mistakes, missing data and style issues. This allows to quickly pin down errors that can be corrected
@@ -90,142 +91,143 @@ pub async fn mb_clippy(start_mbid: &str, filter: &WhitelistBlacklist<String>) {
 
     let crawler = crawler
         // Remove all the entities that don't trigger any lint with the cached data
-        .try_filter(|entity| process_lints_lazy(entity.clone(), filter))
         .map_ok(|entity| process_lints(entity.clone(), filter))
         .extract_future_ok()
         .buffer_unordered(8);
 
     pin_mut!(crawler);
 
-    while let Some(_entity) = crawler
+    while let Some(conti) = crawler
         .try_next()
         .await
         .expect("Couldn't get the next item")
-    {}
-
-    println!("No more data to process");
-}
-
-// === Process lints
-
-async fn process_lints(entity: Arc<MainEntity>, filter: &WhitelistBlacklist<String>) {
-    let entity = &mut entity.as_ref().clone();
-
-    process_lint::<DashETILintRes>(entity, filter).await;
-    process_lint::<MissingWorkLint>(entity, filter).await;
-    process_lint::<MissingBarcodeLint>(entity, filter).await;
-    process_lint::<MissingRemixRelLint>(entity, filter).await;
-    process_lint::<SuspiciousRemixLint>(entity, filter).await;
-    process_lint::<MissingRemixerRelLint>(entity, filter).await;
-    process_lint::<SoundtrackWithoutDisambiguationLint>(entity, filter).await;
-
-    println!(
-        "[Processed] {}",
-        entity
-            .format_with_async(&MUSIBRAINZ_FMT)
-            .await
-            .expect("Error while formating the name of the entity")
-    );
-}
-
-async fn process_lint<L: MbClippyLint>(
-    entity: &mut MainEntity,
-    filter: &WhitelistBlacklist<String>,
-) {
-    // Check if the lint is allowed
-    if !filter.is_allowed(&L::get_name().to_string()) {
-        return;
-    }
-
-    // Check the lint with old data
-
-    debug!(
-        "Checking Lint `{}` for `{}`",
-        L::get_name(),
-        entity.get_unique_id()
-    );
-
-    L::prefetch_entities(&ALISTRAL_CLIENT.symphonize, entity)
-        .await
-        .expect("Couldn't get data for the lint");
-
-    let Some(_lint) = L::check(&ALISTRAL_CLIENT.symphonize, entity)
-        .await
-        .expect("Error while processing lint")
-    else {
-        return;
-    };
-
-    // There might be an issue, so grab the latest data and recheck
-
-    debug!(
-        "Rechecking Lint `{}` for `{}`",
-        L::get_name(),
-        entity.get_unique_id()
-    );
-
-    entity
-        .refetch_and_load_as_task(ALISTRAL_CLIENT.musicbrainz_db.clone())
-        .await
-        .expect("Couldn't refresh the entity");
-
-    let Some(lint) = L::check(&ALISTRAL_CLIENT.symphonize, entity)
-        .await
-        .expect("Error while processing lint")
-    else {
-        return;
-    };
-
-    print_lint(&lint).await;
-}
-
-// === Printing ===
-
-async fn print_lint<L: MbClippyLint>(lint: &L) {
-    let mut report = String::new();
-    writeln!(
-        &mut report,
-        "{}",
-        format!("\n {} ", L::get_name())
-            .on_truecolor_tup(lint.get_severity().get_color())
-            .black()
-            .bold()
-    )
-    .unwrap();
-    writeln!(&mut report).unwrap();
-    writeln!(
-        &mut report,
-        "{}",
-        lint.get_body(&ALISTRAL_CLIENT.symphonize)
-            .await
-            .expect("Error while processing lint body")
-    )
-    .unwrap();
-
-    // Hints
-    let hints = lint
-        .get_hints(&ALISTRAL_CLIENT.symphonize)
-        .await
-        .expect("Error while processing lint hints");
-    if !hints.is_empty() {
-        writeln!(&mut report).unwrap();
-        for hint in hints {
-            writeln!(&mut report, "{hint}").unwrap();
+    {
+        if !conti {
+            break;
         }
     }
-
-    // Links
-    writeln!(&mut report).unwrap();
-    writeln!(&mut report, "Links:").unwrap();
-    for link in lint
-        .get_links(&ALISTRAL_CLIENT.symphonize)
-        .await
-        .expect("Error while processing lint links")
-    {
-        writeln!(&mut report, "    - {link}").unwrap();
-    }
-
-    writeln!(&mut report).unwrap();
-    println!("{report}\n[Enter to continue]");
-    await_next();
 }
+
+// // === Process lints
+
+// async fn process_lints(entity: Arc<MainEntity>, filter: &WhitelistBlacklist<String>) {
+//     let entity = &mut entity.as_ref().clone();
+
+//     process_lint::<DashETILintRes>(entity, filter).await;
+//     process_lint::<MissingWorkLint>(entity, filter).await;
+//     process_lint::<MissingBarcodeLint>(entity, filter).await;
+//     process_lint::<MissingRemixRelLint>(entity, filter).await;
+//     process_lint::<SuspiciousRemixLint>(entity, filter).await;
+//     process_lint::<MissingRemixerRelLint>(entity, filter).await;
+//     process_lint::<SoundtrackWithoutDisambiguationLint>(entity, filter).await;
+
+//     println!(
+//         "[Processed] {}",
+//         entity
+//             .format_with_async(&MUSIBRAINZ_FMT)
+//             .await
+//             .expect("Error while formating the name of the entity")
+//     );
+// }
+
+// async fn process_lint<L: MbClippyLint>(
+//     entity: &mut MainEntity,
+//     filter: &WhitelistBlacklist<String>,
+// ) {
+//     // Check if the lint is allowed
+//     if !filter.is_allowed(&L::get_name().to_string()) {
+//         return;
+//     }
+
+//     // Check the lint with old data
+
+//     debug!(
+//         "Checking Lint `{}` for `{}`",
+//         L::get_name(),
+//         entity.get_unique_id()
+//     );
+
+//     L::prefetch_entities(&ALISTRAL_CLIENT.symphonize, entity)
+//         .await
+//         .expect("Couldn't get data for the lint");
+
+//     let Some(_lint) = L::check(&ALISTRAL_CLIENT.symphonize, entity)
+//         .await
+//         .expect("Error while processing lint")
+//     else {
+//         return;
+//     };
+
+//     // There might be an issue, so grab the latest data and recheck
+
+//     debug!(
+//         "Rechecking Lint `{}` for `{}`",
+//         L::get_name(),
+//         entity.get_unique_id()
+//     );
+
+//     entity
+//         .refetch_and_load_as_task(ALISTRAL_CLIENT.musicbrainz_db.clone())
+//         .await
+//         .expect("Couldn't refresh the entity");
+
+//     let Some(lint) = L::check(&ALISTRAL_CLIENT.symphonize, entity)
+//         .await
+//         .expect("Error while processing lint")
+//     else {
+//         return;
+//     };
+
+//     print_lint(&lint).await;
+// }
+
+// // === Printing ===
+
+// async fn print_lint<L: MbClippyLint>(lint: &L) {
+//     let mut report = String::new();
+//     writeln!(
+//         &mut report,
+//         "{}",
+//         format!("\n {} ", L::get_name())
+//             .on_truecolor_tup(lint.get_severity().get_color())
+//             .black()
+//             .bold()
+//     )
+//     .unwrap();
+//     writeln!(&mut report).unwrap();
+//     writeln!(
+//         &mut report,
+//         "{}",
+//         lint.get_body(&ALISTRAL_CLIENT.symphonize)
+//             .await
+//             .expect("Error while processing lint body")
+//     )
+//     .unwrap();
+
+//     // Hints
+//     let hints = lint
+//         .get_hints(&ALISTRAL_CLIENT.symphonize)
+//         .await
+//         .expect("Error while processing lint hints");
+//     if !hints.is_empty() {
+//         writeln!(&mut report).unwrap();
+//         for hint in hints {
+//             writeln!(&mut report, "{hint}").unwrap();
+//         }
+//     }
+
+//     // Links
+//     writeln!(&mut report).unwrap();
+//     writeln!(&mut report, "Links:").unwrap();
+//     for link in lint
+//         .get_links(&ALISTRAL_CLIENT.symphonize)
+//         .await
+//         .expect("Error while processing lint links")
+//     {
+//         writeln!(&mut report, "    - {link}").unwrap();
+//     }
+
+//     writeln!(&mut report).unwrap();
+//     println!("{report}\n[Enter to continue]");
+//     await_next();
+// }

@@ -1,7 +1,8 @@
 use core::fmt::Write as _;
 
 use alistral_core::cli::colors::AlistralColors as _;
-use symphonize::clippy::clippy_lint::MbClippyLint;
+use strum_macros::Display;
+use strum_macros::EnumIter;
 use symphonize::clippy::lint_result::LintResult;
 use tuillez::OwoColorize as _;
 use tuillez::extensions::inquire_ext::select_enum::select_enum;
@@ -9,6 +10,7 @@ use tuillez::extensions::inquire_ext::select_enum::select_enum;
 use crate::ALISTRAL_CLIENT;
 
 /// Actions to take after displaying a lint
+#[derive(Debug, EnumIter, Display)]
 pub(super) enum LintActions {
     Done,
     //Skip,
@@ -18,11 +20,12 @@ pub(super) enum LintActions {
 pub(super) async fn print_lint<L: LintResult>(lint: &L) -> LintActions {
     println!("{}", format_lint(lint).await);
 
-    select_enum::<LintActions>("")
+    select_enum::<LintActions>("").prompt().unwrap()
 }
 
 pub(super) async fn format_lint<L: LintResult>(lint: &L) -> String {
     let mut report = String::new();
+    writeln!(&mut report).unwrap();
     writeln!(
         &mut report,
         "{}",

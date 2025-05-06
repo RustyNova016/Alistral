@@ -57,7 +57,7 @@ impl LintResult for SuspiciousRemixLintRes {
     fn get_name() -> &'static str {
         SuspiciousRemixLint::get_name()
     }
-    
+
     async fn get_body(
         &self,
 
@@ -103,4 +103,3 @@ impl LintResult for SuspiciousRemixLintRes {
         LintSeverity::MissingRelation
     }
 }
-

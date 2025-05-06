@@ -44,7 +44,7 @@ impl MbClippyLint for SoundtrackWithoutDisambiguationLint {
 }
 
 impl LintResult for SoundtrackWithoutDisambiguationLintRes {
-        fn get_name() -> &'static str {
+    fn get_name() -> &'static str {
         SoundtrackWithoutDisambiguationLint::get_name()
     }
     async fn get_body(
@@ -85,4 +85,3 @@ impl LintResult for SoundtrackWithoutDisambiguationLintRes {
         LintSeverity::StyleIssue
     }
 }
-

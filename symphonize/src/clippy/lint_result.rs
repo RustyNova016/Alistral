@@ -7,7 +7,7 @@ use crate::clippy::lint_severity::LintSeverity;
 
 pub trait LintResult {
     fn get_name() -> &'static str;
-    
+
     fn get_body(
         &self,
         client: &SymphonyzeClient,

@@ -66,7 +66,7 @@ impl MbClippyLint for MissingWorkLint {
     }
 }
 impl LintResult for MissingWorkLintRes {
-        fn get_name() -> &'static str {
+    fn get_name() -> &'static str {
         MissingWorkLint::get_name()
     }
     async fn get_body(
@@ -124,7 +124,6 @@ impl LintResult for MissingWorkLintRes {
         LintSeverity::MissingData
     }
 }
-
 
 #[cfg(test)]
 mod test {
