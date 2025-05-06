@@ -1,5 +1,6 @@
 pub mod display;
 pub mod finds;
+pub mod methods;
 use musicbrainz_db_lite_macros::{MainEntity, Upsert};
 use serde::Deserialize;
 use serde::Serialize;

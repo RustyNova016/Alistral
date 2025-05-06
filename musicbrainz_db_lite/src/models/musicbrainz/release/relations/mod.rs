@@ -1,3 +1,4 @@
+pub mod urls;
 use std::sync::Arc;
 
 use futures::SinkExt as _;

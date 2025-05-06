@@ -2115,6 +2115,7 @@ dependencies = [
  "musicbrainz_db_lite_schema",
  "musicbrainz_rs",
  "owo-colors",
+ "regex",
  "reqwest",
  "serde",
  "serde_json",

@@ -5,7 +5,7 @@ impl Recording {
     ///
     /// This is determined by checking if the recording got a remix relation with another recording, or a remixer relationship with an artist
     pub async fn is_remix(&self, conn: &mut sqlx::SqliteConnection) -> Result<bool, crate::Error> {
-        let recording_rels = self.get_artist_relations(conn).await?;
+        let recording_rels = self.get_artist_relations(conn).await?; //TODO: Use tasks
         for relation in recording_rels {
             if relation.is_remixer_rel(self) {
                 return Ok(true);

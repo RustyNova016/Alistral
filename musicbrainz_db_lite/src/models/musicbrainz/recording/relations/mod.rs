@@ -13,6 +13,8 @@ use super::Recording;
 
 pub mod artist;
 pub mod crawler;
+pub mod releases;
+pub mod urls;
 pub mod work;
 
 impl Recording {

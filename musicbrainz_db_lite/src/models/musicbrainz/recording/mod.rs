@@ -18,8 +18,8 @@ use musicbrainz_db_lite_macros::Upsert;
 
 pub mod display;
 pub mod finds;
+pub mod methods;
 pub mod relations;
-pub mod status;
 
 #[derive(
     Debug, Default, PartialEq, Eq, Clone, FromRow, Upsert, MainEntity, Deserialize, Serialize,
