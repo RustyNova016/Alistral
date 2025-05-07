@@ -45,7 +45,7 @@ where
 
     fn get_related_entity_bulk(
         conn: &mut sqlx::SqliteConnection,
-        entities: &[Self],
+        entities: &[&Self],
     ) -> impl std::future::Future<Output = Result<JoinCollection<Self::ReturnedType>, crate::Error>> + Send
     where
         Self: Sized + Sync,

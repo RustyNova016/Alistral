@@ -20,7 +20,7 @@ use super::EntityWithListens;
 pub mod converters;
 
 /// An indexed collection of [`EntityWithListens`]
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct EntityWithListensCollection<Ent, Lis>(pub HashMap<i64, EntityWithListens<Ent, Lis>>)
 where
     Ent: RowId,

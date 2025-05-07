@@ -23,7 +23,7 @@ pub mod traits;
 pub mod work;
 
 /// A structure representing an entity with associated listens.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct EntityWithListens<Ent, Lis>
 where
     Ent: RowId,

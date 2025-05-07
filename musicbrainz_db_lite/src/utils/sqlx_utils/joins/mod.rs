@@ -6,6 +6,11 @@ use sqlx::FromRow;
 
 use crate::RowId;
 
+pub mod as_rowid_join;
+pub mod index;
+pub mod many_to_zero_join;
+pub mod zero_to_many_join;
+
 /// Represent a returned row during a many to many query.
 #[derive(Clone, PartialEq, Eq, Hash, Debug, FromRow)]
 pub struct JoinRelation<T> {
@@ -24,6 +29,7 @@ pub struct JoinCollection<R> {
 }
 
 impl<R> JoinCollection<R> {
+    /// Return a hashmap of <Rowid, T>. This allow of quick and hashless (On T) lookups.
     fn get_index<T>(data: Vec<T>) -> HashMap<i64, Vec<T>>
     where
         T: RowId,
@@ -34,11 +40,11 @@ impl<R> JoinCollection<R> {
     }
 
     /// Convert the join into a hashmap. This implies that:
-    /// - Right has many Left
+    /// - Right(self) has many Left
     /// - Left has one Right
     ///
     /// ex: a Recording (Right) has many Artists (Left)
-    pub fn many_to_one<L>(self, left_values: Vec<L>) -> HashMap<R, Vec<L>>
+    pub fn one_to_many<L>(self, left_values: Vec<L>) -> HashMap<R, Vec<L>>
     where
         L: RowId,
         R: Eq + Hash,
@@ -46,6 +52,7 @@ impl<R> JoinCollection<R> {
         let mut left_index = Self::get_index(left_values);
 
         let mut output = HashMap::new();
+
         for (left_id, right) in self.joins.into_iter().map(|j| (j.original_id, j.data)) {
             let entry: &mut Vec<L> = output.entry(right).or_default();
 
