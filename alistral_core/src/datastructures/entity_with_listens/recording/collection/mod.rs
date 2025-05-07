@@ -1,12 +1,12 @@
-use itertools::Itertools;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
+use musicbrainz_db_lite::models::listenbrainz::listen::relations::recording::ListenRecordingDBRel;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use musicbrainz_db_lite::models::musicbrainz::user::User;
-use musicbrainz_db_lite::utils::sqlx_utils::entity_relations::JoinRelation;
+use musicbrainz_db_lite::sequelle::JoinCollection;
 use tracing::instrument;
 use tuillez::pg_counted;
-use tuillez::pg_inc;
 use tuillez::pg_spinner;
+use tuillez::tracing_utils::pg_future::PGFuture;
 
 use crate::AlistralClient;
 use crate::database::fetching::recordings::prefetch_recordings_of_listens;
@@ -62,11 +62,17 @@ impl ListenSortingStrategy<Recording, ListenCollection> for RecordingWithListenS
 
         prefetch_recordings_of_listens(conn, self.client, user.id, &listens).await?;
 
-        compile(
-            data,
-            Listen::get_recordings_as_batch(conn, user.id, &listens).await?,
-            listens,
-        );
+        let joins = Listen::get_related_entity_bulk::<ListenRecordingDBRel>(conn, &listens)
+            .pg_spinner("Loading recordings from cache...")
+            .await?;
+
+        for (recording, listens) in joins.into_many_to_zero(listens).invert() {
+            // Insert the listens into the data structure
+            if let Some(recording) = recording {
+                data.insert_or_merge_listens(recording, listens);
+            }
+        }
+
         Ok(())
     }
 
@@ -82,18 +88,8 @@ impl ListenSortingStrategy<Recording, ListenCollection> for RecordingWithListenS
 #[instrument(fields(indicatif.pb_show = tracing::field::Empty))]
 fn compile(
     data: &mut EntityWithListensCollection<Recording, ListenCollection>,
-    relations: Vec<JoinRelation<i64, Recording>>,
+    relations: JoinCollection<Recording>,
     listens: Vec<Listen>,
 ) {
     pg_counted!(relations.len(), "Loading listens data");
-
-    let id_map = relations
-        .into_iter()
-        .map(|join| (join.original_id, join.data))
-        .into_group_map();
-
-    for (key, chunk) in &listens.into_iter().chunk_by(|l| id_map.get(&l.id).unwrap()) {
-        data.insert_or_merge_listens(key.first().unwrap().clone(), chunk.collect_vec());
-        pg_inc!()
-    }
 }

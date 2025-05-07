@@ -1,10 +1,10 @@
 use itertools::Itertools as _;
+use sequelles::datastructures::joins::join_result::JoinCollection;
+use sequelles::datastructures::joins::join_result::JoinRelation;
 use sqlx::sqlite::SqliteRow;
 
 use crate::RowId;
 use crate::models::shared_traits::has_table::HasTable;
-use crate::utils::sqlx_utils::joins::JoinCollection;
-use crate::utils::sqlx_utils::joins::JoinRelation;
 
 pub mod complete_fetch;
 

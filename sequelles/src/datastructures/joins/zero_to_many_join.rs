@@ -1,3 +1,5 @@
+use std::collections::hash_map::IntoValues;
+
 use crate::RowIDMap;
 use crate::has_rowid::HasRowID;
 
@@ -24,5 +26,14 @@ where
 impl<L, R> Default for ZeroToManyJoin<L, R> {
     fn default() -> Self {
         Self(RowIDMap::default())
+    }
+}
+
+impl<L, R> IntoIterator for ZeroToManyJoin<L, R> {
+    type Item = (Option<L>, Vec<R>);
+    type IntoIter = IntoValues<i64, Self::Item>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.0.into_iter()
     }
 }

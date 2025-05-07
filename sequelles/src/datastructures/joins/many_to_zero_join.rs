@@ -1,3 +1,5 @@
+use std::collections::hash_map::IntoValues;
+
 use crate::RowIDMap;
 use crate::datastructures::joins::zero_to_many_join::ZeroToManyJoin;
 use crate::has_rowid::HasRowID;
@@ -15,7 +17,7 @@ where
         self.0.insert(left, right);
     }
 
-    /// Replace the value at a 
+    /// Replace the value at a
     pub fn replace_by_id(&mut self, key: i64, value: R) -> Option<R> {
         self.0.get_mut_by_id(key).and_then(|val| val.replace(value))
     }
@@ -37,5 +39,14 @@ where
 impl<L, R> Default for ManyToZeroJoin<L, R> {
     fn default() -> Self {
         Self(RowIDMap::default())
+    }
+}
+
+impl<L, R> IntoIterator for ManyToZeroJoin<L, R> {
+    type Item = (L, Option<R>);
+    type IntoIter = IntoValues<i64, Self::Item>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.0.into_iter()
     }
 }

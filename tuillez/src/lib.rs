@@ -1,3 +1,4 @@
+pub mod tracing_utils;
 pub mod error;
 #[cfg(feature = "extensions")]
 pub mod extensions;

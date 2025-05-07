@@ -30,15 +30,23 @@ pub struct JoinCollection<T> {
 }
 
 impl<R> JoinCollection<R> {
-    /// Convert the joins into a [`ManyToZeroJoin`]. This assumes that the current elements are the right elements of the join, 
+    pub fn len(&self) -> usize {
+        self.joins.len()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.joins.is_empty()
+    }
+
+    /// Convert the joins into a [`ManyToZeroJoin`]. This assumes that the current elements are the right elements of the join,
     /// and the provided ones are the left elements.
-    pub fn into_zero_to_many<L, T>(self, left_elements: T) -> ManyToZeroJoin<L, R>
+    pub fn into_many_to_zero<L, T>(self, left_elements: T) -> ManyToZeroJoin<L, R>
     where
         L: HasRowID,
         T: IntoIterator<Item = L>,
     {
         let mut smart_join = ManyToZeroJoin::default();
-        
+
         // Insert the left values
         for left in left_elements {
             smart_join.insert(left, None);
@@ -47,7 +55,6 @@ impl<R> JoinCollection<R> {
         // Now add the right values
         for (l_id, right) in self.joins.into_iter().map(|join| join.into_tupple()) {
             smart_join.replace_by_id(l_id, right);
-        
         }
         smart_join
     }

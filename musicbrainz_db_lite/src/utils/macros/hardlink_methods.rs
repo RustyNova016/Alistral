@@ -33,7 +33,7 @@ macro_rules! impl_db_relation_methods {
                 conn: &mut sqlx::SqliteConnection,
                 entities: &[Self],
             ) -> Result<
-                $crate::JoinCollection<<Self as $crate::DBRelation<T>>::ReturnedType>,
+                sequelles::JoinCollection<<Self as $crate::DBRelation<T>>::ReturnedType>,
                 crate::Error,
             >
             where

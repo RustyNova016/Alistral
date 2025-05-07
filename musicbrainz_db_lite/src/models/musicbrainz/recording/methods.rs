@@ -1,3 +1,5 @@
+use chrono::Duration;
+
 use crate::models::musicbrainz::recording::Recording;
 
 impl Recording {
@@ -20,5 +22,11 @@ impl Recording {
         }
 
         Ok(false)
+    }
+
+    pub fn length_as_duration(&self) -> Option<Duration> {
+        self.length.and_then(|length| {
+            Duration::new(length.div_euclid(1000), length.rem_euclid(1000) as u32)
+        })
     }
 }

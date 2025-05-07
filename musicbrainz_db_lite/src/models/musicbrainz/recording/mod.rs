@@ -1,4 +1,4 @@
-use chrono::Duration;
+use sequelles::has_rowid::HasRowID;
 use serde::Deserialize;
 use serde::Serialize;
 use sqlx::prelude::FromRow;
@@ -51,17 +51,19 @@ impl_relations!(Recording);
 impl_db_relation_methods!(Recording);
 impl_db_relation_fetch_methods!(Recording, MBRecording);
 
+impl HasTags for Recording {}
+impl HasGenres for Recording {}
+impl MBIDRedirection for Recording {}
+
 impl crate::RowId for Recording {
     fn get_row_id(&self) -> i64 {
         self.id
     }
 }
 
-impl Recording {
-    pub fn length_as_duration(&self) -> Option<Duration> {
-        self.length.and_then(|length| {
-            Duration::new(length.div_euclid(1000), length.rem_euclid(1000) as u32)
-        })
+impl HasRowID for Recording {
+    fn rowid(&self) -> i64 {
+        self.id
     }
 }
 
@@ -69,7 +71,3 @@ impl HasTable for Recording {
     const TABLE_NAME: &str = "recordings";
     const FOREIGN_FIELD_NAME: &str = "recording";
 }
-
-impl HasTags for Recording {}
-impl HasGenres for Recording {}
-impl MBIDRedirection for Recording {}
