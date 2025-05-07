@@ -2117,6 +2117,7 @@ dependencies = [
  "owo-colors",
  "regex",
  "reqwest",
+ "sequelles",
  "serde",
  "serde_json",
  "serial_test",
@@ -2970,6 +2971,13 @@ checksum = "49db231d56a190491cb4aeda9527f1ad45345af50b0851622a7adb8c03b01c32"
 dependencies = [
  "core-foundation-sys",
  "libc",
+]
+
+[[package]]
+name = "sequelles"
+version = "0.1.0"
+dependencies = [
+ "sqlx",
 ]
 
 [[package]]
