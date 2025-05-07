@@ -2,6 +2,7 @@ use std::hash::Hash;
 
 use sqlx::FromRow;
 
+use crate::ManyToManyJoin;
 use crate::ManyToZeroJoin;
 use crate::has_rowid::HasRowID;
 
@@ -56,6 +57,28 @@ impl<R> JoinCollection<R> {
         for (l_id, right) in self.joins.into_iter().map(|join| join.into_tupple()) {
             smart_join.replace_by_id(l_id, right);
         }
+
+        smart_join
+    }
+
+    pub fn into_many_to_many<L, T>(self, left_elements: T) -> ManyToManyJoin<L, R>
+    where
+        L: HasRowID,
+        R: HasRowID,
+        T: IntoIterator<Item = L>,
+    {
+        let mut smart_join = ManyToManyJoin::default();
+
+        // Insert the left values
+        for left in left_elements {
+            smart_join.add_left(left);
+        }
+
+        for (l_id, right) in self.joins.into_iter().map(|join| join.into_tupple()) {
+            smart_join.add_relation_ids(l_id, right.rowid());
+            smart_join.add_right(right);
+        }
+
         smart_join
     }
 }

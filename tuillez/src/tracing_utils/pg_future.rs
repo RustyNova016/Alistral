@@ -6,7 +6,7 @@ use tracing_indicatif::span_ext::IndicatifSpanExt as _;
 use crate::SPINNER_STYLE;
 
 pub trait PGFuture: Instrument {
-    /// Add a [`tracing_indicatif`] progress bar using the [`SPINNER_STYLE`] style. 
+    /// Add a [`tracing_indicatif`] progress bar using the [`SPINNER_STYLE`] style.
     fn pg_spinner(self, msg: &str) -> Instrumented<Self> {
         let span = info_span!("Test");
         span.pb_set_message(msg);
