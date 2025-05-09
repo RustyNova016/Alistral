@@ -31,7 +31,7 @@ macro_rules! impl_db_relation_methods {
             /// Get the related entities in bulk based on the relation type given in the type parameter
             pub async fn get_related_entity_bulk<T>(
                 conn: &mut sqlx::SqliteConnection,
-                entities: &[Self],
+                entities: &[&Self],
             ) -> Result<
                 sequelles::JoinCollection<<Self as $crate::DBRelation<T>>::ReturnedType>,
                 crate::Error,

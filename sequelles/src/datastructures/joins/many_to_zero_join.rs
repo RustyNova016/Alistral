@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::collections::hash_map::IntoValues;
 
 use crate::RowIDMap;
@@ -13,11 +14,12 @@ impl<L, R> ManyToZeroJoin<L, R>
 where
     L: HasRowID,
 {
+    /// Insert a key-value pair
     pub fn insert(&mut self, left: L, right: Option<R>) {
         self.0.insert(left, right);
     }
 
-    /// Replace the value at a
+    /// Replace the value at a specific rowid
     pub fn replace_by_id(&mut self, key: i64, value: R) -> Option<R> {
         self.0.get_mut_by_id(key).and_then(|val| val.replace(value))
     }
@@ -30,6 +32,40 @@ where
 
         for (left, right) in self.0.into_iter() {
             new_map.push_entry(right, left);
+        }
+
+        new_map
+    }
+
+    /// Return the underlying hashmap.
+    pub fn as_mut_hashmap(&mut self) -> &mut HashMap<i64, (L, Option<R>)> {
+        self.0.as_mut_hash_map()
+    }
+
+    pub fn map_left<F, U>(self, f: F) -> ManyToZeroJoin<U, R>
+    where
+        F: Fn(L) -> U,
+        U: HasRowID,
+    {
+        let mut new_map = ManyToZeroJoin::default();
+
+        for (left, right) in self {
+            let left = f(left);
+            new_map.insert(left, right);
+        }
+
+        new_map
+    }
+
+    pub fn map_right<F, U>(self, f: F) -> ManyToZeroJoin<L, U>
+    where
+        F: Fn(R) -> U,
+    {
+        let mut new_map = ManyToZeroJoin::default();
+
+        for (left, right) in self {
+            let right = right.map(&f);
+            new_map.insert(left, right);
         }
 
         new_map

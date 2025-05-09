@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::collections::hash_map::IntoValues;
 
 use crate::has_rowid::HasRowID;
 
@@ -33,6 +34,10 @@ where
     pub fn remove(&mut self, key: &i64) -> Option<R> {
         self.0.remove(key)
     }
+
+    pub fn iter(&self) -> std::collections::hash_map::Values<'_, i64, R> {
+        self.0.values()
+    }
 }
 
 impl<R> Default for Table<R> {
@@ -51,5 +56,13 @@ where
             table.insert(item);
         }
         table
+    }
+}
+
+impl<R> IntoIterator for Table<R> {
+    type Item = R;
+    type IntoIter = IntoValues<i64, R>;
+    fn into_iter(self) -> Self::IntoIter {
+        self.0.into_values()
     }
 }

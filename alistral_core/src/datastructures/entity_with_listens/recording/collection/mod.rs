@@ -1,3 +1,4 @@
+use itertools::Itertools as _;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::listenbrainz::listen::relations::recording::ListenRecordingDBRel;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
@@ -61,8 +62,9 @@ impl ListenSortingStrategy<Recording, ListenCollection> for RecordingWithListenS
             .ok_or(crate::Error::MissingUserError(user_name.clone()))?;
 
         prefetch_recordings_of_listens(conn, self.client, user.id, &listens).await?;
+        let listen_refs = listens.iter().collect_vec();
 
-        let joins = Listen::get_related_entity_bulk::<ListenRecordingDBRel>(conn, &listens)
+        let joins = Listen::get_related_entity_bulk::<ListenRecordingDBRel>(conn, &listen_refs)
             .pg_spinner("Loading recordings from cache...")
             .await?;
 

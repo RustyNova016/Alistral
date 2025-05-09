@@ -12,6 +12,15 @@ impl HasRowID for i64 {
     }
 }
 
+impl<T> HasRowID for &T
+where
+    T: HasRowID,
+{
+    fn rowid(&self) -> i64 {
+        T::rowid(self)
+    }
+}
+
 impl<T> HasRowID for Option<T>
 where
     T: HasRowID,

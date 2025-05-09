@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
 use crate::Table;
+use crate::ZeroToManyJoin;
 use crate::has_rowid::HasRowID;
 
 /// Represent a Many to Many join in the database.
@@ -100,6 +101,54 @@ where
     pub fn get_associated_lefts(&self, right: &R) -> Vec<&L> {
         self.get_associated_lefts_by_id(right.rowid())
     }
+
+    pub fn into_many_to_zero_left(self) -> ZeroToManyJoin<L, R>
+    where
+        R: Clone,
+    {
+        into_many_to_zero(self.left_table, self.right_table, self.right_to_left)
+    }
+
+    pub fn into_many_to_zero_right(self) -> ZeroToManyJoin<R, L>
+    where
+        L: Clone,
+    {
+        into_many_to_zero(self.right_table, self.left_table, self.left_to_right)
+    }
+}
+
+fn into_many_to_zero<L, R>(
+    left_table: Table<L>,
+    right_table: Table<R>,
+    right_to_left: HashMap<i64, Vec<i64>>,
+) -> ZeroToManyJoin<L, R>
+where
+    L: HasRowID,
+    R: HasRowID + Clone,
+{
+    let mut new_map = ZeroToManyJoin::default();
+
+    new_map.insert_left(None);
+    for left in left_table.into_iter() {
+        new_map.insert_left(Some(left));
+    }
+
+    for right in right_table {
+        let lefts = right_to_left
+            .get(&right.rowid())
+            .cloned()
+            .unwrap_or_default();
+
+        if lefts.is_empty() {
+            new_map.push_entry(None, right);
+        } else {
+            lefts
+                .into_iter()
+                .for_each(|left_id| new_map.push_right_by_id(left_id, right.clone()));
+        }
+    }
+
+    new_map
 }
 
 impl<L, R> Default for ManyToManyJoin<L, R> {
