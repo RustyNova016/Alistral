@@ -8,7 +8,7 @@ rust-version = "1.85.1"
 musicbrainz_db_lite_macros = { path = "./musicbrainz_db_lite_macros" }
 musicbrainz_db_lite_schema = { path = "./musicbrainz_db_lite_schema" }
 tuillez = { path = "../tuillez" }
-sequelles = { path = "../sequelles" }
+sequelles = { path = "../sequelles",  version = "0.1.0", package = "sequelles" }
 
 #musicbrainz_rs_nova = { version = "0.9.0", package = "musicbrainz_rs"  }
 musicbrainz_rs_nova = { branch = "develop", git = "https://github.com/RustyNova016/musicbrainz_rs.git", package = "musicbrainz_rs" }

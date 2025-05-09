@@ -1,6 +1,6 @@
 #!/bin/bash
-#members=("tuillez" "sequelles" "musicbrainz_db_lite" "alistral_core" "interzic" "symphonize" "alistral_cli")
-members=()
+#members=("tuillez"  "musicbrainz_db_lite" "alistral_core" "interzic" "symphonize" "alistral_cli")
+members=("sequelles")
 
 mv Cargo.lock ./Cargo.lock.bk
 mv Cargo.toml ./Cargo.toml.bk
