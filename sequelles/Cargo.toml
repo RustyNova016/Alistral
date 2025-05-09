@@ -1,0 +1,9 @@
+[package]
+name = "sequelles"
+description = "Bunch of utilities to deal with SQLx data. Very opinionated"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85.0"
+
+[dependencies]
+sqlx = { version = "0.8.2", features = ["runtime-tokio", "macros", "sqlite"] }

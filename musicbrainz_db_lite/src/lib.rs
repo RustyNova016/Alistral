@@ -40,11 +40,11 @@ pub use crate::models::shared_traits::get_or_fetch::GetOrFetch;
 pub use crate::models::shared_traits::mbid_redirection::MBIDRedirection;
 pub use crate::models::shared_traits::save_from::SaveFrom;
 
-// === Utils ===
-pub use utils::sqlx_utils::joins::JoinCollection;
-pub use utils::sqlx_utils::joins::JoinRelation;
-
 // === Internal Reexports ===
 pub(crate) type MBRecording = musicbrainz_rs_nova::entity::recording::Recording;
 pub(crate) type MBRelease = musicbrainz_rs_nova::entity::release::Release;
 pub(crate) type MBReleaseGroup = musicbrainz_rs_nova::entity::release_group::ReleaseGroup;
+
+pub mod sequelle {
+    pub use sequelles::*;
+}

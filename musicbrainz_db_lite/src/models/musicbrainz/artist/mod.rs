@@ -1,4 +1,5 @@
 use musicbrainz_db_lite_macros::{MainEntity, Upsert};
+use sequelles::has_rowid::HasRowID;
 use sqlx::prelude::FromRow;
 
 use crate::MBIDRedirection;
@@ -35,6 +36,16 @@ pub struct Artist {
 impl_get_and_fetch!(Artist);
 impl_relations!(Artist);
 
+impl HasTags for Artist {}
+impl HasGenres for Artist {}
+impl MBIDRedirection for Artist {}
+
+impl HasRowID for Artist {
+    fn rowid(&self) -> i64 {
+        self.id
+    }
+}
+
 impl crate::RowId for Artist {
     fn get_row_id(&self) -> i64 {
         self.id
@@ -45,7 +56,3 @@ impl HasTable for Artist {
     const TABLE_NAME: &str = "artists";
     const FOREIGN_FIELD_NAME: &str = "artist";
 }
-
-impl HasTags for Artist {}
-impl HasGenres for Artist {}
-impl MBIDRedirection for Artist {}

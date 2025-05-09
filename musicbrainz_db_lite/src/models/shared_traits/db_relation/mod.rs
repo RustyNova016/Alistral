@@ -1,10 +1,10 @@
 use itertools::Itertools as _;
+use sequelles::datastructures::joins::join_result::JoinCollection;
+use sequelles::datastructures::joins::join_result::JoinRelation;
 use sqlx::sqlite::SqliteRow;
 
 use crate::RowId;
 use crate::models::shared_traits::has_table::HasTable;
-use crate::utils::sqlx_utils::joins::JoinCollection;
-use crate::utils::sqlx_utils::joins::JoinRelation;
 
 pub mod complete_fetch;
 
@@ -45,7 +45,7 @@ where
 
     fn get_related_entity_bulk(
         conn: &mut sqlx::SqliteConnection,
-        entities: &[Self],
+        entities: &[&Self],
     ) -> impl std::future::Future<Output = Result<JoinCollection<Self::ReturnedType>, crate::Error>> + Send
     where
         Self: Sized + Sync,

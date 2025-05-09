@@ -5,6 +5,7 @@ pub mod fatal_error;
 pub mod formatter;
 pub mod macros;
 pub mod styles;
+pub mod tracing_utils;
 pub mod utils;
 
 pub use crate::error::Error;
