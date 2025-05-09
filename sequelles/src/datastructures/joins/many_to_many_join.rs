@@ -6,7 +6,7 @@ use crate::has_rowid::HasRowID;
 
 /// Represent a Many to Many join in the database.
 ///
-/// While it can be useful, prefer using [`ManyToZeroJoin`] or [`ZeroToManyJoin`] when possible, as they take less memory and promote less cloning
+/// While it can be useful, prefer using [`ManyToZeroJoin`](crate::ManyToZeroJoin) or [`ZeroToManyJoin`] when possible, as they take less memory and promote less cloning
 pub struct ManyToManyJoin<L, R> {
     left_table: Table<L>,
     right_table: Table<R>,

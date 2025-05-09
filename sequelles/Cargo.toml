@@ -7,6 +7,3 @@ rust-version = "1.85.0"
 
 [dependencies]
 sqlx = { version = "0.8.2", features = ["runtime-tokio", "macros", "sqlite"] }
-
-[lints]
-workspace = true
