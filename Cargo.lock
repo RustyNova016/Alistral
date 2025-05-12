@@ -50,7 +50,7 @@ dependencies = [
 
 [[package]]
 name = "alistral"
-version = "0.5.9"
+version = "0.5.10"
 dependencies = [
  "alistral_core",
  "async-fn-stream",
