@@ -23,7 +23,7 @@ use crate::models::client::AlistralCliClient;
 
 #[tokio::main]
 async fn main() {
-    dotenvy::dotenv().unwrap();
+    let _ = dotenvy::dotenv();
     let cli = Cli::parse();
     init_tracer(&cli);
     //console_subscriber::init();
