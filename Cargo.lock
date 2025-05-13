@@ -82,7 +82,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sqlx",
- "streamies 0.2.2",
+ "streamies",
  "strsim",
  "strum_macros",
  "symphonize",
@@ -92,6 +92,7 @@ dependencies = [
  "tracing-indicatif",
  "tracing-subscriber",
  "tuillez",
+ "yumako_jams",
  "zip",
 ]
 
@@ -3802,6 +3803,9 @@ name = "toml_datetime"
 version = "0.6.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3da5db5a963e24bc68be8b17b6fa82814bb22ee8660f192bb182771d498f09a3"
+dependencies = [
+ "serde",
+]
 
 [[package]]
 name = "toml_edit"
@@ -3813,8 +3817,15 @@ dependencies = [
  "serde",
  "serde_spanned",
  "toml_datetime",
+ "toml_write",
  "winnow",
 ]
+
+[[package]]
+name = "toml_write"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bfb942dfe1d8e29a7ee7fcbde5bd2b9a25fb89aa70caea2eba3bee836ff41076"
 
 [[package]]
 name = "tower"
@@ -4631,7 +4642,7 @@ dependencies = [
  "json",
  "musicbrainz-db-lite",
  "priority-queue",
- "rand 0.9.0",
+ "rand 0.9.1",
  "reqwest",
  "rust_decimal",
  "serde",
