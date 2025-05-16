@@ -69,3 +69,6 @@ lto = "thin"
 
 [lints.rust]
 async_fn_in_trait = { level = "allow", priority = 1 }
+
+[lints.clippy]
+result_large_err = { level = "allow", priority = 1 }
