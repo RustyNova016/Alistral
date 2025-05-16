@@ -1,4 +1,3 @@
-pub mod parsers;
 use std::io;
 
 use cache::CacheCommand;
@@ -38,6 +37,7 @@ pub mod listens;
 pub mod lookup;
 pub mod mapping;
 pub mod musicbrainz;
+pub mod parsers;
 pub mod radio;
 pub mod unstable;
 

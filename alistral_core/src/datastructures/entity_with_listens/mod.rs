@@ -1,4 +1,3 @@
-
 use chrono::Duration;
 use chrono::Utc;
 use musicbrainz_db_lite::RowId;
@@ -19,6 +18,7 @@ pub mod recording;
 pub mod release;
 pub mod release_group;
 pub mod statistic_data;
+pub mod tags;
 pub mod traits;
 pub mod work;
 
