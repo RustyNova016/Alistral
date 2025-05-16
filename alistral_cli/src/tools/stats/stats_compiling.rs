@@ -20,12 +20,7 @@ impl StatsCommand {
         musicbrainz_db_lite::models::musicbrainz::recording::Recording,
         ListenCollection,
     > {
-        let strat = TagWithEntListensStrategy::new(
-            &ALISTRAL_CLIENT.core,
-            recording_strategy(&ALISTRAL_CLIENT),
-        );
-
-        strat
+        TagWithEntListensStrategy::new(&ALISTRAL_CLIENT.core, recording_strategy(&ALISTRAL_CLIENT))
     }
 
     pub(super) async fn tag_stats(
