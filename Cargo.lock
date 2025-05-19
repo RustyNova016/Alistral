@@ -4653,6 +4653,7 @@ dependencies = [
  "musicbrainz-db-lite",
  "priority-queue",
  "rand 0.9.1",
+ "reqwest",
  "rust_decimal",
  "serde",
  "serde_json",
