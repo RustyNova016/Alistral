@@ -17,6 +17,7 @@ interzic = { path = "../interzic" }
 tuillez = { path = "../tuillez" }
 musicbrainz-db-lite = { path = "../musicbrainz_db_lite", features = ["pretty_format"] }
 symphonize = { path = "../symphonize" }
+yumako_jams = { path = "../yumako_jams" }
 
 # Musicbrainz dependencies
 #listenbrainz = "0.8.1"
@@ -61,6 +62,7 @@ tracing-indicatif = "0.3.9"
 clap-verbosity-flag = { version = "3.0.3", default-features = false, features = ["tracing"] }
 dotenvy = "0.15.7"
 streamies = "0.2.2"
+lyn = "0.1.0"
 
 # The profile that 'cargo dist' will build with
 [profile.dist]
