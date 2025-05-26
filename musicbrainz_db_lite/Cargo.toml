@@ -30,7 +30,7 @@ serde = "1.0.210"
 async-fn-stream = "0.2.2"
 const_format = { version = "0.2.34" , features = ["rust_1_51", "rust_1_64", "assertcp"] }
 #TODO: Check if actually used
-tokio = { version = "1.40.0", features = ["full"] }
+tokio = { version = "1.45.1", features = ["full"] }
 
 owo-colors = { version = "4.2.1", optional = true}
 deadpool = "0.12.2"
