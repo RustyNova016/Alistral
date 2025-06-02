@@ -9,4 +9,4 @@ license = "MIT OR AGPL-3.0-or-later"
 keywords = ["sqlx", "database", "data-structure", "development"]
 
 [dependencies]
-sqlx = { version = "0.8.2", features = ["runtime-tokio", "macros", "sqlite"] }
+sqlx = { version = "0.8.6", features = ["runtime-tokio", "macros", "sqlite"] }
