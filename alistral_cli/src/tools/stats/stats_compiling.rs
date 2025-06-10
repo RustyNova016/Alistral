@@ -35,7 +35,7 @@ impl StatsCommand {
         .await?)
     }
 
-    pub(super) fn work_strategy(&self) -> WorkWithRecordingsStrategy {
+    pub(super) fn work_strategy(&self) -> WorkWithRecordingsStrategy<'_> {
         let mut strat = WorkWithRecordingsStrategy::new(
             &ALISTRAL_CLIENT.core,
             recording_strategy(&ALISTRAL_CLIENT),
