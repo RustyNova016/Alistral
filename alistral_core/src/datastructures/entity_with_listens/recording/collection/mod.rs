@@ -3,9 +3,7 @@ use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::listenbrainz::listen::relations::recording::ListenRecordingDBRel;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use musicbrainz_db_lite::models::musicbrainz::user::User;
-use musicbrainz_db_lite::sequelle::JoinCollection;
 use tracing::instrument;
-use tuillez::pg_counted;
 use tuillez::pg_spinner;
 use tuillez::tracing_utils::pg_future::PGFuture;
 
@@ -85,13 +83,4 @@ impl ListenSortingStrategy<Recording, ListenCollection> for RecordingWithListenS
     ) -> Result<(), crate::Error> {
         Self::sort_insert_listens(self, data, vec![listen]).await
     }
-}
-
-#[instrument(fields(indicatif.pb_show = tracing::field::Empty))]
-fn compile(
-    data: &mut EntityWithListensCollection<Recording, ListenCollection>,
-    relations: JoinCollection<Recording>,
-    listens: Vec<Listen>,
-) {
-    pg_counted!(relations.len(), "Loading listens data");
 }
