@@ -14,23 +14,23 @@ use crate::models::client::AlistralCliClient;
 
 // === Default strategies ===
 
-pub fn artist_strategy(client: &AlistralCliClient) -> ArtistWithRecordingsStrategy {
+pub fn artist_strategy(client: &AlistralCliClient) -> ArtistWithRecordingsStrategy<'_> {
     ArtistWithRecordingsStrategy::new(client.core.as_ref(), recording_strategy(client))
 }
 
-pub fn recording_strategy(client: &AlistralCliClient) -> RecordingWithListenStrategy {
+pub fn recording_strategy(client: &AlistralCliClient) -> RecordingWithListenStrategy<'_> {
     RecordingWithListenStrategy::new(client.core.as_ref())
 }
 
-pub fn release_strategy(client: &AlistralCliClient) -> ReleaseWithRecordingsStrategy {
+pub fn release_strategy(client: &AlistralCliClient) -> ReleaseWithRecordingsStrategy<'_> {
     ReleaseWithRecordingsStrategy::new(client.core.as_ref(), recording_strategy(client))
 }
 
-pub fn release_group_strategy(client: &AlistralCliClient) -> ReleaseGroupWithReleasesStrategy {
+pub fn release_group_strategy(client: &AlistralCliClient) -> ReleaseGroupWithReleasesStrategy<'_> {
     ReleaseGroupWithReleasesStrategy::new(client.core.as_ref(), release_strategy(client))
 }
 
-pub fn work_strategy(client: &AlistralCliClient) -> WorkWithRecordingsStrategy {
+pub fn work_strategy(client: &AlistralCliClient) -> WorkWithRecordingsStrategy<'_> {
     WorkWithRecordingsStrategy::new(client.core.as_ref(), recording_strategy(client))
 }
 

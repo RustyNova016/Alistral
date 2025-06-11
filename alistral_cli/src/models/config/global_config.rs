@@ -26,7 +26,7 @@ impl GlobalConfig {
         }
     }
 
-    pub async fn read(&self) -> RwLockReadGuard<Config> {
+    pub async fn read(&self) -> RwLockReadGuard<'_, Config> {
         self.config.read().await
     }
 
