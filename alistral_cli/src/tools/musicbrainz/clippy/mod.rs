@@ -6,6 +6,7 @@ use clap::Parser;
 use futures::StreamExt;
 use futures::TryStreamExt;
 use futures::pin_mut;
+use itertools::Itertools;
 use musicbrainz_db_lite::models::musicbrainz::main_entities::MainEntity;
 use musicbrainz_db_lite::models::musicbrainz::main_entities::crawler::crawler;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
@@ -23,6 +24,8 @@ use tuillez::OwoColorize as _;
 use tuillez::formatter::FormatWithAsync;
 
 use crate::ALISTRAL_CLIENT;
+use crate::database::interfaces::statistics_data::recording_stats;
+use crate::models::config::Config;
 use crate::utils::cli::await_next;
 use crate::utils::cli::read_mbid_from_input;
 use crate::utils::constants::MUSIBRAINZ_FMT;
@@ -47,11 +50,6 @@ pub struct MusicbrainzClippyCommand {
 
 impl MusicbrainzClippyCommand {
     pub async fn run(&self) {
-        let mbid = self
-            .start_mbid
-            .clone()
-            .unwrap_or_else(|| "8f3471b5-7e6a-48da-86a9-c1c07a0f47ae".to_string());
-
         let filter = if let Some(whitelist) = self.whitelist.clone() {
             WhitelistBlacklist::WhiteList(whitelist.clone())
         } else if let Some(blacklist) = self.blacklist.clone() {
@@ -60,30 +58,49 @@ impl MusicbrainzClippyCommand {
             WhitelistBlacklist::BlackList(Vec::new())
         };
 
-        mb_clippy(
-            &read_mbid_from_input(&mbid).expect("Couldn't read mbid"),
-            &filter,
-        )
-        .await;
+        mb_clippy(self.get_start_recordings().await, &filter).await;
+    }
+
+    async fn get_start_recordings(&self) -> Vec<Recording> {
+        match &self.start_mbid {
+            Some(start) => {
+                let conn = &mut ALISTRAL_CLIENT
+                    .musicbrainz_db
+                    .get_raw_connection()
+                    .await
+                    .expect("Couldn't acquire a connection");
+                let start_mbid = read_mbid_from_input(start).expect("Couldn't read mbid");
+
+                let start_node =
+                    Recording::fetch_and_save(conn, &ALISTRAL_CLIENT.musicbrainz_db, &start_mbid)
+                        .await
+                        .unwrap()
+                        .expect("Couldn't find MBID");
+
+                vec![start_node]
+            }
+
+            None => {
+                let recordings = recording_stats(&ALISTRAL_CLIENT, Config::check_username(&None))
+                    .await
+                    .expect("Couldn't fetch the listened recordings");
+
+                recordings
+                    .into_iter()
+                    .map(|rec| rec.entity().clone())
+                    .collect_vec()
+            }
+        }
     }
 }
 
-pub async fn mb_clippy(start_mbid: &str, filter: &WhitelistBlacklist<String>) {
-    let conn = &mut ALISTRAL_CLIENT
-        .musicbrainz_db
-        .get_raw_connection()
-        .await
-        .expect("Couldn't acquire a connection");
+pub async fn mb_clippy(start_recordings: Vec<Recording>, filter: &WhitelistBlacklist<String>) {
+    let nodes = start_recordings
+        .into_iter()
+        .map(|rec| Arc::new(MainEntity::Recording(rec)))
+        .collect_vec();
 
-    let start_node = Recording::fetch_and_save(conn, &ALISTRAL_CLIENT.musicbrainz_db, start_mbid)
-        .await
-        .unwrap()
-        .expect("Couldn't find MBID");
-
-    let crawler = crawler(
-        ALISTRAL_CLIENT.musicbrainz_db.clone(),
-        Arc::new(MainEntity::Recording(start_node)),
-    );
+    let crawler = crawler(ALISTRAL_CLIENT.musicbrainz_db.clone(), nodes);
 
     let crawler = crawler
         .map_ok(|entity| process_lints(entity.clone(), filter))

@@ -8,7 +8,6 @@ use futures::StreamExt;
 use futures::TryStreamExt;
 use futures::channel::mpsc::Sender;
 use futures::channel::mpsc::UnboundedReceiver;
-use futures::channel::mpsc::UnboundedSender;
 use futures::channel::mpsc::channel;
 use futures::channel::mpsc::unbounded;
 use futures::stream::select;
@@ -19,23 +18,18 @@ use crate::models::musicbrainz::main_entities::MainEntity;
 
 pub fn crawler(
     client: Arc<DBClient>,
-    first_item: Arc<MainEntity>,
+    start_nodes: Vec<Arc<MainEntity>>,
 ) -> impl Stream<Item = Result<Arc<MainEntity>, crate::Error>> {
+    // Declare the crawlers
     let (out_sender, out_reciever) = channel(10);
     let (crawl_sender, crawl_reciever) = unbounded();
 
-    let task = crawl_task(
-        out_sender,
-        crawl_sender.clone(),
-        crawl_reciever,
-        client,
-        first_item,
-    )
-    .into_stream()
-    .filter_map(|val| match val {
-        Ok(_) => ready(None),
-        Err(e) => ready(Some(Err::<Arc<MainEntity>, crate::Error>(e))),
-    });
+    let task = crawl_task(out_sender, crawl_reciever, client, start_nodes)
+        .into_stream()
+        .filter_map(|val| match val {
+            Ok(_) => ready(None),
+            Err(e) => ready(Some(Err::<Arc<MainEntity>, crate::Error>(e))),
+        });
 
     let receiver_stream = out_reciever
         .unique_by(|item| item.get_unique_id())
@@ -55,12 +49,16 @@ pub fn crawler(
 
 async fn crawl_task(
     out_sender: Sender<Arc<MainEntity>>,
-    crawl_sender: UnboundedSender<Arc<MainEntity>>,
     crawl_receiver: UnboundedReceiver<Arc<MainEntity>>,
     client: Arc<DBClient>,
-    first_item: Arc<MainEntity>,
+    start_nodes: Vec<Arc<MainEntity>>,
 ) -> Result<(), crate::Error> {
-    crawl_sender.clone().send(first_item).await?;
+    // Add the starting nodes to the output
+    // Since the output feeds any nodes passing through to the crawling queue,
+    // They will be properly crawled when the starting queue runs out
+    for node in start_nodes {
+        out_sender.clone().send(node).await?;
+    }
 
     let mut stream = crawl_receiver
         .unique_by(|item| item.get_unique_id())
