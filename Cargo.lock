@@ -1075,6 +1075,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "format-url"
+version = "0.6.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e1fbdc38b1a912f18ce325ccef959d0171bc873cb83c801479822330e4424b98"
+dependencies = [
+ "percent-encoding",
+]
+
+[[package]]
 name = "funty"
 version = "2.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3499,6 +3508,8 @@ checksum = "13c2bddecc57b384dee18652358fb23172facb8a2c51ccc10d74c157bdea3292"
 name = "symphonize"
 version = "0.1.0"
 dependencies = [
+ "format-url",
+ "itertools 0.14.0",
  "musicbrainz-db-lite",
  "owo-colors",
  "regex",

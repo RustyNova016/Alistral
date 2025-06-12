@@ -9,6 +9,7 @@
 - [interzic](./interzic/interzic.md)
 - [listens](./listens/listens.md)
 - [stats](./stats/stats.md)
+- [clippy](./clippy/clippy.md)
 
 # Settings
 

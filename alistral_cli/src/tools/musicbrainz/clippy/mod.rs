@@ -13,12 +13,14 @@ use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use streamies::TryStreamies;
 use symphonize::clippy::clippy_lint::MbClippyLint;
 use symphonize::clippy::lints::dash_eti::DashETILint;
+use symphonize::clippy::lints::missing_recording_link::MissingRecordingLink;
 use symphonize::clippy::lints::missing_release_barcode::MissingBarcodeLint;
 use symphonize::clippy::lints::missing_remix_rel::MissingRemixRelLint;
 use symphonize::clippy::lints::missing_remixer_rel::MissingRemixerRelLint;
 use symphonize::clippy::lints::missing_work::MissingWorkLint;
 use symphonize::clippy::lints::soundtrack_without_disambiguation::SoundtrackWithoutDisambiguationLint;
 use symphonize::clippy::lints::suspicious_remix::SuspiciousRemixLint;
+use tokio::sync::Semaphore;
 use tracing::debug;
 use tuillez::OwoColorize as _;
 use tuillez::formatter::FormatWithAsync;
@@ -30,6 +32,8 @@ use crate::utils::cli::await_next;
 use crate::utils::cli::read_mbid_from_input;
 use crate::utils::constants::MUSIBRAINZ_FMT;
 use crate::utils::whitelist_blacklist::WhitelistBlacklist;
+
+static REFETCH_LOCK: Semaphore = Semaphore::const_new(1);
 
 #[derive(Parser, Debug, Clone)]
 /// Search for potential mistakes, missing data and style issues. This allows to quickly pin down errors that can be corrected
@@ -128,6 +132,7 @@ async fn process_lints(entity: Arc<MainEntity>, filter: &WhitelistBlacklist<Stri
     process_lint::<MissingBarcodeLint>(entity, filter).await;
     process_lint::<MissingRemixRelLint>(entity, filter).await;
     process_lint::<SuspiciousRemixLint>(entity, filter).await;
+    process_lint::<MissingRecordingLink>(entity, filter).await;
     process_lint::<MissingRemixerRelLint>(entity, filter).await;
     process_lint::<SoundtrackWithoutDisambiguationLint>(entity, filter).await;
 
@@ -165,6 +170,12 @@ async fn process_lint<L: MbClippyLint>(
     };
 
     // There might be an issue, so grab the latest data and recheck
+    // Also prevent others from fetching data that might get stale after the user fix this lint
+
+    let _ = REFETCH_LOCK
+        .acquire()
+        .await
+        .expect("Refetch lock has been closed");
 
     debug!(
         "Rechecking Lint `{}` for `{}`",
