@@ -1,3 +1,4 @@
+pub mod missing_artist_link;
 pub mod missing_recording_link;
 use crate::clippy::lints::missing_release_barcode::MissingBarcodeLint;
 use crate::clippy::lints::missing_remix_rel::MissingRemixRelLint;
