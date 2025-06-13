@@ -6,6 +6,30 @@ use crate::models::shared_traits::has_tags::HasTags;
 use crate::utils::sqlx_utils::entity_relations::JoinRelation;
 
 impl Tag {
+    pub async fn query_from_entity<T>(
+        conn: &mut sqlx::SqliteConnection,
+        entity: &T,
+    ) -> Result<Vec<Tag>, crate::Error>
+    where
+        T: RowId + HasTags,
+    {
+        Ok(sqlx::query_as(&format!(
+            "
+            SELECT
+                {table}_tag.*
+            FROM
+                {table}_tag
+            WHERE
+                {id_field} = ?
+        ",
+            id_field = T::FOREIGN_FIELD_NAME,
+            table = T::TABLE_NAME
+        ))
+        .bind(entity.get_row_id())
+        .fetch_all(conn)
+        .await?)
+    }
+
     pub async fn query_batch<T>(
         conn: &mut sqlx::SqliteConnection,
         entities: Vec<&T>,

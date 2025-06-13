@@ -85,6 +85,18 @@ impl MainEntity {
             MainEntity::Work(val) => format!("work_{}", val.mbid),
         }
     }
+
+    pub fn get_musicbrainz_link(&self) -> String {
+        let path = match self {
+            MainEntity::Artist(_) => "artist",
+            MainEntity::Label(_) => "label",
+            MainEntity::Recording(_) => "recording",
+            MainEntity::Release(_) => "release",
+            MainEntity::Work(_) => "work",
+        };
+
+        format!("https://musicbrainz.org/{path}/{}", self.get_mbid())
+    }
 }
 
 impl RowId for MainEntity {
