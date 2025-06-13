@@ -1,4 +1,6 @@
+pub mod relations;
 use musicbrainz_db_lite_macros::{MainEntity, Upsert};
+use musicbrainz_rs_nova::entity::artist::Artist as MBArtist;
 use sequelles::has_rowid::HasRowID;
 use sqlx::prelude::FromRow;
 
@@ -7,6 +9,8 @@ use crate::models::shared_traits::has_genre::HasGenres;
 use crate::models::shared_traits::has_table::HasTable;
 use crate::models::shared_traits::has_tags::HasTags;
 use crate::utils::macros::get_and_fetch::impl_get_and_fetch;
+use crate::utils::macros::hardlink_methods::impl_db_relation_fetch_methods;
+use crate::utils::macros::hardlink_methods::impl_db_relation_methods;
 
 use super::relations::impl_relations::impl_relations;
 
@@ -35,6 +39,9 @@ pub struct Artist {
 
 impl_get_and_fetch!(Artist);
 impl_relations!(Artist);
+
+impl_db_relation_methods!(Artist);
+impl_db_relation_fetch_methods!(Artist, MBArtist);
 
 impl HasTags for Artist {}
 impl HasGenres for Artist {}

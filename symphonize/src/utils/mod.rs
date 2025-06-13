@@ -4,6 +4,8 @@ use musicbrainz_db_lite::models::musicbrainz::MusicbrainzFormater;
 
 use crate::SymphonyzeClient;
 
+pub mod harmony;
+
 pub fn formater(client: &SymphonyzeClient) -> MusicbrainzFormater {
     MusicbrainzFormater {
         artist_credits: true,

@@ -13,6 +13,7 @@ use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use streamies::TryStreamies;
 use symphonize::clippy::clippy_lint::MbClippyLint;
 use symphonize::clippy::lints::dash_eti::DashETILint;
+use symphonize::clippy::lints::missing_artist_link::MissingArtistLink;
 use symphonize::clippy::lints::missing_recording_link::MissingRecordingLink;
 use symphonize::clippy::lints::missing_release_barcode::MissingBarcodeLint;
 use symphonize::clippy::lints::missing_remix_rel::MissingRemixRelLint;
@@ -129,6 +130,7 @@ async fn process_lints(entity: Arc<MainEntity>, filter: &WhitelistBlacklist<Stri
 
     process_lint::<DashETILint>(entity, filter).await;
     process_lint::<MissingWorkLint>(entity, filter).await;
+    process_lint::<MissingArtistLink>(entity, filter).await;
     process_lint::<MissingBarcodeLint>(entity, filter).await;
     process_lint::<MissingRemixRelLint>(entity, filter).await;
     process_lint::<SuspiciousRemixLint>(entity, filter).await;
