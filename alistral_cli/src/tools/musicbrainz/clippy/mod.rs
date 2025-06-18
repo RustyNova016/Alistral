@@ -144,7 +144,6 @@ async fn process_lints(entity: Arc<MainEntity>, filter: &WhitelistBlacklist<Stri
     process_lint::<MissingRemixerRelLint>(entity, filter).await;
     process_lint::<SoundtrackWithoutDisambiguationLint>(entity, filter).await;
 
-    
     println!(
         "[Processed - {}] {}",
         PROCESSED_COUNT.fetch_add(1, Ordering::AcqRel),

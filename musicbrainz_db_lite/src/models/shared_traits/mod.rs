@@ -9,6 +9,7 @@ pub mod get_or_fetch;
 pub mod has_genre;
 pub mod has_table;
 pub mod has_tags;
+pub mod has_urls;
 pub mod mbid_redirection;
 pub mod save_from;
 

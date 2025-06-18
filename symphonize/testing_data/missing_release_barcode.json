@@ -1,0 +1,101 @@
+{
+    "releases": [
+        {
+            "status": "Official",
+            "relations": [
+                {
+                    "end": null,
+                    "type": "free streaming",
+                    "type-id": "08445ccf-7b99-4438-9f9a-fb9ac18099ee",
+                    "attribute-values": {},
+                    "target-type": "url",
+                    "target-credit": "",
+                    "source-credit": "",
+                    "begin": null,
+                    "attributes": [],
+                    "ended": false,
+                    "attribute-ids": {},
+                    "url": {
+                        "id": "404c7c80-0ec1-457f-93b0-63e96650dcf4",
+                        "resource": "https://open.spotify.com/album/1qY8L7CXdYKIRlMbomzR5k"
+                    },
+                    "direction": "forward"
+                },
+                {
+                    "end": null,
+                    "attribute-values": {},
+                    "target-credit": "",
+                    "target-type": "url",
+                    "type": "free streaming",
+                    "type-id": "08445ccf-7b99-4438-9f9a-fb9ac18099ee",
+                    "source-credit": "",
+                    "attribute-ids": {},
+                    "ended": false,
+                    "url": {
+                        "resource": "https://soundcloud.com/adventureclub/next-life-feat-krewella",
+                        "id": "b8291450-60f4-4b49-b098-2e330fc7cfd0"
+                    },
+                    "direction": "forward",
+                    "begin": null,
+                    "attributes": []
+                },
+                {
+                    "end": null,
+                    "target-type": "url",
+                    "target-credit": "",
+                    "attribute-values": {},
+                    "type-id": "98e08c20-8402-4163-8970-53504bb6a1e4",
+                    "type": "purchase for download",
+                    "source-credit": "",
+                    "url": {
+                        "id": "afaa9c30-2b2f-4642-93a2-a2a0f99519a6",
+                        "resource": "https://www.beatport.com/release/next-life/2547181"
+                    },
+                    "direction": "forward",
+                    "attribute-ids": {},
+                    "ended": false,
+                    "attributes": [],
+                    "begin": null
+                }
+            ],
+            "asin": null,
+            "id": "b241289a-bf04-4ed8-a7df-a911aea19554",
+            "packaging-id": "119eba76-b343-3e02-a292-f0f00644bb9b",
+            "packaging": "None",
+            "cover-art-archive": {
+                "front": true,
+                "back": false,
+                "count": 1,
+                "artwork": true,
+                "darkened": false
+            },
+            "barcode": null,
+            "disambiguation": "",
+            "release-events": [
+                {
+                    "area": {
+                        "sort-name": "[Worldwide]",
+                        "disambiguation": "",
+                        "type": null,
+                        "iso-3166-1-codes": [
+                            "XW"
+                        ],
+                        "name": "[Worldwide]",
+                        "id": "525d4e18-3d00-31b9-a58b-a146a916de8f",
+                        "type-id": null
+                    },
+                    "date": "2019-04-12"
+                }
+            ],
+            "date": "2019-04-12",
+            "title": "Next Life",
+            "quality": "normal",
+            "country": "XW",
+            "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+            "text-representation": {
+                "script": "Latn",
+                "language": "eng"
+            }
+        }
+    ]
+}
