@@ -39,6 +39,7 @@ streamies = "0.2.2"
 governor = "0.10.0"
 async-recursion = "1.1.1"
 regex = "1.11.1"
+url = "2.5.4"
 
 [features]
 default = ["timeout_continue", "pretty_format"]

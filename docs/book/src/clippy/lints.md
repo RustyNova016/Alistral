@@ -23,6 +23,13 @@ Available websites:
 - Tidal
 - Beatport
 
+# `missing_release_barcode` (Recording)
+
+Checks if a release got a missing barcode, nor is set to not having one
+
+Also warn if the barcode can be found using the external URLs
+
+
 
 # `missing_recording_link` (Recording)
 

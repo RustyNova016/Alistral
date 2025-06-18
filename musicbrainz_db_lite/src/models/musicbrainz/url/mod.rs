@@ -8,6 +8,8 @@ use crate::RowId;
 use crate::models::musicbrainz::relations::impl_relations::impl_relations;
 use crate::models::shared_traits::has_table::HasTable;
 
+pub mod methods;
+
 #[derive(Debug, Default, PartialEq, Eq, Clone, FromRow, Upsert, Deserialize, Serialize)]
 #[database(
     table = "urls",

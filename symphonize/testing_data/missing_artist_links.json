@@ -3228,6 +3228,161 @@
                 }
             ],
             "first-release-date": "2023-06-22"
+        },
+        {
+            "disambiguation": "",
+            "id": "c9e14c28-c681-4d80-97bf-283f0aa799c3",
+            "artist-credit": [
+                {
+                    "artist": {
+                        "name": "Crankdat",
+                        "sort-name": "Crankdat",
+                        "id": "00b21266-918d-434c-b31e-3f1a3e96cad5",
+                        "type": "Person",
+                        "disambiguation": "",
+                        "country": null,
+                        "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df"
+                    },
+                    "joinphrase": " & ",
+                    "name": "Crankdat"
+                },
+                {
+                    "name": "NVADRZ",
+                    "artist": {
+                        "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+                        "country": "SI",
+                        "id": "ef461c5c-6dc3-4f55-b7bb-cceaff841572",
+                        "type": "Person",
+                        "disambiguation": "",
+                        "sort-name": "Nvadrz",
+                        "name": "Nvadrz"
+                    },
+                    "joinphrase": ""
+                }
+            ],
+            "releases": [
+                {
+                    "disambiguation": "",
+                    "text-representation": {
+                        "script": "Latn",
+                        "language": "eng"
+                    },
+                    "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+                    "packaging-id": "119eba76-b343-3e02-a292-f0f00644bb9b",
+                    "packaging": "None",
+                    "country": "XW",
+                    "release-events": [
+                        {
+                            "area": {
+                                "disambiguation": "",
+                                "type": null,
+                                "id": "525d4e18-3d00-31b9-a58b-a146a916de8f",
+                                "iso-3166-1-codes": [
+                                    "XW"
+                                ],
+                                "sort-name": "[Worldwide]",
+                                "name": "[Worldwide]",
+                                "type-id": null
+                            },
+                            "date": "2020-11-20"
+                        }
+                    ],
+                    "date": "2020-11-20",
+                    "artist-credit": [
+                        {
+                            "name": "Crankdat",
+                            "joinphrase": " & ",
+                            "artist": {
+                                "name": "Crankdat",
+                                "sort-name": "Crankdat",
+                                "id": "00b21266-918d-434c-b31e-3f1a3e96cad5",
+                                "disambiguation": "",
+                                "type": "Person",
+                                "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+                                "country": null
+                            }
+                        },
+                        {
+                            "name": "NVADRZ",
+                            "artist": {
+                                "type": "Person",
+                                "disambiguation": "",
+                                "id": "ef461c5c-6dc3-4f55-b7bb-cceaff841572",
+                                "sort-name": "Nvadrz",
+                                "name": "Nvadrz",
+                                "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+                                "country": "SI"
+                            },
+                            "joinphrase": ""
+                        }
+                    ],
+                    "id": "350ff9c7-53e6-4e1f-bcf6-d6e892bef47f",
+                    "status": "Official",
+                    "barcode": "735119700274",
+                    "title": "UNDERGROUND SHIT",
+                    "quality": "normal"
+                }
+            ],
+            "relations": [
+                {
+                    "target-type": "url",
+                    "ended": false,
+                    "attribute-ids": {},
+                    "direction": "forward",
+                    "type-id": "7e41ef12-a124-4324-afdb-fdbae687a89c",
+                    "end": null,
+                    "source-credit": "",
+                    "type": "free streaming",
+                    "target-credit": "",
+                    "attributes": [],
+                    "url": {
+                        "id": "a425523e-df69-4b22-b5a5-4621ce1fc7e4",
+                        "resource": "https://open.spotify.com/track/0OEKbmU51OoRUp4GKgyuKq"
+                    },
+                    "attribute-values": {},
+                    "begin": null
+                },
+                {
+                    "target-credit": "",
+                    "type": "free streaming",
+                    "url": {
+                        "id": "7622d83c-2e23-4cdb-959c-c1bf5326693a",
+                        "resource": "https://www.deezer.com/track/1129788722"
+                    },
+                    "attributes": [],
+                    "attribute-values": {},
+                    "begin": null,
+                    "ended": false,
+                    "target-type": "url",
+                    "attribute-ids": {},
+                    "direction": "forward",
+                    "type-id": "7e41ef12-a124-4324-afdb-fdbae687a89c",
+                    "source-credit": "",
+                    "end": null
+                },
+                {
+                    "ended": false,
+                    "target-type": "url",
+                    "direction": "forward",
+                    "attribute-ids": {},
+                    "type-id": "b5f3058a-666c-406f-aafb-f9249fc7b122",
+                    "end": null,
+                    "source-credit": "",
+                    "type": "streaming",
+                    "target-credit": "",
+                    "url": {
+                        "id": "75c0a797-dfc7-4b47-8dd6-3934e39560b2",
+                        "resource": "https://music.apple.com/gb/song/1538504817"
+                    },
+                    "attributes": [],
+                    "attribute-values": {},
+                    "begin": null
+                }
+            ],
+            "title": "UNDERGROUND SHIT",
+            "length": 187349,
+            "first-release-date": "2020-11-20",
+            "video": false
         }
     ],
     "artists": [
@@ -4528,6 +4683,165 @@
                     "US"
                 ],
                 "name": "United States"
+            }
+        },
+        {
+            "type-id": "b6e035f4-3ce9-331c-97df-83397230b0df",
+            "id": "ef461c5c-6dc3-4f55-b7bb-cceaff841572",
+            "name": "Nvadrz",
+            "type": "Person",
+            "relations": [
+                {
+                    "end": null,
+                    "target-type": "url",
+                    "target-credit": "",
+                    "attribute-values": {},
+                    "type-id": "04a5b104-a4c2-4bac-99a1-7b837c37d9e4",
+                    "type": "discogs",
+                    "source-credit": "",
+                    "url": {
+                        "resource": "https://www.discogs.com/artist/8024731",
+                        "id": "1693848f-bc3f-4ff8-91e2-d760e63b6baa"
+                    },
+                    "direction": "forward",
+                    "ended": false,
+                    "attribute-ids": {},
+                    "attributes": [],
+                    "begin": null
+                },
+                {
+                    "url": {
+                        "resource": "https://open.spotify.com/artist/3BsJD0TUVtn1sv29duwMrw",
+                        "id": "571b29ad-70d0-472c-bcc2-5823cea76194"
+                    },
+                    "direction": "forward",
+                    "ended": false,
+                    "attribute-ids": {},
+                    "attributes": [],
+                    "begin": null,
+                    "source-credit": "",
+                    "target-credit": "",
+                    "target-type": "url",
+                    "attribute-values": {},
+                    "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+                    "type": "free streaming",
+                    "end": null
+                },
+                {
+                    "attribute-values": {},
+                    "target-type": "url",
+                    "target-credit": "",
+                    "type": "free streaming",
+                    "type-id": "769085a1-c2f7-4c24-a532-2375a77693bd",
+                    "end": null,
+                    "ended": false,
+                    "attribute-ids": {},
+                    "url": {
+                        "resource": "https://www.deezer.com/artist/74292512",
+                        "id": "f6a99497-7f52-42af-89ff-6b7caf4fb868"
+                    },
+                    "direction": "forward",
+                    "begin": null,
+                    "attributes": [],
+                    "source-credit": ""
+                },
+                {
+                    "source-credit": "",
+                    "begin": null,
+                    "attributes": [],
+                    "attribute-ids": {},
+                    "ended": false,
+                    "direction": "forward",
+                    "url": {
+                        "id": "5ea38488-bb5f-42c5-b23c-2b71f2d57a43",
+                        "resource": "https://www.beatport.com/artist/nvadrz/822898"
+                    },
+                    "end": null,
+                    "type": "purchase for download",
+                    "type-id": "f8319a2f-f824-4617-81c8-be6560b3b203",
+                    "attribute-values": {},
+                    "target-credit": "",
+                    "target-type": "url"
+                },
+                {
+                    "end": null,
+                    "type": "social network",
+                    "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+                    "attribute-values": {},
+                    "target-type": "url",
+                    "target-credit": "",
+                    "source-credit": "",
+                    "begin": null,
+                    "attributes": [],
+                    "attribute-ids": {},
+                    "ended": false,
+                    "direction": "forward",
+                    "url": {
+                        "id": "39c0938b-8b0f-427a-933a-e350a5763e4a",
+                        "resource": "https://twitter.com/nvadrz"
+                    }
+                },
+                {
+                    "type": "social network",
+                    "type-id": "99429741-f3f6-484b-84f8-23af51991770",
+                    "attribute-values": {},
+                    "target-type": "url",
+                    "target-credit": "",
+                    "end": null,
+                    "begin": null,
+                    "attributes": [],
+                    "ended": false,
+                    "attribute-ids": {},
+                    "direction": "forward",
+                    "url": {
+                        "id": "50812457-3068-49bd-a2b6-a370d988a389",
+                        "resource": "https://www.instagram.com/nvadrz/"
+                    },
+                    "source-credit": ""
+                },
+                {
+                    "ended": false,
+                    "attribute-ids": {},
+                    "url": {
+                        "resource": "https://soundcloud.com/nvadrz",
+                        "id": "48d595b2-4e6b-4847-8b90-adab69c5ad64"
+                    },
+                    "direction": "forward",
+                    "begin": null,
+                    "attributes": [],
+                    "source-credit": "",
+                    "attribute-values": {},
+                    "target-type": "url",
+                    "target-credit": "",
+                    "type": "soundcloud",
+                    "type-id": "89e4a949-0976-440d-bda1-5f772c1e5710",
+                    "end": null
+                }
+            ],
+            "isnis": [],
+            "gender": "Male",
+            "ipis": [],
+            "sort-name": "Nvadrz",
+            "gender-id": "36d3d30a-839d-3eda-8cb3-29be4384e4a9",
+            "begin-area": null,
+            "country": "SI",
+            "area": {
+                "iso-3166-1-codes": [
+                    "SI"
+                ],
+                "type": null,
+                "name": "Slovenia",
+                "id": "5b0b6225-584c-3942-b69d-5efceb9989af",
+                "type-id": null,
+                "disambiguation": "",
+                "sort-name": "Slovenia"
+            },
+            "end-area": null,
+            "disambiguation": "",
+            "life-span": {
+                "end": null,
+                "ended": false,
+                "begin": null
             }
         }
     ]
