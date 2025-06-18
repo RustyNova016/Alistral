@@ -1,4 +1,6 @@
 use core::fmt::Write as _;
+use core::sync::atomic::AtomicU64;
+use core::sync::atomic::Ordering;
 use std::sync::Arc;
 
 use alistral_core::cli::colors::AlistralColors as _;
@@ -36,6 +38,7 @@ use crate::utils::constants::MUSIBRAINZ_FMT;
 use crate::utils::whitelist_blacklist::WhitelistBlacklist;
 
 static REFETCH_LOCK: Semaphore = Semaphore::const_new(1);
+static PROCESSED_COUNT: AtomicU64 = AtomicU64::new(0);
 
 #[derive(Parser, Debug, Clone)]
 /// Search for potential mistakes, missing data and style issues. This allows to quickly pin down errors that can be corrected
@@ -101,6 +104,7 @@ impl MusicbrainzClippyCommand {
 }
 
 pub async fn mb_clippy(start_recordings: Vec<Recording>, filter: &WhitelistBlacklist<String>) {
+    PROCESSED_COUNT.store(1, Ordering::Release);
     let nodes = start_recordings
         .into_iter()
         .map(|rec| Arc::new(MainEntity::Recording(rec)))
@@ -140,8 +144,10 @@ async fn process_lints(entity: Arc<MainEntity>, filter: &WhitelistBlacklist<Stri
     process_lint::<MissingRemixerRelLint>(entity, filter).await;
     process_lint::<SoundtrackWithoutDisambiguationLint>(entity, filter).await;
 
+    
     println!(
-        "[Processed] {}",
+        "[Processed - {}] {}",
+        PROCESSED_COUNT.fetch_add(1, Ordering::AcqRel),
         entity
             .format_with_async(&MUSIBRAINZ_FMT)
             .await
