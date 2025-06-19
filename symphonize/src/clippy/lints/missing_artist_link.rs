@@ -8,13 +8,13 @@ use musicbrainz_db_lite::models::shared_traits::db_relation::EntityURLDBRel;
 use tuillez::formatter::FormatWithAsync;
 
 use crate::clippy::clippy_lint::MbClippyLint;
+use crate::clippy::links::create_harmony_action_link;
 use crate::clippy::lint_hint::MbClippyLintHint;
 use crate::clippy::lint_link::MbClippyLintLink;
 use crate::clippy::lint_severity::LintSeverity;
 
 use crate::SymphonyzeClient;
 use crate::utils::formater;
-use crate::utils::harmony::get_harmony_compatible_release_for_recording;
 
 static LINK_DOMAINS: LazyLock<Vec<&'static str>> = LazyLock::new(|| {
     vec![
@@ -129,16 +129,11 @@ impl MbClippyLint for MissingArtistLink {
             url: format!("https://musicbrainz.org/artist/{}/edit", self.artist.mbid),
         });
 
-        if let Some(release) =
-            get_harmony_compatible_release_for_recording(client, &self.recording).await?
+        if let Some(link) =
+            create_harmony_action_link(client, MainEntity::Recording(self.recording.clone()))
+                .await?
         {
-            out.push(MbClippyLintLink {
-                name: "Harmony release actions".to_string(),
-                url: format!(
-                    "https://harmony.pulsewidth.org.uk/release/actions?release_mbid={}",
-                    release.mbid
-                ),
-            });
+            out.push(link);
         }
 
         Ok(out)

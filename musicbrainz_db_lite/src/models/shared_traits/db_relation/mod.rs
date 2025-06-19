@@ -89,6 +89,9 @@ pub struct ArtistFromCreditsRelation;
 /// Recording (1:M) -> Work
 pub struct RecordingWorkDBRel;
 
+/// Recording (1:M) -> ISRC
+pub struct RecordingISRCDBRel;
+
 /// Entity (0:M) -> [`crate::ArtistCredit`]
 pub struct ArtistCreditDBRel;
 

@@ -23,12 +23,14 @@ Available websites:
 - Tidal
 - Beatport
 
-# `missing_release_barcode` (Recording)
 
-Checks if a release got a missing barcode, nor is set to not having one
+# `missing_isrc` (Recording)
 
-Also warn if the barcode can be found using the external URLs
+Checks if a recording is missing an ISRC and has a release that can provide it using external links
 
+## Why is it important ?
+
+ISRCs are a great way to identify a track. Often, two recordings with the same ISRC can be merged. 
 
 
 # `missing_recording_link` (Recording)
@@ -45,5 +47,13 @@ Available websites:
 - Beatport
 - Youtube
 
+# `missing_release_barcode` (Recording)
 
+Checks if a release got a missing barcode, nor is set to not having one
+
+Also warn if the barcode can be found using the external URLs
+
+## Why is it important ?
+
+Barcode allows for easier release identification. Two releases with the same barcode may be duplicates, but two with different barcodes aren't.
 

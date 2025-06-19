@@ -6,6 +6,7 @@ use sqlx::SqliteConnection;
 use crate::Error;
 use crate::models::musicbrainz::artist_credit::ArtistCredits;
 use crate::models::musicbrainz::genre::genre_tag::GenreTag;
+use crate::models::musicbrainz::isrc::ISRC;
 use crate::models::musicbrainz::recording::Recording;
 use crate::models::musicbrainz::release::Release;
 use crate::models::musicbrainz::release::Track;
@@ -103,6 +104,10 @@ impl Recording {
             for genre in genres {
                 GenreTag::save_api_response::<Self>(&mut conn, genre, &new_value).await?;
             }
+        }
+
+        if let Some(isrcs) = value.isrcs {
+            ISRC::upsert_recording_isrcs_list(&mut conn, new_value.id, isrcs).await?;
         }
 
         conn.commit().await?;

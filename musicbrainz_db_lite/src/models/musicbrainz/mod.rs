@@ -1,3 +1,4 @@
+pub mod isrc;
 use std::sync::Arc;
 
 use crate::DBClient;
