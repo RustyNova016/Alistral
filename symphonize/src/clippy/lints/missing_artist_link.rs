@@ -1,6 +1,7 @@
 use std::sync::LazyLock;
 
 use musicbrainz_db_lite::Artist;
+use musicbrainz_db_lite::FetchAndSave as _;
 use musicbrainz_db_lite::Url;
 use musicbrainz_db_lite::models::musicbrainz::{main_entities::MainEntity, recording::Recording};
 use musicbrainz_db_lite::models::shared_traits::db_relation::ArtistFromCreditsRelation;
@@ -100,6 +101,30 @@ impl MbClippyLint for MissingArtistLink {
         }
 
         Ok(None)
+    }
+
+    /// Refresh the current entity and additional relevant data
+    async fn refresh_data(
+        client: &SymphonyzeClient,
+        entity: &mut MainEntity,
+    ) -> Result<(), crate::Error> {
+        entity
+            .refetch_and_load_as_task(client.mb_database.clone())
+            .await?;
+
+        let MainEntity::Recording(recording) = entity else {
+            return Ok(());
+        };
+
+        let artists = recording
+            .get_related_entity_or_fetch_as_task::<ArtistFromCreditsRelation>(&client.mb_database)
+            .await?;
+
+        for artist in artists {
+            artist.refetch_as_task(client.mb_database.clone()).await?;
+        }
+
+        Ok(())
     }
 
     async fn get_body(
