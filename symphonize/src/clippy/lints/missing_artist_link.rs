@@ -5,7 +5,7 @@ use musicbrainz_db_lite::FetchAndSave as _;
 use musicbrainz_db_lite::Url;
 use musicbrainz_db_lite::models::musicbrainz::{main_entities::MainEntity, recording::Recording};
 use musicbrainz_db_lite::models::shared_traits::db_relation::ArtistFromCreditsRelation;
-use musicbrainz_db_lite::models::shared_traits::db_relation::EntityURLDBRel;
+use musicbrainz_db_lite::models::shared_traits::db_relation::EntityActiveURLDBRel;
 use tuillez::formatter::FormatWithAsync;
 
 use crate::clippy::clippy_lint::MbClippyLint;
@@ -42,7 +42,7 @@ impl MissingArtistLink {
         recording_urls: &[Url],
     ) -> Result<Option<Self>, crate::Error> {
         let artist_urls = artist
-            .get_related_entity_or_fetch_as_task::<EntityURLDBRel>(&client.mb_database)
+            .get_related_entity_or_fetch_as_task::<EntityActiveURLDBRel>(&client.mb_database)
             .await?;
 
         for domain in LINK_DOMAINS.iter() {
@@ -85,7 +85,7 @@ impl MbClippyLint for MissingArtistLink {
         // Whether by direct copy or harmony
 
         let recording_urls = recording
-            .get_related_entity_or_fetch_as_task::<EntityURLDBRel>(&client.mb_database)
+            .get_related_entity_or_fetch_as_task::<EntityActiveURLDBRel>(&client.mb_database)
             .await?;
 
         let artists = recording
