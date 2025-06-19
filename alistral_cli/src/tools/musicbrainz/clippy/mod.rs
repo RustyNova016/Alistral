@@ -17,6 +17,7 @@ use symphonize::clippy::clippy_lint::MbClippyLint;
 use symphonize::clippy::lints::dash_eti::DashETILint;
 use symphonize::clippy::lints::label_as_artist::LabelAsArtistLint;
 use symphonize::clippy::lints::missing_artist_link::MissingArtistLink;
+use symphonize::clippy::lints::missing_isrc::MissingISRCLint;
 use symphonize::clippy::lints::missing_recording_link::MissingRecordingLink;
 use symphonize::clippy::lints::missing_release_barcode::MissingBarcodeLint;
 use symphonize::clippy::lints::missing_remix_rel::MissingRemixRelLint;
@@ -134,6 +135,7 @@ async fn process_lints(entity: Arc<MainEntity>, filter: &WhitelistBlacklist<Stri
     let entity = &mut entity.as_ref().clone();
 
     process_lint::<DashETILint>(entity, filter).await;
+    process_lint::<MissingISRCLint>(entity, filter).await;
     process_lint::<MissingWorkLint>(entity, filter).await;
     process_lint::<LabelAsArtistLint>(entity, filter).await;
     process_lint::<MissingArtistLink>(entity, filter).await;

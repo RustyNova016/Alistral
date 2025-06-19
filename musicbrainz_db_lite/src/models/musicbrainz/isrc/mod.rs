@@ -1,10 +1,24 @@
+use sequelles::has_rowid::HasRowID;
 use sqlx::FromRow;
+
+use crate::models::shared_traits::has_table::HasTable;
 
 #[derive(PartialEq, Eq, Debug, Clone, FromRow)]
 pub struct ISRC {
     id: i64,
     isrc: String,
     recording: i64,
+}
+
+impl HasRowID for ISRC {
+    fn rowid(&self) -> i64 {
+        self.id
+    }
+}
+
+impl HasTable for ISRC {
+    const TABLE_NAME: &str = "isrcs";
+    const FOREIGN_FIELD_NAME: &str = "isrc";
 }
 
 impl ISRC {

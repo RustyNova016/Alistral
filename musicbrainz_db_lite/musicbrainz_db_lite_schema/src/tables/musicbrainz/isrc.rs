@@ -1,4 +1,6 @@
-pub(super) async fn create_isrc_table(conn: &mut sqlx::SqliteConnection) -> Result<(), sqlx::Error> {
+pub(super) async fn create_isrc_table(
+    conn: &mut sqlx::SqliteConnection,
+) -> Result<(), sqlx::Error> {
     sqlx::query(
         r#"
         CREATE TABLE `isrcs` (
