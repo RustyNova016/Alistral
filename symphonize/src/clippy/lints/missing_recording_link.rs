@@ -51,6 +51,14 @@ impl MissingRecordingLink {
                 Some(url) => url,
             };
 
+            // Do not try to add playlist links
+            if release_link
+                .ressource
+                .starts_with("https://www.youtube.com/playlist")
+            {
+                continue;
+            }
+
             if Self::get_link_with_domain(domain, recording_urls).is_none() {
                 return Ok(Some(Self {
                     recording: recording.clone(),
@@ -148,7 +156,7 @@ impl MbClippyLint for MissingRecordingLink {
                     ("edit-recording.url.0.text", &self.link_missing),
                     ("edit-recording.url.0.link_type_id", "268"),
                     ("edit-recording.edit_note", &format!(
-                        "Link copied from release https://musicbrainz.org/release/`{}`. Found by Alistral lint `{}`",
+                        "Link copied from release `https://musicbrainz.org/release/{}`. Found by Alistral lint `{}`",
                          self.parent_release.mbid,
                          Self::get_name()
                     ))
