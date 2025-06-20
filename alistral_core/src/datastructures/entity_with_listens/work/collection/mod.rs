@@ -47,7 +47,7 @@ impl<'l> WorkWithRecordingsStrategy<'l> {
 impl ListenSortingStrategy<Work, RecordingWithListensCollection>
     for WorkWithRecordingsStrategy<'_>
 {
-    #[instrument(skip(self), fields(indicatif.pb_show = tracing::field::Empty))]
+    #[instrument(skip(self, data), fields(indicatif.pb_show = tracing::field::Empty))]
     async fn sort_insert_listens(
         &self,
         data: &mut EntityWithListensCollection<Work, RecordingWithListensCollection>,
@@ -101,7 +101,7 @@ impl ListenSortingStrategy<Work, RecordingWithListensCollection>
 }
 
 impl WorkWithRecordingsCollection {
-    #[instrument(skip(client), fields(indicatif.pb_show = tracing::field::Empty))]
+    #[instrument(skip(client, conn), fields(indicatif.pb_show = tracing::field::Empty))]
     pub async fn add_parents_recursive(
         &mut self,
         conn: &mut sqlx::SqliteConnection,

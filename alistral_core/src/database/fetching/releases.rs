@@ -7,7 +7,7 @@ use tracing_indicatif::span_ext::IndicatifSpanExt as _;
 use tuillez::pg_counted;
 
 /// Prefetch all the release of a list of recordings
-#[instrument(skip(client), fields(indicatif.pb_show = tracing::field::Empty))]
+#[instrument(skip(client, conn, releases), fields(indicatif.pb_show = tracing::field::Empty))]
 pub async fn prefetch_releases(
     conn: &mut sqlx::SqliteConnection,
     client: &crate::AlistralClient,

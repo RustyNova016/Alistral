@@ -49,7 +49,7 @@ impl RadioExportTarget {
     }
 }
 
-#[instrument(fields(indicatif.pb_show = tracing::field::Empty))]
+#[instrument(skip_all, fields(indicatif.pb_show = tracing::field::Empty))]
 pub(super) async fn convert_recordings(
     db_lite_conn: &mut sqlx::SqliteConnection,
     recordings: Vec<Recording>,

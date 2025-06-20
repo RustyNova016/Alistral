@@ -39,7 +39,7 @@ impl<'l> ArtistWithRecordingsStrategy<'l> {
 impl ListenSortingStrategy<Artist, RecordingWithListensCollection>
     for ArtistWithRecordingsStrategy<'_>
 {
-    #[instrument(skip(self), fields(indicatif.pb_show = tracing::field::Empty))]
+    #[instrument(skip(self, data, listens), fields(indicatif.pb_show = tracing::field::Empty))]
     async fn sort_insert_listens(
         &self,
         data: &mut EntityWithListensCollection<Artist, RecordingWithListensCollection>,

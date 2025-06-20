@@ -25,7 +25,7 @@ use crate::models::client::AlistralCliClient;
 async fn main() {
     let _ = dotenvy::dotenv();
     let cli = Cli::parse();
-    init_tracer(&cli);
+    let _worker_guard = init_tracer(&cli);
     //console_subscriber::init();
 
     if run_cli(cli).await {

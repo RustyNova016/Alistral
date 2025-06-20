@@ -9,7 +9,7 @@ use tuillez::pg_inc;
 use crate::models::data::listenbrainz::popularity::PopularityRecordingResponseItem;
 
 /// Sort listens based on the rate of listens of a recording
-#[instrument( fields(indicatif.pb_show = tracing::field::Empty))]
+#[instrument(skip_all, fields(indicatif.pb_show = tracing::field::Empty))]
 pub fn underrated_sorter(
     mut recordings: Vec<RecordingWithListens>,
     user_listens: &RecordingWithListensCollection,

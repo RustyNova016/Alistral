@@ -6,7 +6,7 @@ use tuillez::pg_inc;
 
 use crate::models::data::listenbrainz::popularity::PopularityRecordingResponseItem;
 
-#[instrument( fields(indicatif.pb_show = tracing::field::Empty))]
+#[instrument(fields(indicatif.pb_show = tracing::field::Empty))]
 pub async fn get_global_listen_counts(
     recordings: &[String],
 ) -> Result<Vec<PopularityRecordingResponseItem>, crate::Error> {
