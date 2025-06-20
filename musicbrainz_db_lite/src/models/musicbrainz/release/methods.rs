@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use crate::DBClient;
 use crate::Release;
-use crate::models::shared_traits::db_relation::EntityURLDBRel;
+use crate::models::shared_traits::db_relation::EntityActiveURLDBRel;
 use crate::utils::regex::HARMONY_SEED_URL_REGEX;
 
 impl Release {
@@ -14,7 +14,7 @@ impl Release {
         client: &Arc<DBClient>,
     ) -> Result<bool, crate::Error> {
         let urls = self
-            .get_related_entity_or_fetch_as_task::<EntityURLDBRel>(client)
+            .get_related_entity_or_fetch_as_task::<EntityActiveURLDBRel>(client)
             .await?;
 
         Ok(urls

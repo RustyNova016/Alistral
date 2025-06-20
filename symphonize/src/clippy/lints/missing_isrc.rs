@@ -67,9 +67,6 @@ impl MbClippyLint for MissingISRCLint {
             return Ok(None);
         };
 
-        // Check if a release of the recording got a link that can be moved to the recording level
-        // Whether by direct copy or harmony
-
         let isrcs = recording
             .get_related_entity_or_fetch_as_task::<RecordingISRCDBRel>(&client.mb_database)
             .await?;

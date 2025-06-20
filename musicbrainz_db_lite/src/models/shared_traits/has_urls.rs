@@ -2,20 +2,23 @@ use std::sync::Arc;
 
 use crate::DBRelation;
 use crate::Url;
-use crate::models::shared_traits::db_relation::EntityURLDBRel;
+use crate::models::shared_traits::db_relation::EntityActiveURLDBRel;
 
 pub trait HasUrls<U>
 where
-    Self: crate::DBRelationFetch<EntityURLDBRel, U>,
+    Self: crate::DBRelationFetch<EntityActiveURLDBRel, U>,
     U: Send,
-    Url: From<<Self as DBRelation<EntityURLDBRel>>::ReturnedType>,
+    Url: From<<Self as DBRelation<EntityActiveURLDBRel>>::ReturnedType>,
 {
     /// Return the urls of the entity (Use a task)
     fn get_entity_urls(
         &self,
         client: &Arc<crate::DBClient>,
     ) -> impl std::future::Future<
-        Output = Result<Vec<<Self as DBRelation<EntityURLDBRel>>::ReturnedType>, crate::Error>,
+        Output = Result<
+            Vec<<Self as DBRelation<EntityActiveURLDBRel>>::ReturnedType>,
+            crate::Error,
+        >,
     > + Send
     where
         Self: 'static,
@@ -47,8 +50,8 @@ where
 
 impl<T, U> HasUrls<U> for T
 where
-    T: crate::DBRelationFetch<EntityURLDBRel, U>,
+    T: crate::DBRelationFetch<EntityActiveURLDBRel, U>,
     U: Send,
-    Url: From<<T as DBRelation<EntityURLDBRel>>::ReturnedType>,
+    Url: From<<T as DBRelation<EntityActiveURLDBRel>>::ReturnedType>,
 {
 }

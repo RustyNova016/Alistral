@@ -5,7 +5,7 @@ use musicbrainz_db_lite::Release;
 use musicbrainz_db_lite::Url;
 use musicbrainz_db_lite::models::musicbrainz::recording::relations::releases::RecordingReleasesDBRel;
 use musicbrainz_db_lite::models::musicbrainz::{main_entities::MainEntity, recording::Recording};
-use musicbrainz_db_lite::models::shared_traits::db_relation::EntityURLDBRel;
+use musicbrainz_db_lite::models::shared_traits::db_relation::EntityActiveURLDBRel;
 use tuillez::formatter::FormatWithAsync;
 
 use crate::clippy::clippy_lint::MbClippyLint;
@@ -42,7 +42,7 @@ impl MissingRecordingLink {
         recording_urls: &[Url],
     ) -> Result<Option<Self>, crate::Error> {
         let release_urls = release
-            .get_related_entity_or_fetch_as_task::<EntityURLDBRel>(&client.mb_database)
+            .get_related_entity_or_fetch_as_task::<EntityActiveURLDBRel>(&client.mb_database)
             .await?;
 
         for domain in LINK_DOMAINS.iter() {
@@ -50,6 +50,14 @@ impl MissingRecordingLink {
                 None => continue,
                 Some(url) => url,
             };
+
+            // Do not try to add playlist links
+            if release_link
+                .ressource
+                .starts_with("https://www.youtube.com/playlist")
+            {
+                continue;
+            }
 
             if Self::get_link_with_domain(domain, recording_urls).is_none() {
                 return Ok(Some(Self {
@@ -85,7 +93,7 @@ impl MbClippyLint for MissingRecordingLink {
         // Whether by direct copy or harmony
 
         let recording_urls = recording
-            .get_related_entity_or_fetch_as_task::<EntityURLDBRel>(&client.mb_database)
+            .get_related_entity_or_fetch_as_task::<EntityActiveURLDBRel>(&client.mb_database)
             .await?;
 
         let releases = recording
@@ -148,7 +156,7 @@ impl MbClippyLint for MissingRecordingLink {
                     ("edit-recording.url.0.text", &self.link_missing),
                     ("edit-recording.url.0.link_type_id", "268"),
                     ("edit-recording.edit_note", &format!(
-                        "Link copied from release https://musicbrainz.org/release/`{}`. Found by Alistral lint `{}`",
+                        "Link copied from release `https://musicbrainz.org/release/{}`. Found by Alistral lint `{}`",
                          self.parent_release.mbid,
                          Self::get_name()
                     ))

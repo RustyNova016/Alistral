@@ -16,6 +16,20 @@ where
         entity: &MainEntity,
     ) -> impl std::future::Future<Output = Result<Option<Self>, crate::Error>> + Send;
 
+    /// Refresh the current entity and additional relevant data
+    fn refresh_data(
+        client: &SymphonyzeClient,
+        entity: &mut MainEntity,
+    ) -> impl std::future::Future<Output = Result<(), crate::Error>> + Send {
+        async {
+            entity
+                .refetch_and_load_as_task(client.mb_database.clone())
+                .await?;
+
+            Ok(())
+        }
+    }
+
     fn get_name() -> &'static str;
 
     fn get_name_self(&self) -> &'static str {

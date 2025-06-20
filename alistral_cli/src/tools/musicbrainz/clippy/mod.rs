@@ -194,8 +194,7 @@ async fn process_lint<L: MbClippyLint>(
         entity.get_unique_id()
     );
 
-    entity
-        .refetch_and_load_as_task(ALISTRAL_CLIENT.musicbrainz_db.clone())
+    L::refresh_data(&ALISTRAL_CLIENT.symphonize, entity)
         .await
         .expect("Couldn't refresh the entity");
 

@@ -69,7 +69,7 @@ where
         U: 'static,
     {
         async {
-            let data = Self::fetch_from_mbid(client.as_ref(), mbid).await;
+            let data = Self::fetch_from_mbid_as_task(client.clone(), mbid).await;
 
             match data {
                 Ok(data) => {

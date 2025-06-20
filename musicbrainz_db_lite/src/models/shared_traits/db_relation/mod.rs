@@ -96,7 +96,7 @@ pub struct RecordingISRCDBRel;
 pub struct ArtistCreditDBRel;
 
 /// Entity (0:M) -> [`crate::Url`]
-pub struct EntityURLDBRel;
+pub struct EntityActiveURLDBRel;
 
 /// Entity (0:M) -> [`crate::Tag`]
 pub struct EntityTagDBRel;
