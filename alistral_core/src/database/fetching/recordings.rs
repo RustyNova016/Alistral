@@ -13,7 +13,7 @@ use tuillez::pg_counted;
 use tuillez::pg_inc;
 
 /// Prefetch all the recordings of a list of listens
-#[instrument(skip(client), fields(indicatif.pb_show = tracing::field::Empty))]
+#[instrument(skip(client, conn, listens), fields(indicatif.pb_show = tracing::field::Empty))]
 pub async fn prefetch_recordings_of_listens(
     conn: &mut sqlx::SqliteConnection,
     client: &crate::AlistralClient,
@@ -31,7 +31,7 @@ pub async fn prefetch_recordings_of_listens(
     Ok(())
 }
 
-#[instrument(skip(client), fields(indicatif.pb_show = tracing::field::Empty))]
+#[instrument(skip(client, recordings), fields(indicatif.pb_show = tracing::field::Empty))]
 pub async fn fetch_recordings_as_complete(
     client: &crate::AlistralClient,
     recordings: &[&Recording],
@@ -57,7 +57,7 @@ pub async fn fetch_recordings_as_complete(
     Ok(())
 }
 
-#[instrument(skip(client), fields(indicatif.pb_show = tracing::field::Empty))]
+#[instrument(skip(client, recordings), fields(indicatif.pb_show = tracing::field::Empty))]
 pub async fn fetch_artists_of_recordings(
     client: &crate::AlistralClient,
     recordings: &[&Recording],

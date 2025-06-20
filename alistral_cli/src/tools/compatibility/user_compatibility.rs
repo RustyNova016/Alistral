@@ -37,7 +37,7 @@ pub fn get_user_shared_percent(
 }
 
 /// For each shared recordings, return the ratio of listens being from a recording
-#[instrument( fields(indicatif.pb_show = tracing::field::Empty))]
+#[instrument(skip_all, fields(indicatif.pb_show = tracing::field::Empty))]
 fn get_user_ratio<'r>(
     shared_recordings: &'r Vec<Recording>,
     user_listens: &RecordingWithListensCollection,

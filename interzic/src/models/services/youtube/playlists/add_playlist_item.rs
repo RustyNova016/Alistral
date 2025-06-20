@@ -20,7 +20,7 @@ use crate::models::services::youtube::playlists::YoutubeRateLimit;
 use crate::try_err;
 
 impl Youtube {
-    #[instrument(skip(client), fields(indicatif.pb_show = tracing::field::Empty))]
+    #[instrument(skip(client, playlist, rate_limit), fields(indicatif.pb_show = tracing::field::Empty))]
     pub async fn add_recordings_to_playlist(
         client: &InterzicClient,
         playlist_id: &String,

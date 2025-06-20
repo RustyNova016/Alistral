@@ -23,7 +23,7 @@ use crate::database::musicbrainz::anniversaries::get_recordings_aniversaries;
 use crate::models::config::Config;
 use crate::utils::constants::LISTENBRAINZ_FMT;
 
-#[instrument]
+#[instrument(skip(conn))]
 pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
     let recordings = recording_stats(&ALISTRAL_CLIENT, username.to_string())
         .await

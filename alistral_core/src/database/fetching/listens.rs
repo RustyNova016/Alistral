@@ -58,7 +58,7 @@ impl ListenFetchQuery {
         }
     }
 
-    #[instrument(skip(client), fields(indicatif.pb_show = tracing::field::Empty))]
+    #[instrument(skip(client, conn), fields(indicatif.pb_show = tracing::field::Empty))]
     async fn fetch_recordings_redirects(
         conn: &mut sqlx::SqliteConnection,
         client: &AlistralClient,

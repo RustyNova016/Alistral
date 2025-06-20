@@ -1,6 +1,7 @@
 use musicbrainz_rs_nova::Fetch;
 use musicbrainz_rs_nova::entity::artist::Artist as MBArtist;
 use sqlx::SqliteConnection;
+use tracing::instrument;
 
 use crate::Error;
 use crate::database::client::DBClient;
@@ -9,6 +10,7 @@ use crate::models::shared_traits::fetch_and_save::FetchAndSave;
 use crate::models::shared_traits::fetch_mbid::FetchMBID;
 
 impl FetchMBID<MBArtist> for Artist {
+    #[instrument]
     async fn fetch_from_mbid(
         client: &DBClient,
         mbid: &str,

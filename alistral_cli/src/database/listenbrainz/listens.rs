@@ -7,7 +7,7 @@ use tuillez::pg_spinner;
 use crate::ALISTRAL_CLIENT;
 
 /// Fetch the latest listens for the provided user. If the user has no listens, it will do a full listen fetch.
-#[instrument(fields(indicatif.pb_show = tracing::field::Empty))]
+#[instrument(skip(conn), fields(indicatif.pb_show = tracing::field::Empty))]
 pub async fn fetch_latest_listens_of_user(
     conn: &mut sqlx::SqliteConnection,
     user: &str,

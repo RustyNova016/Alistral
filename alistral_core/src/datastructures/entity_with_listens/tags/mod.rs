@@ -62,7 +62,7 @@ where
     Ent: RowId + HasTags + Clone,
     Lis: ListenCollectionReadable + Clone + Mergable,
 {
-    #[instrument(skip(self, data), fields(indicatif.pb_show = tracing::field::Empty))]
+    #[instrument(skip(self, data, listens), fields(indicatif.pb_show = tracing::field::Empty))]
     async fn sort_insert_listens(
         &self,
         data: &mut TagWithEntListensCollection<Ent, Lis>,
@@ -96,7 +96,7 @@ where
     }
 }
 
-#[instrument(skip(data, listens),fields(indicatif.pb_show = tracing::field::Empty))]
+#[instrument(skip(data, listens, relations),fields(indicatif.pb_show = tracing::field::Empty))]
 fn compile<Ent, Lis>(
     data: &mut TagWithEntListensCollection<Ent, Lis>,
     relations: Vec<JoinRelation<i64, Tag>>,
