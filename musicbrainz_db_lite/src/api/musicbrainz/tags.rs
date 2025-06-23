@@ -1,4 +1,4 @@
-use musicbrainz_rs_nova::entity::tag::Tag as MBTag;
+use musicbrainz_rs::entity::tag::Tag as MBTag;
 
 use crate::RowId;
 use crate::models::musicbrainz::tags::Tag;

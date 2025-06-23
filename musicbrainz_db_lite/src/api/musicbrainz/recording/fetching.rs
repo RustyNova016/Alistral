@@ -1,5 +1,5 @@
-use musicbrainz_rs_nova::Fetch as _;
-use musicbrainz_rs_nova::entity::recording::Recording as MSRecording;
+use musicbrainz_rs::Fetch as _;
+use musicbrainz_rs::entity::recording::Recording as MSRecording;
 use sqlx::SqliteConnection;
 use tracing::debug;
 use tracing::instrument;
@@ -14,7 +14,7 @@ impl FetchMBID<MSRecording> for Recording {
     async fn fetch_from_mbid(
         client: &DBClient,
         mbid: &str,
-    ) -> Result<MSRecording, musicbrainz_rs_nova::Error> {
+    ) -> Result<MSRecording, musicbrainz_rs::Error> {
         debug!("Sending fetch query for recording `{}`", mbid);
 
         MSRecording::fetch()

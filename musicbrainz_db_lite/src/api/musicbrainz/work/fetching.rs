@@ -1,5 +1,5 @@
-use musicbrainz_rs_nova::Fetch;
-use musicbrainz_rs_nova::entity::work::Work as MBWork;
+use musicbrainz_rs::Fetch;
+use musicbrainz_rs::entity::work::Work as MBWork;
 
 use crate::Error;
 use crate::database::client::DBClient;
@@ -11,7 +11,7 @@ impl FetchMBID<MBWork> for Work {
     async fn fetch_from_mbid(
         client: &DBClient,
         mbid: &str,
-    ) -> Result<MBWork, musicbrainz_rs_nova::Error> {
+    ) -> Result<MBWork, musicbrainz_rs::Error> {
         MBWork::fetch()
             .id(mbid)
             .with_aliases()

@@ -1,4 +1,4 @@
-use musicbrainz_rs_nova::entity::release_group::ReleaseGroup as MBReleaseGroup;
+use musicbrainz_rs::entity::release_group::ReleaseGroup as MBReleaseGroup;
 
 use crate::Error;
 use crate::MBIDRedirection as _;
@@ -29,7 +29,7 @@ impl ReleaseGroup {
             .await
     }
 
-    /// Merge an Entity with its counterpart in musicbrainz_rs_nova. It always prefers data from musicbrainz_rs_nova over the cached one
+    /// Merge an Entity with its counterpart in musicbrainz_rs. It always prefers data from musicbrainz_rs over the cached one
     pub fn merge_api_data(self, new: MBReleaseGroup) -> Self {
         Self {
             id: self.id,
@@ -47,7 +47,7 @@ impl ReleaseGroup {
         }
     }
 
-    /// Save the responce from `musicbrainz_rs_nova` and its children relations
+    /// Save the responce from `musicbrainz_rs` and its children relations
     pub async fn save_api_response_recursive(
         conn: &mut sqlx::SqliteConnection,
         value: MBReleaseGroup,

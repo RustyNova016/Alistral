@@ -34,7 +34,7 @@ where
 
                     Ok(Some(data))
                 }
-                Err(musicbrainz_rs_nova::Error::NotFound(_)) => {
+                Err(musicbrainz_rs::Error::NotFound(_)) => {
                     // TODO: Set deleted
                     Ok(None)
                 }
@@ -87,7 +87,7 @@ where
                     .await
                     .unwrap()
                 }
-                Err(musicbrainz_rs_nova::Error::NotFound(_)) => {
+                Err(musicbrainz_rs::Error::NotFound(_)) => {
                     // TODO: Set deleted
                     Ok(None)
                 }

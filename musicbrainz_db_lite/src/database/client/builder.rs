@@ -5,7 +5,7 @@ use std::path::PathBuf;
 use std::sync::Arc;
 
 use listenbrainz::raw::Client as ListenbrainzClient;
-use musicbrainz_rs_nova::client::MusicBrainzClient;
+use musicbrainz_rs::client::MusicBrainzClient;
 use sqlx::sqlite::SqliteConnectOptions;
 use sqlx::sqlite::SqliteJournalMode;
 

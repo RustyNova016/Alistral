@@ -1,4 +1,4 @@
-use musicbrainz_rs_nova::Fetch as _;
+use musicbrainz_rs::Fetch as _;
 use sqlx::SqliteConnection;
 
 use crate::MBRelease;
@@ -12,7 +12,7 @@ impl FetchMBID<MBRelease> for Release {
     async fn fetch_from_mbid(
         client: &DBClient,
         mbid: &str,
-    ) -> Result<MBRelease, musicbrainz_rs_nova::Error> {
+    ) -> Result<MBRelease, musicbrainz_rs::Error> {
         MBRelease::fetch()
             .id(mbid)
             .with_aliases()

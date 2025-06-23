@@ -1,3 +1,4 @@
+use core::str::FromStr;
 use std::path::PathBuf;
 use std::sync::Arc;
 use std::sync::LazyLock;
@@ -60,7 +61,9 @@ impl AlistralCliClient {
 
     fn create_mb_client(config: &Config) -> Arc<MusicBrainzClient> {
         let mut musicbrainz_rs = MusicBrainzClient::default();
-        musicbrainz_rs.musicbrainz_url = config.musicbrainz_url.to_string();
+        let url =
+            url::Url::from_str(&config.musicbrainz_url).expect("Couldn't parse musicbrainz's url");
+        musicbrainz_rs.musicbrainz_domain = url.domain().unwrap().to_string();
         Arc::new(musicbrainz_rs)
     }
 

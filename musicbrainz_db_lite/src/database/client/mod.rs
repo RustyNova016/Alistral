@@ -3,7 +3,7 @@ use std::sync::Arc;
 use deadpool::managed::Object;
 use deadpool::managed::PoolError;
 use listenbrainz::raw::Client as ListenbrainzClient;
-use musicbrainz_rs_nova::client::MusicBrainzClient;
+use musicbrainz_rs::client::MusicBrainzClient;
 
 use crate::database::client::builder::ClientBuilder;
 use crate::database::pool::DBLitePool;

@@ -1,4 +1,4 @@
-use musicbrainz_rs_nova::entity::artist_credit::ArtistCredit as MBArtistCredit;
+use musicbrainz_rs::entity::artist_credit::ArtistCredit as MBArtistCredit;
 use sqlx::SqliteConnection;
 
 use crate::models::musicbrainz::{

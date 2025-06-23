@@ -1,4 +1,4 @@
-use musicbrainz_rs_nova::entity::artist::Artist as MBArtist;
+use musicbrainz_rs::entity::artist::Artist as MBArtist;
 use sqlx::SqliteConnection;
 
 use crate::Error;

@@ -1,5 +1,5 @@
-use musicbrainz_rs_nova::entity::artist::Artist as MBArtist;
-use musicbrainz_rs_nova::entity::recording::Recording as MSRecording;
+use musicbrainz_rs::entity::artist::Artist as MBArtist;
+use musicbrainz_rs::entity::recording::Recording as MSRecording;
 use serde::Deserialize;
 use serde::Serialize;
 

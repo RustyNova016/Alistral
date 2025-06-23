@@ -6,12 +6,12 @@ pub trait FetchMBID<T> {
     fn fetch_from_mbid(
         client: &DBClient,
         mbid: &str,
-    ) -> impl std::future::Future<Output = Result<T, musicbrainz_rs_nova::Error>> + Send;
+    ) -> impl std::future::Future<Output = Result<T, musicbrainz_rs::Error>> + Send;
 
     fn fetch_from_mbid_as_task(
         client: Arc<DBClient>,
         mbid: &str,
-    ) -> impl std::future::Future<Output = Result<T, musicbrainz_rs_nova::Error>> + Send
+    ) -> impl std::future::Future<Output = Result<T, musicbrainz_rs::Error>> + Send
     where
         T: Send + 'static,
     {

@@ -1,4 +1,4 @@
-use musicbrainz_rs_nova::entity::label::LabelInfo as MBLabelInfo;
+use musicbrainz_rs::entity::label::LabelInfo as MBLabelInfo;
 
 use crate::models::musicbrainz::{label::Label, release::LabelInfo};
 

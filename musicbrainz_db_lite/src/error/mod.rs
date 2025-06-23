@@ -9,7 +9,7 @@ pub enum Error {
     //#[error(transparent)]
     //ReqwestError(#[from] reqwest::Error),
     #[error(transparent)]
-    MusicbrainzError(#[from] musicbrainz_rs_nova::Error),
+    MusicbrainzError(#[from] musicbrainz_rs::Error),
 
     #[error(transparent)]
     ListenbrainzError(#[from] listenbrainz::Error),
