@@ -8,8 +8,8 @@ description = "Bunch of utilities to link musicbrainz data to different services
 [dependencies]
 
 # --- MB ecosystem crates ---
-#musicbrainz_rs = "0.9.0"
-musicbrainz_rs = { branch = "develop", git = "https://github.com/RustyNova016/musicbrainz_rs.git", features = ["extras"]}
+musicbrainz_rs = {version = "0.10.0", features = ["extras"]}
+#musicbrainz_rs = { branch = "develop", git = "https://github.com/RustyNova016/musicbrainz_rs.git", features = ["extras"]}
 
 #TODO: Make musicbrainz-db-lite optional
 musicbrainz-db-lite = { path = "../musicbrainz_db_lite" }
