@@ -4,10 +4,10 @@ macro_rules! impl_save_relation {
             pub(crate) async fn save_relation(
                 &self,
                 conn: &mut sqlx::SqliteConnection,
-                api_relation: musicbrainz_rs_nova::entity::relations::Relation,
+                api_relation: musicbrainz_rs::entity::relations::Relation,
             ) -> Result<(), crate::Error> {
                 Ok(match api_relation.content.clone() {
-                    musicbrainz_rs_nova::entity::relations::RelationContent::Artist(value) => {
+                    musicbrainz_rs::entity::relations::RelationContent::Artist(value) => {
                         let entity1 = Artist::save_api_response(conn, *value).await?;
 
                         crate::models::musicbrainz::relations::Relation::save_api_response_inner(
@@ -19,7 +19,7 @@ macro_rules! impl_save_relation {
                         .await?;
                     }
                     // musicbrainz_rs does not support genre relations yet. TODO!
-                    // musicbrainz_rs_nova::entity::relations::RelationContent::Genre(value) => {
+                    // musicbrainz_rs::entity::relations::RelationContent::Genre(value) => {
                     //     let entity1 = crate::models::musicbrainz::genre::Genre::save_api_response(
                     //         conn, *value,
                     //     )
@@ -33,7 +33,7 @@ macro_rules! impl_save_relation {
                     //     )
                     //     .await?;
                     // }
-                    musicbrainz_rs_nova::entity::relations::RelationContent::Label(value) => {
+                    musicbrainz_rs::entity::relations::RelationContent::Label(value) => {
                         let entity1 = crate::models::musicbrainz::label::Label::save_api_response(
                             conn, *value,
                         )
@@ -47,7 +47,7 @@ macro_rules! impl_save_relation {
                         )
                         .await?;
                     }
-                    musicbrainz_rs_nova::entity::relations::RelationContent::Recording(value) => {
+                    musicbrainz_rs::entity::relations::RelationContent::Recording(value) => {
                         let entity1 = Recording::save_api_response(conn, *value).await?;
 
                         crate::models::musicbrainz::relations::Relation::save_api_response_inner(
@@ -58,7 +58,7 @@ macro_rules! impl_save_relation {
                         )
                         .await?;
                     }
-                    musicbrainz_rs_nova::entity::relations::RelationContent::Release(value) => {
+                    musicbrainz_rs::entity::relations::RelationContent::Release(value) => {
                         let entity1 =
                             crate::models::musicbrainz::release::Release::save_api_response(
                                 conn, *value,
@@ -73,7 +73,7 @@ macro_rules! impl_save_relation {
                         )
                         .await?;
                     },
-                    musicbrainz_rs_nova::entity::relations::RelationContent::ReleaseGroup(value) => {
+                    musicbrainz_rs::entity::relations::RelationContent::ReleaseGroup(value) => {
                         let entity1 =
                             crate::models::musicbrainz::release_group::ReleaseGroup::save_api_response(
                                 conn, *value,
@@ -88,9 +88,9 @@ macro_rules! impl_save_relation {
                         )
                         .await?;
                     },
-                        musicbrainz_rs_nova::entity::relations::RelationContent::Url(value) => {
+                    musicbrainz_rs::entity::relations::RelationContent::Url(value) => {
                         let entity1 =
-                            <crate::Url as crate::SaveFrom<musicbrainz_rs_nova::entity::url::Url>>::save_from(
+                            <crate::Url as crate::SaveFrom<musicbrainz_rs::entity::url::Url>>::save_from(
                                 conn, *value,
                             )
                             .await?;
@@ -103,7 +103,7 @@ macro_rules! impl_save_relation {
                         )
                         .await?;
                     }
-                    musicbrainz_rs_nova::entity::relations::RelationContent::Work(value) => {
+                    musicbrainz_rs::entity::relations::RelationContent::Work(value) => {
                         let entity1 =
                             crate::models::musicbrainz::work::Work::save_api_response(conn, *value)
                                 .await?;

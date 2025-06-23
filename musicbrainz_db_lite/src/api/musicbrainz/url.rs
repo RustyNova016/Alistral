@@ -1,5 +1,5 @@
-use musicbrainz_rs_nova::Fetch;
-use musicbrainz_rs_nova::entity::url::Url as MBUrl;
+use musicbrainz_rs::Fetch;
+use musicbrainz_rs::entity::url::Url as MBUrl;
 use sqlx::Acquire;
 
 use crate::CompletenessFlag;
@@ -63,7 +63,7 @@ impl FetchMBID<MBUrl> for Url {
     async fn fetch_from_mbid(
         client: &crate::DBClient,
         mbid: &str,
-    ) -> Result<MBUrl, musicbrainz_rs_nova::Error> {
+    ) -> Result<MBUrl, musicbrainz_rs::Error> {
         MBUrl::fetch()
             .id(mbid)
             .with_area_relations()

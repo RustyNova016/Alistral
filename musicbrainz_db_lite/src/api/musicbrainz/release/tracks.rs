@@ -1,4 +1,4 @@
-use musicbrainz_rs_nova::entity::release::Track as MBTrack;
+use musicbrainz_rs::entity::release::Track as MBTrack;
 use sqlx::sqlite::SqliteQueryResult;
 
 use crate::MBIDRedirection as _;

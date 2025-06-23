@@ -1,5 +1,5 @@
-use musicbrainz_rs_nova::Fetch;
-use musicbrainz_rs_nova::entity::release_group::ReleaseGroup as MBReleaseGroup;
+use musicbrainz_rs::Fetch;
+use musicbrainz_rs::entity::release_group::ReleaseGroup as MBReleaseGroup;
 
 use crate::Error;
 use crate::database::client::DBClient;
@@ -11,7 +11,7 @@ impl FetchMBID<MBReleaseGroup> for ReleaseGroup {
     async fn fetch_from_mbid(
         client: &DBClient,
         mbid: &str,
-    ) -> Result<MBReleaseGroup, musicbrainz_rs_nova::Error> {
+    ) -> Result<MBReleaseGroup, musicbrainz_rs::Error> {
         MBReleaseGroup::fetch()
             .id(mbid)
             .with_aliases()

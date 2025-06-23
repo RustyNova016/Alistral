@@ -1,4 +1,4 @@
-use musicbrainz_rs_nova::entity::label::Label as MBLabel;
+use musicbrainz_rs::entity::label::Label as MBLabel;
 use sqlx::SqliteConnection;
 
 use crate::Error;

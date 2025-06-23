@@ -1,5 +1,5 @@
-use musicbrainz_rs_nova::Fetch;
-use musicbrainz_rs_nova::entity::artist::Artist as MBArtist;
+use musicbrainz_rs::Fetch;
+use musicbrainz_rs::entity::artist::Artist as MBArtist;
 use sqlx::SqliteConnection;
 use tracing::instrument;
 
@@ -14,7 +14,7 @@ impl FetchMBID<MBArtist> for Artist {
     async fn fetch_from_mbid(
         client: &DBClient,
         mbid: &str,
-    ) -> Result<MBArtist, musicbrainz_rs_nova::Error> {
+    ) -> Result<MBArtist, musicbrainz_rs::Error> {
         MBArtist::fetch()
             .id(mbid)
             .with_aliases()

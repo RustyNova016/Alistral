@@ -1,5 +1,5 @@
-use musicbrainz_rs_nova::entity::recording::Recording as MBRecording;
-use musicbrainz_rs_nova::entity::release::Release as MBRelease;
+use musicbrainz_rs::entity::recording::Recording as MBRecording;
+use musicbrainz_rs::entity::release::Release as MBRelease;
 use sqlx::Acquire;
 use sqlx::SqliteConnection;
 

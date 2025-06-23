@@ -1,4 +1,4 @@
-use musicbrainz_rs_nova::entity::release::Media as MBMedia;
+use musicbrainz_rs::entity::release::Media as MBMedia;
 use sqlx::SqliteConnection;
 
 use crate::models::musicbrainz::release::{Media, Track};

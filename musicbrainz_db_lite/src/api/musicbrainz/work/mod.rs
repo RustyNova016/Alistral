@@ -1,5 +1,5 @@
 pub mod fetching;
-use musicbrainz_rs_nova::entity::work::Work as MBWork;
+use musicbrainz_rs::entity::work::Work as MBWork;
 
 use crate::Error;
 use crate::MBIDRedirection as _;
@@ -26,7 +26,7 @@ impl Work {
             .await
     }
 
-    /// Merge an Entity with its counterpart in musicbrainz_rs_nova. It always prefers data from musicbrainz_rs_nova over the cached one
+    /// Merge an Entity with its counterpart in musicbrainz_rs. It always prefers data from musicbrainz_rs over the cached one
     pub fn merge_api_data(self, new: MBWork) -> Self {
         Self {
             id: self.id,
@@ -46,7 +46,7 @@ impl Work {
         }
     }
 
-    /// Save the responce from `musicbrainz_rs_nova` and its children relations
+    /// Save the responce from `musicbrainz_rs` and its children relations
     pub async fn save_api_response_recursive(
         conn: &mut sqlx::SqliteConnection,
         value: MBWork,

@@ -1,6 +1,6 @@
 pub mod relations;
 use musicbrainz_db_lite_macros::{MainEntity, Upsert};
-use musicbrainz_rs_nova::entity::artist::Artist as MBArtist;
+use musicbrainz_rs::entity::artist::Artist as MBArtist;
 use sequelles::has_rowid::HasRowID;
 use sqlx::prelude::FromRow;
 

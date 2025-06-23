@@ -1,4 +1,4 @@
-use musicbrainz_rs_nova::entity::genre::Genre as MBGenre;
+use musicbrainz_rs::entity::genre::Genre as MBGenre;
 
 use crate::RowId;
 use crate::models::musicbrainz::genre::Genre;

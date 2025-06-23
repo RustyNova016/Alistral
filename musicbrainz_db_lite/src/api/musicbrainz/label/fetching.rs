@@ -1,4 +1,4 @@
-use musicbrainz_rs_nova::{Fetch, entity::label::Label as MBLabel};
+use musicbrainz_rs::{Fetch, entity::label::Label as MBLabel};
 
 use crate::database::client::DBClient;
 use crate::models::musicbrainz::label::Label;
@@ -9,7 +9,7 @@ impl FetchMBID<MBLabel> for Label {
     async fn fetch_from_mbid(
         client: &DBClient,
         mbid: &str,
-    ) -> Result<MBLabel, musicbrainz_rs_nova::Error> {
+    ) -> Result<MBLabel, musicbrainz_rs::Error> {
         MBLabel::fetch()
             .id(mbid)
             .with_aliases()

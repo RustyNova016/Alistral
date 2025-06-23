@@ -6,8 +6,8 @@ use async_fn_stream::try_fn_stream;
 use futures::Stream;
 use futures::StreamExt;
 use futures::pin_mut;
-use musicbrainz_rs_nova::Browse;
-use musicbrainz_rs_nova::entity::recording::Recording as MSRecording;
+use musicbrainz_rs::Browse;
+use musicbrainz_rs::entity::recording::Recording as MSRecording;
 use tracing::debug;
 
 use crate::DBClient;

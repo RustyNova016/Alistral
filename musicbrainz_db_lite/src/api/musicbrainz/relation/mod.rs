@@ -1,5 +1,5 @@
 pub mod save_relations;
-use musicbrainz_rs_nova::entity::relations::Relation as MBRelation;
+use musicbrainz_rs::entity::relations::Relation as MBRelation;
 
 use crate::RowId;
 use crate::models::musicbrainz::relations::Relation;
