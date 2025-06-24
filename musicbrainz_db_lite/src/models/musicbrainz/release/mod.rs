@@ -1,11 +1,11 @@
-pub mod display;
-pub mod finds;
-pub mod methods;
 use musicbrainz_db_lite_macros::{MainEntity, Upsert};
 use serde::Deserialize;
 use serde::Serialize;
 use sqlx::FromRow;
 
+pub mod display;
+pub mod finds;
+pub mod methods;
 pub mod relations;
 
 use crate::MBIDRedirection;
@@ -15,6 +15,7 @@ use crate::models::shared_traits::has_genre::HasGenres;
 use crate::models::shared_traits::has_table::HasTable;
 use crate::models::shared_traits::has_tags::HasTags;
 use crate::utils::macros::hardlink_methods::impl_db_relation_fetch_methods;
+use crate::utils::macros::hardlink_methods::impl_db_relation_methods;
 use crate::utils::macros::{
     artist_credits::impl_artist_credits, get_and_fetch::impl_get_and_fetch,
 };
@@ -55,6 +56,7 @@ pub struct Release {
 impl_artist_credits!(Release, "releases");
 impl_get_and_fetch!(Release);
 impl_relations!(Release);
+impl_db_relation_methods!(Release);
 impl_db_relation_fetch_methods!(Release, MBRelease);
 
 impl crate::RowId for Release {
@@ -83,34 +85,6 @@ pub struct Media {
 }
 
 impl crate::RowId for Media {
-    fn get_row_id(&self) -> i64 {
-        self.id
-    }
-}
-
-#[derive(Debug, Default, Clone, FromRow, Upsert)]
-#[database(
-    table = "tracks",
-    primary_key = "id",
-    ignore_insert_keys(id),
-    ignore_update_keys(id, gid)
-)]
-pub struct Track {
-    pub id: i64,
-    pub gid: String,
-    pub title: String,
-    pub number: String,
-    pub length: Option<i64>,
-    pub position: i64,
-
-    pub media: i64,
-    pub recording: Option<i64>,
-    pub artist_credit: Option<i64>,
-}
-
-impl_artist_credits!(Track, "tracks");
-
-impl crate::RowId for Track {
     fn get_row_id(&self) -> i64 {
         self.id
     }

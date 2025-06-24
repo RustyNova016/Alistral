@@ -10,6 +10,7 @@ use crate::ArtistCredit;
 use crate::DBClient;
 use crate::DBRelation;
 use crate::FetchAsComplete;
+use crate::Track;
 use crate::models::musicbrainz::main_entities::MainEntity;
 use crate::models::shared_traits::db_relation::ArtistCreditDBRel;
 use crate::models::shared_traits::db_relation::ArtistFromCreditsRelation;
@@ -63,6 +64,13 @@ impl Release {
                 .await?;
         }
 
+        let tracks = self
+            .get_related_entity::<TrackReleaseDBRel>(&mut *client.get_raw_connection().await?)
+            .await?;
+        for track in tracks {
+            sender.send(Arc::new(MainEntity::Track(track))).await?;
+        }
+
         Ok(())
     }
 }
@@ -84,5 +92,17 @@ impl DBRelation<ArtistFromCreditsRelation> for Release {
         INNER JOIN artist_credits_item ON artist_credits.id = artist_credits_item.artist_credit
         INNER JOIN artists_gid_redirect ON artist_credits_item.artist_gid = artists_gid_redirect.gid
         INNER JOIN artists ON artists_gid_redirect.new_id = artists.id"
+    }
+}
+
+/// [`crate::Track`] (N:1) -> [`crate::Release`]
+pub struct TrackReleaseDBRel;
+
+impl DBRelation<TrackReleaseDBRel> for Release {
+    type ReturnedType = Track;
+
+    fn get_join_statement() -> &'static str {
+        "INNER JOIN tracks ON tracks.media = medias.id
+        INNER JOIN medias ON medias.`release` = releases.id"
     }
 }

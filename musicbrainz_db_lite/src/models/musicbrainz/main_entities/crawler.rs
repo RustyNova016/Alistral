@@ -10,8 +10,10 @@ use futures::channel::mpsc::Sender;
 use futures::channel::mpsc::UnboundedReceiver;
 use futures::channel::mpsc::channel;
 use futures::channel::mpsc::unbounded;
-use futures::stream::select;
+use futures::stream;
+use futures::stream::select_all;
 use streamies::Streamies as _;
+use tracing::debug;
 
 use crate::DBClient;
 use crate::models::musicbrainz::main_entities::MainEntity;
@@ -24,15 +26,21 @@ pub fn crawler(
     let (out_sender, out_reciever) = channel(10);
     let (crawl_sender, crawl_reciever) = unbounded();
 
-    let task = crawl_task(out_sender, crawl_reciever, client, start_nodes)
+    let task = crawl_task(out_sender, crawl_reciever, client)
         .into_stream()
         .filter_map(|val| match val {
             Ok(_) => ready(None),
             Err(e) => ready(Some(Err::<Arc<MainEntity>, crate::Error>(e))),
         });
 
-    let receiver_stream = out_reciever
+    // Starting nodes of the stream. Those are chained to the reciever stream
+    let start_stream = stream::iter(start_nodes);
+
+    let receiver_stream = start_stream
+        .chain(out_reciever)
+        // Only allow unique entities.
         .unique_by(|item| item.get_unique_id())
+        // To make sure that the items passing through are crawled.
         .map(move |item| {
             let mut crawl_sender = crawl_sender.clone();
 
@@ -44,22 +52,14 @@ pub fn crawler(
         })
         .buffer_unordered(8);
 
-    select(receiver_stream, task)
+    select_all([receiver_stream.boxed_local(), task.boxed_local()])
 }
 
 async fn crawl_task(
     out_sender: Sender<Arc<MainEntity>>,
     crawl_receiver: UnboundedReceiver<Arc<MainEntity>>,
     client: Arc<DBClient>,
-    start_nodes: Vec<Arc<MainEntity>>,
 ) -> Result<(), crate::Error> {
-    // Add the starting nodes to the output
-    // Since the output feeds any nodes passing through to the crawling queue,
-    // They will be properly crawled when the starting queue runs out
-    for node in start_nodes {
-        out_sender.clone().send(node).await?;
-    }
-
     let mut stream = crawl_receiver
         .unique_by(|item| item.get_unique_id())
         .map(|item| {
@@ -75,10 +75,14 @@ async fn crawl_task(
                     }
                 }
 
+                debug!("Crawling over entity: {}", item.get_unique_id());
+
                 match &*item {
                     MainEntity::Artist(val) => val.get_crawler(client.clone(), out_sender).await,
                     MainEntity::Recording(val) => val.get_crawler(client.clone(), out_sender).await,
                     MainEntity::Release(val) => val.get_crawler(client.clone(), out_sender).await,
+                    MainEntity::Track(val) => val.get_crawler(client.clone(), out_sender).await,
+
                     _ => Ok(()),
                 }
             }

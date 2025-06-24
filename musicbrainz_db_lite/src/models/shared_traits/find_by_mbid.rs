@@ -23,7 +23,7 @@ pub trait FindByMBID: Sized {
     }
 }
 
-pub struct MBID(String);
+pub struct MBID(pub String);
 
 impl Deref for MBID {
     type Target = str;

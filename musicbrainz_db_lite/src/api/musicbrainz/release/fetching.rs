@@ -3,7 +3,6 @@ use sqlx::SqliteConnection;
 
 use crate::MBRelease;
 use crate::Release;
-use crate::Track;
 use crate::database::client::DBClient;
 use crate::models::shared_traits::fetch_and_save::FetchAndSave;
 use crate::models::shared_traits::fetch_mbid::FetchMBID;
@@ -42,16 +41,6 @@ impl Release {
         mbid: &str,
     ) -> Result<Option<Self>, crate::Error> {
         Self::fetch_and_save_with_conn(conn, client, mbid).await
-    }
-}
-
-impl Track {
-    pub async fn refetch(
-        &self,
-        _conn: &mut sqlx::SqliteConnection,
-        _client: &crate::DBClient,
-    ) -> Result<Self, crate::Error> {
-        todo!();
     }
 }
 

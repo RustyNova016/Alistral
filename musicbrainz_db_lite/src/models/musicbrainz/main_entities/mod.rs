@@ -6,6 +6,7 @@ use tuillez::formatter::FormatWithAsync;
 
 use crate::FetchAndSave;
 use crate::RowId;
+use crate::Track;
 #[cfg(feature = "pretty_format")]
 use crate::models::musicbrainz::MusicbrainzFormater;
 use crate::models::shared_traits::HasMBID;
@@ -25,6 +26,7 @@ pub enum MainEntity {
     Label(Label),
     Recording(Recording),
     Release(Release),
+    Track(Track),
     Work(Work),
 }
 
@@ -35,21 +37,22 @@ impl MainEntity {
             && self.get_mbid() == other.get_mbid()
     }
 
-    pub async fn refetch_and_load(
-        &mut self,
-        conn: &mut sqlx::SqliteConnection,
-        client: &crate::DBClient,
-    ) -> Result<(), crate::Error> {
-        match self {
-            MainEntity::Artist(val) => val.refetch_and_load(conn, client).await?,
-            MainEntity::Label(val) => val.refetch_and_load(conn, client).await?,
-            MainEntity::Recording(val) => val.refetch_and_load(conn, client).await?,
-            MainEntity::Release(val) => val.refetch_and_load(conn, client).await?,
-            MainEntity::Work(val) => val.refetch_and_load(conn, client).await?,
-        }
+    // pub async fn refetch_and_load(
+    //     &mut self,
+    //     conn: &mut sqlx::SqliteConnection,
+    //     client: &crate::DBClient,
+    // ) -> Result<(), crate::Error> {
+    //     match self {
+    //         MainEntity::Artist(val) => val.refetch_and_load(conn, client).await?,
+    //         MainEntity::Label(val) => val.refetch_and_load(conn, client).await?,
+    //         MainEntity::Recording(val) => val.refetch_and_load(conn, client).await?,
+    //         MainEntity::Release(val) => val.refetch_and_load(conn, client).await?,
+    //         MainEntity::Track(val) => val.refetch_and_load(conn, client).await?,
+    //         MainEntity::Work(val) => val.refetch_and_load(conn, client).await?,
+    //     }
 
-        Ok(())
-    }
+    //     Ok(())
+    // }
 
     pub async fn refetch_and_load_as_task(
         &mut self,
@@ -68,6 +71,9 @@ impl MainEntity {
             MainEntity::Release(val) => {
                 *self = MainEntity::Release(val.refetch_as_task(client).await?);
             }
+            MainEntity::Track(val) => {
+                *self = MainEntity::Track(val.refetch_as_task(client).await?);
+            }
             MainEntity::Work(val) => {
                 *self = MainEntity::Work(val.refetch_as_task(client).await?);
             }
@@ -82,6 +88,7 @@ impl MainEntity {
             MainEntity::Label(val) => format!("label_{}", val.mbid),
             MainEntity::Recording(val) => format!("recording_{}", val.mbid),
             MainEntity::Release(val) => format!("release_{}", val.mbid),
+            MainEntity::Track(val) => format!("track_{}", val.gid),
             MainEntity::Work(val) => format!("work_{}", val.mbid),
         }
     }
@@ -92,6 +99,7 @@ impl MainEntity {
             MainEntity::Label(_) => "label",
             MainEntity::Recording(_) => "recording",
             MainEntity::Release(_) => "release",
+            MainEntity::Track(_) => "track",
             MainEntity::Work(_) => "work",
         };
 
@@ -106,6 +114,7 @@ impl RowId for MainEntity {
             Self::Label(val) => val.get_row_id(),
             Self::Recording(val) => val.get_row_id(),
             Self::Release(val) => val.get_row_id(),
+            Self::Track(val) => val.get_row_id(),
             Self::Work(val) => val.get_row_id(),
         }
     }
@@ -118,6 +127,7 @@ impl HasMBID for MainEntity {
             Self::Label(val) => val.get_mbid(),
             Self::Recording(val) => val.get_mbid(),
             Self::Release(val) => val.get_mbid(),
+            Self::Track(val) => val.get_mbid(),
             Self::Work(val) => val.get_mbid(),
         }
     }
@@ -133,6 +143,7 @@ impl FormatWithAsync<MusicbrainzFormater> for MainEntity {
             MainEntity::Label(val) => val.format_with_async(ft).await?,
             MainEntity::Recording(val) => val.format_with_async(ft).await?,
             MainEntity::Release(val) => val.format_with_async(ft).await?,
+            MainEntity::Track(val) => val.format_with_async(ft).await?,
             MainEntity::Work(val) => val.format_with_async(ft).await?,
         };
 

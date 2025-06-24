@@ -4,7 +4,7 @@ pub mod listenbrainz;
 pub mod musicbrainz;
 pub mod shared_traits;
 
-pub struct RowID(i64);
+pub struct RowID(pub i64);
 
 impl Deref for RowID {
     type Target = i64;

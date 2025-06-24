@@ -2,9 +2,9 @@ use musicbrainz_rs::entity::release::Track as MBTrack;
 use sqlx::sqlite::SqliteQueryResult;
 
 use crate::MBIDRedirection as _;
+use crate::Track;
 use crate::models::musicbrainz::artist_credit::ArtistCredits;
 use crate::models::musicbrainz::recording::Recording;
-use crate::models::musicbrainz::release::Track;
 
 impl Track {
     pub async fn save_api_responses(
