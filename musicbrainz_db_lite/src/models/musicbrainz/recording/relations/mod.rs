@@ -5,8 +5,10 @@ use sqlx::SqliteConnection;
 
 use crate::ArtistCredit;
 use crate::DBRelation;
+use crate::Track;
 use crate::models::musicbrainz::isrc::ISRC;
 use crate::models::musicbrainz::release::Release;
+use crate::models::musicbrainz::track::relations::TrackRecordingDBRel;
 use crate::models::shared_traits::db_relation::ArtistCreditDBRel;
 use crate::models::shared_traits::db_relation::RecordingISRCDBRel;
 use crate::utils::sqlx_utils::entity_relations::{JoinCollection, JoinRelation};
@@ -99,6 +101,14 @@ impl DBRelation<RecordingISRCDBRel> for Recording {
 
     fn get_join_statement() -> &'static str {
         "INNER JOIN `isrcs` ON recordings.id = `isrcs`.recording"
+    }
+}
+
+impl DBRelation<TrackRecordingDBRel> for Recording {
+    type ReturnedType = Track;
+
+    fn get_join_statement() -> &'static str {
+        "INNER JOIN tracks ON recordings.id = tracks.recording"
     }
 }
 

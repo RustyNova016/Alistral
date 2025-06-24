@@ -32,6 +32,15 @@ impl LabelAsArtistLint {
                     &client.mb_database,
                 )
                 .await?),
+            MainEntity::Track(val) => Ok(val
+                .get_related_entity::<ArtistFromCreditsRelation>(
+                    &mut *client
+                        .mb_database
+                        .clone()
+                        .get_raw_connection_as_task()
+                        .await?,
+                )
+                .await?),
             //TODO: Release Group
             _ => Ok(Vec::new()),
         }

@@ -2,6 +2,7 @@ use core::fmt::Write as _;
 use core::sync::atomic::AtomicU64;
 use core::sync::atomic::Ordering;
 use std::sync::Arc;
+use std::sync::LazyLock;
 
 use alistral_core::cli::colors::AlistralColors as _;
 use clap::Parser;
@@ -27,6 +28,7 @@ use symphonize::clippy::lints::soundtrack_without_disambiguation::SoundtrackWith
 use symphonize::clippy::lints::suspicious_remix::SuspiciousRemixLint;
 use tokio::sync::Semaphore;
 use tracing::debug;
+use tracing::info;
 use tuillez::OwoColorize as _;
 use tuillez::formatter::FormatWithAsync;
 
@@ -38,7 +40,8 @@ use crate::utils::cli::read_mbid_from_input;
 use crate::utils::constants::MUSIBRAINZ_FMT;
 use crate::utils::whitelist_blacklist::WhitelistBlacklist;
 
-static REFETCH_LOCK: Semaphore = Semaphore::const_new(1);
+static REFETCH_LOCK: LazyLock<Arc<Semaphore>> = LazyLock::new(|| Arc::new(Semaphore::new(1)));
+static PRINT_LOCK: LazyLock<Arc<Semaphore>> = LazyLock::new(|| Arc::new(Semaphore::new(1)));
 static PROCESSED_COUNT: AtomicU64 = AtomicU64::new(0);
 
 #[derive(Parser, Debug, Clone)]
@@ -68,7 +71,7 @@ impl MusicbrainzClippyCommand {
             WhitelistBlacklist::BlackList(Vec::new())
         };
 
-        mb_clippy(self.get_start_recordings().await, &filter).await;
+        mb_clippy(self.get_start_recordings().await, Arc::new(filter)).await;
     }
 
     async fn get_start_recordings(&self) -> Vec<Recording> {
@@ -104,7 +107,7 @@ impl MusicbrainzClippyCommand {
     }
 }
 
-pub async fn mb_clippy(start_recordings: Vec<Recording>, filter: &WhitelistBlacklist<String>) {
+pub async fn mb_clippy(start_recordings: Vec<Recording>, filter: Arc<WhitelistBlacklist<String>>) {
     PROCESSED_COUNT.store(1, Ordering::Release);
     let nodes = start_recordings
         .into_iter()
@@ -114,7 +117,10 @@ pub async fn mb_clippy(start_recordings: Vec<Recording>, filter: &WhitelistBlack
     let crawler = crawler(ALISTRAL_CLIENT.musicbrainz_db.clone(), nodes);
 
     let crawler = crawler
-        .map_ok(|entity| process_lints(entity.clone(), filter))
+        .map_ok(|entity| {
+            let filter = filter.clone();
+            tokio::spawn(async move { process_lints(entity.clone(), filter.clone()).await })
+        })
         .extract_future_ok()
         .buffer_unordered(8);
 
@@ -124,6 +130,8 @@ pub async fn mb_clippy(start_recordings: Vec<Recording>, filter: &WhitelistBlack
         .try_next()
         .await
         .expect("Couldn't get the next item")
+        .transpose()
+        .expect("Join error")
     {}
 
     println!("No more data to process");
@@ -131,22 +139,27 @@ pub async fn mb_clippy(start_recordings: Vec<Recording>, filter: &WhitelistBlack
 
 // === Process lints
 
-async fn process_lints(entity: Arc<MainEntity>, filter: &WhitelistBlacklist<String>) {
+async fn process_lints(entity: Arc<MainEntity>, filter: Arc<WhitelistBlacklist<String>>) {
     let entity = &mut entity.as_ref().clone();
 
-    process_lint::<DashETILint>(entity, filter).await;
-    process_lint::<MissingISRCLint>(entity, filter).await;
-    process_lint::<MissingWorkLint>(entity, filter).await;
-    process_lint::<LabelAsArtistLint>(entity, filter).await;
-    process_lint::<MissingArtistLink>(entity, filter).await;
-    process_lint::<MissingBarcodeLint>(entity, filter).await;
-    process_lint::<MissingRemixRelLint>(entity, filter).await;
-    process_lint::<SuspiciousRemixLint>(entity, filter).await;
-    process_lint::<MissingRecordingLink>(entity, filter).await;
-    process_lint::<MissingRemixerRelLint>(entity, filter).await;
-    process_lint::<SoundtrackWithoutDisambiguationLint>(entity, filter).await;
+    process_lint::<DashETILint>(entity, &filter).await;
+    process_lint::<MissingISRCLint>(entity, &filter).await;
+    process_lint::<MissingWorkLint>(entity, &filter).await;
+    process_lint::<LabelAsArtistLint>(entity, &filter).await;
+    process_lint::<MissingArtistLink>(entity, &filter).await;
+    process_lint::<MissingBarcodeLint>(entity, &filter).await;
+    process_lint::<MissingRemixRelLint>(entity, &filter).await;
+    process_lint::<SuspiciousRemixLint>(entity, &filter).await;
+    process_lint::<MissingRecordingLink>(entity, &filter).await;
+    process_lint::<MissingRemixerRelLint>(entity, &filter).await;
+    process_lint::<SoundtrackWithoutDisambiguationLint>(entity, &filter).await;
 
-    println!(
+    let _lock = PRINT_LOCK
+        .acquire()
+        .await
+        .expect("Print lock has been closed");
+
+    info!(
         "[Processed - {}] {}",
         PROCESSED_COUNT.fetch_add(1, Ordering::AcqRel),
         entity
@@ -183,7 +196,7 @@ async fn process_lint<L: MbClippyLint>(
     // There might be an issue, so grab the latest data and recheck
     // Also prevent others from fetching data that might get stale after the user fix this lint
 
-    let _ = REFETCH_LOCK
+    let _lock = REFETCH_LOCK
         .acquire()
         .await
         .expect("Refetch lock has been closed");
@@ -211,6 +224,11 @@ async fn process_lint<L: MbClippyLint>(
 // === Printing ===
 
 async fn print_lint<L: MbClippyLint>(lint: &L) {
+    let _lock = PRINT_LOCK
+        .acquire()
+        .await
+        .expect("Print lock has been closed");
+
     let mut report = String::new();
     writeln!(
         &mut report,

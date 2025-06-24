@@ -4,12 +4,12 @@ use sqlx::Acquire;
 use sqlx::SqliteConnection;
 
 use crate::Error;
+use crate::Track;
 use crate::models::musicbrainz::artist_credit::ArtistCredits;
 use crate::models::musicbrainz::genre::genre_tag::GenreTag;
 use crate::models::musicbrainz::isrc::ISRC;
 use crate::models::musicbrainz::recording::Recording;
 use crate::models::musicbrainz::release::Release;
-use crate::models::musicbrainz::release::Track;
 use crate::models::musicbrainz::tags::Tag;
 use crate::models::shared_traits::completeness::CompletenessFlag;
 use crate::models::shared_traits::fetch_and_save::FetchAndSave;
