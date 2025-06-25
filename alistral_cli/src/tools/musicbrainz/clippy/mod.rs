@@ -122,7 +122,7 @@ pub async fn mb_clippy(start_recordings: Vec<Recording>, filter: Arc<WhitelistBl
             tokio::spawn(async move { process_lints(entity.clone(), filter.clone()).await })
         })
         .extract_future_ok()
-        .buffer_unordered(8);
+        .buffer_unordered(16);
 
     pin_mut!(crawler);
 
