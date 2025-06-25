@@ -10,7 +10,7 @@ tuillez = { path = "../tuillez" }
 
 thiserror = "2.0.11"
 sqlx = "0.8.3"
-owo-colors = "4.2.1"
+owo-colors = "4.2.2"
 regex = "1.11.1"
 format-url = "0.6.2"
 url = "2.5.4"
