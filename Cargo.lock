@@ -2185,9 +2185,9 @@ dependencies = [
 
 [[package]]
 name = "musicbrainz_rs"
-version = "0.10.0"
+version = "0.10.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "42d6df606ede312c195a574d5b785c2f95d19fcf67b22d359357383aa46eceb9"
+checksum = "1ff2d5030dfceaccafd54e2778ec23aafa1f6d677c36f338ecc7edd8cdb1a7bf"
 dependencies = [
  "chrono",
  "glob",
@@ -2200,6 +2200,7 @@ dependencies = [
  "serde_json",
  "thiserror 2.0.12",
  "tokio",
+ "tracing",
 ]
 
 [[package]]

@@ -1,5 +1,4 @@
 use musicbrainz_db_lite::MainEntity;
-use musicbrainz_db_lite::Recording;
 use regex::Regex;
 use tuillez::formatter::FormatWithAsync;
 
@@ -11,8 +10,18 @@ use crate::clippy::lint_severity::LintSeverity;
 use crate::utils::formater;
 
 pub struct DashETILint {
-    recording: Recording,
+    entity: MainEntity,
     eti: String,
+}
+
+impl DashETILint {
+    pub fn get_title(entity: &MainEntity) -> Option<String> {
+        match entity {
+            MainEntity::Recording(val) => Some(val.title.to_string()),
+            MainEntity::Track(val) => Some(val.title.to_string()),
+            _ => None,
+        }
+    }
 }
 
 impl MbClippyLint for DashETILint {
@@ -24,7 +33,7 @@ impl MbClippyLint for DashETILint {
         _client: &SymphonyzeClient,
         entity: &MainEntity,
     ) -> Result<Option<Self>, crate::Error> {
-        let MainEntity::Recording(recording) = entity else {
+        let Some(title) = Self::get_title(entity) else {
             return Ok(None);
         };
 
@@ -33,7 +42,7 @@ impl MbClippyLint for DashETILint {
             Regex::new(r"(?i).+ - (original mix|sped up|slowed down|extra slowed down|(.+remix))$")
                 .unwrap();
 
-        let eti = match regex.captures(&recording.title) {
+        let eti = match regex.captures(&title) {
             None => return Ok(None),
             Some(val) => val
                 .get(0)
@@ -41,7 +50,7 @@ impl MbClippyLint for DashETILint {
         };
 
         Ok(Some(Self {
-            recording: recording.clone(),
+            entity: entity.clone(),
             eti: eti.as_str().to_string(),
         }))
     }
@@ -53,30 +62,44 @@ impl MbClippyLint for DashETILint {
         Ok(format!(
             "Recording \"{}\" seems to have ETI after a dash (-). This is often seen on spotify imports as spotify uses this style of ETI
     -> Convert the dash to parenthesis: `{} ({})`",
-            self.recording.format_with_async(&formater(client)).await?,
-                self.recording.title.clone().split(" - ").next().unwrap_or(""),
+            self.entity.format_with_async(&formater(client)).await?,
+            Self::get_title(&self.entity).clone().unwrap_or_default().split(" - ").next().unwrap_or(""),
                 self.eti
         ))
     }
 
     async fn get_links(
         &self,
-        _client: &SymphonyzeClient,
+        client: &SymphonyzeClient,
     ) -> Result<Vec<MbClippyLintLink>, crate::Error> {
         let mut out = Vec::new();
 
-        out.push(MbClippyLintLink {
-            name: "Recording".to_string(),
-            url: format!("https://musicbrainz.org/recording/{}", self.recording.mbid),
-        });
+        match &self.entity {
+            MainEntity::Recording(recording) => {
+                out.push(MbClippyLintLink {
+                    name: "Recording editing".to_string(),
+                    url: format!("https://musicbrainz.org/recording/{}/edit", recording.mbid),
+                });
+            }
+            MainEntity::Track(track) => {
+                let release = track
+                    .get_release(
+                        &mut *client
+                            .mb_database
+                            .clone()
+                            .get_raw_connection_as_task()
+                            .await?,
+                    )
+                    .await?
+                    .expect("A track didn't have a release");
 
-        out.push(MbClippyLintLink {
-            name: "Recording editing".to_string(),
-            url: format!(
-                "https://musicbrainz.org/recording/{}/edit",
-                self.recording.mbid
-            ),
-        });
+                out.push(MbClippyLintLink {
+                    name: "Release editing".to_string(),
+                    url: format!("https://musicbrainz.org/release/{}/edit", release.mbid),
+                });
+            }
+            _ => {}
+        }
 
         Ok(out)
     }
