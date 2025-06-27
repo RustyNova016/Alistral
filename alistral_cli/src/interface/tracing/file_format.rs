@@ -35,7 +35,7 @@ where
         let current_thread = std::thread::current();
         match current_thread.name() {
             Some(name) => {
-                write!(writer, "{}] ", name)?;
+                write!(writer, "{name}] ")?;
             }
             // Close the braket
             None => {
@@ -45,7 +45,7 @@ where
 
         // === Filename ===
         if let Some(filename) = metadata.file() {
-            write!(writer, "{}: ", filename)?;
+            write!(writer, "{filename}: ")?;
         }
 
         // Write fields on the event

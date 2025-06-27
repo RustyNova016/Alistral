@@ -43,10 +43,10 @@ impl ReverseMappingCommand {
             println!("Title: {}", rec.title);
             println!("Artist credit: {}", rec.artist_credits);
             if let Some(release) = rec.release {
-                println!("Release: {}", release);
+                println!("Release: {release}");
             }
             if let Some(mbid) = rec.mbid {
-                println!("MBID: {}", mbid);
+                println!("MBID: {mbid}");
             }
         }
 

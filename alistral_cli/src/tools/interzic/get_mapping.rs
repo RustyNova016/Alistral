@@ -82,7 +82,7 @@ impl GetMappingCommand {
 
                 match id {
                     None => println!("Couldn't find a mapping for the recording"),
-                    Some(id) => println!("Mapped to video: https://youtu.be/{}", id),
+                    Some(id) => println!("Mapped to video: https://youtu.be/{id}",),
                 }
             }
         }

@@ -127,8 +127,7 @@ impl MbClippyLint for MissingBarcodeLint {
             out.push(MbClippyLintLink {
                 name: "Harmony search".to_string(),
                 url: format!(
-                    "https://harmony.pulsewidth.org.uk/release?url={}&category=prefered",
-                    url
+                    "https://harmony.pulsewidth.org.uk/release?url={url}&category=prefered"
                 ),
             });
         }
@@ -144,8 +143,7 @@ impl MbClippyLint for MissingBarcodeLint {
 
         if let Some(url) = &self.barcode_url {
             hints.push(MbClippyLintHint::new(format!(
-                "Found a linked url that can provide a barcode: `{}`",
-                url
+                "Found a linked url that can provide a barcode: `{url}`"
             )));
         } else {
             hints.push(MbClippyLintHint::new("No barcode has been entered for this release, nor has been set has not having one.".to_string()));
