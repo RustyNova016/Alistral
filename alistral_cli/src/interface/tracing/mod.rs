@@ -170,8 +170,8 @@ fn get_domain(writer: &mut format::Writer<'_>, metadata: &Metadata<'static>) -> 
         "alistral_core" => "[Alistral]".alistral_green(),
         "musicbrainz_db_lite" => "[MusicBrainz DB]".db_lite_purple(),
         "interzic" => "[Interzic]".interzic_turquoize(),
-        _ => format!("[{}]", top_crate),
+        _ => format!("[{top_crate}]"),
     };
 
-    write!(writer, "{} ", content)
+    write!(writer, "{content} ")
 }

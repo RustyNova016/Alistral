@@ -143,7 +143,7 @@ mod tests {
                 .await
                 .expect("Error during fetching");
 
-            println!("{:#?}", right_value);
+            println!("{right_value:#?}");
 
             right_value
                 .iter()
@@ -179,7 +179,7 @@ mod tests {
             let mut found = false;
             for relation in right_value {
                 let related = relation.get_entity_1_as_left(conn).await.unwrap();
-                println!("{:#?}", related);
+                println!("{related:#?}");
                 if related.mbid == right {
                     found = true
                 }

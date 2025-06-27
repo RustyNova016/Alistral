@@ -65,7 +65,7 @@ where
         let mut formated = self.print_stream();
 
         while let Some(line) = formated.try_next().await? {
-            println!("{}", line);
+            println!("{line}");
 
             if !pager.inc() {
                 break;

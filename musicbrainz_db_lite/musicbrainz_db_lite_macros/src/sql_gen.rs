@@ -8,7 +8,7 @@ pub(crate) fn get_insert_fields_from_idents(fields: &Fields) -> String {
     let mut names = Vec::new();
     for field in fields {
         let identifier = field.ident.as_ref().unwrap();
-        names.push(format!("`{}`", identifier));
+        names.push(format!("`{identifier}`"));
     }
 
     format!("({})", names.join(", "))
@@ -52,7 +52,7 @@ pub(crate) fn get_on_conflict_fields_from_idents(
             continue;
         }
 
-        names.push(format!("`{}` = excluded.`{}`", identifier, identifier));
+        names.push(format!("`{identifier}` = excluded.`{identifier}`"));
     }
 
     names.join(", ").to_string()

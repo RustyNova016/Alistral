@@ -2,12 +2,9 @@ use proc_macro2::TokenStream;
 use syn::Ident;
 
 pub fn impl_update_date(struct_name: &Ident, table_name: &str, pk: &str) -> TokenStream {
-    let sql = format!(
-        "UPDATE `{}` SET `full_update_date` = ? WHERE {} = ?",
-        table_name, pk
-    );
+    let sql = format!("UPDATE `{table_name}` SET `full_update_date` = ? WHERE {pk} = ?");
 
-    let is_fully_fetched_doc = format!("Return true if the {} is fully fetched.", struct_name);
+    let is_fully_fetched_doc = format!("Return true if the {struct_name} is fully fetched.");
 
     quote::quote! {
         /// Reset the full update date to be now

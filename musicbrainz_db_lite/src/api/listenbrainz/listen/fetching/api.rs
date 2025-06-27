@@ -19,11 +19,11 @@ pub(super) async fn fetch_user_listens(
     );
 
     if let Some(min_ts) = min_ts {
-        write!(&mut url, "&min_ts={}", min_ts).unwrap();
+        write!(&mut url, "&min_ts={min_ts}").unwrap();
     }
 
     if let Some(max_ts) = max_ts {
-        write!(&mut url, "&max_ts={}", max_ts).unwrap();
+        write!(&mut url, "&max_ts={max_ts}").unwrap();
     }
 
     let body = reqwest::get(url).await?.text().await?;
