@@ -9,6 +9,7 @@ use alistral_core::datastructures::listen_collection::traits::ListenCollectionRe
 use clap::Parser;
 use clap::ValueEnum;
 use derive_more::IsVariant;
+use musicbrainz_db_lite::Label;
 use musicbrainz_db_lite::RowId;
 use musicbrainz_db_lite::models::musicbrainz::artist::Artist;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
@@ -78,6 +79,7 @@ pub enum StatsTarget {
     ReleaseGroup,
     Work,
     Tag,
+    Label,
 }
 
 impl StatsTarget {
@@ -89,6 +91,7 @@ impl StatsTarget {
             Self::ReleaseGroup => "release_group",
             Self::Work => "work",
             Self::Tag => "tag",
+            Self::Label => "label",
         }
     }
 }
@@ -136,6 +139,15 @@ impl StatsCommand {
                 self.run_stats::<SimpleTag, RecordingWithListensCollection, ListenCountStats>(data)
                     .await
             }
+            (SortBy::ListenCount, StatsTarget::Label) => {
+                let data = self.label_stats(user).await?;
+                self.run_stats::<Label, ReleaseWithRecordingsCollection, ListenCountStats>(data)
+                    .await
+            }
+
+            // ====================
+            // Listen duration
+            // ====================
             (SortBy::ListenDuration, StatsTarget::Artist) => {
                 let data = artist_stats(&ALISTRAL_CLIENT, user).await?;
 
@@ -171,6 +183,11 @@ impl StatsCommand {
                     data,
                 )
                 .await
+            }
+            (SortBy::ListenDuration, StatsTarget::Label) => {
+                let data = self.label_stats(user).await?;
+                self.run_stats::<Label, ReleaseWithRecordingsCollection, ListenDurationStats>(data)
+                    .await
             } // _ => {
               //     println!(
               //         "This type of statistic is not implemented for this entity. If you believe it should be able to exist, feel free to create an issue"

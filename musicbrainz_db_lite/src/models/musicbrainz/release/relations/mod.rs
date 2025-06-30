@@ -10,6 +10,7 @@ use crate::ArtistCredit;
 use crate::DBClient;
 use crate::DBRelation;
 use crate::FetchAsComplete;
+use crate::Label;
 use crate::Track;
 use crate::models::musicbrainz::main_entities::MainEntity;
 use crate::models::shared_traits::db_relation::ArtistCreditDBRel;
@@ -104,5 +105,18 @@ impl DBRelation<TrackReleaseDBRel> for Release {
     fn get_join_statement() -> &'static str {
         "INNER JOIN tracks ON tracks.media = medias.id
         INNER JOIN medias ON medias.`release` = releases.id"
+    }
+}
+
+/// [`crate::Release`] (N:N) -> [`crate::Label`]
+pub struct ReleaseLabelDBRel;
+
+impl DBRelation<ReleaseLabelDBRel> for Release {
+    type ReturnedType = Label;
+
+    fn get_join_statement() -> &'static str {
+        "INNER JOIN label_infos ON releases.id = label_infos.release
+        INNER JOIN labels ON label_infos.label = labels_gid_redirect.gid
+        INNER JOIN labels_gid_redirect ON labels_gid_redirect.new_id = labels.id"
     }
 }
