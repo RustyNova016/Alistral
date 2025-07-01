@@ -11,10 +11,10 @@ for member in "${members[@]}"; do
     echo "Verifying ${member}"
     echo ""
 
-    cargo msrv verify
+    cargo msrv verify --all-features
     if [ $? -ne 0 ] 
     then
-        cargo msrv find
+        cargo msrv find --all-features
         exit 1
     fi
     cd ../

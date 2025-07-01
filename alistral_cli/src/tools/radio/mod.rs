@@ -54,6 +54,7 @@ pub(super) async fn convert_recordings(
 ) -> Result<Vec<MessyRecording>, crate::Error> {
     Span::current().pb_set_length(recordings.len() as u64);
     Span::current().pb_set_message("Saving playlists recordings");
+
     let mut messy = Vec::new();
 
     for recording in recordings {

@@ -58,6 +58,7 @@ pub enum Error {
     #[error(transparent)]
     AlistralCore(#[from] alistral_core::Error),
 
+    #[cfg(feature = "interzicf")]
     #[error(transparent)]
     Interzic(#[from] interzic::Error),
 

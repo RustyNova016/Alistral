@@ -1,5 +1,7 @@
 use clap::Parser;
 
+use crate::interface::tracing::init_tracer;
+use crate::models::client::AlistralCliClient;
 use database::cleanup::cleanup_database;
 use models::cli::Cli;
 use tracing::debug;
@@ -15,11 +17,8 @@ pub(crate) mod testing;
 pub(crate) mod tools;
 pub(crate) mod utils;
 
-pub(crate) use crate::models::client::ALISTRAL_CLIENT;
-pub(crate) use crate::models::error::Error;
-
-use crate::interface::tracing::init_tracer;
-use crate::models::client::AlistralCliClient;
+pub use crate::models::client::ALISTRAL_CLIENT;
+pub use crate::models::error::Error;
 
 #[tokio::main]
 async fn main() {

@@ -11,7 +11,7 @@ for member in "${members[@]}"; do
     echo "Verifying ${member}"
     echo ""
 
-    cargo minimal-versions check --direct
+    cargo minimal-versions check --direct --all-features
     if [ $? -ne 0 ] 
     then
         exit 1

@@ -12,19 +12,25 @@ use clap_verbosity_flag::InfoLevel;
 use clap_verbosity_flag::Verbosity;
 use config::ConfigCli;
 use listens::ListenCommand;
+#[cfg(feature = "lookup")]
 use lookup::LookupCommand;
 use mapping::MappingCommand;
+#[cfg(feature = "musicbrainz")]
 use musicbrainz::MusicbrainzCommand;
 use tuillez::fatal_error::FatalError;
 use unstable::UnstableCommand;
 
+#[cfg(feature = "interzicf")]
 use crate::models::cli::interzic::InterzicCommand;
+#[cfg(feature = "radio")]
 use crate::models::cli::radio::RadioCommand;
 use crate::tools::bumps::bump_command;
 use crate::tools::bumps::bump_down_command;
 use crate::tools::compatibility::compatibility_command;
 use crate::tools::daily::daily_report;
+#[cfg(feature = "interzicf")]
 use crate::tools::playlist::PlaylistCommand;
+#[cfg(feature = "stats")]
 use crate::tools::stats::StatsCommand;
 
 use super::config::Config;
@@ -32,11 +38,15 @@ use super::config::Config;
 pub mod cache;
 pub mod common;
 pub mod config;
+#[cfg(feature = "interzic")]
 pub mod interzic;
 pub mod listens;
+#[cfg(feature = "lookup")]
 pub mod lookup;
 pub mod mapping;
+#[cfg(feature = "musicbrainz")]
 pub mod musicbrainz;
+#[cfg(feature = "radio")]
 pub mod radio;
 pub mod unstable;
 
@@ -140,27 +150,33 @@ pub enum Commands {
         username: Option<String>,
     },
 
+    #[cfg(feature = "interzic")]
     /// Interact with the interzic database
     Interzic(InterzicCommand),
 
     /// Commands to edit listens
     Listens(ListenCommand),
 
+    #[cfg(feature = "lookup")]
     /// Get detailled information about an entity
     Lookup(LookupCommand),
 
     /// Commands for interacting with listen mappings
     Mapping(MappingCommand),
 
+    #[cfg(feature = "musicbrainz")]
     /// Commands for musicbrainz stuff
     Musicbrainz(MusicbrainzCommand),
 
+    #[cfg(feature = "interzicf")]
     /// Interact with playlists
     Playlist(PlaylistCommand),
 
+    #[cfg(feature = "radio")]
     /// Generate radio playlists for you
     Radio(RadioCommand),
 
+    #[cfg(feature = "stats")]
     /// Shows top statistics for a specific target
     Stats(StatsCommand),
 
@@ -170,12 +186,14 @@ pub enum Commands {
 impl Commands {
     pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> Result<(), FatalError> {
         match self {
+            #[cfg(feature = "stats")]
             Self::Stats(val) => val.run(conn).await?,
 
             Self::Compatibility { user_a, user_b } => {
                 compatibility_command(conn, user_a, user_b).await;
             }
 
+            #[cfg(feature = "radio")]
             Self::Radio(val) => val.run(conn).await?,
 
             Self::Cache(val) => val.run(conn).await?,
@@ -184,16 +202,20 @@ impl Commands {
 
             Self::Daily { username } => daily_report(conn, &Config::check_username(username)).await,
 
+            #[cfg(feature = "interzic")]
             Self::Interzic(val) => val.run(conn).await?,
 
             Self::Listens(val) => val.run(conn).await?,
 
+            #[cfg(feature = "lookup")]
             Self::Lookup(val) => val.run(conn).await?,
 
             Self::Mapping(val) => val.run(conn).await?,
 
+            #[cfg(feature = "musicbrainz")]
             Self::Musicbrainz(val) => val.run(conn).await,
 
+            #[cfg(feature = "interzicf")]
             Self::Playlist(val) => val.run(conn).await?,
 
             Self::Bump(val) => bump_command(conn, val.clone()).await,

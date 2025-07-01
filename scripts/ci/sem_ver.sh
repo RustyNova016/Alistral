@@ -12,7 +12,7 @@ for member in "${members[@]}"; do
     echo "Verifying ${member}"
     echo ""
 
-    cargo semver-checks
+    cargo semver-checks --all-features
     if [ $? -ne 0 ] 
     then
         exit 1
