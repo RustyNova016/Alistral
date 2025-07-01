@@ -36,7 +36,7 @@ jobs:
       - uses: taiki-e/install-action@cargo-hack
         
       - name: Run tests
-        run: cargo hack test --ignore-private
+        run: cargo hack test --all-features --ignore-private
 
   clippy:
     env: 
@@ -69,7 +69,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@nightly
       - uses: Swatinem/rust-cache@v2
       - uses: dtolnay/install@cargo-docs-rs
-      - run: cargo doc --no-deps --document-private-items
+      - run: cargo doc --all-features --no-deps --document-private-items
 
   fmt:
     runs-on: ubuntu-latest

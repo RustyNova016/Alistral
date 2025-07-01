@@ -13,6 +13,7 @@ pub struct DataStorage {
 }
 
 impl DataStorage {
+    #[cfg(feature = "radio")]
     /// Increment the playlist count, returning the old count for usage
     pub fn incr_playlist_count(&mut self) -> u64 {
         let count = self.playlist_count;

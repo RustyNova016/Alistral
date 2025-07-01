@@ -3,6 +3,7 @@ use std::collections::HashMap;
 use chrono::DateTime;
 use chrono::Duration;
 use chrono::Utc;
+#[cfg(feature = "radio")]
 use itertools::Itertools;
 use serde::Deserialize;
 use serde::Serialize;
@@ -17,6 +18,7 @@ impl RecordingTimeoutConfig {
         self.0.insert(recording.to_string(), Utc::now() + duration);
     }
 
+    #[cfg(feature = "radio")]
     pub fn get_timed_out_recordings(&self) -> Vec<String> {
         self.0
             .iter()

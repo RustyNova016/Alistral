@@ -1,5 +1,6 @@
 use core::ops::Deref;
 use core::ops::DerefMut;
+#[cfg(feature = "radio")]
 use std::sync::RwLock;
 // use std::sync::RwLockReadGuard;
 use std::sync::RwLockWriteGuard;
@@ -7,9 +8,12 @@ use std::thread::panicking;
 
 use super::DataFile;
 
+#[cfg(feature = "radio")]
 pub struct FileGuard<T: DataFile>(RwLock<T>);
 
+#[cfg(feature = "radio")]
 impl<T: DataFile> FileGuard<T> {
+    #[cfg(feature = "radio")]
     pub fn new(config: T) -> Self {
         Self(RwLock::new(config))
     }
@@ -25,6 +29,7 @@ impl<T: DataFile> FileGuard<T> {
     //     self.read().expect("Lock poisoned")
     // }
 
+    #[cfg(feature = "radio")]
     pub fn write(
         &self,
     ) -> Result<FileWriteGuard<'_, T>, std::sync::PoisonError<std::sync::RwLockWriteGuard<'_, T>>>

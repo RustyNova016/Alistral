@@ -2,11 +2,17 @@ pub mod bumps;
 pub mod cache;
 pub mod compatibility;
 pub mod daily;
+#[cfg(feature = "interzicf")]
 pub mod interzic;
 pub mod listens;
+#[cfg(feature = "lookup")]
 pub mod lookup;
+#[cfg(feature = "musicbrainz")]
 pub mod musicbrainz;
+#[cfg(feature = "interzicf")]
 pub mod playlist;
+#[cfg(feature = "radio")]
 pub mod radio;
+#[cfg(feature = "stats")]
 pub mod stats;
 pub mod unstable;

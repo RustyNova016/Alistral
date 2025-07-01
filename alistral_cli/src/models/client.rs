@@ -5,18 +5,23 @@ use std::sync::LazyLock;
 
 use alistral_core::AlistralClient;
 use futures::executor::block_on;
+#[cfg(feature = "interzicf")]
 use interzic::InterzicClient;
 use listenbrainz::raw::Client as ListenbrainzClient;
 use musicbrainz_db_lite::DBClient;
 use musicbrainz_db_lite::client::MusicBrainzClient;
+#[cfg(feature = "clippy")]
 use symphonize::SymphonyzeClient;
 use tuillez::fatal_error::IntoFatal;
 
 use crate::database::DB_LOCATION;
 use crate::models::config::Config;
 use crate::models::config::config_trait::ConfigFile;
+#[cfg(feature = "interzicf")]
 use crate::utils::constants::INTERZIC_DB;
+#[cfg(feature = "interzicf")]
 use crate::utils::constants::TOKENCACHE;
+#[cfg(feature = "interzicf")]
 use crate::utils::constants::YT_SECRET_FILE;
 use crate::utils::env::in_offline_mode;
 use crate::utils::env::temp_database;
@@ -27,9 +32,11 @@ pub static ALISTRAL_CLIENT: LazyLock<AlistralCliClient> =
 pub struct AlistralCliClient {
     pub config: Config,
     pub core: Arc<AlistralClient>,
+    #[cfg(feature = "interzicf")]
     pub interzic: Arc<InterzicClient>,
     pub listenbrainz: Arc<ListenbrainzClient>,
     pub musicbrainz_db: Arc<DBClient>,
+    #[cfg(feature = "clippy")]
     pub symphonize: Arc<SymphonyzeClient>,
 }
 
@@ -40,17 +47,21 @@ impl AlistralCliClient {
         let listenbrainz = Self::create_lb_client(&config);
         let musicbrainz_db =
             Self::create_mb_db_client(musicbrainz.clone(), listenbrainz.clone()).await;
+        #[cfg(feature = "interzicf")]
         let interzic =
             Self::create_interzic(musicbrainz, listenbrainz.clone(), musicbrainz_db.clone()).await;
         let core = Self::create_core_client(musicbrainz_db.clone(), listenbrainz.clone());
+        #[cfg(feature = "clippy")]
         let symphonize = Self::create_symphonize_client(musicbrainz_db.clone());
 
         Ok(Self {
             config,
             core,
+            #[cfg(feature = "interzicf")]
             interzic,
             listenbrainz,
             musicbrainz_db,
+            #[cfg(feature = "clippy")]
             symphonize,
         })
     }
@@ -93,6 +104,7 @@ impl AlistralCliClient {
         Arc::new(musicbrainz_db)
     }
 
+    #[cfg(feature = "interzicf")]
     async fn create_interzic(
         musicbrainz_rs: Arc<MusicBrainzClient>,
         listenbrainz: Arc<ListenbrainzClient>,
@@ -102,9 +114,11 @@ impl AlistralCliClient {
         builder
             .create_database_if_missing(&INTERZIC_DB)
             .expect("Couldn't create interzic database");
+
         builder
             .read_database(INTERZIC_DB.clone().to_str().unwrap())
             .expect("Couldn't connect to interzic database");
+
         builder
             .migrate_database()
             .await
@@ -151,6 +165,7 @@ impl AlistralCliClient {
         block_on(Self::create_or_fatal())
     }
 
+    #[cfg(feature = "clippy")]
     pub fn create_symphonize_client(musicbrainz_db: Arc<DBClient>) -> Arc<SymphonyzeClient> {
         Arc::new(SymphonyzeClient {
             mb_database: musicbrainz_db,

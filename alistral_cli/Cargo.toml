@@ -13,10 +13,10 @@ rust-version = "1.85.1"
 [dependencies]
 # Workspace dependencies
 alistral_core = { path = "../alistral_core" }
-interzic = { path = "../interzic" }
+interzic = { path = "../interzic", optional = true }
 tuillez = { path = "../tuillez" }
 musicbrainz-db-lite = { path = "../musicbrainz_db_lite", features = ["pretty_format"] }
-symphonize = { path = "../symphonize" }
+symphonize = { path = "../symphonize", optional = true}
 
 # Musicbrainz dependencies
 #listenbrainz = "0.8.1"
@@ -63,6 +63,17 @@ dotenvy = "0.15.7"
 streamies = "0.2.2"
 tracing-appender = "0.2.3"
 url = "2.5.4"
+
+[features]
+full = ["clippy", "musicbrainz", "lookup", "stats"]
+musicbrainz = []
+clippy = ["musicbrainz", "symphonize"]
+lookup = ["legacy_ent_with_listen"]
+legacy_ent_with_listen = []
+radio = ["interzicf"]
+stats = []
+# Subcrates
+interzicf = ["interzic"]
 
 # The profile that 'cargo dist' will build with
 [profile.dist]

@@ -1,7 +1,10 @@
 use core::fmt::Display;
 
+#[cfg(feature = "radio")]
 use chrono::DateTime;
+#[cfg(feature = "radio")]
 use chrono::Duration;
+#[cfg(feature = "radio")]
 use chrono::Utc;
 use clap::ValueEnum;
 use derive_more::IsVariant;
@@ -64,6 +67,7 @@ pub enum Timeframe {
 }
 
 impl Timeframe {
+    #[cfg(feature = "radio")]
     pub fn get_start_date(&self) -> DateTime<Utc> {
         let now = Utc::now();
 
