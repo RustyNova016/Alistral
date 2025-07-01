@@ -1,4 +1,5 @@
 use musicbrainz_db_lite_macros::{MainEntity, Upsert};
+use sequelles::has_rowid::HasRowID;
 use serde::Deserialize;
 use serde::Serialize;
 use sqlx::FromRow;
@@ -61,6 +62,12 @@ impl_db_relation_fetch_methods!(Release, MBRelease);
 
 impl crate::RowId for Release {
     fn get_row_id(&self) -> i64 {
+        self.id
+    }
+}
+
+impl HasRowID for Release {
+    fn rowid(&self) -> i64 {
         self.id
     }
 }
