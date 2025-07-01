@@ -23,7 +23,7 @@ fn delete_or_not_found<P: AsRef<Path>>(path: P) -> Result<(), crate::Error> {
                 return Ok(());
             }
 
-            Err(crate::Error::DatabaseIoError(err))
+            Err(crate::Error::DatabaseIo(err))
         }
     }
 }

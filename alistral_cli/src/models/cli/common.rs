@@ -46,6 +46,10 @@ pub enum ConfigBool {
     False,
 }
 
+#[expect(
+    clippy::enum_variant_names,
+    reason = "This is used for the CLI. So the postfix must stay"
+)]
 #[derive(ValueEnum, Clone, Debug, Copy, Default, IsVariant)]
 pub enum Timeframe {
     /// Uses the last 30 days from now

@@ -4,19 +4,19 @@ use database::cleanup::cleanup_database;
 use models::cli::Cli;
 use tracing::debug;
 
-pub mod api;
-pub mod database;
-pub mod datastructures;
-pub mod interface;
-pub mod models;
+pub(crate) mod api;
+pub(crate) mod database;
+pub(crate) mod datastructures;
+pub(crate) mod interface;
+pub(crate) mod models;
 #[cfg(test)]
-pub mod testing;
+pub(crate) mod testing;
 /// This is the module containing all the different tools of this app
-pub mod tools;
-pub mod utils;
+pub(crate) mod tools;
+pub(crate) mod utils;
 
-pub use crate::models::client::ALISTRAL_CLIENT;
-pub use crate::models::error::Error;
+pub(crate) use crate::models::client::ALISTRAL_CLIENT;
+pub(crate) use crate::models::error::Error;
 
 use crate::interface::tracing::init_tracer;
 use crate::models::client::AlistralCliClient;

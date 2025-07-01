@@ -1,7 +1,7 @@
 use core::ops::Deref;
 use core::ops::DerefMut;
 use std::sync::RwLock;
-use std::sync::RwLockReadGuard;
+// use std::sync::RwLockReadGuard;
 use std::sync::RwLockWriteGuard;
 use std::thread::panicking;
 
@@ -14,16 +14,16 @@ impl<T: DataFile> FileGuard<T> {
         Self(RwLock::new(config))
     }
 
-    pub fn read(
-        &self,
-    ) -> Result<RwLockReadGuard<'_, T>, std::sync::PoisonError<std::sync::RwLockReadGuard<'_, T>>>
-    {
-        self.0.read()
-    }
+    // pub fn read(
+    //     &self,
+    // ) -> Result<RwLockReadGuard<'_, T>, std::sync::PoisonError<std::sync::RwLockReadGuard<'_, T>>>
+    // {
+    //     self.0.read()
+    // }
 
-    pub fn read_or_panic(&self) -> RwLockReadGuard<'_, T> {
-        self.read().expect("Lock poisoned")
-    }
+    // pub fn read_or_panic(&self) -> RwLockReadGuard<'_, T> {
+    //     self.read().expect("Lock poisoned")
+    // }
 
     pub fn write(
         &self,
@@ -32,9 +32,9 @@ impl<T: DataFile> FileGuard<T> {
         self.0.write().map(|guard| FileWriteGuard(guard))
     }
 
-    pub fn write_or_panic(&self) -> FileWriteGuard<'_, T> {
-        self.write().expect("Lock poisoned")
-    }
+    // pub fn write_or_panic(&self) -> FileWriteGuard<'_, T> {
+    //     self.write().expect("Lock poisoned")
+    // }
 }
 
 pub struct FileWriteGuard<'l, T: DataFile>(RwLockWriteGuard<'l, T>);

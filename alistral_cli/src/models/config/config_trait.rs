@@ -36,19 +36,18 @@ pub trait ConfigFile: Serialize + DeserializeOwned + Default {
 
     fn save(&self) -> Result<(), crate::Error> {
         let config_file = File::create(Self::path_to_config().as_path())
-            .map_err(crate::Error::ConfigFileCreationError)?;
-        serde_json::to_writer_pretty(config_file, self)
-            .map_err(crate::Error::ConfigFileWriteError)?;
+            .map_err(crate::Error::ConfigFileCreation)?;
+        serde_json::to_writer_pretty(config_file, self).map_err(crate::Error::ConfigFileWrite)?;
         Ok(())
     }
 
     fn load_unguarded() -> Result<Self, crate::Error> {
         match Self::get_config_reader() {
             Ok(Some(data)) => {
-                serde_json::from_reader(data).map_err(crate::Error::ConfigLoadDeserializationError)
+                serde_json::from_reader(data).map_err(crate::Error::ConfigDeserialization)
             }
             Ok(None) => Ok(Self::default()),
-            Err(err) => Err(crate::Error::ConfigLoadError(err)),
+            Err(err) => Err(crate::Error::ConfigRead(err)),
         }
     }
 

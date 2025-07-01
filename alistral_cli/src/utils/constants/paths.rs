@@ -24,8 +24,8 @@ fn create_alistral_dir(path: &Path) -> PathBuf {
 pub static CONFIG_DIR: LazyLock<PathBuf> =
     LazyLock::new(|| create_alistral_dir(get_basedirs().config_dir()));
 
-pub static CACHE_DIR: LazyLock<PathBuf> =
-    LazyLock::new(|| create_alistral_dir(get_basedirs().cache_dir()));
+// pub static CACHE_DIR: LazyLock<PathBuf> =
+//     LazyLock::new(|| create_alistral_dir(get_basedirs().cache_dir()));
 
 pub static LOG_DIR: LazyLock<PathBuf> = LazyLock::new(|| {
     let mut path = CONFIG_DIR.to_path_buf();

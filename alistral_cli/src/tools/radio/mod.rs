@@ -28,12 +28,10 @@ impl RadioExportTarget {
                 Listenbrainz::create_playlist(
                     &ALISTRAL_CLIENT.interzic,
                     playlist,
-                    username.ok_or(crate::Error::MissingPlaylistUserDataError(
+                    username.ok_or(crate::Error::MissingPlaylistUserData(
                         "username".to_string(),
                     ))?,
-                    token.ok_or(crate::Error::MissingPlaylistUserDataError(
-                        "token".to_string(),
-                    ))?,
+                    token.ok_or(crate::Error::MissingPlaylistUserData("token".to_string()))?,
                 )
                 .await?;
             }

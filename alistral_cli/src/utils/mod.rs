@@ -7,5 +7,4 @@ pub mod extensions;
 pub mod listenbrainz_api;
 pub mod radio;
 pub mod regex;
-pub mod traits;
 pub mod whitelist_blacklist;
