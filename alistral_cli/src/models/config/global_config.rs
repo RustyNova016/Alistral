@@ -5,7 +5,7 @@ use std::sync::LazyLock;
 use std::thread::panicking;
 
 use tokio::sync::RwLock;
-use tokio::sync::RwLockReadGuard;
+// use tokio::sync::RwLockReadGuard;
 use tokio::sync::RwLockWriteGuard;
 
 use super::Config;
@@ -26,9 +26,9 @@ impl GlobalConfig {
         }
     }
 
-    pub async fn read(&self) -> RwLockReadGuard<'_, Config> {
-        self.config.read().await
-    }
+    // pub async fn read(&self) -> RwLockReadGuard<'_, Config> {
+    //     self.config.read().await
+    // }
 
     pub async fn write(&self) -> GlobalConfigGuard<'_> {
         let guard = self.config.write().await;

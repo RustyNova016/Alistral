@@ -80,16 +80,18 @@ pub enum StatsTarget {
     Tag,
 }
 
-impl StatsTarget {
-    pub fn to_str(&self) -> &str {
-        match self {
+impl Display for StatsTarget {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let inner = match self {
             Self::Recording => "recording",
             Self::Artist => "artist",
             Self::Release => "release",
             Self::ReleaseGroup => "release_group",
             Self::Work => "work",
             Self::Tag => "tag",
-        }
+        };
+
+        write!(f, "{inner}")
     }
 }
 

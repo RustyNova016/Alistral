@@ -98,5 +98,6 @@ where
 
 pub enum StatisticOutput {
     Print,
+    #[expect(dead_code)]
     Art,
 }

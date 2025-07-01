@@ -1,4 +1,3 @@
-pub mod formating;
 use core::fmt;
 use std::io;
 
@@ -8,9 +7,8 @@ use super::regex::is_string_mbid;
 use crate::models::cli::Cli;
 use crate::utils::regex::get_raw_mbid_from_url;
 
-pub mod navigation;
+pub mod formating;
 pub mod parsing;
-pub mod prompt;
 
 /// Block the current trhead until the user press enter
 pub fn await_next() {

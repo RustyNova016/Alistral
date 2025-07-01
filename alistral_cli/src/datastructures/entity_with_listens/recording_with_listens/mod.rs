@@ -51,7 +51,7 @@ impl RecordingWithListens {
 
         let user = User::find_by_name(conn, &user_name)
             .await?
-            .ok_or(crate::Error::MissingUserError(user_name.clone()))?;
+            .ok_or(crate::Error::MissingUser(user_name.clone()))?;
 
         prefetch_recordings_of_listens(conn, user.id, &listens.data).await?;
 

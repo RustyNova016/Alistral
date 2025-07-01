@@ -3,8 +3,8 @@ use interzic::models::services::youtube::error::YoutubeError;
 
 pub fn process_errors(error: &crate::Error) -> Option<String> {
     match &error {
-        crate::Error::InterzicError(err) => process_interzic_error(err),
-        crate::Error::ListenbrainzError(err) => process_listenbrainz_error(err),
+        crate::Error::Interzic(err) => process_interzic_error(err),
+        crate::Error::Listenbrainz(err) => process_listenbrainz_error(err),
         _ => None,
     }
 }

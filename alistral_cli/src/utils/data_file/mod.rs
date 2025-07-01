@@ -13,14 +13,12 @@ pub trait DataFile: Serialize + DeserializeOwned + Default {
 
     fn load_unguarded() -> Result<Self, crate::Error> {
         match File::open(Self::path().as_path()) {
-            Ok(data) => {
-                serde_json::from_reader(data).map_err(crate::Error::ConfigLoadDeserializationError)
-            }
+            Ok(data) => serde_json::from_reader(data).map_err(crate::Error::ConfigDeserialization),
             Err(err) => {
                 if err.kind() == io::ErrorKind::NotFound {
                     Ok(Self::default())
                 } else {
-                    Err(crate::Error::ConfigLoadError(err))
+                    Err(crate::Error::ConfigRead(err))
                 }
             }
         }
@@ -32,8 +30,8 @@ pub trait DataFile: Serialize + DeserializeOwned + Default {
 
     fn save(&self) -> Result<(), crate::Error> {
         let file: File =
-            File::create(Self::path().as_path()).map_err(crate::Error::ConfigFileCreationError)?;
-        serde_json::to_writer_pretty(file, self).map_err(crate::Error::ConfigFileWriteError)?;
+            File::create(Self::path().as_path()).map_err(crate::Error::ConfigFileCreation)?;
+        serde_json::to_writer_pretty(file, self).map_err(crate::Error::ConfigFileWrite)?;
         Ok(())
     }
 }

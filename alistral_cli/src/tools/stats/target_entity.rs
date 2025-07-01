@@ -12,15 +12,15 @@ pub enum StatsTarget {
 }
 
 impl StatsTarget {
-    pub fn to_str(&self) -> &str {
-        match self {
-            Self::Recording => "recording",
-            Self::Artist => "artist",
-            Self::Release => "release",
-            Self::ReleaseGroup => "release_group",
-            Self::Work => "work",
-            Self::WorkRecursive => "work_recursive",
-            Self::Tag => "tag",
-        }
-    }
+    // pub fn to_str(&self) -> &str {
+    //     match self {
+    //         Self::Recording => "recording",
+    //         Self::Artist => "artist",
+    //         Self::Release => "release",
+    //         Self::ReleaseGroup => "release_group",
+    //         Self::Work => "work",
+    //         Self::WorkRecursive => "work_recursive",
+    //         Self::Tag => "tag",
+    //     }
+    // }
 }

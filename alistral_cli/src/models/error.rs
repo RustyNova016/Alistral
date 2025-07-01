@@ -9,62 +9,67 @@ use crate::interface::errors::process_errors;
 #[derive(Error, Debug)]
 //#[expect(clippy::enum_variant_names)]
 pub enum Error {
-    #[error(transparent)]
-    AlistralCore(#[from] alistral_core::Error),
-
-    #[error(transparent)]
-    InterzicError(#[from] interzic::Error),
-
-    #[error(transparent)]
-    TimeError(#[from] TimeError),
-
     // --- Config Errors ---
     #[error("An error occured when trying to load the configuration file.")]
-    ConfigLoadError(io::Error),
+    ConfigRead(io::Error),
 
     #[error("Couldn't load the configuration file. The configuration schema is incorrect")]
-    ConfigLoadDeserializationError(serde_json::Error),
+    ConfigDeserialization(serde_json::Error),
 
     #[error("Couldn't create the configuration file.")]
-    ConfigFileCreationError(io::Error),
+    ConfigFileCreation(io::Error),
 
     #[error("Couldn't write the configuration file.")]
-    ConfigFileWriteError(serde_json::Error),
+    ConfigFileWrite(serde_json::Error),
 
     // --- Cache Errors ---
-    #[error(transparent)]
-    SQLxError(#[from] sqlx::Error),
-
-    #[error(transparent)]
-    MusicbrainzDBLiteError(#[from] musicbrainz_db_lite::Error),
-
     #[error("Tried to get user {0} but couldn't be found")]
-    MissingUserError(String),
+    MissingUser(String),
 
     #[error("Tried to open the database {0} but it couldn't be found")]
     MissingDatabaseFile(String),
 
     #[error("Filesystem error when accessing the cache")]
-    DatabaseIoError(io::Error),
+    DatabaseIo(io::Error),
 
     // --- Fetching Errors ---
     #[error("Error with the request.")]
-    RequestError(#[from] reqwest::Error),
+    Reqwest(#[from] reqwest::Error),
 
     #[error("Couldn't decode the server's responce")]
-    RequestDecodeError(reqwest::Error),
+    RequestDecode(reqwest::Error),
 
     #[error("Listenbrainz responded with an error")]
-    ListenbrainzError(#[from] listenbrainz::Error),
+    Listenbrainz(#[from] listenbrainz::Error),
 
     #[error("No user data is available for this playlist export target: {0}")]
-    MissingPlaylistUserDataError(String),
+    MissingPlaylistUserData(String),
 
+    #[allow(clippy::enum_variant_names)]
     #[error(transparent)]
     FatalError(#[from] FatalError),
 
     #[error(transparent)]
-    RawConnectionError(#[from] RawPoolError),
+    RawConnection(#[from] RawPoolError),
+
+    // ==================
+    //  Error Reexports
+    // ==================
+    #[error(transparent)]
+    AlistralCore(#[from] alistral_core::Error),
+
+    #[error(transparent)]
+    Interzic(#[from] interzic::Error),
+
+    #[allow(clippy::enum_variant_names)]
+    #[error(transparent)]
+    TimeError(#[from] TimeError),
+
+    #[error(transparent)]
+    SQLx(#[from] sqlx::Error),
+
+    #[error(transparent)]
+    MusicbrainzDBLite(#[from] musicbrainz_db_lite::Error),
 }
 
 impl From<Error> for FatalError {
@@ -82,10 +87,10 @@ impl From<Error> for FatalError {
 impl Error {
     pub fn from_musicbrainz_rs_error(err: reqwest::Error) -> Self {
         if err.is_decode() {
-            return Self::RequestDecodeError(err);
+            return Self::RequestDecode(err);
         }
 
-        Self::RequestError(err)
+        Self::Reqwest(err)
     }
 
     pub fn expect_fatal(self, text: String) -> ! {
