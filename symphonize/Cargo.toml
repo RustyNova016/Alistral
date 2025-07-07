@@ -16,4 +16,4 @@ format-url = "0.6.2"
 url = "2.5.4"
 
 [dev-dependencies]
-tokio = "1.45.1"
+tokio = "1.46.1"
