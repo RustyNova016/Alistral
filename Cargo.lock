@@ -3782,7 +3782,6 @@ dependencies = [
  "mio 1.0.4",
  "parking_lot",
  "pin-project-lite",
- "signal-hook-registry",
  "slab",
  "socket2",
  "tokio-macros",
