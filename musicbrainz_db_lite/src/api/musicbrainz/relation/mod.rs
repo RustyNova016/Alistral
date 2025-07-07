@@ -4,7 +4,7 @@ use musicbrainz_rs::entity::relations::Relation as MBRelation;
 use crate::RowId;
 use crate::models::musicbrainz::relations::Relation;
 use crate::models::musicbrainz::relations::traits::HasRelation;
-use crate::utils::date_utils::date_to_timestamp;
+use crate::utils::date_utils::date_string_to_timestamp;
 
 impl<T, U> Relation<T, U>
 where
@@ -30,9 +30,9 @@ where
                 .attributes
                 .map(|val| serde_json::to_string(&val))
                 .transpose()?,
-            begin: value.begin.map(|date| date_to_timestamp(date).unwrap()),
+            begin: value.begin.and_then(date_string_to_timestamp),
             direction: value.direction,
-            end: value.end.map(|date| date_to_timestamp(date).unwrap()),
+            end: value.end.and_then(date_string_to_timestamp),
             id: Default::default(),
             entity0: fetched_entity.get_entity0_id(content_entity),
             entity0_phamtom: Default::default(),

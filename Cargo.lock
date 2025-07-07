@@ -2196,9 +2196,9 @@ dependencies = [
 
 [[package]]
 name = "musicbrainz_rs"
-version = "0.10.2"
+version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b3446fdc9ccc3deba92fbb76b1d39e732073c4aa8478731b9300937ea33c6d12"
+checksum = "94ffa30f251f4bcd33fc7b17acf354c6c8c8eb9071be18803b83aa1093ce215c"
 dependencies = [
  "chrono",
  "glob",

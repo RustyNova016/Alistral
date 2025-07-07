@@ -15,7 +15,7 @@ use crate::models::shared_traits::completeness::CompletenessFlag;
 use crate::models::shared_traits::fetch_and_save::FetchAndSave;
 use crate::models::shared_traits::mbid_redirection::MBIDRedirection;
 use crate::models::shared_traits::save_from::SaveFrom;
-use crate::utils::date_utils::date_to_timestamp;
+use crate::utils::date_utils::date_string_to_timestamp;
 
 pub mod fetching;
 
@@ -46,8 +46,7 @@ impl Recording {
             video: new.video.map(|n| n as i64).or(self.video),
             first_release_date: new
                 .first_release_date
-                .map(|date| date_to_timestamp(date).unwrap())
-                .or(self.first_release_date),
+                .and_then(|date| date_string_to_timestamp(date).or(self.first_release_date)),
         }
     }
 

@@ -14,7 +14,7 @@ use crate::models::musicbrainz::tags::Tag;
 use crate::models::shared_traits::completeness::CompletenessFlag;
 use crate::models::shared_traits::fetch_and_save::FetchAndSave;
 use crate::models::shared_traits::save_from::SaveFrom;
-use crate::utils::date_utils::date_to_timestamp;
+use crate::utils::date_utils::date_string_to_timestamp;
 
 pub mod fetching;
 pub mod label_info;
@@ -45,8 +45,7 @@ impl Release {
             country: new.country.or(self.country),
             date: new
                 .date
-                .map(|date| date_to_timestamp(date).unwrap())
-                .or(self.date),
+                .and_then(|date| date_string_to_timestamp(date).or(self.date)),
             disambiguation: new.disambiguation.or(self.disambiguation),
             packaging: self.packaging, //TODO: Packaging to string
             title: new.title,
