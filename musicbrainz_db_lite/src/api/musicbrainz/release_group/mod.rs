@@ -10,7 +10,7 @@ use crate::models::musicbrainz::tags::Tag;
 use crate::models::shared_traits::completeness::CompletenessFlag;
 use crate::models::shared_traits::fetch_and_save::FetchAndSave;
 use crate::models::shared_traits::save_from::SaveFrom;
-use crate::utils::date_utils::date_to_timestamp;
+use crate::utils::date_utils::date_string_to_timestamp;
 
 pub mod fetching;
 
@@ -39,8 +39,7 @@ impl ReleaseGroup {
             disambiguation: new.disambiguation,
             first_release_date: new
                 .first_release_date
-                .map(|date| date_to_timestamp(date).unwrap())
-                .or(self.first_release_date),
+                .and_then(|date| date_string_to_timestamp(date).or(self.first_release_date)),
             primary_type_id: new.primary_type_id.or(self.primary_type_id),
             full_update_date: self.full_update_date,
             artist_credit: None,
