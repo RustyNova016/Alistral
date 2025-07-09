@@ -11,4 +11,10 @@ pub enum Error {
 
     #[error(transparent)]
     DBRawConnectionError(#[from] RawPoolError),
+
+    #[error(transparent)]
+    Reqwest(#[from] reqwest::Error),
+
+    #[error(transparent)]
+    Serde(#[from] serde_json::Error),
 }

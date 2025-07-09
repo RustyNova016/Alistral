@@ -1,9 +1,16 @@
+pub mod fetch_url;
+use std::sync::Arc;
+
+use futures::FutureExt;
+use futures::future::BoxFuture;
 use musicbrainz_rs::Fetch;
-use musicbrainz_rs::entity::url::Url as MBUrl;
+
 use sqlx::Acquire;
 
 use crate::CompletenessFlag;
+use crate::DBClient;
 use crate::MBIDRedirection;
+use crate::MBUrl;
 use crate::models::musicbrainz::url::Url;
 use crate::models::shared_traits::fetch_and_save::FetchAndSave;
 use crate::models::shared_traits::fetch_mbid::FetchMBID;
@@ -47,15 +54,7 @@ impl SaveFrom<MBUrl> for Url {
         conn: &mut sqlx::SqliteConnection,
         value: MBUrl,
     ) -> Result<Self, crate::Error> {
-        let mut conn = conn.begin().await?;
-
-        let output = Url::from(value).upsert(&mut conn).await?;
-
-        // TODO: URL relations when MB_rs supports it
-
-        conn.commit().await?;
-
-        Ok(output)
+        Url::save_api_response(conn, value).await
     }
 }
 
@@ -83,6 +82,54 @@ impl FetchMBID<MBUrl> for Url {
             .with_work_relations()
             .execute_with_client(&client.musicbrainz_client)
             .await
+    }
+}
+
+impl Url {
+    pub fn save_api_response(
+        conn: &mut sqlx::SqliteConnection,
+        value: MBUrl,
+    ) -> BoxFuture<'_, Result<Self, crate::Error>> {
+        Self::save_api_response_inner(conn, value).boxed()
+    }
+
+    pub async fn save_api_response_as_task(
+        client: Arc<DBClient>,
+        value: MBUrl,
+    ) -> Result<Self, crate::Error> {
+        tokio::spawn(async move {
+            Self::save_api_response_inner(&mut *client.get_raw_connection().await?, value).await
+        })
+        .await
+        .unwrap()
+    }
+
+    async fn save_api_response_inner(
+        conn: &mut sqlx::SqliteConnection,
+        value: MBUrl,
+    ) -> Result<Self, crate::Error> {
+        let mut conn = conn.begin().await?;
+
+        let output = Url::from(value.clone()).upsert(&mut conn).await?;
+
+        if let Some(relations) = value.relations {
+            // Remove all the old relations
+            output.delete_all_relations(&mut conn).await?;
+
+            for rel in relations {
+                match output.save_relation(&mut conn, rel).await {
+                    Ok(_) => {}
+                    Err(crate::Error::RelationNotImplemented) => {}
+                    Err(err) => {
+                        Err(err)?;
+                    }
+                }
+            }
+        }
+
+        conn.commit().await?;
+
+        Ok(output)
     }
 }
 
