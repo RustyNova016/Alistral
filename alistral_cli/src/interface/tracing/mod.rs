@@ -72,7 +72,7 @@ where
         .filename_suffix("log")
         .rotation(Rotation::NEVER)
         .max_log_files(100)
-        .filename_prefix(format!("log-{}", now.format("%Y-%m-%d_%H:%M:%S")))
+        .filename_prefix(format!("log-{}", now.format("%Y-%m-%d_%H-%M-%S")))
         .build(&*LOG_DIR)
         .expect("Couldn't create log file appender");
 
