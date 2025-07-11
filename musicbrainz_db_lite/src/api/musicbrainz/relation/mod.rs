@@ -33,6 +33,7 @@ where
             begin: value.begin.and_then(date_string_to_timestamp),
             direction: value.direction,
             end: value.end.and_then(date_string_to_timestamp),
+            ended: value.ended.map(|end| if end { 1 } else { 0 }).unwrap_or(0),
             id: Default::default(),
             entity0: fetched_entity.get_entity0_id(content_entity),
             entity0_phamtom: Default::default(),

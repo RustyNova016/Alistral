@@ -1,0 +1,1401 @@
+{
+    "releases": [{
+        "text-representation": {
+            "script": "Latn",
+            "language": "mul"
+        },
+        "relations": [
+            {
+                "target-credit": "",
+                "end": null,
+                "attribute-values": {},
+                "type": "amazon asin",
+                "url": {
+                    "id": "1cd2458c-1aa7-42a9-8e54-0b7695e46d35",
+                    "resource": "https://www.amazon.com/gp/product/B007N7Q930"
+                },
+                "attribute-ids": {},
+                "direction": "forward",
+                "attributes": [],
+                "begin": null,
+                "ended": false,
+                "target-type": "url",
+                "type-id": "4f2e710d-166c-480c-a293-2e2c8d658d87",
+                "source-credit": ""
+            },
+            {
+                "target-credit": "",
+                "end": null,
+                "url": {
+                    "resource": "http://www.junodownload.com/products/clash-ep/1910568-02/",
+                    "id": "291b6909-0acc-487a-a2d2-9cd4b7ca100a"
+                },
+                "attribute-values": {},
+                "type": "purchase for download",
+                "attribute-ids": {},
+                "ended": false,
+                "attributes": [],
+                "begin": null,
+                "direction": "forward",
+                "type-id": "98e08c20-8402-4163-8970-53504bb6a1e4",
+                "target-type": "url",
+                "source-credit": ""
+            },
+            {
+                "url": {
+                    "id": "9a066699-33fa-41b2-b8e6-d6c9171b018c",
+                    "resource": "https://itunes.apple.com/us/album/id501380937"
+                },
+                "attribute-values": {},
+                "type": "purchase for download",
+                "target-credit": "",
+                "end": null,
+                "type-id": "98e08c20-8402-4163-8970-53504bb6a1e4",
+                "target-type": "url",
+                "source-credit": "",
+                "attribute-ids": {},
+                "ended": true,
+                "begin": null,
+                "attributes": [],
+                "direction": "forward"
+            },
+            {
+                "target-type": "url",
+                "type-id": "98e08c20-8402-4163-8970-53504bb6a1e4",
+                "source-credit": "",
+                "attribute-ids": {},
+                "direction": "forward",
+                "ended": true,
+                "begin": null,
+                "attributes": [],
+                "type": "purchase for download",
+                "attribute-values": {},
+                "url": {
+                    "id": "1f41e00f-9340-4e95-adba-3ad45697ff34",
+                    "resource": "https://www.beatport.com/release/clash-ep/870675"
+                },
+                "target-credit": "",
+                "end": null
+            }
+        ],
+        "date": "2012-02-27",
+        "country": "XW",
+        "media": [
+            {
+                "format": "Digital Media",
+                "discs": [],
+                "position": 1,
+                "track-offset": 0,
+                "track-count": 6,
+                "id": "4c008681-071f-3c16-8f01-23c56dc74bb8",
+                "title": "",
+                "format-id": "907a28d9-b3b2-3ef6-89a8-7b18d91d4794",
+                "tracks": [
+                    {
+                        "number": "1",
+                        "artist-credit": [
+                            {
+                                "joinphrase": "",
+                                "name": "Caravan Palace",
+                                "artist": {
+                                    "country": "FR",
+                                    "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+                                    "sort-name": "Caravan Palace",
+                                    "type": "Group",
+                                    "id": "72eabb1a-4d2c-4de6-90f2-671b2cada42b",
+                                    "disambiguation": "French electro swing band",
+                                    "name": "Caravan Palace",
+                                    "aliases": [
+                                        {
+                                            "begin": null,
+                                            "ended": false,
+                                            "end": null,
+                                            "name": "Caravane Palace",
+                                            "primary": null,
+                                            "type-id": null,
+                                            "locale": null,
+                                            "type": null,
+                                            "sort-name": "Caravane Palace"
+                                        }
+                                    ]
+                                }
+                            }
+                        ],
+                        "title": "Clash",
+                        "length": 204000,
+                        "id": "8e7f2848-9082-41bd-a21d-8f7a10465201",
+                        "recording": {
+                            "video": false,
+                            "first-release-date": "2011-10-03",
+                            "artist-credit": [
+                                {
+                                    "joinphrase": "",
+                                    "name": "Caravan Palace",
+                                    "artist": {
+                                        "disambiguation": "French electro swing band",
+                                        "name": "Caravan Palace",
+                                        "country": "FR",
+                                        "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+                                        "sort-name": "Caravan Palace",
+                                        "type": "Group",
+                                        "id": "72eabb1a-4d2c-4de6-90f2-671b2cada42b"
+                                    }
+                                }
+                            ],
+                            "title": "Clash",
+                            "id": "1cd4c9ff-126b-4809-9bbe-f4fe8e760045",
+                            "length": 204000,
+                            "disambiguation": "Single/EP version",
+                            "aliases": []
+                        },
+                        "position": 1
+                    },
+                    {
+                        "number": "2",
+                        "length": 203000,
+                        "recording": {
+                            "aliases": [
+                                {
+                                    "sort-name": "12 juin 3049",
+                                    "type": null,
+                                    "type-id": null,
+                                    "primary": null,
+                                    "locale": null,
+                                    "ended": false,
+                                    "begin": null,
+                                    "end": null,
+                                    "name": "12 juin 3049"
+                                }
+                            ],
+                            "disambiguation": "",
+                            "artist-credit": [
+                                {
+                                    "artist": {
+                                        "name": "Caravan Palace",
+                                        "disambiguation": "French electro swing band",
+                                        "sort-name": "Caravan Palace",
+                                        "type": "Group",
+                                        "id": "72eabb1a-4d2c-4de6-90f2-671b2cada42b",
+                                        "country": "FR",
+                                        "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b"
+                                    },
+                                    "name": "Caravan Palace",
+                                    "joinphrase": ""
+                                }
+                            ],
+                            "id": "7cea3b50-dad9-4c63-aa19-5bdd6703a27a",
+                            "length": 203470,
+                            "title": "12 Juin 3049",
+                            "first-release-date": "2011-10-03",
+                            "video": false
+                        },
+                        "id": "95b8aa9c-f4bb-4965-84da-b33f7537a994",
+                        "title": "12 juin 3049",
+                        "artist-credit": [
+                            {
+                                "name": "Caravan Palace",
+                                "artist": {
+                                    "id": "72eabb1a-4d2c-4de6-90f2-671b2cada42b",
+                                    "type": "Group",
+                                    "sort-name": "Caravan Palace",
+                                    "country": "FR",
+                                    "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+                                    "aliases": [
+                                        {
+                                            "type": null,
+                                            "sort-name": "Caravane Palace",
+                                            "type-id": null,
+                                            "primary": null,
+                                            "locale": null,
+                                            "begin": null,
+                                            "ended": false,
+                                            "end": null,
+                                            "name": "Caravane Palace"
+                                        }
+                                    ],
+                                    "name": "Caravan Palace",
+                                    "disambiguation": "French electro swing band"
+                                },
+                                "joinphrase": ""
+                            }
+                        ],
+                        "position": 2
+                    },
+                    {
+                        "number": "3",
+                        "artist-credit": [
+                            {
+                                "joinphrase": "",
+                                "name": "Caravan Palace",
+                                "artist": {
+                                    "aliases": [
+                                        {
+                                            "primary": null,
+                                            "type-id": null,
+                                            "locale": null,
+                                            "sort-name": "Caravane Palace",
+                                            "type": null,
+                                            "ended": false,
+                                            "begin": null,
+                                            "name": "Caravane Palace",
+                                            "end": null
+                                        }
+                                    ],
+                                    "name": "Caravan Palace",
+                                    "disambiguation": "French electro swing band",
+                                    "id": "72eabb1a-4d2c-4de6-90f2-671b2cada42b",
+                                    "sort-name": "Caravan Palace",
+                                    "type": "Group",
+                                    "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+                                    "country": "FR"
+                                }
+                            }
+                        ],
+                        "recording": {
+                            "video": false,
+                            "id": "ee91bb6f-2acf-459b-978d-f00c8bdfb8f0",
+                            "length": 302000,
+                            "title": "Clash (Jupiter remix)",
+                            "artist-credit": [
+                                {
+                                    "name": "Caravan Palace",
+                                    "artist": {
+                                        "country": "FR",
+                                        "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+                                        "sort-name": "Caravan Palace",
+                                        "type": "Group",
+                                        "id": "72eabb1a-4d2c-4de6-90f2-671b2cada42b",
+                                        "disambiguation": "French electro swing band",
+                                        "name": "Caravan Palace"
+                                    },
+                                    "joinphrase": ""
+                                }
+                            ],
+                            "first-release-date": "2011-10-03",
+                            "disambiguation": "",
+                            "aliases": []
+                        },
+                        "id": "2e8a7b3a-94cf-4204-8abf-a4c98103eb68",
+                        "length": 302000,
+                        "title": "Clash (Jupiter Remix)",
+                        "position": 3
+                    },
+                    {
+                        "number": "4",
+                        "artist-credit": [
+                            {
+                                "joinphrase": "",
+                                "name": "Caravan Palace",
+                                "artist": {
+                                    "type": "Group",
+                                    "sort-name": "Caravan Palace",
+                                    "id": "72eabb1a-4d2c-4de6-90f2-671b2cada42b",
+                                    "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+                                    "country": "FR",
+                                    "name": "Caravan Palace",
+                                    "aliases": [
+                                        {
+                                            "begin": null,
+                                            "ended": false,
+                                            "end": null,
+                                            "name": "Caravane Palace",
+                                            "type-id": null,
+                                            "primary": null,
+                                            "locale": null,
+                                            "type": null,
+                                            "sort-name": "Caravane Palace"
+                                        }
+                                    ],
+                                    "disambiguation": "French electro swing band"
+                                }
+                            }
+                        ],
+                        "length": 205000,
+                        "title": "Clash (Flash Remix By Charles)",
+                        "id": "b1281df9-e67c-427d-81dd-be8cf6050205",
+                        "recording": {
+                            "disambiguation": "",
+                            "aliases": [],
+                            "video": false,
+                            "first-release-date": "2011-10-03",
+                            "artist-credit": [
+                                {
+                                    "artist": {
+                                        "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+                                        "country": "FR",
+                                        "type": "Group",
+                                        "sort-name": "Caravan Palace",
+                                        "id": "72eabb1a-4d2c-4de6-90f2-671b2cada42b",
+                                        "disambiguation": "French electro swing band",
+                                        "name": "Caravan Palace"
+                                    },
+                                    "name": "Caravan Palace",
+                                    "joinphrase": ""
+                                }
+                            ],
+                            "id": "5e4b3ef3-1434-461f-a7ef-84f7cc2b573d",
+                            "title": "Clash (Splash remix by Hugo)",
+                            "length": 205000
+                        },
+                        "position": 4
+                    },
+                    {
+                        "recording": {
+                            "artist-credit": [
+                                {
+                                    "joinphrase": "",
+                                    "artist": {
+                                        "disambiguation": "French electro swing band",
+                                        "name": "Caravan Palace",
+                                        "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+                                        "country": "FR",
+                                        "id": "72eabb1a-4d2c-4de6-90f2-671b2cada42b",
+                                        "type": "Group",
+                                        "sort-name": "Caravan Palace"
+                                    },
+                                    "name": "Caravan Palace"
+                                }
+                            ],
+                            "id": "4c6f55e1-7dce-4cec-9671-7e5d24327e59",
+                            "title": "Clash (Flash remix by Charles)",
+                            "length": 198000,
+                            "first-release-date": "2011-10-03",
+                            "video": false,
+                            "aliases": [],
+                            "disambiguation": ""
+                        },
+                        "id": "5f5502ca-9380-4816-9f51-fc16647ac720",
+                        "title": "Clash (Splash Remix By Hugo)",
+                        "length": 198000,
+                        "artist-credit": [
+                            {
+                                "name": "Caravan Palace",
+                                "artist": {
+                                    "type": "Group",
+                                    "sort-name": "Caravan Palace",
+                                    "id": "72eabb1a-4d2c-4de6-90f2-671b2cada42b",
+                                    "country": "FR",
+                                    "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+                                    "name": "Caravan Palace",
+                                    "aliases": [
+                                        {
+                                            "type-id": null,
+                                            "primary": null,
+                                            "locale": null,
+                                            "sort-name": "Caravane Palace",
+                                            "type": null,
+                                            "ended": false,
+                                            "begin": null,
+                                            "end": null,
+                                            "name": "Caravane Palace"
+                                        }
+                                    ],
+                                    "disambiguation": "French electro swing band"
+                                },
+                                "joinphrase": ""
+                            }
+                        ],
+                        "number": "5",
+                        "position": 5
+                    },
+                    {
+                        "length": 188000,
+                        "title": "Clash (Slash Remix By Shiny Mob)",
+                        "id": "630ec4f9-5246-4cc8-b381-9ad076f0a8a8",
+                        "recording": {
+                            "video": false,
+                            "first-release-date": "2011-10-03",
+                            "artist-credit": [
+                                {
+                                    "joinphrase": "",
+                                    "artist": {
+                                        "country": "FR",
+                                        "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+                                        "id": "72eabb1a-4d2c-4de6-90f2-671b2cada42b",
+                                        "type": "Group",
+                                        "sort-name": "Caravan Palace",
+                                        "disambiguation": "French electro swing band",
+                                        "name": "Caravan Palace"
+                                    },
+                                    "name": "Caravan Palace"
+                                }
+                            ],
+                            "title": "Clash (Slash remix by Shiny Mob)",
+                            "id": "1da4edad-a00a-4f16-b9ae-d4a4750a901c",
+                            "length": 188493,
+                            "disambiguation": "",
+                            "aliases": []
+                        },
+                        "artist-credit": [
+                            {
+                                "joinphrase": "",
+                                "artist": {
+                                    "name": "Caravan Palace",
+                                    "aliases": [
+                                        {
+                                            "type": null,
+                                            "sort-name": "Caravane Palace",
+                                            "locale": null,
+                                            "primary": null,
+                                            "type-id": null,
+                                            "end": null,
+                                            "name": "Caravane Palace",
+                                            "begin": null,
+                                            "ended": false
+                                        }
+                                    ],
+                                    "disambiguation": "French electro swing band",
+                                    "sort-name": "Caravan Palace",
+                                    "type": "Group",
+                                    "id": "72eabb1a-4d2c-4de6-90f2-671b2cada42b",
+                                    "country": "FR",
+                                    "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b"
+                                },
+                                "name": "Caravan Palace"
+                            }
+                        ],
+                        "number": "6",
+                        "position": 6
+                    }
+                ]
+            }
+        ],
+        "packaging": "None",
+        "artist-credit": [
+            {
+                "name": "Caravan Palace",
+                "artist": {
+                    "id": "72eabb1a-4d2c-4de6-90f2-671b2cada42b",
+                    "sort-name": "Caravan Palace",
+                    "type": "Group",
+                    "country": "FR",
+                    "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+                    "aliases": [
+                        {
+                            "type": null,
+                            "sort-name": "Caravane Palace",
+                            "locale": null,
+                            "type-id": null,
+                            "primary": null,
+                            "name": "Caravane Palace",
+                            "end": null,
+                            "begin": null,
+                            "ended": false
+                        }
+                    ],
+                    "name": "Caravan Palace",
+                    "disambiguation": "French electro swing band"
+                },
+                "joinphrase": ""
+            }
+        ],
+        "title": "Clash",
+        "id": "0ca76757-9169-45bc-8d1d-1f08f3887b53",
+        "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+        "asin": "B007N7Q930",
+        "status": "Official",
+        "disambiguation": "",
+        "aliases": [],
+        "release-events": [
+            {
+                "date": "2012-02-27",
+                "area": {
+                    "name": "[Worldwide]",
+                    "disambiguation": "",
+                    "id": "525d4e18-3d00-31b9-a58b-a146a916de8f",
+                    "sort-name": "[Worldwide]",
+                    "type": null,
+                    "iso-3166-1-codes": [
+                        "XW"
+                    ],
+                    "type-id": null
+                }
+            }
+        ],
+        "label-info": [
+            {
+                "label": {
+                    "aliases": [],
+                    "label-code": null,
+                    "name": "Café de la Danse",
+                    "disambiguation": "",
+                    "id": "d5b6935a-fded-41d9-9efa-8841547fcd50",
+                    "sort-name": "Café de la Danse",
+                    "type": "Original Production",
+                    "type-id": "7aaa37fe-2def-3476-b359-80245850062d"
+                },
+                "catalog-number": "30004"
+            }
+        ],
+        "quality": "normal",
+        "cover-art-archive": {
+            "count": 1,
+            "artwork": true,
+            "front": true,
+            "back": false,
+            "darkened": false
+        },
+        "packaging-id": "119eba76-b343-3e02-a292-f0f00644bb9b",
+        "barcode": "3700551729258"
+    }],
+
+    "recordings": [
+        {
+            "title": "12 Juin 3049",
+            "length": 203470,
+            "artist-credit": [
+                {
+                    "joinphrase": "",
+                    "name": "Caravan Palace",
+                    "artist": {
+                        "name": "Caravan Palace",
+                        "country": "FR",
+                        "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+                        "id": "72eabb1a-4d2c-4de6-90f2-671b2cada42b",
+                        "sort-name": "Caravan Palace",
+                        "disambiguation": "French electro swing band",
+                        "type": "Group",
+                        "aliases": [
+                            {
+                                "primary": null,
+                                "name": "Caravane Palace",
+                                "sort-name": "Caravane Palace",
+                                "type-id": null,
+                                "type": null,
+                                "locale": null,
+                                "begin": null,
+                                "ended": false,
+                                "end": null
+                            }
+                        ]
+                    }
+                }
+            ],
+            "first-release-date": "2011-10-03",
+            "id": "7cea3b50-dad9-4c63-aa19-5bdd6703a27a",
+            "relations": [
+                {
+                    "target-type": "url",
+                    "source-credit": "",
+                    "direction": "forward",
+                    "target-credit": "",
+                    "url": {
+                        "id": "17a4324e-9fc2-449c-b608-fd96c0ad01ce",
+                        "resource": "https://open.spotify.com/track/525lLoNqjttwG4g4PDOskx"
+                    },
+                    "attribute-ids": {},
+                    "type": "free streaming",
+                    "end": null,
+                    "begin": null,
+                    "ended": false,
+                    "attribute-values": {},
+                    "attributes": [],
+                    "type-id": "7e41ef12-a124-4324-afdb-fdbae687a89c"
+                },
+                {
+                    "url": {
+                        "id": "e1b407fa-9331-4636-9e49-bcaa570e69f0",
+                        "resource": "https://www.deezer.com/track/13986151"
+                    },
+                    "attribute-ids": {},
+                    "target-credit": "",
+                    "source-credit": "",
+                    "target-type": "url",
+                    "direction": "forward",
+                    "type-id": "7e41ef12-a124-4324-afdb-fdbae687a89c",
+                    "attributes": [],
+                    "attribute-values": {},
+                    "end": null,
+                    "ended": false,
+                    "begin": null,
+                    "type": "free streaming"
+                },
+                {
+                    "attribute-ids": {},
+                    "url": {
+                        "id": "59e7fd30-867a-4c17-ac58-56e42662021d",
+                        "resource": "https://www.youtube.com/watch?v=KepxuR0wIxU"
+                    },
+                    "source-credit": "",
+                    "direction": "forward",
+                    "target-type": "url",
+                    "target-credit": "",
+                    "attributes": [],
+                    "type-id": "7e41ef12-a124-4324-afdb-fdbae687a89c",
+                    "attribute-values": {},
+                    "begin": null,
+                    "ended": false,
+                    "end": null,
+                    "type": "free streaming"
+                },
+                {
+                    "target-credit": "",
+                    "source-credit": "",
+                    "direction": "forward",
+                    "target-type": "url",
+                    "url": {
+                        "resource": "https://music.apple.com/fr/song/468211311",
+                        "id": "1a6dd3c9-fb2e-4072-8e71-5ffab8330f28"
+                    },
+                    "attribute-ids": {},
+                    "end": null,
+                    "ended": false,
+                    "begin": null,
+                    "type": "purchase for download",
+                    "type-id": "92777657-504c-4acb-bd33-51a201bd57e1",
+                    "attributes": [],
+                    "attribute-values": {}
+                },
+                {
+                    "target-credit": "",
+                    "source-credit": "",
+                    "target-type": "url",
+                    "direction": "forward",
+                    "url": {
+                        "resource": "https://music.apple.com/fr/song/468211311",
+                        "id": "1a6dd3c9-fb2e-4072-8e71-5ffab8330f28"
+                    },
+                    "attribute-ids": {},
+                    "end": null,
+                    "ended": false,
+                    "begin": null,
+                    "type": "streaming",
+                    "type-id": "b5f3058a-666c-406f-aafb-f9249fc7b122",
+                    "attributes": [],
+                    "attribute-values": {}
+                }
+            ],
+            "disambiguation": "",
+            "video": false,
+            "aliases": [
+                {
+                    "locale": null,
+                    "type": null,
+                    "begin": null,
+                    "ended": false,
+                    "end": null,
+                    "primary": null,
+                    "name": "12 juin 3049",
+                    "sort-name": "12 juin 3049",
+                    "type-id": null
+                }
+            ],
+            "releases": [
+                {
+                    "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+                    "aliases": [],
+                    "barcode": "3596972508097",
+                    "release-events": [
+                        {
+                            "area": {
+                                "type-id": null,
+                                "id": "5b8a5ee5-0bb3-34cf-9a75-c27c44e341fc",
+                                "sort-name": "Belgium",
+                                "iso-3166-1-codes": [
+                                    "BE"
+                                ],
+                                "name": "Belgium",
+                                "disambiguation": "",
+                                "type": null
+                            },
+                            "date": "2011-10-03"
+                        },
+                        {
+                            "date": "2011-10-03",
+                            "area": {
+                                "type": null,
+                                "disambiguation": "",
+                                "iso-3166-1-codes": [
+                                    "CA"
+                                ],
+                                "name": "Canada",
+                                "sort-name": "Canada",
+                                "id": "71bbafaa-e825-3e15-8ca9-017dcad1748b",
+                                "type-id": null
+                            }
+                        },
+                        {
+                            "date": "2011-10-03",
+                            "area": {
+                                "id": "08310658-51eb-3801-80de-5a0739207115",
+                                "sort-name": "France",
+                                "type-id": null,
+                                "type": null,
+                                "disambiguation": "",
+                                "name": "France",
+                                "iso-3166-1-codes": [
+                                    "FR"
+                                ]
+                            }
+                        },
+                        {
+                            "date": "2011-10-03",
+                            "area": {
+                                "id": "1333ff06-8e3d-3c8e-9f3a-13a2a38b41df",
+                                "sort-name": "Switzerland",
+                                "type-id": null,
+                                "type": null,
+                                "disambiguation": "",
+                                "iso-3166-1-codes": [
+                                    "CH"
+                                ],
+                                "name": "Switzerland"
+                            }
+                        }
+                    ],
+                    "status": "Official",
+                    "country": "BE",
+                    "artist-credit": [
+                        {
+                            "artist": {
+                                "aliases": [
+                                    {
+                                        "primary": null,
+                                        "name": "Caravane Palace",
+                                        "sort-name": "Caravane Palace",
+                                        "type-id": null,
+                                        "type": null,
+                                        "locale": null,
+                                        "begin": null,
+                                        "ended": false,
+                                        "end": null
+                                    }
+                                ],
+                                "type": "Group",
+                                "disambiguation": "French electro swing band",
+                                "sort-name": "Caravan Palace",
+                                "id": "72eabb1a-4d2c-4de6-90f2-671b2cada42b",
+                                "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+                                "country": "FR",
+                                "name": "Caravan Palace"
+                            },
+                            "joinphrase": "",
+                            "name": "Caravan Palace"
+                        }
+                    ],
+                    "packaging-id": "119eba76-b343-3e02-a292-f0f00644bb9b",
+                    "disambiguation": "",
+                    "title": "Clash",
+                    "text-representation": {
+                        "script": "Latn",
+                        "language": "eng"
+                    },
+                    "quality": "normal",
+                    "date": "2011-10-03",
+                    "packaging": "None",
+                    "id": "282eda7d-2919-4590-a9e7-811c3f251972"
+                },
+                {
+                    "disambiguation": "",
+                    "title": "Clash",
+                    "id": "0ca76757-9169-45bc-8d1d-1f08f3887b53",
+                    "packaging": "None",
+                    "date": "2012-02-27",
+                    "text-representation": {
+                        "script": "Latn",
+                        "language": "mul"
+                    },
+                    "quality": "normal",
+                    "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+                    "aliases": [],
+                    "status": "Official",
+                    "barcode": "3700551729258",
+                    "release-events": [
+                        {
+                            "date": "2012-02-27",
+                            "area": {
+                                "type-id": null,
+                                "sort-name": "[Worldwide]",
+                                "id": "525d4e18-3d00-31b9-a58b-a146a916de8f",
+                                "iso-3166-1-codes": [
+                                    "XW"
+                                ],
+                                "name": "[Worldwide]",
+                                "disambiguation": "",
+                                "type": null
+                            }
+                        }
+                    ],
+                    "artist-credit": [
+                        {
+                            "artist": {
+                                "aliases": [
+                                    {
+                                        "ended": false,
+                                        "begin": null,
+                                        "end": null,
+                                        "type": null,
+                                        "locale": null,
+                                        "sort-name": "Caravane Palace",
+                                        "type-id": null,
+                                        "primary": null,
+                                        "name": "Caravane Palace"
+                                    }
+                                ],
+                                "disambiguation": "French electro swing band",
+                                "type": "Group",
+                                "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+                                "country": "FR",
+                                "sort-name": "Caravan Palace",
+                                "id": "72eabb1a-4d2c-4de6-90f2-671b2cada42b",
+                                "name": "Caravan Palace"
+                            },
+                            "joinphrase": "",
+                            "name": "Caravan Palace"
+                        }
+                    ],
+                    "packaging-id": "119eba76-b343-3e02-a292-f0f00644bb9b",
+                    "country": "XW"
+                },
+                {
+                    "title": "Panic",
+                    "id": "88fd4025-3f7a-4304-8b9a-31e334787e76",
+                    "text-representation": {
+                        "language": "eng",
+                        "script": "Latn"
+                    },
+                    "quality": "normal",
+                    "packaging": "Jewel Case",
+                    "date": "2012-03-02",
+                    "disambiguation": "",
+                    "barcode": "3596973239228",
+                    "release-events": [
+                        {
+                            "area": {
+                                "id": "08310658-51eb-3801-80de-5a0739207115",
+                                "sort-name": "France",
+                                "type-id": null,
+                                "type": null,
+                                "disambiguation": "",
+                                "iso-3166-1-codes": [
+                                    "FR"
+                                ],
+                                "name": "France"
+                            },
+                            "date": "2012-03-02"
+                        }
+                    ],
+                    "status": "Official",
+                    "packaging-id": "ec27701a-4a22-37f4-bfac-6616e0f9750a",
+                    "artist-credit": [
+                        {
+                            "artist": {
+                                "aliases": [
+                                    {
+                                        "sort-name": "Caravane Palace",
+                                        "type-id": null,
+                                        "primary": null,
+                                        "name": "Caravane Palace",
+                                        "ended": false,
+                                        "begin": null,
+                                        "end": null,
+                                        "type": null,
+                                        "locale": null
+                                    }
+                                ],
+                                "type": "Group",
+                                "disambiguation": "French electro swing band",
+                                "id": "72eabb1a-4d2c-4de6-90f2-671b2cada42b",
+                                "sort-name": "Caravan Palace",
+                                "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+                                "country": "FR",
+                                "name": "Caravan Palace"
+                            },
+                            "joinphrase": "",
+                            "name": "Caravan Palace"
+                        }
+                    ],
+                    "country": "FR",
+                    "aliases": [],
+                    "status-id": "4e304316-386d-3409-af2e-78857eec5cfe"
+                },
+                {
+                    "disambiguation": "digital media release",
+                    "text-representation": {
+                        "script": "Latn",
+                        "language": "fra"
+                    },
+                    "quality": "normal",
+                    "packaging": "None",
+                    "date": "2012-03-05",
+                    "id": "9b98a76e-ac41-4f31-b2fd-f4d672bbdbe2",
+                    "title": "Panic",
+                    "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+                    "aliases": [],
+                    "country": "FR",
+                    "artist-credit": [
+                        {
+                            "artist": {
+                                "aliases": [
+                                    {
+                                        "type": null,
+                                        "locale": null,
+                                        "end": null,
+                                        "ended": false,
+                                        "begin": null,
+                                        "name": "Caravane Palace",
+                                        "primary": null,
+                                        "type-id": null,
+                                        "sort-name": "Caravane Palace"
+                                    }
+                                ],
+                                "type": "Group",
+                                "disambiguation": "French electro swing band",
+                                "sort-name": "Caravan Palace",
+                                "id": "72eabb1a-4d2c-4de6-90f2-671b2cada42b",
+                                "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+                                "country": "FR",
+                                "name": "Caravan Palace"
+                            },
+                            "joinphrase": "",
+                            "name": "Caravan Palace"
+                        }
+                    ],
+                    "packaging-id": "119eba76-b343-3e02-a292-f0f00644bb9b",
+                    "barcode": "3596972532825",
+                    "release-events": [
+                        {
+                            "date": "2012-03-05",
+                            "area": {
+                                "type-id": null,
+                                "id": "08310658-51eb-3801-80de-5a0739207115",
+                                "sort-name": "France",
+                                "iso-3166-1-codes": [
+                                    "FR"
+                                ],
+                                "name": "France",
+                                "disambiguation": "",
+                                "type": null
+                            }
+                        }
+                    ],
+                    "status": "Official"
+                },
+                {
+                    "title": "Panic",
+                    "id": "ab4690ff-068f-4ea3-bdeb-ab1dd9e9a7a2",
+                    "text-representation": {
+                        "script": "Latn",
+                        "language": "eng"
+                    },
+                    "quality": "normal",
+                    "packaging": "Jewel Case",
+                    "date": "2012-03-05",
+                    "disambiguation": "",
+                    "release-events": [
+                        {
+                            "date": "2012-03-05",
+                            "area": {
+                                "type": null,
+                                "iso-3166-1-codes": [
+                                    "FR"
+                                ],
+                                "name": "France",
+                                "disambiguation": "",
+                                "id": "08310658-51eb-3801-80de-5a0739207115",
+                                "sort-name": "France",
+                                "type-id": null
+                            }
+                        }
+                    ],
+                    "barcode": "3596972532825",
+                    "status": "Official",
+                    "packaging-id": "ec27701a-4a22-37f4-bfac-6616e0f9750a",
+                    "artist-credit": [
+                        {
+                            "name": "Caravan Palace",
+                            "joinphrase": "",
+                            "artist": {
+                                "disambiguation": "French electro swing band",
+                                "type": "Group",
+                                "aliases": [
+                                    {
+                                        "end": null,
+                                        "ended": false,
+                                        "begin": null,
+                                        "locale": null,
+                                        "type": null,
+                                        "type-id": null,
+                                        "sort-name": "Caravane Palace",
+                                        "name": "Caravane Palace",
+                                        "primary": null
+                                    }
+                                ],
+                                "name": "Caravan Palace",
+                                "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+                                "country": "FR",
+                                "id": "72eabb1a-4d2c-4de6-90f2-671b2cada42b",
+                                "sort-name": "Caravan Palace"
+                            }
+                        }
+                    ],
+                    "country": "FR",
+                    "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+                    "aliases": []
+                },
+                {
+                    "id": "7d356af6-558c-432f-9a71-63b611d08a51",
+                    "text-representation": {
+                        "script": "Latn",
+                        "language": "mul"
+                    },
+                    "quality": "normal",
+                    "date": "2012-03-05",
+                    "packaging": "Cardboard/Paper Sleeve",
+                    "title": "Panic",
+                    "disambiguation": "",
+                    "packaging-id": "f7101ce3-0384-39ce-9fde-fbbd0044d35f",
+                    "artist-credit": [
+                        {
+                            "name": "Caravan Palace",
+                            "joinphrase": "",
+                            "artist": {
+                                "country": "FR",
+                                "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+                                "sort-name": "Caravan Palace",
+                                "id": "72eabb1a-4d2c-4de6-90f2-671b2cada42b",
+                                "name": "Caravan Palace",
+                                "aliases": [
+                                    {
+                                        "end": null,
+                                        "begin": null,
+                                        "ended": false,
+                                        "locale": null,
+                                        "type": null,
+                                        "type-id": null,
+                                        "sort-name": "Caravane Palace",
+                                        "name": "Caravane Palace",
+                                        "primary": null
+                                    }
+                                ],
+                                "disambiguation": "French electro swing band",
+                                "type": "Group"
+                            }
+                        }
+                    ],
+                    "country": "FR",
+                    "release-events": [
+                        {
+                            "area": {
+                                "id": "08310658-51eb-3801-80de-5a0739207115",
+                                "sort-name": "France",
+                                "type-id": null,
+                                "type": null,
+                                "iso-3166-1-codes": [
+                                    "FR"
+                                ],
+                                "name": "France",
+                                "disambiguation": ""
+                            },
+                            "date": "2012-03-05"
+                        }
+                    ],
+                    "barcode": "3596972536953",
+                    "status": "Promotion",
+                    "status-id": "518ffc83-5cde-34df-8627-81bff5093d92",
+                    "aliases": []
+                },
+                {
+                    "id": "2fa31ec1-5935-4372-88de-a3cc9e147872",
+                    "text-representation": {
+                        "language": "eng",
+                        "script": null
+                    },
+                    "quality": "normal",
+                    "date": "2012-03-05",
+                    "packaging": "Jewel Case",
+                    "title": "Panic",
+                    "disambiguation": "",
+                    "artist-credit": [
+                        {
+                            "artist": {
+                                "name": "Caravan Palace",
+                                "id": "72eabb1a-4d2c-4de6-90f2-671b2cada42b",
+                                "sort-name": "Caravan Palace",
+                                "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+                                "country": "FR",
+                                "type": "Group",
+                                "disambiguation": "French electro swing band",
+                                "aliases": [
+                                    {
+                                        "begin": null,
+                                        "ended": false,
+                                        "end": null,
+                                        "type": null,
+                                        "locale": null,
+                                        "sort-name": "Caravane Palace",
+                                        "type-id": null,
+                                        "primary": null,
+                                        "name": "Caravane Palace"
+                                    }
+                                ]
+                            },
+                            "name": "Caravan Palace",
+                            "joinphrase": ""
+                        }
+                    ],
+                    "packaging-id": "ec27701a-4a22-37f4-bfac-6616e0f9750a",
+                    "country": "US",
+                    "release-events": [
+                        {
+                            "date": "2012-03-05",
+                            "area": {
+                                "id": "489ce91b-6658-3307-9877-795b68554c98",
+                                "sort-name": "United States",
+                                "type-id": null,
+                                "type": null,
+                                "iso-3166-1-codes": [
+                                    "US"
+                                ],
+                                "name": "United States",
+                                "disambiguation": ""
+                            }
+                        }
+                    ],
+                    "barcode": "813615013927",
+                    "status": "Official",
+                    "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+                    "aliases": []
+                },
+                {
+                    "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+                    "aliases": [],
+                    "release-events": [
+                        {
+                            "area": {
+                                "iso-3166-1-codes": [
+                                    "XW"
+                                ],
+                                "name": "[Worldwide]",
+                                "disambiguation": "",
+                                "type": null,
+                                "type-id": null,
+                                "sort-name": "[Worldwide]",
+                                "id": "525d4e18-3d00-31b9-a58b-a146a916de8f"
+                            },
+                            "date": "2013-07-29"
+                        }
+                    ],
+                    "barcode": "3663729098092",
+                    "status": "Official",
+                    "packaging-id": "119eba76-b343-3e02-a292-f0f00644bb9b",
+                    "artist-credit": [
+                        {
+                            "joinphrase": "",
+                            "name": "Caravan Palace",
+                            "artist": {
+                                "disambiguation": "French electro swing band",
+                                "type": "Group",
+                                "aliases": [
+                                    {
+                                        "type-id": null,
+                                        "sort-name": "Caravane Palace",
+                                        "name": "Caravane Palace",
+                                        "primary": null,
+                                        "end": null,
+                                        "begin": null,
+                                        "ended": false,
+                                        "type": null,
+                                        "locale": null
+                                    }
+                                ],
+                                "name": "Caravan Palace",
+                                "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+                                "country": "FR",
+                                "sort-name": "Caravan Palace",
+                                "id": "72eabb1a-4d2c-4de6-90f2-671b2cada42b"
+                            }
+                        }
+                    ],
+                    "country": "XW",
+                    "disambiguation": "",
+                    "title": "Caravan Palace / Panic",
+                    "id": "d567279c-526d-4bd7-8733-da48a9f2996f",
+                    "text-representation": {
+                        "script": "Latn",
+                        "language": "eng"
+                    },
+                    "quality": "normal",
+                    "packaging": "None",
+                    "date": "2013-07-29"
+                },
+                {
+                    "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+                    "aliases": [],
+                    "country": null,
+                    "packaging-id": "119eba76-b343-3e02-a292-f0f00644bb9b",
+                    "artist-credit": [
+                        {
+                            "artist": {
+                                "aliases": [
+                                    {
+                                        "ended": false,
+                                        "begin": null,
+                                        "end": null,
+                                        "type": null,
+                                        "locale": null,
+                                        "sort-name": "Caravane Palace",
+                                        "type-id": null,
+                                        "primary": null,
+                                        "name": "Caravane Palace"
+                                    }
+                                ],
+                                "disambiguation": "French electro swing band",
+                                "type": "Group",
+                                "country": "FR",
+                                "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+                                "sort-name": "Caravan Palace",
+                                "id": "72eabb1a-4d2c-4de6-90f2-671b2cada42b",
+                                "name": "Caravan Palace"
+                            },
+                            "joinphrase": "",
+                            "name": "Caravan Palace"
+                        }
+                    ],
+                    "release-events": [
+                        {
+                            "date": "2013-09-24",
+                            "area": null
+                        }
+                    ],
+                    "barcode": "190296777721",
+                    "status": "Official",
+                    "disambiguation": "",
+                    "quality": "normal",
+                    "text-representation": {
+                        "language": "eng",
+                        "script": "Latn"
+                    },
+                    "packaging": "None",
+                    "date": "2013-09-24",
+                    "id": "42d0ddfd-867c-4aa5-98a6-d1347aec1863",
+                    "title": "Panic"
+                },
+                {
+                    "status": "Official",
+                    "release-events": [
+                        {
+                            "area": {
+                                "type-id": null,
+                                "sort-name": "United Kingdom",
+                                "id": "8a754a16-0027-3a29-b6d7-2b40ea0481ed",
+                                "disambiguation": "",
+                                "name": "United Kingdom",
+                                "iso-3166-1-codes": [
+                                    "GB"
+                                ],
+                                "type": null
+                            },
+                            "date": "2013-12-02"
+                        }
+                    ],
+                    "barcode": "802987056021",
+                    "country": "GB",
+                    "artist-credit": [
+                        {
+                            "artist": {
+                                "name": "Caravan Palace",
+                                "id": "72eabb1a-4d2c-4de6-90f2-671b2cada42b",
+                                "sort-name": "Caravan Palace",
+                                "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+                                "country": "FR",
+                                "type": "Group",
+                                "disambiguation": "French electro swing band",
+                                "aliases": [
+                                    {
+                                        "primary": null,
+                                        "name": "Caravane Palace",
+                                        "sort-name": "Caravane Palace",
+                                        "type-id": null,
+                                        "type": null,
+                                        "locale": null,
+                                        "begin": null,
+                                        "ended": false,
+                                        "end": null
+                                    }
+                                ]
+                            },
+                            "name": "Caravan Palace",
+                            "joinphrase": ""
+                        }
+                    ],
+                    "packaging-id": "f7101ce3-0384-39ce-9fde-fbbd0044d35f",
+                    "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+                    "aliases": [],
+                    "title": "Panic",
+                    "packaging": "Cardboard/Paper Sleeve",
+                    "date": "2013-12-02",
+                    "text-representation": {
+                        "script": "Latn",
+                        "language": "eng"
+                    },
+                    "quality": "normal",
+                    "id": "20688279-c935-4682-902a-f47ac9d82dc9",
+                    "disambiguation": ""
+                },
+                {
+                    "disambiguation": "",
+                    "id": "72ecbd79-89b2-435e-b58c-ea6646466ef3",
+                    "quality": "normal",
+                    "text-representation": {
+                        "script": "Latn",
+                        "language": "eng"
+                    },
+                    "date": "2013",
+                    "packaging": "Gatefold Cover",
+                    "title": "Panic",
+                    "status-id": "4e304316-386d-3409-af2e-78857eec5cfe",
+                    "aliases": [],
+                    "packaging-id": "e724a489-a7e8-30a1-a17c-30dfd6831202",
+                    "artist-credit": [
+                        {
+                            "artist": {
+                                "sort-name": "Caravan Palace",
+                                "id": "72eabb1a-4d2c-4de6-90f2-671b2cada42b",
+                                "type-id": "e431f5f6-b5d2-343d-8b36-72607fffb74b",
+                                "country": "FR",
+                                "name": "Caravan Palace",
+                                "aliases": [
+                                    {
+                                        "type-id": null,
+                                        "sort-name": "Caravane Palace",
+                                        "name": "Caravane Palace",
+                                        "primary": null,
+                                        "end": null,
+                                        "ended": false,
+                                        "begin": null,
+                                        "type": null,
+                                        "locale": null
+                                    }
+                                ],
+                                "type": "Group",
+                                "disambiguation": "French electro swing band"
+                            },
+                            "name": "Caravan Palace",
+                            "joinphrase": ""
+                        }
+                    ],
+                    "country": "XE",
+                    "barcode": "802987056021",
+                    "release-events": [
+                        {
+                            "area": {
+                                "type": null,
+                                "disambiguation": "",
+                                "name": "Europe",
+                                "iso-3166-1-codes": [
+                                    "XE"
+                                ],
+                                "id": "89a675c2-3e37-3518-b83c-418bad59a85a",
+                                "sort-name": "Europe",
+                                "type-id": null
+                            },
+                            "date": "2013"
+                        }
+                    ],
+                    "status": "Official"
+                }
+            ]
+        }
+    ]
+}

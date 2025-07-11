@@ -190,3 +190,45 @@ impl MbClippyLint for MissingRecordingLink {
         LintSeverity::MissingRelation
     }
 }
+
+#[cfg(test)]
+mod test {
+
+    use musicbrainz_db_lite::Recording;
+
+    use crate::SymphonyzeClient;
+    use crate::clippy::lints::missing_recording_link::MissingRecordingLink;
+    // use crate::testing::should_trigger_lint;
+    use crate::testing::shouldnt_trigger_lint;
+    use crate::testing::test_name;
+
+    // #[tokio::test]
+    // async fn should_trigger() {
+    //     let client = SymphonyzeClient::get_testing_client(&test_name()).await;
+    //     client.load_test_data("missing_artist_links.json").await;
+
+    //     should_trigger_lint::<MissingArtistLink, Recording>(
+    //         &client,
+    //         "953d57c1-06d4-4faa-b7b7-91f09912ff99",
+    //     )
+    //     .await;
+
+    //     should_trigger_lint::<MissingArtistLink, Recording>(
+    //         &client,
+    //         "c9e14c28-c681-4d80-97bf-283f0aa799c3",
+    //     )
+    //     .await;
+    // }
+
+    #[tokio::test]
+    async fn shouldnt_trigger() {
+        let client = SymphonyzeClient::get_testing_client(&test_name()).await;
+        client.load_test_data("missing_recording.json").await;
+
+        shouldnt_trigger_lint::<MissingRecordingLink, Recording>(
+            &client,
+            "7cea3b50-dad9-4c63-aa19-5bdd6703a27a",
+        )
+        .await;
+    }
+}
