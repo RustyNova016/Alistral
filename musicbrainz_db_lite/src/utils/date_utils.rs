@@ -13,7 +13,7 @@ pub fn date_string_to_timestamp(date: DateString) -> Option<i64> {
     }
 
     date_to_timestamp(
-        date.into_naive_date(1, 1)
+        date.into_naive_date(0, 1, 1)
             .expect("DateString doesn't contain a date"),
     )
 }

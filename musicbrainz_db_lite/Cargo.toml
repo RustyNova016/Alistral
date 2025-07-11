@@ -10,7 +10,7 @@ musicbrainz_db_lite_schema = { path = "./musicbrainz_db_lite_schema" }
 tuillez = { path = "../tuillez" }
 sequelles = { path = "../sequelles",  version = "0.1.0", package = "sequelles" }
 
-musicbrainz_rs = { version = "0.11.0", package = "musicbrainz_rs"  }
+musicbrainz_rs = { version = "0.12.0", package = "musicbrainz_rs"  }
 #musicbrainz_rs = { branch = "develop", git = "https://github.com/RustyNova016/musicbrainz_rs.git", package = "musicbrainz_rs" }
 #musicbrainz_rs = { path = "../musicbrainz_rs_nova" }
 
