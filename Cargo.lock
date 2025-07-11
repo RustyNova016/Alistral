@@ -3586,12 +3586,17 @@ name = "symphonize"
 version = "0.1.0"
 dependencies = [
  "format-url",
+ "governor",
  "musicbrainz-db-lite",
  "owo-colors",
  "regex",
+ "reqwest",
+ "serde",
+ "serde_json",
  "sqlx",
  "thiserror 2.0.12",
  "tokio",
+ "tracing",
  "tuillez",
  "url",
 ]

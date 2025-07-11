@@ -1,4 +1,8 @@
+use std::sync::Arc;
+
+use crate::DBClient;
 use crate::MBIDRedirection;
+use crate::Url;
 use crate::models::shared_traits::find_by_mbid::FindByMBID;
 use crate::models::shared_traits::find_by_rowid::FindByRowID;
 
@@ -19,5 +23,44 @@ impl FindByMBID for Release {
         id: &str,
     ) -> Result<Option<Self>, crate::Error> {
         Ok(<Self as MBIDRedirection>::find_by_mbid(conn, id).await?)
+    }
+}
+
+impl Release {
+    /// Search for releases by its linked url
+    pub async fn find_by_url(
+        conn: &mut sqlx::SqliteConnection,
+        url: &str,
+    ) -> Result<Vec<Release>, crate::Error> {
+        Ok(sqlx::query_as(
+            "SELECT releases.*
+                    FROM releases
+                    INNER JOIN l_releases_urls ON releases.id = l_releases_urls.`entity0`
+                    INNER JOIN urls ON urls.id = l_releases_urls.`entity1`
+                    WHERE urls.ressource = ?",
+        )
+        .bind(url)
+        .fetch_all(conn)
+        .await?)
+    }
+
+    /// Search for releases by its linked url
+    pub async fn get_or_fetch_by_url_as_task(
+        client: Arc<DBClient>,
+        url: &str,
+    ) -> Result<Vec<Release>, crate::Error> {
+        let releases = Self::find_by_url(&mut *client.get_raw_connection().await?, url).await?;
+
+        if releases.is_empty() {
+            let url_data = Url::fetch_and_save_by_ressource_as_task(client.clone(), url).await?;
+
+            if url_data.is_some() {
+                Self::find_by_url(&mut *client.get_raw_connection().await?, url).await
+            } else {
+                Ok(Vec::new())
+            }
+        } else {
+            Ok(releases)
+        }
     }
 }

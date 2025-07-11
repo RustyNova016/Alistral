@@ -49,6 +49,7 @@ pub(crate) type MBLabel = musicbrainz_rs::entity::label::Label;
 pub(crate) type MBRecording = musicbrainz_rs::entity::recording::Recording;
 pub(crate) type MBRelease = musicbrainz_rs::entity::release::Release;
 pub(crate) type MBReleaseGroup = musicbrainz_rs::entity::release_group::ReleaseGroup;
+pub(crate) type MBUrl = musicbrainz_rs::entity::url::Url;
 
 pub mod sequelle {
     pub use sequelles::*;
