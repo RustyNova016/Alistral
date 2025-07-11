@@ -21,7 +21,7 @@ static LINK_DOMAINS: LazyLock<Vec<&'static str>> = LazyLock::new(|| {
     vec![
         "https://open.spotify.com",
         "https://www.deezer.com",
-        "https://music.apple.com",
+        //"https://music.apple.com",
         "https://tidal.com",
         "https://www.beatport.com",
         //"https://www.youtube.com", Youtube links may not be from the artist channel's
