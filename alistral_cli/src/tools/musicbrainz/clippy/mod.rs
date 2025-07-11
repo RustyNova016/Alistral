@@ -57,7 +57,7 @@ pub struct MusicbrainzClippyCommand {
 
     /// Sort the initial recordings by their name
     #[arg(short, long)]
-    pub sort: bool
+    pub sort: bool,
 }
 
 impl MusicbrainzClippyCommand {
@@ -112,10 +112,7 @@ impl MusicbrainzClippyCommand {
     }
 }
 
-pub async fn mb_clippy(
-    start_recordings: Vec<Recording>,
-    filter: Arc<WhitelistBlacklist<String>>,
-) {
+pub async fn mb_clippy(start_recordings: Vec<Recording>, filter: Arc<WhitelistBlacklist<String>>) {
     PROCESSED_COUNT.store(1, Ordering::Release);
     let nodes = start_recordings
         .into_iter()

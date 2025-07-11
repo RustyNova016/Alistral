@@ -20,6 +20,7 @@ pub struct Relation<T, U> {
     pub direction: String,
     pub begin: Option<i64>,
     pub end: Option<i64>,
+    pub ended: i64,
     pub attributes: Option<String>,
     pub attribute_ids: Option<String>,
     pub atribute_values: Option<String>,
@@ -52,6 +53,7 @@ where
                     `direction`,
                     `begin`,
                     `end`,
+                    `ended`,
                     `attributes`,
                     `attribute_ids`,
                     `atribute_values`,
@@ -62,7 +64,7 @@ where
                     `entity1`
                 )
             VALUES
-                (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ON CONFLICT DO
             UPDATE
             SET
@@ -71,6 +73,7 @@ where
                 `direction` = excluded.`direction`,
                 `begin` = excluded.`begin`,
                 `end` = excluded.`end`,
+                `ended` = excluded.`ended`,
                 `attributes` = excluded.`attributes`,
                 `attribute_ids` = excluded.`attribute_ids`,
                 `atribute_values` = excluded.`atribute_values`,
@@ -87,6 +90,7 @@ where
         query = query.bind(&self.direction);
         query = query.bind(self.begin);
         query = query.bind(self.end);
+        query = query.bind(self.ended);
         query = query.bind(&self.attributes);
         query = query.bind(&self.attribute_ids);
         query = query.bind(&self.atribute_values);
@@ -109,5 +113,9 @@ where
             .await?;
 
         Ok(relations)
+    }
+
+    pub fn is_ended(&self) -> bool {
+        self.ended == 1
     }
 }
