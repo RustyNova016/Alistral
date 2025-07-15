@@ -1,6 +1,7 @@
 use std::sync::LazyLock;
 
 use format_url::FormatUrl;
+use musicbrainz_db_lite::FetchAndSave;
 use musicbrainz_db_lite::Release;
 use musicbrainz_db_lite::Url;
 use musicbrainz_db_lite::models::musicbrainz::recording::relations::releases::RecordingReleasesDBRel;
@@ -81,6 +82,29 @@ impl MbClippyLint for MissingRecordingLink {
         "missing_recording_link"
     }
 
+    async fn refresh_data(
+            client: &SymphonyzeClient,
+            entity: &mut MainEntity,
+        ) -> Result<(), crate::Error> {
+            entity
+            .refetch_and_load_as_task(client.mb_database.clone())
+            .await?;
+
+            let MainEntity::Recording(recording) = entity else {
+                return Ok(());
+            };
+
+            let releases = recording
+            .get_related_entity_or_fetch_as_task::<RecordingReleasesDBRel>(&client.mb_database)
+            .await?;
+
+            for release in releases  {
+                release.refetch_as_task(client.mb_database.clone()).await?;
+            }
+
+        Ok(())
+    }
+
     async fn check(
         client: &SymphonyzeClient,
         entity: &MainEntity,
@@ -141,6 +165,13 @@ impl MbClippyLint for MissingRecordingLink {
         });
 
         if link_supported_by_harmony(&self.link_missing) {
+            out.push(MbClippyLintLink {
+                name: "Harmony Lookup".to_string(),
+                url: format!(
+                    "https://harmony.pulsewidth.org.uk/release?url={}&category=preferred",
+                    self.link_missing
+                ),
+            });
             out.push(MbClippyLintLink {
                 name: "Harmony release actions".to_string(),
                 url: format!(
