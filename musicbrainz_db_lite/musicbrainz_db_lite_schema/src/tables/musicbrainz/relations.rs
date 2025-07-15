@@ -63,6 +63,7 @@ pub(super) async fn create_relation_table(
         `direction` TEXT NOT NULL, 
         `begin` INTEGER,
         `end` INTEGER,
+        `ended` INTEGER NOT NULL DEFAULT 0,
         `attributes` TEXT,
         `attribute_ids` TEXT,
         `atribute_values` TEXT,
