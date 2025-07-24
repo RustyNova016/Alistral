@@ -14,6 +14,7 @@ pub mod artist;
 pub mod collection;
 pub mod entity_as_listens;
 pub mod label;
+pub mod messybrainz;
 pub mod recording;
 pub mod release;
 pub mod release_group;
@@ -21,8 +22,6 @@ pub mod statistic_data;
 pub mod tags;
 pub mod traits;
 pub mod work;
-pub mod messybrainz;
-pub mod tags;
 
 /// A structure representing an entity with associated listens.
 #[derive(Debug, Clone, PartialEq, Eq)]

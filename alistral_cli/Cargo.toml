@@ -75,7 +75,7 @@ tracing-indicatif = "0.3.11"
 # Other
 
 [features]
-#default = ["clippy"]
+default = ["radio"]
 full = ["clippy", "musicbrainz", "lookup", "stats"]
 musicbrainz = []
 clippy = ["musicbrainz", "symphonize"]

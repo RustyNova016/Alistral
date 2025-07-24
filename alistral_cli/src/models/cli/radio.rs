@@ -309,7 +309,7 @@ impl RadioSubcommands {
                 .await?;
             }
             Self::Yumako(val) => val.run(conn).await?,
-            Self::Inspect(val) => val.run(conn).await?,
+            Self::Inspect(val) => val.run().await?,
         }
 
         Ok(())
