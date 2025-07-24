@@ -83,24 +83,24 @@ impl MbClippyLint for MissingRecordingLink {
     }
 
     async fn refresh_data(
-            client: &SymphonyzeClient,
-            entity: &mut MainEntity,
-        ) -> Result<(), crate::Error> {
-            entity
+        client: &SymphonyzeClient,
+        entity: &mut MainEntity,
+    ) -> Result<(), crate::Error> {
+        entity
             .refetch_and_load_as_task(client.mb_database.clone())
             .await?;
 
-            let MainEntity::Recording(recording) = entity else {
-                return Ok(());
-            };
+        let MainEntity::Recording(recording) = entity else {
+            return Ok(());
+        };
 
-            let releases = recording
+        let releases = recording
             .get_related_entity_or_fetch_as_task::<RecordingReleasesDBRel>(&client.mb_database)
             .await?;
 
-            for release in releases  {
-                release.refetch_as_task(client.mb_database.clone()).await?;
-            }
+        for release in releases {
+            release.refetch_as_task(client.mb_database.clone()).await?;
+        }
 
         Ok(())
     }

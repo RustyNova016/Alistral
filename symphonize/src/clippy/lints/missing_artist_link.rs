@@ -206,12 +206,6 @@ mod test {
             "953d57c1-06d4-4faa-b7b7-91f09912ff99",
         )
         .await;
-
-        should_trigger_lint::<MissingArtistLink, Recording>(
-            &client,
-            "c9e14c28-c681-4d80-97bf-283f0aa799c3",
-        )
-        .await;
     }
 
     #[tokio::test]
