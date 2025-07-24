@@ -1,6 +1,7 @@
 use std::sync::LazyLock;
 
 use format_url::FormatUrl;
+use musicbrainz_db_lite::FetchAndSave;
 use musicbrainz_db_lite::Release;
 use musicbrainz_db_lite::Url;
 use musicbrainz_db_lite::models::musicbrainz::recording::relations::releases::RecordingReleasesDBRel;
@@ -81,6 +82,29 @@ impl MbClippyLint for MissingRecordingLink {
         "missing_recording_link"
     }
 
+    async fn refresh_data(
+        client: &SymphonyzeClient,
+        entity: &mut MainEntity,
+    ) -> Result<(), crate::Error> {
+        entity
+            .refetch_and_load_as_task(client.mb_database.clone())
+            .await?;
+
+        let MainEntity::Recording(recording) = entity else {
+            return Ok(());
+        };
+
+        let releases = recording
+            .get_related_entity_or_fetch_as_task::<RecordingReleasesDBRel>(&client.mb_database)
+            .await?;
+
+        for release in releases {
+            release.refetch_as_task(client.mb_database.clone()).await?;
+        }
+
+        Ok(())
+    }
+
     async fn check(
         client: &SymphonyzeClient,
         entity: &MainEntity,
@@ -142,6 +166,13 @@ impl MbClippyLint for MissingRecordingLink {
 
         if link_supported_by_harmony(&self.link_missing) {
             out.push(MbClippyLintLink {
+                name: "Harmony Lookup".to_string(),
+                url: format!(
+                    "https://harmony.pulsewidth.org.uk/release?url={}&category=preferred",
+                    self.link_missing
+                ),
+            });
+            out.push(MbClippyLintLink {
                 name: "Harmony release actions".to_string(),
                 url: format!(
                     "https://harmony.pulsewidth.org.uk/release/actions?release_mbid={}",
@@ -188,5 +219,47 @@ impl MbClippyLint for MissingRecordingLink {
 
     fn get_severity(&self) -> LintSeverity {
         LintSeverity::MissingRelation
+    }
+}
+
+#[cfg(test)]
+mod test {
+
+    use musicbrainz_db_lite::Recording;
+
+    use crate::SymphonyzeClient;
+    use crate::clippy::lints::missing_recording_link::MissingRecordingLink;
+    // use crate::testing::should_trigger_lint;
+    use crate::testing::shouldnt_trigger_lint;
+    use crate::testing::test_name;
+
+    // #[tokio::test]
+    // async fn should_trigger() {
+    //     let client = SymphonyzeClient::get_testing_client(&test_name()).await;
+    //     client.load_test_data("missing_artist_links.json").await;
+
+    //     should_trigger_lint::<MissingArtistLink, Recording>(
+    //         &client,
+    //         "953d57c1-06d4-4faa-b7b7-91f09912ff99",
+    //     )
+    //     .await;
+
+    //     should_trigger_lint::<MissingArtistLink, Recording>(
+    //         &client,
+    //         "c9e14c28-c681-4d80-97bf-283f0aa799c3",
+    //     )
+    //     .await;
+    // }
+
+    #[tokio::test]
+    async fn shouldnt_trigger() {
+        let client = SymphonyzeClient::get_testing_client(&test_name()).await;
+        client.load_test_data("missing_recording.json").await;
+
+        shouldnt_trigger_lint::<MissingRecordingLink, Recording>(
+            &client,
+            "7cea3b50-dad9-4c63-aa19-5bdd6703a27a",
+        )
+        .await;
     }
 }

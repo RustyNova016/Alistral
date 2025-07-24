@@ -21,7 +21,7 @@ static LINK_DOMAINS: LazyLock<Vec<&'static str>> = LazyLock::new(|| {
     vec![
         "https://open.spotify.com",
         "https://www.deezer.com",
-        "https://music.apple.com",
+        //"https://music.apple.com",
         "https://tidal.com",
         "https://www.beatport.com",
         //"https://www.youtube.com", Youtube links may not be from the artist channel's
@@ -204,12 +204,6 @@ mod test {
         should_trigger_lint::<MissingArtistLink, Recording>(
             &client,
             "953d57c1-06d4-4faa-b7b7-91f09912ff99",
-        )
-        .await;
-
-        should_trigger_lint::<MissingArtistLink, Recording>(
-            &client,
-            "c9e14c28-c681-4d80-97bf-283f0aa799c3",
         )
         .await;
     }

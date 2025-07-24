@@ -1,5 +1,3 @@
-pub mod mb_clippy;
-pub mod sambl_check;
 use core::fmt::Write as _;
 use core::sync::atomic::AtomicU64;
 use core::sync::atomic::Ordering;
@@ -34,6 +32,9 @@ use crate::utils::cli::await_next;
 use crate::utils::cli::read_mbid_from_input;
 use crate::utils::whitelist_blacklist::WhitelistBlacklist;
 
+pub mod mb_clippy;
+pub mod sambl_check;
+
 static REFETCH_LOCK: LazyLock<Arc<Semaphore>> = LazyLock::new(|| Arc::new(Semaphore::new(1)));
 static PRINT_LOCK: LazyLock<Arc<Semaphore>> = LazyLock::new(|| Arc::new(Semaphore::new(1)));
 static PROCESSED_COUNT: AtomicU64 = AtomicU64::new(0);
@@ -53,6 +54,10 @@ pub struct MusicbrainzClippyCommand {
     /// List of lints that should not be checked (Note: Put this argument last or before another argument)
     #[arg(short, long, num_args = 0..)]
     pub blacklist: Option<Vec<String>>,
+
+    /// Sort the initial recordings by their name
+    #[arg(short, long)]
+    pub sort: bool,
 }
 
 impl MusicbrainzClippyCommand {
@@ -69,7 +74,7 @@ impl MusicbrainzClippyCommand {
     }
 
     async fn get_start_recordings(&self) -> Vec<Recording> {
-        match &self.start_mbid {
+        let mut start = match &self.start_mbid {
             Some(start) => {
                 let conn = &mut ALISTRAL_CLIENT
                     .musicbrainz_db
@@ -97,13 +102,18 @@ impl MusicbrainzClippyCommand {
                     .map(|rec| rec.entity().clone())
                     .collect_vec()
             }
+        };
+
+        if self.sort {
+            start.sort_unstable_by_key(|rec| rec.title.to_owned());
         }
+
+        start
     }
 }
 
 pub async fn mb_clippy(start_recordings: Vec<Recording>, filter: Arc<WhitelistBlacklist<String>>) {
     PROCESSED_COUNT.store(1, Ordering::Release);
-    //start_recordings.sort_unstable_by_key(|rec|rec.title.to_owned());
     let nodes = start_recordings
         .into_iter()
         .map(|rec| Arc::new(MainEntity::Recording(rec)))
