@@ -3094,6 +3094,8 @@ dependencies = [
 [[package]]
 name = "sequelles"
 version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2fb3ae00fc9ccb0a0f83c9c8f835907727fdd3e6d47953ba709ce228068e99dd"
 dependencies = [
  "sqlx",
 ]
