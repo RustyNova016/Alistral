@@ -1,3 +1,4 @@
+pub mod components;
 pub mod recording;
 use crate::models::cli::lookup::LookupTarget;
 use recording::lookup_recording;
