@@ -1,8 +1,11 @@
+pub mod listen_timeframe;
+pub mod user;
 use chrono::Duration;
 use chrono::Utc;
 use musicbrainz_db_lite::HasRowID;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 
+use crate::datastructures::entity_with_listens::listen_timeframe::extract_timeframe::ExtractTimeframe;
 use crate::datastructures::entity_with_listens::recording::RecordingWithListens;
 use crate::datastructures::entity_with_listens::traits::IterRecordingWithListens;
 use crate::traits::mergable::Mergable;
@@ -140,5 +143,26 @@ where
 {
     fn iter_recording_with_listens(&self) -> impl Iterator<Item = &RecordingWithListens> {
         self.listens.iter_recording_with_listens()
+    }
+}
+
+impl<Ent, Lis> ExtractTimeframe for EntityWithListens<Ent, Lis>
+where
+    Ent: HasRowID,
+    Lis: ListenCollectionReadable + ExtractTimeframe,
+{
+    fn extract_timeframe(
+        self,
+        start: chrono::DateTime<Utc>,
+        end: chrono::DateTime<Utc>,
+        include_start: bool,
+        include_end: bool,
+    ) -> Self {
+        Self {
+            entity: self.entity,
+            listens: self
+                .listens
+                .extract_timeframe(start, end, include_start, include_end),
+        }
     }
 }

@@ -12,6 +12,7 @@ use alistral_core::datastructures::entity_with_listens::release::collection::Rel
 use alistral_core::datastructures::entity_with_listens::release_group::collection::ReleaseGroupWithReleasesCollection;
 #[cfg(feature = "stats")]
 use alistral_core::datastructures::entity_with_listens::release_group::collection::ReleaseGroupWithReleasesStrategy;
+use alistral_core::datastructures::entity_with_listens::user::collection::UserWithListensStrategy;
 // use alistral_core::datastructures::entity_with_listens::work::collection::WorkWithRecordingsCollection;
 // use alistral_core::datastructures::entity_with_listens::work::collection::WorkWithRecordingsStrategy;
 
@@ -40,6 +41,10 @@ pub fn release_group_strategy(client: &AlistralCliClient) -> ReleaseGroupWithRel
 // pub fn work_strategy(client: &AlistralCliClient) -> WorkWithRecordingsStrategy<'_> {
 //     WorkWithRecordingsStrategy::new(client.core.as_ref(), recording_strategy(client))
 // }
+
+pub fn user_strategy(client: &AlistralCliClient) -> UserWithListensStrategy<'_> {
+    UserWithListensStrategy::new(client.core.as_ref())
+}
 
 // === Default stats fetching ===
 
@@ -90,3 +95,12 @@ pub async fn release_group_stats(
 
 //     Ok(ListenFetchQuery::get_entity_with_listens(&client.core, user, &strategy).await?)
 // }
+
+pub async fn user_stats(
+    client: &AlistralCliClient,
+    user: String,
+) -> Result<RecordingWithListensCollection, crate::Error> {
+    let strategy = recording_strategy(client);
+
+    Ok(ListenFetchQuery::get_entity_with_listens(&client.core, user, &strategy).await?)
+}

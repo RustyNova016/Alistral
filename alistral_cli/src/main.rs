@@ -20,8 +20,7 @@ pub(crate) mod utils;
 pub use crate::models::client::ALISTRAL_CLIENT;
 pub use crate::models::error::Error;
 
-//pub(crate) type ColEyreVal<T> = color_eyre::Result<T>;
-pub(crate) type ColEyre = color_eyre::Result<()>;
+pub(crate) type ColEyre<T = ()> = color_eyre::Result<T>;
 
 #[tokio::main]
 async fn main() -> ColEyre {
