@@ -8,7 +8,6 @@ rust-version = "1.85.1"
 musicbrainz_db_lite_macros = { path = "./musicbrainz_db_lite_macros" }
 musicbrainz_db_lite_schema = { path = "./musicbrainz_db_lite_schema" }
 tuillez = { path = "../tuillez" }
-sequelles = { path = "../sequelles",  version = "0.1.0", package = "sequelles" }
 
 musicbrainz_rs = { version = "0.12.0", package = "musicbrainz_rs"  }
 #musicbrainz_rs = { branch = "develop", git = "https://github.com/RustyNova016/musicbrainz_rs.git", package = "musicbrainz_rs" }
@@ -40,6 +39,7 @@ governor = "0.10.0"
 async-recursion = "1.1.1"
 regex = "1.11.1"
 url = "2.5.4"
+sequelles = "0.1.0"
 
 [features]
 default = ["timeout_continue", "pretty_format"]

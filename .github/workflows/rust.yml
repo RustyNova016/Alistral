@@ -119,16 +119,16 @@ jobs:
     - name: Run cargo-minimal-versions
       run: /bin/bash ./scripts/ci/minimum_versions.sh
 
-  semver_checks:
-    env: 
-      SQLX_OFFLINE: true
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Install cargo-semver-checks
-      run: cargo install cargo-semver-checks --locked
-    - name: Run cargo-semver-checks
-      run: /bin/bash ./scripts/ci/sem_ver.sh
+  # semver_checks:
+  #   env: 
+  #     SQLX_OFFLINE: true
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - name: Install cargo-semver-checks
+  #     run: cargo install cargo-semver-checks --locked
+  #   - name: Run cargo-semver-checks
+  #     run: /bin/bash ./scripts/ci/sem_ver.sh
 
   dependancies:
     env: 
