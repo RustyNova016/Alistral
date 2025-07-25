@@ -12,8 +12,6 @@ use clap_verbosity_flag::InfoLevel;
 use clap_verbosity_flag::Verbosity;
 use config::ConfigCli;
 use listens::ListenCommand;
-#[cfg(feature = "lookup")]
-use lookup::LookupCommand;
 use mapping::MappingCommand;
 #[cfg(feature = "musicbrainz")]
 use musicbrainz::MusicbrainzCommand;
@@ -28,6 +26,8 @@ use crate::tools::bumps::bump_command;
 use crate::tools::bumps::bump_down_command;
 use crate::tools::compatibility::compatibility_command;
 use crate::tools::daily::daily_report;
+#[cfg(feature = "lookup")]
+use crate::tools::lookup::LookupCommand;
 #[cfg(feature = "interzicf")]
 use crate::tools::playlist::PlaylistCommand;
 #[cfg(feature = "stats")]
@@ -208,7 +208,7 @@ impl Commands {
             Self::Listens(val) => val.run(conn).await?,
 
             #[cfg(feature = "lookup")]
-            Self::Lookup(val) => val.run(conn).await?,
+            Self::Lookup(cmd) => cmd.run().await,
 
             Self::Mapping(val) => val.run(conn).await?,
 
