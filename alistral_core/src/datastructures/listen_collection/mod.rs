@@ -6,6 +6,7 @@ use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use serde::Deserialize;
 use serde::Serialize;
 
+use crate::datastructures::entity_with_listens::listen_timeframe::extract_timeframe::ExtractTimeframe;
 use crate::traits::mergable::Mergable;
 
 pub mod traits;
@@ -122,5 +123,43 @@ impl FromIterator<Listen> for ListenCollection {
 impl Mergable for ListenCollection {
     fn merge(&mut self, other: Self) {
         self.merge_by_index(other);
+    }
+}
+
+impl ExtractTimeframe for ListenCollection {
+    fn extract_timeframe(
+        self,
+        start: chrono::DateTime<chrono::Utc>,
+        end: chrono::DateTime<chrono::Utc>,
+        include_start: bool,
+        include_end: bool,
+    ) -> Self {
+        self.into_iter()
+            .filter(|listen| {
+                // Check if before start
+                let listen = listen.listened_at_as_datetime();
+
+                if start > listen {
+                    return false;
+                }
+
+                // Check if equal start if needed
+                if !include_start && start == listen {
+                    return false;
+                }
+
+                // Check if after end
+                if end < listen {
+                    return false;
+                }
+
+                // Check if equal end if needed
+                if !include_end && start == listen {
+                    return false;
+                }
+
+                true
+            })
+            .collect()
     }
 }

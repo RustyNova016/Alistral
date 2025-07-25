@@ -49,6 +49,7 @@ impl ListenSortingStrategy<Recording, ListenCollection> for RecordingWithListenS
         let conn = &mut *self.client.musicbrainz_db.get_raw_connection().await?;
 
         // Prefetch the missing data
+        // TODO: Make it user agnostic
         let user_name = listens
             .first()
             .expect("At least one listen should be there")

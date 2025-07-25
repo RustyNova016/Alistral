@@ -54,6 +54,7 @@ version = "0.5.14"
 dependencies = [
  "alistral_core",
  "async-fn-stream",
+ "bon",
  "chrono",
  "clap",
  "clap-markdown",
