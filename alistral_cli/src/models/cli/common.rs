@@ -7,9 +7,8 @@ use chrono::Duration;
 #[cfg(feature = "radio")]
 use chrono::Utc;
 use clap::ValueEnum;
-use derive_more::IsVariant;
 
-#[derive(ValueEnum, Clone, Debug, Copy, Default, IsVariant)]
+#[derive(ValueEnum, Clone, Debug, Copy, Default)]
 pub enum SortListensBy {
     #[default]
     None,
@@ -17,7 +16,7 @@ pub enum SortListensBy {
     OldestListen,
 }
 
-#[derive(ValueEnum, Clone, Debug, Copy, Default, IsVariant)]
+#[derive(ValueEnum, Clone, Debug, Copy, Default)]
 pub enum SortSorterBy {
     /// The count of listens for this element. This is descending by default
     #[default]
@@ -41,7 +40,7 @@ impl Display for SortSorterBy {
     }
 }
 
-#[derive(ValueEnum, Clone, Debug, Copy, Default, IsVariant)]
+#[derive(ValueEnum, Clone, Debug, Copy, Default)]
 pub enum ConfigBool {
     #[default]
     Toggle,
@@ -53,7 +52,7 @@ pub enum ConfigBool {
     clippy::enum_variant_names,
     reason = "This is used for the CLI. So the postfix must stay"
 )]
-#[derive(ValueEnum, Clone, Debug, Copy, Default, IsVariant)]
+#[derive(ValueEnum, Clone, Debug, Copy, Default)]
 pub enum Timeframe {
     /// Uses the last 30 days from now
     #[default]
