@@ -3,6 +3,7 @@ use core::fmt::Debug;
 use std::collections::HashMap;
 use std::collections::hash_map::IntoValues;
 
+use chrono::Utc;
 use futures::Stream;
 use futures::stream;
 use itertools::Itertools as _;
@@ -10,6 +11,7 @@ use musicbrainz_db_lite::RowId;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use rust_decimal::Decimal;
 
+use crate::datastructures::entity_with_listens::listen_timeframe::extract_timeframe::ExtractTimeframe;
 use crate::datastructures::listen_collection::ListenCollection;
 use crate::datastructures::listen_collection::traits::ListenCollectionReadable;
 use crate::datastructures::listen_sorter::ListenSortingStrategy;
@@ -232,5 +234,25 @@ where
     type IntoIter = IntoValues<i64, Self::Item>;
     fn into_iter(self) -> Self::IntoIter {
         self.0.into_values()
+    }
+}
+
+impl<Ent, Lis> ExtractTimeframe for EntityWithListensCollection<Ent, Lis>
+where
+    Ent: RowId + Clone,
+    Lis: ListenCollectionReadable + ExtractTimeframe + Mergable + Clone,
+{
+    fn extract_timeframe(
+        self,
+        start: chrono::DateTime<Utc>,
+        end: chrono::DateTime<Utc>,
+        include_start: bool,
+        include_end: bool,
+    ) -> Self {
+        let mut new_self = Self::default();
+        self.into_iter()
+            .map(|ent| ent.extract_timeframe(start, end, include_start, include_end))
+            .for_each(|ent| new_self.insert_or_merge_entity_stats(ent));
+        new_self
     }
 }
