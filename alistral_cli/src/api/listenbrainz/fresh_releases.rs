@@ -1,12 +1,12 @@
+use bon::Builder;
 use chrono::DateTime;
 use chrono::Utc;
-use macon::Builder;
 use serde::Deserialize;
 use serde::Serialize;
 
 #[derive(Debug, Clone, Builder)]
 pub struct FreshReleaseRequest {
-    #[builder(Default=!)]
+    #[builder(default)]
     release_date: DateTime<Utc>,
     days: u8,
     past: bool,

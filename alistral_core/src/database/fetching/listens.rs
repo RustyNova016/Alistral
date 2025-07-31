@@ -1,4 +1,4 @@
-use macon::Builder;
+use bon::Builder;
 use musicbrainz_db_lite::RowId;
 use musicbrainz_db_lite::api::listenbrainz::listen::fetching::query::ListenFetchAPIQuery;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
@@ -17,7 +17,7 @@ use crate::datastructures::listen_sorter::ListenSortingStrategy;
 
 #[derive(Builder)]
 pub struct ListenFetchQuery {
-    #[builder(Default=!)]
+    #[builder(default)]
     user: String,
 
     fetch_recordings_redirects: bool,

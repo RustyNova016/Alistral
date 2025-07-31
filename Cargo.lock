@@ -54,6 +54,7 @@ version = "0.5.12"
 dependencies = [
  "alistral_core",
  "async-fn-stream",
+ "bon",
  "chrono",
  "clap",
  "clap-markdown",
@@ -68,7 +69,6 @@ dependencies = [
  "interzic",
  "itertools 0.14.0",
  "listenbrainz",
- "macon",
  "musicbrainz-db-lite",
  "rand 0.9.2",
  "regex",
@@ -97,11 +97,11 @@ dependencies = [
 name = "alistral_core"
 version = "0.1.0"
 dependencies = [
+ "bon",
  "chrono",
  "futures",
  "itertools 0.14.0",
  "listenbrainz",
- "macon",
  "musicbrainz-db-lite",
  "owo-colors",
  "rust_decimal",
@@ -336,6 +336,31 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3078c7629b62d3f0439517fa394996acacc5cbc91c5a20d8c658e77abd503a71"
 dependencies = [
  "generic-array",
+]
+
+[[package]]
+name = "bon"
+version = "3.6.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "33d9ef19ae5263a138da9a86871eca537478ab0332a7770bac7e3f08b801f89f"
+dependencies = [
+ "bon-macros",
+ "rustversion",
+]
+
+[[package]]
+name = "bon-macros"
+version = "3.6.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "577ae008f2ca11ca7641bd44601002ee5ab49ef0af64846ce1ab6057218a5cc1"
+dependencies = [
+ "darling 0.21.0",
+ "ident_case",
+ "prettyplease",
+ "proc-macro2",
+ "quote",
+ "rustversion",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -2027,33 +2052,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "macon"
-version = "1.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4e2360fdc60235ad3db2d65bb74539e0813c20a626f7e330ce9a64b2d4e513f0"
-dependencies = [
- "macon_api",
- "macon_derive",
-]
-
-[[package]]
-name = "macon_api"
-version = "1.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2330ee9375fc537d78cc438ed16695a5d0201f0be9d977bf6bc4ac11e5b4e177"
-
-[[package]]
-name = "macon_derive"
-version = "1.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ccd7e1436ba066ad10c8b43ac4a00d304322831b90f039f1d83815f846fee024"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.104",
-]
-
-[[package]]
 name = "maybe-async"
 version = "0.2.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2124,6 +2122,7 @@ version = "0.1.0"
 dependencies = [
  "async-fn-stream",
  "async-recursion",
+ "bon",
  "chrono",
  "const_format",
  "deadpool",
@@ -2132,7 +2131,6 @@ dependencies = [
  "governor",
  "itertools 0.14.0",
  "listenbrainz",
- "macon",
  "musicbrainz_db_lite_macros",
  "musicbrainz_db_lite_schema",
  "musicbrainz_rs",
@@ -2502,6 +2500,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "85eae3c4ed2f50dcfe72643da4befc30deadb458a9b590d720cde2f2b1e97da9"
 dependencies = [
  "zerocopy",
+]
+
+[[package]]
+name = "prettyplease"
+version = "0.2.36"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ff24dfcda44452b9816fff4cd4227e1bb73ff5a2f1bc1105aa92fb8565ce44d2"
+dependencies = [
+ "proc-macro2",
+ "syn 2.0.104",
 ]
 
 [[package]]
