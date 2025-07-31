@@ -5,14 +5,19 @@ pub mod timewindow;
 
 
 pub struct ListenTimeframe<T: ExtractTimeframe> {
-    settings: TimeframeSettings,
+    /// The start of the timeframe (inclusive)
+    start: DateTime<Utc>,
+    /// The end of the timeframe (inclusive)
+    end: DateTime<Utc>,
+
+
     all_time: T,
     current: T,
     previous: T,
 }
 
 impl<T: ExtractTimeframe> ListenTimeframe<T> {
-    pub fn new(timeframe: TimeframeSettings, all_time: T) -> Self
+    pub fn new(start: DateTime<Utc>, end: DateTime<Utc>, all_time: T) -> Self
     where
         T: Clone,
     {
@@ -35,7 +40,9 @@ impl<T: ExtractTimeframe> ListenTimeframe<T> {
     pub fn previous(&self) -> &T {
         &self.previous
     }
-    pub fn settings(&self) -> &TimeframeSettings {
-        &self.settings
-    }
+}
+
+pub enum ListenTimeframeOrFull<T> {
+    Full(T),
+    Timeframe(ListenTimeframe)
 }
