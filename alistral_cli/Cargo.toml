@@ -54,7 +54,7 @@ tokio = { version = "1.46.1", features = ["rt", "rt-multi-thread", "parking_lot"
 streamies = "0.2.2"
 
 # Cli
-clap = { version = "4.5.41", features = [
+clap = { version = "4.5.42", features = [
     "unicode",
     "wrap_help",
     "derive",
