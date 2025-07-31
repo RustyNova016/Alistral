@@ -47,7 +47,6 @@ itertools = "0.14.0"
 async-fn-stream = "0.2.2"
 macon = "1.3.0" #TODO: Replace with `bon`
 derive_more = { version = "2.0.1", features = ["full"] } #TODO: Remove
-derive-new = "0.7.0" #TODO: Remove
 
 # Async
 futures = "0.3.31"
