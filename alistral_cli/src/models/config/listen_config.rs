@@ -1,10 +1,9 @@
-use derive_getters::Getters;
 use serde::Deserialize;
 use serde::Serialize;
 
 use crate::models::cli::common::ConfigBool;
 
-#[derive(Debug, Serialize, Deserialize, Getters)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ListenConfig {
     pub refresh_unmapped_listens: bool,
 }

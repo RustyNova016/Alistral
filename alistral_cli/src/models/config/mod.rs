@@ -3,7 +3,6 @@ use bumps::BumpList;
 use clap::CommandFactory;
 use config_guard::ConfigGuard;
 use config_trait::ConfigFile;
-use derive_getters::Getters;
 use listen_config::ListenConfig;
 use mapper::MapperConfig;
 use rust_decimal::Decimal;
@@ -21,7 +20,7 @@ pub mod listen_config;
 pub mod mapper;
 pub mod recording_timeout;
 
-#[derive(Debug, Serialize, Deserialize, Getters)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
     /// Saved usertokens
     tokens: HashMap<String, String>,
