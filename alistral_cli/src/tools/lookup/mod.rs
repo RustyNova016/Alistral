@@ -1,7 +1,9 @@
+pub mod recording_b;
 pub mod components;
 pub mod recording;
 pub mod user;
 use crate::models::cli::lookup::LookupTarget;
+use crate::tools::lookup::recording_b::LookupRecordingCommand;
 use crate::tools::lookup::user::LookupUserCommand;
 use clap::Parser;
 use clap::Subcommand;
@@ -33,12 +35,14 @@ impl LookupCommand {
 
 #[derive(Subcommand, Clone, Debug)]
 enum LookupSubcommands {
+    Recording(LookupRecordingCommand),
     User(LookupUserCommand),
 }
 
 impl LookupSubcommands {
     pub async fn run(&self) {
         match self {
+            Self::Recording(cmd) => cmd.run().await,
             Self::User(cmd) => cmd.run().await,
         }
     }

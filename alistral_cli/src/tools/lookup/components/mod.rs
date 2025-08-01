@@ -1,3 +1,4 @@
+pub mod title;
 use core::cmp::Ordering;
 use core::fmt::Display;
 use std::fmt::Write;

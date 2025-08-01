@@ -50,6 +50,8 @@ pub type DBLitePoolError = PoolError<crate::Error>;
 
 pub type DBLitePoolResult = Result<Object<PoolManager>, DBLitePoolError>;
 
+pub type DBLiteConnObject = Object<RawPoolManager>;
+
 #[ext]
 pub impl DBLitePool {
     #[allow(async_fn_in_trait)]

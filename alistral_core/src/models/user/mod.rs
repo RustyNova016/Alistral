@@ -1,11 +1,15 @@
+use itertools::Itertools;
 use musicbrainz_db_lite::User;
 
 use crate::AlistralClient;
 use crate::database::fetching::listens::ListenFetchQuery;
 use crate::datastructures::entity_with_listens::EntityWithListens;
+use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListenStrategy;
+use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use crate::datastructures::entity_with_listens::user::UserWithListens;
 use crate::datastructures::entity_with_listens::user::collection::UserWithListensStrategy;
 use crate::datastructures::listen_collection::ListenCollection;
+use crate::datastructures::listen_sorter::ListenSortingStrategy as _;
 
 pub struct UserData {
     listens: UserWithListens,
@@ -41,5 +45,23 @@ impl UserData {
 
     pub fn user_with_listens(&self) -> &UserWithListens {
         &self.listens
+    }
+
+    pub async fn recordings_with_listens(
+        &self,
+        client: &AlistralClient,
+    ) -> Result<RecordingWithListensCollection, crate::Error> {
+        let strat = RecordingWithListenStrategy::new(client);
+        self.recordings_with_listens_with_strat(strat).await
+    }
+
+    pub async fn recordings_with_listens_with_strat(
+        &self,
+        strat: RecordingWithListenStrategy<'_>,
+    ) -> Result<RecordingWithListensCollection, crate::Error> {
+        let listens = self.listens.listens().iter().cloned().collect_vec();
+        let mut data = RecordingWithListensCollection::default();
+        strat.sort_insert_listens(&mut data, listens).await?;
+        Ok(data)
     }
 }
