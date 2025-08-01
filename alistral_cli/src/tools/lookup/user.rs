@@ -51,7 +51,7 @@ impl LookupUserCommand {
 fn get_title(data: &ListenTimeframe<UserWithListens>) -> String {
     if data.previous_opt().is_some() {
         format!(
-            "Statistics for {} {}",
+            " Statistics for {} {}",
             data.current().entity().name,
             format!(
                 "({} -> {}, compared to {} -> {})",
@@ -67,7 +67,7 @@ fn get_title(data: &ListenTimeframe<UserWithListens>) -> String {
         .bold()
         .to_string()
     } else {
-        format!("All time statistics for {}", data.current().entity().name)
+        format!(" All time statistics for {}", data.current().entity().name)
             .on_green()
             .black()
             .bold()
@@ -80,6 +80,7 @@ async fn get_listencount(data: &ListenTimeframe<UserWithListens>) -> impl Displa
         .description("Listen count".to_string())
         .data(data.clone())
         .get_data(|ent| ent.listen_count())
+        .value_formater(|a| a.to_string())
         .build()
         .to_string()
         .await

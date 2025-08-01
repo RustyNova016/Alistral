@@ -95,7 +95,7 @@ async fn get_title(data: &ListenTimeframe<RecordingWithListens>) -> String {
 
     if data.previous_opt().is_some() {
         format!(
-            "Statistics for {} {}",
+            " Statistics for {} {}",
             name,
             format!(
                 "({} -> {}, compared to {} -> {})",
@@ -111,7 +111,7 @@ async fn get_title(data: &ListenTimeframe<RecordingWithListens>) -> String {
         .bold()
         .to_string()
     } else {
-        format!("All time statistics for {}", name)
+        format!(" All time statistics for {}", name)
             .on_green()
             .black()
             .bold()
@@ -124,16 +124,20 @@ async fn get_listencount(data: &ListenTimeframe<RecordingWithListens>) -> impl D
         .description("Listen count".to_string())
         .data(data.clone())
         .get_data(|ent| ent.listen_count())
+        .value_formater(|a| a.to_string())
         .build()
         .to_string()
         .await
 }
+
+
 
 async fn print_report(data: &ListenTimeframe<RecordingWithListens>) {
     let mut out = String::new();
 
     writeln!(out, "{}", get_title(data).await).unwrap();
     writeln!(out).unwrap();
+    writeln!(out, "[General]").unwrap();
     writeln!(out, "{}", get_listencount(data).await).unwrap();
 
     println!("{out}");

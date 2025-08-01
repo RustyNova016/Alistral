@@ -1,3 +1,5 @@
+pub mod disp_duration;
+pub mod previous_tf_comparison;
 pub mod title;
 use core::cmp::Ordering;
 use core::fmt::Display;
@@ -14,29 +16,36 @@ use tuillez::formatter::FormatWithAsync;
 
 #[derive(bon::Builder, Clone, Debug)]
 #[builder(derive(Clone, Debug))]
-pub(super) struct LookupLine<E, L, F, T>
+pub(super) struct LookupLine<Ent, Lis, Fdata, Data, Form>
 where
-    E: RowId,
-    L: ListenCollectionReadable + ExtractTimeframe,
-    F: Fn(&EntityWithListens<E, L>) -> T,
-    T: Display,
+    Ent: RowId,
+    Lis: ListenCollectionReadable + ExtractTimeframe,
+    Fdata: Fn(&EntityWithListens<Ent, Lis>) -> Data,
+    Data: Display,
+    Form: Fn(&Data) -> String,
 {
     description: String,
-    data: ListenTimeframe<EntityWithListens<E, L>>,
+    data: ListenTimeframe<EntityWithListens<Ent, Lis>>,
 
-    get_data: F,
+    get_data: Fdata,
     #[builder(default = false)]
     lower_is_better: bool,
+
+    // Formaters
+
+    /// Format the value returned by [`Self::get_data`] into a nice string to display
+    value_formater: Option<Form>,
 }
 
-impl<E, L, F, T> LookupLine<E, L, F, T>
+impl<Ent, Lis, Fdata, Data, Form> LookupLine<Ent, Lis, Fdata, Data, Form>
 where
-    E: RowId,
-    L: ListenCollectionReadable + ExtractTimeframe,
-    F: Fn(&EntityWithListens<E, L>) -> T,
-    T: Display + PartialOrd,
+    Ent: RowId,
+    Lis: ListenCollectionReadable + ExtractTimeframe,
+    Fdata: Fn(&EntityWithListens<Ent, Lis>) -> Data,
+    Data: Display + PartialOrd,
+    Form: Fn(&Data) -> String,
 {
-    pub fn get_arrow(&self, current: &T, previous: &T) -> String {
+    pub fn get_arrow(&self, current: &Data, previous: &Data) -> String {
         match previous.partial_cmp(current) {
             None => "-".bright_black().to_string(),
             Some(Ordering::Equal) => "-".bright_black().to_string(),
@@ -49,7 +58,7 @@ where
 
     pub async fn to_string(&self) -> String {
         let current_value = (self.get_data)(&self.data.current());
-        let mut out = format!("{}: {} ", self.description, current_value);
+        let mut out = format!("{}: {} ", self.description, self.format_value(&current_value));
 
         if let Some(prev_data) = &self.data.previous_opt() {
             let prev_value = (self.get_data)(&prev_data);
@@ -57,11 +66,18 @@ where
                 out,
                 "[{} - {}]",
                 self.get_arrow(&current_value, &prev_value),
-                prev_value
+                self.format_value(&prev_value)
             )
             .unwrap()
         }
 
         out
+    }
+
+    pub fn format_value(&self, value: &Data) -> String {
+        match &self.value_formater {
+            Some(v) => (v)(value),
+            None => value.to_string()
+        }
     }
 }
