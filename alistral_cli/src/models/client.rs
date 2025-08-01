@@ -8,6 +8,7 @@ use futures::executor::block_on;
 #[cfg(feature = "interzicf")]
 use interzic::InterzicClient;
 use listenbrainz::raw::Client as ListenbrainzClient;
+use musicbrainz_db_lite::database::pool::DBLiteConnObject;
 use musicbrainz_db_lite::DBClient;
 use musicbrainz_db_lite::client::MusicBrainzClient;
 #[cfg(feature = "clippy")]
@@ -170,5 +171,12 @@ impl AlistralCliClient {
         Arc::new(SymphonyzeClient {
             mb_database: musicbrainz_db,
         })
+    }
+
+    pub async fn mb_conn(&self) -> DBLiteConnObject {
+        self.musicbrainz_db
+            .get_raw_connection()
+            .await
+            .expect("Connection to the database has been closed")
     }
 }
