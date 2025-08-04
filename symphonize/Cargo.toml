@@ -21,4 +21,4 @@ tracing = "0.1.41"
 governor = "0.10.0"
 
 [dev-dependencies]
-tokio = "1.45.1"
+tokio = "1.47.1"
