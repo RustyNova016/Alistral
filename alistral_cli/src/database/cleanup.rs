@@ -1,3 +1,5 @@
+use sqlx::Acquire;
+
 pub async fn cleanup_table_data(
     conn: &mut sqlx::SqliteConnection,
     table_name: &str,
@@ -16,10 +18,16 @@ pub async fn cleanup_table_data(
 }
 
 pub async fn cleanup_database(conn: &mut sqlx::SqliteConnection) -> Result<(), sqlx::Error> {
-    cleanup_table_data(conn, "recordings").await?;
-    cleanup_table_data(conn, "artists").await?;
-    cleanup_table_data(conn, "releases").await?;
-    cleanup_table_data(conn, "labels").await?;
+    let mut trans = conn.begin().await?;
+
+    cleanup_table_data(&mut trans, "artists").await?;
+    cleanup_table_data(&mut trans, "labels").await?;
+    cleanup_table_data(&mut trans, "recordings").await?;
+    cleanup_table_data(&mut trans, "releases").await?;
+    // cleanup_table_data(&mut trans, "release_groups").await?;
+    cleanup_table_data(&mut trans, "works").await?;
+    
+    trans.commit().await?;
 
     Ok(())
 }
