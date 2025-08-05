@@ -75,6 +75,13 @@ impl ListenCollection {
             self.data.push(new_listen);
         }
     }
+
+    pub fn retain<F>(&mut self, f: F)
+    where
+        F: FnMut(&Listen) -> bool,
+    {
+        self.data.retain(f);
+    }
 }
 
 impl From<Listen> for ListenCollection {
@@ -122,5 +129,11 @@ impl FromIterator<Listen> for ListenCollection {
 impl Mergable for ListenCollection {
     fn merge(&mut self, other: Self) {
         self.merge_by_index(other);
+    }
+}
+
+impl From<ListenCollection> for Vec<Listen> {
+    fn from(value: ListenCollection) -> Self {
+        value.data
     }
 }

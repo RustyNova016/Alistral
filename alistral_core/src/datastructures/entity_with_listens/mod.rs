@@ -24,7 +24,7 @@ pub mod traits;
 pub mod work;
 
 /// A structure representing an entity with associated listens.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct EntityWithListens<Ent, Lis>
 where
     Ent: RowId,
@@ -56,6 +56,11 @@ where
         self.oldest_listen_date()
             .map(|discovery| Utc::now() - discovery)
     }
+
+    /// Set the listens.
+    pub fn set_listens(&mut self, listens: Lis) {
+        self.listens = listens
+    }
 }
 
 impl<Ent, Lis> ListenCollectionReadable for EntityWithListens<Ent, Lis>
@@ -73,8 +78,25 @@ where
     Ent: RowId,
 {
     /// Add a listen if it doesn't already exist in the collection. This doesn't check if the listen belong to the entity
-    pub fn insert_unique_listens_unchecked(&mut self, new_listen: Listen) {
+    pub fn insert_unique_listen_unchecked(&mut self, new_listen: Listen) {
         self.listens.push_unique(new_listen);
+    }
+
+    /// Add a collection of listen if it doesn't already exist in the collection. This doesn't check if the listen belong to the entity
+    pub fn insert_unique_listens_unchecked<I: IntoIterator<Item = Listen>>(
+        &mut self,
+        new_listens: I,
+    ) {
+        for lis in new_listens {
+            self.listens.push_unique(lis);
+        }
+    }
+
+    pub fn retain<F>(&mut self, f: F)
+    where
+        F: FnMut(&Listen) -> bool,
+    {
+        self.listens.retain(f);
     }
 }
 

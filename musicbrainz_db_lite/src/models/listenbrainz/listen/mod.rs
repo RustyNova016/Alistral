@@ -1,3 +1,4 @@
+pub mod views;
 use chrono::{DateTime, TimeZone, Utc};
 use sequelles::has_rowid::HasRowID;
 use serde::Deserialize;

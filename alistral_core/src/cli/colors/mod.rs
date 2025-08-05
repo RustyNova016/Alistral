@@ -29,6 +29,10 @@ pub trait AlistralColors: Display {
         self.truecolor(0, 255, 255).to_string()
     }
 
+    fn yumako_red(&self) -> String {
+        self.truecolor(255, 75, 75).to_string()
+    }
+
     fn db_lite_purple(&self) -> String {
         self.truecolor(175, 100, 220).to_string()
     }
@@ -37,6 +41,14 @@ pub trait AlistralColors: Display {
         format!(" {self} {CLEAR_UNTIL_END_OF_LINE}")
             .bold()
             .on_alistral_dark_green()
+            .black()
+            .to_string()
+    }
+
+    fn as_color_title(&self, color: (u8, u8, u8)) -> String {
+        format!(" {self} {CLEAR_UNTIL_END_OF_LINE}")
+            .bold()
+            .on_truecolor_tup(color)
             .black()
             .to_string()
     }
