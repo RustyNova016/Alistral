@@ -1,3 +1,4 @@
+pub mod rank;
 pub mod bump;
 pub mod overdue_count;
 pub mod overdue_duration;
