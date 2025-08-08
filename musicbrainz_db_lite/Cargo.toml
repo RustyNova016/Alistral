@@ -19,7 +19,6 @@ listenbrainz = { branch = "alistral_version", git = "https://github.com/RustyNov
 chrono = "0.4.40"
 extend = "1.2.0"
 futures = "0.3.31"
-macon = "1.2.0"
 serde_json = "1.0.140"
 sqlx = { version = "0.8.2", features = ["runtime-tokio", "macros", "sqlite"] }
 thiserror = "2.0.3"
@@ -40,6 +39,7 @@ async-recursion = "1.1.1"
 regex = "1.11.1"
 url = "2.5.4"
 sequelles = "0.1.0"
+bon = "3.6.5"
 
 [features]
 default = ["timeout_continue", "pretty_format"]

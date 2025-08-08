@@ -1,11 +1,10 @@
 use crate::models::error::Error;
-use derive_getters::Getters;
 use serde::Deserialize;
 use serde::Serialize;
 
 use super::Config;
 
-#[derive(Debug, Serialize, Deserialize, Getters, Default)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct MapperConfig {
     /// List of recordings that shouldn't be proposed to be mapped
     pub(super) backlisted: Vec<String>,
