@@ -11,7 +11,7 @@ proc-macro = true
 
 [dependencies]
 darling = "0.21.0"
-proc-macro2 = "1.0.86"
+proc-macro2 = "1.0.97"
 quote = "1.0.37"
 sqlx = { version = "0.8.2", features = ["runtime-tokio", "macros"] }
 syn = "2.0.104"
