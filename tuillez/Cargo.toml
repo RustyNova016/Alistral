@@ -10,7 +10,7 @@ indicatif = "0.18.0"
 owo-colors = "4.2.1"
 tracing-indicatif = "0.3.11"
 backtrace = "^0.3.48"
-thiserror = "2.0.3"
+thiserror = "2.0.14"
 extend = {version = "1.2.0", optional = true}
 chrono = {version = "0.4.40", optional = true}
 rust_decimal = {version = "1.36.0", optional = true}

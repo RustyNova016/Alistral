@@ -33,7 +33,7 @@ extend = "1.2.0"
 directories = "6.0.0"
 reqwest = { version = "0.12.22", features = ["json"] }
 rand = "0.9.2"
-thiserror = "2.0.12"
+thiserror = "2.0.14"
 derive_more = { version = "2.0.1", features = ["full"] }
 derive-new = "0.7.0"
 derive-getters = "0.5.0"
