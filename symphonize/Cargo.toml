@@ -8,7 +8,7 @@ rust-version = "1.85.1"
 musicbrainz-db-lite = { path = "../musicbrainz_db_lite" }
 tuillez = { path = "../tuillez" }
 
-thiserror = "2.0.11"
+thiserror = "2.0.15"
 sqlx = "0.8.3"
 owo-colors = "4.2.1"
 regex = "1.11.1"
