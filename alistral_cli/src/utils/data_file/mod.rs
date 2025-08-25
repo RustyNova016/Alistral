@@ -8,6 +8,7 @@ use file_guard::FileGuard;
 use serde::Serialize;
 use serde::de::DeserializeOwned;
 
+#[cfg(feature = "radio")]
 pub mod file_guard;
 
 pub trait DataFile: Serialize + DeserializeOwned + Default {

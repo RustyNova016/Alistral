@@ -111,6 +111,7 @@ pub impl<T, E> Result<T, E>
 where
     E: Into<crate::Error>,
 {
+    #[cfg(feature = "radio")]
     fn unwrap_fatal(self) -> T {
         match self {
             Ok(v) => v,
@@ -118,6 +119,7 @@ where
         }
     }
 
+    #[cfg(feature = "radio")]
     fn expect_fatal(self, text: &str) -> T {
         match self {
             Ok(v) => v,
@@ -126,6 +128,7 @@ where
     }
 }
 
+#[cfg(feature = "radio")]
 fn inner<T: Into<crate::Error>>(this: T, text: Option<String>) -> ! {
     let err: crate::Error = this.into();
     let text = process_errors(&err).or(text);

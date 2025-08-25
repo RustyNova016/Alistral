@@ -1,12 +1,12 @@
 [package]
 name = "alistral"
-version = "0.5.12"
+version = "0.5.13"
 edition = "2024"
 repository = "https://github.com/RustyNova016/alistral"
 publish = true
 license = "MIT"
 description = "A CLI app containing a set of useful tools for Listenbrainz"
-rust-version = "1.85.1"
+rust-version = "1.89.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -28,12 +28,12 @@ rust_decimal = "1.37.2"
 rust_decimal_macros = "1.36.0"
 chrono = "0.4.41"
 serde = { version = "1.0.219", features = ["rc"] }
-serde_json = "1.0.140"
+serde_json = "1.0.143"
 extend = "1.2.0"
 directories = "6.0.0"
-reqwest = { version = "0.12.22", features = ["json"] }
+reqwest = { version = "0.12.23", features = ["json"] }
 rand = "0.9.2"
-thiserror = "2.0.12"
+thiserror = "2.0.16"
 derive_more = { version = "2.0.1", features = ["full"] }
 derive-new = "0.7.0"
 derive-getters = "0.5.0"
@@ -50,17 +50,17 @@ url = "2.5.4"
 
 # Async
 futures = "0.3.31"
-tokio = { version = "1.46.1", features = ["rt", "rt-multi-thread", "parking_lot"] }
+tokio = { version = "1.47.1", features = ["rt", "rt-multi-thread", "parking_lot"] }
 streamies = "0.2.2"
 
 # Cli
-clap = { version = "4.5.42", features = [
+clap = { version = "4.5.45", features = [
     "unicode",
     "wrap_help",
     "derive",
     "color",
 ] }
-clap_complete = "4.5.55"
+clap_complete = "4.5.57"
 clap-markdown = "0.1.5"
 clap-verbosity-flag = { version = "3.0.3", default-features = false, features = ["tracing"] }
 
@@ -68,19 +68,25 @@ clap-verbosity-flag = { version = "3.0.3", default-features = false, features = 
 tracing = "0.1.41"
 tracing-subscriber = "0.3.19"
 tracing-appender = "0.2.3"
-tracing-indicatif = "0.3.11"
+tracing-indicatif = "0.3.13"
 
 # Other
 
 [features]
 #default = ["clippy"]
-full = ["clippy", "musicbrainz", "lookup", "stats"]
+default = ["full"]
+full = ["clippy", "musicbrainz", "lookup", "stats", "radio"]
+
+# Commands
 musicbrainz = []
 clippy = ["musicbrainz", "symphonize"]
 lookup = ["legacy_ent_with_listen"]
-legacy_ent_with_listen = []
 radio = ["interzicf"]
 stats = []
+
+# Parts
+legacy_ent_with_listen = []
+
 # Subcrates
 interzicf = ["interzic"]
 
