@@ -8,7 +8,7 @@ jobs:
             outputs:
                   tag: ${{ steps.get-latest-tag.outputs.tag }}
             steps:
-                  - uses: actions/checkout@v4
+                  - uses: actions/checkout@v5
                   
                   - uses: actions-ecosystem/action-get-latest-tag@v1
                     id: get-latest-tag
@@ -22,7 +22,7 @@ jobs:
                   fail-fast: false
             needs: get-tag
             steps:
-                  - uses: actions/checkout@v4
+                  - uses: actions/checkout@v5
 
                   - name: Install toolchain
                     uses: actions-rs/toolchain@v1
@@ -53,7 +53,7 @@ jobs:
                   fail-fast: false
             needs: get-tag
             steps:
-                  - uses: actions/checkout@v4
+                  - uses: actions/checkout@v5
 
                   - name: Install toolchain
                     uses: actions-rs/toolchain@v1
@@ -84,7 +84,7 @@ jobs:
                   fail-fast: false
             needs: get-tag
             steps:
-                  - uses: actions/checkout@v4
+                  - uses: actions/checkout@v5
 
                   - name: Install toolchain
                     uses: actions-rs/toolchain@v1

@@ -42,8 +42,10 @@ impl<T: DataFile> FileGuard<T> {
     // }
 }
 
+#[cfg(feature = "radio")]
 pub struct FileWriteGuard<'l, T: DataFile>(RwLockWriteGuard<'l, T>);
 
+#[cfg(feature = "radio")]
 impl<'l, T: DataFile> Deref for FileWriteGuard<'l, T> {
     type Target = RwLockWriteGuard<'l, T>;
 
@@ -52,12 +54,14 @@ impl<'l, T: DataFile> Deref for FileWriteGuard<'l, T> {
     }
 }
 
+#[cfg(feature = "radio")]
 impl<T: DataFile> DerefMut for FileWriteGuard<'_, T> {
     fn deref_mut(&mut self) -> &mut Self::Target {
         &mut self.0
     }
 }
 
+#[cfg(feature = "radio")]
 impl<T: DataFile> Drop for FileWriteGuard<'_, T> {
     fn drop(&mut self) {
         if panicking() {

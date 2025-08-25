@@ -1,6 +1,7 @@
 pub mod cli;
 pub mod cli_paging;
 pub mod constants;
+#[cfg(feature = "radio")]
 pub mod data_file;
 pub mod env;
 pub mod extensions;
