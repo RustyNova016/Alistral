@@ -10,9 +10,9 @@ pub struct ApiResult {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AlbumData {
-    pub spotify_name: String,
-    pub spotify_url: String,
-    pub mbid: String,
+    pub name: String,
+    pub url: String,
+    pub mbid: Option<String>,
     pub album_status: String,
 }
 

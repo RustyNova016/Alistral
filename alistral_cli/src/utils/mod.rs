@@ -8,5 +8,5 @@ pub mod extensions;
 pub mod listenbrainz_api;
 pub mod radio;
 pub mod regex;
-#[cfg(feature = "clippy")]
+#[cfg(feature = "musicbrainz")]
 pub mod whitelist_blacklist;

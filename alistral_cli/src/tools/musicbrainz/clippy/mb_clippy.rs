@@ -25,12 +25,12 @@ use tracing::debug;
 use tracing::info;
 use tuillez::formatter::FormatWithAsync as _;
 
+use crate::utils::constants::MUSIBRAINZ_FMT;
 use crate::ALISTRAL_CLIENT;
 use crate::tools::musicbrainz::clippy::PRINT_LOCK;
 use crate::tools::musicbrainz::clippy::PROCESSED_COUNT;
 use crate::tools::musicbrainz::clippy::REFETCH_LOCK;
 use crate::tools::musicbrainz::clippy::print_lint;
-use crate::utils::constants::MUSIBRAINZ_FMT;
 use crate::utils::whitelist_blacklist::WhitelistBlacklist;
 
 pub async fn mb_clippy_poller(

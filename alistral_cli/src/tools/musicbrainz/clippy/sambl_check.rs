@@ -58,7 +58,7 @@ pub fn samble_clippy_stream(
         .map(async |albums| {
             let urls = albums
                 .iter()
-                .map(|a| a.1.spotify_url.as_str())
+                .map(|a| a.1.url.as_str())
                 .collect_vec();
             Url::fetch_and_save_by_ressource_bulk_as_task(
                 ALISTRAL_CLIENT.musicbrainz_db.clone(),
@@ -110,7 +110,7 @@ async fn process_album(artist: Arc<Artist>, album: AlbumData, filter: &Whitelist
     info!(
         "[Processed - {}] [SAMBL] `{}`",
         PROCESSED_COUNT.fetch_add(1, Ordering::AcqRel),
-        album.spotify_name
+        album.name
     );
 }
 
@@ -174,7 +174,7 @@ async fn process_lint<L: SamblLint>(
     debug!(
         "Checking Lint `{}` for `{}`",
         L::get_name(),
-        album.spotify_name
+        album.name
     );
 
     if L::check_album_data(&ALISTRAL_CLIENT.symphonize, artist, album)
@@ -207,7 +207,7 @@ pub async fn recheck_lint<L: SamblLint>(artist: &Artist, album: &AlbumData) -> O
     debug!(
         "Rechecking Lint `{}` for `{}`",
         L::get_name(),
-        album.spotify_name
+        album.name
     );
 
     L::refresh_album_data(&ALISTRAL_CLIENT.symphonize, album)

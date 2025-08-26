@@ -10,7 +10,7 @@ use interzic::InterzicClient;
 use listenbrainz::raw::Client as ListenbrainzClient;
 use musicbrainz_db_lite::DBClient;
 use musicbrainz_db_lite::client::MusicBrainzClient;
-#[cfg(feature = "clippy")]
+#[cfg(feature = "musicbrainz")]
 use symphonize::SymphonyzeClient;
 use tuillez::fatal_error::IntoFatal;
 
@@ -36,7 +36,7 @@ pub struct AlistralCliClient {
     pub interzic: Arc<InterzicClient>,
     pub listenbrainz: Arc<ListenbrainzClient>,
     pub musicbrainz_db: Arc<DBClient>,
-    #[cfg(feature = "clippy")]
+    #[cfg(feature = "musicbrainz")]
     pub symphonize: Arc<SymphonyzeClient>,
 }
 
@@ -51,7 +51,7 @@ impl AlistralCliClient {
         let interzic =
             Self::create_interzic(musicbrainz, listenbrainz.clone(), musicbrainz_db.clone()).await;
         let core = Self::create_core_client(musicbrainz_db.clone(), listenbrainz.clone());
-        #[cfg(feature = "clippy")]
+        #[cfg(feature = "musicbrainz")]
         let symphonize = Self::create_symphonize_client(musicbrainz_db.clone());
 
         Ok(Self {
@@ -61,7 +61,7 @@ impl AlistralCliClient {
             interzic,
             listenbrainz,
             musicbrainz_db,
-            #[cfg(feature = "clippy")]
+            #[cfg(feature = "musicbrainz")]
             symphonize,
         })
     }
@@ -165,7 +165,7 @@ impl AlistralCliClient {
         block_on(Self::create_or_fatal())
     }
 
-    #[cfg(feature = "clippy")]
+    #[cfg(feature = "musicbrainz")]
     pub fn create_symphonize_client(musicbrainz_db: Arc<DBClient>) -> Arc<SymphonyzeClient> {
         Arc::new(SymphonyzeClient {
             mb_database: musicbrainz_db,

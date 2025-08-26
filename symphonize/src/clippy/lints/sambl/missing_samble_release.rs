@@ -72,7 +72,7 @@ impl SamblLint for MissingSamblReleaseLint {
         // by checking if a release contain the spotify url
         let releases = Release::get_or_fetch_by_url_as_task(
             client.mb_database.clone(),
-            &sambl_album.spotify_url,
+            &sambl_album.url,
         )
         .await?;
 
@@ -82,15 +82,16 @@ impl SamblLint for MissingSamblReleaseLint {
         }
 
         // If it's orange, seek the release
-        let potential_release = if !sambl_album.mbid.is_empty() {
-            Release::get_or_fetch_as_task(client.mb_database.clone(), &sambl_album.mbid).await?
+        let potential_release = if !sambl_album.mbid.as_ref().is_none_or(|id| id.is_empty()) {
+            Release::get_or_fetch_as_task(client.mb_database.clone(), &sambl_album.mbid.clone().unwrap())
+                .await?
         } else {
             None
         };
 
         Ok(Some(Self {
-            release_name: sambl_album.spotify_name.clone(),
-            spotify_link: sambl_album.spotify_url.clone(),
+            release_name: sambl_album.name.clone(),
+            spotify_link: sambl_album.url.clone(),
             artist: artist.clone(),
             potential_release,
         }))

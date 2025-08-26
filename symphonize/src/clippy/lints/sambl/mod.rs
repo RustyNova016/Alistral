@@ -21,7 +21,7 @@ pub trait SamblLint: MbClippyLint {
         async {
             Url::fetch_and_save_by_ressource_as_task(
                 client.mb_database.clone(),
-                &album.spotify_url,
+                &album.url,
             )
             .await?;
 
