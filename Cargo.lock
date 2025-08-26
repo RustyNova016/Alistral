@@ -93,6 +93,7 @@ dependencies = [
  "tracing-subscriber",
  "tuillez",
  "url",
+ "workspace-hack",
  "zip",
 ]
 
@@ -115,6 +116,7 @@ dependencies = [
  "tracing",
  "tracing-indicatif",
  "tuillez",
+ "workspace-hack",
 ]
 
 [[package]]
@@ -1860,6 +1862,7 @@ dependencies = [
  "thiserror 2.0.16",
  "tracing",
  "tuillez",
+ "workspace-hack",
 ]
 
 [[package]]
@@ -2209,6 +2212,7 @@ dependencies = [
  "tracing",
  "tuillez",
  "url",
+ "workspace-hack",
 ]
 
 [[package]]
@@ -2220,6 +2224,7 @@ dependencies = [
  "quote",
  "sqlx",
  "syn 2.0.106",
+ "workspace-hack",
 ]
 
 [[package]]
@@ -2230,6 +2235,7 @@ dependencies = [
  "serial_test",
  "sqlx",
  "tokio",
+ "workspace-hack",
 ]
 
 [[package]]
@@ -3603,6 +3609,7 @@ dependencies = [
  "tracing",
  "tuillez",
  "url",
+ "workspace-hack",
 ]
 
 [[package]]
@@ -4053,6 +4060,7 @@ dependencies = [
  "thiserror 2.0.16",
  "tracing",
  "tracing-indicatif",
+ "workspace-hack",
 ]
 
 [[package]]
@@ -4691,6 +4699,50 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6f42320e61fe2cfd34354ecb597f86f413484a798ba44a8ca1165c58d42da6c1"
 dependencies = [
  "bitflags 2.9.3",
+]
+
+[[package]]
+name = "workspace-hack"
+version = "0.1.0"
+dependencies = [
+ "arrayvec",
+ "base64",
+ "bitflags 2.9.3",
+ "cc",
+ "chrono",
+ "crossbeam-utils",
+ "crypto-common",
+ "deranged",
+ "digest",
+ "either",
+ "flate2",
+ "form_urlencoded",
+ "futures",
+ "futures-channel",
+ "futures-sink",
+ "futures-util",
+ "hyper",
+ "hyper-util",
+ "log",
+ "memchr",
+ "miniz_oxide",
+ "musicbrainz_rs",
+ "num-traits",
+ "portable-atomic",
+ "reqwest",
+ "serde",
+ "sha2",
+ "smallvec",
+ "sqlx",
+ "sqlx-macros",
+ "sqlx-macros-core",
+ "sqlx-sqlite",
+ "syn 2.0.106",
+ "time",
+ "tokio",
+ "tracing",
+ "tracing-core",
+ "zeroize",
 ]
 
 [[package]]
