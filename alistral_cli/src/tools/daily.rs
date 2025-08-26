@@ -157,6 +157,7 @@ async fn get_fresh_releases(
 
     //TODO: #529 Daily: Prevent recompiling recording with listens
     let artists = ArtistWithRecordingsCollection::from_listencollection(
+        &ALISTRAL_CLIENT.core,
         listens,
         &artist_strategy(&ALISTRAL_CLIENT),
     )

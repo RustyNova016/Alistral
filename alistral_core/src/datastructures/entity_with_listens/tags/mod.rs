@@ -62,16 +62,17 @@ where
     Ent: HasRowID + HasTags + Clone,
     Lis: ListenCollectionReadable + Clone + Mergable,
 {
-    #[instrument(skip(self, data, listens), fields(indicatif.pb_show = tracing::field::Empty))]
+    #[instrument(skip(self, client, data, listens), fields(indicatif.pb_show = tracing::field::Empty))]
     async fn sort_insert_listens(
         &self,
+        client: &AlistralClient,
         data: &mut TagWithEntListensCollection<Ent, Lis>,
         listens: Vec<Listen>,
     ) -> Result<(), crate::Error> {
         pg_spinner!("Compiling artist listen data");
         // Convert Recordings
         let listens =
-            EntityWithListensCollection::<Ent, Lis>::from_listens(listens, &self.ent_strat).await?;
+            EntityWithListensCollection::<Ent, Lis>::from_listens(client, listens, &self.ent_strat).await?;
 
         let entity_refs = listens.iter_entities().collect_vec();
         //fetch_artists_of_recordings(self.client, &recording_refs).await?;
@@ -89,10 +90,11 @@ where
 
     async fn sort_insert_listen(
         &self,
+        client: &AlistralClient,
         data: &mut TagWithEntListensCollection<Ent, Lis>,
         listen: Listen,
     ) -> Result<(), crate::Error> {
-        Self::sort_insert_listens(self, data, vec![listen]).await
+        Self::sort_insert_listens(self, client, data, vec![listen]).await
     }
 }
 

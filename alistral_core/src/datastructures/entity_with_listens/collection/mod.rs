@@ -16,6 +16,7 @@ use crate::datastructures::listen_collection::ListenCollection;
 use crate::datastructures::listen_collection::traits::ListenCollectionReadable;
 use crate::datastructures::listen_sorter::ListenSortingStrategy;
 use crate::traits::mergable::Mergable;
+use crate::AlistralClient;
 
 use super::EntityWithListens;
 
@@ -153,44 +154,47 @@ where
     /// Insert a listen with a specific sorting strategy
     pub async fn insert_listen_with<T>(
         &mut self,
+        client: &AlistralClient,
         listen: Listen,
         strategy: &T,
     ) -> Result<(), crate::Error>
     where
         T: ListenSortingStrategy<Ent, Lis>,
     {
-        strategy.sort_insert_listen(self, listen).await
+        strategy.sort_insert_listen(client, self, listen).await
     }
 
     /// Insert a collection of listens with a specific sorting strategy
     pub async fn insert_listens_with<T>(
         &mut self,
+        client: &AlistralClient,
         listens: Vec<Listen>,
         strategy: &T,
     ) -> Result<(), crate::Error>
     where
         T: ListenSortingStrategy<Ent, Lis>,
     {
-        strategy.sort_insert_listens(self, listens).await
+        strategy.sort_insert_listens(client, self, listens).await
     }
 
-    pub async fn from_listens<S>(listens: Vec<Listen>, strat: &S) -> Result<Self, crate::Error>
+    pub async fn from_listens<S>(client: &AlistralClient, listens: Vec<Listen>, strat: &S) -> Result<Self, crate::Error>
     where
         S: ListenSortingStrategy<Ent, Lis>,
     {
         let mut new = Self::new();
-        new.insert_listens_with(listens, strat).await?;
+        new.insert_listens_with(client, listens, strat).await?;
         Ok(new)
     }
 
     pub async fn from_listencollection<S>(
+        client: &AlistralClient,
         listens: ListenCollection,
         strat: &S,
     ) -> Result<Self, crate::Error>
     where
         S: ListenSortingStrategy<Ent, Lis>,
     {
-        Self::from_listens(listens.data, strat).await
+        Self::from_listens(client, listens.data, strat).await
     }
 }
 

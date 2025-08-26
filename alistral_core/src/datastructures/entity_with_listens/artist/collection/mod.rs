@@ -21,13 +21,13 @@ pub type ArtistWithRecordingsCollection =
 
 pub struct ArtistWithRecordingsStrategy<'l> {
     pub(super) client: &'l AlistralClient,
-    recording_strat: RecordingWithListenStrategy<'l>,
+    recording_strat: RecordingWithListenStrategy,
 }
 
 impl<'l> ArtistWithRecordingsStrategy<'l> {
     pub fn new(
         client: &'l AlistralClient,
-        recording_strat: RecordingWithListenStrategy<'l>,
+        recording_strat: RecordingWithListenStrategy,
     ) -> Self {
         Self {
             client,
@@ -39,16 +39,17 @@ impl<'l> ArtistWithRecordingsStrategy<'l> {
 impl ListenSortingStrategy<Artist, RecordingWithListensCollection>
     for ArtistWithRecordingsStrategy<'_>
 {
-    #[instrument(skip(self, data, listens), fields(indicatif.pb_show = tracing::field::Empty))]
+    #[instrument(skip(self, client, data, listens), fields(indicatif.pb_show = tracing::field::Empty))]
     async fn sort_insert_listens(
         &self,
+        client: &AlistralClient,
         data: &mut EntityWithListensCollection<Artist, RecordingWithListensCollection>,
         listens: Vec<Listen>,
     ) -> Result<(), crate::Error> {
         pg_spinner!("Compiling artist listen data");
         // Convert Recordings
         let recording_listens =
-            RecordingWithListensCollection::from_listens(listens, &self.recording_strat).await?;
+            RecordingWithListensCollection::from_listens(client, listens, &self.recording_strat).await?;
 
         let recording_refs = recording_listens.iter_entities().collect_vec();
 
@@ -88,9 +89,10 @@ impl ListenSortingStrategy<Artist, RecordingWithListensCollection>
 
     async fn sort_insert_listen(
         &self,
+        client: &AlistralClient,
         data: &mut EntityWithListensCollection<Artist, RecordingWithListensCollection>,
         listen: Listen,
     ) -> Result<(), crate::Error> {
-        Self::sort_insert_listens(self, data, vec![listen]).await
+        Self::sort_insert_listens(self, client, data, vec![listen]).await
     }
 }

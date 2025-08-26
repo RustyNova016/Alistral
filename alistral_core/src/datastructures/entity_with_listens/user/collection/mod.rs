@@ -24,9 +24,10 @@ impl<'l> UserWithListensStrategy<'l> {
 }
 
 impl ListenSortingStrategy<User, ListenCollection> for UserWithListensStrategy<'_> {
-    #[instrument(skip(self, data, listens), fields(indicatif.pb_show = tracing::field::Empty))]
+    #[instrument(skip(self, _client, data, listens), fields(indicatif.pb_show = tracing::field::Empty))]
     async fn sort_insert_listens(
         &self,
+        _client: &AlistralClient,
         data: &mut EntityWithListensCollection<User, ListenCollection>,
         listens: Vec<Listen>,
     ) -> Result<(), crate::Error> {
@@ -56,9 +57,10 @@ impl ListenSortingStrategy<User, ListenCollection> for UserWithListensStrategy<'
 
     async fn sort_insert_listen(
         &self,
+        client: &AlistralClient,
         data: &mut EntityWithListensCollection<User, ListenCollection>,
         listen: Listen,
     ) -> Result<(), crate::Error> {
-        Self::sort_insert_listens(self, data, vec![listen]).await
+        Self::sort_insert_listens(self, client, data, vec![listen]).await
     }
 }

@@ -134,11 +134,12 @@ impl AlistralCliClient {
         musicbrainz_db: Arc<DBClient>,
         listenbrainz: Arc<ListenbrainzClient>,
     ) -> Arc<AlistralClient> {
-        Arc::new(AlistralClient {
-            listenbrainz,
-            musicbrainz_db,
-            offline: in_offline_mode(),
-        })
+        AlistralClient::builder()
+            .listenbrainz(listenbrainz)
+            .musicbrainz_db(musicbrainz_db)
+            .offline(in_offline_mode())
+            .build()
+            .into()
     }
 
     /// Create the client, or fancy panic if an error occur
