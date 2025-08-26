@@ -11,7 +11,6 @@ pub trait ExtractTimeframe {
     /// - `end`: The end of the timeframe as a `DateTime<Utc>`.
     /// - `include_start`: A boolean indicating whether to include the start time in the extracted timeframe.
     /// - `include_end`: A boolean indicating whether to include the end time in the extracted timeframe.
-
     fn extract_timeframe(
         self,
         start: DateTime<Utc>,

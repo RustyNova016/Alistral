@@ -1,4 +1,4 @@
-use macon::Builder;
+
 use musicbrainz_db_lite::RowId;
 use musicbrainz_db_lite::api::listenbrainz::listen::fetching::query::ListenFetchAPIQuery;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
@@ -15,9 +15,8 @@ use crate::datastructures::listen_collection::ListenCollection;
 use crate::datastructures::listen_collection::traits::ListenCollectionReadable;
 use crate::datastructures::listen_sorter::ListenSortingStrategy;
 
-#[derive(Builder)]
+#[derive(bon::Builder)]
 pub struct ListenFetchQuery {
-    #[builder(Default=!)]
     user: String,
 
     fetch_recordings_redirects: bool,
@@ -78,7 +77,7 @@ impl ListenFetchQuery {
     pub async fn get_recordings_with_listens(
         client: &AlistralClient,
         user: String,
-        strat: &RecordingWithListenStrategy<'_>,
+        strat: &RecordingWithListenStrategy,
     ) -> Result<RecordingWithListensCollection, crate::Error> {
         Self::get_entity_with_listens(client, user, strat).await
     }
@@ -106,7 +105,7 @@ impl ListenFetchQuery {
             )
             .await?;
 
-        EntityWithListensCollection::from_listencollection(listens, strat).await
+        EntityWithListensCollection::from_listencollection(client, listens, strat).await
     }
 }
 
