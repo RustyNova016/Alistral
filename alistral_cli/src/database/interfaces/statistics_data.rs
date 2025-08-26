@@ -24,8 +24,8 @@ pub fn artist_strategy(client: &AlistralCliClient) -> ArtistWithRecordingsStrate
     ArtistWithRecordingsStrategy::new(client.core.as_ref(), recording_strategy(client))
 }
 
-pub fn recording_strategy(client: &AlistralCliClient) -> RecordingWithListenStrategy<'_> {
-    RecordingWithListenStrategy::new(client.core.as_ref())
+pub fn recording_strategy(client: &AlistralCliClient) -> RecordingWithListenStrategy {
+    RecordingWithListenStrategy::new()
 }
 
 #[cfg(feature = "stats")]

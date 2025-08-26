@@ -23,20 +23,20 @@ impl IterRecordingWithListens for RecordingWithListensCollection {
     }
 }
 
-pub struct RecordingWithListenStrategy<'l> {
-    pub(super) client: &'l AlistralClient,
-}
+#[derive(Default)]
+pub struct RecordingWithListenStrategy {}
 
-impl<'l> RecordingWithListenStrategy<'l> {
-    pub fn new(client: &'l AlistralClient) -> Self {
-        Self { client }
+impl RecordingWithListenStrategy {
+    pub fn new() -> Self {
+        Self {}
     }
 }
 
-impl ListenSortingStrategy<Recording, ListenCollection> for RecordingWithListenStrategy<'_> {
-    #[instrument(skip(self, data, listens), fields(indicatif.pb_show = tracing::field::Empty))]
+impl ListenSortingStrategy<Recording, ListenCollection> for RecordingWithListenStrategy {
+    #[instrument(skip(self, client, data, listens), fields(indicatif.pb_show = tracing::field::Empty))]
     async fn sort_insert_listens(
         &self,
+        client: &AlistralClient,
         data: &mut EntityWithListensCollection<Recording, ListenCollection>,
         listens: Vec<Listen>,
     ) -> Result<(), crate::Error> {
@@ -46,7 +46,7 @@ impl ListenSortingStrategy<Recording, ListenCollection> for RecordingWithListenS
         }
 
         pg_spinner!("Compiling recording listens data");
-        let conn = &mut *self.client.musicbrainz_db.get_raw_connection().await?;
+        let conn = &mut *client.musicbrainz_db.get_raw_connection().await?;
 
         // Prefetch the missing data
         // TODO: Make it user agnostic
@@ -60,7 +60,7 @@ impl ListenSortingStrategy<Recording, ListenCollection> for RecordingWithListenS
             .await?
             .ok_or(crate::Error::MissingUserError(user_name.clone()))?;
 
-        prefetch_recordings_of_listens(conn, self.client, user.id, &listens).await?;
+        prefetch_recordings_of_listens(conn, client, user.id, &listens).await?;
         let listen_refs = listens.iter().collect_vec();
 
         let joins = Listen::get_related_entity_bulk::<ListenRecordingDBRel>(conn, &listen_refs)
@@ -79,9 +79,10 @@ impl ListenSortingStrategy<Recording, ListenCollection> for RecordingWithListenS
 
     async fn sort_insert_listen(
         &self,
+        client: &AlistralClient,
         data: &mut EntityWithListensCollection<Recording, ListenCollection>,
         listen: Listen,
     ) -> Result<(), crate::Error> {
-        Self::sort_insert_listens(self, data, vec![listen]).await
+        Self::sort_insert_listens(self, client, data, vec![listen]).await
     }
 }

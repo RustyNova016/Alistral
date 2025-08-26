@@ -101,11 +101,11 @@ dependencies = [
 name = "alistral_core"
 version = "0.1.0"
 dependencies = [
+ "bon",
  "chrono",
  "futures",
  "itertools 0.14.0",
  "listenbrainz",
- "macon",
  "musicbrainz-db-lite",
  "owo-colors",
  "rust_decimal",
