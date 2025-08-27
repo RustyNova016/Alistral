@@ -25,7 +25,7 @@ jobs:
           - ubuntu-latest
           - macos-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v5.0.0
 
       - run: rustup toolchain install stable --profile minimal --no-self-update
 
@@ -43,7 +43,7 @@ jobs:
       SQLX_OFFLINE: true
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v5.0.0
 
       # Install minimal toolchain
       - name: Install minimal stable toolchain
@@ -65,7 +65,7 @@ jobs:
       SQLX_OFFLINE: true
       RUSTDOCFLAGS: -Dwarnings
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v5.0.0
       - uses: dtolnay/rust-toolchain@nightly
       - uses: Swatinem/rust-cache@v2
       - uses: dtolnay/install@cargo-docs-rs
@@ -74,7 +74,7 @@ jobs:
   fmt:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v5.0.0
 
       # Install minimal toolchain
       - name: Install minimal stable toolchain
@@ -92,7 +92,7 @@ jobs:
       SQLX_OFFLINE: true
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v5.0.0
 
     - uses: Swatinem/rust-cache@v2
 
@@ -111,7 +111,7 @@ jobs:
       SQLX_OFFLINE: true
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v5.0.0
     - uses: dtolnay/rust-toolchain@nightly
     - uses: Swatinem/rust-cache@v2
     - uses: taiki-e/install-action@cargo-hack
@@ -124,7 +124,7 @@ jobs:
   #     SQLX_OFFLINE: true
   #   runs-on: ubuntu-latest
   #   steps:
-  #   - uses: actions/checkout@v5
+  #   - uses: actions/checkout@v5.0.0
   #   - name: Install cargo-semver-checks
   #     run: cargo install cargo-semver-checks --locked
   #   - name: Run cargo-semver-checks
@@ -135,7 +135,7 @@ jobs:
       SQLX_OFFLINE: true
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v5.0.0
     - name: Install cargo-machete
       run: cargo install cargo-machete --locked
     - name: Run cargo-machete
