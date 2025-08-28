@@ -15,4 +15,3 @@ proc-macro2 = "1.0.86"
 quote = "1.0.37"
 sqlx = { version = "0.8.2", features = ["runtime-tokio", "macros"] }
 syn = "2.0.104"
-workspace-hack = { version = "0.1", path = "../../workspace-hack" }
