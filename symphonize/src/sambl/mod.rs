@@ -3,17 +3,14 @@ use std::sync::LazyLock;
 
 use governor::Quota;
 use governor::RateLimiter;
-use musicbrainz_db_lite::Artist;
-use musicbrainz_db_lite::HasUrls as _;
 use tracing::debug;
 use tracing::error;
-use url::Host;
 
-use crate::SymphonyzeClient;
 use crate::sambl::api_results::ApiError;
 use crate::sambl::api_results::ApiResult;
 
 pub mod api_results;
+pub mod lookup;
 
 static RATE_LIMIT: LazyLock<
     RateLimiter<
@@ -24,7 +21,23 @@ static RATE_LIMIT: LazyLock<
     >,
 > = LazyLock::new(|| RateLimiter::direct(Quota::per_minute(NonZero::new(6).unwrap())));
 
-pub async fn sambl_get_artist_albums(
+pub enum SamblProviders {
+    Spotify,
+    Deezer,
+    Tidal,
+}
+
+impl SamblProviders {
+    pub fn to_namespace(&self) -> &'static str {
+        match self {
+            Self::Deezer => "deezer",
+            Self::Spotify => "spotify",
+            Self::Tidal => "tidal",
+        }
+    }
+}
+
+pub async fn sambl_get_spotify_artist_albums(
     spotify_id: &str,
     mbid: &str,
 ) -> Result<Option<ApiResult>, crate::Error> {
@@ -52,19 +65,23 @@ async fn fetch_sambl(mbid: &str, url: &str) -> Result<Option<ApiResult>, crate::
     panic!("Couldn't parse SAMBL's response: {text:#?}");
 }
 
-pub async fn sambl_get_album_for_artist(
-    client: &SymphonyzeClient,
-    artist: &Artist,
-) -> Result<Option<ApiResult>, crate::Error> {
-    let host = Host::Domain("open.spotify.com");
-    let Some(spot_url) = artist.has_url_with_host(&client.mb_database, &host).await? else {
-        return Ok(None);
-    };
-    let spot_id = spot_url
-        .ressource
-        .split("/")
-        .last()
-        .expect("Malformed spotify url");
+// /// Ask sambl for the artist's albums
+// pub async fn sambl_get_albums_for_artist(
+//     client: &SymphonyzeClient,
+//     artist: &Artist,
+// ) -> Result<Option<ApiResult>, crate::Error> {
+//     let host = Host::Domain("open.spotify.com");
+//     let Some(spot_url) = artist
+//         .get_urls_with_host(&client.mb_database, &host)
+//         .await?
+//     else {
+//         return Ok(None);
+//     };
+//     let spot_id = spot_url
+//         .ressource
+//         .split("/")
+//         .last()
+//         .expect("Malformed spotify url");
 
-    sambl_get_artist_albums(spot_id, &artist.mbid).await
-}
+//     sambl_get_spotify_artist_albums(spot_id, &artist.mbid).await
+// }

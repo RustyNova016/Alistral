@@ -19,11 +19,8 @@ pub trait SamblLint: MbClippyLint {
         album: &AlbumData,
     ) -> impl std::future::Future<Output = Result<(), crate::Error>> + Send {
         async {
-            Url::fetch_and_save_by_ressource_as_task(
-                client.mb_database.clone(),
-                &album.spotify_url,
-            )
-            .await?;
+            Url::fetch_and_save_by_ressource_as_task(client.mb_database.clone(), &album.url)
+                .await?;
 
             Ok(())
         }

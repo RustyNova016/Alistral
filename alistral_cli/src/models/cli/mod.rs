@@ -15,8 +15,6 @@ use listens::ListenCommand;
 #[cfg(feature = "lookup")]
 use lookup::LookupCommand;
 use mapping::MappingCommand;
-#[cfg(feature = "musicbrainz")]
-use musicbrainz::MusicbrainzCommand;
 use tuillez::fatal_error::FatalError;
 use unstable::UnstableCommand;
 
@@ -28,6 +26,8 @@ use crate::tools::bumps::bump_command;
 use crate::tools::bumps::bump_down_command;
 use crate::tools::compatibility::compatibility_command;
 use crate::tools::daily::daily_report;
+#[cfg(feature = "musicbrainz")]
+use crate::tools::musicbrainz::MusicbrainzCommand;
 #[cfg(feature = "interzicf")]
 use crate::tools::playlist::PlaylistCommand;
 #[cfg(feature = "stats")]
@@ -44,8 +44,6 @@ pub mod listens;
 #[cfg(feature = "lookup")]
 pub mod lookup;
 pub mod mapping;
-#[cfg(feature = "musicbrainz")]
-pub mod musicbrainz;
 #[cfg(feature = "radio")]
 pub mod radio;
 pub mod unstable;

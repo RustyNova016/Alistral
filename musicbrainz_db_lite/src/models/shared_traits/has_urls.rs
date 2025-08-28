@@ -1,5 +1,7 @@
 use std::sync::Arc;
 
+use itertools::Itertools;
+
 use crate::DBRelation;
 use crate::Url;
 use crate::models::shared_traits::db_relation::EntityActiveURLDBRel;
@@ -10,7 +12,7 @@ where
     U: Send,
     Url: From<<Self as DBRelation<EntityActiveURLDBRel>>::ReturnedType>,
 {
-    /// Return the urls of the entity (Use a task)
+    /// Return the urls of the entity. This fetches the entity if needed, in a task
     fn get_entity_urls(
         &self,
         client: &Arc<crate::DBClient>,
@@ -28,11 +30,11 @@ where
     }
 
     /// Return true if the current entity has an url that is on a specific host
-    fn has_url_with_host(
+    fn get_urls_with_host(
         &self,
         client: &Arc<crate::DBClient>,
         host: &url::Host<&str>,
-    ) -> impl std::future::Future<Output = Result<Option<Url>, crate::Error>> + Send
+    ) -> impl std::future::Future<Output = Result<Vec<Url>, crate::Error>> + Send
     where
         Self: 'static,
         U: 'static,
@@ -43,7 +45,8 @@ where
             Ok(urls
                 .into_iter()
                 .map(Url::from)
-                .find(|url| url.match_host(host)))
+                .filter(|url| url.match_host(host))
+                .collect_vec())
         }
     }
 }

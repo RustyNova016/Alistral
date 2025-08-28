@@ -74,13 +74,12 @@ workspace-hack = { version = "0.1", path = "../workspace-hack" }
 # Other
 
 [features]
-#default = ["clippy"]
-default = ["full"]
-full = ["clippy", "musicbrainz", "lookup", "stats", "radio"]
+default = ["musicbrainz"]
+#default = ["full"]
+full = ["musicbrainz", "lookup", "stats", "radio"]
 
 # Commands
-musicbrainz = []
-clippy = ["musicbrainz", "symphonize"]
+musicbrainz = ["symphonize"]
 lookup = ["legacy_ent_with_listen"]
 radio = ["interzicf"]
 stats = []

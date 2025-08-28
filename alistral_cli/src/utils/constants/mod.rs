@@ -10,7 +10,7 @@ use crate::utils::constants::paths::CONFIG_DIR;
 
 pub mod paths;
 
-#[cfg(feature = "clippy")]
+#[cfg(feature = "musicbrainz")]
 pub static MUSIBRAINZ_FMT: LazyLock<MusicbrainzFormater> = LazyLock::new(|| MusicbrainzFormater {
     artist_credits: true,
     listenbrainz_link: false,

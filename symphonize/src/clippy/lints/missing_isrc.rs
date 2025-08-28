@@ -38,10 +38,10 @@ impl MissingISRCLint {
     ) -> Result<Option<Self>, crate::Error> {
         for domain in DOMAINS_WITH_ISRCS.iter() {
             let host = Host::Domain(*domain);
-            if release
-                .has_url_with_host(&client.mb_database, &host)
+            if !release
+                .get_urls_with_host(&client.mb_database, &host)
                 .await?
-                .is_some()
+                .is_empty()
             {
                 return Ok(Some(Self {
                     recording: recording.clone(),
