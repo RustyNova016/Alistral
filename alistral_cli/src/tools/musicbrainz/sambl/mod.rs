@@ -59,7 +59,7 @@ impl MusicbrainzSamblCommand {
         let mut results = Vec::new();
 
         for artist in &self.start_artists {
-            let mbid = read_mbid_from_input(&artist).expect("Couldn't read mbid");
+            let mbid = read_mbid_from_input(artist).expect("Couldn't read mbid");
 
             let artist =
                 Artist::fetch_and_save_as_task(ALISTRAL_CLIENT.musicbrainz_db.clone(), &mbid)

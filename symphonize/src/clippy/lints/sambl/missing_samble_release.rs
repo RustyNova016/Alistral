@@ -2,6 +2,7 @@ use musicbrainz_db_lite::Artist;
 use musicbrainz_db_lite::GetOrFetch;
 use musicbrainz_db_lite::MainEntity;
 use musicbrainz_db_lite::Release;
+use tuillez::OwoColorize;
 use tuillez::formatter::FormatWithAsync as _;
 use tuillez::utils::hyperlink_rename;
 
@@ -16,7 +17,8 @@ use crate::utils::formater;
 
 pub struct MissingSamblReleaseLint {
     release_name: String,
-    spotify_link: String,
+    provider_link: String,
+    provider: String,
 
     artist: Artist,
 
@@ -70,11 +72,9 @@ impl SamblLint for MissingSamblReleaseLint {
 
         // Sambl found a missing album. Let's make sure it is not present in MB
         // by checking if a release contain the spotify url
-        let releases = Release::get_or_fetch_by_url_as_task(
-            client.mb_database.clone(),
-            &sambl_album.url,
-        )
-        .await?;
+        let releases =
+            Release::get_or_fetch_by_url_as_task(client.mb_database.clone(), &sambl_album.url)
+                .await?;
 
         if !releases.is_empty() {
             // The releases are properly linked. We ignore this report
@@ -83,15 +83,19 @@ impl SamblLint for MissingSamblReleaseLint {
 
         // If it's orange, seek the release
         let potential_release = if !sambl_album.mbid.as_ref().is_none_or(|id| id.is_empty()) {
-            Release::get_or_fetch_as_task(client.mb_database.clone(), &sambl_album.mbid.clone().unwrap())
-                .await?
+            Release::get_or_fetch_as_task(
+                client.mb_database.clone(),
+                &sambl_album.mbid.clone().unwrap(),
+            )
+            .await?
         } else {
             None
         };
 
         Ok(Some(Self {
+            provider: sambl_album.provider.clone(),
             release_name: sambl_album.name.clone(),
-            spotify_link: sambl_album.url.clone(),
+            provider_link: sambl_album.url.clone(),
             artist: artist.clone(),
             potential_release,
         }))
@@ -128,15 +132,15 @@ impl MbClippyLint for MissingSamblReleaseLint {
         let mut out = Vec::new();
 
         out.push(MbClippyLintLink {
-            name: "Spotify Release".to_string(),
-            url: self.spotify_link.clone(),
+            name: "Release url".to_string(),
+            url: self.provider_link.clone(),
         });
 
         out.push(MbClippyLintLink {
             name: "Harmony search".to_string(),
             url: format!(
                 "https://harmony.pulsewidth.org.uk/release?url={}&category=preferred",
-                self.spotify_link
+                self.provider_link
             ),
         });
 
@@ -155,8 +159,15 @@ impl MbClippyLint for MissingSamblReleaseLint {
                 &format!("https://musicbrainz.org/release/{}", release.mbid),
             );
             ret.push(MbClippyLintHint::new(format!(
-                "This {link} might be the same, but is missing its spotify link."
+                "This {link} might be the same, but is missing its {} link.",
+                self.provider
             )));
+        }
+
+        if &self.provider == "deezer" || &self.provider == "tidal" {
+            ret.push(MbClippyLintHint::new(format!(
+                "⚠️  {} group artists of the same name. Make sure the artist is correct and not another one", self.provider
+            ).yellow().to_string()));
         }
 
         Ok(ret)

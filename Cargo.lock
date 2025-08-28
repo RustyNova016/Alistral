@@ -81,7 +81,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sqlx",
- "streamies",
+ "streamies 0.2.2",
  "strsim",
  "strum_macros",
  "symphonize",
@@ -480,9 +480,9 @@ dependencies = [
 
 [[package]]
 name = "clap"
-version = "4.5.45"
+version = "4.5.46"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1fc0e74a703892159f5ae7d3aac52c8e6c392f5ae5f359c70b5881d60aaac318"
+checksum = "2c5e4fcf9c21d2e544ca1ee9d8552de13019a42aa7dbf32747fa7aaf1df76e57"
 dependencies = [
  "clap_builder",
  "clap_derive",
@@ -509,9 +509,9 @@ dependencies = [
 
 [[package]]
 name = "clap_builder"
-version = "4.5.44"
+version = "4.5.46"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b3e7f4214277f3c7aa526a59dd3fbe306a370daee1f8b7b8c987069cd8e888a8"
+checksum = "fecb53a0e6fcfb055f686001bc2e2592fa527efaf38dbe81a6a9563562e57d41"
 dependencies = [
  "anstream",
  "anstyle",
@@ -1974,9 +1974,9 @@ checksum = "6a82ae493e598baaea5209805c49bbf2ea7de956d50d7da0da1164f9c6d28543"
 
 [[package]]
 name = "liblzma"
-version = "0.4.3"
+version = "0.4.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "272b875472a046e39ff7408374a5a050b112d2142211a0f54a295c0bd1c3c757"
+checksum = "10bf66f4598dc77ff96677c8e763655494f00ff9c1cf79e2eb5bb07bc31f807d"
 dependencies = [
  "liblzma-sys",
 ]
@@ -2206,7 +2206,7 @@ dependencies = [
  "serde_json",
  "serial_test",
  "sqlx",
- "streamies",
+ "streamies 0.2.2",
  "thiserror 2.0.16",
  "tokio",
  "tracing",
@@ -3557,6 +3557,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "streamies"
+version = "0.3.0"
+source = "git+https://github.com/RustyNova016/streamies.git#0b00d1152aafa7d972521c00d8091ba020a3b3a1"
+dependencies = [
+ "futures",
+ "pin-project-lite",
+]
+
+[[package]]
 name = "stringprep"
 version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3596,6 +3605,7 @@ name = "symphonize"
 version = "0.1.0"
 dependencies = [
  "format-url",
+ "futures",
  "governor",
  "musicbrainz-db-lite",
  "owo-colors",
@@ -3604,6 +3614,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sqlx",
+ "streamies 0.3.0",
  "thiserror 2.0.16",
  "tokio",
  "tracing",

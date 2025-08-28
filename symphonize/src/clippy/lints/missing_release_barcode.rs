@@ -46,10 +46,11 @@ impl MissingBarcodeLint {
 
         for domain in DOMAINS_WITH_UPC.iter() {
             let host = Host::Domain(*domain);
-            match release
-                .has_url_with_host(&client.mb_database, &host)
-                .await?
-            {
+            let urls = release
+                .get_urls_with_host(&client.mb_database, &host)
+                .await?;
+
+            match urls.first() {
                 None => continue,
                 Some(url) => {
                     return Ok(Some(Self {

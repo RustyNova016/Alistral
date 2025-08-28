@@ -1,9 +1,9 @@
-use core::future::ready;
 use core::sync::atomic::Ordering;
 use std::sync::Arc;
 
 use futures::Stream;
 use futures::StreamExt;
+use futures::TryStreamExt as _;
 use futures::channel::mpsc::Sender;
 use futures::channel::mpsc::channel;
 use futures::pin_mut;
@@ -12,10 +12,11 @@ use itertools::Itertools;
 use musicbrainz_db_lite::Artist;
 use musicbrainz_db_lite::MainEntity;
 use musicbrainz_db_lite::Url;
+use streamies::TryStreamies;
 use symphonize::clippy::lints::sambl::SamblLint;
 use symphonize::clippy::lints::sambl::missing_samble_release::MissingSamblReleaseLint;
 use symphonize::sambl::api_results::AlbumData;
-use symphonize::sambl::sambl_get_album_for_artist;
+use symphonize::sambl::lookup::sambl_lookup_stream;
 use tracing::debug;
 use tracing::info;
 
@@ -43,23 +44,19 @@ pub fn samble_clippy_stream(
         })
         // Get the album data
         .map(async |artist| {
-            sambl_get_album_for_artist(&ALISTRAL_CLIENT.symphonize, &artist)
+            sambl_lookup_stream(&ALISTRAL_CLIENT.symphonize, &artist.clone())
+                .map_ok(move |data| (artist.clone(), data))
+                .try_collect_vec()
                 .await
-                .unwrap()
-                .map(|data| (artist, data))
+                .map(stream::iter)
+                .expect("Error while fetching sambl albums")
         })
         .buffer_unordered(8)
-        .filter_map(ready)
-        .flat_map(|(artist, data)| {
-            stream::iter(data.album_data).map(move |album| (artist.clone(), album))
-        })
+        .flatten()
         // Fetch the urls
         .chunks(100)
         .map(async |albums| {
-            let urls = albums
-                .iter()
-                .map(|a| a.1.url.as_str())
-                .collect_vec();
+            let urls = albums.iter().map(|a| a.1.url.as_str()).collect_vec();
             Url::fetch_and_save_by_ressource_bulk_as_task(
                 ALISTRAL_CLIENT.musicbrainz_db.clone(),
                 urls,
@@ -171,11 +168,7 @@ async fn process_lint<L: SamblLint>(
 
     // Check the lint with old data
 
-    debug!(
-        "Checking Lint `{}` for `{}`",
-        L::get_name(),
-        album.name
-    );
+    debug!("Checking Lint `{}` for `{}`", L::get_name(), album.name);
 
     if L::check_album_data(&ALISTRAL_CLIENT.symphonize, artist, album)
         .await
@@ -204,11 +197,7 @@ async fn process_lint<L: SamblLint>(
 pub async fn recheck_lint<L: SamblLint>(artist: &Artist, album: &AlbumData) -> Option<L> {
     //pg_spinner!("Verifying lint...");
 
-    debug!(
-        "Rechecking Lint `{}` for `{}`",
-        L::get_name(),
-        album.name
-    );
+    debug!("Rechecking Lint `{}` for `{}`", L::get_name(), album.name);
 
     L::refresh_album_data(&ALISTRAL_CLIENT.symphonize, album)
         .await

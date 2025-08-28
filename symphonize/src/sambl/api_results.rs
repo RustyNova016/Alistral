@@ -10,6 +10,7 @@ pub struct ApiResult {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AlbumData {
+    pub provider: String,
     pub name: String,
     pub url: String,
     pub mbid: Option<String>,
