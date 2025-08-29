@@ -38,16 +38,18 @@ impl<'l> LabelWithReleasesStrategy<'l> {
 impl ListenSortingStrategy<Label, ReleaseWithRecordingsCollection>
     for LabelWithReleasesStrategy<'_>
 {
-    #[instrument(skip(self, data, listens), fields(indicatif.pb_show = tracing::field::Empty))]
+    #[instrument(skip(self, client, data, listens), fields(indicatif.pb_show = tracing::field::Empty))]
     async fn sort_insert_listens(
         &self,
+        client: &AlistralClient,
         data: &mut EntityWithListensCollection<Label, ReleaseWithRecordingsCollection>,
         listens: Vec<Listen>,
     ) -> Result<(), crate::Error> {
         pg_spinner!("Compiling label listens data");
         // Convert Releases
         let releases =
-            ReleaseWithRecordingsCollection::from_listens(listens, &self.release_strat).await?;
+            ReleaseWithRecordingsCollection::from_listens(client, listens, &self.release_strat)
+                .await?;
 
         let conn = &mut *self.client.musicbrainz_db.get_raw_connection().await?;
 
@@ -84,9 +86,10 @@ impl ListenSortingStrategy<Label, ReleaseWithRecordingsCollection>
 
     async fn sort_insert_listen(
         &self,
+        client: &AlistralClient,
         data: &mut EntityWithListensCollection<Label, ReleaseWithRecordingsCollection>,
         listen: Listen,
     ) -> Result<(), crate::Error> {
-        Self::sort_insert_listens(self, data, vec![listen]).await
+        Self::sort_insert_listens(self, client, data, vec![listen]).await
     }
 }
