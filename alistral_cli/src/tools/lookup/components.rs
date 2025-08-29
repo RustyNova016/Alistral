@@ -3,13 +3,11 @@ use core::fmt::Display;
 use std::fmt::Write;
 
 use alistral_core::datastructures::entity_with_listens::EntityWithListens;
-use alistral_core::datastructures::entity_with_listens::collection::EntityWithListensCollection;
 use alistral_core::datastructures::entity_with_listens::listen_timeframe::ListenTimeframe;
 use alistral_core::datastructures::entity_with_listens::listen_timeframe::extract_timeframe::ExtractTimeframe;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use musicbrainz_db_lite::RowId;
 use tuillez::OwoColorize;
-use tuillez::formatter::FormatWithAsync;
 
 #[derive(bon::Builder, Clone, Debug)]
 #[builder(derive(Clone, Debug))]
@@ -47,11 +45,11 @@ where
     }
 
     pub async fn to_string(&self) -> String {
-        let current_value = (self.get_data)(&self.data.current());
+        let current_value = (self.get_data)(self.data.current());
         let mut out = format!("{}: {} ", self.description, current_value);
 
         if let Some(prev_data) = &self.data.previous_opt() {
-            let prev_value = (self.get_data)(&prev_data);
+            let prev_value = (self.get_data)(prev_data);
             write!(
                 out,
                 "[{} - {}]",
