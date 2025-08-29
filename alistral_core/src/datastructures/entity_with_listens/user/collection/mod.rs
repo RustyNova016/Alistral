@@ -13,21 +13,20 @@ use crate::datastructures::listen_sorter::ListenSortingStrategy;
 
 pub type UserWithListensCollection = EntityWithListensCollection<User, ListenCollection>;
 
-pub struct UserWithListensStrategy<'l> {
-    pub(super) client: &'l AlistralClient,
-}
+#[derive(Debug, Default)]
+pub struct UserWithListensStrategy {}
 
-impl<'l> UserWithListensStrategy<'l> {
-    pub fn new(client: &'l AlistralClient) -> Self {
-        Self { client }
+impl UserWithListensStrategy {
+    pub fn new() -> Self {
+        Self {}
     }
 }
 
-impl ListenSortingStrategy<User, ListenCollection> for UserWithListensStrategy<'_> {
-    #[instrument(skip(self, _client, data, listens), fields(indicatif.pb_show = tracing::field::Empty))]
+impl ListenSortingStrategy<User, ListenCollection> for UserWithListensStrategy {
+    #[instrument(skip(self, client, data, listens), fields(indicatif.pb_show = tracing::field::Empty))]
     async fn sort_insert_listens(
         &self,
-        _client: &AlistralClient,
+        client: &AlistralClient,
         data: &mut EntityWithListensCollection<User, ListenCollection>,
         listens: Vec<Listen>,
     ) -> Result<(), crate::Error> {
@@ -37,7 +36,7 @@ impl ListenSortingStrategy<User, ListenCollection> for UserWithListensStrategy<'
         }
 
         pg_spinner!("Compiling user listens data");
-        let conn = &mut *self.client.musicbrainz_db.get_raw_connection().await?;
+        let conn = &mut *client.musicbrainz_db.get_raw_connection().await?;
 
         let listen_refs = listens.iter().collect_vec();
 

@@ -11,12 +11,12 @@ use musicbrainz_db_lite::HasRowID;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use rust_decimal::Decimal;
 
+use crate::AlistralClient;
 use crate::datastructures::entity_with_listens::listen_timeframe::extract_timeframe::ExtractTimeframe;
 use crate::datastructures::listen_collection::ListenCollection;
 use crate::datastructures::listen_collection::traits::ListenCollectionReadable;
 use crate::datastructures::listen_sorter::ListenSortingStrategy;
 use crate::traits::mergable::Mergable;
-use crate::AlistralClient;
 
 use super::EntityWithListens;
 
@@ -177,7 +177,11 @@ where
         strategy.sort_insert_listens(client, self, listens).await
     }
 
-    pub async fn from_listens<S>(client: &AlistralClient, listens: Vec<Listen>, strat: &S) -> Result<Self, crate::Error>
+    pub async fn from_listens<S>(
+        client: &AlistralClient,
+        listens: Vec<Listen>,
+        strat: &S,
+    ) -> Result<Self, crate::Error>
     where
         S: ListenSortingStrategy<Ent, Lis>,
     {

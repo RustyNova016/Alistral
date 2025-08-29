@@ -3,9 +3,9 @@ use core::future::Future;
 use musicbrainz_db_lite::HasRowID;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 
+use crate::AlistralClient;
 use crate::datastructures::entity_with_listens::collection::EntityWithListensCollection;
 use crate::datastructures::listen_collection::traits::ListenCollectionReadable;
-use crate::AlistralClient;
 
 /// A specific strategy to add listens to a [`EntityWithListensCollection`]
 pub trait ListenSortingStrategy<Ent, Lis>
