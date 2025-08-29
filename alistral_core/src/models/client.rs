@@ -14,7 +14,7 @@ pub struct AlistralClient {
     pub musicbrainz_db: Arc<DBClient>,
 
     // Configuration
-    #[builder(default = false)]
+    //#[builder(default = false)]
     pub offline: bool,
 
     // Strategies

@@ -6,7 +6,6 @@ use alistral_core::datastructures::entity_with_listens::user::UserWithListens;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use alistral_core::models::user::UserData;
 use chrono::DateTime;
-use chrono::Duration;
 use chrono::Utc;
 use clap::Parser;
 
@@ -16,7 +15,6 @@ use crate::ALISTRAL_CLIENT;
 use crate::models::cli::common::Timeframe;
 use crate::models::config::Config;
 use crate::tools::lookup::components::LookupLine;
-use crate::utils::cli::read_mbid_from_input;
 
 #[derive(Parser, Clone, Debug)]
 pub(super) struct LookupUserCommand {

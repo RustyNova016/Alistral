@@ -40,8 +40,6 @@ pub mod config;
 #[cfg(feature = "interzic")]
 pub mod interzic;
 pub mod listens;
-#[cfg(feature = "lookup")]
-pub mod lookup;
 pub mod mapping;
 #[cfg(feature = "radio")]
 pub mod radio;

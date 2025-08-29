@@ -4,6 +4,8 @@ use std::sync::Arc;
 use std::sync::LazyLock;
 
 use alistral_core::AlistralClient;
+use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListenStrategy;
+use alistral_core::datastructures::entity_with_listens::user::collection::UserWithListensStrategy;
 use futures::executor::block_on;
 #[cfg(feature = "interzicf")]
 use interzic::InterzicClient;
@@ -138,6 +140,8 @@ impl AlistralCliClient {
             .listenbrainz(listenbrainz)
             .musicbrainz_db(musicbrainz_db)
             .offline(in_offline_mode())
+            .recording_with_listen_strat(RecordingWithListenStrategy::default())
+            .user_with_listen_strat(UserWithListensStrategy::default())
             .build()
             .into()
     }
