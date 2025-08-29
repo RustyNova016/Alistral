@@ -1,4 +1,3 @@
-
 use musicbrainz_db_lite::RowId;
 use musicbrainz_db_lite::api::listenbrainz::listen::fetching::query::ListenFetchAPIQuery;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;

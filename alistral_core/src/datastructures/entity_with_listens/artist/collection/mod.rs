@@ -25,10 +25,7 @@ pub struct ArtistWithRecordingsStrategy<'l> {
 }
 
 impl<'l> ArtistWithRecordingsStrategy<'l> {
-    pub fn new(
-        client: &'l AlistralClient,
-        recording_strat: RecordingWithListenStrategy,
-    ) -> Self {
+    pub fn new(client: &'l AlistralClient, recording_strat: RecordingWithListenStrategy) -> Self {
         Self {
             client,
             recording_strat,
@@ -49,7 +46,8 @@ impl ListenSortingStrategy<Artist, RecordingWithListensCollection>
         pg_spinner!("Compiling artist listen data");
         // Convert Recordings
         let recording_listens =
-            RecordingWithListensCollection::from_listens(client, listens, &self.recording_strat).await?;
+            RecordingWithListensCollection::from_listens(client, listens, &self.recording_strat)
+                .await?;
 
         let recording_refs = recording_listens.iter_entities().collect_vec();
 
