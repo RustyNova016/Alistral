@@ -46,7 +46,8 @@ impl ListenSortingStrategy<ReleaseGroup, ReleaseWithRecordingsCollection>
         pg_spinner!("Compiling release group listens data");
         // Convert Releases
         let releases =
-            ReleaseWithRecordingsCollection::from_listens(client, listens, &self.release_strat).await?;
+            ReleaseWithRecordingsCollection::from_listens(client, listens, &self.release_strat)
+                .await?;
 
         let conn = &mut *self.client.musicbrainz_db.get_raw_connection().await?;
 

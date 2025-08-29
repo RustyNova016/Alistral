@@ -5,7 +5,6 @@ use crate::database::fetching::listens::ListenFetchQuery;
 use crate::datastructures::entity_with_listens::EntityWithListens;
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use crate::datastructures::entity_with_listens::user::UserWithListens;
-use crate::datastructures::entity_with_listens::user::collection::UserWithListensStrategy;
 use crate::datastructures::listen_collection::ListenCollection;
 
 pub struct UserData {
@@ -16,17 +15,12 @@ pub struct UserData {
 
 impl UserData {
     pub async fn load_user(client: &AlistralClient, name: String) -> Result<Self, crate::Error> {
-        let strat = UserWithListensStrategy::new(&client);
-        Self::load_user_with_strat(client, name, &strat).await
-    }
-
-    pub async fn load_user_with_strat<'l>(
-        client: &AlistralClient,
-        name: String,
-        strat: &UserWithListensStrategy<'l>,
-    ) -> Result<Self, crate::Error> {
-        let listens =
-            ListenFetchQuery::get_entity_with_listens(client, name.clone(), strat).await?;
+        let listens = ListenFetchQuery::get_entity_with_listens(
+            client,
+            name.clone(),
+            &client.user_with_listen_strat,
+        )
+        .await?;
 
         Ok(Self {
             listens: listens

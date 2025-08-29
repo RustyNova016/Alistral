@@ -72,7 +72,8 @@ where
         pg_spinner!("Compiling artist listen data");
         // Convert Recordings
         let listens =
-            EntityWithListensCollection::<Ent, Lis>::from_listens(client, listens, &self.ent_strat).await?;
+            EntityWithListensCollection::<Ent, Lis>::from_listens(client, listens, &self.ent_strat)
+                .await?;
 
         let entity_refs = listens.iter_entities().collect_vec();
         //fetch_artists_of_recordings(self.client, &recording_refs).await?;
