@@ -74,6 +74,7 @@ impl ListenSeeder {
         .into();
 
         let mut recordings = RecordingWithListensCollection::from_listencollection(
+            &ALISTRAL_CLIENT.core,
             listens,
             &recording_strategy(&ALISTRAL_CLIENT),
         )
@@ -125,6 +126,7 @@ impl ListenSeeder {
         .into();
 
         let mapped = RecordingWithListensCollection::from_listencollection(
+            &ALISTRAL_CLIENT.core,
             listens,
             &recording_strategy(&ALISTRAL_CLIENT),
         )

@@ -18,14 +18,11 @@ pub type ReleaseWithRecordingsCollection =
 
 pub struct ReleaseWithRecordingsStrategy<'l> {
     pub(super) client: &'l AlistralClient,
-    recording_strat: RecordingWithListenStrategy<'l>,
+    recording_strat: RecordingWithListenStrategy,
 }
 
 impl<'l> ReleaseWithRecordingsStrategy<'l> {
-    pub fn new(
-        client: &'l AlistralClient,
-        recording_strat: RecordingWithListenStrategy<'l>,
-    ) -> Self {
+    pub fn new(client: &'l AlistralClient, recording_strat: RecordingWithListenStrategy) -> Self {
         Self {
             client,
             recording_strat,
@@ -36,16 +33,18 @@ impl<'l> ReleaseWithRecordingsStrategy<'l> {
 impl ListenSortingStrategy<Release, RecordingWithListensCollection>
     for ReleaseWithRecordingsStrategy<'_>
 {
-    #[instrument(skip(self, data, listens), fields(indicatif.pb_show = tracing::field::Empty))]
+    #[instrument(skip(self, client, data, listens), fields(indicatif.pb_show = tracing::field::Empty))]
     async fn sort_insert_listens(
         &self,
+        client: &AlistralClient,
         data: &mut EntityWithListensCollection<Release, RecordingWithListensCollection>,
         listens: Vec<Listen>,
     ) -> Result<(), crate::Error> {
         pg_spinner!("Compiling releases listen data");
         // Convert Recordings
         let recordings =
-            RecordingWithListensCollection::from_listens(listens, &self.recording_strat).await?;
+            RecordingWithListensCollection::from_listens(client, listens, &self.recording_strat)
+                .await?;
 
         let recording_refs = recordings.iter_entities().collect_vec();
         fetch_recordings_as_complete(self.client, &recording_refs).await?;
@@ -78,9 +77,10 @@ impl ListenSortingStrategy<Release, RecordingWithListensCollection>
 
     async fn sort_insert_listen(
         &self,
+        client: &AlistralClient,
         data: &mut EntityWithListensCollection<Release, RecordingWithListensCollection>,
         listen: Listen,
     ) -> Result<(), crate::Error> {
-        Self::sort_insert_listens(self, data, vec![listen]).await
+        Self::sort_insert_listens(self, client, data, vec![listen]).await
     }
 }
