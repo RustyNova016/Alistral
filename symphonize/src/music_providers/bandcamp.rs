@@ -15,5 +15,5 @@ pub fn is_bandcamp_url(url: &Url) -> bool {
 pub fn get_bandcamp_artist_id_from_url(url: &str) -> Option<&str> {
     let groups = BANDCAMP_URL_REGEX.captures(url)?;
 
-    return groups.get(1).map(|matc| matc.as_str());
+    groups.get(1).map(|matc| matc.as_str())
 }

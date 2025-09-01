@@ -6,9 +6,9 @@ use musicbrainz_db_lite::HasUrls as _;
 use musicbrainz_db_lite::Url;
 use streamies::TryStreamies as _;
 
+use crate::SymphonyzeClient;
 use crate::music_providers::bandcamp::get_bandcamp_artist_id_from_url;
 use crate::music_providers::bandcamp::is_bandcamp_url;
-use crate::SymphonyzeClient;
 use crate::music_providers::deezer::get_deezer_artist_id_from_url;
 use crate::music_providers::deezer::is_deezer_url;
 use crate::music_providers::spotify::get_spotify_artist_id_from_url;
