@@ -6,6 +6,8 @@ use musicbrainz_db_lite::HasUrls as _;
 use musicbrainz_db_lite::Url;
 use streamies::TryStreamies as _;
 
+use crate::music_providers::bandcamp::get_bandcamp_artist_id_from_url;
+use crate::music_providers::bandcamp::is_bandcamp_url;
 use crate::SymphonyzeClient;
 use crate::music_providers::deezer::get_deezer_artist_id_from_url;
 use crate::music_providers::deezer::is_deezer_url;
@@ -54,6 +56,11 @@ fn get_sambl_host_id(url: &Url) -> Option<(SamblProviders, &str)> {
         Some((
             SamblProviders::Tidal,
             get_tidal_artist_id_from_url(&url.ressource).unwrap(),
+        ))
+    } else if is_bandcamp_url(url) {
+        Some((
+            SamblProviders::Bandcamp,
+            get_bandcamp_artist_id_from_url(&url.ressource).unwrap(),
         ))
     } else {
         None
