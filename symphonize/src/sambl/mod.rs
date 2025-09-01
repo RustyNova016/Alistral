@@ -25,6 +25,7 @@ pub enum SamblProviders {
     Spotify,
     Deezer,
     Tidal,
+    Bandcamp,
 }
 
 impl SamblProviders {
@@ -33,6 +34,7 @@ impl SamblProviders {
             Self::Deezer => "deezer",
             Self::Spotify => "spotify",
             Self::Tidal => "tidal",
+            Self::Bandcamp => "bandcamp",
         }
     }
 }
