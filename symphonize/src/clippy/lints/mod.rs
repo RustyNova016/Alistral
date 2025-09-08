@@ -8,6 +8,7 @@ use crate::clippy::lints::suspicious_remix::SuspiciousRemixLint;
 pub mod dash_eti;
 pub mod label_as_artist;
 pub mod missing_artist_link;
+pub mod missing_cover_art;
 pub mod missing_isrc;
 pub mod missing_recording_link;
 pub mod missing_release_barcode;

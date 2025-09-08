@@ -1,6 +1,5 @@
-use futures::stream;
 use futures::StreamExt;
-use futures::StreamExt as _;
+use futures::stream;
 use itertools::Itertools as _;
 use musicbrainz_db_lite::FetchAsComplete;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
