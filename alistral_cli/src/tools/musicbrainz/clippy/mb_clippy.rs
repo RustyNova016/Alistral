@@ -22,7 +22,6 @@ use symphonize::clippy::lints::soundtrack_without_disambiguation::SoundtrackWith
 use symphonize::clippy::lints::suspicious_remix::SuspiciousRemixLint;
 use tokio::task::JoinError;
 use tracing::debug;
-use tracing::info;
 use tuillez::formatter::FormatWithAsync as _;
 
 use crate::ALISTRAL_CLIENT;
@@ -84,7 +83,7 @@ async fn process_lints(entity: Arc<MainEntity>, filter: Arc<WhitelistBlacklist<S
         .await
         .expect("Print lock has been closed");
 
-    info!(
+    println!(
         "[Processed - {}] {}",
         PROCESSED_COUNT.fetch_add(1, Ordering::AcqRel),
         entity

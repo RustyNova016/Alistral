@@ -53,6 +53,31 @@ impl Release {
             status: self.status,   //TODO: Status to string
             full_update_date: self.full_update_date,
             release_group: self.release_group,
+            artwork: new
+                .cover_art_archive
+                .clone()
+                .map(|ca| ca.artwork)
+                .or(self.artwork),
+            cover_back: new
+                .cover_art_archive
+                .clone()
+                .map(|ca| ca.back)
+                .or(self.cover_back),
+            cover_count: new
+                .cover_art_archive
+                .clone()
+                .map(|ca| ca.count as i64)
+                .or(self.cover_count),
+            cover_darkened: new
+                .cover_art_archive
+                .clone()
+                .map(|ca| ca.darkened)
+                .or(self.cover_darkened),
+            cover_front: new
+                .cover_art_archive
+                .clone()
+                .map(|ca| ca.front)
+                .or(self.cover_front),
         }
     }
 

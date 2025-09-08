@@ -48,6 +48,15 @@ pub struct Release {
     pub disambiguation: Option<String>,
     pub packaging: Option<String>,
     pub annotation: Option<String>,
+
+    // Cover art
+    pub artwork: Option<bool>,
+    pub cover_back: Option<bool>,
+    pub cover_count: Option<i64>,
+    pub cover_darkened: Option<bool>,
+    pub cover_front: Option<bool>,
+
+    // Cache Management
     pub full_update_date: Option<i64>,
 
     pub artist_credit: Option<i64>,

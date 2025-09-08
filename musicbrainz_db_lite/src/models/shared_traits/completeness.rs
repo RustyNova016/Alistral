@@ -131,6 +131,7 @@ where
         }
     }
 
+    /// If the recording isn't completly fetched, refetch it as a task
     fn fetch_as_complete_as_task(
         &self,
         client: Arc<crate::DBClient>,
