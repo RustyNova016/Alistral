@@ -1,10 +1,13 @@
-use futures::StreamExt as _;
-use futures::TryStreamExt as _;
 use futures::stream;
+use futures::StreamExt;
+use futures::StreamExt as _;
 use itertools::Itertools as _;
+use musicbrainz_db_lite::FetchAsComplete;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::artist::Artist;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
+use streamies::TryStreamExt;
+use streamies::TryStreamies;
 use tracing::Span;
 use tracing::info;
 use tracing::instrument;
@@ -45,14 +48,12 @@ pub async fn fetch_recordings_as_complete(
     pg_counted!(uncompletes.len(), "Fetching recordings");
     info!("Fetching full recording data");
 
-    let conn = &mut *client.musicbrainz_db.get_raw_connection().await?;
-
-    for recording in uncompletes {
-        recording
-            .fetch_if_incomplete(conn, &client.musicbrainz_db)
-            .await?;
-        Span::current().pb_inc(1);
-    }
+    stream::iter(uncompletes)
+        .map(|rec| rec.fetch_as_complete_as_task(client.musicbrainz_db.clone()))
+        .buffer_unordered(8)
+        .inspect(|_| Span::current().pb_inc(1))
+        .try_collect_vec()
+        .await?;
 
     Ok(())
 }

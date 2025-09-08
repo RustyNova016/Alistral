@@ -111,6 +111,7 @@ dependencies = [
  "rust_decimal_macros",
  "serde",
  "sqlx",
+ "streamies 0.2.2",
  "thiserror 2.0.16",
  "tracing",
  "tracing-indicatif",
