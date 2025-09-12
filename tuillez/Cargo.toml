@@ -15,7 +15,7 @@ extend = {version = "1.2.0", optional = true}
 chrono = {version = "0.4.40", optional = true}
 rust_decimal = {version = "1.36.0", optional = true}
 rust_decimal_macros = {version = "1.36.0", optional = true}
-humantime = {version = "2.1.0", optional = true}
+humantime = {version = "2.3.0", optional = true}
 tracing = "0.1.41"
 
 [features]
