@@ -22,7 +22,7 @@ symphonize = { path = "../symphonize", optional = true}
 #listenbrainz = "0.8.1"
 listenbrainz = { branch = "alistral_version", git = "https://github.com/RustyNova016/listenbrainz-rs.git", default-features = false, features = ["tls-native"]}
 
-inquire = "0.7.5"
+inquire = "0.8.0"
 itertools = "0.14.0"
 rust_decimal = "1.37.2"
 rust_decimal_macros = "1.36.0"
