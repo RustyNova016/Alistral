@@ -26,7 +26,7 @@ thiserror = "2.0.3"
 tracing = "0.1.41"
 itertools = "0.14.0"
 serde = "1.0.210"
-async-fn-stream = "0.2.2"
+async-fn-stream = "0.3.0"
 const_format = { version = "0.2.34" , features = ["rust_1_51", "rust_1_64", "assertcp"] }
 #TODO: Check if actually used
 tokio = { version = "1.45.1", features = [] }
