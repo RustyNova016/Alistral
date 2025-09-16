@@ -16,7 +16,6 @@ use listens::ListenCommand;
 use lookup::LookupCommand;
 use mapping::MappingCommand;
 use tuillez::fatal_error::FatalError;
-use unstable::UnstableCommand;
 
 #[cfg(feature = "interzicf")]
 use crate::models::cli::interzic::InterzicCommand;
@@ -32,6 +31,7 @@ use crate::tools::musicbrainz::MusicbrainzCommand;
 use crate::tools::playlist::PlaylistCommand;
 #[cfg(feature = "stats")]
 use crate::tools::stats::StatsCommand;
+use crate::tools::unstable::UnstableCommand;
 
 use super::config::Config;
 
@@ -220,8 +220,9 @@ impl Commands {
 
             Self::BumpDown(val) => bump_down_command(conn, val.clone()).await,
 
-            Self::Unstable(val) => val.command.run(conn).await,
+            Self::Unstable(val) => val.command.run(conn).await?,
         }
+        
         Ok(())
     }
 }
