@@ -74,7 +74,7 @@ color-eyre = "0.6.5"
 # Other
 
 [features]
-default = ["musicbrainz"]
+default = ["full"]
 #default = ["full"]
 full = ["musicbrainz", "lookup", "stats", "radio"]
 

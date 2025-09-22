@@ -1,0 +1,44 @@
+{
+  "db_name": "SQLite",
+  "query": "\n            SELECT \n                listens.*\n            FROM       \n                users \n                INNER JOIN listens ON users.name = listens.user \n                INNER JOIN msid_mapping ON listens.recording_msid = msid_mapping.recording_msid\n            WHERE\n                -- Only for this user\n                LOWER(listens.user) = LOWER(?)  \n    \n                -- Keep only mapped listens \n                AND msid_mapping.user = users.id \n\n                -- Minimum listened_at\n                AND listens.listened_at >= ?\n\n                -- Maximum listened_at\n                AND listens.listened_at <= ?\n\n            ORDER BY msid_mapping.recording_mbid",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "listened_at",
+        "ordinal": 1,
+        "type_info": "Integer"
+      },
+      {
+        "name": "user",
+        "ordinal": 2,
+        "type_info": "Text"
+      },
+      {
+        "name": "recording_msid",
+        "ordinal": 3,
+        "type_info": "Text"
+      },
+      {
+        "name": "data",
+        "ordinal": 4,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 3
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "dace721e5c6fd6524029d690599dd90d323e0daad3420dd6213df5c7f0ed185c"
+}
