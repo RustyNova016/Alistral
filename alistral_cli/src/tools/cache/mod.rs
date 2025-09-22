@@ -1,4 +1,3 @@
-use std::fs;
 use std::fs::remove_file;
 use std::io;
 use std::path::Path;
@@ -6,8 +5,6 @@ use std::path::Path;
 use clap::Parser;
 use clap::Subcommand;
 
-use crate::database::DEBUG_DB_LOCATION;
-use crate::database::RELEASE_DB_LOCATION;
 use crate::tools::cache::clear::CacheClearCommand;
 use crate::tools::cache::copy_to_debug::CacheCopyToDebugCommand;
 
