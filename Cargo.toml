@@ -11,6 +11,9 @@ members = [
 ]
 resolver = "3"
 
+[profile.dev]
+debug = "line-tables-only"
+
 [workspace.lints.rust]
 unsafe_code = "forbid"
 
