@@ -13,7 +13,6 @@ use crate::tools::cache::copy_to_debug::CacheCopyToDebugCommand;
 
 pub mod clear;
 pub mod copy_to_debug;
-pub mod refresh_data;
 
 pub fn delete_database(path: &Path) -> Result<(), crate::Error> {
     delete_or_not_found(path)?;
@@ -36,21 +35,15 @@ fn delete_or_not_found<P: AsRef<Path>>(path: P) -> Result<(), crate::Error> {
     }
 }
 
-pub fn copy_to_debug() {
-    delete_database(&DEBUG_DB_LOCATION).expect("Couldn't delete database");
-
-    fs::copy(&*RELEASE_DB_LOCATION, &*DEBUG_DB_LOCATION).expect("Couldn't copy the database");
-}
-
 /// Commands that interface with the cache of the app
-#[derive(Parser, Debug)]
+#[derive(Parser, Debug, Clone)]
 #[command(version, about)]
 pub struct CacheCommand {
     #[command(subcommand)]
     pub command: CacheSubcommands,
 }
 
-#[derive(Subcommand, Debug)]
+#[derive(Subcommand, Debug, Clone)]
 pub enum CacheSubcommands {
     Clear(CacheClearCommand),
     CopyToDebug(CacheCopyToDebugCommand),

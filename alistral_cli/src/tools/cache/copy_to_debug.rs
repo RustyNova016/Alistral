@@ -9,7 +9,7 @@ use crate::tools::cache::delete_database;
 /// Copy the release database to the debug one.
 ///
 /// ⚠️ This wipes the debug database.
-#[derive(Parser, Debug)]
+#[derive(Parser, Debug, Clone)]
 pub struct CacheCopyToDebugCommand;
 
 impl CacheCopyToDebugCommand {

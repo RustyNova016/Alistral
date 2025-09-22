@@ -3,7 +3,9 @@ use std::fs::File;
 use std::io::BufRead;
 use std::io::BufReader;
 use std::path::Path;
+use std::path::PathBuf;
 
+use clap::Parser;
 use musicbrainz_db_lite::MBIDRedirection as _;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::listenbrainz::messybrainz_submission::MessybrainzSubmission;
@@ -14,6 +16,41 @@ use serde::Deserialize;
 use serde::Serialize;
 use sqlx::Acquire;
 use tracing::info;
+
+use crate::ALISTRAL_CLIENT;
+use crate::models::config::Config;
+
+/// Load a listen dump from the website
+///
+/// Allows to load an exported dump of you listens. This is may not be any faster than using the app.
+///
+/// You can get a listen dump [here](https://listenbrainz.org/settings/export/)
+#[derive(Parser, Debug, Clone)]
+pub struct ListenImportDumpCommand {
+    /// Path to the dump file
+    path: String,
+
+    /// Name of the user to import those listens for
+    username: Option<String>,
+}
+
+impl ListenImportDumpCommand {
+    pub async fn run(&self) {
+        let path = PathBuf::from(&self.path)
+            .canonicalize()
+            .expect("Couldn't find zip file.");
+
+        let user = &Config::check_username(&self.username);
+
+        let conn = &mut *ALISTRAL_CLIENT
+            .musicbrainz_db
+            .get_raw_connection()
+            .await
+            .expect("Couldn't connect to the database");
+
+        import_listen_dump(conn, &path, user).await
+    }
+}
 
 pub async fn import_listen_dump(
     conn: &mut sqlx::SqliteConnection,

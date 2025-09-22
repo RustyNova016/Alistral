@@ -1,6 +1,5 @@
 use std::io;
 
-use cache::CacheCommand;
 use clap::Command;
 use clap::CommandFactory;
 use clap::Parser;
@@ -24,6 +23,7 @@ use crate::models::cli::interzic::InterzicCommand;
 use crate::models::cli::radio::RadioCommand;
 use crate::tools::bumps::bump_command;
 use crate::tools::bumps::bump_down_command;
+use crate::tools::cache::CacheCommand;
 use crate::tools::compatibility::compatibility_command;
 use crate::tools::daily::daily_report;
 #[cfg(feature = "musicbrainz")]
@@ -35,7 +35,6 @@ use crate::tools::stats::StatsCommand;
 
 use super::config::Config;
 
-pub mod cache;
 pub mod common;
 pub mod config;
 #[cfg(feature = "interzic")]
@@ -184,6 +183,8 @@ pub enum Commands {
 impl Commands {
     pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> Result<(), FatalError> {
         match self {
+            Self::Cache(val) => val.run().await,
+
             #[cfg(feature = "stats")]
             Self::Stats(val) => val.run(conn).await?,
 
@@ -193,8 +194,6 @@ impl Commands {
 
             #[cfg(feature = "radio")]
             Self::Radio(val) => val.run(conn).await?,
-
-            Self::Cache(val) => val.run(conn).await?,
 
             Self::Config(val) => val.command.run().await?,
 

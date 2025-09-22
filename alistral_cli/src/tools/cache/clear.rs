@@ -9,7 +9,7 @@ use crate::tools::cache::delete_database;
 /// This is useful if you need disk space, or need to manually rebuild in case of corruption
 ///
 /// Most times you only need the `--main` argument. If you need to delete the debug database, use `--debug`
-#[derive(Parser, Debug)]
+#[derive(Parser, Debug, Clone)]
 pub struct CacheClearCommand {
     #[arg(short, long)]
     main: bool,
