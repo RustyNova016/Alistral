@@ -1,1 +1,1 @@
-cargo run -- --markdown-help > ./docs/book/src/CommandLineHelp.md 
+cargo run  --all-features -- --markdown-help > ./docs/book/src/CommandLineHelp.md 
