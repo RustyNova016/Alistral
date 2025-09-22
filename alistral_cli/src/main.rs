@@ -20,9 +20,13 @@ pub(crate) mod utils;
 pub use crate::models::client::ALISTRAL_CLIENT;
 pub use crate::models::error::Error;
 
+//pub(crate) type ColEyreVal<T> = color_eyre::Result<T>;
+pub(crate) type ColEyre = color_eyre::Result<()>;
+
 #[tokio::main]
-async fn main() {
+async fn main() -> ColEyre {
     let _ = dotenvy::dotenv();
+    color_eyre::install()?;
     let cli = Cli::parse();
     let _worker_guard = init_tracer(&cli);
     //console_subscriber::init();
@@ -30,6 +34,8 @@ async fn main() {
     if run_cli(cli).await {
         post_run().await
     }
+
+    Ok(())
 }
 
 async fn run_cli(cli: Cli) -> bool {

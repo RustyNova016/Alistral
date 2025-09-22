@@ -2,6 +2,8 @@ use clap::Parser;
 use clap::Subcommand;
 
 use crate::models::config::Config;
+use crate::tools::listens::clear::ListensClearCommand;
+use crate::tools::listens::import::ListenImportDumpCommand;
 use crate::tools::listens::mapper::listen_mapper_convert_mbids;
 use crate::tools::listens::reload::ListenReloadCommand;
 use crate::tools::listens::submit::ListenSubmitCommand;
@@ -23,6 +25,9 @@ impl ListenCommand {
 
 #[derive(Subcommand, Debug, Clone)]
 pub enum ListenSubcommands {
+    Clear(ListensClearCommand),
+    ImportDump(ListenImportDumpCommand),
+
     /// Changes all the listens of a recording into another. Useful if LB mapped to a recording you never listened
     RemapMsid {
         /// The MBID of the recording
@@ -51,6 +56,8 @@ pub enum ListenSubcommands {
 impl ListenSubcommands {
     pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> Result<(), crate::Error> {
         match self {
+            Self::Clear(val) => val.run().await,
+            Self::ImportDump(val) => val.run().await,
             Self::RemapMsid {
                 original_id,
                 new_id,

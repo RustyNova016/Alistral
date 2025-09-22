@@ -1,3 +1,4 @@
+pub mod clear;
 pub mod import;
 pub mod mapper;
 pub mod reload;

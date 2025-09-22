@@ -8,12 +8,8 @@ This document contains the help content for the `alistral` command-line program.
 * [`alistral bump`↴](#alistral-bump)
 * [`alistral bump-down`↴](#alistral-bump-down)
 * [`alistral cache`↴](#alistral-cache)
-* [`alistral cache copy-to-debug`↴](#alistral-cache-copy-to-debug)
 * [`alistral cache clear`↴](#alistral-cache-clear)
-* [`alistral cache clear-listens`↴](#alistral-cache-clear-listens)
-* [`alistral cache init-database`↴](#alistral-cache-init-database)
-* [`alistral cache load-dump`↴](#alistral-cache-load-dump)
-* [`alistral cache refresh-data`↴](#alistral-cache-refresh-data)
+* [`alistral cache copy-to-debug`↴](#alistral-cache-copy-to-debug)
 * [`alistral compatibility`↴](#alistral-compatibility)
 * [`alistral config`↴](#alistral-config)
 * [`alistral config blacklist-mapper-msid`↴](#alistral-config-blacklist-mapper-msid)
@@ -29,6 +25,8 @@ This document contains the help content for the `alistral` command-line program.
 * [`alistral interzic reverse-mapping`↴](#alistral-interzic-reverse-mapping)
 * [`alistral interzic overwrite`↴](#alistral-interzic-overwrite)
 * [`alistral listens`↴](#alistral-listens)
+* [`alistral listens clear`↴](#alistral-listens-clear)
+* [`alistral listens import-dump`↴](#alistral-listens-import-dump)
 * [`alistral listens remap-msid`↴](#alistral-listens-remap-msid)
 * [`alistral listens reload`↴](#alistral-listens-reload)
 * [`alistral listens submit`↴](#alistral-listens-submit)
@@ -38,6 +36,7 @@ This document contains the help content for the `alistral` command-line program.
 * [`alistral mapping list-unmapped`↴](#alistral-mapping-list-unmapped)
 * [`alistral musicbrainz`↴](#alistral-musicbrainz)
 * [`alistral musicbrainz clippy`↴](#alistral-musicbrainz-clippy)
+* [`alistral musicbrainz sambl`↴](#alistral-musicbrainz-sambl)
 * [`alistral playlist`↴](#alistral-playlist)
 * [`alistral playlist convert`↴](#alistral-playlist-convert)
 * [`alistral radio`↴](#alistral-radio)
@@ -139,24 +138,8 @@ Commands to deal with the local cache
 
 ###### **Subcommands:**
 
-* `copy-to-debug` — Copy the release database to the debug one
 * `clear` — Wipe the cache's data
-* `clear-listens` — Clear all the listens from the database
-* `init-database` — Initialise the database
-* `load-dump` — Load a listen dump from the website
-* `refresh-data` — 
-
-
-
-## `alistral cache copy-to-debug`
-
-Copy the release database to the debug one.
-
-⚠️ This wipe the debug database.
-
-⚠️ If there is migrations, do `cargo sqlx migrate run` next
-
-**Usage:** `alistral cache copy-to-debug`
+* `copy-to-debug` — Copy the release database to the debug one
 
 
 
@@ -166,60 +149,24 @@ Wipe the cache's data
 
 This is useful if you need disk space, or need to manually rebuild in case of corruption
 
-**Usage:** `alistral cache clear`
+Most times you only need the `--main` argument. If you need to delete the debug database, use `--debug`
 
-
-
-## `alistral cache clear-listens`
-
-Clear all the listens from the database
-
-**Usage:** `alistral cache clear-listens [USER]`
-
-###### **Arguments:**
-
-* `<USER>` — Only delete listens of user
-
-
-
-## `alistral cache init-database`
-
-Initialise the database
-
-**Usage:** `alistral cache init-database [OPTIONS]`
+**Usage:** `alistral cache clear [OPTIONS]`
 
 ###### **Options:**
 
-* `--reset` — Wipe the database file beforehand
+* `-m`, `--main`
+* `-d`, `--debug`
 
 
 
-## `alistral cache load-dump`
+## `alistral cache copy-to-debug`
 
-Load a listen dump from the website
+Copy the release database to the debug one.
 
-Allows to load an exported dump of you listens. This is often faster than using the app. This also prevent stumbling into LB-1584
+⚠️ This wipes the debug database.
 
-You can get a listen dump [here](https://listenbrainz.org/settings/export/)
-
-**Usage:** `alistral cache load-dump <PATH> [USERNAME]`
-
-###### **Arguments:**
-
-* `<PATH>` — Path to the dump file
-* `<USERNAME>` — Name of the user to import those listens for
-
-
-
-## `alistral cache refresh-data`
-
-**Usage:** `alistral cache refresh-data [OPTIONS]`
-
-###### **Options:**
-
-* `-u`, `--username <USERNAME>` — Name of the user to refresh the data
-* `-l`, `--limit <LIMIT>` — How many entities to refresh
-* `-m`, `--max-ts <MAX_TS>` — Only refresh older than timestamp
+**Usage:** `alistral cache copy-to-debug`
 
 
 
@@ -442,10 +389,43 @@ Commands to edit listens
 
 ###### **Subcommands:**
 
+* `clear` — Remove all the listens in the database
+* `import-dump` — Load a listen dump from the website
 * `remap-msid` — Changes all the listens of a recording into another. Useful if LB mapped to a recording you never listened
 * `reload` — 
 * `submit` — 
 * `wrong-mapping` — 
+
+
+
+## `alistral listens clear`
+
+Remove all the listens in the database.
+
+Optionally only target one user
+
+**Usage:** `alistral listens clear [USER]`
+
+###### **Arguments:**
+
+* `<USER>`
+
+
+
+## `alistral listens import-dump`
+
+Load a listen dump from the website
+
+Allows to load an exported dump of you listens. This is may not be any faster than using the app.
+
+You can get a listen dump [here](https://listenbrainz.org/settings/export/)
+
+**Usage:** `alistral listens import-dump <PATH> [USERNAME]`
+
+###### **Arguments:**
+
+* `<PATH>` — Path to the dump file
+* `<USERNAME>` — Name of the user to import those listens for
 
 
 
@@ -580,6 +560,7 @@ Commands for musicbrainz stuff
 ###### **Subcommands:**
 
 * `clippy` — Search for potential mistakes, missing data and style issues. This allows to quickly pin down errors that can be corrected
+* `sambl` — Search for potential mistakes, missing data and style issues. This allows to quickly pin down errors that can be corrected
 
 
 
@@ -597,9 +578,27 @@ Search for potential mistakes, missing data and style issues. This allows to qui
 
 ###### **Options:**
 
-* `-n`, `--new-first` — Whether to check FILO (first in, last out) instead of FIFO (first in, first out)
 * `-w`, `--whitelist <WHITELIST>` — List of lints that should only be checked (Note: Put this argument last or before another argument)
 * `-b`, `--blacklist <BLACKLIST>` — List of lints that should not be checked (Note: Put this argument last or before another argument)
+* `-s`, `--sort` — Sort the initial recordings by their name
+
+
+
+## `alistral musicbrainz sambl`
+
+Search for potential mistakes, missing data and style issues. This allows to quickly pin down errors that can be corrected
+
+⚠️ All tips are suggestions. Take them with a grain of salt. If you are unsure, it's preferable to skip.
+
+**Usage:** `alistral musicbrainz sambl [OPTIONS] [START_ARTISTS]...`
+
+###### **Arguments:**
+
+* `<START_ARTISTS>` — The MBID of a recording to start from
+
+###### **Options:**
+
+* `-s`, `--sort` — Sort the initial artists by their name
 
 
 
@@ -806,7 +805,7 @@ Shows top statistics for a specific target
 
 * `<TARGET>` — The type of entity to sort by
 
-  Possible values: `recording`, `artist`, `release`, `release-group`, `work`, `tag`
+  Possible values: `recording`, `artist`, `release`, `release-group`, `work`, `tag`, `label`
 
 
 ###### **Options:**
