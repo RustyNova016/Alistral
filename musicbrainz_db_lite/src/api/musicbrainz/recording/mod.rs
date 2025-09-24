@@ -4,6 +4,7 @@ use sqlx::Acquire;
 use sqlx::SqliteConnection;
 
 use crate::Error;
+use crate::HasArtistCredits as _;
 use crate::Track;
 use crate::models::musicbrainz::artist_credit::ArtistCredits;
 use crate::models::musicbrainz::genre::genre_tag::GenreTag;

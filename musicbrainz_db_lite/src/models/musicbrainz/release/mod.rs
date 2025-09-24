@@ -4,22 +4,21 @@ use serde::Deserialize;
 use serde::Serialize;
 use sqlx::FromRow;
 
-pub mod display;
-pub mod finds;
-pub mod methods;
-pub mod relations;
-
+use crate::HasArtistCredits;
 use crate::MBIDRedirection;
 use crate::MBRelease;
 use crate::models::musicbrainz::relations::impl_relations::impl_relations;
 use crate::models::shared_traits::has_genre::HasGenres;
 use crate::models::shared_traits::has_table::HasTable;
 use crate::models::shared_traits::has_tags::HasTags;
+use crate::utils::macros::get_and_fetch::impl_get_and_fetch;
 use crate::utils::macros::hardlink_methods::impl_db_relation_fetch_methods;
 use crate::utils::macros::hardlink_methods::impl_db_relation_methods;
-use crate::utils::macros::{
-    artist_credits::impl_artist_credits, get_and_fetch::impl_get_and_fetch,
-};
+
+pub mod display;
+pub mod finds;
+pub mod methods;
+pub mod relations;
 
 #[derive(
     Debug, Default, Clone, FromRow, Upsert, MainEntity, PartialEq, Eq, Deserialize, Serialize,
@@ -54,7 +53,6 @@ pub struct Release {
     pub release_group: Option<i64>,
 }
 
-impl_artist_credits!(Release, "releases");
 impl_get_and_fetch!(Release);
 impl_relations!(Release);
 impl_db_relation_methods!(Release);
@@ -69,6 +67,20 @@ impl crate::RowId for Release {
 impl HasRowID for Release {
     fn rowid(&self) -> i64 {
         self.id
+    }
+}
+
+impl HasArtistCredits<MBRelease> for Release {
+    fn get_artist_credits_id(&self) -> Option<&i64> {
+        self.artist_credit.as_ref()
+    }
+
+    fn get_title(&self) -> &str {
+        &self.title
+    }
+
+    fn set_artist_credits_id(&mut self, id: Option<i64>) {
+        self.artist_credit = id
     }
 }
 

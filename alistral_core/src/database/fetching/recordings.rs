@@ -2,6 +2,7 @@ use futures::StreamExt as _;
 use futures::TryStreamExt as _;
 use futures::stream;
 use itertools::Itertools as _;
+use musicbrainz_db_lite::HasArtistCredits as _;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::artist::Artist;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;

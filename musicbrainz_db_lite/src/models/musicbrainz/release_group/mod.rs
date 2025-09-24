@@ -1,13 +1,14 @@
 use musicbrainz_db_lite_macros::{MainEntity, Upsert};
+use sequelles::has_rowid::HasRowID;
 use sqlx::FromRow;
 
+use crate::HasArtistCredits;
 use crate::MBIDRedirection;
 use crate::MBReleaseGroup;
 use crate::models::musicbrainz::relations::impl_relations::impl_relations;
 use crate::models::shared_traits::has_genre::HasGenres;
 use crate::models::shared_traits::has_table::HasTable;
 use crate::models::shared_traits::has_tags::HasTags;
-use crate::utils::macros::artist_credits::impl_artist_credits;
 use crate::utils::macros::get_and_fetch::impl_get_and_fetch;
 use crate::utils::macros::hardlink_methods::impl_db_relation_fetch_methods;
 
@@ -37,7 +38,6 @@ pub struct ReleaseGroup {
 }
 
 impl_get_and_fetch!(ReleaseGroup);
-impl_artist_credits!(ReleaseGroup, "release_groups");
 impl_relations!(ReleaseGroup);
 impl_db_relation_fetch_methods!(ReleaseGroup, MBReleaseGroup);
 
@@ -47,9 +47,29 @@ impl crate::RowId for ReleaseGroup {
     }
 }
 
+impl HasRowID for ReleaseGroup {
+    fn rowid(&self) -> i64 {
+        self.id
+    }
+}
+
 impl HasTable for ReleaseGroup {
     const TABLE_NAME: &str = "release_groups";
     const FOREIGN_FIELD_NAME: &str = "release_group";
+}
+
+impl HasArtistCredits<MBReleaseGroup> for ReleaseGroup {
+    fn get_title(&self) -> &str {
+        &self.title
+    }
+
+    fn get_artist_credits_id(&self) -> Option<&i64> {
+        self.artist_credit.as_ref()
+    }
+
+    fn set_artist_credits_id(&mut self, id: Option<i64>) {
+        self.artist_credit = id
+    }
 }
 
 impl HasTags for ReleaseGroup {}

@@ -6,6 +6,7 @@ pub mod find_by;
 pub mod find_by_mbid;
 pub mod find_by_rowid;
 pub mod get_or_fetch;
+pub mod has_artist_credits;
 pub mod has_genre;
 pub mod has_table;
 pub mod has_tags;

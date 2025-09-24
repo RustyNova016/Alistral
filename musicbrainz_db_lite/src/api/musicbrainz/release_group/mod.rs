@@ -1,6 +1,7 @@
 use musicbrainz_rs::entity::release_group::ReleaseGroup as MBReleaseGroup;
 
 use crate::Error;
+use crate::HasArtistCredits as _;
 use crate::MBIDRedirection as _;
 use crate::models::musicbrainz::artist_credit::ArtistCredits;
 use crate::models::musicbrainz::genre::genre_tag::GenreTag;

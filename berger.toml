@@ -4,4 +4,4 @@ path = "./"
     [repository.alistral.rust]
     fmt = true
     sqlx = false
-    clippy_hack = true
+    clippy_hack = false

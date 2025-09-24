@@ -1,6 +1,7 @@
 pub mod database;
 use core::fmt::Display;
 
+use musicbrainz_db_lite::HasArtistCredits as _;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use sqlx::prelude::FromRow;
 

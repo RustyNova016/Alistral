@@ -40,6 +40,7 @@ pub use crate::models::shared_traits::find_by::FindBy;
 pub use crate::models::shared_traits::find_by_mbid::FindByMBID;
 pub use crate::models::shared_traits::find_by_rowid::FindByRowID;
 pub use crate::models::shared_traits::get_or_fetch::GetOrFetch;
+pub use crate::models::shared_traits::has_artist_credits::HasArtistCredits;
 pub use crate::models::shared_traits::has_urls::HasUrls;
 pub use crate::models::shared_traits::mbid_redirection::MBIDRedirection;
 pub use crate::models::shared_traits::save_from::SaveFrom;
