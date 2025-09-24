@@ -1,4 +1,3 @@
-pub mod urls;
 use std::sync::Arc;
 
 use futures::SinkExt as _;
@@ -11,18 +10,19 @@ use crate::DBClient;
 use crate::DBRelation;
 use crate::FetchAsComplete;
 use crate::Label;
+use crate::Media;
 use crate::Track;
 use crate::models::musicbrainz::main_entities::MainEntity;
 use crate::models::shared_traits::db_relation::ArtistCreditDBRel;
 use crate::models::shared_traits::db_relation::ArtistFromCreditsRelation;
 
-use super::Media;
 use super::Release;
 
 pub mod label_infos;
 pub mod labels;
 pub mod recording;
 pub mod release_group;
+pub mod urls;
 
 impl Release {
     /// Get the releases of the recording, and fetch them if necessary.

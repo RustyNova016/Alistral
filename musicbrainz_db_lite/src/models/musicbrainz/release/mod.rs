@@ -84,30 +84,7 @@ impl HasArtistCredits<MBRelease> for Release {
     }
 }
 
-#[derive(Debug, Default, Clone, FromRow, Upsert)]
-#[database(
-    table = "medias",
-    primary_key = "id",
-    ignore_insert_keys(id),
-    ignore_update_keys(id)
-)]
-pub struct Media {
-    pub id: i64,
-    pub track_count: i64,
-    pub title: Option<String>,
-    pub position: Option<i64>,
-    pub disc_count: Option<i64>,
-    pub format: Option<String>,
-    pub track_offset: Option<i64>,
 
-    pub release: i64,
-}
-
-impl crate::RowId for Media {
-    fn get_row_id(&self) -> i64 {
-        self.id
-    }
-}
 
 #[derive(Debug, Default, Clone, FromRow, Upsert)]
 #[database(

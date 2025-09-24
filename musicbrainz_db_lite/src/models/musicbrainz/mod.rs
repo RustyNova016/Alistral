@@ -1,3 +1,4 @@
+pub mod media;
 use std::sync::Arc;
 
 use crate::DBClient;
