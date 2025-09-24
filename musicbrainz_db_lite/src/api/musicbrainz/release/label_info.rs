@@ -1,6 +1,7 @@
 use musicbrainz_rs::entity::label::LabelInfo as MBLabelInfo;
 
-use crate::models::musicbrainz::{label::Label, release::LabelInfo};
+use crate::Label;
+use crate::LabelInfo;
 
 impl LabelInfo {
     pub async fn save_api_response(

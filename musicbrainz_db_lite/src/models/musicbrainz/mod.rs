@@ -1,3 +1,4 @@
+pub mod label_info;
 pub mod media;
 use std::sync::Arc;
 
