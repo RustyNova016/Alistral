@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "UPDATE `labels` SET `full_update_date` = $1 WHERE id = $2",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": []
+  },
+  "hash": "619f4f26901f797623b0a57ac808f2ba3d7b64ecf7b91480e72984e2755d6c84"
+}

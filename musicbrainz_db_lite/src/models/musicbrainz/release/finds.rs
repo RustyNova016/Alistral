@@ -1,8 +1,11 @@
 use std::sync::Arc;
 
+use snafu::ResultExt as _;
+
 use crate::DBClient;
 use crate::MBIDRedirection;
 use crate::Url;
+use crate::models::errors::sqlx_error::SqlxSnafu;
 use crate::models::shared_traits::find_by_mbid::FindByMBID;
 use crate::models::shared_traits::find_by_rowid::FindByRowID;
 
@@ -13,7 +16,12 @@ impl FindByRowID for Release {
         conn: &mut sqlx::SqliteConnection,
         id: i64,
     ) -> Result<Option<Self>, crate::Error> {
-        Ok(Self::find_by_id_column(conn, id).await?)
+        Ok(
+            sqlx::query_as!(Self, "SELECT * FROM `releases` WHERE `id` = $1", id)
+                .fetch_optional(conn)
+                .await
+                .context(SqlxSnafu)?,
+        )
     }
 }
 

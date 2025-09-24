@@ -1,8 +1,8 @@
-use musicbrainz_db_lite_macros::MainEntity;
 use sequelles::has_rowid::HasRowID;
 use sqlx::FromRow;
 
 use crate::HasArtistCredits;
+use crate::HasMBID;
 use crate::MBIDRedirection;
 use crate::MBReleaseGroup;
 use crate::models::musicbrainz::relations::impl_relations::impl_relations;
@@ -17,13 +17,7 @@ pub mod finds;
 pub mod relations;
 pub mod upsert;
 
-#[derive(Debug, Default, PartialEq, Eq, Clone, FromRow, MainEntity)]
-#[database(
-    table = "release_groups",
-    primary_key = "id",
-    ignore_insert_keys(id),
-    ignore_update_keys(id, mbid)
-)]
+#[derive(Debug, Default, PartialEq, Eq, Clone, FromRow)]
 pub struct ReleaseGroup {
     pub id: i64,
     pub mbid: String,
@@ -51,6 +45,12 @@ impl crate::RowId for ReleaseGroup {
 impl HasRowID for ReleaseGroup {
     fn rowid(&self) -> i64 {
         self.id
+    }
+}
+
+impl HasMBID for ReleaseGroup {
+    fn get_mbid(&self) -> &str {
+        &self.mbid
     }
 }
 

@@ -1,10 +1,10 @@
-use musicbrainz_db_lite_macros::MainEntity;
 use sequelles::has_rowid::HasRowID;
 use serde::Deserialize;
 use serde::Serialize;
 use sqlx::FromRow;
 
 use crate::HasArtistCredits;
+use crate::HasMBID;
 use crate::MBIDRedirection;
 use crate::MBRelease;
 use crate::models::musicbrainz::relations::impl_relations::impl_relations;
@@ -21,13 +21,7 @@ pub mod methods;
 pub mod relations;
 pub mod upsert;
 
-#[derive(Debug, Default, Clone, FromRow, MainEntity, PartialEq, Eq, Deserialize, Serialize)]
-#[database(
-    table = "releases",
-    primary_key = "id",
-    ignore_insert_keys(id),
-    ignore_update_keys(id, mbid)
-)]
+#[derive(Debug, Default, Clone, FromRow, PartialEq, Eq, Deserialize, Serialize)]
 pub struct Release {
     pub id: i64,
     pub mbid: String,
@@ -86,6 +80,12 @@ impl HasArtistCredits<MBRelease> for Release {
 impl HasTable for Release {
     const TABLE_NAME: &str = "releases";
     const FOREIGN_FIELD_NAME: &str = "release";
+}
+
+impl HasMBID for Release {
+    fn get_mbid(&self) -> &str {
+        &self.mbid
+    }
 }
 
 impl HasTags for Release {}

@@ -1,6 +1,6 @@
-use musicbrainz_db_lite_macros::MainEntity;
 use sqlx::FromRow;
 
+use crate::HasMBID;
 use crate::MBIDRedirection;
 use crate::models::musicbrainz::relations::impl_relations::impl_relations;
 use crate::models::shared_traits::has_genre::HasGenres;
@@ -12,13 +12,7 @@ pub mod display;
 pub mod finds;
 pub mod upsert;
 
-#[derive(Debug, Default, PartialEq, Eq, Clone, FromRow, MainEntity)]
-#[database(
-    table = "Works",
-    primary_key = "id",
-    ignore_insert_keys(id),
-    ignore_update_keys(id, mbid)
-)]
+#[derive(Debug, Default, PartialEq, Eq, Clone, FromRow)]
 pub struct Work {
     pub id: i64,
     pub mbid: String,
@@ -42,6 +36,12 @@ impl crate::RowId for Work {
 impl HasTable for Work {
     const TABLE_NAME: &str = "works";
     const FOREIGN_FIELD_NAME: &str = "work";
+}
+
+impl HasMBID for Work {
+    fn get_mbid(&self) -> &str {
+        &self.mbid
+    }
 }
 
 impl HasTags for Work {}

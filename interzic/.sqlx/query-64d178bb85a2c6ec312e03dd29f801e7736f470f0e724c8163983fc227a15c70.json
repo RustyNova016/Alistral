@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "UPDATE `works` SET `full_update_date` = $1 WHERE id = $2",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": []
+  },
+  "hash": "64d178bb85a2c6ec312e03dd29f801e7736f470f0e724c8163983fc227a15c70"
+}

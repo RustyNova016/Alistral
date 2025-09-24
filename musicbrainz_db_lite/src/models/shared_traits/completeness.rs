@@ -4,6 +4,8 @@ use std::sync::Arc;
 use crate::models::shared_traits::HasMBID;
 use crate::models::shared_traits::get_or_fetch::GetOrFetch;
 
+/// This trait handles the "Completeness" flag of the entity. Since some entities can be partially fetched,
+/// this flag make sure the entity has all the informations we need
 pub trait CompletenessFlag {
     /// Reset the "full update" date in the database. This should only be called after a full update of the entity.
     fn set_full_update(
@@ -11,9 +13,11 @@ pub trait CompletenessFlag {
         conn: &mut sqlx::SqliteConnection,
     ) -> impl Future<Output = Result<(), sqlx::Error>> + Send;
 
+    /// Return true if the entity has been fully fetched
     fn is_complete(&self) -> bool;
 }
 
+/// Trait to get entities and make sure they are fully fetched
 pub trait FetchAsComplete<U>
 where
     Self: GetOrFetch<U> + HasMBID,

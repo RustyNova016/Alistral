@@ -4,6 +4,7 @@ use itertools::Itertools;
 use sqlx::SqliteConnection;
 
 use crate::DBRelation;
+use crate::FetchAsComplete;
 use crate::models::musicbrainz::work::Work;
 use crate::models::shared_traits::db_relation::RecordingWorkDBRel;
 use crate::utils::sqlx_utils::entity_relations::{JoinCollection, JoinRelation};
@@ -18,7 +19,7 @@ impl Recording {
         client: &crate::DBClient,
     ) -> Result<Vec<Work>, crate::Error> {
         // First, make sure all the work of the recording are in the database
-        self.fetch_if_incomplete(conn, client).await?;
+        self.fetch_as_complete_with_conn(conn, client).await?;
 
         // Next, get all the works
         Ok(sqlx::query_as(

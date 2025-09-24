@@ -1,3 +1,4 @@
+pub mod errors;
 use core::ops::Deref;
 
 pub mod listenbrainz;

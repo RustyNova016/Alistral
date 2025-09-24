@@ -2,6 +2,8 @@ use futures::StreamExt as _;
 use futures::TryStreamExt as _;
 use futures::stream;
 use itertools::Itertools as _;
+use musicbrainz_db_lite::CompletenessFlag;
+use musicbrainz_db_lite::FetchAsComplete;
 use musicbrainz_db_lite::HasArtistCredits as _;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::artist::Artist;
@@ -38,10 +40,7 @@ pub async fn fetch_recordings_as_complete(
     recordings: &[&Recording],
 ) -> Result<(), musicbrainz_db_lite::Error> {
     // Eliminate all the recordings that are complete
-    let uncompletes = recordings
-        .iter()
-        .filter(|r| !r.is_fully_fetched())
-        .collect_vec();
+    let uncompletes = recordings.iter().filter(|r| !r.is_complete()).collect_vec();
 
     pg_counted!(uncompletes.len(), "Fetching recordings");
     info!("Fetching full recording data");
@@ -50,7 +49,7 @@ pub async fn fetch_recordings_as_complete(
 
     for recording in uncompletes {
         recording
-            .fetch_if_incomplete(conn, &client.musicbrainz_db)
+            .fetch_as_complete_with_conn(conn, &client.musicbrainz_db)
             .await?;
         Span::current().pb_inc(1);
     }

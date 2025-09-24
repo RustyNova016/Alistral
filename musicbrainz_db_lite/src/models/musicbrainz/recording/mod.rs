@@ -4,6 +4,7 @@ use serde::Serialize;
 use sqlx::prelude::FromRow;
 
 use super::relations::impl_relations::impl_relations;
+use crate::HasMBID;
 use crate::MBIDRedirection;
 use crate::MBRecording;
 use crate::models::shared_traits::has_artist_credits::HasArtistCredits;
@@ -13,7 +14,6 @@ use crate::models::shared_traits::has_tags::HasTags;
 use crate::utils::macros::get_and_fetch::impl_get_and_fetch;
 use crate::utils::macros::hardlink_methods::impl_db_relation_fetch_methods;
 use crate::utils::macros::hardlink_methods::impl_db_relation_methods;
-use musicbrainz_db_lite_macros::MainEntity;
 
 pub mod display;
 pub mod finds;
@@ -21,13 +21,7 @@ pub mod methods;
 pub mod relations;
 pub mod upsert;
 
-#[derive(Debug, Default, PartialEq, Eq, Clone, FromRow, MainEntity, Deserialize, Serialize)]
-#[database(
-    table = "recordings",
-    primary_key = "id",
-    ignore_insert_keys(id),
-    ignore_update_keys(id, mbid)
-)]
+#[derive(Debug, Default, PartialEq, Eq, Clone, FromRow, Deserialize, Serialize)]
 pub struct Recording {
     pub id: i64,
     pub mbid: String,
@@ -67,6 +61,12 @@ impl HasRowID for Recording {
 impl HasTable for Recording {
     const TABLE_NAME: &str = "recordings";
     const FOREIGN_FIELD_NAME: &str = "recording";
+}
+
+impl HasMBID for Recording {
+    fn get_mbid(&self) -> &str {
+        &self.mbid
+    }
 }
 
 impl HasArtistCredits<MBRecording> for Recording {

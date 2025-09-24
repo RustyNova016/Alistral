@@ -1,4 +1,7 @@
+use snafu::ResultExt as _;
+
 use crate::MBIDRedirection;
+use crate::models::errors::sqlx_error::SqlxSnafu;
 use crate::models::shared_traits::find_by_mbid::FindByMBID;
 use crate::models::shared_traits::find_by_rowid::FindByRowID;
 
@@ -9,7 +12,12 @@ impl FindByRowID for Work {
         conn: &mut sqlx::SqliteConnection,
         id: i64,
     ) -> Result<Option<Self>, crate::Error> {
-        Ok(Self::find_by_id_column(conn, id).await?)
+        Ok(
+            sqlx::query_as!(Self, "SELECT * FROM `works` WHERE `id` = $1", id)
+                .fetch_optional(conn)
+                .await
+                .context(SqlxSnafu)?,
+        )
     }
 }
 
