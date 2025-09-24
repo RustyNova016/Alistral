@@ -1,9 +1,9 @@
 use itertools::Itertools as _;
+use musicbrainz_db_lite::HasRowID as _;
 use musicbrainz_db_lite::Label;
 use musicbrainz_db_lite::Release;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::release::relations::ReleaseLabelDBRel;
-use musicbrainz_db_lite::sequelle::has_rowid::HasRowID as _;
 use tracing::instrument;
 use tuillez::pg_spinner;
 

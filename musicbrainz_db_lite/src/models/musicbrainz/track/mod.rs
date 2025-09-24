@@ -29,12 +29,6 @@ pub struct Track {
 // impl_artist_credits!(Track, "tracks");
 impl_db_relation_methods!(Track);
 
-impl crate::RowId for Track {
-    fn get_row_id(&self) -> i64 {
-        self.id
-    }
-}
-
 impl HasRowID for Track {
     fn rowid(&self) -> i64 {
         self.id

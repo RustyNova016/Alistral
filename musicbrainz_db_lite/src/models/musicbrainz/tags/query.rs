@@ -1,6 +1,6 @@
 use itertools::Itertools as _;
+use sequelles::has_rowid::HasRowID;
 
-use crate::RowId;
 use crate::models::musicbrainz::tags::Tag;
 use crate::models::shared_traits::has_tags::HasTags;
 use crate::utils::sqlx_utils::entity_relations::JoinRelation;
@@ -11,7 +11,7 @@ impl Tag {
         entity: &T,
     ) -> Result<Vec<Tag>, crate::Error>
     where
-        T: RowId + HasTags,
+        T: HasRowID + HasTags,
     {
         Ok(sqlx::query_as(&format!(
             "
@@ -25,7 +25,7 @@ impl Tag {
             id_field = T::FOREIGN_FIELD_NAME,
             table = T::TABLE_NAME
         ))
-        .bind(entity.get_row_id())
+        .bind(entity.rowid())
         .fetch_all(conn)
         .await?)
     }
@@ -35,9 +35,9 @@ impl Tag {
         entities: Vec<&T>,
     ) -> Result<Vec<JoinRelation<i64, Tag>>, crate::Error>
     where
-        T: RowId + HasTags,
+        T: HasRowID + HasTags,
     {
-        let ids = entities.iter().map(|r| r.get_row_id()).collect_vec();
+        let ids = entities.iter().map(|r| r.rowid()).collect_vec();
         let id_string = serde_json::to_string(&ids)?;
 
         Ok(sqlx::query_as(&format!(

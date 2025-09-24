@@ -1,8 +1,8 @@
+use sequelles::has_rowid::HasRowID;
 use sqlx::prelude::FromRow;
 #[cfg(feature = "pretty_format")]
 use tuillez::formatter::FormatWithAsync;
 
-use crate::RowId;
 #[cfg(feature = "pretty_format")]
 use crate::models::musicbrainz::MusicbrainzFormater;
 use crate::models::shared_traits::has_tags::HasTags;
@@ -56,8 +56,8 @@ impl Tag {
     }
 }
 
-impl RowId for Tag {
-    fn get_row_id(&self) -> i64 {
+impl HasRowID for Tag {
+    fn rowid(&self) -> i64 {
         self.id
     }
 }

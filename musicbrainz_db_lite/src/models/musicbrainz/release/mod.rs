@@ -51,12 +51,6 @@ impl_relations!(Release);
 impl_db_relation_methods!(Release);
 impl_db_relation_fetch_methods!(Release, MBRelease);
 
-impl crate::RowId for Release {
-    fn get_row_id(&self) -> i64 {
-        self.id
-    }
-}
-
 impl HasRowID for Release {
     fn rowid(&self) -> i64 {
         self.id

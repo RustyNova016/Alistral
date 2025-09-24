@@ -1,12 +1,11 @@
-pub mod impl_relations;
-pub mod kind;
-
 use core::marker::PhantomData;
 
+use sequelles::has_rowid::HasRowID;
 use sqlx::prelude::FromRow;
 use traits::HasRelation;
 
-use crate::RowId;
+pub mod impl_relations;
+pub mod kind;
 
 #[expect(clippy::module_inception)]
 pub mod relations;
@@ -39,7 +38,7 @@ pub struct Relation<T, U> {
 
 impl<T, U> Relation<T, U>
 where
-    T: Send + Unpin + HasRelation<U> + RowId,
+    T: Send + Unpin + HasRelation<U> + HasRowID,
     U: Send + Unpin + HasRelation<T>,
 {
     pub async fn upsert(&self, conn: &mut sqlx::SqliteConnection) -> Result<Self, sqlx::Error> {
@@ -108,7 +107,7 @@ where
     ) -> Result<Vec<Relation<T, U>>, sqlx::Error> {
         let sql = format!("SELECT * FROM {} WHERE `entity0` = ?", T::RELATION_TABLE);
         let relations: Vec<Relation<T, U>> = sqlx::query_as(&sql)
-            .bind(entity.get_row_id())
+            .bind(entity.rowid())
             .fetch_all(conn)
             .await?;
 

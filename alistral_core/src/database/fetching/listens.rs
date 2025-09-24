@@ -1,5 +1,5 @@
 use macon::Builder;
-use musicbrainz_db_lite::RowId;
+use musicbrainz_db_lite::HasRowID;
 use musicbrainz_db_lite::api::listenbrainz::listen::fetching::query::ListenFetchAPIQuery;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
@@ -89,7 +89,7 @@ impl ListenFetchQuery {
         strat: &S,
     ) -> Result<EntityWithListensCollection<Ent, Lis>, crate::Error>
     where
-        Ent: RowId,
+        Ent: HasRowID,
         Lis: ListenCollectionReadable,
         S: ListenSortingStrategy<Ent, Lis>,
     {

@@ -46,12 +46,6 @@ impl HasTags for Recording {}
 impl HasGenres for Recording {}
 impl MBIDRedirection for Recording {}
 
-impl crate::RowId for Recording {
-    fn get_row_id(&self) -> i64 {
-        self.id
-    }
-}
-
 impl HasRowID for Recording {
     fn rowid(&self) -> i64 {
         self.id

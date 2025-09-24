@@ -16,12 +16,6 @@ pub struct Media {
     pub release: i64,
 }
 
-impl crate::RowId for Media {
-    fn get_row_id(&self) -> i64 {
-        self.id
-    }
-}
-
 impl HasRowID for Media {
     fn rowid(&self) -> i64 {
         self.id

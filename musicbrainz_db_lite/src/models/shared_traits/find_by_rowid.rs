@@ -1,9 +1,10 @@
+use sequelles::has_rowid::HasRowID;
+
 use crate::models::RowID;
 
-use super::RowId;
 use super::find_by::FindBy;
 
-pub trait FindByRowID: RowId + Sized {
+pub trait FindByRowID: HasRowID + Sized {
     fn find_by_rowid(
         conn: &mut sqlx::SqliteConnection,
         id: i64,

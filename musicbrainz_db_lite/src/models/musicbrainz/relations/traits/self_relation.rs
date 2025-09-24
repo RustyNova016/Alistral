@@ -10,11 +10,11 @@ macro_rules! impl_has_self_relation {
             );
 
             fn get_entity0_id(&self, _other: &$right_entity) -> i64 {
-                self.get_row_id()
+                self.rowid()
             }
 
             fn get_entity1_id(&self, other: &$right_entity) -> i64 {
-                other.get_row_id()
+                other.rowid()
             }
 
             async fn get_entity_relations(

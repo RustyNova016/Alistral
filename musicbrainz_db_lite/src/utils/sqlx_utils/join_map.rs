@@ -1,12 +1,12 @@
 use std::collections::HashMap;
 
-use crate::RowId;
+use sequelles::has_rowid::HasRowID;
 
 /// a Map like struct that holds two entities (**L**eft and **R**ight)
 #[derive(Debug, Default)]
-pub struct JoinMap<L: RowId, R>(HashMap<i64, (L, HashMap<i64, R>)>);
+pub struct JoinMap<L: HasRowID, R>(HashMap<i64, (L, HashMap<i64, R>)>);
 
-impl<L: RowId, R> JoinMap<L, R> {
+impl<L: HasRowID, R> JoinMap<L, R> {
     pub fn get_by_id(&self, id: i64) -> Option<&(L, HashMap<i64, R>)> {
         self.0.get(&id)
     }
@@ -18,13 +18,13 @@ impl<L: RowId, R> JoinMap<L, R> {
     pub fn invert_join(self) -> JoinMap<R, L>
     where
         L: Clone,
-        R: RowId,
+        R: HasRowID,
     {
         let mut new = HashMap::new();
 
         for (left_id, (left_element, right_elements)) in self.0 {
             for right_element in right_elements {
-                new.entry(right_element.1.get_row_id())
+                new.entry(right_element.1.rowid())
                     .or_insert_with(|| (right_element.1, HashMap::new()))
                     .1
                     .insert(left_id, left_element.clone());

@@ -1,11 +1,11 @@
 pub mod convert;
 use std::sync::Arc;
 
+use sequelles::has_rowid::HasRowID;
 #[cfg(feature = "pretty_format")]
 use tuillez::formatter::FormatWithAsync;
 
 use crate::FetchAndSave;
-use crate::RowId;
 use crate::Track;
 #[cfg(feature = "pretty_format")]
 use crate::models::musicbrainz::MusicbrainzFormater;
@@ -107,15 +107,15 @@ impl MainEntity {
     }
 }
 
-impl RowId for MainEntity {
-    fn get_row_id(&self) -> i64 {
+impl HasRowID for MainEntity {
+    fn rowid(&self) -> i64 {
         match self {
-            Self::Artist(val) => val.get_row_id(),
-            Self::Label(val) => val.get_row_id(),
-            Self::Recording(val) => val.get_row_id(),
-            Self::Release(val) => val.get_row_id(),
-            Self::Track(val) => val.get_row_id(),
-            Self::Work(val) => val.get_row_id(),
+            Self::Artist(val) => val.rowid(),
+            Self::Label(val) => val.rowid(),
+            Self::Recording(val) => val.rowid(),
+            Self::Release(val) => val.rowid(),
+            Self::Track(val) => val.rowid(),
+            Self::Work(val) => val.rowid(),
         }
     }
 }

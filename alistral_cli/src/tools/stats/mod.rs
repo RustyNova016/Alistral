@@ -9,8 +9,8 @@ use alistral_core::datastructures::listen_collection::traits::ListenCollectionRe
 use clap::Parser;
 use clap::ValueEnum;
 use derive_more::IsVariant;
+use musicbrainz_db_lite::HasRowID;
 use musicbrainz_db_lite::Label;
-use musicbrainz_db_lite::RowId;
 use musicbrainz_db_lite::models::musicbrainz::artist::Artist;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use musicbrainz_db_lite::models::musicbrainz::release::Release;
@@ -204,7 +204,7 @@ impl StatsCommand {
         data: EntityWithListensCollection<Ent, Lis>,
     ) -> Result<(), crate::Error>
     where
-        Ent: RowId,
+        Ent: HasRowID,
         Lis: ListenCollectionReadable,
         S: StatisticType,
         StatisticFormater<Ent, Lis, S>: StatFormatterVariant<Ent, Lis>,

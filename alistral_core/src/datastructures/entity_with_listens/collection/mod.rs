@@ -6,7 +6,7 @@ use std::collections::hash_map::IntoValues;
 use futures::Stream;
 use futures::stream;
 use itertools::Itertools as _;
-use musicbrainz_db_lite::RowId;
+use musicbrainz_db_lite::HasRowID;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use rust_decimal::Decimal;
 
@@ -23,12 +23,12 @@ pub mod converters;
 #[derive(Debug, Clone)]
 pub struct EntityWithListensCollection<Ent, Lis>(pub HashMap<i64, EntityWithListens<Ent, Lis>>)
 where
-    Ent: RowId,
+    Ent: HasRowID,
     Lis: ListenCollectionReadable;
 
 impl<Ent, Lis> EntityWithListensCollection<Ent, Lis>
 where
-    Ent: RowId,
+    Ent: HasRowID,
     Lis: ListenCollectionReadable,
 {
     pub fn new() -> Self {
@@ -73,7 +73,7 @@ where
         EntityWithListens<Ent, Lis>: Mergable + Clone,
     {
         self.0
-            .entry(value.get_row_id())
+            .entry(value.rowid())
             .and_modify(|val| val.merge(value.clone()))
             .or_insert(value);
     }
@@ -117,7 +117,7 @@ where
     /// Return the ratio of total listens of the entity collection being from a specific entity
     pub fn get_listen_ratio(&self, entity: &Ent) -> Decimal {
         let recording_listen_count = self
-            .get_by_id(entity.get_row_id())
+            .get_by_id(entity.rowid())
             .map(|r| r.listen_count())
             .unwrap_or(0);
 
@@ -138,7 +138,7 @@ where
                 rank = i;
             }
 
-            if rec.entity().get_row_id() == entity.get_row_id() {
+            if rec.entity().rowid() == entity.rowid() {
                 return Some(rank);
             }
 
@@ -194,7 +194,7 @@ where
 
 impl<Ent, Lis> Default for EntityWithListensCollection<Ent, Lis>
 where
-    Ent: RowId,
+    Ent: HasRowID,
     Lis: ListenCollectionReadable,
 {
     fn default() -> Self {
@@ -204,7 +204,7 @@ where
 
 impl<Ent, Lis> ListenCollectionReadable for EntityWithListensCollection<Ent, Lis>
 where
-    Ent: RowId,
+    Ent: HasRowID,
     Lis: ListenCollectionReadable,
 {
     fn iter_listens(&self) -> impl Iterator<Item = &Listen> {
@@ -214,7 +214,7 @@ where
 
 impl<Ent, Lis> Mergable for EntityWithListensCollection<Ent, Lis>
 where
-    Ent: RowId,
+    Ent: HasRowID,
     Lis: ListenCollectionReadable,
     EntityWithListens<Ent, Lis>: Mergable + Clone,
 {
@@ -225,7 +225,7 @@ where
 
 impl<Ent, Lis> IntoIterator for EntityWithListensCollection<Ent, Lis>
 where
-    Ent: RowId,
+    Ent: HasRowID,
     Lis: ListenCollectionReadable,
 {
     type Item = EntityWithListens<Ent, Lis>;

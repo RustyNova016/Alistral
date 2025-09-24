@@ -1,3 +1,4 @@
+use sequelles::has_rowid::HasRowID;
 use sqlx::FromRow;
 
 use crate::HasMBID;
@@ -27,8 +28,8 @@ pub struct Work {
 impl_get_and_fetch!(Work);
 impl_relations!(Work);
 
-impl crate::RowId for Work {
-    fn get_row_id(&self) -> i64 {
+impl HasRowID for Work {
+    fn rowid(&self) -> i64 {
         self.id
     }
 }

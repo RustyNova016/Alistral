@@ -1,6 +1,6 @@
 use chrono::Duration;
 use chrono::Utc;
-use musicbrainz_db_lite::RowId;
+use musicbrainz_db_lite::HasRowID;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 
 use crate::datastructures::entity_with_listens::recording::RecordingWithListens;
@@ -27,7 +27,7 @@ pub mod work;
 #[derive(Debug, Clone)]
 pub struct EntityWithListens<Ent, Lis>
 where
-    Ent: RowId,
+    Ent: HasRowID,
     Lis: ListenCollectionReadable,
 {
     entity: Ent,
@@ -36,7 +36,7 @@ where
 
 impl<Ent, Lis> EntityWithListens<Ent, Lis>
 where
-    Ent: RowId,
+    Ent: HasRowID,
     Lis: ListenCollectionReadable,
 {
     pub fn new(entity: Ent, listens: Lis) -> Self {
@@ -60,7 +60,7 @@ where
 
 impl<Ent, Lis> ListenCollectionReadable for EntityWithListens<Ent, Lis>
 where
-    Ent: RowId,
+    Ent: HasRowID,
     Lis: ListenCollectionReadable,
 {
     fn iter_listens(&self) -> impl Iterator<Item = &Listen> {
@@ -70,7 +70,7 @@ where
 
 impl<Ent> EntityWithListens<Ent, ListenCollection>
 where
-    Ent: RowId,
+    Ent: HasRowID,
 {
     /// Add a listen if it doesn't already exist in the collection. This doesn't check if the listen belong to the entity
     pub fn insert_unique_listens_unchecked(&mut self, new_listen: Listen) {
@@ -97,11 +97,11 @@ where
 
 impl<Ent, Lis> Mergable for EntityWithListens<Ent, Lis>
 where
-    Ent: RowId,
+    Ent: HasRowID,
     Lis: ListenCollectionReadable + Mergable,
 {
     fn merge(&mut self, other: Self) {
-        if self.entity.get_row_id() != other.entity.get_row_id() {
+        if self.entity.rowid() != other.entity.rowid() {
             #[cfg(debug_assertions)] // This is an awkward situation. Let's crash in debug to catch those cases
             panic!("Tried to merge two different recordings");
 
@@ -113,19 +113,19 @@ where
     }
 }
 
-impl<Ent, Lis> RowId for EntityWithListens<Ent, Lis>
+impl<Ent, Lis> HasRowID for EntityWithListens<Ent, Lis>
 where
-    Ent: RowId,
+    Ent: HasRowID,
     Lis: ListenCollectionReadable,
 {
-    fn get_row_id(&self) -> i64 {
-        self.entity.get_row_id()
+    fn rowid(&self) -> i64 {
+        self.entity.rowid()
     }
 }
 
 impl<Ent, Lis> From<EntityWithListens<Ent, Lis>> for ListenCollection
 where
-    Ent: RowId,
+    Ent: HasRowID,
     Lis: IntoIterator<Item = Listen> + ListenCollectionReadable,
 {
     fn from(value: EntityWithListens<Ent, Lis>) -> Self {
@@ -135,7 +135,7 @@ where
 
 impl<Ent, Lis> IterRecordingWithListens for EntityWithListens<Ent, Lis>
 where
-    Ent: RowId,
+    Ent: HasRowID,
     Lis: ListenCollectionReadable + IterRecordingWithListens,
 {
     fn iter_recording_with_listens(&self) -> impl Iterator<Item = &RecordingWithListens> {

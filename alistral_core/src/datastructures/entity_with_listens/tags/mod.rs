@@ -2,7 +2,7 @@ pub mod id;
 use core::marker::PhantomData;
 
 use itertools::Itertools as _;
-use musicbrainz_db_lite::RowId;
+use musicbrainz_db_lite::HasRowID;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::tags::Tag;
 use musicbrainz_db_lite::models::shared_traits::has_tags::HasTags;
@@ -30,7 +30,7 @@ pub type TagWithEntListensCollection<Ent, Lis> =
 pub struct TagWithEntListensStrategy<'l, T, Ent, Lis>
 where
     T: ListenSortingStrategy<Ent, Lis>,
-    Ent: RowId,
+    Ent: HasRowID,
     Lis: ListenCollectionReadable,
 {
     pub(super) client: &'l AlistralClient,
@@ -42,7 +42,7 @@ where
 impl<'l, T, Ent, Lis> TagWithEntListensStrategy<'l, T, Ent, Lis>
 where
     T: ListenSortingStrategy<Ent, Lis>,
-    Ent: RowId,
+    Ent: HasRowID,
     Lis: ListenCollectionReadable,
 {
     pub fn new(client: &'l AlistralClient, ent_strat: T) -> Self {
@@ -59,7 +59,7 @@ impl<T, Ent, Lis> ListenSortingStrategy<SimpleTag, EntityWithListensCollection<E
     for TagWithEntListensStrategy<'_, T, Ent, Lis>
 where
     T: ListenSortingStrategy<Ent, Lis>,
-    Ent: RowId + HasTags + Clone,
+    Ent: HasRowID + HasTags + Clone,
     Lis: ListenCollectionReadable + Clone + Mergable,
 {
     #[instrument(skip(self, data, listens), fields(indicatif.pb_show = tracing::field::Empty))]
@@ -102,7 +102,7 @@ fn compile<Ent, Lis>(
     relations: Vec<JoinRelation<i64, Tag>>,
     listens: EntityWithListensCollection<Ent, Lis>,
 ) where
-    Ent: RowId + HasTags + Clone,
+    Ent: HasRowID + HasTags + Clone,
     Lis: ListenCollectionReadable + Clone + Mergable,
 {
     pg_counted!(relations.len(), "Loading listens data");

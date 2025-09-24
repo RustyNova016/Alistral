@@ -7,7 +7,7 @@ use futures::Stream;
 use futures::StreamExt;
 use futures::TryStreamExt;
 use futures::stream;
-use musicbrainz_db_lite::RowId;
+use musicbrainz_db_lite::HasRowID;
 
 use crate::utils::cli_paging::CLIPager;
 
@@ -16,7 +16,7 @@ pub mod listenduration;
 
 pub struct StatisticFormater<Ent, Lis, Stats>
 where
-    Ent: RowId,
+    Ent: HasRowID,
     Lis: ListenCollectionReadable,
     Stats: StatisticType,
 {
@@ -28,7 +28,7 @@ where
 
 impl<Ent, Lis, Stats> StatisticFormater<Ent, Lis, Stats>
 where
-    Ent: RowId,
+    Ent: HasRowID,
     Lis: ListenCollectionReadable,
     Stats: StatisticType,
 {
@@ -44,7 +44,7 @@ where
 impl<Ent, Lis, Stats> StatisticFormater<Ent, Lis, Stats>
 where
     Self: StatFormatterVariant<Ent, Lis>,
-    Ent: RowId,
+    Ent: HasRowID,
     Lis: ListenCollectionReadable,
     Stats: StatisticType,
 {
@@ -87,7 +87,7 @@ impl StatisticType for ListenDurationStats {}
 /// Trait for formatting specific statistic types
 pub trait StatFormatterVariant<Ent, Lis>
 where
-    Ent: RowId,
+    Ent: HasRowID,
     Lis: ListenCollectionReadable,
 {
     fn sort_elements(&self) -> Vec<&EntityWithListens<Ent, Lis>>;

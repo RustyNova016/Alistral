@@ -37,12 +37,6 @@ impl_relations!(Label);
 impl_db_relation_methods!(Label);
 impl_db_relation_fetch_methods!(Label, MBLabel);
 
-impl crate::RowId for Label {
-    fn get_row_id(&self) -> i64 {
-        self.id
-    }
-}
-
 impl HasTable for Label {
     const TABLE_NAME: &str = "labels";
     const FOREIGN_FIELD_NAME: &str = "label";

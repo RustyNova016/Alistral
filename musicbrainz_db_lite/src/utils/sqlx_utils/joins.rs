@@ -2,9 +2,8 @@ use std::collections::HashMap;
 use std::hash::Hash;
 
 use itertools::Itertools;
+use sequelles::has_rowid::HasRowID;
 use sqlx::FromRow;
-
-use crate::RowId;
 
 /// Represent a returned row during a many to many query.
 #[derive(Clone, PartialEq, Eq, Hash, Debug, FromRow)]
@@ -26,10 +25,10 @@ pub struct JoinCollection<R> {
 impl<R> JoinCollection<R> {
     fn get_index<T>(data: Vec<T>) -> HashMap<i64, Vec<T>>
     where
-        T: RowId,
+        T: HasRowID,
     {
         data.into_iter()
-            .map(|join| (join.get_row_id(), join))
+            .map(|join| (join.rowid(), join))
             .into_group_map()
     }
 
@@ -40,7 +39,7 @@ impl<R> JoinCollection<R> {
     /// ex: a Recording (Right) has many Artists (Left)
     pub fn many_to_one<L>(self, left_values: Vec<L>) -> HashMap<R, Vec<L>>
     where
-        L: RowId,
+        L: HasRowID,
         R: Eq + Hash,
     {
         let mut left_index = Self::get_index(left_values);
@@ -58,7 +57,7 @@ impl<R> JoinCollection<R> {
 
     pub fn many_to_many_right<L>(self, left_values: Vec<L>) -> HashMap<R, Vec<L>>
     where
-        L: RowId + Clone,
+        L: HasRowID + Clone,
         R: Eq + Hash,
     {
         let left_index = Self::get_index(left_values);

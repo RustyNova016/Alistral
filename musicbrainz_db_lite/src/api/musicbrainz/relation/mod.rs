@@ -1,15 +1,15 @@
 pub mod save_relations;
 use musicbrainz_rs::entity::relations::Relation as MBRelation;
+use sequelles::has_rowid::HasRowID;
 
-use crate::RowId;
 use crate::models::musicbrainz::relations::Relation;
 use crate::models::musicbrainz::relations::traits::HasRelation;
 use crate::utils::date_utils::date_string_to_timestamp;
 
 impl<T, U> Relation<T, U>
 where
-    T: Send + Unpin + RowId + HasRelation<U>,
-    U: Send + Unpin + RowId + HasRelation<T>,
+    T: Send + Unpin + HasRowID + HasRelation<U>,
+    U: Send + Unpin + HasRowID + HasRelation<T>,
 {
     pub async fn save_api_response_inner(
         conn: &mut sqlx::SqliteConnection,

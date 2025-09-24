@@ -35,13 +35,6 @@ pub struct ReleaseGroup {
 impl_get_and_fetch!(ReleaseGroup);
 impl_relations!(ReleaseGroup);
 impl_db_relation_fetch_methods!(ReleaseGroup, MBReleaseGroup);
-
-impl crate::RowId for ReleaseGroup {
-    fn get_row_id(&self) -> i64 {
-        self.id
-    }
-}
-
 impl HasRowID for ReleaseGroup {
     fn rowid(&self) -> i64 {
         self.id

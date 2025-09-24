@@ -3,7 +3,6 @@ use sequelles::has_rowid::HasRowID;
 use serde::Deserialize;
 use serde::Serialize;
 
-use crate::models::shared_traits::RowId;
 use crate::models::shared_traits::has_table::HasTable;
 use crate::utils::macros::hardlink_methods::impl_db_relation_methods;
 
@@ -47,12 +46,6 @@ impl Listen {
         .await?;
 
         Ok(())
-    }
-}
-
-impl RowId for Listen {
-    fn get_row_id(&self) -> i64 {
-        self.id
     }
 }
 

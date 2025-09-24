@@ -3,7 +3,7 @@ use std::sync::Arc;
 use std::sync::LazyLock;
 use std::sync::Mutex;
 
-use musicbrainz_db_lite::RowId;
+use musicbrainz_db_lite::HasRowID;
 use musicbrainz_db_lite::models::musicbrainz::MusicbrainzFormater;
 use tuillez::formatter::FormatWithAsync;
 
@@ -32,8 +32,8 @@ impl SimpleTag {
     }
 }
 
-impl RowId for SimpleTag {
-    fn get_row_id(&self) -> i64 {
+impl HasRowID for SimpleTag {
+    fn rowid(&self) -> i64 {
         self.id
     }
 }

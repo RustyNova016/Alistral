@@ -1,8 +1,9 @@
 use core::future::Future;
 use std::sync::Arc;
 
+use sequelles::has_rowid::HasRowID;
+
 use crate::DBClient;
-use crate::RowId;
 use crate::models::shared_traits::HasMBID;
 use crate::models::shared_traits::completeness::CompletenessFlag;
 use crate::models::shared_traits::fetch_mbid::FetchMBID;
@@ -10,7 +11,7 @@ use crate::models::shared_traits::save_from::SaveFrom;
 
 pub trait FetchAndSave<U>
 where
-    Self: Sized + FetchMBID<U> + SaveFrom<U> + RowId + CompletenessFlag,
+    Self: Sized + FetchMBID<U> + SaveFrom<U> + HasRowID + CompletenessFlag,
     U: Send,
 {
     /// Fetch save an entity using a premade connection
@@ -30,7 +31,7 @@ where
                     let mut data = Self::save_from(conn, data).await?;
                     data.set_full_update(conn).await?;
 
-                    Self::set_redirection(conn, mbid, data.get_row_id()).await?;
+                    Self::set_redirection(conn, mbid, data.rowid()).await?;
 
                     Ok(Some(data))
                 }
@@ -80,7 +81,7 @@ where
                         let mut data = Self::save_from(conn, data).await?;
                         data.set_full_update(conn).await?;
 
-                        Self::set_redirection(conn, &mbid, data.get_row_id()).await?;
+                        Self::set_redirection(conn, &mbid, data.rowid()).await?;
 
                         Ok(Some(data))
                     })

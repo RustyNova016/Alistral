@@ -1,6 +1,6 @@
 use core::future::Future;
 
-use musicbrainz_db_lite::RowId;
+use musicbrainz_db_lite::HasRowID;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 
 use crate::datastructures::entity_with_listens::collection::EntityWithListensCollection;
@@ -9,7 +9,7 @@ use crate::datastructures::listen_collection::traits::ListenCollectionReadable;
 /// A specific strategy to add listens to a [`EntityWithListensCollection`]
 pub trait ListenSortingStrategy<Ent, Lis>
 where
-    Ent: RowId,
+    Ent: HasRowID,
     Lis: ListenCollectionReadable,
 {
     fn sort_insert_listen(
