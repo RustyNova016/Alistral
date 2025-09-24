@@ -4,6 +4,7 @@ use sqlx::sqlite::SqliteRow;
 use crate::RowId;
 use crate::models::shared_traits::has_table::HasTable;
 
+/// Trait for all the entities that have mbid redirection
 pub trait MBIDRedirection
 where
     Self: HasTable + RowId,

@@ -1,4 +1,4 @@
-use musicbrainz_db_lite_macros::{MainEntity, Upsert};
+use musicbrainz_db_lite_macros::MainEntity;
 use sequelles::has_rowid::HasRowID;
 use sqlx::FromRow;
 
@@ -15,8 +15,9 @@ use super::relations::impl_relations::impl_relations;
 
 pub mod display;
 pub mod finds;
+pub mod upsert;
 
-#[derive(Debug, Default, Clone, FromRow, Upsert, MainEntity, PartialEq, Eq)]
+#[derive(Debug, Default, Clone, FromRow, MainEntity, PartialEq, Eq)]
 #[database(
     table = "labels",
     primary_key = "id",

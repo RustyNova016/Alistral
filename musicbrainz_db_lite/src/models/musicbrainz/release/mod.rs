@@ -1,4 +1,4 @@
-use musicbrainz_db_lite_macros::{MainEntity, Upsert};
+use musicbrainz_db_lite_macros::MainEntity;
 use sequelles::has_rowid::HasRowID;
 use serde::Deserialize;
 use serde::Serialize;
@@ -19,10 +19,9 @@ pub mod display;
 pub mod finds;
 pub mod methods;
 pub mod relations;
+pub mod upsert;
 
-#[derive(
-    Debug, Default, Clone, FromRow, Upsert, MainEntity, PartialEq, Eq, Deserialize, Serialize,
-)]
+#[derive(Debug, Default, Clone, FromRow, MainEntity, PartialEq, Eq, Deserialize, Serialize)]
 #[database(
     table = "releases",
     primary_key = "id",

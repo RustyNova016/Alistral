@@ -1,4 +1,4 @@
-use musicbrainz_db_lite_macros::{MainEntity, Upsert};
+use musicbrainz_db_lite_macros::MainEntity;
 use sqlx::FromRow;
 
 use crate::MBIDRedirection;
@@ -10,8 +10,9 @@ use crate::utils::macros::get_and_fetch::impl_get_and_fetch;
 
 pub mod display;
 pub mod finds;
+pub mod upsert;
 
-#[derive(Debug, Default, PartialEq, Eq, Clone, FromRow, Upsert, MainEntity)]
+#[derive(Debug, Default, PartialEq, Eq, Clone, FromRow, MainEntity)]
 #[database(
     table = "Works",
     primary_key = "id",

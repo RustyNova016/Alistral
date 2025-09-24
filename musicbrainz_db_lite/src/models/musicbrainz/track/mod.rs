@@ -1,9 +1,3 @@
-pub mod crawler;
-pub mod display;
-pub mod fetching;
-pub mod find;
-pub mod relations;
-use musicbrainz_db_lite_macros::Upsert;
 use sequelles::has_rowid::HasRowID;
 use sqlx::FromRow;
 
@@ -11,13 +5,14 @@ use crate::HasMBID;
 use crate::models::shared_traits::has_table::HasTable;
 use crate::utils::macros::hardlink_methods::impl_db_relation_methods;
 
-#[derive(Debug, Default, Clone, FromRow, Upsert, PartialEq, Eq)]
-#[database(
-    table = "tracks",
-    primary_key = "id",
-    ignore_insert_keys(id),
-    ignore_update_keys(id, gid)
-)]
+pub mod crawler;
+pub mod display;
+pub mod fetching;
+pub mod find;
+pub mod relations;
+pub mod upsert;
+
+#[derive(Debug, Default, Clone, FromRow, PartialEq, Eq)]
 pub struct Track {
     pub id: i64,
     pub gid: String,

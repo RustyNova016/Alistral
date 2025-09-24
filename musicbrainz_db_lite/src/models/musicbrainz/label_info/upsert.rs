@@ -7,7 +7,7 @@ impl LabelInfo {
         );
         query = query.bind(&self.catalog_number);
         query = query.bind(&self.label);
-        query = query.bind(&self.release);
+        query = query.bind(self.release);
         Ok(query.fetch_one(conn).await?)
     }
 }

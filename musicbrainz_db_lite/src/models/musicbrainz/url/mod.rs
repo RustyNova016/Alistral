@@ -1,4 +1,3 @@
-use musicbrainz_db_lite_macros::Upsert;
 use serde::Deserialize;
 use serde::Serialize;
 use sqlx::FromRow;
@@ -9,14 +8,9 @@ use crate::models::musicbrainz::relations::impl_relations::impl_relations;
 use crate::models::shared_traits::has_table::HasTable;
 
 pub mod methods;
+pub mod upsert;
 
-#[derive(Debug, Default, PartialEq, Eq, Clone, FromRow, Upsert, Deserialize, Serialize)]
-#[database(
-    table = "urls",
-    primary_key = "id",
-    ignore_insert_keys(id),
-    ignore_update_keys(id, mbid)
-)]
+#[derive(Debug, Default, PartialEq, Eq, Clone, FromRow, Deserialize, Serialize)]
 pub struct Url {
     pub id: i64,
     pub mbid: String,
