@@ -96,7 +96,7 @@ impl CompletenessFlag for Artist {
     ) -> Result<(), sqlx::Error> {
         let ts = chrono::Utc::now().timestamp();
         sqlx::query!(
-            "UPDATE `labels` SET `full_update_date` = $1 WHERE id = $2",
+            "UPDATE `artists` SET `full_update_date` = $1 WHERE id = $2",
             ts,
             self.id
         )
