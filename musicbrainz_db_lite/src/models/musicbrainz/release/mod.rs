@@ -1,4 +1,4 @@
-use musicbrainz_db_lite_macros::{MainEntity, Upsert};
+use musicbrainz_db_lite_macros::MainEntity;
 use sequelles::has_rowid::HasRowID;
 use serde::Deserialize;
 use serde::Serialize;
@@ -19,10 +19,9 @@ pub mod display;
 pub mod finds;
 pub mod methods;
 pub mod relations;
+pub mod upsert;
 
-#[derive(
-    Debug, Default, Clone, FromRow, Upsert, MainEntity, PartialEq, Eq, Deserialize, Serialize,
-)]
+#[derive(Debug, Default, Clone, FromRow, MainEntity, PartialEq, Eq, Deserialize, Serialize)]
 #[database(
     table = "releases",
     primary_key = "id",
@@ -81,51 +80,6 @@ impl HasArtistCredits<MBRelease> for Release {
 
     fn set_artist_credits_id(&mut self, id: Option<i64>) {
         self.artist_credit = id
-    }
-}
-
-#[derive(Debug, Default, Clone, FromRow, Upsert)]
-#[database(
-    table = "medias",
-    primary_key = "id",
-    ignore_insert_keys(id),
-    ignore_update_keys(id)
-)]
-pub struct Media {
-    pub id: i64,
-    pub track_count: i64,
-    pub title: Option<String>,
-    pub position: Option<i64>,
-    pub disc_count: Option<i64>,
-    pub format: Option<String>,
-    pub track_offset: Option<i64>,
-
-    pub release: i64,
-}
-
-impl crate::RowId for Media {
-    fn get_row_id(&self) -> i64 {
-        self.id
-    }
-}
-
-#[derive(Debug, Default, Clone, FromRow, Upsert)]
-#[database(
-    table = "label_infos",
-    primary_key = "id",
-    ignore_insert_keys(id),
-    ignore_update_keys(id, gid)
-)]
-pub struct LabelInfo {
-    pub id: i64,
-    pub catalog_number: Option<String>,
-    pub label: Option<String>,
-    pub release: i64,
-}
-
-impl crate::RowId for LabelInfo {
-    fn get_row_id(&self) -> i64 {
-        self.id
     }
 }
 

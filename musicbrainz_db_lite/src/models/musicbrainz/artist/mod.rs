@@ -1,5 +1,4 @@
-pub mod relations;
-use musicbrainz_db_lite_macros::{MainEntity, Upsert};
+use musicbrainz_db_lite_macros::MainEntity;
 use musicbrainz_rs::entity::artist::Artist as MBArtist;
 use sequelles::has_rowid::HasRowID;
 use sqlx::prelude::FromRow;
@@ -17,8 +16,10 @@ use super::relations::impl_relations::impl_relations;
 pub mod crawler;
 pub mod display;
 pub mod finds;
+pub mod relations;
+pub mod upsert;
 
-#[derive(Debug, Default, Clone, PartialEq, Eq, FromRow, Upsert, MainEntity)]
+#[derive(Debug, Default, Clone, PartialEq, Eq, FromRow, MainEntity)]
 #[database(
     table = "artists",
     primary_key = "id",

@@ -4,11 +4,11 @@ use sqlx::SqliteConnection;
 
 use crate::Error;
 use crate::HasArtistCredits as _;
+use crate::LabelInfo;
 use crate::MBIDRedirection as _;
+use crate::Media;
 use crate::models::musicbrainz::artist_credit::ArtistCredits;
 use crate::models::musicbrainz::genre::genre_tag::GenreTag;
-use crate::models::musicbrainz::release::LabelInfo;
-use crate::models::musicbrainz::release::Media;
 use crate::models::musicbrainz::release::Release;
 use crate::models::musicbrainz::release_group::ReleaseGroup;
 use crate::models::musicbrainz::tags::Tag;

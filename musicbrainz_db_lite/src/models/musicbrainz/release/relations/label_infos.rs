@@ -1,6 +1,6 @@
 use sqlx::SqliteConnection;
 
-use crate::models::musicbrainz::release::LabelInfo;
+use crate::LabelInfo;
 use crate::models::musicbrainz::release::Release;
 
 impl Release {

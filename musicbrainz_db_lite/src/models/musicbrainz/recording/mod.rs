@@ -14,16 +14,14 @@ use crate::utils::macros::get_and_fetch::impl_get_and_fetch;
 use crate::utils::macros::hardlink_methods::impl_db_relation_fetch_methods;
 use crate::utils::macros::hardlink_methods::impl_db_relation_methods;
 use musicbrainz_db_lite_macros::MainEntity;
-use musicbrainz_db_lite_macros::Upsert;
 
 pub mod display;
 pub mod finds;
 pub mod methods;
 pub mod relations;
+pub mod upsert;
 
-#[derive(
-    Debug, Default, PartialEq, Eq, Clone, FromRow, Upsert, MainEntity, Deserialize, Serialize,
-)]
+#[derive(Debug, Default, PartialEq, Eq, Clone, FromRow, MainEntity, Deserialize, Serialize)]
 #[database(
     table = "recordings",
     primary_key = "id",

@@ -1,4 +1,4 @@
-use musicbrainz_db_lite_macros::{MainEntity, Upsert};
+use musicbrainz_db_lite_macros::MainEntity;
 use sequelles::has_rowid::HasRowID;
 use sqlx::FromRow;
 
@@ -15,8 +15,9 @@ use crate::utils::macros::hardlink_methods::impl_db_relation_fetch_methods;
 pub mod display;
 pub mod finds;
 pub mod relations;
+pub mod upsert;
 
-#[derive(Debug, Default, PartialEq, Eq, Clone, FromRow, Upsert, MainEntity)]
+#[derive(Debug, Default, PartialEq, Eq, Clone, FromRow, MainEntity)]
 #[database(
     table = "release_groups",
     primary_key = "id",

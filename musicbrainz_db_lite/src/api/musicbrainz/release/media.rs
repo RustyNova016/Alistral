@@ -1,8 +1,8 @@
 use musicbrainz_rs::entity::release::Media as MBMedia;
 use sqlx::SqliteConnection;
 
+use crate::Media;
 use crate::Track;
-use crate::models::musicbrainz::release::Media;
 
 impl Media {
     pub async fn save_api_response(
