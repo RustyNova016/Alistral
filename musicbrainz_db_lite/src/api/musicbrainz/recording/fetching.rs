@@ -63,10 +63,10 @@ impl Recording {
 #[cfg(test)]
 mod tests {
 
+    use crate::HasArtistCredits as _;
     use crate::database::client::DBClient;
     use crate::database::pool::DBLitePoolExt as _;
     use crate::models::musicbrainz::recording::Recording;
-    use crate::HasArtistCredits as _;
 
     #[tokio::test]
     #[serial_test::serial]

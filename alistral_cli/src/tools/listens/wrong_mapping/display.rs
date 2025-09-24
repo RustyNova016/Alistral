@@ -1,10 +1,10 @@
 use alistral_core::cli::colors::AlistralColors as _;
 use inquire::InquireError;
 use inquire::Select;
+use musicbrainz_db_lite::HasArtistCredits as _;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::listenbrainz::messybrainz_submission::MessybrainzSubmission;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
-use musicbrainz_db_lite::HasArtistCredits as _;
 use strsim::sorensen_dice;
 use tuillez::OwoColorize as _;
 use tuillez::formatter::FormatWithAsync;
