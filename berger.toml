@@ -1,0 +1,7 @@
+[repository.alistral]
+path = "./"
+
+    [repository.alistral.rust]
+    fmt = true
+    sqlx = false
+    clippy_hack = true
