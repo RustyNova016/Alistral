@@ -1,3 +1,4 @@
+pub mod has_artist_credits;
 pub mod completeness;
 pub mod db_relation;
 pub mod fetch_and_save;

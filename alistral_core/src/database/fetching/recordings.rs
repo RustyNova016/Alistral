@@ -5,6 +5,7 @@ use itertools::Itertools as _;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::artist::Artist;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
+use musicbrainz_db_lite::HasArtistCredits as _;
 use tracing::Span;
 use tracing::info;
 use tracing::instrument;

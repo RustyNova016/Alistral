@@ -3,6 +3,7 @@ use alistral_core::database::fetching::listens::ListenFetchQueryReturn;
 use display::display_wrong_mapping;
 use itertools::Itertools;
 use musicbrainz_db_lite::models::listenbrainz::messybrainz_submission::MessybrainzSubmission;
+use musicbrainz_db_lite::HasArtistCredits as _;
 use strsim::sorensen_dice;
 
 use crate::ALISTRAL_CLIENT;

@@ -6,10 +6,10 @@ use sqlx::prelude::FromRow;
 use super::relations::impl_relations::impl_relations;
 use crate::MBIDRedirection;
 use crate::MBRecording;
+use crate::models::shared_traits::has_artist_credits::HasArtistCredits;
 use crate::models::shared_traits::has_genre::HasGenres;
 use crate::models::shared_traits::has_table::HasTable;
 use crate::models::shared_traits::has_tags::HasTags;
-use crate::utils::macros::artist_credits::impl_artist_credits;
 use crate::utils::macros::get_and_fetch::impl_get_and_fetch;
 use crate::utils::macros::hardlink_methods::impl_db_relation_fetch_methods;
 use crate::utils::macros::hardlink_methods::impl_db_relation_methods;
@@ -45,7 +45,6 @@ pub struct Recording {
     pub artist_credit: Option<i64>,
 }
 
-impl_artist_credits!(Recording, "recordings");
 impl_get_and_fetch!(Recording);
 impl_relations!(Recording);
 impl_db_relation_methods!(Recording);
@@ -70,4 +69,18 @@ impl HasRowID for Recording {
 impl HasTable for Recording {
     const TABLE_NAME: &str = "recordings";
     const FOREIGN_FIELD_NAME: &str = "recording";
+}
+
+impl HasArtistCredits<MBRecording> for Recording {
+    fn get_title(&self) -> &str {
+        &self.title
+    }
+
+    fn get_artist_credits_id(&self) -> Option<&i64> {
+        self.artist_credit.as_ref()
+    }
+
+    fn set_artist_credits_id(&mut self, id: Option<i64>) {
+        self.artist_credit = id
+    }
 }

@@ -2,6 +2,7 @@ use alistral_core::datastructures::listen_collection::traits::ListenCollectionRe
 use chrono::Duration;
 use chrono::Local;
 use indoc::formatdoc;
+use musicbrainz_db_lite::HasArtistCredits as _;
 use rust_decimal::Decimal;
 use tuillez::OwoColorize as _;
 use tuillez::extensions::chrono_exts::DateTimeUtcExt as _;
