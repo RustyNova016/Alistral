@@ -9,9 +9,8 @@ use musicbrainz_rs::client::MusicBrainzClient;
 use sqlx::sqlite::SqliteConnectOptions;
 use sqlx::sqlite::SqliteJournalMode;
 
-use crate::database::pool::DBLitePool;
-use crate::database::pool::DBLitePoolExt;
-use crate::database::pool::PoolManager;
+use crate::database::conn_pool::DBLitePool;
+use crate::database::conn_pool::DBLitePoolManager;
 
 use super::DBClient;
 
@@ -95,7 +94,7 @@ impl<MBClient, LBClient> ClientBuilder<DatabaseFile, (), MBClient, LBClient> {
         .journal_mode(SqliteJournalMode::Wal)
         .busy_timeout(Duration::from_millis(60000));
 
-        let connection = PoolManager::create_pool(optconn);
+        let connection = DBLitePoolManager::create_pool(optconn);
         connection.resize(pool_size);
         Ok(ClientBuilder {
             connection,
@@ -112,10 +111,7 @@ impl<MBClient, LBClient> ClientBuilder<DatabaseFile, (), MBClient, LBClient> {
     ) -> Result<ClientBuilder<DatabaseFile, DBLitePool, MBClient, LBClient>, crate::Error> {
         let new = self.connect(pool_size).await?;
 
-        musicbrainz_db_lite_schema::create_and_migrate(
-            &mut *new.connection.get_raw_connection().await?,
-        )
-        .await?;
+        musicbrainz_db_lite_schema::create_and_migrate(&mut *new.connection.get().await?).await?;
 
         Ok(new)
     }
@@ -135,9 +131,8 @@ impl<MBClient, LBClient> ClientBuilder<InMemory, (), MBClient, LBClient> {
             .journal_mode(SqliteJournalMode::Wal)
             .busy_timeout(Duration::from_millis(60000));
 
-        let pool = PoolManager::create_pool(optconn);
-        musicbrainz_db_lite_schema::create_and_migrate(&mut *pool.get_raw_connection().await?)
-            .await?;
+        let pool = DBLitePoolManager::create_pool(optconn);
+        musicbrainz_db_lite_schema::create_and_migrate(&mut *pool.get().await?).await?;
 
         pool.resize(pool_size);
         Ok(ClientBuilder {
@@ -207,7 +202,7 @@ impl<Loc, DbConn, MBClient> ClientBuilder<Loc, DbConn, MBClient, ()> {
 impl<Loc> ClientBuilder<Loc, DBLitePool, Arc<MusicBrainzClient>, Arc<ListenbrainzClient>> {
     pub fn build(self) -> DBClient {
         DBClient {
-            connection: self.connection,
+            database: self.connection,
             musicbrainz_client: self.musicbrainz_client,
             listenbrainz_client: self.listenbrainz_client,
         }

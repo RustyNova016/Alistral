@@ -6,19 +6,19 @@ use sqlx::SqliteConnection;
 use sqlx::sqlite::SqliteConnectOptions;
 
 #[derive(Debug)]
-pub struct RawPoolManager {
+pub struct DBLitePoolManager {
     config: SqliteConnectOptions,
 }
 
-impl RawPoolManager {
-    pub fn create_pool(config: SqliteConnectOptions) -> RawConnectionPool {
-        RawConnectionPool::builder(RawPoolManager { config })
+impl DBLitePoolManager {
+    pub fn create_pool(config: SqliteConnectOptions) -> DBLitePool {
+        DBLitePool::builder(DBLitePoolManager { config })
             .build()
             .unwrap()
     }
 }
 
-impl managed::Manager for RawPoolManager {
+impl managed::Manager for DBLitePoolManager {
     type Type = sqlx::SqliteConnection;
     type Error = sqlx::Error;
 
@@ -36,8 +36,10 @@ impl managed::Manager for RawPoolManager {
 }
 
 /// A connection pool of raw `SqliteConnection`.
-pub type RawConnectionPool = managed::Pool<RawPoolManager>;
+pub type DBLitePool = managed::Pool<DBLitePoolManager>;
 
-pub type RawPoolError = PoolError<sqlx::Error>;
+pub type DBLitePoolError = PoolError<sqlx::Error>;
 
-pub type RawPoolResult = Result<Object<RawPoolManager>, RawPoolError>;
+pub type DBLitePoolConn = Object<DBLitePoolManager>;
+
+pub type DBLitePoolResult = Result<DBLitePoolConn, DBLitePoolError>;

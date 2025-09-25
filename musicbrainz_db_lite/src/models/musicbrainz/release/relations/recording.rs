@@ -76,7 +76,6 @@ impl Release {
 #[cfg(test)]
 mod tests {
     use crate::database::client::DBClient;
-    use crate::database::pool::DBLitePoolExt as _;
     use crate::models::musicbrainz::release::Release;
     use crate::utils::tests::RelationAssertion;
 
@@ -84,7 +83,7 @@ mod tests {
     #[serial_test::serial]
     async fn should_get_recordings_from_release() {
         let client = DBClient::connect_in_memory_and_create().await.unwrap();
-        let conn = &mut *client.connection.get_raw_connection().await.unwrap();
+        let conn = &mut *client.get_raw_connection().await.unwrap();
 
         // Test values. Feel free to add edge cases here
         // (Release, Recording)

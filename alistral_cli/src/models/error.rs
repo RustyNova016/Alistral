@@ -1,4 +1,4 @@
-use musicbrainz_db_lite::database::raw_conn_pool::RawPoolError;
+use musicbrainz_db_lite::database::conn_pool::DBLitePoolError;
 use std::io;
 use thiserror::Error;
 use tuillez::extensions::chrono_exts::TimeError;
@@ -50,7 +50,7 @@ pub enum Error {
     FatalError(#[from] FatalError),
 
     #[error(transparent)]
-    RawConnection(#[from] RawPoolError),
+    RawConnection(#[from] DBLitePoolError),
 
     // ==================
     //  Error Reexports
