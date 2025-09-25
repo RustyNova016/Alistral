@@ -27,7 +27,7 @@ impl DBClient {
         musicbrainz_client: Arc<MusicBrainzClient>,
         listenbrainz_client: Arc<ListenbrainzClient>,
     ) -> Result<Self, sqlx::Error> {
-        let optconn = SqliteConnectOptions::from_str(&path.to_string_lossy().to_string())?
+        let optconn = SqliteConnectOptions::from_str(path.to_string_lossy().as_ref())?
             .journal_mode(SqliteJournalMode::Wal)
             .create_if_missing(true)
             .foreign_keys(true)
@@ -36,7 +36,7 @@ impl DBClient {
         let db = SqliteDatabase::builder()
             .connection_config(optconn)
             .path(path)
-            .migrations(sqlx::migrate!("./musicbrainz_db_lite_schema/migrations"))
+            .migrations(sqlx::migrate!("./migrations"))
             .build();
 
         Ok(Self {
@@ -60,7 +60,7 @@ impl DBClient {
 
         let db = SqliteDatabase::builder()
             .connection_config(optconn)
-            .migrations(sqlx::migrate!("./musicbrainz_db_lite_schema/migrations"))
+            .migrations(sqlx::migrate!("./migrations"))
             .build();
 
         Ok(Self {

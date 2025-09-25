@@ -2238,7 +2238,6 @@ dependencies = [
  "itertools 0.14.0",
  "listenbrainz",
  "macon",
- "musicbrainz_db_lite_schema",
  "musicbrainz_rs",
  "owo-colors",
  "regex",
@@ -2255,16 +2254,6 @@ dependencies = [
  "tracing",
  "tuillez",
  "url",
-]
-
-[[package]]
-name = "musicbrainz_db_lite_schema"
-version = "0.1.1"
-dependencies = [
- "directories",
- "serial_test",
- "sqlx",
- "tokio",
 ]
 
 [[package]]
@@ -3159,6 +3148,7 @@ dependencies = [
 [[package]]
 name = "sequelles"
 version = "0.1.1"
+source = "git+https://github.com/RustyNova016/sequelles?rev=f5f5df6b1669d6757cacbd5a33744f1661dbdadc#f5f5df6b1669d6757cacbd5a33744f1661dbdadc"
 dependencies = [
  "async-once-cell",
  "bon",

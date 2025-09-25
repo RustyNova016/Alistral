@@ -5,7 +5,6 @@ edition = "2024"
 rust-version = "1.85.1"
 
 [dependencies]
-musicbrainz_db_lite_schema = { path = "./musicbrainz_db_lite_schema" }
 extend = "1.2.0"
 macon = "1.2.0" #TODO: Remove for bon
 serde_json = "1.0.140"
@@ -53,3 +52,6 @@ pretty_format = ["dep:owo-colors"]
 
 [dev-dependencies]
 serial_test = "3.1.1"
+
+[patch.crates-io]
+sequelles = { git = "https://github.com/RustyNova016/sequelles", rev = "f5f5df6b1669d6757cacbd5a33744f1661dbdadc"}

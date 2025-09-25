@@ -1,4 +1,4 @@
-use musicbrainz_db_lite::sequelle::databases::sqlite::database::GetConnectionError;
+use musicbrainz_db_lite::GetConnectionError;
 
 #[derive(thiserror::Error, Debug)]
 pub enum Error {

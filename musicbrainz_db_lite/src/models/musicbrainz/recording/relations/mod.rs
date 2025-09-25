@@ -116,8 +116,8 @@ impl DBRelation<TrackRecordingDBRel> for Recording {
 #[cfg(test)]
 mod tests {
 
-    use crate::tests::fixtures::default_client::test_mb_client;
     use crate::models::musicbrainz::recording::Recording;
+    use crate::tests::fixtures::default_client::test_mb_client;
 
     #[tokio::test]
     #[serial_test::serial]

@@ -1,8 +1,8 @@
 use musicbrainz_rs::Fetch;
 use musicbrainz_rs::entity::release_group::ReleaseGroup as MBReleaseGroup;
 
-use crate::Error;
 use crate::DBClient;
+use crate::Error;
 use crate::models::musicbrainz::release_group::ReleaseGroup;
 use crate::models::shared_traits::fetch_and_save::FetchAndSave;
 use crate::models::shared_traits::fetch_mbid::FetchMBID;
