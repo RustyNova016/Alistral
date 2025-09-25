@@ -29,7 +29,6 @@ mod tests {
     use listenbrainz::raw::Client;
 
     use crate::database::client::DBClient;
-    use crate::database::pool::DBLitePoolExt;
     use crate::models::listenbrainz::listen::Listen;
     use crate::models::listenbrainz::messybrainz_submission::MessybrainzSubmission;
 
@@ -37,7 +36,7 @@ mod tests {
     #[serial_test::serial]
     async fn should_get_listens_of_msid() {
         let client = DBClient::connect_in_memory_and_create().await.unwrap();
-        let conn = &mut *client.connection.get_raw_connection().await.unwrap();
+        let conn = &mut *client.get_raw_connection().await.unwrap();
         let lb_client = Client::new();
 
         // Test values. Feel free to add edge cases here

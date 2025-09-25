@@ -180,14 +180,13 @@ mod tests {
     use listenbrainz::raw::Client;
 
     use crate::database::client::DBClient;
-    use crate::database::pool::DBLitePoolExt as _;
     use crate::models::listenbrainz::listen::Listen;
 
     #[tokio::test]
     #[serial_test::serial]
     async fn should_fetch_listen_by_triplet() {
         let client = DBClient::connect_in_memory_and_create().await.unwrap();
-        let conn = &mut *client.connection.get_raw_connection().await.unwrap();
+        let conn = &mut *client.get_raw_connection().await.unwrap();
         let lb_client = Client::new();
 
         // Test values. Feel free to add edge cases here

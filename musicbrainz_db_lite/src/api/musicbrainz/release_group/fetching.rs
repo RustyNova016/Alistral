@@ -44,14 +44,13 @@ impl ReleaseGroup {
 mod tests {
 
     use crate::database::client::DBClient;
-    use crate::database::pool::DBLitePoolExt as _;
     use crate::models::musicbrainz::release_group::ReleaseGroup;
 
     #[tokio::test]
     #[serial_test::serial]
     async fn should_insert_work() {
         let client = DBClient::connect_in_memory_and_create().await.unwrap();
-        let conn = &mut *client.connection.get_raw_connection().await.unwrap();
+        let conn = &mut *client.get_raw_connection().await.unwrap();
 
         // Test values. Feel free to add edge cases here
         let test_values = vec![
