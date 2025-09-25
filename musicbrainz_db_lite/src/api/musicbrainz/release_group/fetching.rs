@@ -2,7 +2,7 @@ use musicbrainz_rs::Fetch;
 use musicbrainz_rs::entity::release_group::ReleaseGroup as MBReleaseGroup;
 
 use crate::Error;
-use crate::database::client::DBClient;
+use crate::DBClient;
 use crate::models::musicbrainz::release_group::ReleaseGroup;
 use crate::models::shared_traits::fetch_and_save::FetchAndSave;
 use crate::models::shared_traits::fetch_mbid::FetchMBID;
@@ -42,14 +42,13 @@ impl ReleaseGroup {
 
 #[cfg(test)]
 mod tests {
-
-    use crate::database::client::DBClient;
     use crate::models::musicbrainz::release_group::ReleaseGroup;
+    use crate::tests::fixtures::default_client::test_mb_client;
 
     #[tokio::test]
     #[serial_test::serial]
     async fn should_insert_work() {
-        let client = DBClient::connect_in_memory_and_create().await.unwrap();
+        let client = test_mb_client();
         let conn = &mut *client.get_raw_connection().await.unwrap();
 
         // Test values. Feel free to add edge cases here

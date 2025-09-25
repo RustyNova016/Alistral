@@ -87,7 +87,7 @@ impl MbClippyLint for DashETILint {
                         &mut *client
                             .mb_database
                             .clone()
-                            .get_raw_connection_as_task()
+                            .get_conn_as_task()
                             .await?,
                     )
                     .await?

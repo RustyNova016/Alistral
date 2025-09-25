@@ -1,6 +1,6 @@
 use musicbrainz_rs::{Fetch, entity::label::Label as MBLabel};
 
-use crate::database::client::DBClient;
+use crate::DBClient;
 use crate::models::musicbrainz::label::Label;
 use crate::models::shared_traits::fetch_and_save::FetchAndSave;
 use crate::models::shared_traits::fetch_mbid::FetchMBID;
@@ -41,14 +41,13 @@ impl Label {
 
 #[cfg(test)]
 mod tests {
-
-    use crate::database::client::DBClient;
     use crate::models::musicbrainz::label::Label;
+    use crate::tests::fixtures::default_client::test_mb_client;
 
     #[tokio::test]
     #[serial_test::serial]
     async fn should_insert_label() {
-        let client = DBClient::connect_in_memory_and_create().await.unwrap();
+        let client = test_mb_client();
         let conn = &mut *client.get_raw_connection().await.unwrap();
 
         // Test values. Feel free to add edge cases here

@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use listenbrainz::raw::Client as ListenbrainzClient;
-use musicbrainz_db_lite::database::client::DBClient;
+use musicbrainz_db_lite::DBClient;
 
 pub struct AlistralClient {
     // Subclients

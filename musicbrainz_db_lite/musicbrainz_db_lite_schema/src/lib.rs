@@ -8,6 +8,8 @@ pub mod tables;
 #[cfg(test)]
 pub mod testing;
 
+
+
 pub async fn create_and_migrate(conn: &mut sqlx::SqliteConnection) -> Result<(), MigrateError> {
     sqlx::migrate!("./migrations").run(conn).await
 }

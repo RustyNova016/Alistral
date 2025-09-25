@@ -1,13 +1,13 @@
 pub mod api;
-pub mod database;
 pub mod error;
 pub mod models;
+pub mod tests;
 pub mod utils;
-
 pub use musicbrainz_rs::*;
 
-pub use crate::database::client::DBClient;
+// pub use crate::database::client::DBClient;
 pub use crate::error::Error;
+pub use crate::models::client::DBClient;
 
 // === Entity ===
 pub use crate::models::musicbrainz::artist::Artist;

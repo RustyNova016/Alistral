@@ -1,3 +1,4 @@
+pub mod client;
 pub mod errors;
 pub mod listenbrainz;
 pub mod musicbrainz;

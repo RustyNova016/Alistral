@@ -6,12 +6,18 @@ members = [
     "tuillez", 
     "musicbrainz_db_lite", 
     "musicbrainz_db_lite/musicbrainz_db_lite_schema", 
-    "symphonize"
+    "symphonize", 
+    "/root/projects/Alistral/sequelles"
 ]
 resolver = "3"
 
 # [profile.dev]
 # debug = "line-tables-only"
+
+[patch]
+
+[patch.crates-io]
+sequelles = { path = "/root/projects/Alistral/sequelles" }
 
 [workspace.lints.rust]
 unsafe_code = "forbid"

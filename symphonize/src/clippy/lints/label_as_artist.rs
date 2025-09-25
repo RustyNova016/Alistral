@@ -34,11 +34,7 @@ impl LabelAsArtistLint {
                 .await?),
             MainEntity::Track(val) => Ok(val
                 .get_related_entity::<ArtistFromCreditsRelation>(
-                    &mut *client
-                        .mb_database
-                        .clone()
-                        .get_raw_connection_as_task()
-                        .await?,
+                    &mut *client.mb_database.clone().get_conn_as_task().await?,
                 )
                 .await?),
             //TODO: Release Group
@@ -57,7 +53,7 @@ impl MbClippyLint for LabelAsArtistLint {
         entity: &MainEntity,
     ) -> Result<Option<Self>, crate::Error> {
         let artists = Self::get_artists(client, entity).await?;
-        let conn = &mut client.mb_database.get_raw_connection().await?;
+        let conn = &mut client.mb_database.get_conn().await?;
 
         for artist in artists {
             let tags = Tag::query_from_entity(conn, &artist).await?;

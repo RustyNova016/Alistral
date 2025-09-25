@@ -3,8 +3,8 @@ use musicbrainz_rs::entity::artist::Artist as MBArtist;
 use sqlx::SqliteConnection;
 use tracing::instrument;
 
+use crate::DBClient;
 use crate::Error;
-use crate::database::client::DBClient;
 use crate::models::musicbrainz::artist::Artist;
 use crate::models::shared_traits::fetch_and_save::FetchAndSave;
 use crate::models::shared_traits::fetch_mbid::FetchMBID;
@@ -52,14 +52,13 @@ impl Artist {
 
 #[cfg(test)]
 mod tests {
-
-    use crate::database::client::DBClient;
     use crate::models::musicbrainz::artist::Artist;
+    use crate::tests::fixtures::default_client::test_mb_client;
 
     #[tokio::test]
     #[serial_test::serial]
     async fn should_insert_artist() {
-        let client = DBClient::connect_in_memory_and_create().await.unwrap();
+        let client = test_mb_client();
         let conn = &mut *client.get_raw_connection().await.unwrap();
 
         // Test values. Feel free to add edge cases here

@@ -67,7 +67,7 @@ pub async fn fetch_artists_of_recordings(
     //TODO: Turn the stream from Recording -> ArtistCredits -> Unique -> Fetch
     stream::iter(recordings)
         .map(async |recording| -> Result<(), crate::Error> {
-            let conn = &mut *client.musicbrainz_db.get_raw_connection().await?;
+            let conn = &mut *client.musicbrainz_db.get_conn().await?;
 
             let credits = recording
                 .get_artist_credits_or_fetch(conn, &client.musicbrainz_db)

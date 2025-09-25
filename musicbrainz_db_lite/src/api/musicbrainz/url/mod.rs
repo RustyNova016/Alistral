@@ -141,15 +141,15 @@ mod tests {
     use futures::StreamExt as _;
     use futures::stream;
 
-    use crate::database::client::DBClient;
     use crate::models::musicbrainz::recording::Recording;
     use crate::models::musicbrainz::url::Url;
     use crate::models::shared_traits::fetch_and_save::FetchAndSave;
+    use crate::tests::fixtures::default_client::test_mb_client;
 
     #[tokio::test]
     #[serial_test::serial]
     async fn should_insert_url() {
-        let client = DBClient::connect_in_memory_and_create().await.unwrap();
+        let client = test_mb_client();
 
         // Test values. Feel free to add edge cases here
         let test_values = vec!["7b62f7c5-2100-48de-8973-2a243482b0bb"];
@@ -164,7 +164,7 @@ mod tests {
     #[tokio::test]
     #[serial_test::serial]
     async fn should_get_url_relations() {
-        let client = DBClient::connect_in_memory_and_create().await.unwrap();
+        let client = test_mb_client();
 
         let recording_with_url =
             Recording::fetch_and_save_with_pool(&client, "490ec335-1972-4b06-86e6-1dd8d5484cf7")

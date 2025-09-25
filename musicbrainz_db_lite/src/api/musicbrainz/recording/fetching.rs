@@ -4,7 +4,7 @@ use sqlx::SqliteConnection;
 use tracing::debug;
 use tracing::instrument;
 
-use crate::database::client::DBClient;
+use crate::DBClient;
 use crate::models::musicbrainz::recording::Recording;
 use crate::models::shared_traits::fetch_and_save::FetchAndSave;
 use crate::models::shared_traits::fetch_mbid::FetchMBID;
@@ -63,14 +63,14 @@ impl Recording {
 #[cfg(test)]
 mod tests {
 
+    use crate::tests::fixtures::default_client::test_mb_client;
     use crate::HasArtistCredits as _;
-    use crate::database::client::DBClient;
     use crate::models::musicbrainz::recording::Recording;
 
     #[tokio::test]
     #[serial_test::serial]
     async fn should_insert_recording() {
-        let client = DBClient::connect_in_memory_and_create().await.unwrap();
+        let client = test_mb_client();
         let conn = &mut *client.get_raw_connection().await.unwrap();
 
         // Test values. Feel free to add edge cases here
