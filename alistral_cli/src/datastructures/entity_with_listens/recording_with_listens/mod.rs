@@ -5,7 +5,7 @@ use alistral_core::datastructures::listen_collection::traits::ListenCollectionRe
 use chrono::{DateTime, Duration, Utc};
 use collection::RecordingWithListensCollection;
 use derive_getters::Getters;
-use musicbrainz_db_lite::RowId;
+use musicbrainz_db_lite::HasRowID;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use musicbrainz_db_lite::models::musicbrainz::user::User;
@@ -66,7 +66,7 @@ impl RecordingWithListens {
                 (listen.clone(), join.data)
             })
             .for_each(|(listen, recording)| {
-                out.entry(recording.get_row_id())
+                out.entry(recording.rowid())
                     .or_insert_with(|| Self {
                         recording,
                         listens: ListenCollection::default(),

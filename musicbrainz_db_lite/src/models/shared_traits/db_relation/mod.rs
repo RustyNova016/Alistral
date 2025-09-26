@@ -1,9 +1,9 @@
 use itertools::Itertools as _;
 use sequelles::datastructures::joins::join_result::JoinCollection;
 use sequelles::datastructures::joins::join_result::JoinRelation;
+use sequelles::has_rowid::HasRowID;
 use sqlx::sqlite::SqliteRow;
 
-use crate::RowId;
 use crate::models::shared_traits::has_table::HasTable;
 
 pub mod complete_fetch;
@@ -11,7 +11,7 @@ pub mod complete_fetch;
 /// Trait for all the entity having a database relation with another
 pub trait DBRelation<Relation>
 where
-    Self: HasTable + RowId,
+    Self: HasTable + HasRowID,
 {
     type ReturnedType: HasTable + for<'a> sqlx::FromRow<'a, SqliteRow> + Send + Unpin;
 
@@ -24,7 +24,7 @@ where
         conn: &mut sqlx::SqliteConnection,
     ) -> impl std::future::Future<Output = Result<Vec<Self::ReturnedType>, crate::Error>> + Send
     {
-        let id = self.get_row_id();
+        let id = self.rowid();
         async move {
             let query = format!(
                 "SELECT
@@ -51,7 +51,7 @@ where
         Self: Sized + Sync,
     {
         async {
-            let ids = entities.iter().map(|r| r.get_row_id()).collect_vec();
+            let ids = entities.iter().map(|r| r.rowid()).collect_vec();
             let id_string = serde_json::to_string(&ids)?;
 
             let joins: Vec<JoinRelation<Self::ReturnedType>> = sqlx::query_as(&format!(

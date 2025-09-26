@@ -48,6 +48,7 @@ impl Release {
 mod tests {
     use musicbrainz_db_lite_schema::create_and_migrate;
 
+    use crate::FetchAsComplete;
     use crate::database::client::DBClient;
     use crate::models::musicbrainz::recording::Recording;
     use crate::models::musicbrainz::release::Release;
@@ -88,14 +89,17 @@ mod tests {
                 .await
                 .unwrap();
 
-            let mut release = Release::get_or_fetch(conn, &client, release_id)
+            let release = Release::get_or_fetch(conn, &client, release_id)
                 .await
                 .unwrap()
                 .unwrap();
 
             assert!(release.full_update_date.is_none());
 
-            release.refetch_and_load(conn, &client).await.unwrap();
+            let release = release
+                .fetch_as_complete_with_conn(conn, &client)
+                .await
+                .unwrap();
 
             assert!(release.full_update_date.is_some());
         }

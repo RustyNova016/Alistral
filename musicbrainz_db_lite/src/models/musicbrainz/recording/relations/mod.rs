@@ -5,6 +5,7 @@ use sqlx::SqliteConnection;
 
 use crate::ArtistCredit;
 use crate::DBRelation;
+use crate::FetchAsComplete as _;
 use crate::Track;
 use crate::models::musicbrainz::isrc::ISRC;
 use crate::models::musicbrainz::release::Release;
@@ -29,7 +30,7 @@ impl Recording {
         client: &crate::DBClient,
     ) -> Result<Vec<Release>, crate::Error> {
         // First, make sure all the releases of the recording are in the database
-        self.fetch_if_incomplete(conn, client).await?;
+        self.fetch_as_complete_with_conn(conn, client).await?;
 
         // Next, get all the releases
         Ok(sqlx::query_as(

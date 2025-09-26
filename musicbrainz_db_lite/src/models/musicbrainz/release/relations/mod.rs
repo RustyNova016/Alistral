@@ -32,7 +32,7 @@ impl Release {
         client: &crate::DBClient,
     ) -> Result<Vec<Media>, crate::Error> {
         // First, make sure all the data of the entity is in the database
-        let id = self.get_or_fetch_as_complete(conn, client).await?.id;
+        let id = self.fetch_as_complete_with_conn(conn, client).await?.id;
 
         // Next, get all the children
         Ok(sqlx::query_as(

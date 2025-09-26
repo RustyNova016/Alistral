@@ -1,8 +1,7 @@
 use macon::Builder;
+use sequelles::has_rowid::HasRowID;
 use sqlx::prelude::FromRow;
 use sqlx::{Executor, Sqlite};
-
-use crate::RowId;
 
 pub mod finds;
 pub mod relations;
@@ -53,8 +52,8 @@ impl MessybrainzSubmission {
     }
 }
 
-impl RowId for MessybrainzSubmission {
-    fn get_row_id(&self) -> i64 {
+impl HasRowID for MessybrainzSubmission {
+    fn rowid(&self) -> i64 {
         self.id
     }
 }

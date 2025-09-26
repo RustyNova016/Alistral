@@ -1,6 +1,6 @@
 use musicbrainz_rs::entity::genre::Genre as MBGenre;
+use sequelles::has_rowid::HasRowID;
 
-use crate::RowId;
 use crate::models::musicbrainz::genre::Genre;
 use crate::models::musicbrainz::genre::genre_tag::GenreTag;
 use crate::models::shared_traits::has_genre::HasGenres;
@@ -26,7 +26,7 @@ impl Genre {
 }
 
 impl GenreTag {
-    pub async fn save_api_response<T: HasGenres + RowId>(
+    pub async fn save_api_response<T: HasGenres + HasRowID>(
         conn: &mut sqlx::SqliteConnection,
         value: MBGenre,
         parent: &T,
@@ -39,7 +39,7 @@ impl GenreTag {
             id: Default::default(),
         };
 
-        genre_tag.upsert::<T>(conn, parent.get_row_id()).await?;
+        genre_tag.upsert::<T>(conn, parent.rowid()).await?;
         Ok(genre_tag)
     }
 }

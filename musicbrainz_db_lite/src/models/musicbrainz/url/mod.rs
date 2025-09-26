@@ -1,9 +1,9 @@
+use sequelles::has_rowid::HasRowID;
 use serde::Deserialize;
 use serde::Serialize;
 use sqlx::FromRow;
 
 use crate::HasMBID;
-use crate::RowId;
 use crate::models::musicbrainz::relations::impl_relations::impl_relations;
 use crate::models::shared_traits::has_table::HasTable;
 
@@ -25,8 +25,8 @@ impl_relations!(Url);
 
 impl crate::MBIDRedirection for Url {}
 
-impl RowId for Url {
-    fn get_row_id(&self) -> i64 {
+impl HasRowID for Url {
+    fn rowid(&self) -> i64 {
         self.id
     }
 }

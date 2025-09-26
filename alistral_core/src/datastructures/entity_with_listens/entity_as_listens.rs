@@ -1,5 +1,5 @@
 use itertools::Itertools as _;
-use musicbrainz_db_lite::RowId;
+use musicbrainz_db_lite::HasRowID;
 use rust_decimal::Decimal;
 
 use crate::datastructures::entity_with_listens::EntityWithListens;
@@ -8,8 +8,8 @@ use crate::datastructures::listen_collection::traits::ListenCollectionReadable;
 
 impl<EntMain, EntSub, Lis> EntityWithListens<EntMain, EntityWithListensCollection<EntSub, Lis>>
 where
-    EntMain: RowId,
-    EntSub: RowId,
+    EntMain: HasRowID,
+    EntSub: HasRowID,
     Lis: ListenCollectionReadable,
 {
     /// Return the number of child entities that have been listened

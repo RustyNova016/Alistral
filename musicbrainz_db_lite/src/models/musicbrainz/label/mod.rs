@@ -1,7 +1,7 @@
-use musicbrainz_db_lite_macros::MainEntity;
 use sequelles::has_rowid::HasRowID;
 use sqlx::FromRow;
 
+use crate::HasMBID;
 use crate::MBIDRedirection;
 use crate::MBLabel;
 use crate::models::shared_traits::has_genre::HasGenres;
@@ -17,13 +17,7 @@ pub mod display;
 pub mod finds;
 pub mod upsert;
 
-#[derive(Debug, Default, Clone, FromRow, MainEntity, PartialEq, Eq)]
-#[database(
-    table = "labels",
-    primary_key = "id",
-    ignore_insert_keys(id),
-    ignore_update_keys(id, mbid)
-)]
+#[derive(Debug, Default, Clone, FromRow, PartialEq, Eq)]
 pub struct Label {
     pub id: i64,
     pub mbid: String,
@@ -43,12 +37,6 @@ impl_relations!(Label);
 impl_db_relation_methods!(Label);
 impl_db_relation_fetch_methods!(Label, MBLabel);
 
-impl crate::RowId for Label {
-    fn get_row_id(&self) -> i64 {
-        self.id
-    }
-}
-
 impl HasTable for Label {
     const TABLE_NAME: &str = "labels";
     const FOREIGN_FIELD_NAME: &str = "label";
@@ -63,3 +51,9 @@ impl HasRowID for Label {
 impl HasTags for Label {}
 impl HasGenres for Label {}
 impl MBIDRedirection for Label {}
+
+impl HasMBID for Label {
+    fn get_mbid(&self) -> &str {
+        &self.mbid
+    }
+}

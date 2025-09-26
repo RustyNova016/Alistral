@@ -2,6 +2,7 @@ use std::collections::HashMap;
 
 use itertools::Itertools;
 
+use crate::FetchAsComplete as _;
 use crate::models::musicbrainz::artist::Artist;
 use crate::models::musicbrainz::recording::Recording;
 use crate::models::shared_traits::db_relation::ArtistFromCreditsRelation;
@@ -17,7 +18,7 @@ impl Recording {
         client: &crate::DBClient,
     ) -> Result<Vec<Artist>, crate::Error> {
         // First, make sure all the work of the recording are in the database
-        self.fetch_if_incomplete(conn, client).await?;
+        self.fetch_as_complete_with_conn(conn, client).await?;
 
         // Next, get all the works
         Ok(sqlx::query_as(

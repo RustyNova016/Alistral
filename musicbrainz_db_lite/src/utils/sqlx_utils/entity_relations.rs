@@ -3,9 +3,8 @@ use std::collections::HashMap;
 
 use extend::ext;
 use itertools::Itertools;
+use sequelles::has_rowid::HasRowID;
 use sqlx::FromRow;
-
-use crate::RowId;
 
 pub fn inner_join_values<IdT, T, U, IteT, IteU>(left: IteT, mut right: IteU) -> Vec<(T, U)>
 where
@@ -41,7 +40,7 @@ pub struct JoinCollection<T, U> {
 
 impl<R> JoinCollection<i64, R>
 where
-    R: RowId + Eq + Hash,
+    R: HasRowID + Eq + Hash,
 {
     /// Associate the left entity's rowids to right entities
     pub fn into_lid_hashmap(self) -> HashMap<i64, Vec<R>> {
@@ -69,12 +68,12 @@ where
     /// ex: a Release (Right) has many Tracks (Left)
     pub fn into_inner_many_to_one_hashmap<L>(self, left_entities: Vec<L>) -> HashMap<R, Vec<L>>
     where
-        L: RowId,
+        L: HasRowID,
     {
         // Construct an
         let mut l_index = left_entities
             .into_iter()
-            .into_group_map_by(|ent| ent.get_row_id());
+            .into_group_map_by(|ent| ent.rowid());
 
         let mut output = HashMap::new();
         for (l_id, right) in self.into_id_values() {
@@ -133,13 +132,13 @@ impl<T, U> From<Vec<JoinRelation<T, U>>> for JoinCollection<T, U> {
 }
 
 #[ext(name = InvertJoin)]
-pub impl<L: Clone + RowId, R: RowId> HashMap<i64, (L, Vec<R>)> {
+pub impl<L: Clone + HasRowID, R: HasRowID> HashMap<i64, (L, Vec<R>)> {
     fn invert_join(self) -> HashMap<i64, (R, Vec<L>)> {
         let mut new = HashMap::new();
 
         for (_, (left_element, right_elements)) in self {
             for right_element in right_elements {
-                new.entry(right_element.get_row_id())
+                new.entry(right_element.rowid())
                     .or_insert_with(|| (right_element, Vec::new()))
                     .1
                     .push(left_element.clone())

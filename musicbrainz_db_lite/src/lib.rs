@@ -30,7 +30,6 @@ pub use crate::models::musicbrainz::work::Work;
 
 // === Traits ===
 pub use crate::models::shared_traits::HasMBID;
-pub use crate::models::shared_traits::RowId;
 pub use crate::models::shared_traits::completeness::CompletenessFlag;
 pub use crate::models::shared_traits::completeness::FetchAsComplete;
 pub use crate::models::shared_traits::db_relation::DBRelation;
@@ -52,6 +51,5 @@ pub(crate) type MBRelease = musicbrainz_rs::entity::release::Release;
 pub(crate) type MBReleaseGroup = musicbrainz_rs::entity::release_group::ReleaseGroup;
 pub(crate) type MBUrl = musicbrainz_rs::entity::url::Url;
 
-pub mod sequelle {
-    pub use sequelles::*;
-}
+// === External Reexports ===
+pub use sequelles::has_rowid::HasRowID;

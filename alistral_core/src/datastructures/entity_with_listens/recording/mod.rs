@@ -2,7 +2,7 @@ use core::ops::Mul;
 
 use chrono::Duration;
 use collection::RecordingWithListensCollection;
-use musicbrainz_db_lite::RowId;
+use musicbrainz_db_lite::HasRowID as _;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use rust_decimal::Decimal;
 use rust_decimal_macros::dec;
@@ -49,7 +49,7 @@ impl RecordingWithListens {
     ) -> Decimal {
         // Retrieve the all time listen count of the recording for the user
         let all_time_listen_count = user_listens
-            .get_by_id(self.entity.get_row_id())
+            .get_by_id(self.entity.rowid())
             .map(|r| r.listen_count())
             .unwrap_or(0);
 

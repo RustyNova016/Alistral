@@ -1,13 +1,13 @@
+use sequelles::has_rowid::HasRowID;
 use sqlx::FromRow;
 use sqlx::sqlite::SqliteRow;
 
-use crate::RowId;
 use crate::models::shared_traits::has_table::HasTable;
 
 /// Trait for all the entities that have mbid redirection
 pub trait MBIDRedirection
 where
-    Self: HasTable + RowId,
+    Self: HasTable + HasRowID,
 {
     /// Return the name of the mbid redirect table for the current entity
     fn get_redirect_table_name() -> String {
@@ -119,7 +119,7 @@ where
         &self,
         conn: &mut sqlx::SqliteConnection,
     ) -> impl std::future::Future<Output = Result<Vec<String>, sqlx::Error>> + Send {
-        let id = self.get_row_id();
+        let id = self.rowid();
         async move { Self::get_mbid_aliases_of_id(conn, id).await }
     }
 }

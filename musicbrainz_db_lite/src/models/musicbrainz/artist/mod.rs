@@ -1,8 +1,8 @@
-use musicbrainz_db_lite_macros::MainEntity;
 use musicbrainz_rs::entity::artist::Artist as MBArtist;
 use sequelles::has_rowid::HasRowID;
 use sqlx::prelude::FromRow;
 
+use crate::HasMBID;
 use crate::MBIDRedirection;
 use crate::models::shared_traits::has_genre::HasGenres;
 use crate::models::shared_traits::has_table::HasTable;
@@ -19,13 +19,7 @@ pub mod finds;
 pub mod relations;
 pub mod upsert;
 
-#[derive(Debug, Default, Clone, PartialEq, Eq, FromRow, MainEntity)]
-#[database(
-    table = "artists",
-    primary_key = "id",
-    ignore_insert_keys(id),
-    ignore_update_keys(id, mbid)
-)]
+#[derive(Debug, Default, Clone, PartialEq, Eq, FromRow)]
 pub struct Artist {
     pub id: i64,
     pub mbid: String,
@@ -54,13 +48,13 @@ impl HasRowID for Artist {
     }
 }
 
-impl crate::RowId for Artist {
-    fn get_row_id(&self) -> i64 {
-        self.id
-    }
-}
-
 impl HasTable for Artist {
     const TABLE_NAME: &str = "artists";
     const FOREIGN_FIELD_NAME: &str = "artist";
+}
+
+impl HasMBID for Artist {
+    fn get_mbid(&self) -> &str {
+        &self.mbid
+    }
 }

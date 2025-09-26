@@ -5,14 +5,13 @@ members = [
     "interzic", 
     "tuillez", 
     "musicbrainz_db_lite", 
-    "musicbrainz_db_lite/musicbrainz_db_lite_macros", 
     "musicbrainz_db_lite/musicbrainz_db_lite_schema", 
     "symphonize"
 ]
 resolver = "3"
 
-[profile.dev]
-debug = "line-tables-only"
+# [profile.dev]
+# debug = "line-tables-only"
 
 [workspace.lints.rust]
 unsafe_code = "forbid"

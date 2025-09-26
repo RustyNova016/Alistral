@@ -1,11 +1,11 @@
 use musicbrainz_rs::entity::tag::Tag as MBTag;
+use sequelles::has_rowid::HasRowID;
 
-use crate::RowId;
 use crate::models::musicbrainz::tags::Tag;
 use crate::models::shared_traits::has_tags::HasTags;
 
 impl Tag {
-    pub async fn save_api_response<T: HasTags + RowId>(
+    pub async fn save_api_response<T: HasTags + HasRowID>(
         conn: &mut sqlx::SqliteConnection,
         value: MBTag,
         parent: &T,
@@ -17,7 +17,7 @@ impl Tag {
             id: Default::default(),
         };
 
-        tag.upsert::<T>(conn, parent.get_row_id()).await?;
+        tag.upsert::<T>(conn, parent.rowid()).await?;
         Ok(tag)
     }
 }

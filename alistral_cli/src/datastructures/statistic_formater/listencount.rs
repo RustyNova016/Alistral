@@ -3,7 +3,7 @@ use std::sync::LazyLock;
 use alistral_core::datastructures::entity_with_listens::EntityWithListens;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use itertools::Itertools as _;
-use musicbrainz_db_lite::RowId;
+use musicbrainz_db_lite::HasRowID;
 use musicbrainz_db_lite::models::musicbrainz::MusicbrainzFormater;
 use tuillez::formatter::FormatWithAsync;
 
@@ -26,7 +26,7 @@ pub static LISTENCOUNT_FMT: LazyLock<ListenCountFormatter> =
 
 impl<'l, Ent, Lis> FormatWithAsync<ListenCountFormatter<'l>> for EntityWithListens<Ent, Lis>
 where
-    Ent: RowId + FormatWithAsync<MusicbrainzFormater> + Sync,
+    Ent: HasRowID + FormatWithAsync<MusicbrainzFormater> + Sync,
     Lis: ListenCollectionReadable + Sync,
     crate::Error: From<<Ent as FormatWithAsync<MusicbrainzFormater>>::Error>,
 {
@@ -48,7 +48,7 @@ where
 
 impl<Ent, Lis> StatFormatterVariant<Ent, Lis> for StatisticFormater<Ent, Lis, ListenCountStats>
 where
-    Ent: RowId + for<'a> FormatWithAsync<MusicbrainzFormater> + Sync,
+    Ent: HasRowID + for<'a> FormatWithAsync<MusicbrainzFormater> + Sync,
     Lis: ListenCollectionReadable + Sync,
     crate::Error: for<'a> From<<Ent as FormatWithAsync<MusicbrainzFormater>>::Error>,
 {

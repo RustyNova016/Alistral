@@ -1,8 +1,9 @@
-use core::ops::Deref;
-
+pub mod errors;
 pub mod listenbrainz;
 pub mod musicbrainz;
 pub mod shared_traits;
+
+use core::ops::Deref;
 
 pub struct RowID(pub i64);
 

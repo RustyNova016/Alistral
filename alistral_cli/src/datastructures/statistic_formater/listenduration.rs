@@ -4,7 +4,7 @@ use alistral_core::datastructures::entity_with_listens::EntityWithListens;
 use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use itertools::Itertools as _;
-use musicbrainz_db_lite::RowId;
+use musicbrainz_db_lite::HasRowID;
 use musicbrainz_db_lite::models::musicbrainz::MusicbrainzFormater;
 use tuillez::extensions::chrono_exts::DurationExt;
 use tuillez::formatter::FormatWithAsync;
@@ -28,7 +28,7 @@ pub static LISTENDURATION_FMT: LazyLock<ListenDurationFormatter> =
 impl<'l, Ent, Lis> FormatWithAsync<ListenDurationFormatter<'l>> for EntityWithListens<Ent, Lis>
 where
     Self: ListenCollWithTime,
-    Ent: RowId + FormatWithAsync<MusicbrainzFormater> + Sync,
+    Ent: HasRowID + FormatWithAsync<MusicbrainzFormater> + Sync,
     Lis: ListenCollectionReadable + Sync,
     crate::Error: From<<Ent as FormatWithAsync<MusicbrainzFormater>>::Error>,
 {
@@ -54,7 +54,7 @@ where
 
 impl<Ent, Lis> StatFormatterVariant<Ent, Lis> for StatisticFormater<Ent, Lis, ListenDurationStats>
 where
-    Ent: RowId + for<'a> FormatWithAsync<MusicbrainzFormater> + Sync,
+    Ent: HasRowID + for<'a> FormatWithAsync<MusicbrainzFormater> + Sync,
     Lis: ListenCollectionReadable + Sync,
     EntityWithListens<Ent, Lis>: ListenCollWithTime,
     crate::Error: for<'a> From<<Ent as FormatWithAsync<MusicbrainzFormater>>::Error>,

@@ -1,7 +1,7 @@
 pub mod self_relation;
 pub trait HasRelation<U>
 where
-    Self: RowId + HasTable + Sized + Send + Unpin + Clone + Sync,
+    Self: HasRowID + HasTable + Sized + Send + Unpin + Clone + Sync,
     U: HasTable + Send + Unpin + Clone,
 {
     /// The name of the table where the relation is stored
@@ -47,7 +47,7 @@ where
                 left_table = Self::TABLE_NAME,
                 right_table = Self::RELATION_TABLE,
             ))
-            .bind(self.get_row_id())
+            .bind(self.rowid())
             .fetch_all(conn)
             .await?)
         }
@@ -71,7 +71,7 @@ where
         Output = Result<HashMap<i64, (&'r &'r Self, Vec<Relation<Self, U>>)>, crate::Error>,
     > + Send {
         async move {
-            let ids = left_entities.iter().map(|r| r.get_row_id()).collect_vec();
+            let ids = left_entities.iter().map(|r| r.rowid()).collect_vec();
             let id_string = serde_json::to_string(&ids)?;
 
             let mut join = String::new();
@@ -109,7 +109,7 @@ where
             .await?;
 
             Ok(JoinCollection::from(joins)
-                .into_hashmap(left_entities, |id, value| &value.get_row_id() == id))
+                .into_hashmap(left_entities, |id, value| &value.rowid() == id))
         }
     }
 
@@ -145,7 +145,7 @@ where
                 "DELETE FROM `{}` as t WHERE {where_clause}",
                 Self::RELATION_TABLE
             ))
-            .bind(self.get_row_id())
+            .bind(self.rowid())
             .execute(conn)
             .await?;
             Ok(())
@@ -170,11 +170,11 @@ macro_rules! impl_has_relation {
             );
 
             fn get_entity0_id(&self, _other: &$right_entity) -> i64 {
-                self.get_row_id()
+                self.rowid()
             }
 
             fn get_entity1_id(&self, other: &$right_entity) -> i64 {
-                other.get_row_id()
+                other.rowid()
             }
 
             async fn get_entity_relations(
@@ -225,11 +225,11 @@ macro_rules! impl_reverse_has_relation {
             );
 
             fn get_entity0_id(&self, other: &$left_entity) -> i64 {
-                other.get_row_id()
+                other.rowid()
             }
 
             fn get_entity1_id(&self, _other: &$left_entity) -> i64 {
-                self.get_row_id()
+                self.rowid()
             }
 
             async fn get_entity_relations(
@@ -264,8 +264,8 @@ use std::collections::HashMap;
 pub(crate) use impl_reverse_has_relation;
 use itertools::Itertools as _;
 use self_relation::impl_has_self_relation;
+use sequelles::has_rowid::HasRowID;
 
-use crate::RowId;
 use crate::models::musicbrainz::artist::Artist;
 use crate::models::musicbrainz::genre::Genre;
 use crate::models::musicbrainz::label::Label;

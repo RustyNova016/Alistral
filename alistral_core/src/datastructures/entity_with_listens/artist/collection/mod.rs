@@ -1,9 +1,9 @@
 use itertools::Itertools as _;
+use musicbrainz_db_lite::HasRowID as _;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::artist::Artist;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use musicbrainz_db_lite::models::shared_traits::db_relation::ArtistFromCreditsRelation;
-use musicbrainz_db_lite::sequelle::has_rowid::HasRowID;
 use tracing::instrument;
 use tuillez::pg_spinner;
 use tuillez::tracing_utils::pg_future::PGFuture as _;

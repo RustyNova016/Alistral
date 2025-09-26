@@ -2,6 +2,7 @@ use std::collections::HashMap;
 
 use itertools::Itertools;
 
+use crate::FetchAsComplete as _;
 use crate::models::musicbrainz::recording::Recording;
 use crate::models::musicbrainz::release::Release;
 use crate::utils::sqlx_utils::entity_relations::JoinCollection;
@@ -15,7 +16,7 @@ impl Release {
         client: &crate::DBClient,
     ) -> Result<Vec<Recording>, crate::Error> {
         // First, make sure the entity is in the database
-        self.fetch_if_incomplete(conn, client).await?;
+        self.fetch_as_complete_with_conn(conn, client).await?;
 
         // Next, get all the works
         Ok(sqlx::query_as(

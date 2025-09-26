@@ -1,4 +1,6 @@
 use itertools::Itertools as _;
+use musicbrainz_db_lite::CompletenessFlag;
+use musicbrainz_db_lite::FetchAsComplete;
 use musicbrainz_db_lite::models::musicbrainz::release::Release;
 use tracing::Span;
 use tracing::info;
@@ -14,17 +16,14 @@ pub async fn prefetch_releases(
     releases: &[&Release],
 ) -> Result<(), musicbrainz_db_lite::Error> {
     // Eliminate all the recordings that are complete
-    let uncompletes = releases
-        .iter()
-        .filter(|r| !r.is_fully_fetched())
-        .collect_vec();
+    let uncompletes = releases.iter().filter(|r| !r.is_complete()).collect_vec();
 
     pg_counted!(uncompletes.len(), "Fetching releases");
     info!("Fetching full release data");
 
     for release in uncompletes {
         release
-            .fetch_if_incomplete(conn, &client.musicbrainz_db)
+            .fetch_as_complete_with_conn(conn, &client.musicbrainz_db)
             .await?;
         Span::current().pb_inc(1);
     }

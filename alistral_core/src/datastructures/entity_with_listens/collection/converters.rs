@@ -1,6 +1,6 @@
 //! Implementations for type convertions
 
-use musicbrainz_db_lite::RowId;
+use musicbrainz_db_lite::HasRowID;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 
 use crate::datastructures::entity_with_listens::EntityWithListens;
@@ -13,7 +13,7 @@ use crate::traits::mergable::Mergable;
 
 impl<Ent, Lis> From<Vec<EntityWithListens<Ent, Lis>>> for EntityWithListensCollection<Ent, Lis>
 where
-    Ent: RowId,
+    Ent: HasRowID,
     Lis: ListenCollectionReadable,
     EntityWithListens<Ent, Lis>: Mergable + Clone,
 {
@@ -30,7 +30,7 @@ where
 
 impl<Ent, Lis> From<EntityWithListens<Ent, Lis>> for EntityWithListensCollection<Ent, Lis>
 where
-    Ent: RowId,
+    Ent: HasRowID,
     Lis: ListenCollectionReadable,
     EntityWithListens<Ent, Lis>: Mergable + Clone,
 {
@@ -43,7 +43,7 @@ where
 
 impl<Ent, Lis> From<EntityWithListensCollection<Ent, Lis>> for ListenCollection
 where
-    Ent: RowId,
+    Ent: HasRowID,
     Lis: ListenCollectionReadable + IntoIterator<Item = Listen>,
 {
     fn from(value: EntityWithListensCollection<Ent, Lis>) -> Self {
@@ -53,7 +53,7 @@ where
 
 impl<Ent, Lis> IterRecordingWithListens for EntityWithListensCollection<Ent, Lis>
 where
-    Ent: RowId,
+    Ent: HasRowID,
     Lis: ListenCollectionReadable + IterRecordingWithListens,
 {
     fn iter_recording_with_listens(&self) -> impl Iterator<Item = &RecordingWithListens> {

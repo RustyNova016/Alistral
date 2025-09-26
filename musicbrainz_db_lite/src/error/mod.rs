@@ -3,6 +3,7 @@ use futures::channel::mpsc::SendError;
 use thiserror::Error;
 
 use crate::api::listenbrainz::listen::fetching::query::ListenFetchQueryError;
+use crate::models::errors::sqlx_error::SqlxError;
 
 #[derive(Error, Debug)]
 pub enum Error {
@@ -53,4 +54,7 @@ pub enum Error {
 
     #[error(transparent)]
     SendError(#[from] SendError),
+
+    #[error(transparent)]
+    SqlxError2(#[from] SqlxError),
 }

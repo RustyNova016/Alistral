@@ -131,7 +131,17 @@ impl CompletenessFlag for Recording {
         &mut self,
         conn: &mut sqlx::SqliteConnection,
     ) -> Result<(), sqlx::Error> {
-        self.reset_full_update_date(conn).await
+        let ts = chrono::Utc::now().timestamp();
+        sqlx::query!(
+            "UPDATE `recordings` SET `full_update_date` = $1 WHERE id = $2",
+            ts,
+            self.id
+        )
+        .execute(conn)
+        .await?;
+
+        self.full_update_date = Some(ts);
+        Ok(())
     }
 
     fn is_complete(&self) -> bool {

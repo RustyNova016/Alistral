@@ -1,0 +1,74 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT * FROM `recordings` WHERE `id` = $1",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "mbid",
+        "ordinal": 1,
+        "type_info": "Text"
+      },
+      {
+        "name": "title",
+        "ordinal": 2,
+        "type_info": "Text"
+      },
+      {
+        "name": "video",
+        "ordinal": 3,
+        "type_info": "Integer"
+      },
+      {
+        "name": "length",
+        "ordinal": 4,
+        "type_info": "Integer"
+      },
+      {
+        "name": "disambiguation",
+        "ordinal": 5,
+        "type_info": "Text"
+      },
+      {
+        "name": "annotation",
+        "ordinal": 6,
+        "type_info": "Text"
+      },
+      {
+        "name": "first_release_date",
+        "ordinal": 7,
+        "type_info": "Integer"
+      },
+      {
+        "name": "full_update_date",
+        "ordinal": 8,
+        "type_info": "Integer"
+      },
+      {
+        "name": "artist_credit",
+        "ordinal": 9,
+        "type_info": "Integer"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  "hash": "d04478c3c4683d72721bff7c61da4a41acd07509189dbd8bd7f189b6b45e35e4"
+}

@@ -1,3 +1,4 @@
+use sequelles::has_rowid::HasRowID;
 use sqlx::FromRow;
 
 pub mod upsert;
@@ -9,8 +10,8 @@ pub struct LabelInfo {
     pub release: i64,
 }
 
-impl crate::RowId for LabelInfo {
-    fn get_row_id(&self) -> i64 {
+impl HasRowID for LabelInfo {
+    fn rowid(&self) -> i64 {
         self.id
     }
 }

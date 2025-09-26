@@ -1,8 +1,8 @@
 pub mod finds;
 pub mod genre_tag;
+use sequelles::has_rowid::HasRowID;
 use sqlx::prelude::FromRow;
 
-use crate::RowId;
 use crate::models::shared_traits::has_table::HasTable;
 
 use super::relations::impl_relations::impl_relations;
@@ -47,8 +47,8 @@ impl Genre {
 
 impl_relations!(Genre);
 
-impl RowId for Genre {
-    fn get_row_id(&self) -> i64 {
+impl HasRowID for Genre {
+    fn rowid(&self) -> i64 {
         self.id
     }
 }

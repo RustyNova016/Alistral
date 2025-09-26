@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use crate::CompletenessFlag;
 use crate::DBClient;
-use crate::FetchAndSave;
+use crate::FetchAndSave as _;
 use crate::HasMBID;
 use crate::models::musicbrainz::track::Track;
 
