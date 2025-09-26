@@ -95,3 +95,6 @@ async_fn_in_trait = { level = "allow", priority = 1 }
 
 [lints.clippy]
 result_large_err = { level = "allow", priority = 1 }
+
+[patch.crates-io]
+sequelles = { git = "https://github.com/RustyNova016/sequelles", rev = "f5f5df6b1669d6757cacbd5a33744f1661dbdadc"}

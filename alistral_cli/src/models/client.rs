@@ -79,8 +79,8 @@ impl AlistralCliClient {
     }
 
     async fn create_mb_db_client(
-        musicbrainz: Arc<MusicBrainzClient>,
-        listenbrainz: Arc<ListenbrainzClient>,
+        musicbrainz_client: Arc<MusicBrainzClient>,
+        listenbrainz_client: Arc<ListenbrainzClient>,
     ) -> Arc<DBClient> {
         //TODO: set db loaction in config
         let mut location = DB_LOCATION.to_path_buf();
@@ -88,18 +88,8 @@ impl AlistralCliClient {
             location = PathBuf::from("./temp.db");
         }
 
-        let musicbrainz_db = DBClient::builder()
-            .as_file(location)
-            .create_file()
-            .expect("Couldn't create database file");
-
-        let musicbrainz_db = musicbrainz_db
-            .connect_and_migrate(64)
-            .await
-            .expect("Couldn't connect to database")
-            .set_mb_client(musicbrainz)
-            .set_lb_client(listenbrainz)
-            .build();
+        let musicbrainz_db = DBClient::from_path(location, musicbrainz_client, listenbrainz_client)
+            .expect("Couldn't create database client");
 
         Arc::new(musicbrainz_db)
     }

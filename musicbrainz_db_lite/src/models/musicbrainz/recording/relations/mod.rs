@@ -116,13 +116,13 @@ impl DBRelation<TrackRecordingDBRel> for Recording {
 #[cfg(test)]
 mod tests {
 
-    use crate::database::client::DBClient;
     use crate::models::musicbrainz::recording::Recording;
+    use crate::tests::fixtures::default_client::test_mb_client;
 
     #[tokio::test]
     #[serial_test::serial]
     async fn should_get_release_group_from_release() {
-        let client = DBClient::connect_in_memory_and_create().await.unwrap();
+        let client = test_mb_client();
         let conn = &mut *client.get_raw_connection().await.unwrap();
 
         // Test values. Feel free to add edge cases here
@@ -155,7 +155,7 @@ mod tests {
     #[tokio::test]
     #[serial_test::serial]
     async fn should_get_original_mix_from_remix() {
-        let client = DBClient::connect_in_memory_and_create().await.unwrap();
+        let client = test_mb_client();
         let conn = &mut *client.get_raw_connection().await.unwrap();
 
         // Test values. Feel free to add edge cases here

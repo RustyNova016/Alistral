@@ -1,9 +1,9 @@
 use musicbrainz_rs::Fetch as _;
 use sqlx::SqliteConnection;
 
+use crate::DBClient;
 use crate::MBRelease;
 use crate::Release;
-use crate::database::client::DBClient;
 use crate::models::shared_traits::fetch_and_save::FetchAndSave;
 use crate::models::shared_traits::fetch_mbid::FetchMBID;
 
@@ -46,19 +46,16 @@ impl Release {
 
 #[cfg(test)]
 mod tests {
-    use musicbrainz_db_lite_schema::create_and_migrate;
-
     use crate::FetchAsComplete;
-    use crate::database::client::DBClient;
     use crate::models::musicbrainz::recording::Recording;
     use crate::models::musicbrainz::release::Release;
+    use crate::tests::fixtures::default_client::test_mb_client;
 
     #[tokio::test]
     #[serial_test::serial]
     async fn should_insert_release() {
-        let client = DBClient::connect_in_memory_and_create().await.unwrap();
+        let client = test_mb_client();
         let conn = &mut *client.get_raw_connection().await.unwrap();
-        create_and_migrate(conn).await.unwrap();
 
         // Test values. Feel free to add edge cases here
         let test_values = vec!["daf6e333-b491-490a-9444-8888cb08b141"];
@@ -73,7 +70,7 @@ mod tests {
     #[tokio::test]
     #[serial_test::serial]
     async fn should_full_insert_release() {
-        let client = DBClient::connect_in_memory_and_create().await.unwrap();
+        let client = test_mb_client();
         let conn = &mut *client.get_raw_connection().await.unwrap();
 
         // Test values. Feel free to add edge cases here

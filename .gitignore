@@ -6,8 +6,12 @@
 /symphonize/target
 /tuillez/target
 
+
 /.vscode
 debug_db.db
 .env
 .envrc
 temp.db
+
+# Workspace ignores
+/sequelles

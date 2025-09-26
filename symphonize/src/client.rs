@@ -9,14 +9,7 @@ pub struct SymphonyzeClient {
 impl SymphonyzeClient {
     #[cfg(test)]
     pub async fn get_testing_client(name: &str) -> Self {
-        let db_client = DBClient::builder()
-            .in_memory_with_name(name.to_string())
-            .set_default_lb_client()
-            .set_default_mb_client()
-            .connect_and_migrate(8)
-            .await
-            .unwrap()
-            .build();
+        let db_client = DBClient::get_default_named(name).expect("Couldn't create database client");
 
         Self {
             mb_database: Arc::new(db_client),

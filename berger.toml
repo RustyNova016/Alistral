@@ -5,3 +5,12 @@ path = "./"
     fmt = true
     sqlx = false
     clippy_hack = false
+
+[repository.sequelles]
+path = "./sequelles"
+remote_url = "https://github.com/RustyNova016/sequelles"
+
+    [repository.sequelles.rust]
+    fmt = true
+    sqlx = false
+    clippy_hack = true

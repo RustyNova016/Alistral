@@ -83,13 +83,7 @@ impl MbClippyLint for DashETILint {
             }
             MainEntity::Track(track) => {
                 let release = track
-                    .get_release(
-                        &mut *client
-                            .mb_database
-                            .clone()
-                            .get_raw_connection_as_task()
-                            .await?,
-                    )
+                    .get_release(&mut *client.mb_database.clone().get_conn_as_task().await?)
                     .await?
                     .expect("A track didn't have a release");
 

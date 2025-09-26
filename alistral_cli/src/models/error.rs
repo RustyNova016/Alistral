@@ -1,4 +1,3 @@
-use musicbrainz_db_lite::database::conn_pool::DBLitePoolError;
 use std::io;
 use thiserror::Error;
 use tuillez::extensions::chrono_exts::TimeError;
@@ -48,9 +47,6 @@ pub enum Error {
     #[allow(clippy::enum_variant_names)]
     #[error(transparent)]
     FatalError(#[from] FatalError),
-
-    #[error(transparent)]
-    RawConnection(#[from] DBLitePoolError),
 
     // ==================
     //  Error Reexports

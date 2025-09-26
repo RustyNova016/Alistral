@@ -1,5 +1,6 @@
 use deadpool::managed::PoolError;
 use futures::channel::mpsc::SendError;
+use sequelles::databases::sqlite::database::GetConnectionError;
 use thiserror::Error;
 
 use crate::api::listenbrainz::listen::fetching::query::ListenFetchQueryError;
@@ -57,4 +58,7 @@ pub enum Error {
 
     #[error(transparent)]
     SqlxError2(#[from] SqlxError),
+
+    #[error(transparent)]
+    GetConnectionError(#[from] GetConnectionError),
 }

@@ -5,13 +5,17 @@ members = [
     "interzic", 
     "tuillez", 
     "musicbrainz_db_lite", 
-    "musicbrainz_db_lite/musicbrainz_db_lite_schema", 
     "symphonize"
 ]
 resolver = "3"
 
-# [profile.dev]
-# debug = "line-tables-only"
+[profile.dev]
+debug = "line-tables-only"
+
+[patch]
+
+[patch.crates-io]
+sequelles = { git = "https://github.com/RustyNova016/sequelles", rev = "f5f5df6b1669d6757cacbd5a33744f1661dbdadc"}
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
