@@ -96,7 +96,7 @@ mod tests {
 
             assert!(release.full_update_date.is_none());
 
-            release
+            let release = release
                 .fetch_as_complete_with_conn(conn, &client)
                 .await
                 .unwrap();

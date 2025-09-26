@@ -140,6 +140,8 @@ impl CompletenessFlag for Release {
         )
         .execute(conn)
         .await?;
+
+        self.full_update_date = Some(ts);
         Ok(())
     }
 

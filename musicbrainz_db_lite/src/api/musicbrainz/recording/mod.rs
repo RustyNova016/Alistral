@@ -139,6 +139,8 @@ impl CompletenessFlag for Recording {
         )
         .execute(conn)
         .await?;
+
+        self.full_update_date = Some(ts);
         Ok(())
     }
 

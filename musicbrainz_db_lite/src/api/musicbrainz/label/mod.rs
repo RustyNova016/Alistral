@@ -110,6 +110,8 @@ impl CompletenessFlag for Label {
         )
         .execute(conn)
         .await?;
+
+        self.full_update_date = Some(ts);
         Ok(())
     }
 

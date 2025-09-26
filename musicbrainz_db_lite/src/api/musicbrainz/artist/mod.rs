@@ -102,6 +102,8 @@ impl CompletenessFlag for Artist {
         )
         .execute(conn)
         .await?;
+
+        self.full_update_date = Some(ts);
         Ok(())
     }
 

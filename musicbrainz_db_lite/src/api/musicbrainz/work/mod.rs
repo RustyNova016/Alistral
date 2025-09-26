@@ -108,6 +108,8 @@ impl CompletenessFlag for Work {
         )
         .execute(conn)
         .await?;
+
+        self.full_update_date = Some(ts);
         Ok(())
     }
 

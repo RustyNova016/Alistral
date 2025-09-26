@@ -119,6 +119,8 @@ impl CompletenessFlag for ReleaseGroup {
         )
         .execute(conn)
         .await?;
+
+        self.full_update_date = Some(ts);
         Ok(())
     }
 
