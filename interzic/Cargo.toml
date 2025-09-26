@@ -22,7 +22,7 @@ listenbrainz = { branch = "alistral_version", git = "https://github.com/RustyNov
 google-youtube3 = "6.0.0"
 
 # --- Other crates ---
-regex = "1.11.1"
+regex = "1.11.3"
 sqlx = "0.8.2"
 thiserror = "2.0.3"
 governor = "0.10.0"
