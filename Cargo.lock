@@ -206,12 +206,13 @@ checksum = "7c02d123df017efcdfbd739ef81735b36c5ba83ec3c59c80a9d7ecc718f92e50"
 
 [[package]]
 name = "async-fn-stream"
-version = "0.2.2"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e71711442f1016c768c259bec59300a10efe753bc3e686ec19e2c6a54a97c29b"
+checksum = "ed32de479678e0c4fea3e910c3b082ce52179d6fd6dcc07bc202faf7829812e2"
 dependencies = [
  "futures-util",
  "pin-project-lite",
+ "smallvec",
 ]
 
 [[package]]
