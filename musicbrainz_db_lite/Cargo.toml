@@ -34,7 +34,7 @@ deadpool = "0.12.3"
 
 # Error handling
 snafu = {version = "0.8.9", features = ["rust_1_81", "futures"]}
-thiserror = "2.0.3"
+thiserror = "2.0.17"
 
 # Logging
 tracing = "0.1.41"
