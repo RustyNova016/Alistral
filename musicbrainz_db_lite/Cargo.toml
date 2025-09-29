@@ -9,7 +9,7 @@ extend = "1.2.0"
 macon = "1.2.0" #TODO: Remove for bon
 serde_json = "1.0.140"
 itertools = "0.14.0"
-serde = "1.0.227"
+serde = "1.0.228"
 const_format = { version = "0.2.34" , features = ["rust_1_51", "rust_1_64", "assertcp"] }
 reqwest = { version = "0.12.12", features = ["json"] }
 governor = "0.10.0"
