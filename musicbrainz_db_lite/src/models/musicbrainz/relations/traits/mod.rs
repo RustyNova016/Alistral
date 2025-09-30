@@ -261,7 +261,7 @@ macro_rules! impl_reverse_has_relation {
 
 use std::collections::HashMap;
 
-pub(crate) use impl_reverse_has_relation;
+// pub(crate) use impl_reverse_has_relation;
 use itertools::Itertools as _;
 use self_relation::impl_has_self_relation;
 use sequelles::has_rowid::HasRowID;
