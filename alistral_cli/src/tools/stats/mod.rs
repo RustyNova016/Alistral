@@ -209,7 +209,7 @@ impl StatsCommand {
         S: StatisticType,
         StatisticFormater<Ent, Lis, S>: StatFormatterVariant<Ent, Lis>,
     {
-        let stats = StatisticFFormater::<Ent, Lis, S>::new(data, StatisticOutput::Print);
+        let stats = StatisticFormater::<Ent, Lis, S>::new(data, StatisticOutput::Print);
 
         stats.print_paged().await
     }

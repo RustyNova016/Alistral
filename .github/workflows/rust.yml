@@ -76,11 +76,12 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      # Install minimal toolchain
-      - name: Install minimal stable toolchain
+      - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
         with:
-          components: rustfmt
+            components: rustfmt
+
+      - uses: Swatinem/rust-cache@v2
 
       - name: Run rustfmt
         run: cargo fmt --all --check
@@ -94,10 +95,10 @@ jobs:
     steps:
     - uses: actions/checkout@v5
 
-    - uses: Swatinem/rust-cache@v2
-
     - name: Install Rust
       uses: dtolnay/rust-toolchain@stable
+
+    - uses: Swatinem/rust-cache@v2
 
     - name: Install cargo-msrv
       run: cargo install cargo-msrv --all-features
@@ -136,7 +137,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v5
+
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+
+    - uses: Swatinem/rust-cache@v2
+
     - name: Install cargo-machete
       run: cargo install cargo-machete --locked
+
     - name: Run cargo-machete
       run: /bin/bash ./scripts/ci/udeps.sh
