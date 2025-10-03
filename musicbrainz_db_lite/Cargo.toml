@@ -41,7 +41,7 @@ tuillez = { path = "../tuillez" }
 owo-colors = { version = "4.2.1", optional = true}
 
 # Macros
-macon = "1.2.0" #TODO: Remove for bon
+bon = "3.7.2"
 
 # Others
 chrono = "0.4.42"

@@ -6,11 +6,8 @@ use clap::{Parser, Subcommand};
 use tuillez::extensions::chrono_exts::DurationExt;
 
 use crate::datastructures::radio::collector::RadioCollector;
-use crate::datastructures::radio::collector::RadioCollectorBuilder;
 use crate::datastructures::radio::seeders::SeederSettings;
-use crate::datastructures::radio::seeders::SeederSettingsBuilder;
 use crate::datastructures::radio::seeders::listens::ListenSeeder;
-use crate::datastructures::radio::seeders::listens::ListenSeederBuilder;
 use crate::models::config::Config;
 use crate::tools::radio::circles::create_radio_mix;
 use crate::tools::radio::listen_rate::listen_rate_radio;
@@ -49,34 +46,29 @@ pub struct RadioCommand {
 
 impl RadioCommand {
     pub fn get_collector(&self) -> RadioCollector {
-        let collector = RadioCollectorBuilder::default();
-
-        let collector = match self.min_count {
-            Some(val) => collector.count(val),
-            None => collector.count_none(),
-        };
+        let collector = RadioCollector::builder();
+        let collector = collector.maybe_count(self.min_count);
 
         let collector = match self.min_duration.as_ref() {
             Some(val) => collector.duration(
                 chrono::Duration::from_human_string(val)
                     .expect("Couldn't parse mimimum lenght for radio"),
             ),
-            None => collector.duration_none(),
+            None => collector.maybe_duration(None),
         };
 
         collector.build()
     }
 
     fn get_seeder_settings(&self) -> SeederSettings {
-        SeederSettingsBuilder::default()
+        SeederSettings::builder()
             .min_listen_per_recording(self.min_seed_listens.unwrap_or(3))
-            .min_listened_at(self.seed_listen_range.map(|r| r.get_start_date()))
-            .max_listened_at_default()
+            .maybe_min_listened_at(self.seed_listen_range.map(|r| r.get_start_date()))
             .build()
     }
 
     fn get_listen_seeder(&self, username: &Option<String>) -> ListenSeeder {
-        ListenSeederBuilder::default()
+        ListenSeeder::builder()
             .username(Config::check_username(username))
             .settings(self.get_seeder_settings())
             .build()

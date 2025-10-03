@@ -3,7 +3,6 @@ use alistral_core::datastructures::entity_with_listens::recording::collection::R
 use alistral_core::datastructures::listen_collection::ListenCollection;
 use derive_getters::Getters;
 use itertools::Itertools;
-use macon::Builder;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 
 use crate::ALISTRAL_CLIENT;
@@ -13,12 +12,9 @@ use crate::database::listenbrainz::listens::fetch_latest_listens_of_user;
 use super::SeederSettings;
 
 /// A querry to generate a list of seed recording using the user's listens
-#[derive(Debug, Builder, Getters, Clone)]
+#[derive(Debug, bon::Builder, Getters, Clone)]
 pub struct ListenSeeder {
-    #[builder(Default=!)]
     pub username: String,
-
-    #[builder(Default=!)]
     settings: SeederSettings,
 }
 
