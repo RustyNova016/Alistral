@@ -207,9 +207,9 @@ checksum = "7c02d123df017efcdfbd739ef81735b36c5ba83ec3c59c80a9d7ecc718f92e50"
 
 [[package]]
 name = "async-fn-stream"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ed32de479678e0c4fea3e910c3b082ce52179d6fd6dcc07bc202faf7829812e2"
+checksum = "a06a4a3a4901f9e66e0d3cb56a55d88063af953150a2c7645db581b2a2a18b5c"
 dependencies = [
  "futures-util",
  "pin-project-lite",
@@ -2142,33 +2142,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "macon"
-version = "1.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4e2360fdc60235ad3db2d65bb74539e0813c20a626f7e330ce9a64b2d4e513f0"
-dependencies = [
- "macon_api",
- "macon_derive",
-]
-
-[[package]]
-name = "macon_api"
-version = "1.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2330ee9375fc537d78cc438ed16695a5d0201f0be9d977bf6bc4ac11e5b4e177"
-
-[[package]]
-name = "macon_derive"
-version = "1.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ccd7e1436ba066ad10c8b43ac4a00d304322831b90f039f1d83815f846fee024"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.106",
-]
-
-[[package]]
 name = "maybe-async"
 version = "0.2.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2228,6 +2201,7 @@ version = "0.1.0"
 dependencies = [
  "async-fn-stream",
  "async-recursion",
+ "bon",
  "chrono",
  "const_format",
  "deadpool",
@@ -2236,7 +2210,6 @@ dependencies = [
  "governor",
  "itertools 0.14.0",
  "listenbrainz",
- "macon",
  "musicbrainz_rs",
  "owo-colors",
  "regex",
