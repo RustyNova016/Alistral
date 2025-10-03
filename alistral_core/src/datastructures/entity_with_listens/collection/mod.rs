@@ -3,6 +3,7 @@ use core::fmt::Debug;
 use std::collections::HashMap;
 use std::collections::hash_map::IntoValues;
 
+use chrono::Utc;
 use futures::Stream;
 use futures::stream;
 use itertools::Itertools as _;
@@ -10,6 +11,8 @@ use musicbrainz_db_lite::HasRowID;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use rust_decimal::Decimal;
 
+use crate::AlistralClient;
+use crate::datastructures::entity_with_listens::listen_timeframe::extract_timeframe::ExtractTimeframe;
 use crate::datastructures::listen_collection::ListenCollection;
 use crate::datastructures::listen_collection::traits::ListenCollectionReadable;
 use crate::datastructures::listen_sorter::ListenSortingStrategy;
@@ -151,44 +154,51 @@ where
     /// Insert a listen with a specific sorting strategy
     pub async fn insert_listen_with<T>(
         &mut self,
+        client: &AlistralClient,
         listen: Listen,
         strategy: &T,
     ) -> Result<(), crate::Error>
     where
         T: ListenSortingStrategy<Ent, Lis>,
     {
-        strategy.sort_insert_listen(self, listen).await
+        strategy.sort_insert_listen(client, self, listen).await
     }
 
     /// Insert a collection of listens with a specific sorting strategy
     pub async fn insert_listens_with<T>(
         &mut self,
+        client: &AlistralClient,
         listens: Vec<Listen>,
         strategy: &T,
     ) -> Result<(), crate::Error>
     where
         T: ListenSortingStrategy<Ent, Lis>,
     {
-        strategy.sort_insert_listens(self, listens).await
+        strategy.sort_insert_listens(client, self, listens).await
     }
 
-    pub async fn from_listens<S>(listens: Vec<Listen>, strat: &S) -> Result<Self, crate::Error>
+    pub async fn from_listens<S>(
+        client: &AlistralClient,
+        listens: Vec<Listen>,
+        strat: &S,
+    ) -> Result<Self, crate::Error>
     where
         S: ListenSortingStrategy<Ent, Lis>,
     {
         let mut new = Self::new();
-        new.insert_listens_with(listens, strat).await?;
+        new.insert_listens_with(client, listens, strat).await?;
         Ok(new)
     }
 
     pub async fn from_listencollection<S>(
+        client: &AlistralClient,
         listens: ListenCollection,
         strat: &S,
     ) -> Result<Self, crate::Error>
     where
         S: ListenSortingStrategy<Ent, Lis>,
     {
-        Self::from_listens(listens.data, strat).await
+        Self::from_listens(client, listens.data, strat).await
     }
 }
 
@@ -232,5 +242,25 @@ where
     type IntoIter = IntoValues<i64, Self::Item>;
     fn into_iter(self) -> Self::IntoIter {
         self.0.into_values()
+    }
+}
+
+impl<Ent, Lis> ExtractTimeframe for EntityWithListensCollection<Ent, Lis>
+where
+    Ent: HasRowID + Clone,
+    Lis: ListenCollectionReadable + ExtractTimeframe + Mergable + Clone,
+{
+    fn extract_timeframe(
+        self,
+        start: chrono::DateTime<Utc>,
+        end: chrono::DateTime<Utc>,
+        include_start: bool,
+        include_end: bool,
+    ) -> Self {
+        let mut new_self = Self::default();
+        self.into_iter()
+            .map(|ent| ent.extract_timeframe(start, end, include_start, include_end))
+            .for_each(|ent| new_self.insert_or_merge_entity_stats(ent));
+        new_self
     }
 }

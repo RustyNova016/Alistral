@@ -35,7 +35,7 @@ impl StatsCommand {
         &self,
     ) -> TagWithEntListensStrategy<
         '_,
-        RecordingWithListenStrategy<'_>,
+        RecordingWithListenStrategy,
         musicbrainz_db_lite::models::musicbrainz::recording::Recording,
         ListenCollection,
     > {

@@ -54,6 +54,7 @@ version = "0.5.14"
 dependencies = [
  "alistral_core",
  "async-fn-stream",
+ "bon",
  "chrono",
  "clap",
  "clap-markdown",
@@ -101,11 +102,12 @@ dependencies = [
 name = "alistral_core"
 version = "0.1.0"
 dependencies = [
+ "async-once-cell",
+ "bon",
  "chrono",
  "futures",
  "itertools 0.14.0",
  "listenbrainz",
- "macon",
  "musicbrainz-db-lite",
  "owo-colors",
  "rust_decimal",
@@ -887,9 +889,9 @@ checksum = "092966b41edc516079bdf31ec78a2e0588d1d0c08f78b91d8307215928642b2b"
 
 [[package]]
 name = "deflate64"
-version = "0.1.9"
+version = "0.1.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "da692b8d1080ea3045efaab14434d40468c3d8657e42abddfffca87b428f4c1b"
+checksum = "26bf8fc351c5ed29b5c2f0cbbac1b209b74f60ecd62e675a998df72c49af5204"
 
 [[package]]
 name = "der"
@@ -2058,9 +2060,9 @@ dependencies = [
 
 [[package]]
 name = "libz-rs-sys"
-version = "0.5.1"
+version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "172a788537a2221661b480fee8dc5f96c580eb34fa88764d3205dc356c7e4221"
+checksum = "840db8cf39d9ec4dd794376f38acc40d0fc65eec2a8f484f7fd375b84602becd"
 dependencies = [
  "zlib-rs",
 ]
@@ -3138,8 +3140,9 @@ dependencies = [
 
 [[package]]
 name = "sequelles"
-version = "0.1.1"
-source = "git+https://github.com/RustyNova016/sequelles?rev=f5f5df6b1669d6757cacbd5a33744f1661dbdadc#f5f5df6b1669d6757cacbd5a33744f1661dbdadc"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c3075d013e8a5bf8e767fe9f43ea3968ec55b564175f6c517b44a21b81ad7ed1"
 dependencies = [
  "async-once-cell",
  "bon",
@@ -4985,9 +4988,9 @@ dependencies = [
 
 [[package]]
 name = "zlib-rs"
-version = "0.5.1"
+version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "626bd9fa9734751fc50d6060752170984d7053f5a39061f524cda68023d4db8a"
+checksum = "2f06ae92f42f5e5c42443fd094f245eb656abf56dd7cce9b8b263236565e00f2"
 
 [[package]]
 name = "zopfli"
@@ -5021,9 +5024,9 @@ dependencies = [
 
 [[package]]
 name = "zstd-sys"
-version = "2.0.15+zstd.1.5.7"
+version = "2.0.16+zstd.1.5.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "eb81183ddd97d0c74cedf1d50d85c8d08c1b8b68ee863bdee9e706eedba1a237"
+checksum = "91e19ebc2adc8f83e43039e79776e3fda8ca919132d68a1fed6a5faca2683748"
 dependencies = [
  "cc",
  "pkg-config",

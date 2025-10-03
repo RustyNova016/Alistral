@@ -1,15 +1,35 @@
-pub mod recording;
-use crate::models::cli::lookup::LookupTarget;
-use recording::lookup_recording;
-use tuillez::fatal_error::FatalError;
+use crate::tools::lookup::recording::LookupRecordingCommand;
+use crate::tools::lookup::user::LookupUserCommand;
+use clap::Parser;
+use clap::Subcommand;
 
-pub async fn lookup_command(
-    conn: &mut sqlx::SqliteConnection,
-    username: &str,
-    id: &str,
-    target: LookupTarget,
-) -> Result<(), FatalError> {
-    match target {
-        LookupTarget::Recording => lookup_recording(conn, username, id).await,
+pub mod components;
+pub mod recording;
+pub mod user;
+
+#[derive(Parser, Clone, Debug)]
+pub struct LookupCommand {
+    #[command(subcommand)]
+    command: LookupSubcommands,
+}
+
+impl LookupCommand {
+    pub async fn run(&self) {
+        self.command.run().await
+    }
+}
+
+#[derive(Subcommand, Clone, Debug)]
+enum LookupSubcommands {
+    User(LookupUserCommand),
+    Recording(LookupRecordingCommand),
+}
+
+impl LookupSubcommands {
+    pub async fn run(&self) {
+        match self {
+            Self::User(cmd) => cmd.run().await,
+            Self::Recording(cmd) => cmd.run().await,
+        }
     }
 }

@@ -1,0 +1,57 @@
+use std::sync::Arc;
+
+use async_once_cell::OnceCell;
+
+use crate::AlistralClient;
+use crate::database::fetching::listens::ListenFetchQuery;
+use crate::database::fetching::listens::ListenFetchQueryReturn;
+use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
+use crate::datastructures::entity_with_listens::user::collection::UserWithListensCollection;
+use crate::datastructures::listen_collection::ListenCollection;
+
+pub mod recordings;
+pub mod user;
+
+/// This struct hold listens data. This is a convenience over having a to create listen statistics yourself
+///
+/// The design is intentionally not mutable. Having a mutation somewhere would need invalidating all of the inner statistics,
+/// thus having to recreate the whole struct. This means that:
+/// - The inner listens are fixed
+/// - The inner client is fixed
+///
+/// To change any of those two, you need to create a new [`ListenStatisticsData`] struct with the new parameters.
+pub struct ListenStatisticsData {
+    client: Arc<AlistralClient>,
+    listens: ListenCollection,
+
+    recordings: OnceCell<RecordingWithListensCollection>,
+    users: OnceCell<UserWithListensCollection>,
+}
+
+impl ListenStatisticsData {
+    pub fn new(client: Arc<AlistralClient>, listens: ListenCollection) -> Self {
+        Self {
+            client,
+            listens,
+            users: OnceCell::new(),
+            recordings: OnceCell::new(),
+        }
+    }
+
+    pub async fn new_from_user_listens(
+        client: Arc<AlistralClient>,
+        name: String,
+    ) -> Result<Self, crate::Error> {
+        let query = ListenFetchQuery::builder()
+            .user(name)
+            .returns(ListenFetchQueryReturn::Mapped)
+            .fetch_recordings_redirects(false)
+            .build();
+
+        let listens = query
+            .fetch(client.musicbrainz_db.get_conn().await?.as_mut(), &client)
+            .await?;
+
+        Ok(Self::new(client, listens))
+    }
+}

@@ -24,6 +24,3 @@ streamies = {git = "https://github.com/RustyNova016/streamies.git", version = "0
 
 [dev-dependencies]
 tokio = "1.45.1"
-
-[patch.crates-io]
-sequelles = { git = "https://github.com/RustyNova016/sequelles", rev = "f5f5df6b1669d6757cacbd5a33744f1661dbdadc"}
