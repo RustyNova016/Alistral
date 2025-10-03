@@ -6,14 +6,14 @@ use alistral_core::datastructures::entity_with_listens::EntityWithListens;
 use alistral_core::datastructures::entity_with_listens::listen_timeframe::ListenTimeframe;
 use alistral_core::datastructures::entity_with_listens::listen_timeframe::extract_timeframe::ExtractTimeframe;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
-use musicbrainz_db_lite::RowId;
+use musicbrainz_db_lite::HasRowID;
 use tuillez::OwoColorize;
 
 #[derive(bon::Builder, Clone, Debug)]
 #[builder(derive(Clone, Debug))]
 pub(super) struct LookupLine<E, L, F, T>
 where
-    E: RowId,
+    E: HasRowID,
     L: ListenCollectionReadable + ExtractTimeframe,
     F: Fn(&EntityWithListens<E, L>) -> T,
     T: Display,
@@ -28,7 +28,7 @@ where
 
 impl<E, L, F, T> LookupLine<E, L, F, T>
 where
-    E: RowId,
+    E: HasRowID,
     L: ListenCollectionReadable + ExtractTimeframe,
     F: Fn(&EntityWithListens<E, L>) -> T,
     T: Display + PartialOrd,

@@ -4,7 +4,7 @@ use std::fmt::Write;
 use alistral_core::datastructures::entity_with_listens::listen_timeframe::ListenTimeframe;
 use alistral_core::datastructures::entity_with_listens::user::UserWithListens;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
-use alistral_core::models::user::UserData;
+use alistral_core::models::listen_statistics_data::ListenStatisticsData;
 use chrono::DateTime;
 use chrono::Utc;
 use clap::Parser;
@@ -29,9 +29,19 @@ impl LookupUserCommand {
     pub async fn run(&self) {
         let user = Config::check_username(&self.user);
 
-        let userdata = UserData::load_user(&ALISTRAL_CLIENT.core, user)
+        let userdata =
+            ListenStatisticsData::new_from_user_listens(ALISTRAL_CLIENT.core.clone(), user.clone())
+                .await
+                .expect("Couldn't load user data");
+
+        let stats = userdata
+            .user_stats()
             .await
-            .expect("Couldn't load user data");
+            .expect("Couldn't generate user statistics");
+        let stats = stats
+            .iter()
+            .find(|data| data.entity().name == user)
+            .expect("Couldn't find user");
 
         let end = Utc::now();
 
@@ -40,7 +50,7 @@ impl LookupUserCommand {
             None => DateTime::from_timestamp(0, 0).unwrap(),
         };
 
-        let timeframe = ListenTimeframe::new(start, end, userdata.user_with_listens().clone());
+        let timeframe = ListenTimeframe::new(start, end, stats.to_owned());
 
         print_report(&timeframe).await
     }

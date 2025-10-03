@@ -17,10 +17,10 @@ pub struct AlistralClient {
     //#[builder(default = false)]
     pub offline: bool,
 
-    // Strategies
-    #[builder(default)]
-    pub user_with_listen_strat: UserWithListensStrategy,
-
+    // === Strategies ===
     #[builder(default)]
     pub recording_with_listen_strat: RecordingWithListenStrategy,
+
+    #[builder(default)]
+    pub user_with_listen_strat: UserWithListensStrategy,
 }

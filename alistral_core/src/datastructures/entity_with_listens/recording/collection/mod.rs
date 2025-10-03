@@ -46,7 +46,7 @@ impl ListenSortingStrategy<Recording, ListenCollection> for RecordingWithListenS
         }
 
         pg_spinner!("Compiling recording listens data");
-        let conn = &mut *client.musicbrainz_db.get_raw_connection().await?;
+        let conn = &mut *client.musicbrainz_db.get_conn().await?;
 
         // Prefetch the missing data
         // TODO: Make it user agnostic

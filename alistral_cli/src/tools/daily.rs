@@ -3,6 +3,7 @@ use core::cmp::Reverse;
 use alistral_core::datastructures::entity_with_listens::artist::collection::ArtistWithRecordingsCollection;
 use alistral_core::datastructures::listen_collection::ListenCollection;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
+use alistral_core::models::listen_statistics_data::ListenStatisticsData;
 use chrono::DateTime;
 use chrono::Datelike;
 use chrono::NaiveDate;
@@ -18,14 +19,21 @@ use crate::ALISTRAL_CLIENT;
 use crate::api::listenbrainz::fresh_releases::FreshReleaseRelease;
 use crate::api::listenbrainz::fresh_releases::FreshReleaseRequest;
 use crate::database::interfaces::statistics_data::artist_strategy;
-use crate::database::interfaces::statistics_data::recording_stats;
 use crate::database::musicbrainz::anniversaries::get_recordings_aniversaries;
 use crate::models::config::Config;
 use crate::utils::constants::LISTENBRAINZ_FMT;
 
 #[instrument(skip(conn))]
 pub async fn daily_report(conn: &mut sqlx::SqliteConnection, username: &str) {
-    let recordings = recording_stats(&ALISTRAL_CLIENT, username.to_string())
+    let user_data = ListenStatisticsData::new_from_user_listens(
+        ALISTRAL_CLIENT.core.clone(),
+        username.to_string(),
+    )
+    .await
+    .expect("Couldn't fetch user listens");
+
+    let recordings = user_data
+        .recording_stats()
         .await
         .expect("Couldn't fetch the listened recordings");
 

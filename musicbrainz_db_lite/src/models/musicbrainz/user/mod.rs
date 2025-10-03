@@ -38,12 +38,6 @@ impl HasRowID for User {
     }
 }
 
-impl crate::RowId for User {
-    fn get_row_id(&self) -> i64 {
-        self.id
-    }
-}
-
 impl HasTable for User {
     const FOREIGN_FIELD_NAME: &str = "user";
     const TABLE_NAME: &str = "users";

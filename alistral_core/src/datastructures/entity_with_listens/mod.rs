@@ -148,7 +148,7 @@ where
 
 impl<Ent, Lis> ExtractTimeframe for EntityWithListens<Ent, Lis>
 where
-    Ent: RowId,
+    Ent: HasRowID,
     Lis: ListenCollectionReadable + ExtractTimeframe,
 {
     fn extract_timeframe(

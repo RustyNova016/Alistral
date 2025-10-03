@@ -6,7 +6,6 @@ rust-version = "1.85.1"
 
 [dependencies]
 extend = "1.2.0"
-macon = "1.2.0" #TODO: Remove for bon
 serde_json = "1.0.140"
 itertools = "0.14.0"
 serde = "1.0.227"
@@ -28,7 +27,7 @@ async-recursion = "1.1.1"
 async-fn-stream = "0.3.0"
 
 # Databasing
-sequelles = "0.1.0"
+sequelles = "0.2.0"
 sqlx = { version = "0.8.2", features = ["runtime-tokio", "macros", "sqlite"] }
 deadpool = "0.12.3"
 
@@ -41,6 +40,9 @@ tracing = "0.1.41"
 tuillez = { path = "../tuillez" }
 owo-colors = { version = "4.2.1", optional = true}
 
+# Macros
+macon = "1.2.0" #TODO: Remove for bon
+
 # Others
 chrono = "0.4.42"
 
@@ -52,6 +54,3 @@ pretty_format = ["dep:owo-colors"]
 
 [dev-dependencies]
 serial_test = "3.1.1"
-
-[patch.crates-io]
-sequelles = { git = "https://github.com/RustyNova016/sequelles", rev = "f5f5df6b1669d6757cacbd5a33744f1661dbdadc"}

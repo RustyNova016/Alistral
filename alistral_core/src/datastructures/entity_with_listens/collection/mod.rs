@@ -247,7 +247,7 @@ where
 
 impl<Ent, Lis> ExtractTimeframe for EntityWithListensCollection<Ent, Lis>
 where
-    Ent: RowId + Clone,
+    Ent: HasRowID + Clone,
     Lis: ListenCollectionReadable + ExtractTimeframe + Mergable + Clone,
 {
     fn extract_timeframe(
