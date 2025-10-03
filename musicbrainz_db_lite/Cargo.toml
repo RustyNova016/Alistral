@@ -38,7 +38,7 @@ thiserror = "2.0.3"
 # Logging
 tracing = "0.1.41"
 tuillez = { path = "../tuillez" }
-owo-colors = { version = "4.2.1", optional = true}
+owo-colors = { version = "4.2.3", optional = true}
 
 # Macros
 macon = "1.2.0" #TODO: Remove for bon

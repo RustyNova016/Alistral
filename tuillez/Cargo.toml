@@ -7,7 +7,7 @@ rust-version = "1.85.1"
 [dependencies]
 color-backtrace = {git = "https://github.com/RustyNova016/color-backtrace.git", branch = "example", default-features = false, features = ["use-btparse-crate"]}
 indicatif = "0.18.0"
-owo-colors = "4.2.1"
+owo-colors = "4.2.3"
 tracing-indicatif = "0.3.11"
 backtrace = "^0.3.48"
 thiserror = "2.0.3"
