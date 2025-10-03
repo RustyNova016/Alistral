@@ -1,10 +1,9 @@
 use chrono::Duration;
 use futures::Stream;
 use futures::StreamExt;
-use macon::Builder;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 
-#[derive(Debug, Builder)]
+#[derive(Debug, bon::Builder)]
 pub struct RadioCollector {
     duration: Option<Duration>,
     count: Option<u64>,

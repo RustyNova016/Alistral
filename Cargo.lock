@@ -73,7 +73,6 @@ dependencies = [
  "interzic",
  "itertools 0.14.0",
  "listenbrainz",
- "macon",
  "musicbrainz-db-lite",
  "rand 0.9.2",
  "regex",
