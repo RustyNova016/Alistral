@@ -4,10 +4,12 @@ use futures::stream;
 use itertools::Itertools as _;
 use musicbrainz_db_lite::CompletenessFlag;
 use musicbrainz_db_lite::FetchAsComplete;
+use musicbrainz_db_lite::GetOrFetch as _;
 use musicbrainz_db_lite::HasArtistCredits as _;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::artist::Artist;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
+use streamies::TryStreamies;
 use tracing::Span;
 use tracing::info;
 use tracing::instrument;
@@ -20,16 +22,19 @@ use tuillez::pg_inc;
 pub async fn prefetch_recordings_of_listens(
     conn: &mut sqlx::SqliteConnection,
     client: &crate::AlistralClient,
-    user_id: i64,
     listens: &[Listen],
 ) -> Result<(), musicbrainz_db_lite::Error> {
-    let recordings = Listen::get_unfetched_recordings_ids(conn, user_id, listens).await?;
+    let recordings = Listen::get_unfetched_recordings_ids(conn, listens).await?;
     pg_counted!(recordings.len(), "Fetching recordings");
 
-    for recording in recordings {
-        Recording::get_or_fetch(conn, &client.musicbrainz_db, &recording).await?;
-        Span::current().pb_inc(1);
-    }
+    stream::iter(recordings)
+        .map(async |mbid| {
+            Recording::get_or_fetch_as_task(client.musicbrainz_db.clone(), &mbid).await
+        })
+        .buffer_unordered(8)
+        .inspect(|_| Span::current().pb_inc(1))
+        .try_collect_vec()
+        .await?;
 
     Ok(())
 }

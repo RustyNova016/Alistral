@@ -2,7 +2,6 @@ use itertools::Itertools as _;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::listenbrainz::listen::relations::recording::ListenRecordingDBRel;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
-use musicbrainz_db_lite::models::musicbrainz::user::User;
 use tracing::instrument;
 use tuillez::pg_spinner;
 use tuillez::tracing_utils::pg_future::PGFuture;
@@ -14,6 +13,8 @@ use crate::datastructures::entity_with_listens::recording::RecordingWithListens;
 use crate::datastructures::entity_with_listens::traits::IterRecordingWithListens;
 use crate::datastructures::listen_collection::ListenCollection;
 use crate::datastructures::listen_sorter::ListenSortingStrategy;
+
+pub mod sort;
 
 pub type RecordingWithListensCollection = EntityWithListensCollection<Recording, ListenCollection>;
 
@@ -50,17 +51,8 @@ impl ListenSortingStrategy<Recording, ListenCollection> for RecordingWithListenS
 
         // Prefetch the missing data
         // TODO: Make it user agnostic
-        let user_name = listens
-            .first()
-            .expect("At least one listen should be there")
-            .user
-            .clone();
 
-        let user = User::find_by_name(conn, &user_name)
-            .await?
-            .ok_or(crate::Error::MissingUserError(user_name.clone()))?;
-
-        prefetch_recordings_of_listens(conn, client, user.id, &listens).await?;
+        prefetch_recordings_of_listens(conn, client, &listens).await?;
         let listen_refs = listens.iter().collect_vec();
 
         let joins = Listen::get_related_entity_bulk::<ListenRecordingDBRel>(conn, &listen_refs)

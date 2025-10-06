@@ -59,7 +59,6 @@ impl Listen {
     /// Get the recordings that aren't in the database but have listens among a list of listens
     pub async fn get_unfetched_recordings_ids(
         conn: &mut SqliteConnection,
-        user_id: i64,
         listens: &[Listen],
     ) -> Result<Vec<String>, crate::Error> {
         let ids = listens.iter().map(|v| v.id).collect_vec();
@@ -71,16 +70,17 @@ impl Listen {
                         recordings_gid_redirect."gid"
                     FROM
                         listens
+                        INNER JOIN users ON listens.user = users.name
                         INNER JOIN messybrainz_submission ON listens.recording_msid = messybrainz_submission.msid
                         INNER JOIN msid_mapping ON messybrainz_submission.msid = msid_mapping.recording_msid
                         INNER JOIN recordings_gid_redirect ON msid_mapping.recording_mbid = recordings_gid_redirect.gid
                     WHERE
                         recordings_gid_redirect.deleted = 0
                         AND recordings_gid_redirect.new_id IS NULL
-                        AND msid_mapping.user = ?
-                        AND listens.id IN (SELECT value FROM JSON_EACH(?))
+                        AND msid_mapping.user = users.id
+                        AND listens.id IN (SELECT value FROM JSON_EACH($1))
                         "#,
-                        user_id, id_string
+                        id_string
                 )
                 .fetch_all(conn)
                 .await?)

@@ -53,7 +53,7 @@ impl RecordingWithListens {
             .await?
             .ok_or(crate::Error::MissingUser(user_name.clone()))?;
 
-        prefetch_recordings_of_listens(conn, user.id, &listens.data).await?;
+        prefetch_recordings_of_listens(conn, &listens.data).await?;
 
         let mut out = HashMap::new();
 
