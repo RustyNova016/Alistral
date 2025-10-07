@@ -44,8 +44,8 @@ impl Recording {
     #[instrument(skip(client, recordings), fields(indicatif.pb_show = tracing::field::Empty))]
     pub async fn fetch_all_artists_from_credits_bulk<'recording>(
         client: Arc<DBClient>,
-        recordings: &'recording [&'recording Recording],
-    ) -> Result<Vec<(&'recording Recording, Vec<Artist>)>, crate::Error> {
+        recordings: Vec<Recording>,
+    ) -> Result<Vec<(Recording, Vec<Artist>)>, crate::Error> {
         pg_counted!(recordings.len(), "Fetching artists");
 
         let results = stream::iter(recordings)
@@ -55,7 +55,7 @@ impl Recording {
                     .await;
 
                 match artists {
-                    Ok(artists) => Ok((*recording, artists)),
+                    Ok(artists) => Ok((recording, artists)),
                     Err(err) => Err(err),
                 }
             })

@@ -23,7 +23,7 @@ use crate::tools::bumps::bump_command;
 use crate::tools::bumps::bump_down_command;
 use crate::tools::cache::CacheCommand;
 use crate::tools::compatibility::compatibility_command;
-use crate::tools::daily::daily_report;
+use crate::tools::daily::DailyCommand;
 #[cfg(feature = "lookup")]
 use crate::tools::lookup::LookupCommand;
 #[cfg(feature = "musicbrainz")]
@@ -32,8 +32,6 @@ use crate::tools::musicbrainz::MusicbrainzCommand;
 use crate::tools::playlist::PlaylistCommand;
 #[cfg(feature = "stats")]
 use crate::tools::stats::StatsCommand;
-
-use super::config::Config;
 
 pub mod common;
 pub mod config;
@@ -140,10 +138,7 @@ pub enum Commands {
     Config(ConfigCli),
 
     /// Daily report
-    Daily {
-        /// Name of the user to fetch stats listen from
-        username: Option<String>,
-    },
+    Daily(DailyCommand),
 
     #[cfg(feature = "interzic")]
     /// Interact with the interzic database
@@ -195,7 +190,7 @@ impl Commands {
 
             Self::Config(val) => val.command.run().await?,
 
-            Self::Daily { username } => daily_report(conn, &Config::check_username(username)).await,
+            Self::Daily(val) => val.run().await,
 
             #[cfg(feature = "interzic")]
             Self::Interzic(val) => val.run(conn).await?,
@@ -219,6 +214,7 @@ impl Commands {
 
             Self::Unstable(val) => val.command.run(conn).await,
         }
+        
         Ok(())
     }
 }

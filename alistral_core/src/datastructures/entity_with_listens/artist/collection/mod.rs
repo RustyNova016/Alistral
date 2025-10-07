@@ -15,6 +15,8 @@ use crate::datastructures::entity_with_listens::recording::collection::Recording
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use crate::datastructures::listen_sorter::ListenSortingStrategy;
 
+pub mod sort;
+
 pub type ArtistWithRecordingsCollection =
     EntityWithListensCollection<Artist, RecordingWithListensCollection>;
 
@@ -48,12 +50,12 @@ impl ListenSortingStrategy<Artist, RecordingWithListensCollection>
             RecordingWithListensCollection::from_listens(client, listens, &self.recording_strat)
                 .await?;
 
-        let recording_refs = recording_listens.iter_entities().collect_vec();
+        let recording_refs = recording_listens.iter_entities().cloned().collect_vec();
 
         // Fetch
         let joins = Recording::fetch_all_artists_from_credits_bulk(
             self.client.musicbrainz_db.clone(),
-            &recording_refs,
+            recording_refs.clone(),
         )
         .await?;
 
@@ -96,3 +98,4 @@ impl ListenSortingStrategy<Artist, RecordingWithListensCollection>
         Self::sort_insert_listens(self, client, data, vec![listen]).await
     }
 }
+
