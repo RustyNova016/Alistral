@@ -66,12 +66,12 @@ pub async fn fetch_recordings_as_complete(
 pub async fn fetch_artists_of_recordings(
     client: &crate::AlistralClient,
     recordings: &[&Recording],
-) -> Result<(), crate::Error> {
+) -> Result<(), musicbrainz_db_lite::Error> {
     pg_counted!(recordings.len(), "Fetching artists");
 
     //TODO: Turn the stream from Recording -> ArtistCredits -> Unique -> Fetch
     stream::iter(recordings)
-        .map(async |recording| -> Result<(), crate::Error> {
+        .map(async |recording| -> Result<(), musicbrainz_db_lite::Error> {
             let conn = &mut *client.musicbrainz_db.get_conn().await?;
 
             let credits = recording

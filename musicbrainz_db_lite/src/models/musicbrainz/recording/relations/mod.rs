@@ -17,6 +17,7 @@ use crate::utils::sqlx_utils::entity_relations::{JoinCollection, JoinRelation};
 use super::Recording;
 
 pub mod artist;
+pub mod artist_credits;
 pub mod crawler;
 pub mod releases;
 pub mod urls;
@@ -115,7 +116,6 @@ impl DBRelation<TrackRecordingDBRel> for Recording {
 
 #[cfg(test)]
 mod tests {
-
     use crate::models::musicbrainz::recording::Recording;
     use crate::tests::fixtures::default_client::test_mb_client;
 

@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use sequelles::has_rowid::HasRowID;
 
 use crate::ArtistCredits;
@@ -20,7 +22,7 @@ where
     /// Set the id of the artist credits associated to this entity
     fn set_artist_credits_id(&mut self, id: Option<i64>);
 
-    /// Get the artist credits of the antity or refetch the entity
+    /// Get the artist credits of the entity or refetch the entity
     fn get_artist_credits_or_fetch(
         &self,
         conn: &mut sqlx::SqliteConnection,
@@ -37,6 +39,33 @@ where
                         .expect("The artist credits should be loaded after fetching");
 
                     Ok(ArtistCredits::find_by_id(conn, *new_id).await?)
+                }
+            }
+        }
+    }
+
+    /// Get the artist credits of the entity or refetch the entity. Uses a task for it
+    fn get_artist_credits_or_fetch_tasked(
+        &self,
+        client: Arc<crate::DBClient>,
+    ) -> impl Future<Output = Result<ArtistCredits, crate::Error>> + Send
+    where
+        Self: 'static,
+        U: 'static,
+    {
+        async move {
+            match self.get_artist_credits_id() {
+                Some(id) => {
+                    Ok(ArtistCredits::find_by_id(&mut *client.get_conn().await?, *id).await?)
+                }
+
+                None => {
+                    let new_self = self.refetch_as_task(client.clone()).await?;
+                    let new_id = new_self
+                        .get_artist_credits_id()
+                        .expect("The artist credits should be loaded after fetching");
+
+                    Ok(ArtistCredits::find_by_id(&mut *client.get_conn().await?, *new_id).await?)
                 }
             }
         }

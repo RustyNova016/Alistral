@@ -5,12 +5,16 @@ members = [
     "interzic", 
     "tuillez", 
     "musicbrainz_db_lite", 
-    "symphonize"
+    "symphonize",
+    "sequelles"
 ]
 resolver = "3"
 
 [profile.dev]
 debug = "line-tables-only"
+
+[patch.crates-io]
+sequelles = {path = "./sequelles"}
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
