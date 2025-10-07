@@ -71,21 +71,23 @@ pub async fn fetch_artists_of_recordings(
 
     //TODO: Turn the stream from Recording -> ArtistCredits -> Unique -> Fetch
     stream::iter(recordings)
-        .map(async |recording| -> Result<(), musicbrainz_db_lite::Error> {
-            let conn = &mut *client.musicbrainz_db.get_conn().await?;
+        .map(
+            async |recording| -> Result<(), musicbrainz_db_lite::Error> {
+                let conn = &mut *client.musicbrainz_db.get_conn().await?;
 
-            let credits = recording
-                .get_artist_credits_or_fetch(conn, &client.musicbrainz_db)
-                .await?;
+                let credits = recording
+                    .get_artist_credits_or_fetch(conn, &client.musicbrainz_db)
+                    .await?;
 
-            for credit in credits.1 {
-                Artist::get_or_fetch(conn, &client.musicbrainz_db, &credit.artist_gid).await?;
-            }
+                for credit in credits.1 {
+                    Artist::get_or_fetch(conn, &client.musicbrainz_db, &credit.artist_gid).await?;
+                }
 
-            pg_inc!();
+                pg_inc!();
 
-            Ok(())
-        })
+                Ok(())
+            },
+        )
         .buffered(8)
         .try_collect()
         .await

@@ -1,6 +1,7 @@
 use alistral_core::database::fetching::listens::ListenFetchQuery;
 #[cfg(feature = "stats")]
 use alistral_core::datastructures::entity_with_listens::artist::collection::ArtistWithRecordingsCollection;
+#[cfg(feature = "stats")]
 use alistral_core::datastructures::entity_with_listens::artist::collection::ArtistWithRecordingsStrategy;
 use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListenStrategy;
 use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
@@ -16,7 +17,7 @@ use alistral_core::datastructures::entity_with_listens::release_group::collectio
 use crate::models::client::AlistralCliClient;
 
 // === Default strategies ===
-
+#[cfg(feature = "stats")]
 pub fn artist_strategy(client: &AlistralCliClient) -> ArtistWithRecordingsStrategy<'_> {
     ArtistWithRecordingsStrategy::new(client.core.as_ref(), recording_strategy(client))
 }

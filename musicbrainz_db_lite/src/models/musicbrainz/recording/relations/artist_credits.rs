@@ -12,7 +12,7 @@ impl Recording {
         conn: &mut sqlx::SqliteConnection,
         recording_refs: &[&Self],
     ) -> Result<JoinCollection<Artist>, crate::Error> {
-        Recording::get_related_entity_bulk::<ArtistFromCreditsRelation>(conn, &recording_refs)
+        Recording::get_related_entity_bulk::<ArtistFromCreditsRelation>(conn, recording_refs)
             .pg_spinner("Loading recordings from cache...")
             .await
     }

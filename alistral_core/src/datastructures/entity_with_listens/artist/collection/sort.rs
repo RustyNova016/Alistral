@@ -1,10 +1,9 @@
-use std::backtrace::Backtrace;
-
 use itertools::Itertools as _;
 use musicbrainz_db_lite::HasRowID as _;
 use musicbrainz_db_lite::Recording;
 use sequelles::JoinCollection;
 use sequelles::JoinRelation;
+use snafu::Backtrace;
 use snafu::ResultExt;
 use snafu::Snafu;
 use tracing::instrument;

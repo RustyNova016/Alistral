@@ -98,4 +98,3 @@ impl ListenSortingStrategy<Artist, RecordingWithListensCollection>
         Self::sort_insert_listens(self, client, data, vec![listen]).await
     }
 }
-

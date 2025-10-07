@@ -9,9 +9,9 @@ use itertools::Itertools as _;
 use musicbrainz_db_lite::GetOrFetch;
 use musicbrainz_db_lite::ReleaseGroup;
 use tracing::instrument;
-use tuillez::pg_spinner;
 use tuillez::OwoColorize as _;
 use tuillez::formatter::FormatWithAsync;
+use tuillez::pg_spinner;
 
 use crate::ALISTRAL_CLIENT;
 use crate::api::listenbrainz::fresh_releases::FreshReleaseRelease;
@@ -67,7 +67,7 @@ impl DailyCommand {
         today: DateTime<Utc>,
     ) -> Vec<FreshReleaseRelease> {
         pg_spinner!("Generating `Fresh Releases` report");
-        
+
         let fresh_releases = FreshReleaseRequest::builder()
             .days(7)
             .future(false)

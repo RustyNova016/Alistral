@@ -1,9 +1,8 @@
-use std::backtrace::Backtrace;
-
 use itertools::Itertools as _;
 use musicbrainz_db_lite::GetConnectionError;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::listenbrainz::listen::relations::recording::ListenRecordingDBRel;
+use snafu::Backtrace;
 use snafu::ResultExt;
 use snafu::Snafu;
 use tracing::instrument;
@@ -23,7 +22,7 @@ impl Linker<RecordingWithListensCollection, Listen> for AlistralClient {
         data: &mut RecordingWithListensCollection,
         item: Listen,
     ) -> Self::Returned {
-        Self::link_entry_batch(&self, data, vec![item]).await
+        self.link_entry_batch(data, vec![item]).await
     }
 
     #[instrument(skip(self, data, items), fields(indicatif.pb_show = tracing::field::Empty))]

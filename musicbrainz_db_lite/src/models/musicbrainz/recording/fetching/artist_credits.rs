@@ -42,7 +42,7 @@ impl Recording {
     ///
     /// This isn't an optimized way to get the artists. Use this if you aren't sure if the artists are cached, and need a way to prefetch them
     #[instrument(skip(client, recordings), fields(indicatif.pb_show = tracing::field::Empty))]
-    pub async fn fetch_all_artists_from_credits_bulk<'recording>(
+    pub async fn fetch_all_artists_from_credits_bulk(
         client: Arc<DBClient>,
         recordings: Vec<Recording>,
     ) -> Result<Vec<(Recording, Vec<Artist>)>, crate::Error> {

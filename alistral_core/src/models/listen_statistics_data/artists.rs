@@ -21,7 +21,7 @@ impl ListenStatisticsData {
             .await
             .context(RecordingStatsSnafu)?
             .clone();
-        
+
         coll.insert_element(self.client.as_ref(), recording_stats)
             .await
             .context(ArtistLinkingSnafu)?;
@@ -43,4 +43,3 @@ pub enum ArtistStatsError {
         source: RecordingStatsError,
     },
 }
-

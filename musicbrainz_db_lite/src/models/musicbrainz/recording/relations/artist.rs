@@ -76,4 +76,3 @@ impl Recording {
         Ok(JoinCollection::from(joins).into_hashmap(recordings, |id, value| &value.id == id))
     }
 }
-

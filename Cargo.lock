@@ -3116,6 +3116,7 @@ dependencies = [
 [[package]]
 name = "sequelles"
 version = "0.2.0"
+source = "git+https://github.com/RustyNova016/sequelles?branch=master#99b2aa533ef7e17f935b5647897c4676b588d09c"
 dependencies = [
  "async-once-cell",
  "bon",
@@ -3347,7 +3348,6 @@ version = "0.8.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6e84b3f4eacbf3a1ce05eac6763b4d629d60cbc94d632e4092c54ade71f1e1a2"
 dependencies = [
- "backtrace",
  "futures-core",
  "pin-project",
  "snafu-derive",

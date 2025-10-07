@@ -214,7 +214,7 @@ impl Commands {
 
             Self::Unstable(val) => val.command.run(conn).await,
         }
-        
+
         Ok(())
     }
 }

@@ -1,7 +1,7 @@
 use itertools::Itertools as _;
-use sequelles::has_rowid::HasRowID;
 use sequelles::JoinCollection;
 use sequelles::JoinRelation;
+use sequelles::has_rowid::HasRowID;
 use sqlx::sqlite::SqliteRow;
 
 use crate::models::shared_traits::has_table::HasTable;
