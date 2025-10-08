@@ -1,4 +1,4 @@
-pub mod bumps;
+pub mod bump;
 pub mod cache;
 pub mod compatibility;
 pub mod daily;

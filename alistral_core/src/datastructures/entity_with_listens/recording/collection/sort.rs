@@ -1,7 +1,7 @@
 use itertools::Itertools as _;
 use musicbrainz_db_lite::GetConnectionError;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
-use musicbrainz_db_lite::models::listenbrainz::listen::relations::recording::ListenRecordingDBRel;
+use musicbrainz_db_lite::models::listenbrainz::listen::relations::listen_recordings::ListenRecordingDBRel;
 use snafu::Backtrace;
 use snafu::ResultExt;
 use snafu::Snafu;

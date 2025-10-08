@@ -1,6 +1,6 @@
 use itertools::Itertools as _;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
-use musicbrainz_db_lite::models::listenbrainz::listen::relations::recording::ListenRecordingDBRel;
+use musicbrainz_db_lite::models::listenbrainz::listen::relations::listen_recordings::ListenRecordingDBRel;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use tracing::instrument;
 use tuillez::pg_spinner;

@@ -19,8 +19,8 @@ use unstable::UnstableCommand;
 use crate::models::cli::interzic::InterzicCommand;
 #[cfg(feature = "radio")]
 use crate::models::cli::radio::RadioCommand;
-use crate::tools::bumps::bump_command;
-use crate::tools::bumps::bump_down_command;
+use crate::tools::bump::BumpCommand;
+use crate::tools::bump::bump_down::BumpDownCommand;
 use crate::tools::cache::CacheCommand;
 use crate::tools::compatibility::compatibility_command;
 use crate::tools::daily::DailyCommand;
@@ -90,38 +90,16 @@ impl Cli {
     }
 }
 
-/// bump a recording to show up more frequently in radios that uses scores. By default, it uses the lastest listen as target.
-///
-/// bump-down is an alias for `bump <RECORDING> <DURATION> 0.9`
-///
-/// All the bumps are added multiplicatively, so a recording won't disapear. Use the blacklist to remove them.
-#[derive(Parser, Debug, Clone)]
-pub struct BumpCLI {
-    /// The recording to bump
-    pub recording: Option<String>,
-
-    /// The duration the bump last for (Default: 3 months)
-    #[arg(short, long)]
-    pub duration: Option<String>,
-
-    /// The multiplier added to the score (Default: 1.1)
-    #[arg(short, long)]
-    pub multiplier: Option<String>,
-
-    #[arg(short, long)]
-    pub username: Option<String>,
-}
-
 #[derive(Subcommand, Debug, Clone)]
 pub enum Commands {
-    Bump(BumpCLI),
+    Bump(BumpCommand),
 
     /// bump a recording to show up more frequently in radios that uses scores. By default, it uses the lastest listen as target.
     ///
     /// bump-down is an alias for `bump <RECORDING> <DURATION> 0.9`
     ///    
     /// All the bumps are added multiplicatively, so a recording won't disapear. Use the blacklist to remove them.
-    BumpDown(BumpCLI),
+    BumpDown(BumpDownCommand),
 
     /// Commands to deal with the local cache
     Cache(CacheCommand),
@@ -176,6 +154,8 @@ pub enum Commands {
 impl Commands {
     pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> Result<(), FatalError> {
         match self {
+            Self::Bump(val) => val.run().await,
+            Self::BumpDown(val) => val.run().await,
             Self::Cache(val) => val.run().await,
 
             #[cfg(feature = "stats")]
@@ -207,11 +187,6 @@ impl Commands {
 
             #[cfg(feature = "interzicf")]
             Self::Playlist(val) => val.run(conn).await?,
-
-            Self::Bump(val) => bump_command(conn, val.clone()).await,
-
-            Self::BumpDown(val) => bump_down_command(conn, val.clone()).await,
-
             Self::Unstable(val) => val.command.run(conn).await,
         }
 

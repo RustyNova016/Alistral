@@ -1,6 +1,7 @@
 use crate::DBRelation;
 use crate::User;
 
+pub mod listen_recordings;
 pub mod messybrainz_submission;
 pub mod recording;
 
