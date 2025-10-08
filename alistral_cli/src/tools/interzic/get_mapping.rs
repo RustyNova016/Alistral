@@ -9,6 +9,7 @@ use tuillez::fatal_error::OptIntoFatal;
 use crate::ALISTRAL_CLIENT;
 use crate::utils::cli::read_mbid_from_input;
 
+/// Fetch the id of a recording on an external service
 #[derive(Parser, Debug, Clone)]
 pub struct GetMappingCommand {
     /// Get the mapping of which service?
@@ -41,7 +42,9 @@ pub enum InterzicMappingTarget {
 }
 
 impl GetMappingCommand {
-    pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> Result<(), crate::Error> {
+    pub async fn run(&self) -> Result<(), crate::Error> {
+        let conn = &mut *ALISTRAL_CLIENT.get_conn().await;
+
         // Prioritise mbid resolving
         let recording = if let Some(mbid) = self.mbid.as_ref() {
             MessyRecording::from_mbid_with_db(

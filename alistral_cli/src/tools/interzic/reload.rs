@@ -7,6 +7,7 @@ use tuillez::fatal_error::OptIntoFatal as _;
 use crate::ALISTRAL_CLIENT;
 use crate::utils::cli::read_mbid_from_input;
 
+/// Reload recording data from Musicbrainz
 #[derive(Parser, Debug, Clone)]
 pub struct ReloadCommand {
     /// Reload only this mbid
@@ -14,7 +15,9 @@ pub struct ReloadCommand {
 }
 
 impl ReloadCommand {
-    pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> Result<(), crate::Error> {
+    pub async fn run(&self) -> Result<(), crate::Error> {
+        let conn = &mut *ALISTRAL_CLIENT.get_conn().await;
+
         if let Some(mbid) = &self.mbid {
             let mbid = &read_mbid_from_input(mbid)
                 .expect_fatal("Couldn't read the mbid from the input. Check if it's correct")?;

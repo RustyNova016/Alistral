@@ -9,6 +9,7 @@ use crate::ALISTRAL_CLIENT;
 use crate::tools::interzic::get_mapping::InterzicMappingTarget;
 use crate::utils::cli::read_mbid_from_input;
 
+/// Overwrite a mapping for an user
 #[derive(Parser, Debug, Clone)]
 pub struct OverwriteCommand {
     /// Set the mapping of this service
@@ -38,7 +39,9 @@ pub struct OverwriteCommand {
 }
 
 impl OverwriteCommand {
-    pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> Result<(), crate::Error> {
+    pub async fn run(&self) -> Result<(), crate::Error> {
+        let conn = &mut *ALISTRAL_CLIENT.get_conn().await;
+
         let recording = if let Some(mbid) = self.mbid.as_ref() {
             MessyRecording::from_mbid_with_db(
                 conn,

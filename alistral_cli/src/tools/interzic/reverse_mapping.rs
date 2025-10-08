@@ -5,6 +5,7 @@ use tuillez::fatal_error::OptIntoFatal;
 use crate::ALISTRAL_CLIENT;
 use crate::tools::interzic::get_mapping::InterzicMappingTarget;
 
+/// Get the recording mapped to this id
 #[derive(Parser, Debug, Clone)]
 pub struct ReverseMappingCommand {
     /// Get the mapping of which service?
@@ -18,7 +19,7 @@ pub struct ReverseMappingCommand {
 }
 
 impl ReverseMappingCommand {
-    pub async fn run(&self, _conn: &mut sqlx::SqliteConnection) -> Result<(), crate::Error> {
+    pub async fn run(&self) -> Result<(), crate::Error> {
         let recordings = match self.source {
             InterzicMappingTarget::Youtube => {
                 Youtube::get_recordings_from_id(
