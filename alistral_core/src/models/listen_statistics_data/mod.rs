@@ -58,4 +58,8 @@ impl ListenStatisticsData {
 
         Ok(Self::new(client, listens))
     }
+
+    pub fn listens(&self) -> &ListenCollection {
+        &self.listens
+    }
 }
