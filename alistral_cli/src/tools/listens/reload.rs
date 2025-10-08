@@ -12,7 +12,7 @@ pub struct ListenReloadCommand {
 }
 
 impl ListenReloadCommand {
-    pub async fn run(&self) -> Result<(), crate::Error> {
+    pub async fn run(&self) {
         let mut query = ListenFetchAPIQuery::try_new(
             ALISTRAL_CLIENT
                 .config
@@ -26,8 +26,7 @@ impl ListenReloadCommand {
         query
             .request_and_save(&ALISTRAL_CLIENT.musicbrainz_db)
             .await
-            .expect_fatal("Couldn't reload the listens")?;
-
-        Ok(())
+            .expect_fatal("Couldn't reload the listens")
+            .unwrap();
     }
 }

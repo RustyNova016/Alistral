@@ -54,4 +54,5 @@ pub(crate) type MBUrl = musicbrainz_rs::entity::url::Url;
 
 // === External Reexports ===
 pub use sequelles::databases::sqlite::database::GetConnectionError;
+pub use sequelles::databases::sqlite::pool::SqlitePoolConnection;
 pub use sequelles::has_rowid::HasRowID;

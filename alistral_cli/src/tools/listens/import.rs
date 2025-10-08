@@ -2,8 +2,6 @@ use std::collections::HashMap;
 use std::fs::File;
 use std::io::BufRead;
 use std::io::BufReader;
-use std::path::Path;
-use std::path::PathBuf;
 
 use clap::Parser;
 use musicbrainz_db_lite::MBIDRedirection as _;
@@ -18,7 +16,7 @@ use sqlx::Acquire;
 use tracing::info;
 
 use crate::ALISTRAL_CLIENT;
-use crate::models::config::Config;
+use crate::utils::user_inputs::UserInputParser;
 
 /// Load a listen dump from the website
 ///
@@ -28,97 +26,82 @@ use crate::models::config::Config;
 #[derive(Parser, Debug, Clone)]
 pub struct ListenImportDumpCommand {
     /// Path to the dump file
-    path: String,
+    pub path: String,
 
     /// Name of the user to import those listens for
-    username: Option<String>,
+    pub username: Option<String>,
 }
 
 impl ListenImportDumpCommand {
     pub async fn run(&self) {
-        let path = PathBuf::from(&self.path)
-            .canonicalize()
-            .expect("Couldn't find zip file.");
+        // Variables
+        let zip_path = UserInputParser::parse_file_path(&self.path);
+        let username = UserInputParser::username_or_default(&self.username);
+        let conn = &mut *ALISTRAL_CLIENT.get_conn().await;
 
-        let user = &Config::check_username(&self.username);
+        let zip_file = File::open(zip_path).expect("Couldn't access zip file.");
+        let mut archive = zip::ZipArchive::new(zip_file).expect("Couldn't read zip file.");
 
-        let conn = &mut *ALISTRAL_CLIENT
-            .musicbrainz_db
-            .get_raw_connection()
-            .await
-            .expect("Couldn't connect to the database");
+        let mut import_trans = conn.begin().await.expect("Couldn't start transaction");
 
-        import_listen_dump(conn, &path, user).await
-    }
-}
+        // We read the zip file
+        for i in 0..archive.len() {
+            let file = archive.by_index(i).unwrap();
 
-pub async fn import_listen_dump(
-    conn: &mut sqlx::SqliteConnection,
-    dump_path: &Path,
-    username: &str,
-) {
-    let zip_file = File::open(dump_path).expect("Couldn't access zip file.");
-    let mut archive = zip::ZipArchive::new(zip_file).expect("Couldn't read zip file.");
+            let outpath = match file.enclosed_name() {
+                Some(path) => path,
+                None => continue,
+            };
 
-    let mut import_trans = conn.begin().await.expect("Couldn't start transaction");
+            // The file is a directory? Skip. We don't need to handle those
+            if file.is_dir() {
+                continue;
+            }
 
-    // We read the zip file
-    for i in 0..archive.len() {
-        let file = archive.by_index(i).unwrap();
+            // The file is actually a listen?
+            if outpath.to_string_lossy() == "feedback.jsonl"
+                || outpath.to_string_lossy() == "pinned_recording.jsonl"
+                || outpath.to_string_lossy() == "user.json"
+            {
+                continue;
+            }
 
-        let outpath = match file.enclosed_name() {
-            Some(path) => path,
-            None => continue,
-        };
+            println!("Saving {}", outpath.display());
 
-        // The file is a directory? Skip. We don't need to handle those
-        if file.is_dir() {
-            continue;
-        }
+            // Convert jsonl to json
+            let content = BufReader::new(file).lines();
 
-        // The file is actually a listen?
-        if outpath.to_string_lossy() == "feedback.jsonl"
-            || outpath.to_string_lossy() == "pinned_recording.jsonl"
-            || outpath.to_string_lossy() == "user.json"
-        {
-            continue;
-        }
-
-        println!("Saving {}", outpath.display());
-
-        // Convert jsonl to json
-        let content = BufReader::new(file).lines();
-
-        // Then save the content
-        let mut count = 0;
-        let mut trans = import_trans
-            .begin()
-            .await
-            .expect("Couldn't start transaction");
-        for line in content {
-            let line = line.expect("Couldn't read line");
-            //println!("{line}");
-            let data: ImportListen = serde_json::from_str(&line).unwrap_or_else(|err| {
-                panic!(
-                    "Couldn't convert line #{} of {}. Error: {err}",
-                    count + 1,
-                    outpath.display()
-                )
-            });
-
-            data.save(&mut trans, username)
+            // Then save the content
+            let mut count = 0;
+            let mut trans = import_trans
+                .begin()
                 .await
-                .expect("Couldn't save listen");
-            count += 1;
-        }
-        trans.commit().await.expect("Couldn't save transaction");
+                .expect("Couldn't start transaction");
+            for line in content {
+                let line = line.expect("Couldn't read line");
+                //println!("{line}");
+                let data: ImportListen = serde_json::from_str(&line).unwrap_or_else(|err| {
+                    panic!(
+                        "Couldn't convert line #{} of {}. Error: {err}",
+                        count + 1,
+                        outpath.display()
+                    )
+                });
 
-        info!("Loaded {count} listens");
+                data.save(&mut trans, &username)
+                    .await
+                    .expect("Couldn't save listen");
+                count += 1;
+            }
+            trans.commit().await.expect("Couldn't save transaction");
+
+            info!("Loaded {count} listens");
+        }
+        import_trans
+            .commit()
+            .await
+            .expect("Couldn't save transaction");
     }
-    import_trans
-        .commit()
-        .await
-        .expect("Couldn't save transaction");
 }
 
 //TODO: #449 Move ImportListen to models
@@ -216,31 +199,25 @@ impl ImportListen {
 #[cfg(test)]
 mod tests {
     use crate::ALISTRAL_CLIENT;
-    use crate::tools::listens::import::import_listen_dump;
+    use crate::tools::listens::import::ListenImportDumpCommand;
     use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
-    use std::path::PathBuf;
 
     #[sqlx::test]
     async fn load_listen_dump_test() {
-        let mut conn = ALISTRAL_CLIENT
-            .musicbrainz_db
-            .get_raw_connection()
-            .await
-            .expect("Couldn't connect to the database");
-        import_listen_dump(
-            &mut conn,
-            &PathBuf::from("tests/data/listen_dump.zip".to_string()),
-            "TestNova",
-        )
-        .await;
+        let cmd = ListenImportDumpCommand {
+            path: "tests/data/listen_dump.zip".to_string(),
+            username: Some("TestNova".to_string()),
+        };
+
+        cmd.run().await;
 
         //TODO: #451 Make sqlx prepare query macros in tests + Convert the queries
         let listen: Listen = sqlx::query_as("SELECT * FROM listens WHERE listened_at = 1705054374")
-            .fetch_one(&mut *conn)
+            .fetch_one(&mut *ALISTRAL_CLIENT.get_conn().await)
             .await
             .expect("This listen should exist");
         listen
-            .get_recording_or_fetch(&mut conn, &ALISTRAL_CLIENT.musicbrainz_db)
+            .get_recording_or_fetch_with_task(ALISTRAL_CLIENT.musicbrainz_db.clone())
             .await
             .expect("The listen should be mapped");
     }

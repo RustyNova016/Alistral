@@ -8,7 +8,7 @@ use listenbrainz::raw::request::TrackMetadata;
 use tuillez::fatal_error::IntoFatal;
 
 use crate::ALISTRAL_CLIENT;
-use crate::models::config::Config;
+use crate::utils::user_inputs::UserInputParser;
 
 #[derive(Parser, Debug, Clone)]
 pub struct ListenSubmitCommand {
@@ -24,7 +24,7 @@ pub struct ListenSubmitCommand {
 
     /// Submit the listen on this user
     #[arg(short, long)]
-    pub user: Option<String>,
+    pub username: Option<String>,
 
     /// The token of the user
     #[arg(short, long)]
@@ -32,38 +32,33 @@ pub struct ListenSubmitCommand {
 }
 
 impl ListenSubmitCommand {
-    pub async fn run(&self) -> Result<(), crate::Error> {
+    pub async fn run(&self) {
+        let token = UserInputParser::user_token_or_default(&self.username, &self.token);
         let mut extras = HashMap::new();
         extras.insert("submission_client", "Alistral (Submit listen)");
         extras.insert("submission_client_version", env!("CARGO_PKG_VERSION"));
 
-        ALISTRAL_CLIENT.listenbrainz.submit_listens(
-            &self.get_token(),
-            SubmitListens {
-                listen_type: listenbrainz::raw::request::ListenType::Single,
-                payload: &[Payload {
-                    listened_at: Some(Utc::now().timestamp()),
-                    track_metadata: TrackMetadata {
-                        track_name: self.recording.clone(),
-                        artist_name: self.artist_credits.clone(),
-                        release_name: self.release.clone(),
-                        additional_info: serde_json::to_value(extras)
-                            .expect_fatal("Couldn't convert extra data to json")?
-                            .as_object()
-                            .cloned(),
-                    },
-                }],
-            },
-        )?;
-
-        Ok(())
-    }
-
-    pub fn get_user(&self) -> String {
-        Config::check_username(&self.user)
-    }
-
-    pub fn get_token(&self) -> String {
-        Config::check_token(&self.get_user(), &self.token)
+        ALISTRAL_CLIENT
+            .listenbrainz
+            .submit_listens(
+                &token,
+                SubmitListens {
+                    listen_type: listenbrainz::raw::request::ListenType::Single,
+                    payload: &[Payload {
+                        listened_at: Some(Utc::now().timestamp()),
+                        track_metadata: TrackMetadata {
+                            track_name: self.recording.clone(),
+                            artist_name: self.artist_credits.clone(),
+                            release_name: self.release.clone(),
+                            additional_info: serde_json::to_value(extras)
+                                .expect_fatal("Couldn't convert extra data to json")
+                                .unwrap()
+                                .as_object()
+                                .cloned(),
+                        },
+                    }],
+                },
+            )
+            .unwrap();
     }
 }
