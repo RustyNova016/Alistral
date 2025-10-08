@@ -18,7 +18,7 @@ impl UserInputParser {
         {
             Some(val) => val,
             None => {
-                tracing::error!("Couldn't find a recording with mbid {mbid}");
+                tracing::error!("Couldn't find a recording with mbid `{mbid}`");
                 std::process::exit(2);
             }
         }

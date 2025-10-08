@@ -12,22 +12,16 @@ pub struct ListensClearCommand {
 
 impl ListensClearCommand {
     pub async fn run(&self) {
-        let conn = &mut *ALISTRAL_CLIENT
-            .musicbrainz_db
-            .get_raw_connection()
-            .await
-            .expect("Couldn't get a connection");
-
         match &self.user {
             Some(user) => {
                 sqlx::query!("DELETE FROM listens WHERE LOWER(user) = LOWER(?)", user)
-                    .execute(conn)
+                    .execute(&mut *ALISTRAL_CLIENT.get_conn().await)
                     .await
                     .expect("Couldn't delete listens");
             }
             None => {
                 sqlx::query!("DELETE FROM listens")
-                    .execute(conn)
+                    .execute(&mut *ALISTRAL_CLIENT.get_conn().await)
                     .await
                     .expect("Couldn't delete listens");
             }

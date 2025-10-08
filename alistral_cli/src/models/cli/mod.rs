@@ -10,8 +10,6 @@ use clap_complete::generate;
 use clap_verbosity_flag::InfoLevel;
 use clap_verbosity_flag::Verbosity;
 use config::ConfigCli;
-use listens::ListenCommand;
-use mapping::MappingCommand;
 use tuillez::fatal_error::FatalError;
 use unstable::UnstableCommand;
 
@@ -24,6 +22,7 @@ use crate::tools::bump::bump_down::BumpDownCommand;
 use crate::tools::cache::CacheCommand;
 use crate::tools::compatibility::compatibility_command;
 use crate::tools::daily::DailyCommand;
+use crate::tools::listens::ListenCommand;
 #[cfg(feature = "lookup")]
 use crate::tools::lookup::LookupCommand;
 #[cfg(feature = "musicbrainz")]
@@ -37,8 +36,6 @@ pub mod common;
 pub mod config;
 #[cfg(feature = "interzic")]
 pub mod interzic;
-pub mod listens;
-pub mod mapping;
 #[cfg(feature = "radio")]
 pub mod radio;
 pub mod unstable;
@@ -122,15 +119,12 @@ pub enum Commands {
     /// Interact with the interzic database
     Interzic(InterzicCommand),
 
-    /// Commands to edit listens
+    #[clap(aliases = &["listen", "scrobble", "scrobbles"])]
     Listens(ListenCommand),
 
     #[cfg(feature = "lookup")]
     /// Get detailled information about an entity
     Lookup(LookupCommand),
-
-    /// Commands for interacting with listen mappings
-    Mapping(MappingCommand),
 
     #[cfg(feature = "musicbrainz")]
     /// Commands for musicbrainz stuff
@@ -157,36 +151,32 @@ impl Commands {
             Self::Bump(val) => val.run().await,
             Self::BumpDown(val) => val.run().await,
             Self::Cache(val) => val.run().await,
+            Self::Compatibility { user_a, user_b } => {
+                compatibility_command(conn, user_a, user_b).await;
+            }
+            Self::Config(val) => val.command.run().await?,
+            Self::Daily(val) => val.run().await,
 
             #[cfg(feature = "stats")]
             Self::Stats(val) => val.run(conn).await?,
 
-            Self::Compatibility { user_a, user_b } => {
-                compatibility_command(conn, user_a, user_b).await;
-            }
-
             #[cfg(feature = "radio")]
             Self::Radio(val) => val.run(conn).await?,
-
-            Self::Config(val) => val.command.run().await?,
-
-            Self::Daily(val) => val.run().await,
 
             #[cfg(feature = "interzic")]
             Self::Interzic(val) => val.run(conn).await?,
 
-            Self::Listens(val) => val.run(conn).await?,
+            Self::Listens(val) => val.run().await,
 
             #[cfg(feature = "lookup")]
             Self::Lookup(cmd) => cmd.run().await,
-
-            Self::Mapping(val) => val.run(conn).await?,
 
             #[cfg(feature = "musicbrainz")]
             Self::Musicbrainz(val) => val.run(conn).await,
 
             #[cfg(feature = "interzicf")]
             Self::Playlist(val) => val.run(conn).await?,
+
             Self::Unstable(val) => val.command.run(conn).await,
         }
 

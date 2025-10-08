@@ -1,11 +1,8 @@
 use core::str::FromStr;
-use std::path::PathBuf;
 use std::sync::Arc;
 use std::sync::LazyLock;
 
 use alistral_core::AlistralClient;
-use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListenStrategy;
-use alistral_core::datastructures::entity_with_listens::user::collection::UserWithListensStrategy;
 use futures::executor::block_on;
 #[cfg(feature = "interzicf")]
 use interzic::InterzicClient;
@@ -16,7 +13,6 @@ use musicbrainz_db_lite::client::MusicBrainzClient;
 use symphonize::SymphonyzeClient;
 use tuillez::fatal_error::IntoFatal;
 
-use crate::database::DB_LOCATION;
 use crate::models::config::Config;
 use crate::models::config::config_trait::ConfigFile;
 #[cfg(feature = "interzicf")]
@@ -25,8 +21,9 @@ use crate::utils::constants::INTERZIC_DB;
 use crate::utils::constants::TOKENCACHE;
 #[cfg(feature = "interzicf")]
 use crate::utils::constants::YT_SECRET_FILE;
-use crate::utils::env::in_offline_mode;
-use crate::utils::env::temp_database;
+
+pub mod al_core;
+pub mod mb_db;
 
 pub static ALISTRAL_CLIENT: LazyLock<AlistralCliClient> =
     LazyLock::new(AlistralCliClient::create_blocking_or_fatal);
@@ -80,22 +77,6 @@ impl AlistralCliClient {
         Arc::new(musicbrainz_rs)
     }
 
-    async fn create_mb_db_client(
-        musicbrainz_client: Arc<MusicBrainzClient>,
-        listenbrainz_client: Arc<ListenbrainzClient>,
-    ) -> Arc<DBClient> {
-        //TODO: set db loaction in config
-        let mut location = DB_LOCATION.to_path_buf();
-        if temp_database() {
-            location = PathBuf::from("./temp.db");
-        }
-
-        let musicbrainz_db = DBClient::from_path(location, musicbrainz_client, listenbrainz_client)
-            .expect("Couldn't create database client");
-
-        Arc::new(musicbrainz_db)
-    }
-
     #[cfg(feature = "interzicf")]
     async fn create_interzic(
         musicbrainz_rs: Arc<MusicBrainzClient>,
@@ -130,20 +111,6 @@ impl AlistralCliClient {
         }
 
         Arc::new(client)
-    }
-
-    fn create_core_client(
-        musicbrainz_db: Arc<DBClient>,
-        listenbrainz: Arc<ListenbrainzClient>,
-    ) -> Arc<AlistralClient> {
-        AlistralClient::builder()
-            .listenbrainz(listenbrainz)
-            .musicbrainz_db(musicbrainz_db)
-            .offline(in_offline_mode())
-            .recording_with_listen_strat(RecordingWithListenStrategy::default())
-            .user_with_listen_strat(UserWithListensStrategy::default())
-            .build()
-            .into()
     }
 
     /// Create the client, or fancy panic if an error occur
