@@ -41,7 +41,7 @@ tuillez = { path = "../tuillez" }
 owo-colors = { version = "4.2.1", optional = true}
 
 # Macros
-bon = "3.7.2"
+bon = "3.8.0"
 
 # Others
 chrono = "0.4.42"

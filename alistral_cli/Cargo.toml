@@ -64,7 +64,7 @@ thiserror = "2.0.17"
 #snafu = { version = "0.8.9", features = ["rust_1_81", "backtrace"] }
 
 # Macros
-bon = "3.7.2"
+bon = "3.8.0"
 derive_more = { version = "2.0.1", features = ["full"] }
 derive-new = "0.7.0"
 derive-getters = "0.5.0"

@@ -26,7 +26,7 @@ sequelles = "0.2.0"
 sqlx = { version = "0.8.3", features = ["runtime-tokio", "macros"] }
 
 # Macros
-bon = "3.7.2"
+bon = "3.8.0"
 thiserror = "2.0.11"
 snafu = { version = "0.8.9", features = ["rust_1_81"] }
 
