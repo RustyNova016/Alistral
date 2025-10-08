@@ -11,6 +11,7 @@ use crate::datastructures::entity_with_listens::user::collection::UserWithListen
 use crate::datastructures::listen_collection::ListenCollection;
 
 pub mod artists;
+pub mod listens;
 pub mod recordings;
 pub mod user;
 
@@ -61,5 +62,9 @@ impl ListenStatisticsData {
 
     pub fn listens(&self) -> &ListenCollection {
         &self.listens
+    }
+
+    pub fn clone_no_stats(&self) -> Self {
+        Self::new(self.client.clone(), self.listens.clone())
     }
 }

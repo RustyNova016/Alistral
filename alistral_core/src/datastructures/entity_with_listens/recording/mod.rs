@@ -2,6 +2,7 @@ use core::ops::Mul;
 
 use chrono::Duration;
 use collection::RecordingWithListensCollection;
+use musicbrainz_db_lite::HasMBID;
 use musicbrainz_db_lite::HasRowID as _;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use rust_decimal::Decimal;
@@ -71,5 +72,11 @@ impl ListenCollWithTime for RecordingWithListens {
         self.entity
             .length_as_duration()
             .map(|dur| dur.mul(self.listen_count().try_into().unwrap()))
+    }
+}
+
+impl RecordingWithListensCollection {
+    pub fn get_by_mbid(&self, mbid: &str) -> Option<&RecordingWithListens> {
+        self.0.values().find(|rec| rec.entity().get_mbid() == mbid)
     }
 }
