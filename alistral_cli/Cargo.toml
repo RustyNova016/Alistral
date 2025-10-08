@@ -61,6 +61,7 @@ inquire = "0.9.1"
 # Error handling
 color-eyre = "0.6.5"
 thiserror = "2.0.17"
+#snafu = { version = "0.8.9", features = ["rust_1_81", "backtrace"] }
 
 # Macros
 bon = "3.7.2"
@@ -100,3 +101,6 @@ async_fn_in_trait = { level = "allow", priority = 1 }
 
 [lints.clippy]
 result_large_err = { level = "allow", priority = 1 }
+
+[patch.crates-io]
+sequelles = {git = "https://github.com/RustyNova016/sequelles", branch = "master"}

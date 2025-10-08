@@ -1,6 +1,6 @@
 use itertools::Itertools as _;
-use sequelles::datastructures::joins::join_result::JoinCollection;
-use sequelles::datastructures::joins::join_result::JoinRelation;
+use sequelles::JoinCollection;
+use sequelles::JoinRelation;
 use sequelles::has_rowid::HasRowID;
 use sqlx::sqlite::SqliteRow;
 

@@ -12,6 +12,9 @@ resolver = "3"
 [profile.dev]
 debug = "line-tables-only"
 
+[patch.crates-io]
+sequelles = {git = "https://github.com/RustyNova016/sequelles", branch = "master"}
+
 [workspace.lints.rust]
 unsafe_code = "forbid"
 

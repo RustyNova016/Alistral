@@ -3,18 +3,19 @@ use musicbrainz_db_lite::HasRowID as _;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::artist::Artist;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
-use musicbrainz_db_lite::models::shared_traits::db_relation::ArtistFromCreditsRelation;
+use sequelles::JoinCollection;
+use sequelles::JoinRelation;
 use tracing::instrument;
 use tuillez::pg_spinner;
-use tuillez::tracing_utils::pg_future::PGFuture as _;
 
 use crate::AlistralClient;
-use crate::database::fetching::recordings::fetch_artists_of_recordings;
 use crate::datastructures::entity_with_listens::artist::artist_with_recordings::ArtistWithRecordings;
 use crate::datastructures::entity_with_listens::collection::EntityWithListensCollection;
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListenStrategy;
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use crate::datastructures::listen_sorter::ListenSortingStrategy;
+
+pub mod sort;
 
 pub type ArtistWithRecordingsCollection =
     EntityWithListensCollection<Artist, RecordingWithListensCollection>;
@@ -49,20 +50,23 @@ impl ListenSortingStrategy<Artist, RecordingWithListensCollection>
             RecordingWithListensCollection::from_listens(client, listens, &self.recording_strat)
                 .await?;
 
-        let recording_refs = recording_listens.iter_entities().collect_vec();
+        let recording_refs = recording_listens.iter_entities().cloned().collect_vec();
 
         // Fetch
-        fetch_artists_of_recordings(self.client, &recording_refs).await?;
+        let joins = Recording::fetch_all_artists_from_credits_bulk(
+            self.client.musicbrainz_db.clone(),
+            recording_refs.clone(),
+        )
+        .await?;
 
-        let conn = &mut *self.client.musicbrainz_db.get_raw_connection().await?;
+        let mut join_col = JoinCollection::default();
+        for (recording, artists) in joins {
+            for artist in artists {
+                join_col.push(JoinRelation::new(artist, recording.rowid()));
+            }
+        }
 
-        // Load artists
-        let results =
-            Recording::get_related_entity_bulk::<ArtistFromCreditsRelation>(conn, &recording_refs)
-                .pg_spinner("Loading recordings from cache...")
-                .await?;
-
-        let results = results
+        let results = join_col
             .into_many_to_many(recording_refs)
             .into_many_to_zero_right()
             .map_right(|right| {

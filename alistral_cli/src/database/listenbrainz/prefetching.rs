@@ -7,10 +7,9 @@ use crate::ALISTRAL_CLIENT;
 /// Prefetch all the recordings of a list of listens
 pub async fn prefetch_recordings_of_listens(
     conn: &mut sqlx::SqliteConnection,
-    user_id: i64,
     listens: &[Listen],
 ) -> Result<(), musicbrainz_db_lite::Error> {
-    let recordings = Listen::get_unfetched_recordings_ids(conn, user_id, listens).await?;
+    let recordings = Listen::get_unfetched_recordings_ids(conn, listens).await?;
 
     info!("Fetching missing recording data");
     for recording in recordings {

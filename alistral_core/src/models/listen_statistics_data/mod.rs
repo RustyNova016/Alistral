@@ -5,10 +5,12 @@ use async_once_cell::OnceCell;
 use crate::AlistralClient;
 use crate::database::fetching::listens::ListenFetchQuery;
 use crate::database::fetching::listens::ListenFetchQueryReturn;
+use crate::datastructures::entity_with_listens::artist::collection::ArtistWithRecordingsCollection;
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use crate::datastructures::entity_with_listens::user::collection::UserWithListensCollection;
 use crate::datastructures::listen_collection::ListenCollection;
 
+pub mod artists;
 pub mod recordings;
 pub mod user;
 
@@ -24,6 +26,7 @@ pub struct ListenStatisticsData {
     client: Arc<AlistralClient>,
     listens: ListenCollection,
 
+    artists: OnceCell<ArtistWithRecordingsCollection>,
     recordings: OnceCell<RecordingWithListensCollection>,
     users: OnceCell<UserWithListensCollection>,
 }
@@ -33,6 +36,7 @@ impl ListenStatisticsData {
         Self {
             client,
             listens,
+            artists: OnceCell::new(),
             users: OnceCell::new(),
             recordings: OnceCell::new(),
         }

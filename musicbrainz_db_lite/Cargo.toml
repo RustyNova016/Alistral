@@ -54,3 +54,6 @@ pretty_format = ["dep:owo-colors"]
 
 [dev-dependencies]
 serial_test = "3.1.1"
+
+[patch.crates-io]
+sequelles = {git = "https://github.com/RustyNova016/sequelles", branch = "master"}

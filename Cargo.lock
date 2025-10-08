@@ -111,8 +111,11 @@ dependencies = [
  "owo-colors",
  "rust_decimal",
  "rust_decimal_macros",
+ "sequelles",
  "serde",
+ "snafu",
  "sqlx",
+ "streamies 0.2.2",
  "thiserror 2.0.17",
  "tracing",
  "tracing-indicatif",
@@ -630,9 +633,9 @@ checksum = "c2459377285ad874054d797f3ccebf984978aa39129f6eafde5cdc8315b612f8"
 
 [[package]]
 name = "const_format"
-version = "0.2.34"
+version = "0.2.35"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "126f97965c8ad46d6d9163268ff28432e8f6a1196a55578867832e3049df63dd"
+checksum = "7faa7469a93a566e9ccc1c73fe783b4a65c274c5ace346038dca9c39fe0030ad"
 dependencies = [
  "const_format_proc_macros",
  "konst",
@@ -3113,8 +3116,7 @@ dependencies = [
 [[package]]
 name = "sequelles"
 version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c3075d013e8a5bf8e767fe9f43ea3968ec55b564175f6c517b44a21b81ad7ed1"
+source = "git+https://github.com/RustyNova016/sequelles?branch=master#99b2aa533ef7e17f935b5647897c4676b588d09c"
 dependencies = [
  "async-once-cell",
  "bon",
@@ -3346,7 +3348,6 @@ version = "0.8.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6e84b3f4eacbf3a1ce05eac6763b4d629d60cbc94d632e4092c54ade71f1e1a2"
 dependencies = [
- "backtrace",
  "futures-core",
  "pin-project",
  "snafu-derive",

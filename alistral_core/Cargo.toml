@@ -13,17 +13,22 @@ listenbrainz = { branch = "alistral_version", git = "https://github.com/RustyNov
 
 itertools = "0.14.0"
 serde = "1.0.227"
-sqlx = { version = "0.8.3", features = ["runtime-tokio", "macros"] }
 owo-colors = "4.2.1"
 chrono = "0.4.42"
 
 # Async 
 async-once-cell = "0.5.4"
 futures = "0.3.31"
+streamies = "0.2.2"
+
+# Databasing
+sequelles = "0.2.0"
+sqlx = { version = "0.8.3", features = ["runtime-tokio", "macros"] }
 
 # Macros
 bon = "3.7.2"
 thiserror = "2.0.11"
+snafu = { version = "0.8.9", features = ["rust_1_81"] }
 
 # Tracing
 tracing-indicatif = "0.3.11"
@@ -33,3 +38,5 @@ tracing = "0.1.41"
 rust_decimal = "1.36.0"
 rust_decimal_macros = "1.36.0"
 
+[patch.crates-io]
+sequelles = {git = "https://github.com/RustyNova016/sequelles", branch = "master"}
