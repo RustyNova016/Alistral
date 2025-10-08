@@ -13,8 +13,6 @@ use config::ConfigCli;
 use tuillez::fatal_error::FatalError;
 use unstable::UnstableCommand;
 
-#[cfg(feature = "interzicf")]
-use crate::models::cli::interzic::InterzicCommand;
 #[cfg(feature = "radio")]
 use crate::models::cli::radio::RadioCommand;
 use crate::tools::bump::BumpCommand;
@@ -22,6 +20,8 @@ use crate::tools::bump::bump_down::BumpDownCommand;
 use crate::tools::cache::CacheCommand;
 use crate::tools::compatibility::compatibility_command;
 use crate::tools::daily::DailyCommand;
+#[cfg(feature = "interzicf")]
+use crate::tools::interzic::InterzicCommand;
 use crate::tools::listens::ListenCommand;
 #[cfg(feature = "lookup")]
 use crate::tools::lookup::LookupCommand;
@@ -34,8 +34,6 @@ use crate::tools::stats::StatsCommand;
 
 pub mod common;
 pub mod config;
-#[cfg(feature = "interzic")]
-pub mod interzic;
 #[cfg(feature = "radio")]
 pub mod radio;
 pub mod unstable;
@@ -116,7 +114,6 @@ pub enum Commands {
     Daily(DailyCommand),
 
     #[cfg(feature = "interzic")]
-    /// Interact with the interzic database
     Interzic(InterzicCommand),
 
     #[clap(aliases = &["listen", "scrobble", "scrobbles"])]
@@ -164,7 +161,7 @@ impl Commands {
             Self::Radio(val) => val.run(conn).await?,
 
             #[cfg(feature = "interzic")]
-            Self::Interzic(val) => val.run(conn).await?,
+            Self::Interzic(val) => val.run().await?,
 
             Self::Listens(val) => val.run().await,
 
