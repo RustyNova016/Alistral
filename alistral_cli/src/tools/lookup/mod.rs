@@ -4,7 +4,6 @@ use clap::Subcommand;
 use crate::tools::lookup::recording::LookupRecordingCommand;
 use crate::tools::lookup::user::LookupUserCommand;
 
-pub mod components;
 pub mod lookup_components;
 pub mod recording;
 pub mod user;
