@@ -1,9 +1,10 @@
-use crate::tools::lookup::recording::LookupRecordingCommand;
-use crate::tools::lookup::user::LookupUserCommand;
 use clap::Parser;
 use clap::Subcommand;
 
-pub mod components;
+use crate::tools::lookup::recording::LookupRecordingCommand;
+use crate::tools::lookup::user::LookupUserCommand;
+
+pub mod lookup_components;
 pub mod recording;
 pub mod user;
 
@@ -13,23 +14,17 @@ pub struct LookupCommand {
     command: LookupSubcommands,
 }
 
-impl LookupCommand {
-    pub async fn run(&self) {
-        self.command.run().await
-    }
-}
-
 #[derive(Subcommand, Clone, Debug)]
 enum LookupSubcommands {
     User(LookupUserCommand),
     Recording(LookupRecordingCommand),
 }
 
-impl LookupSubcommands {
+impl LookupCommand {
     pub async fn run(&self) {
-        match self {
-            Self::User(cmd) => cmd.run().await,
-            Self::Recording(cmd) => cmd.run().await,
+        match &self.command {
+            LookupSubcommands::User(cmd) => cmd.run().await,
+            LookupSubcommands::Recording(cmd) => cmd.run().await,
         }
     }
 }
