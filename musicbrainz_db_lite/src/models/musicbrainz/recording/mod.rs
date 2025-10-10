@@ -1,3 +1,5 @@
+use chrono::DateTime;
+use chrono::Utc;
 use sequelles::has_rowid::HasRowID;
 use serde::Deserialize;
 use serde::Serialize;
@@ -75,5 +77,11 @@ impl HasArtistCredits<MBRecording> for Recording {
 
     fn set_artist_credits_id(&mut self, id: Option<i64>) {
         self.artist_credit = id
+    }
+}
+
+impl Recording {
+    pub fn first_release_date(&self) -> Option<DateTime<Utc>> {
+        DateTime::from_timestamp(self.first_release_date?, 0)
     }
 }

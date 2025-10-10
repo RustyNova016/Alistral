@@ -27,13 +27,14 @@ This document contains the help content for the `alistral` command-line program.
 * [`alistral listens`↴](#alistral-listens)
 * [`alistral listens clear`↴](#alistral-listens-clear)
 * [`alistral listens import-dump`↴](#alistral-listens-import-dump)
-* [`alistral listens remap-msid`↴](#alistral-listens-remap-msid)
 * [`alistral listens reload`↴](#alistral-listens-reload)
+* [`alistral listens remap-msid`↴](#alistral-listens-remap-msid)
 * [`alistral listens submit`↴](#alistral-listens-submit)
+* [`alistral listens unlinked`↴](#alistral-listens-unlinked)
 * [`alistral listens wrong-mapping`↴](#alistral-listens-wrong-mapping)
 * [`alistral lookup`↴](#alistral-lookup)
-* [`alistral mapping`↴](#alistral-mapping)
-* [`alistral mapping list-unmapped`↴](#alistral-mapping-list-unmapped)
+* [`alistral lookup user`↴](#alistral-lookup-user)
+* [`alistral lookup recording`↴](#alistral-lookup-recording)
 * [`alistral musicbrainz`↴](#alistral-musicbrainz)
 * [`alistral musicbrainz clippy`↴](#alistral-musicbrainz-clippy)
 * [`alistral musicbrainz sambl`↴](#alistral-musicbrainz-sambl)
@@ -62,10 +63,9 @@ A CLI app containing a set of useful tools for Listenbrainz
 * `compatibility` — 
 * `config` — Commands to deal with the app's configuration
 * `daily` — Daily report
-* `interzic` — Interact with the interzic database
-* `listens` — Commands to edit listens
+* `interzic` — A CLI app containing a set of useful tools for Listenbrainz
+* `listens` — A CLI app containing a set of useful tools for Listenbrainz
 * `lookup` — Get detailled information about an entity
-* `mapping` — Commands for interacting with listen mappings
 * `musicbrainz` — Commands for musicbrainz stuff
 * `playlist` — Interact with playlists
 * `radio` — Generate radio playlists for you
@@ -282,17 +282,18 @@ Set the default username
 
 Daily report
 
-**Usage:** `alistral daily [USERNAME]`
+**Usage:** `alistral daily [DATE] [USERNAME]`
 
 ###### **Arguments:**
 
-* `<USERNAME>` — Name of the user to fetch stats listen from
+* `<DATE>` — The date to use
+* `<USERNAME>` — Name of the user to provide a daily report
 
 
 
 ## `alistral interzic`
 
-Interact with the interzic database
+A CLI app containing a set of useful tools for Listenbrainz
 
 **Usage:** `alistral interzic <COMMAND>`
 
@@ -383,7 +384,7 @@ Overwrite a mapping for an user
 
 ## `alistral listens`
 
-Commands to edit listens
+A CLI app containing a set of useful tools for Listenbrainz
 
 **Usage:** `alistral listens <COMMAND>`
 
@@ -391,10 +392,11 @@ Commands to edit listens
 
 * `clear` — Remove all the listens in the database
 * `import-dump` — Load a listen dump from the website
-* `remap-msid` — Changes all the listens of a recording into another. Useful if LB mapped to a recording you never listened
 * `reload` — 
+* `remap-msid` — Changes all the listens of a recording into another. Useful if LB mapped to a recording you never listened
 * `submit` — 
-* `wrong-mapping` — 
+* `unlinked` — List all of your unlinked listens
+* `wrong-mapping` — Try to find listens that have mapped to the wrong recordings
 
 
 
@@ -429,6 +431,16 @@ You can get a listen dump [here](https://listenbrainz.org/settings/export/)
 
 
 
+## `alistral listens reload`
+
+**Usage:** `alistral listens reload [USER]`
+
+###### **Arguments:**
+
+* `<USER>` — Reload the listens of this user
+
+
+
 ## `alistral listens remap-msid`
 
 Changes all the listens of a recording into another. Useful if LB mapped to a recording you never listened
@@ -444,16 +456,6 @@ Changes all the listens of a recording into another. Useful if LB mapped to a re
 
 
 
-## `alistral listens reload`
-
-**Usage:** `alistral listens reload [USER]`
-
-###### **Arguments:**
-
-* `<USER>` — Reload the listens of this user
-
-
-
 ## `alistral listens submit`
 
 **Usage:** `alistral listens submit [OPTIONS] <RECORDING> <ARTIST_CREDITS>`
@@ -466,51 +468,12 @@ Changes all the listens of a recording into another. Useful if LB mapped to a re
 ###### **Options:**
 
 * `-g`, `--release <RELEASE>` — The release of the recording
-* `-u`, `--user <USER>` — Submit the listen on this user
+* `-u`, `--username <USERNAME>` — Submit the listen on this user
 * `-t`, `--token <TOKEN>` — The token of the user
 
 
 
-## `alistral listens wrong-mapping`
-
-**Usage:** `alistral listens wrong-mapping [USERNAME]`
-
-###### **Arguments:**
-
-* `<USERNAME>` — Your username
-
-
-
-## `alistral lookup`
-
-Get detailled information about an entity
-
-**Usage:** `alistral lookup <ENTITY_TYPE> <ID> [USERNAME]`
-
-###### **Arguments:**
-
-* `<ENTITY_TYPE>` — The type of entity to look for
-
-  Possible values: `recording`
-
-* `<ID>` — The id of the entity (Accept URLs)
-* `<USERNAME>` — Name of the user to look up stats from
-
-
-
-## `alistral mapping`
-
-Commands for interacting with listen mappings
-
-**Usage:** `alistral mapping <COMMAND>`
-
-###### **Subcommands:**
-
-* `list-unmapped` — List all of your unlinked listens
-
-
-
-## `alistral mapping list-unmapped`
+## `alistral listens unlinked`
 
 List all of your unlinked listens
 
@@ -530,7 +493,7 @@ Total: 8 unlinked recordings
 
 > This also means that the same recording can be shown twice in the list. > For example: "Panic - Dion Timer" won't have the same MSID as "Panic by Dion Timmer", even if they are the same recording.
 
-**Usage:** `alistral mapping list-unmapped [OPTIONS] [USERNAME]`
+**Usage:** `alistral listens unlinked [OPTIONS] [USERNAME]`
 
 ###### **Arguments:**
 
@@ -548,6 +511,82 @@ Total: 8 unlinked recordings
   - `oldest`:
     The oldest element
 
+
+
+
+## `alistral listens wrong-mapping`
+
+Try to find listens that have mapped to the wrong recordings
+
+**Usage:** `alistral listens wrong-mapping [USERNAME]`
+
+###### **Arguments:**
+
+* `<USERNAME>` — Your username
+
+
+
+## `alistral lookup`
+
+Get detailled information about an entity
+
+**Usage:** `alistral lookup <COMMAND>`
+
+###### **Subcommands:**
+
+* `user` — 
+* `recording` — 
+
+
+
+## `alistral lookup user`
+
+**Usage:** `alistral lookup user [OPTIONS] [USERNAME]`
+
+###### **Arguments:**
+
+* `<USERNAME>` — Get the data of this user
+
+###### **Options:**
+
+* `-t`, `--timeframe <TIMEFRAME>` — Time period to use for the statistics
+
+  Possible values:
+  - `last30-days`:
+    Uses the last 30 days from now
+  - `last90-days`:
+    Uses the last 30 days from now
+  - `last365-days`:
+    Uses the last 365 days from now
+
+* `-f`, `--from <FROM>` — Get statistics from this date. Use YYYY-MM-DD format
+* `-u`, `--until <UNTIL>` — Get statistics until this date. Use YYYY-MM-DD format
+
+
+
+## `alistral lookup recording`
+
+**Usage:** `alistral lookup recording [OPTIONS] <ID> [USERNAME]`
+
+###### **Arguments:**
+
+* `<ID>` — The id of the entity (Accept URLs)
+* `<USERNAME>` — Get the data of this user
+
+###### **Options:**
+
+* `-t`, `--timeframe <TIMEFRAME>` — Time period to use for the statistics
+
+  Possible values:
+  - `last30-days`:
+    Uses the last 30 days from now
+  - `last90-days`:
+    Uses the last 30 days from now
+  - `last365-days`:
+    Uses the last 365 days from now
+
+* `-f`, `--from <FROM>` — Get statistics from this date. Use YYYY-MM-DD format
+* `-u`, `--until <UNTIL>` — Get statistics until this date. Use YYYY-MM-DD format
 
 
 
