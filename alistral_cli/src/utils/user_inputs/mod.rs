@@ -1,5 +1,9 @@
 use std::path::PathBuf;
 
+use chrono::DateTime;
+use chrono::NaiveDate;
+use chrono::Utc;
+
 use crate::models::config::Config;
 
 pub mod get_entities;
@@ -26,5 +30,14 @@ impl UserInputParser {
                 std::process::exit(2);
             }
         }
+    }
+
+    pub fn parse_naive_date(date: Option<NaiveDate>) -> Option<DateTime<Utc>> {
+        Some(
+            date?
+                .and_hms_opt(0, 0, 0)
+                .expect("0 0 0 is valid hms")
+                .and_utc(),
+        )
     }
 }

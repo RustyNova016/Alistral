@@ -1,5 +1,4 @@
 use chrono::DateTime;
-use chrono::Local;
 use chrono::NaiveDate;
 use chrono::Utc;
 use clap::Parser;
@@ -50,18 +49,7 @@ impl LookupUserCommand {
             return Some(t.get_start_date());
         }
 
-        if let Some(t) = &self.from {
-            //TODO: Proper error?
-            return Some(
-                t.and_hms_opt(0, 0, 0)
-                    .unwrap()
-                    .and_local_timezone(Local)
-                    .unwrap()
-                    .to_utc(),
-            );
-        }
-
-        None
+        UserInputParser::parse_naive_date(self.from)
     }
 
     pub fn until(&self) -> Option<DateTime<Utc>> {
@@ -69,17 +57,6 @@ impl LookupUserCommand {
             return Some(Utc::now());
         }
 
-        if let Some(t) = &self.until {
-            //TODO: Proper error?
-            return Some(
-                t.and_hms_opt(0, 0, 0)
-                    .unwrap()
-                    .and_local_timezone(Local)
-                    .unwrap()
-                    .to_utc(),
-            );
-        }
-
-        None
+        UserInputParser::parse_naive_date(self.until)
     }
 }
