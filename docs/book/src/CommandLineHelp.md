@@ -47,6 +47,7 @@ This document contains the help content for the `alistral` command-line program.
 * [`alistral radio overdue`↴](#alistral-radio-overdue)
 * [`alistral radio shared`↴](#alistral-radio-shared)
 * [`alistral stats`↴](#alistral-stats)
+* [`alistral stats top`↴](#alistral-stats-top)
 * [`alistral unstable`↴](#alistral-unstable)
 
 ## `alistral`
@@ -838,7 +839,19 @@ Generate playlists based on the listened recordings of two users
 
 Shows top statistics for a specific target
 
-**Usage:** `alistral stats [OPTIONS] <TARGET>`
+**Usage:** `alistral stats <COMMAND>`
+
+###### **Subcommands:**
+
+* `top` — Retrieve the top listened entities
+
+
+
+## `alistral stats top`
+
+Retrieve the top listened entities
+
+**Usage:** `alistral stats top [OPTIONS] <TARGET>`
 
 ###### **Arguments:**
 
