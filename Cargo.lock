@@ -3116,7 +3116,7 @@ dependencies = [
 [[package]]
 name = "sequelles"
 version = "0.2.0"
-source = "git+https://github.com/RustyNova016/sequelles?branch=master#99b2aa533ef7e17f935b5647897c4676b588d09c"
+source = "git+https://github.com/RustyNova016/sequelles?rev=99b2aa533ef7e17f935b5647897c4676b588d09c#99b2aa533ef7e17f935b5647897c4676b588d09c"
 dependencies = [
  "async-once-cell",
  "bon",
@@ -4118,6 +4118,7 @@ checksum = "e421abadd41a4225275504ea4d6566923418b7f05506fbc9c0fe86ba7396114b"
 [[package]]
 name = "tuillez"
 version = "0.1.0"
+source = "git+https://github.com/RustyNova016/tuillez?rev=9760b11841bc29b7101aea62b2f275dd34c6bdae#9760b11841bc29b7101aea62b2f275dd34c6bdae"
 dependencies = [
  "backtrace",
  "chrono",

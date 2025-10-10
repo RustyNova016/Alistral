@@ -1,5 +1,5 @@
 #!/bin/bash
-members=("tuillez" "musicbrainz_db_lite" "alistral_core" "interzic" "symphonize" "alistral_cli")
+members=("musicbrainz_db_lite" "alistral_core" "interzic" "symphonize" "alistral_cli")
 
 mv Cargo.lock ./Cargo.lock.bk
 mv Cargo.toml ./Cargo.toml.bk

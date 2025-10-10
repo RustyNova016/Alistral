@@ -14,7 +14,6 @@ rust-version = "1.89.0"
 # Workspace dependencies
 alistral_core = { path = "../alistral_core" }
 interzic = { path = "../interzic", optional = true }
-tuillez = { path = "../tuillez" }
 musicbrainz-db-lite = { path = "../musicbrainz_db_lite", features = ["pretty_format"] }
 symphonize = { path = "../symphonize", optional = true}
 
@@ -75,6 +74,7 @@ tracing = "0.1.41"
 tracing-subscriber = "0.3.20"
 tracing-appender = "0.2.3"
 tracing-indicatif = "0.3.13"
+tuillez = "0.1.0"
 
 # Other
 zip = "6.0.0"
@@ -103,4 +103,5 @@ async_fn_in_trait = { level = "allow", priority = 1 }
 result_large_err = { level = "allow", priority = 1 }
 
 [patch.crates-io]
-sequelles = {git = "https://github.com/RustyNova016/sequelles", branch = "master"}
+sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "99b2aa533ef7e17f935b5647897c4676b588d09c"}
+tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "9760b11841bc29b7101aea62b2f275dd34c6bdae"}

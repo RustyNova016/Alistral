@@ -6,7 +6,7 @@ rust-version = "1.85.1"
 
 [dependencies]
 musicbrainz-db-lite = { path = "../musicbrainz_db_lite" }
-tuillez = { path = "../tuillez" }
+tuillez = "0.1.0"
 
 thiserror = "2.0.11"
 sqlx = "0.8.3"
@@ -26,4 +26,5 @@ streamies = {git = "https://github.com/RustyNova016/streamies.git", version = "0
 tokio = "1.45.1"
 
 [patch.crates-io]
-sequelles = {git = "https://github.com/RustyNova016/sequelles", branch = "master"}
+sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "99b2aa533ef7e17f935b5647897c4676b588d09c"}
+tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "9760b11841bc29b7101aea62b2f275dd34c6bdae"}

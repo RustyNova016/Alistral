@@ -37,7 +37,7 @@ thiserror = "2.0.3"
 
 # Logging
 tracing = "0.1.41"
-tuillez = { path = "../tuillez" }
+tuillez = "0.1.0"
 owo-colors = { version = "4.2.1", optional = true}
 
 # Macros
@@ -56,4 +56,5 @@ pretty_format = ["dep:owo-colors"]
 serial_test = "3.1.1"
 
 [patch.crates-io]
-sequelles = {git = "https://github.com/RustyNova016/sequelles", branch = "master"}
+sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "99b2aa533ef7e17f935b5647897c4676b588d09c"}
+tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "9760b11841bc29b7101aea62b2f275dd34c6bdae"}

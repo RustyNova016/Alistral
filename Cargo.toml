@@ -3,7 +3,6 @@ members = [
     "alistral_cli",
     "./alistral_core", 
     "interzic", 
-    "tuillez", 
     "musicbrainz_db_lite", 
     "symphonize"
 ]
@@ -13,7 +12,8 @@ resolver = "3"
 debug = "line-tables-only"
 
 [patch.crates-io]
-sequelles = {git = "https://github.com/RustyNova016/sequelles", branch = "master"}
+sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "99b2aa533ef7e17f935b5647897c4676b588d09c"}
+tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "9760b11841bc29b7101aea62b2f275dd34c6bdae"}
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
