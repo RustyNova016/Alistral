@@ -8,7 +8,7 @@ use crate::utils::cli::await_next;
 
 pub mod user_compatibility;
 
-pub async fn compatibility_command(_conn: &mut sqlx::SqliteConnection, user_a: &str, user_b: &str) {
+pub async fn compatibility_command(user_a: &str, user_b: &str) {
     let user_a_recordings = recording_stats(&ALISTRAL_CLIENT, user_a.to_string())
         .await
         .expect("Couldn't get the listened recordings");

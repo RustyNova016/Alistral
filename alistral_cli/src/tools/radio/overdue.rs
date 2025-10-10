@@ -19,11 +19,11 @@ use crate::models::data_storage::DataStorage;
 use crate::models::error::ResultTEExt;
 use crate::tools::radio::convert_recordings;
 use crate::utils::data_file::DataFile;
+use crate::ALISTRAL_CLIENT;
 
 //TODO: Refactor Radios params into structs
 #[expect(clippy::too_many_arguments)]
 pub async fn overdue_radio(
-    conn: &mut sqlx::SqliteConnection,
     seeder: ListenSeeder,
     token: &str,
     min_listens: Option<u64>,
@@ -34,6 +34,7 @@ pub async fn overdue_radio(
     target: RadioExportTarget,
 ) -> Result<(), crate::Error> {
     let username = seeder.username().clone();
+    let conn = &mut *ALISTRAL_CLIENT.get_conn().await;
 
     info!("[Seeding] Getting listens");
     let recordings = seeder.seed(conn).await.expect("Couldn't find seed listens");

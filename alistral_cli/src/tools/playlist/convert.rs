@@ -23,7 +23,7 @@ pub struct PlaylistConvertCommand {
 }
 
 impl PlaylistConvertCommand {
-    pub async fn run(&self, _conn: &mut sqlx::SqliteConnection) -> Result<(), crate::Error> {
+    pub async fn run(&self) -> Result<(), crate::Error> {
         let playlist = match self.source {
             PlaylistOrigin::Listenbrainz => {
                 Listenbrainz::import_playlist(&ALISTRAL_CLIENT.interzic, &self.id)

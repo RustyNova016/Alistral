@@ -15,9 +15,9 @@ use crate::models::data_storage::DataStorage;
 use crate::models::error::ResultTEExt as _;
 use crate::tools::radio::convert_recordings;
 use crate::utils::data_file::DataFile as _;
+use crate::ALISTRAL_CLIENT;
 
 pub async fn listen_rate_radio(
-    conn: &mut sqlx::SqliteConnection,
     seeder: ListenSeeder,
     token: &str,
     min_listens: Option<u64>,
@@ -26,6 +26,7 @@ pub async fn listen_rate_radio(
     target: RadioExportTarget,
 ) -> Result<(), crate::Error> {
     let username = seeder.username().clone();
+    let conn = &mut *ALISTRAL_CLIENT.get_conn().await;
 
     info!("[Seeding] Getting listens");
     let recordings = seeder

@@ -99,7 +99,7 @@ impl Display for StatsTarget {
 }
 
 impl StatsCommand {
-    pub async fn run(&self, _conn: &mut sqlx::SqliteConnection) -> Result<(), crate::Error> {
+    pub async fn run(&self) -> Result<(), crate::Error> {
         let user = Config::check_username(&self.username).to_lowercase();
 
         self.route_sort_type(user).await?;

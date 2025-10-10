@@ -17,10 +17,10 @@ use crate::models::data_storage::DataStorage;
 use crate::models::error::ResultTEExt as _;
 use crate::tools::radio::convert_recordings;
 use crate::utils::data_file::DataFile as _;
+use crate::ALISTRAL_CLIENT;
 
 #[expect(clippy::too_many_arguments)]
 pub async fn shared_radio(
-    conn: &mut sqlx::SqliteConnection,
     seeder: ListenSeeder,
     other_user: String,
     min_listens: Option<u64>,
@@ -30,6 +30,7 @@ pub async fn shared_radio(
     target: RadioExportTarget,
 ) -> Result<(), crate::Error> {
     let username = seeder.username().clone();
+    let conn = &mut *ALISTRAL_CLIENT.get_conn().await;
 
     info!("[Seeding] Getting listens");
 

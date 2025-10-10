@@ -39,15 +39,7 @@ async fn main() -> ColEyre {
 }
 
 async fn run_cli(cli: Cli) -> bool {
-    debug!("Starting the database");
-    // Set up the database
-    let conn = &mut *ALISTRAL_CLIENT
-        .musicbrainz_db
-        .get_raw_connection()
-        .await
-        .expect("Couldn't connect to the database");
-
-    match cli.run(conn).await {
+    match cli.run().await {
         Result::Ok(val) => val,
         Err(err) => err.panic(),
     }

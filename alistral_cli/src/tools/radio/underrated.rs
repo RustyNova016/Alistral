@@ -17,12 +17,12 @@ use crate::tools::radio::convert_recordings;
 use crate::utils::data_file::DataFile as _;
 
 pub async fn underrated_mix(
-    conn: &mut sqlx::SqliteConnection,
     seeder: ListenSeeder,
     collector: RadioCollector,
     token: &str,
     target: RadioExportTarget,
 ) -> Result<(), crate::Error> {
+    let conn = &mut *ALISTRAL_CLIENT.get_conn().await;
     let username = seeder.username().clone();
 
     info!("[Seeding] Getting listens");
