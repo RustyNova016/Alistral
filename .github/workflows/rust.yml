@@ -33,10 +33,11 @@ jobs:
         with: 
           key: "(${{ matrix.os }})"
 
-      - uses: taiki-e/install-action@cargo-hack
+      - name: Install cargo-nextest
+        uses: taiki-e/install-action@nextest
         
       - name: Run tests
-        run: cargo hack test --all-features --ignore-private
+        run: cargo nextest run --all-features
 
   clippy:
     env: 
