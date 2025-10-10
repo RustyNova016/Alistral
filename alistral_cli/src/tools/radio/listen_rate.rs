@@ -4,6 +4,7 @@ use futures::stream;
 use interzic::models::playlist_stub::PlaylistStub;
 use tracing::info;
 
+use crate::ALISTRAL_CLIENT;
 use crate::datastructures::radio::collector::RadioCollector;
 use crate::datastructures::radio::filters::cooldown::cooldown_filter;
 use crate::datastructures::radio::filters::min_listens::min_listen_filter;
@@ -15,7 +16,6 @@ use crate::models::data_storage::DataStorage;
 use crate::models::error::ResultTEExt as _;
 use crate::tools::radio::convert_recordings;
 use crate::utils::data_file::DataFile as _;
-use crate::ALISTRAL_CLIENT;
 
 pub async fn listen_rate_radio(
     seeder: ListenSeeder,

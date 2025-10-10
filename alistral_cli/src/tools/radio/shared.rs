@@ -5,6 +5,7 @@ use interzic::models::playlist_stub::PlaylistStub;
 use itertools::Itertools;
 use tracing::info;
 
+use crate::ALISTRAL_CLIENT;
 use crate::datastructures::radio::collector::RadioCollector;
 use crate::datastructures::radio::filters::booleans::and_filter;
 use crate::datastructures::radio::filters::cooldown::cooldown_filter;
@@ -17,9 +18,7 @@ use crate::models::data_storage::DataStorage;
 use crate::models::error::ResultTEExt as _;
 use crate::tools::radio::convert_recordings;
 use crate::utils::data_file::DataFile as _;
-use crate::ALISTRAL_CLIENT;
 
-#[expect(clippy::too_many_arguments)]
 pub async fn shared_radio(
     seeder: ListenSeeder,
     other_user: String,
