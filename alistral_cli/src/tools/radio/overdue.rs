@@ -6,6 +6,7 @@ use futures::{StreamExt, stream};
 use interzic::models::playlist_stub::PlaylistStub;
 use tracing::info;
 
+use crate::ALISTRAL_CLIENT;
 use crate::datastructures::radio::collector::RadioCollector;
 use crate::datastructures::radio::filters::cooldown::cooldown_filter;
 use crate::datastructures::radio::filters::min_listens::min_listen_filter;
@@ -23,7 +24,6 @@ use crate::utils::data_file::DataFile;
 //TODO: Refactor Radios params into structs
 #[expect(clippy::too_many_arguments)]
 pub async fn overdue_radio(
-    conn: &mut sqlx::SqliteConnection,
     seeder: ListenSeeder,
     token: &str,
     min_listens: Option<u64>,
@@ -34,6 +34,7 @@ pub async fn overdue_radio(
     target: RadioExportTarget,
 ) -> Result<(), crate::Error> {
     let username = seeder.username().clone();
+    let conn = &mut *ALISTRAL_CLIENT.get_conn().await;
 
     info!("[Seeding] Getting listens");
     let recordings = seeder.seed(conn).await.expect("Couldn't find seed listens");

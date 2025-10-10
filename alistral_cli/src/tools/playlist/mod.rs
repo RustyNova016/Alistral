@@ -13,23 +13,17 @@ pub struct PlaylistCommand {
     pub command: PlaylistSubcommands,
 }
 
-impl PlaylistCommand {
-    pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> Result<(), FatalError> {
-        self.command.run(conn).await
-    }
-}
-
 #[derive(Subcommand, Debug, Clone)]
 pub enum PlaylistSubcommands {
     /// Convert a playlist from one service to another
     Convert(PlaylistConvertCommand),
 }
 
-impl PlaylistSubcommands {
-    pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> Result<(), FatalError> {
-        match self {
-            Self::Convert(val) => {
-                val.run(conn).await?;
+impl PlaylistCommand {
+    pub async fn run(&self) -> Result<(), FatalError> {
+        match &self.command {
+            PlaylistSubcommands::Convert(val) => {
+                val.run().await?;
             }
         }
 

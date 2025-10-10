@@ -4,7 +4,6 @@ use std::sync::LazyLock;
 
 use directories::BaseDirs;
 
-pub mod cleanup;
 pub mod interfaces;
 pub mod listenbrainz;
 

@@ -5,6 +5,7 @@ use listenbrainz::raw::Client as ListenbrainzClient;
 use musicbrainz_db_lite::DBClient;
 use musicbrainz_db_lite::MusicBrainzClient;
 use musicbrainz_db_lite::SqlitePoolConnection;
+use sqlx::Acquire;
 
 use crate::database::DB_LOCATION;
 use crate::models::client::AlistralCliClient;
@@ -31,4 +32,33 @@ impl AlistralCliClient {
     pub async fn get_conn(&self) -> SqlitePoolConnection {
         self.musicbrainz_db.get_conn().await.unwrap()
     }
+
+    pub async fn clean_up_mb_db(&self) {
+        let mut conn = self.get_conn().await;
+        let mut trans = conn.begin().await.unwrap();
+
+        cleanup_table_data(&mut trans, "recordings").await.unwrap();
+        cleanup_table_data(&mut trans, "artists").await.unwrap();
+        cleanup_table_data(&mut trans, "releases").await.unwrap();
+        cleanup_table_data(&mut trans, "labels").await.unwrap();
+
+        trans.commit().await.unwrap();
+    }
+}
+
+pub async fn cleanup_table_data(
+    conn: &mut sqlx::SqliteConnection,
+    table_name: &str,
+) -> Result<(), sqlx::Error> {
+    let sql = format!(
+        "DELETE FROM {table_name} WHERE {table_name}.id IN (SELECT id FROM {table_name} WHERE full_update_date IS NOT NULL ORDER BY full_update_date LIMIT 10)"
+    );
+    sqlx::query(&sql).execute(&mut *conn).await?;
+
+    let sql = format!(
+        "DELETE FROM {table_name} WHERE {table_name}.id IN (SELECT id FROM {table_name} ORDER BY full_update_date LIMIT 10)"
+    );
+    sqlx::query(&sql).execute(conn).await?;
+
+    Ok(())
 }

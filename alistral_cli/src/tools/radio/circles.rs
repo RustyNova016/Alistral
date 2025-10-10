@@ -23,7 +23,6 @@ use crate::utils::constants::LISTENBRAINZ_FMT;
 use crate::utils::data_file::DataFile as _;
 
 pub async fn create_radio_mix(
-    conn: &mut sqlx::SqliteConnection,
     seeder: ListenSeeder,
     token: String,
     unlistened: bool,
@@ -31,6 +30,7 @@ pub async fn create_radio_mix(
     target: RadioExportTarget,
 ) {
     let username = seeder.username().clone();
+    let conn = &mut *ALISTRAL_CLIENT.get_conn().await;
 
     info!("[Seeding] Getting listens");
     let recordings_with_listens = seeder

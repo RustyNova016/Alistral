@@ -80,7 +80,7 @@ tracing-indicatif = "0.3.13"
 zip = "6.0.0"
 
 [features]
-default = ["lookup"]
+default = ["full"]
 #default = ["full"]
 full = ["musicbrainz", "lookup", "stats", "radio"]
 

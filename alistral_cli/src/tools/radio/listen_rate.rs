@@ -4,6 +4,7 @@ use futures::stream;
 use interzic::models::playlist_stub::PlaylistStub;
 use tracing::info;
 
+use crate::ALISTRAL_CLIENT;
 use crate::datastructures::radio::collector::RadioCollector;
 use crate::datastructures::radio::filters::cooldown::cooldown_filter;
 use crate::datastructures::radio::filters::min_listens::min_listen_filter;
@@ -17,7 +18,6 @@ use crate::tools::radio::convert_recordings;
 use crate::utils::data_file::DataFile as _;
 
 pub async fn listen_rate_radio(
-    conn: &mut sqlx::SqliteConnection,
     seeder: ListenSeeder,
     token: &str,
     min_listens: Option<u64>,
@@ -26,6 +26,7 @@ pub async fn listen_rate_radio(
     target: RadioExportTarget,
 ) -> Result<(), crate::Error> {
     let username = seeder.username().clone();
+    let conn = &mut *ALISTRAL_CLIENT.get_conn().await;
 
     info!("[Seeding] Getting listens");
     let recordings = seeder

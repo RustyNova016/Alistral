@@ -74,9 +74,9 @@ impl RadioCommand {
             .build()
     }
 
-    pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> Result<(), crate::Error> {
+    pub async fn run(&self) -> Result<(), crate::Error> {
         self.command
-            .run(conn, self.get_collector(), self, self.output.clone())
+            .run(self.get_collector(), self, self.output.clone())
             .await
     }
 }
@@ -203,7 +203,6 @@ pub enum RadioSubcommands {
 impl RadioSubcommands {
     pub async fn run(
         &self,
-        conn: &mut sqlx::SqliteConnection,
         collector: RadioCollector,
         command: &RadioCommand,
         target: RadioExportTarget,
@@ -216,7 +215,6 @@ impl RadioSubcommands {
                 //cooldown
             } => {
                 create_radio_mix(
-                    conn,
                     command.get_listen_seeder(username),
                     Config::check_token(&Config::check_username(username), token),
                     *unlistened,
@@ -228,7 +226,6 @@ impl RadioSubcommands {
 
             Self::Underrated { username, token } => {
                 underrated_mix(
-                    conn,
                     command.get_listen_seeder(username),
                     collector,
                     &Config::check_token(&Config::check_username(username), token),
@@ -243,7 +240,6 @@ impl RadioSubcommands {
                 cooldown,
             } => {
                 listen_rate_radio(
-                    conn,
                     command.get_listen_seeder(username),
                     &Config::check_token(&Config::check_username(username), token),
                     *min,
@@ -263,7 +259,6 @@ impl RadioSubcommands {
                 at_listening_time,
             } => {
                 overdue_radio(
-                    conn,
                     command.get_listen_seeder(username),
                     &Config::check_token(&Config::check_username(username), token),
                     *min,
@@ -284,7 +279,6 @@ impl RadioSubcommands {
                 cooldown,
             } => {
                 shared_radio(
-                    conn,
                     command.get_listen_seeder(&Some(username_a.to_string())),
                     username_b.to_string(),
                     *min,
