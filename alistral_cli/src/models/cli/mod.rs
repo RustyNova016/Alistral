@@ -151,7 +151,7 @@ impl Commands {
             Self::Daily(val) => val.run().await,
 
             #[cfg(feature = "stats")]
-            Self::Stats(val) => val.run().await?,
+            Self::Stats(val) => val.run().await,
 
             #[cfg(feature = "radio")]
             Self::Radio(val) => val.run().await?,

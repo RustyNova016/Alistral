@@ -12,9 +12,9 @@ use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use crate::ALISTRAL_CLIENT;
 use crate::database::interfaces::statistics_data::recording_strategy;
 use crate::database::interfaces::statistics_data::release_strategy;
-use crate::tools::stats::StatsCommand;
+use crate::tools::stats::tops::StatsTopCommand;
 
-impl StatsCommand {
+impl StatsTopCommand {
     pub(super) fn label_strategy(&self) -> LabelWithReleasesStrategy<'_> {
         LabelWithReleasesStrategy::new(&ALISTRAL_CLIENT.core, release_strategy(&ALISTRAL_CLIENT))
     }
