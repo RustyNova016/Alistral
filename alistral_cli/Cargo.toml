@@ -23,7 +23,7 @@ listenbrainz = { branch = "alistral_version", git = "https://github.com/RustyNov
 
 
 itertools = "0.14.0"
-rust_decimal = "1.38.0"
+rust_decimal = "1.39.0"
 rust_decimal_macros = "1.38.0"
 chrono = "0.4.42"
 serde = { version = "1.0.228", features = ["rc"] }
