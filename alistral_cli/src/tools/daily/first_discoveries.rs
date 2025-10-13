@@ -5,7 +5,7 @@ use alistral_core::datastructures::listen_collection::traits::ListenCollectionRe
 use alistral_core::models::listen_statistics_data::ListenStatisticsData;
 use chrono::DateTime;
 use chrono::Datelike as _;
-use chrono::Utc;
+use chrono::Local;
 use itertools::Itertools;
 use tuillez::OwoColorize as _;
 use tuillez::formatter::FormatWithAsync as _;
@@ -14,7 +14,7 @@ use crate::tools::daily::DailyCommand;
 use crate::utils::constants::LISTENBRAINZ_FMT;
 
 impl DailyCommand {
-    pub async fn print_first_discoveries(stats: &ListenStatisticsData, today: DateTime<Utc>) {
+    pub async fn print_first_discoveries(stats: &ListenStatisticsData, today: DateTime<Local>) {
         let mut recordings = Self::get_first_discoveries(stats, today).await;
 
         if recordings.is_empty() {
@@ -49,7 +49,7 @@ impl DailyCommand {
 
     async fn get_first_discoveries(
         stats: &ListenStatisticsData,
-        today: DateTime<Utc>,
+        today: DateTime<Local>,
     ) -> Vec<RecordingWithListens> {
         let stats = stats.recording_stats().await.unwrap();
 

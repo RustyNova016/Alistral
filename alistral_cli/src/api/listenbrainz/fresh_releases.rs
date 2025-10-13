@@ -1,17 +1,24 @@
 use chrono::DateTime;
-use chrono::Utc;
+use chrono::TimeZone;
 use serde::Deserialize;
 use serde::Serialize;
 
 #[derive(Debug, Clone, bon::Builder)]
-pub struct FreshReleaseRequest {
-    release_date: DateTime<Utc>,
+pub struct FreshReleaseRequest<Tz>
+where
+    Tz: TimeZone,
+{
+    release_date: DateTime<Tz>,
     days: u8,
     past: bool,
     future: bool,
 }
 
-impl FreshReleaseRequest {
+impl<Tz> FreshReleaseRequest<Tz>
+where
+    Tz: TimeZone,
+    <Tz as TimeZone>::Offset: std::fmt::Display,
+{
     pub fn get_parameters(&self) -> String {
         format!(
             "?release_date={}&days={}&past={}&future={}",
@@ -33,7 +40,11 @@ impl FreshReleaseRequest {
     }
 }
 
-impl Default for FreshReleaseRequest {
+impl<Tz> Default for FreshReleaseRequest<Tz>
+where
+    Tz: TimeZone,
+    chrono::DateTime<Tz>: std::default::Default,
+{
     fn default() -> Self {
         Self {
             days: 90,

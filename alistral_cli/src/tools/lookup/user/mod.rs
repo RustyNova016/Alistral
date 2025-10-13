@@ -49,7 +49,7 @@ impl LookupUserCommand {
             return Some(t.get_start_date());
         }
 
-        UserInputParser::parse_naive_date(self.from)
+        UserInputParser::parse_naive_date_utc(self.from)
     }
 
     pub fn until(&self) -> Option<DateTime<Utc>> {
@@ -57,6 +57,6 @@ impl LookupUserCommand {
             return Some(Utc::now());
         }
 
-        UserInputParser::parse_naive_date(self.until)
+        UserInputParser::parse_naive_date_utc(self.until)
     }
 }
