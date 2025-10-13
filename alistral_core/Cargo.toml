@@ -6,7 +6,6 @@ rust-version = "1.85.1"
 
 [dependencies]
 musicbrainz-db-lite = { path = "../musicbrainz_db_lite" }
-tuillez = { path = "../tuillez" }
 
 #listenbrainz = "0.8.1"
 listenbrainz = { branch = "alistral_version", git = "https://github.com/RustyNova016/listenbrainz-rs.git", default-features = false, features = ["tls-native"] }
@@ -33,10 +32,12 @@ snafu = { version = "0.8.9", features = ["rust_1_81"] }
 # Tracing
 tracing-indicatif = "0.3.11"
 tracing = "0.1.41"
+tuillez = "0.1.0"
 
 # Other 
 rust_decimal = "1.36.0"
 rust_decimal_macros = "1.36.0"
 
 [patch.crates-io]
-sequelles = {git = "https://github.com/RustyNova016/sequelles", branch = "master"}
+sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "99b2aa533ef7e17f935b5647897c4676b588d09c"}
+tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "9760b11841bc29b7101aea62b2f275dd34c6bdae"}
