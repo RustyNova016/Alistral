@@ -24,7 +24,7 @@ streamies = "0.2.2"
 futures = "0.3.31"
 tokio = { version = "1.45.1", features = [] }
 async-recursion = "1.1.1"
-async-fn-stream = "0.3.0"
+async-fn-stream = "0.3.2"
 
 # Databasing
 sequelles = "0.2.0"
