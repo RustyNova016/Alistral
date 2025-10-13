@@ -2,6 +2,7 @@ use core::cmp::Reverse;
 
 use alistral_core::models::listen_statistics_data::ListenStatisticsData;
 use chrono::DateTime;
+use chrono::Local;
 use chrono::NaiveDate;
 use chrono::TimeZone as _;
 use chrono::Utc;
@@ -21,7 +22,7 @@ use crate::tools::daily::DailyCommand;
 use crate::utils::constants::LISTENBRAINZ_FMT;
 
 impl DailyCommand {
-    pub async fn print_fresh_releases(stats: &ListenStatisticsData, today: DateTime<Utc>) {
+    pub async fn print_fresh_releases(stats: &ListenStatisticsData, today: DateTime<Local>) {
         let fresh_releases = Self::get_fresh_releases(stats, today).await;
         if fresh_releases.is_empty() {
             return;
@@ -64,7 +65,7 @@ impl DailyCommand {
     #[instrument(skip(stats, today), fields(indicatif.pb_show = tracing::field::Empty))]
     async fn get_fresh_releases(
         stats: &ListenStatisticsData,
-        today: DateTime<Utc>,
+        today: DateTime<Local>,
     ) -> Vec<FreshReleaseRelease> {
         pg_spinner!("Generating `Fresh Releases` report");
 

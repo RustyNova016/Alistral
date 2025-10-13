@@ -1,6 +1,7 @@
 use std::path::PathBuf;
 
 use chrono::DateTime;
+use chrono::Local;
 use chrono::NaiveDate;
 use chrono::Utc;
 
@@ -32,7 +33,19 @@ impl UserInputParser {
         }
     }
 
-    pub fn parse_naive_date(date: Option<NaiveDate>) -> Option<DateTime<Utc>> {
+    #[allow(dead_code)]
+    pub fn parse_naive_date(date: Option<NaiveDate>) -> Option<DateTime<Local>> {
+        Some(
+            date?
+                .and_hms_opt(0, 0, 0)
+                .expect("0 0 0 is valid hms")
+                .and_local_timezone(Local)
+                .unwrap(),
+        )
+    }
+
+    #[allow(dead_code)]
+    pub fn parse_naive_date_utc(date: Option<NaiveDate>) -> Option<DateTime<Utc>> {
         Some(
             date?
                 .and_hms_opt(0, 0, 0)
