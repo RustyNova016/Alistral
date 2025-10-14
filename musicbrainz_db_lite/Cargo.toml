@@ -12,7 +12,7 @@ serde = "1.0.227"
 const_format = { version = "0.2.34" , features = ["rust_1_51", "rust_1_64", "assertcp"] }
 reqwest = { version = "0.12.12", features = ["json"] }
 governor = "0.10.0"
-regex = "1.11.3"
+regex = "1.12.2"
 url = "2.5.4"
 
 # Musicbrainz
