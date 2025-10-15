@@ -41,7 +41,7 @@ url = "2.5.4"
 
 # Async
 futures = "0.3.31"
-tokio = { version = "1.47.1", features = ["rt", "rt-multi-thread", "parking_lot"] }
+tokio = { version = "1.48.0", features = ["rt", "rt-multi-thread", "parking_lot"] }
 streamies = "0.2.2"
 async-fn-stream = "0.3.1"
 

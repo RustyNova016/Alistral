@@ -22,7 +22,7 @@ listenbrainz = { branch = "alistral_version", git = "https://github.com/RustyNov
 # Async
 streamies = "0.2.2"
 futures = "0.3.31"
-tokio = { version = "1.45.1", features = [] }
+tokio = { version = "1.48.0", features = [] }
 async-recursion = "1.1.1"
 async-fn-stream = "0.3.0"
 
