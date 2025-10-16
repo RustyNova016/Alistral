@@ -1,11 +1,13 @@
 use core::fmt::Write as _;
 
+use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime;
 use alistral_core::models::listen_statistics_data::ListenStatisticsData;
 use chrono::DateTime;
 use chrono::Utc;
 use tuillez::OwoColorize as _;
 
 use crate::tools::lookup::lookup_components::comp_arrow::LookupCompArrow;
+use crate::tools::lookup::lookup_components::duration_string::LookupDurationString;
 
 pub struct UserLookup {
     pub(super) user: String,
@@ -65,6 +67,12 @@ impl UserLookup {
 
         writeln!(&mut report).unwrap();
         writeln!(&mut report, "   - {}", self.get_listen_count_field()).unwrap();
+        writeln!(
+            &mut report,
+            "   - {}",
+            self.get_listen_duration_field().await
+        )
+        .unwrap();
 
         report
     }
@@ -78,6 +86,26 @@ impl UserLookup {
             string = format!(
                 "{string} [{} {data_before}]",
                 LookupCompArrow::comp_asc(now_data, data_before),
+            );
+        }
+
+        string
+    }
+
+    pub async fn get_listen_duration_field(&self) -> String {
+        let now_data = self.now.recording_stats().await.unwrap();
+        let time = now_data.get_time_listened();
+
+        let mut string = format!("Total playtime: {}", LookupDurationString(time));
+
+        if let Some(before_data) = self.before.as_ref() {
+            let before_data = before_data.recording_stats().await.unwrap();
+            let before_time = before_data.get_time_listened();
+
+            string = format!(
+                "{string} [{} {}]",
+                LookupCompArrow::comp_asc(time, before_time),
+                LookupDurationString(before_time)
             );
         }
 

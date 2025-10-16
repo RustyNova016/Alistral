@@ -1,7 +1,6 @@
 [repository.alistral]
 path = "./"
-
-    [repository.alistral.release]
+remote_url = "https://github.com/RustyNova016/Alistral"
 
     [repository.alistral.rust]
     fmt = true
