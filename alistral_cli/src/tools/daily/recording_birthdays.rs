@@ -56,13 +56,15 @@ impl DailyCommand {
         today: DateTime<Local>,
     ) -> Vec<RecordingWithListens> {
         pg_spinner!("Generating `Recording birthdays` Releases` report");
+
         let stats = stats.recording_stats().await.unwrap();
+
         pg_counted!(
             stats.len(),
             "Generating `Recording birthdays` Releases` report"
         );
-        let mut recs = Vec::new();
 
+        let mut recs = Vec::new();
         for rec in stats.iter() {
             pg_inc!();
             let Some(release) = rec
