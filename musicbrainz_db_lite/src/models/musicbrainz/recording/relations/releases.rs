@@ -23,6 +23,11 @@ impl DBRelation<RecordingReleasesDBRel> for Recording {
 }
 
 impl Recording {
+    pub async fn get_releases(&self, client: &Arc<DBClient>) -> Result<Vec<Release>, crate::Error> {
+        self.get_related_entity_or_fetch_as_task::<RecordingReleasesDBRel>(client)
+            .await
+    }
+
     /// Get the releases of the recording that are harmony compatible
     pub async fn get_harmony_compatible_releases(
         &self,

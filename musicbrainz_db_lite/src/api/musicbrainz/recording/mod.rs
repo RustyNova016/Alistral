@@ -47,7 +47,8 @@ impl Recording {
             video: new.video.map(|n| n as i64).or(self.video),
             first_release_date: new
                 .first_release_date
-                .and_then(|date| date_string_to_timestamp(date).or(self.first_release_date)),
+                .and_then(date_string_to_timestamp)
+                .or(self.first_release_date),
         }
     }
 

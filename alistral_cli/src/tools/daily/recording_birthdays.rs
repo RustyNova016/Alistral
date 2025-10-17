@@ -6,10 +6,14 @@ use alistral_core::models::listen_statistics_data::ListenStatisticsData;
 use chrono::DateTime;
 use chrono::Datelike as _;
 use chrono::Local;
-use itertools::Itertools;
+use tracing::instrument;
 use tuillez::OwoColorize as _;
 use tuillez::formatter::FormatWithAsync as _;
+use tuillez::pg_counted;
+use tuillez::pg_inc;
+use tuillez::pg_spinner;
 
+use crate::ALISTRAL_CLIENT;
 use crate::tools::daily::DailyCommand;
 use crate::utils::constants::LISTENBRAINZ_FMT;
 
@@ -25,13 +29,20 @@ impl DailyCommand {
         recordings.sort_by_cached_key(|r| Reverse(r.listen_count()));
 
         for rec in recordings {
+            let date = rec
+                .entity()
+                .first_release_date_or_fetch(ALISTRAL_CLIENT.musicbrainz_db.clone())
+                .await
+                .unwrap()
+                .unwrap();
+
             println!(
                 "   - {} ({}, {} Listens)",
                 rec.recording()
                     .format_with_async(&LISTENBRAINZ_FMT)
                     .await
                     .expect("Couldn't get artist credits"),
-                rec.recording().first_release_date().unwrap().year(),
+                date.year(),
                 rec.listen_count()
             );
         }
@@ -39,20 +50,35 @@ impl DailyCommand {
         println!();
     }
 
+    #[instrument(skip(stats), fields(indicatif.pb_show = tracing::field::Empty))]
     async fn get_recording_birthdays(
         stats: &ListenStatisticsData,
         today: DateTime<Local>,
     ) -> Vec<RecordingWithListens> {
+        pg_spinner!("Generating `Recording birthdays` Releases` report");
         let stats = stats.recording_stats().await.unwrap();
+        pg_counted!(
+            stats.len(),
+            "Generating `Recording birthdays` Releases` report"
+        );
+        let mut recs = Vec::new();
 
-        stats
-            .iter()
-            .filter(|rec| {
-                rec.entity().first_release_date().is_some_and(|release| {
-                    release.day() == today.day() && release.month() == today.month()
-                })
-            })
-            .cloned()
-            .collect_vec()
+        for rec in stats.iter() {
+            pg_inc!();
+            let Some(release) = rec
+                .entity()
+                .first_release_date_or_fetch(ALISTRAL_CLIENT.musicbrainz_db.clone())
+                .await
+                .unwrap()
+            else {
+                continue;
+            };
+
+            if release.day() == today.day() && release.month() == today.month() {
+                recs.push(rec.clone())
+            }
+        }
+
+        recs
     }
 }
