@@ -1,5 +1,8 @@
 use std::sync::Arc;
 
+use chrono::DateTime;
+use chrono::Utc;
+
 use crate::DBClient;
 use crate::Release;
 use crate::models::shared_traits::db_relation::EntityActiveURLDBRel;
@@ -20,5 +23,9 @@ impl Release {
         Ok(urls
             .into_iter()
             .any(|url| HARMONY_SEED_URL_REGEX.is_match(&url.ressource)))
+    }
+
+    pub fn release_date(&self) -> Option<DateTime<Utc>> {
+        DateTime::from_timestamp(self.date?, 0)
     }
 }

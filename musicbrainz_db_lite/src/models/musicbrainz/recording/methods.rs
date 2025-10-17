@@ -1,5 +1,11 @@
-use chrono::Duration;
+use std::sync::Arc;
 
+use chrono::DateTime;
+use chrono::Duration;
+use chrono::Utc;
+
+use crate::DBClient;
+use crate::FetchAsComplete;
 use crate::models::musicbrainz::recording::Recording;
 
 impl Recording {
@@ -28,5 +34,37 @@ impl Recording {
         self.length.and_then(|length| {
             Duration::new(length.div_euclid(1000), length.rem_euclid(1000) as u32)
         })
+    }
+
+    pub async fn first_release_date_or_fetch(
+        &self,
+        client: Arc<DBClient>,
+    ) -> Result<Option<DateTime<Utc>>, crate::Error> {
+        if let Some(date) = self.first_release_date() {
+            return Ok(Some(date));
+        }
+
+        // Not found? Fetch as whole
+        let new = self.fetch_as_complete_as_task(client.clone()).await?;
+
+        if let Some(date) = new.first_release_date() {
+            return Ok(Some(date));
+        }
+
+        // Still not found? Find the earliest release
+        let releases = new.get_releases(&client).await?;
+        let mut min: Option<DateTime<Utc>> = None;
+        for release in releases {
+            let Some(date) = release.release_date() else {
+                continue;
+            };
+
+            match min {
+                Some(min_val) => min = Some(min_val.min(date)),
+                None => min = Some(date),
+            }
+        }
+
+        Ok(min)
     }
 }

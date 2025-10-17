@@ -200,6 +200,14 @@ where
     {
         Self::from_listens(client, listens.data, strat).await
     }
+
+    pub fn len(&self) -> usize {
+        self.0.len()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.0.is_empty()
+    }
 }
 
 impl<Ent, Lis> Default for EntityWithListensCollection<Ent, Lis>
