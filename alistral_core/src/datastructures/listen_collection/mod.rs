@@ -90,6 +90,12 @@ impl From<Vec<Listen>> for ListenCollection {
     }
 }
 
+impl From<ListenCollection> for Vec<Listen> {
+    fn from(value: ListenCollection) -> Self {
+        value.data
+    }
+}
+
 impl Deref for ListenCollection {
     type Target = Vec<Listen>;
 
