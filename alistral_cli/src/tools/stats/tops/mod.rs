@@ -6,6 +6,11 @@ use alistral_core::datastructures::entity_with_listens::release::collection::Rel
 use alistral_core::datastructures::entity_with_listens::tags::id::SimpleTag;
 use alistral_core::datastructures::listen_collection::ListenCollection;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
+use alistral_core::models::listen_statistics_data::ListenStatisticsData;
+use chrono::DateTime;
+use chrono::Local;
+use chrono::NaiveDate;
+use chrono::Utc;
 use clap::Parser;
 use clap::ValueEnum;
 use derive_more::IsVariant;
@@ -28,8 +33,10 @@ use crate::datastructures::statistic_formater::StatFormatterVariant;
 use crate::datastructures::statistic_formater::StatisticFormater;
 use crate::datastructures::statistic_formater::StatisticOutput;
 use crate::datastructures::statistic_formater::StatisticType;
+use crate::models::cli::common::Timeframe;
 use crate::utils::user_inputs::UserInputParser;
 
+pub mod generate_rows;
 pub mod stats_compiling;
 pub mod target_entity;
 
@@ -40,7 +47,7 @@ pub struct StatsTopCommand {
     target: StatsTarget,
 
     /// Name of the user to fetch stats listen from
-    #[arg(short, long)]
+    #[arg(long)]
     username: Option<String>,
 
     /// The type of sorting to use
@@ -50,6 +57,18 @@ pub struct StatsTopCommand {
     /// Recursively add parent works to work stats
     #[arg(long)]
     w_recursive: bool,
+
+    /// Time period to use for the statistics.
+    #[clap(short, long)]
+    timeframe: Option<Timeframe>,
+
+    /// Get statistics from this date. Use YYYY-MM-DD format
+    #[clap(short, long)]
+    from: Option<NaiveDate>,
+
+    /// Get statistics until this date. Use YYYY-MM-DD format
+    #[clap(short, long)]
+    until: Option<NaiveDate>,
 }
 
 #[derive(ValueEnum, Clone, Debug, Copy, IsVariant)]
@@ -106,6 +125,69 @@ impl StatsTopCommand {
         self.route_sort_type(username).await.unwrap();
     }
 
+    pub fn from(&self) -> Option<DateTime<Utc>> {
+        if let Some(t) = &self.timeframe {
+            return Some(t.get_start_date());
+        }
+
+        if let Some(t) = &self.from {
+            //TODO: Proper error?
+            return Some(
+                t.and_hms_opt(0, 0, 0)
+                    .unwrap()
+                    .and_local_timezone(Local)
+                    .unwrap()
+                    .to_utc(),
+            );
+        }
+
+        None
+    }
+
+    pub fn until(&self) -> Option<DateTime<Utc>> {
+        if self.timeframe.is_some() {
+            return Some(Utc::now());
+        }
+
+        if let Some(t) = &self.until {
+            //TODO: Proper error?
+            return Some(
+                t.and_hms_opt(0, 0, 0)
+                    .unwrap()
+                    .and_local_timezone(Local)
+                    .unwrap()
+                    .to_utc(),
+            );
+        }
+
+        None
+    }
+
+    pub async fn get_stats(&self) -> (ListenStatisticsData, Option<ListenStatisticsData>) {
+        let username = UserInputParser::username_or_default(&self.username);
+        let stats = ALISTRAL_CLIENT.statistics_of_user(username).await;
+
+        match (self.from(), self.until().unwrap_or(Utc::now())) {
+            (Some(from), until) => {
+                let period = until - from;
+                let before_start = from - period;
+
+                let now_stats = stats.clone_no_stats().filter_listening_date(from, until);
+                let before_stats = stats
+                    .filter_listening_date(before_start, from);
+
+                (now_stats, Some(before_stats))
+            }
+
+            (None, _) => (stats, None),
+        }
+    }
+
+    /// Return true if the top is on a specific period
+    pub fn is_period(&self) -> bool {
+        self.from().is_some()
+    }
+
     async fn route_sort_type(&self, user: String) -> Result<(), crate::Error> {
         match (self.sort_by, self.target) {
             (SortBy::ListenCount, StatsTarget::Artist) => {
@@ -114,9 +196,8 @@ impl StatsTopCommand {
                     .await
             }
             (SortBy::ListenCount, StatsTarget::Recording) => {
-                let data = recording_stats(&ALISTRAL_CLIENT, user.clone()).await?;
-                self.run_stats::<Recording, ListenCollection, ListenCountStats>(data)
-                    .await
+                self.print_recording_stats().await;
+                Ok(())
             }
             (SortBy::ListenCount, StatsTarget::Release) => {
                 let data = release_stats(&ALISTRAL_CLIENT, user.clone()).await?;
