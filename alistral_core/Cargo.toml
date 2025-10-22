@@ -18,7 +18,7 @@ futures = "0.3.31"
 streamies = "0.2.2"
 
 # Databasing
-sequelles = "0.2.0"
+sequelles = { version = "0.2.0", features = ["chrono"] }
 sqlx = { version = "0.8.3", features = ["runtime-tokio", "macros"] }
 
 # Macros
