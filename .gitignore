@@ -4,7 +4,7 @@
 /interzic/target
 /musicbrainz_db_lite/target
 /symphonize/target
-/tuillez
+
 
 
 /.vscode
@@ -14,4 +14,6 @@ debug_db.db
 temp.db
 
 # Workspace ignores
+/musicbrainz_rs
 /sequelles
+/tuillez

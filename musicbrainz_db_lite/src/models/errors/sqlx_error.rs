@@ -1,4 +1,4 @@
-use snafu::Backtrace;
+use snafu::Location;
 use snafu::Snafu;
 
 /// Wrapper around [sqlx::Error] with backtrace support
@@ -6,5 +6,10 @@ use snafu::Snafu;
 #[snafu(visibility(pub))]
 pub struct SqlxError {
     source: sqlx::Error,
-    backtrace: Backtrace,
+
+    #[snafu(implicit)]
+    location: Location,
+
+    #[cfg(feature = "backtrace")]
+    backtrace: snafu::Backtrace,
 }

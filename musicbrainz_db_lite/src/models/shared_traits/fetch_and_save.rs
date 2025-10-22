@@ -35,11 +35,17 @@ where
 
                     Ok(Some(data))
                 }
-                Err(musicbrainz_rs::Error::NotFound(_)) => {
-                    // TODO: Set deleted
-                    Ok(None)
+                Err(err) => {
+                    if err
+                        .as_musicbrainz_error()
+                        .is_some_and(|err| err.is_not_found())
+                    {
+                        // TODO: Set deleted
+                        Ok(None)
+                    } else {
+                        Err(err.into())
+                    }
                 }
-                Err(err) => Err(err.into()),
             }
         }
     }
@@ -88,11 +94,17 @@ where
                     .await
                     .unwrap()
                 }
-                Err(musicbrainz_rs::Error::NotFound(_)) => {
-                    // TODO: Set deleted
-                    Ok(None)
+                Err(err) => {
+                    if err
+                        .as_musicbrainz_error()
+                        .is_some_and(|err| err.is_not_found())
+                    {
+                        // TODO: Set deleted
+                        Ok(None)
+                    } else {
+                        Err(err.into())
+                    }
                 }
-                Err(err) => Err(err.into()),
             }
         }
     }

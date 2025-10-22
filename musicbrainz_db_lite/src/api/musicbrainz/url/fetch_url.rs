@@ -16,7 +16,7 @@ impl Url {
     pub async fn fetch_by_ressource(
         client: &DBClient,
         url: &str,
-    ) -> Result<MBUrl, musicbrainz_rs::Error> {
+    ) -> Result<MBUrl, musicbrainz_rs::GetRequestError> {
         let req = ApiRequest::new(format!(
             "https://musicbrainz.org/ws/2/url?resource={url}&fmt=json&inc=artist-rels+label-rels+release-group-rels+release-rels+recording-rels+url-rels+work-rels"
         ));
@@ -27,7 +27,7 @@ impl Url {
     pub async fn fetch_by_ressource_bulk(
         client: &DBClient,
         urls: Vec<&str>,
-    ) -> Result<MultiUrlResponse, musicbrainz_rs::Error> {
+    ) -> Result<MultiUrlResponse, musicbrainz_rs::GetRequestError> {
         let mut req =  "https://musicbrainz.org/ws/2/url?fmt=json&inc=artist-rels+label-rels+release-group-rels+release-rels+recording-rels+url-rels+work-rels".to_string();
 
         for url in urls {
@@ -43,10 +43,16 @@ impl Url {
     ) -> Result<Option<Url>, crate::Error> {
         let res = match Self::fetch_by_ressource(&client, url).await {
             Ok(val) => val,
-            Err(err) => match err {
-                musicbrainz_rs::Error::NotFound(_) => return Ok(None),
-                _ => return Err(err.into()),
-            },
+            Err(err) => {
+                if err
+                    .as_musicbrainz_error()
+                    .is_some_and(|err| err.is_not_found())
+                {
+                    return Ok(None);
+                } else {
+                    return Err(err.into());
+                }
+            }
         };
 
         Ok(Some(
@@ -60,10 +66,16 @@ impl Url {
     ) -> Result<Vec<Url>, crate::Error> {
         let res = match Self::fetch_by_ressource_bulk(&client, urls).await {
             Ok(val) => val,
-            Err(err) => match err {
-                musicbrainz_rs::Error::NotFound(_) => return Ok(Vec::new()),
-                _ => return Err(err.into()),
-            },
+            Err(err) => {
+                if err
+                    .as_musicbrainz_error()
+                    .is_some_and(|err| err.is_not_found())
+                {
+                    return Ok(Vec::new());
+                } else {
+                    return Err(err.into());
+                }
+            }
         };
 
         stream::iter(res.urls)

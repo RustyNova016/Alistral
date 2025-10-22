@@ -9,7 +9,7 @@ impl FetchMBID<MBLabel> for Label {
     async fn fetch_from_mbid(
         client: &DBClient,
         mbid: &str,
-    ) -> Result<MBLabel, musicbrainz_rs::Error> {
+    ) -> Result<MBLabel, musicbrainz_rs::GetRequestError> {
         MBLabel::fetch()
             .id(mbid)
             .with_aliases()

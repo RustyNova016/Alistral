@@ -11,7 +11,7 @@ impl FetchMBID<MBWork> for Work {
     async fn fetch_from_mbid(
         client: &DBClient,
         mbid: &str,
-    ) -> Result<MBWork, musicbrainz_rs::Error> {
+    ) -> Result<MBWork, musicbrainz_rs::GetRequestError> {
         MBWork::fetch()
             .id(mbid)
             .with_aliases()
