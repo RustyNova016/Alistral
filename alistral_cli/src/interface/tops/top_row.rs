@@ -1,3 +1,5 @@
+use alistral_core::cli::colors::AlistralColors;
+use tuillez::OwoColorize;
 use tuillez::formatter::FormatWithAsync;
 
 use crate::interface::comp_arrow::ComparisonArrow;
@@ -18,10 +20,10 @@ impl<T> TopRow<T> {
         match self.previous_ranking {
             None => format!("#{}", self.ranking),
             Some(previous_ranking) => format!(
-                "{} #{} ({})",
+                "{} #{:<3} {}", //←⇐⇦⇽≪
                 ComparisonArrow::lesser_is_better_inv(self.ranking, previous_ranking),
                 self.ranking,
-                previous_ranking
+                format!("≪ {previous_ranking:>3}").true_color_tup((100, 100, 100))
             ),
         }
     }
@@ -29,7 +31,11 @@ impl<T> TopRow<T> {
     pub fn score_col(&self) -> String {
         match &self.previous_score {
             None => format!("{}", self.score),
-            Some(previous_score) => format!("{} ({})", self.score, previous_score),
+            Some(previous_score) => format!(
+                "{:<4} {}",
+                self.score,
+                format!("≪ {previous_score:>4}").true_color_tup((100, 100, 100))
+            ),
         }
     }
 }
