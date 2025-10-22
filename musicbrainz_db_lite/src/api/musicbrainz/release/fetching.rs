@@ -11,7 +11,7 @@ impl FetchMBID<MBRelease> for Release {
     async fn fetch_from_mbid(
         client: &DBClient,
         mbid: &str,
-    ) -> Result<MBRelease, musicbrainz_rs::Error> {
+    ) -> Result<MBRelease, musicbrainz_rs::GetRequestError> {
         MBRelease::fetch()
             .id(mbid)
             .with_aliases()

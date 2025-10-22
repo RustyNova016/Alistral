@@ -11,7 +11,7 @@ pub enum Error {
     SecretFileLoadError(io::Error),
 
     #[error(transparent)]
-    MusicbrainzError(#[from] musicbrainz_rs::Error),
+    MusicbrainzGetRequestError(#[from] musicbrainz_rs::GetRequestError),
 
     #[error(transparent)]
     SQLXError(#[from] sqlx::Error),

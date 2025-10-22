@@ -8,11 +8,6 @@ use crate::models::errors::sqlx_error::SqlxError;
 
 #[derive(Error, Debug)]
 pub enum Error {
-    //#[error(transparent)]
-    //ReqwestError(#[from] reqwest::Error),
-    #[error(transparent)]
-    MusicbrainzError(#[from] musicbrainz_rs::Error),
-
     #[error(transparent)]
     ListenbrainzError(#[from] listenbrainz::Error),
 
@@ -61,4 +56,7 @@ pub enum Error {
 
     #[error(transparent)]
     GetConnectionError(#[from] GetConnectionError),
+
+    #[error(transparent)]
+    MusicbrainzGetRequestError(#[from] musicbrainz_rs::GetRequestError),
 }

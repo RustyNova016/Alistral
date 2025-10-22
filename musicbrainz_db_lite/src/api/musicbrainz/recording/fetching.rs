@@ -14,7 +14,7 @@ impl FetchMBID<MSRecording> for Recording {
     async fn fetch_from_mbid(
         client: &DBClient,
         mbid: &str,
-    ) -> Result<MSRecording, musicbrainz_rs::Error> {
+    ) -> Result<MSRecording, musicbrainz_rs::GetRequestError> {
         debug!("Sending fetch query for recording `{}`", mbid);
 
         MSRecording::fetch()
