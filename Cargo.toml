@@ -5,6 +5,7 @@ members = [
     "interzic", 
     "musicbrainz_db_lite", 
     "symphonize",
+    "sequelles"
     #"tuillez"
     #"sequelles",
     #"listenbrainz_rs"
