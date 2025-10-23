@@ -21,7 +21,6 @@ use musicbrainz_db_lite::models::musicbrainz::release::Release;
 use musicbrainz_db_lite::models::musicbrainz::release_group::ReleaseGroup;
 use musicbrainz_db_lite::models::musicbrainz::work::Work;
 
-use crate::tools::stats::tops::generator::TopGenerator;
 use crate::ALISTRAL_CLIENT;
 use crate::database::interfaces::statistics_data::artist_stats;
 use crate::database::interfaces::statistics_data::recording_stats;
@@ -34,6 +33,9 @@ use crate::datastructures::statistic_formater::StatisticFormater;
 use crate::datastructures::statistic_formater::StatisticOutput;
 use crate::datastructures::statistic_formater::StatisticType;
 use crate::models::cli::common::Timeframe;
+use crate::models::datastructures::tops::scorer::listen_count::ListenCountTopScorer;
+use crate::models::datastructures::tops::scorer::listen_duration::ListenDurationTopScorer;
+use crate::tools::stats::tops::generator::TopGenerator;
 use crate::utils::user_inputs::UserInputParser;
 
 pub mod generate_rows;
@@ -41,8 +43,6 @@ pub mod generator;
 pub mod printing;
 pub mod stats_compiling;
 pub mod target_entity;
-
-
 
 /// Retrieve the top listened entities
 #[derive(Parser, Debug, Clone)]
@@ -182,7 +182,7 @@ impl StatsTopCommand {
             }
             (SortBy::ListenCount, StatsTarget::Recording) => {
                 let gene = self.get_generator().await;
-                gene.print_recording_stats().await;
+                gene.print_recording_stats(ListenCountTopScorer).await;
                 Ok(())
             }
             (SortBy::ListenCount, StatsTarget::Release) => {
@@ -223,9 +223,9 @@ impl StatsTopCommand {
                     .await
             }
             (SortBy::ListenDuration, StatsTarget::Recording) => {
-                let data = recording_stats(&ALISTRAL_CLIENT, user.clone()).await?;
-                self.run_stats::<Recording, ListenCollection, ListenDurationStats>(data)
-                    .await
+                let gene = self.get_generator().await;
+                gene.print_recording_stats(ListenDurationTopScorer).await;
+                Ok(())
             }
             (SortBy::ListenDuration, StatsTarget::Release) => {
                 let data = release_stats(&ALISTRAL_CLIENT, user.clone()).await?;
@@ -295,5 +295,3 @@ impl StatsTopCommand {
 //         stats_command(&mut conn, "RustyNova", StatsTarget::WorkRecursive, SortSorterBy::Count).await;
 //     }
 // }
-
-
