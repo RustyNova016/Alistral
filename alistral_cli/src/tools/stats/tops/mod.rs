@@ -6,7 +6,6 @@ use alistral_core::datastructures::entity_with_listens::release::collection::Rel
 use alistral_core::datastructures::entity_with_listens::tags::id::SimpleTag;
 use alistral_core::datastructures::listen_collection::ListenCollection;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
-use alistral_core::models::listen_statistics_data::ListenStatisticsData;
 use chrono::DateTime;
 use chrono::Local;
 use chrono::NaiveDate;
@@ -22,6 +21,7 @@ use musicbrainz_db_lite::models::musicbrainz::release::Release;
 use musicbrainz_db_lite::models::musicbrainz::release_group::ReleaseGroup;
 use musicbrainz_db_lite::models::musicbrainz::work::Work;
 
+use crate::tools::stats::tops::generator::TopGenerator;
 use crate::ALISTRAL_CLIENT;
 use crate::database::interfaces::statistics_data::artist_stats;
 use crate::database::interfaces::statistics_data::recording_stats;
@@ -37,8 +37,12 @@ use crate::models::cli::common::Timeframe;
 use crate::utils::user_inputs::UserInputParser;
 
 pub mod generate_rows;
+pub mod generator;
+pub mod printing;
 pub mod stats_compiling;
 pub mod target_entity;
+
+
 
 /// Retrieve the top listened entities
 #[derive(Parser, Debug, Clone)]
@@ -163,29 +167,10 @@ impl StatsTopCommand {
         None
     }
 
-    pub async fn get_stats(&self) -> (ListenStatisticsData, Option<ListenStatisticsData>) {
+    pub async fn get_generator(&self) -> TopGenerator {
         let username = UserInputParser::username_or_default(&self.username);
         let stats = ALISTRAL_CLIENT.statistics_of_user(username).await;
-
-        match (self.from(), self.until().unwrap_or(Utc::now())) {
-            (Some(from), until) => {
-                let period = until - from;
-                let before_start = from - period;
-
-                let now_stats = stats.clone_no_stats().filter_listening_date(from, until);
-                let before_stats = stats
-                    .filter_listening_date(before_start, from);
-
-                (now_stats, Some(before_stats))
-            }
-
-            (None, _) => (stats, None),
-        }
-    }
-
-    /// Return true if the top is on a specific period
-    pub fn is_period(&self) -> bool {
-        self.from().is_some()
+        TopGenerator::new(stats, self.from(), self.until())
     }
 
     async fn route_sort_type(&self, user: String) -> Result<(), crate::Error> {
@@ -196,7 +181,8 @@ impl StatsTopCommand {
                     .await
             }
             (SortBy::ListenCount, StatsTarget::Recording) => {
-                self.print_recording_stats().await;
+                let gene = self.get_generator().await;
+                gene.print_recording_stats().await;
                 Ok(())
             }
             (SortBy::ListenCount, StatsTarget::Release) => {
@@ -309,3 +295,5 @@ impl StatsTopCommand {
 //         stats_command(&mut conn, "RustyNova", StatsTarget::WorkRecursive, SortSorterBy::Count).await;
 //     }
 // }
+
+

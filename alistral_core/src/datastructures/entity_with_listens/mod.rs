@@ -50,8 +50,16 @@ where
         &self.entity
     }
 
+    pub fn into_entity(self) -> Ent {
+        self.entity
+    }
+
     pub fn listens(&self) -> &Lis {
         &self.listens
+    }
+
+    pub fn into_listens(self) -> Lis {
+        self.listens
     }
 
     /// Return the amount of time this entity having known about (Since first associated listen)

@@ -1,5 +1,4 @@
 use alistral_core::cli::colors::AlistralColors;
-use tuillez::OwoColorize;
 use tuillez::formatter::FormatWithAsync;
 
 use crate::interface::comp_arrow::ComparisonArrow;
