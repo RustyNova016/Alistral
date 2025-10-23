@@ -4378,8 +4378,9 @@ checksum = "e421abadd41a4225275504ea4d6566923418b7f05506fbc9c0fe86ba7396114b"
 [[package]]
 name = "tuillez"
 version = "0.1.0"
-source = "git+https://github.com/RustyNova016/tuillez?rev=9760b11841bc29b7101aea62b2f275dd34c6bdae#9760b11841bc29b7101aea62b2f275dd34c6bdae"
+source = "git+https://github.com/RustyNova016/tuillez?rev=debb79bf8c8656a4eedb571177a8ffa3b9984e78#debb79bf8c8656a4eedb571177a8ffa3b9984e78"
 dependencies = [
+ "async-trait",
  "backtrace",
  "chrono",
  "color-backtrace",
