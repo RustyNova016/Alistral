@@ -1,7 +1,9 @@
 use sequelles::has_rowid::HasRowID;
 use sqlx::prelude::FromRow;
 #[cfg(feature = "pretty_format")]
-use tuillez::formatter::FormatWithAsync;
+use tuillez::formatter::FormatWithAsyncDyn;
+#[cfg(feature = "pretty_format")]
+use tuillez::reexports::async_trait;
 
 #[cfg(feature = "pretty_format")]
 use crate::models::musicbrainz::MusicbrainzFormater;
@@ -63,7 +65,8 @@ impl HasRowID for Tag {
 }
 
 #[cfg(feature = "pretty_format")]
-impl FormatWithAsync<MusicbrainzFormater> for Tag {
+#[async_trait]
+impl FormatWithAsyncDyn<MusicbrainzFormater> for Tag {
     type Error = crate::Error;
 
     async fn format_with_async(&self, _ft: &MusicbrainzFormater) -> Result<String, Self::Error> {

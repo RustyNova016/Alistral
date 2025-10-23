@@ -1,5 +1,7 @@
 #[cfg(feature = "pretty_format")]
-use tuillez::formatter::FormatWithAsync;
+use tuillez::formatter::FormatWithAsyncDyn;
+#[cfg(feature = "pretty_format")]
+use tuillez::reexports::async_trait;
 
 #[cfg(feature = "pretty_format")]
 use crate::models::musicbrainz::MusicbrainzFormater;
@@ -24,7 +26,8 @@ impl Work {
 }
 
 #[cfg(feature = "pretty_format")]
-impl FormatWithAsync<MusicbrainzFormater> for Work {
+#[async_trait]
+impl FormatWithAsyncDyn<MusicbrainzFormater> for Work {
     type Error = crate::Error;
 
     async fn format_with_async(&self, _ft: &MusicbrainzFormater) -> Result<String, Self::Error> {
