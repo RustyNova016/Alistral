@@ -4,7 +4,6 @@ use alistral_core::datastructures::entity_with_listens::collection::EntityWithLi
 use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use alistral_core::datastructures::entity_with_listens::release::collection::ReleaseWithRecordingsCollection;
 use alistral_core::datastructures::entity_with_listens::tags::id::SimpleTag;
-use alistral_core::datastructures::listen_collection::ListenCollection;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use chrono::DateTime;
 use chrono::Local;
@@ -16,14 +15,12 @@ use derive_more::IsVariant;
 use musicbrainz_db_lite::HasRowID;
 use musicbrainz_db_lite::Label;
 use musicbrainz_db_lite::models::musicbrainz::artist::Artist;
-use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use musicbrainz_db_lite::models::musicbrainz::release::Release;
 use musicbrainz_db_lite::models::musicbrainz::release_group::ReleaseGroup;
 use musicbrainz_db_lite::models::musicbrainz::work::Work;
 
 use crate::ALISTRAL_CLIENT;
 use crate::database::interfaces::statistics_data::artist_stats;
-use crate::database::interfaces::statistics_data::recording_stats;
 use crate::database::interfaces::statistics_data::release_group_stats;
 use crate::database::interfaces::statistics_data::release_stats;
 use crate::datastructures::statistic_formater::ListenCountStats;
@@ -295,3 +292,4 @@ impl StatsTopCommand {
 //         stats_command(&mut conn, "RustyNova", StatsTarget::WorkRecursive, SortSorterBy::Count).await;
 //     }
 // }
+

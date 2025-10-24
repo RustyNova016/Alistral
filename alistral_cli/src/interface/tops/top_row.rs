@@ -34,7 +34,7 @@ impl<S> TopRow<S> where S: Ord + Eq {
             None => format!("{}", self.score),
             Some(previous_score) => format!(
                 "{} {:<4} {}",
-                ComparisonArrow::lesser_is_better_inv(&self.score, &previous_score),
+                ComparisonArrow::greater_is_better(&self.score, &previous_score),
                 self.score,
                 format!("≪ {:>4}", previous_score).true_color_tup((100, 100, 100))
             ),

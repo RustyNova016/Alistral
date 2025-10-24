@@ -12,6 +12,7 @@ use tuillez::formatter::FormatWithAsyncDyn;
 
 use crate::interface::tops::top_row::TopRow;
 use crate::models::datastructures::tops::scorer::TopScorer;
+use crate::models::datastructures::tops::top_entity::TopEntity;
 use crate::tools::stats::tops::generator::TopGenerator;
 
 impl TopGenerator {
@@ -56,38 +57,33 @@ where
         }
     }
 
-    ranking.get_ranks(|rec| Reverse(scorer.get_score_of_element(rec.clone())))
+    ranking.get_ranks(|rec| Reverse(scorer.get_score_of_element(&rec)))
 }
 
-fn generate_top_rows<Ent, Lis, Sco>(
-    cur_stats: Vec<(usize, EntityWithListens<Ent, Lis>)>,
-    before_stats: Option<Vec<(usize, EntityWithListens<Ent, Lis>)>>,
+fn generate_top_rows<Ent, Sco>(
+    cur_stats: Vec<(usize, Ent)>,
+    before_stats: Option<Vec<(usize, Ent)>>,
     scorer: &Sco,
-) -> Vec<TopRow<<Sco as TopScorer<EntityWithListens<Ent, Lis>>>::Score>>
+) -> Vec<TopRow<<Sco as TopScorer<Ent>>::Score>>
 where
-    Ent: HasRowID
-        + Clone
-        + FormatWithAsyncDyn<MusicbrainzFormater, Error = musicbrainz_db_lite::Error>
-        + 'static,
-    Lis: ListenCollectionReadable,
-    EntityWithListens<Ent, Lis>: Clone,
-    Sco: TopScorer<EntityWithListens<Ent, Lis>>
+    Ent: TopEntity<Sco> + 'static,
+    Sco: TopScorer<Ent> + 'static
 {
     let mut rows = Vec::new();
     for (rank, recording) in cur_stats {
         let before = before_stats.as_ref().and_then(|before| {
             before
                 .iter()
-                .find(|(_, rec)| rec.entity().rowid() == recording.entity().rowid())
+                .find(|(_, rec)| rec.rowid() == recording.rowid())
         });
 
         rows.push(TopRow {
             ranking: rank + 1,
-            score: scorer.get_score_of_element(recording.clone()),
-            element: Box::new(recording.into_entity()),
+            score: scorer.get_score_of_element(&recording),
+            element: Box::new(recording.get_display_entity()),
 
             previous_ranking: before.as_ref().map(|(rank, _)| rank + 1),
-            previous_score: before.map(|previous| scorer.get_score_of_element(previous.1.clone())),
+            previous_score: before.map(|previous| scorer.get_score_of_element(&previous.1)),
         })
     }
 

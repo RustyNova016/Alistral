@@ -7,5 +7,5 @@ pub mod listen_duration;
 pub trait TopScorer<T> {
     type Score: Ord;
 
-    fn get_score_of_element(&self, element: T) -> TopScore<Self::Score>;
+    fn get_score_of_element(&self, element: &T) -> TopScore<Self::Score>;
 }

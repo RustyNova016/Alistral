@@ -11,7 +11,7 @@ where
 {
     type Score = usize;
 
-    fn get_score_of_element(&self, element: L) -> TopScore<Self::Score> {
+    fn get_score_of_element(&self, element: &L) -> TopScore<Self::Score> {
         let count = element.listen_count();
         TopScore { data: count, display: count.to_string() }
     }
