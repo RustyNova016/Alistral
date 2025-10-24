@@ -6,6 +6,10 @@ use itertools::Itertools;
 use musicbrainz_db_lite::HasRowID;
 use musicbrainz_db_lite::Recording;
 
+pub mod generate_rows;
+pub mod printing;
+
+/// Create a top
 pub struct TopGenerator {
     stats: ListenStatisticsData,
 

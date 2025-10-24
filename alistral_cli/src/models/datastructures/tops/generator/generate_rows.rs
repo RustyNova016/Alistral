@@ -1,19 +1,15 @@
 use core::cmp::Reverse;
 
-use alistral_core::datastructures::entity_with_listens::EntityWithListens;
 use alistral_core::datastructures::entity_with_listens::recording::RecordingWithListens;
 use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
-use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use musicbrainz_db_lite::HasRowID;
 use musicbrainz_db_lite::Recording;
-use musicbrainz_db_lite::models::musicbrainz::MusicbrainzFormater;
 use sequelles::datastructures::ranking::Ranking;
-use tuillez::formatter::FormatWithAsyncDyn;
 
 use crate::interface::tops::top_row::TopRow;
+use crate::models::datastructures::tops::generator::TopGenerator;
 use crate::models::datastructures::tops::scorer::TopScorer;
 use crate::models::datastructures::tops::top_entity::TopEntity;
-use crate::tools::stats::tops::generator::TopGenerator;
 
 impl TopGenerator {
     pub async fn generate_recording_rows<Sco>(&self, scorer: Sco) -> Vec<TopRow<<Sco as TopScorer<RecordingWithListens>>::Score>>

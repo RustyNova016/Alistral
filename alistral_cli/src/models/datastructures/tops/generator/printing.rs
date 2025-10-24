@@ -3,7 +3,7 @@ use comfy_table::Table;
 use comfy_table::presets::UTF8_FULL_CONDENSED;
 
 use crate::interface::tops::top_row::TopRow;
-use crate::tools::stats::tops::generator::TopGenerator;
+use crate::models::datastructures::tops::generator::TopGenerator;
 use crate::utils::cli::await_next;
 
 impl TopGenerator {

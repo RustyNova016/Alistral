@@ -19,6 +19,7 @@ use musicbrainz_db_lite::models::musicbrainz::release::Release;
 use musicbrainz_db_lite::models::musicbrainz::release_group::ReleaseGroup;
 use musicbrainz_db_lite::models::musicbrainz::work::Work;
 
+use crate::models::datastructures::tops::generator::TopGenerator;
 use crate::ALISTRAL_CLIENT;
 use crate::database::interfaces::statistics_data::artist_stats;
 use crate::database::interfaces::statistics_data::release_group_stats;
@@ -32,12 +33,8 @@ use crate::datastructures::statistic_formater::StatisticType;
 use crate::models::cli::common::Timeframe;
 use crate::models::datastructures::tops::scorer::listen_count::ListenCountTopScorer;
 use crate::models::datastructures::tops::scorer::listen_duration::ListenDurationTopScorer;
-use crate::tools::stats::tops::generator::TopGenerator;
 use crate::utils::user_inputs::UserInputParser;
 
-pub mod generate_rows;
-pub mod generator;
-pub mod printing;
 pub mod stats_compiling;
 pub mod target_entity;
 
