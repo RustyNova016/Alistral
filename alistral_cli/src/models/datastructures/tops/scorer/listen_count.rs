@@ -1,6 +1,7 @@
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 
 use crate::models::datastructures::tops::scorer::TopScorer;
+use crate::models::datastructures::tops::top_score::TopScore;
 
 pub struct ListenCountTopScorer;
 
@@ -10,7 +11,8 @@ where
 {
     type Score = usize;
 
-    fn get_score_of_element(&self, element: L) -> Self::Score {
-        element.listen_count()
+    fn get_score_of_element(&self, element: L) -> TopScore<Self::Score> {
+        let count = element.listen_count();
+        TopScore { data: count, display: count.to_string() }
     }
 }
