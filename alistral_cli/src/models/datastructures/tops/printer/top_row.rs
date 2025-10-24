@@ -6,17 +6,18 @@ use crate::interface::comp_arrow::ComparisonArrow;
 use crate::models::datastructures::tops::top_score::TopScore;
 use crate::utils::constants::LISTENBRAINZ_FMT;
 
-pub struct TopRow<S> where S: Ord + Eq {
+pub struct TopRow {
     pub ranking: usize,
     pub previous_ranking: Option<usize>,
 
-    pub score: TopScore<S>,
-    pub previous_score: Option<TopScore<S>>,
+    pub score: TopScore,
+    pub previous_score: Option<TopScore>,
 
-    pub element: Box<dyn FormatWithAsyncDyn<MusicbrainzFormater, Error = musicbrainz_db_lite::Error>>,
+    pub element:
+        Box<dyn FormatWithAsyncDyn<MusicbrainzFormater, Error = musicbrainz_db_lite::Error>>,
 }
 
-impl<S> TopRow<S> where S: Ord + Eq {
+impl TopRow {
     pub fn rank_col(&self) -> String {
         match self.previous_ranking {
             None => format!("#{}", self.ranking),
@@ -42,6 +43,9 @@ impl<S> TopRow<S> where S: Ord + Eq {
     }
 
     pub async fn element_col(&self) -> String {
-        self.element.format_with_async(&LISTENBRAINZ_FMT).await.unwrap()
+        self.element
+            .format_with_async(&LISTENBRAINZ_FMT)
+            .await
+            .unwrap()
     }
 }

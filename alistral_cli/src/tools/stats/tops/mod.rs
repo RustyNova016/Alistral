@@ -19,7 +19,6 @@ use musicbrainz_db_lite::models::musicbrainz::release::Release;
 use musicbrainz_db_lite::models::musicbrainz::release_group::ReleaseGroup;
 use musicbrainz_db_lite::models::musicbrainz::work::Work;
 
-use crate::models::datastructures::tops::generator::TopGenerator;
 use crate::ALISTRAL_CLIENT;
 use crate::database::interfaces::statistics_data::artist_stats;
 use crate::database::interfaces::statistics_data::release_group_stats;
@@ -31,10 +30,13 @@ use crate::datastructures::statistic_formater::StatisticFormater;
 use crate::datastructures::statistic_formater::StatisticOutput;
 use crate::datastructures::statistic_formater::StatisticType;
 use crate::models::cli::common::Timeframe;
+use crate::models::datastructures::tops::generator::TopGenerator;
 use crate::models::datastructures::tops::scorer::listen_count::ListenCountTopScorer;
 use crate::models::datastructures::tops::scorer::listen_duration::ListenDurationTopScorer;
+use crate::tools::stats::tops::score_by::SortBy;
 use crate::utils::user_inputs::UserInputParser;
 
+pub mod score_by;
 pub mod stats_compiling;
 pub mod target_entity;
 
@@ -67,26 +69,6 @@ pub struct StatsTopCommand {
     /// Get statistics until this date. Use YYYY-MM-DD format
     #[clap(short, long)]
     until: Option<NaiveDate>,
-}
-
-#[derive(ValueEnum, Clone, Debug, Copy, IsVariant)]
-pub enum SortBy {
-    /// The number of times the entity has been listened to
-    ListenCount,
-
-    /// The total duration this entity has been listened for
-    ListenDuration,
-}
-
-impl Display for SortBy {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Self::ListenCount => write!(f, "listen-count")?,
-            Self::ListenDuration => write!(f, "listen-duration")?,
-        };
-
-        Ok(())
-    }
 }
 
 #[derive(ValueEnum, Clone, Debug, Copy, IsVariant)]
@@ -176,7 +158,8 @@ impl StatsTopCommand {
             }
             (SortBy::ListenCount, StatsTarget::Recording) => {
                 let gene = self.get_generator().await;
-                gene.print_recording_stats(ListenCountTopScorer).await;
+                gene.generate_rows_for_entwlis()
+                gene.generate_recording_rows(ListenCountTopScorer).await;
                 Ok(())
             }
             (SortBy::ListenCount, StatsTarget::Release) => {
@@ -289,4 +272,3 @@ impl StatsTopCommand {
 //         stats_command(&mut conn, "RustyNova", StatsTarget::WorkRecursive, SortSorterBy::Count).await;
 //     }
 // }
-

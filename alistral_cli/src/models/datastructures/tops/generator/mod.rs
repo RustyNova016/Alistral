@@ -6,8 +6,12 @@ use itertools::Itertools;
 use musicbrainz_db_lite::HasRowID;
 use musicbrainz_db_lite::Recording;
 
+/// Genarate tops for entities with listens
+pub mod entity_with_list;
 pub mod generate_rows;
-pub mod printing;
+pub mod listen_count;
+
+
 
 /// Create a top
 pub struct TopGenerator {
@@ -86,4 +90,9 @@ impl TopGenerator {
 
         (cur_stats, prev_stats, entities)
     }
+
+    
 }
+
+
+

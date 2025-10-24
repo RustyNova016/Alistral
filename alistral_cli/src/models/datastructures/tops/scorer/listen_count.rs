@@ -9,10 +9,9 @@ impl<L> TopScorer<L> for ListenCountTopScorer
 where
     L: ListenCollectionReadable,
 {
-    type Score = usize;
 
-    fn get_score_of_element(&self, element: &L) -> TopScore<Self::Score> {
-        let count = element.listen_count();
-        TopScore { data: count, display: count.to_string() }
+
+    fn get_score_of_element(&self, element: &L) -> TopScore {
+        TopScore::Number(element.listen_count() as i64)
     }
 }

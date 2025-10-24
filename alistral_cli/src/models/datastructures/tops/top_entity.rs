@@ -12,7 +12,7 @@ where
     Self: Sized + HasRowID,
     Sco: TopScorer<Self>,
 {
-    fn get_top_score(&self, scorer: Sco) -> TopScore<Sco::Score> {
+    fn get_top_score(&self, scorer: Sco) -> TopScore {
         scorer.get_score_of_element(&self)
     }
 
