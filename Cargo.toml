@@ -5,6 +5,8 @@ members = [
     "interzic", 
     "musicbrainz_db_lite", 
     "symphonize",
+    "sequelles"
+    #"tuillez"
 ]
 resolver = "3"
 
@@ -12,8 +14,10 @@ resolver = "3"
 debug = "line-tables-only"
 
 [patch.crates-io]
-sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "99b2aa533ef7e17f935b5647897c4676b588d09c"}
-tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "9760b11841bc29b7101aea62b2f275dd34c6bdae"}
+#sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "99b2aa533ef7e17f935b5647897c4676b588d09c"}
+sequelles = {path = "./sequelles"}
+tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c8656a4eedb571177a8ffa3b9984e78"}
+#tuillez = {path = "./tuillez"}
 musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "60ab4d48a6898cc2fc8e0b6fc9fb774c64cfe8d2"}
 #musicbrainz_rs = {path = "./musicbrainz_rs"}
 

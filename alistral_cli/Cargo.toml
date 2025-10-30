@@ -78,9 +78,11 @@ tuillez = "0.1.0"
 
 # Other
 zip = "6.0.0"
+sequelles = { version = "0.2.0", path = "../sequelles" }
+comfy-table = { version = "7.2.1", features = ["custom_styling"] }
 
 [features]
-default = ["full"]
+default = ["stats"]
 #default = ["full"]
 full = ["musicbrainz", "lookup", "stats", "radio"]
 
