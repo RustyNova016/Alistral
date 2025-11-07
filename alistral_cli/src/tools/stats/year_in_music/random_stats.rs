@@ -1,5 +1,6 @@
 use std::fmt::Write;
 
+use alistral_core::cli::colors::AlistralColors;
 use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use rust_decimal::Decimal;
@@ -24,10 +25,10 @@ impl YimReport {
         let current = self.current.listens().listen_count();
         let previous = self.previous.listens().listen_count();
         format!(
-            "Listened to {} recordings ({} {})",
-            current,
+            "Listened to {} tracks ({} {})",
+            current.alistral_green(),
             ComparisonArrow::greater_is_better(current, previous),
-            previous
+            previous.alistral_green()
         )
     }
 
@@ -52,10 +53,10 @@ impl YimReport {
 
         format!(
             "Had music in your ears for {} ({} {}). That's {}% of the year!",
-            HumanTimePrinter::from(current),
+            HumanTimePrinter::from(current).alistral_green(),
             ComparisonArrow::greater_is_better(current, previous),
-            HumanTimePrinter::from(previous),
-            year_percent.round_dp(2)
+            HumanTimePrinter::from(previous).alistral_green(),
+            year_percent.round_dp(2).alistral_green()
         )
     }
 }

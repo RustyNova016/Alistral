@@ -1,5 +1,17 @@
+pub mod artist;
+pub mod collection;
+pub mod entity_as_listens;
+pub mod label;
 pub mod listen_timeframe;
+pub mod messybrainz;
+pub mod recording;
+pub mod release;
+pub mod release_group;
+pub mod statistic_data;
+pub mod tags;
+pub mod traits;
 pub mod user;
+pub mod work;
 use chrono::Duration;
 use chrono::Utc;
 use musicbrainz_db_lite::HasRowID;
@@ -13,18 +25,7 @@ use crate::traits::mergable::Mergable;
 use super::listen_collection::ListenCollection;
 use super::listen_collection::traits::ListenCollectionReadable;
 
-pub mod artist;
-pub mod collection;
-pub mod entity_as_listens;
-pub mod label;
-pub mod messybrainz;
-pub mod recording;
-pub mod release;
-pub mod release_group;
-pub mod statistic_data;
-pub mod tags;
-pub mod traits;
-pub mod work;
+
 
 /// A structure representing an entity with associated listens.
 #[derive(Debug, Clone)]
@@ -174,4 +175,6 @@ where
         }
     }
 }
+
+
 

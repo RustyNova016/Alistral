@@ -19,9 +19,11 @@ use crate::models::datastructures::tops::top_score::TopScore;
 use crate::utils::cli::await_next;
 use crate::utils::user_inputs::UserInputParser;
 
+pub mod artists;
 pub mod new_releases;
 pub mod random_stats;
 pub mod recordings;
+pub mod stats;
 
 /// A recap of the year's statistics
 #[derive(Parser, Debug, Clone)]
@@ -45,6 +47,7 @@ impl StatsYIMCommand {
         let stats = ALISTRAL_CLIENT.statistics_of_user(username).await;
 
         let report = YimReport::new(year, stats);
+        report.prefetch_data().await;
         report.print().await;
     }
 }
@@ -55,12 +58,15 @@ struct YimReport {
     year_start: DateTime<Local>,
     year_end: DateTime<Local>,
 
+    /// All the user data
+    full_user_stats: ListenStatisticsData,
+
     current: ListenStatisticsData,
     previous: ListenStatisticsData,
 }
 
 impl YimReport {
-    pub fn new(year: i32, stats: ListenStatisticsData) -> Self {
+    pub fn new(year: i32, full_user_stats: ListenStatisticsData) -> Self {
         let year_start =
             NaiveDateTime::parse_from_str(&format!("{}-01-01 00:00:00", year), "%Y-%m-%d %H:%M:%S")
                 .unwrap()
@@ -70,11 +76,13 @@ impl YimReport {
         let year_end = year_start.with_year(year + 1).unwrap();
         let previous_year = year_start.with_year(year - 1).unwrap();
 
-        let current = stats
+        let current = full_user_stats
             .clone_no_stats()
             .filter_listening_date(year_start.into(), year_end.into());
 
-        let previous = stats.filter_listening_date(previous_year.into(), year_start.into());
+        let previous = full_user_stats
+            .clone_no_stats()
+            .filter_listening_date(previous_year.into(), year_start.into());
 
         Self {
             current,
@@ -82,6 +90,7 @@ impl YimReport {
             year,
             year_end,
             year_start,
+            full_user_stats,
         }
     }
 
@@ -95,6 +104,10 @@ impl YimReport {
         await_next();
 
         println!("{}", self.new_release_page().await);
+        println!("[Press enter to continue]");
+        await_next();
+
+        println!("{}", self.artist_report().await);
         println!("[Press enter to continue]");
         await_next();
     }
