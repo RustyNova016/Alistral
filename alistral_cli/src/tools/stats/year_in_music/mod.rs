@@ -8,8 +8,10 @@ use chrono::NaiveDateTime;
 use clap::Parser;
 
 use crate::ALISTRAL_CLIENT;
+use crate::utils::cli::await_next;
 use crate::utils::user_inputs::UserInputParser;
 
+pub mod new_releases;
 pub mod random_stats;
 pub mod recordings;
 
@@ -28,10 +30,14 @@ impl StatsYIMCommand {
         let year = self.year.unwrap_or(2024);
         let username = UserInputParser::username_or_default(&self.username);
 
+        println!("Welcome to your Year in Music recap!");
+        println!();
+        println!("Please wait while we fetch your data...");
+
         let stats = ALISTRAL_CLIENT.statistics_of_user(username).await;
 
         let report = YimReport::new(year, stats);
-        println!("{}", report.print().await)
+        report.print().await;
     }
 }
 
@@ -71,12 +77,12 @@ impl YimReport {
         }
     }
 
-    pub async fn print(&self) -> String {
-        let mut out = String::new();
-        writeln!(out, "{}", self.random_stats_report().await).unwrap();
-        writeln!(out).unwrap();
-        writeln!(out, "{}", self.recording_report().await).unwrap();
-        out
+    pub async fn print(&self) {
+        println!("{}", self.random_stats_report().await);
+        println!("[Press enter to continue]");
+        await_next();
+        println!("{}", self.recording_report().await);
+        println!("[Press enter to continue]");
+        await_next();
     }
 }
-

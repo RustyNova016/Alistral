@@ -10,7 +10,7 @@ use sequelles::ZeroToManyJoin;
 /// Map listens to the the first release date of the recordings
 #[derive(Debug, Default)]
 pub struct StatsByReleaseYear {
-    pub mapping: ZeroToManyJoin<i32, RecordingWithListens>,
+    pub mapping: ZeroToManyJoin<i64, RecordingWithListens>,
 }
 
 impl StatsByReleaseYear {
@@ -24,7 +24,7 @@ impl StatsByReleaseYear {
             .first_release_date_or_fetch(client.musicbrainz_db.clone())
             .await?;
 
-        self.mapping.push_entry(date.map(|date| date.year()), recording);
+        self.mapping.push_entry(date.map(|date| date.year() as i64), recording);
 
         Ok(())
     }
