@@ -5,13 +5,16 @@ use alistral_core::datastructures::listen_collection::traits::ListenCollectionRe
 use rust_decimal::Decimal;
 use rust_decimal_macros::dec;
 
+use crate::datastructures::cli_formating::title::Heading1;
 use crate::datastructures::formaters::human_time::HumanTimePrinter;
 use crate::interface::comp_arrow::ComparisonArrow;
 use crate::tools::stats::year_in_music::YimReport;
 
 impl YimReport {
     pub(super) async fn random_stats_report(&self) -> String {
-        let mut out = format!("In {}, you:\n", self.year);
+        let mut out = String::new();
+        writeln!(out, "{}", Heading1("General stats 📈")).unwrap();
+        writeln!(out, "In {}, you:", self.year).unwrap();
         writeln!(out, " - {}", self.listen_count_line()).unwrap();
         writeln!(out, " - {}", self.listen_duration_line().await).unwrap();
         out
