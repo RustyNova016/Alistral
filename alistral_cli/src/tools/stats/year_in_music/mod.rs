@@ -1,13 +1,21 @@
+use core::cmp::Reverse;
 use std::fmt::Write;
 
+use alistral_core::datastructures::entity_with_listens::recording::RecordingWithListens;
+use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime as _;
 use alistral_core::models::listen_statistics_data::ListenStatisticsData;
 use chrono::DateTime;
 use chrono::Datelike;
 use chrono::Local;
 use chrono::NaiveDateTime;
 use clap::Parser;
+use itertools::Itertools as _;
+use sequelles::datastructures::ranking::Ranking;
 
 use crate::ALISTRAL_CLIENT;
+use crate::models::datastructures::tops::printer::TopPrinter;
+use crate::models::datastructures::tops::printer::top_row::TopRow;
+use crate::models::datastructures::tops::top_score::TopScore;
 use crate::utils::cli::await_next;
 use crate::utils::user_inputs::UserInputParser;
 
@@ -81,8 +89,32 @@ impl YimReport {
         println!("{}", self.random_stats_report().await);
         println!("[Press enter to continue]");
         await_next();
+
         println!("{}", self.recording_report().await);
         println!("[Press enter to continue]");
         await_next();
+
+        println!("{}", self.new_release_page().await);
+        println!("[Press enter to continue]");
+        await_next();
+    }
+
+    pub async fn top_recordings(stats: Vec<RecordingWithListens>) -> String {
+        let rankings = Ranking::from(stats);
+        let rankings =
+            rankings.get_ranks(|rec| Reverse(rec.get_time_listened().unwrap_or_default()));
+
+        let rows = rankings
+            .into_iter()
+            .map(|(rank, rec)| TopRow {
+                ranking: rank + 1,
+                score: TopScore::TimeDelta(rec.get_time_listened().unwrap_or_default()),
+                element: Box::new(rec.recording().clone()),
+                previous_ranking: None,
+                previous_score: None,
+            })
+            .collect_vec();
+
+        TopPrinter::format_n_rows(rows, 10).await
     }
 }
