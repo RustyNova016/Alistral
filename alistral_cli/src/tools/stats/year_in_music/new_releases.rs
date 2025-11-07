@@ -1,19 +1,13 @@
-use core::cmp::Reverse;
 use std::fmt::Write;
 
 use alistral_core::datastructures::entity_with_listens::recording::RecordingWithListens;
-use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use itertools::Itertools;
-use sequelles::datastructures::ranking::Ranking;
 use tuillez::OwoColorize;
 
 use crate::ALISTRAL_CLIENT;
 use crate::datastructures::cli_formating::title::Heading1;
 use crate::datastructures::mappers::stats_by_release_year::StatsByReleaseYear;
-use crate::models::datastructures::tops::printer::TopPrinter;
-use crate::models::datastructures::tops::printer::top_row::TopRow;
-use crate::models::datastructures::tops::top_score::TopScore;
 use crate::tools::stats::year_in_music::YimReport;
 
 impl YimReport {
@@ -25,7 +19,7 @@ impl YimReport {
         writeln!(out, "{}", self.new_releases().await).unwrap();
         writeln!(out).unwrap();
         writeln!(out, "Here's the top 10 tracks:").unwrap();
-        writeln!(out, "{}", Self::top(stats).await).unwrap();
+        writeln!(out, "{}", Self::top_recordings(stats).await).unwrap();
 
         out
     }
@@ -84,23 +78,5 @@ impl YimReport {
             track_count.green(),
             listen_count.green()
         )
-    }
-
-    async fn top(stats: Vec<RecordingWithListens>) -> String {
-        let rankings = Ranking::from(stats);
-        let rankings = rankings.get_ranks(|rec| Reverse(rec.get_time_listened().unwrap_or_default()));
-
-        let rows = rankings
-            .into_iter()
-            .map(|(rank, rec)| TopRow {
-                ranking: rank,
-                score: TopScore::TimeDelta(rec.get_time_listened().unwrap_or_default()),
-                element: Box::new(rec.recording().clone()),
-                previous_ranking: None,
-                previous_score: None,
-            })
-            .collect_vec();
-
-        TopPrinter::format_n_rows(rows, 10).await
     }
 }
