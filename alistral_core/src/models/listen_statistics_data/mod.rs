@@ -9,6 +9,7 @@ use crate::datastructures::entity_with_listens::artist::collection::ArtistWithRe
 use crate::datastructures::entity_with_listens::label::collection::LabelWithReleasesCollection;
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use crate::datastructures::entity_with_listens::release::collection::ReleaseWithRecordingsCollection;
+use crate::datastructures::entity_with_listens::release_group::collection::ReleaseGroupWithReleasesCollection;
 use crate::datastructures::entity_with_listens::user::collection::UserWithListensCollection;
 use crate::datastructures::listen_collection::ListenCollection;
 
@@ -17,7 +18,10 @@ pub mod labels;
 pub mod listens;
 pub mod recordings;
 pub mod release;
+pub mod release_groups;
 pub mod user;
+
+
 
 /// This struct hold listens data. This is a convenience over having a to create listen statistics yourself
 ///
@@ -35,6 +39,7 @@ pub struct ListenStatisticsData {
     labels: OnceCell<LabelWithReleasesCollection>,
     recordings: OnceCell<RecordingWithListensCollection>,
     releases: OnceCell<ReleaseWithRecordingsCollection>,
+    release_groups: OnceCell<ReleaseGroupWithReleasesCollection>,
     users: OnceCell<UserWithListensCollection>,
 }
 
@@ -48,6 +53,7 @@ impl ListenStatisticsData {
             users: OnceCell::new(),
             recordings: OnceCell::new(),
             releases: OnceCell::new(),
+            release_groups: OnceCell::new(),
         }
     }
 
@@ -76,3 +82,5 @@ impl ListenStatisticsData {
         Self::new(self.client.clone(), self.listens.clone())
     }
 }
+
+

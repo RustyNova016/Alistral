@@ -18,7 +18,7 @@ impl DBRelation<ReleasesReleasesgroupDBRel> for Release {
     type ReturnedType = ReleaseGroup;
 
     fn get_join_statement() -> &'static str {
-        "INNER JOIN releases ON release_groups.id = releases.release_group"
+        "INNER JOIN release_groups ON release_groups.id = releases.release_group"
     }
 }
 
