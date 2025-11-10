@@ -13,6 +13,7 @@ use crate::datastructures::entity_with_listens::release::collection::ReleaseWith
 use crate::datastructures::entity_with_listens::release_group::ReleaseGroupWithReleases;
 use crate::datastructures::listen_sorter::ListenSortingStrategy;
 
+pub mod sort;
 pub type ReleaseGroupWithReleasesCollection =
     EntityWithListensCollection<ReleaseGroup, ReleaseWithRecordingsCollection>;
 

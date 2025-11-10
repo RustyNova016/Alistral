@@ -1,14 +1,37 @@
 use std::collections::HashMap;
+use std::sync::Arc;
 
 use itertools::Itertools;
 
+use crate::DBClient;
+use crate::DBRelation;
 use crate::FetchAsComplete as _;
 use crate::models::musicbrainz::release::Release;
 use crate::models::musicbrainz::release_group::ReleaseGroup;
 use crate::utils::sqlx_utils::entity_relations::JoinCollection;
 use crate::utils::sqlx_utils::entity_relations::JoinRelation;
 
+/// Recording (1:M) -> Releases
+pub struct ReleasesReleasesgroupDBRel;
+
+impl DBRelation<ReleasesReleasesgroupDBRel> for Release {
+    type ReturnedType = ReleaseGroup;
+
+    fn get_join_statement() -> &'static str {
+        "INNER JOIN releases ON release_groups.id = releases.release_group"
+    }
+}
+
 impl Release {
+    /// Get the release group associated to the release
+    pub async fn get_release_group(
+        &self,
+        client: &Arc<DBClient>,
+    ) -> Result<Vec<ReleaseGroup>, crate::Error> {
+        self.get_related_entity_or_fetch_as_task::<ReleasesReleasesgroupDBRel>(client)
+            .await
+    }
+
     /// Get the releases of the recording, and fetch them if necessary.
     pub async fn get_release_group_or_fetch(
         &self,

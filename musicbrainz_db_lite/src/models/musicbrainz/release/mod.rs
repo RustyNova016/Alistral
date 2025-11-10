@@ -16,6 +16,7 @@ use crate::utils::macros::hardlink_methods::impl_db_relation_fetch_methods;
 use crate::utils::macros::hardlink_methods::impl_db_relation_methods;
 
 pub mod display;
+pub mod fetching;
 pub mod finds;
 pub mod methods;
 pub mod relations;
