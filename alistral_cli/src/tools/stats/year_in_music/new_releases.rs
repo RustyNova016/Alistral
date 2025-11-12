@@ -22,7 +22,7 @@ impl YimReport {
 
         writeln!(out, "{}", self.new_releases(&stats).await).unwrap();
         writeln!(out).unwrap();
-        writeln!(out, "Here's the top 10 tracks:").unwrap();
+        writeln!(out, "Here's the top 20 tracks:").unwrap();
         writeln!(out, "{}", Self::top_recordings(stats).await).unwrap();
 
         out
