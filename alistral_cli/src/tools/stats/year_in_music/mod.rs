@@ -20,9 +20,11 @@ use crate::utils::cli::await_next;
 use crate::utils::user_inputs::UserInputParser;
 
 pub mod artists;
+pub mod discoveries;
 pub mod new_releases;
 pub mod random_stats;
 pub mod recordings;
+pub mod releases;
 pub mod stats;
 
 /// A recap of the year's statistics
@@ -107,7 +109,15 @@ impl YimReport {
         println!("[Press enter to continue]");
         await_next();
 
+        println!("{}", self.discoveries_page().await);
+        println!("[Press enter to continue]");
+        await_next();
+
         println!("{}", self.artist_report().await);
+        println!("[Press enter to continue]");
+        await_next();
+
+        println!("{}", self.release_report().await);
         println!("[Press enter to continue]");
         await_next();
     }
@@ -128,6 +138,6 @@ impl YimReport {
             })
             .collect_vec();
 
-        TopPrinter::format_n_rows(rows, 10).await
+        TopPrinter::format_n_rows(rows, 20).await
     }
 }
