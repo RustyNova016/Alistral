@@ -1,5 +1,6 @@
 //! Implementations for type convertions
 
+use itertools::Itertools;
 use musicbrainz_db_lite::HasRowID;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 
@@ -60,5 +61,6 @@ where
         self.0
             .values()
             .flat_map(|value| value.listens.iter_recording_with_listens())
+            .unique_by(|rec| rec.entity().rowid())
     }
 }
