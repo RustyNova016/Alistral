@@ -1,5 +1,4 @@
 use core::cmp::Reverse;
-use std::fmt::Write;
 
 use alistral_core::datastructures::entity_with_listens::recording::RecordingWithListens;
 use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime as _;
@@ -21,6 +20,7 @@ use crate::utils::user_inputs::UserInputParser;
 
 pub mod artists;
 pub mod discoveries;
+pub mod month_recap;
 pub mod new_releases;
 pub mod random_stats;
 pub mod recordings;
@@ -118,6 +118,10 @@ impl YimReport {
         await_next();
 
         println!("{}", self.release_report().await);
+        println!("[Press enter to continue]");
+        await_next();
+
+        println!("{}", self.monthly_recap_page().await);
         println!("[Press enter to continue]");
         await_next();
     }
