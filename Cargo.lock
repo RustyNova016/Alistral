@@ -56,6 +56,7 @@ dependencies = [
  "async-fn-stream",
  "bon",
  "channels-console",
+ "charchart",
  "chrono",
  "clap",
  "clap-markdown",
@@ -518,6 +519,16 @@ dependencies = [
  "serde_json",
  "tiny_http",
  "tokio",
+]
+
+[[package]]
+name = "charchart"
+version = "0.1.0"
+source = "git+https://github.com/RustyNova016/charchart#0416103608634b6a8dc7f1ea9501da76717ce939"
+dependencies = [
+ "bon",
+ "owo-colors",
+ "rust_decimal",
 ]
 
 [[package]]
