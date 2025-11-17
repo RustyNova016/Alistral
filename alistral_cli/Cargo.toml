@@ -76,6 +76,9 @@ tracing-appender = "0.2.3"
 tracing-indicatif = "0.3.13"
 tuillez = "0.1.0"
 
+# Debuging
+channels-console = { version = "0.3", optional = true, features=['futures'] }
+
 # Other
 zip = "6.0.0"
 
@@ -95,6 +98,9 @@ legacy_ent_with_listen = []
 
 # Subcrates
 interzicf = ["interzic"]
+
+# Debugging
+channels-console = ["dep:channels-console", "musicbrainz-db-lite/channels-console"]
 
 [lints.rust]
 async_fn_in_trait = { level = "allow", priority = 1 }
