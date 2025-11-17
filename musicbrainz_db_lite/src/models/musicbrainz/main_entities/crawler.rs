@@ -25,6 +25,9 @@ pub fn crawler(
     // Declare the crawlers
     let (out_sender, out_reciever) = channel(10);
     let (crawl_sender, crawl_reciever) = unbounded();
+    #[cfg(feature = "channels-console")]
+    let (crawl_sender, crawl_reciever) =
+        channels_console::instrument!((crawl_sender, crawl_reciever), log = true);
 
     let task = crawl_task(out_sender, crawl_reciever, client)
         .into_stream()

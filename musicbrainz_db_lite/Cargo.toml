@@ -43,6 +43,9 @@ owo-colors = { version = "4.2.1", optional = true}
 # Macros
 bon = "3.7.2"
 
+# Debuging
+channels-console = { version = "0.3", optional = true, features=['futures'] }
+
 # Others
 chrono = "0.4.42"
 
@@ -52,6 +55,9 @@ default = ["timeout_continue", "pretty_format"]
 timeout_continue = []
 pretty_format = ["dep:owo-colors"]
 backtrace = ["musicbrainz_rs/backtrace"]
+
+# Debugging
+channels-console = ["dep:channels-console"]
 
 [dev-dependencies]
 serial_test = "3.1.1"

@@ -32,6 +32,7 @@ use crate::tools::musicbrainz::clippy::print_lint;
 use crate::utils::constants::MUSIBRAINZ_FMT;
 use crate::utils::whitelist_blacklist::WhitelistBlacklist;
 
+/// Poll the Clippy lint stream until it's empty
 pub async fn mb_clippy_poller(
     stream: impl Stream<Item = Result<(), JoinError>>,
 ) -> Result<(), JoinError> {
@@ -41,6 +42,7 @@ pub async fn mb_clippy_poller(
     Ok(())
 }
 
+/// Create the clippy stream
 pub fn mb_clippy_stream(
     filter: Arc<WhitelistBlacklist<String>>,
 ) -> (
@@ -48,6 +50,14 @@ pub fn mb_clippy_stream(
     impl Stream<Item = Result<(), JoinError>>,
 ) {
     let (entity_send, entity_stream) = channel::<Arc<MainEntity>>(10);
+
+    #[cfg(feature = "channels-console")]
+    let (entity_send, entity_stream) = channels_console::instrument!(
+        (entity_send, entity_stream),
+        capacity = 10,
+        log = true,
+        label = "Clippy Lint Channel"
+    );
 
     let stream = entity_stream
         .map(move |entity| {
