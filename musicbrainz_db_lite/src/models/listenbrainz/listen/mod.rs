@@ -7,8 +7,11 @@ use crate::models::shared_traits::has_table::HasTable;
 use crate::utils::macros::hardlink_methods::impl_db_relation_methods;
 
 pub mod deletes;
+pub mod fetching;
+pub mod insert;
 pub mod relations;
 pub mod selects;
+
 
 #[derive(Debug, PartialEq, Eq, Clone, sqlx::FromRow, Deserialize, Serialize)]
 pub struct Listen {
@@ -59,3 +62,4 @@ impl HasTable for Listen {
     const TABLE_NAME: &str = "listens";
     const FOREIGN_FIELD_NAME: &str = "listen";
 }
+

@@ -3,7 +3,7 @@ use snafu::Snafu;
 
 /// Wrapper around [sqlx::Error] with backtrace support
 #[derive(Debug, Snafu)]
-#[snafu(visibility(pub))]
+#[snafu(visibility(pub(crate)), display("An error occured in SQLx"))]
 pub struct SqlxError {
     source: sqlx::Error,
 

@@ -4,8 +4,9 @@ use sequelles::databases::sqlite::database::GetConnectionError;
 use thiserror::Error;
 
 use crate::api::listenbrainz::listen::fetching::query::ListenFetchQueryError;
-use crate::models::errors::sqlx_error::SqlxError;
+use crate::error::sqlx_error::SqlxError;
 
+pub mod sqlx_error;
 #[derive(Error, Debug)]
 pub enum Error {
     #[error(transparent)]
@@ -60,3 +61,4 @@ pub enum Error {
     #[error(transparent)]
     MusicbrainzGetRequestError(#[from] musicbrainz_rs::GetRequestError),
 }
+

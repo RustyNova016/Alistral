@@ -1,5 +1,4 @@
 pub mod client;
-pub mod errors;
 pub mod listenbrainz;
 pub mod musicbrainz;
 pub mod shared_traits;
