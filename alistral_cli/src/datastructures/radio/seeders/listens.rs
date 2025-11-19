@@ -7,7 +7,6 @@ use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 
 use crate::ALISTRAL_CLIENT;
 use crate::database::interfaces::statistics_data::recording_strategy;
-use crate::database::listenbrainz::listens::fetch_latest_listens_of_user;
 
 use super::SeederSettings;
 
@@ -24,7 +23,7 @@ impl ListenSeeder {
         conn: &mut sqlx::SqliteConnection,
     ) -> Result<RecordingWithListensCollection, crate::Error> {
         // Get the listens
-        fetch_latest_listens_of_user(conn, &self.username).await?;
+        Listen::fetch_and_save_incremental(&ALISTRAL_CLIENT.musicbrainz_db, &self.username).await.unwrap();
 
         let min_listened_at = self
             .settings

@@ -1,4 +1,5 @@
 use musicbrainz_db_lite::GetConnectionError;
+use musicbrainz_db_lite::models::listenbrainz::listen::fetching::ListenFetchingError;
 use thiserror::Error;
 
 #[derive(Error, Debug)]
@@ -15,4 +16,7 @@ pub enum Error {
 
     #[error(transparent)]
     GetConnectionError(#[from] GetConnectionError),
+
+    #[error(transparent)]
+    ListenFetchingError(#[from] ListenFetchingError),
 }

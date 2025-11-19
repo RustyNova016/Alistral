@@ -79,13 +79,11 @@ pub(super) async fn display_wrong_mapping(
 
     match choice() {
         Choice::Next => {
-            Listen::fetch_listen_by_id(
-                conn,
-                &ALISTRAL_CLIENT.listenbrainz,
+            Listen::fetch_and_save_listen_by_index(
+                &ALISTRAL_CLIENT.musicbrainz_db,
                 listen.listened_at,
                 &listen.user,
                 &listen.recording_msid,
-                10,
             )
             .await
             .expect("Couldn't refresh listen");

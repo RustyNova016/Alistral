@@ -1,5 +1,4 @@
 use musicbrainz_db_lite::HasRowID;
-use musicbrainz_db_lite::api::listenbrainz::listen::fetching::query::ListenFetchAPIQuery;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use tracing::instrument;
@@ -32,13 +31,7 @@ impl ListenFetchQuery {
         // Fetch the latest listens
         // ... If it's not in offline mode
         if !client.offline {
-            let mut fetch = ListenFetchAPIQuery::incremental_fetch_user(
-                &client.musicbrainz_db,
-                self.user.clone(),
-            )
-            .await?;
-
-            fetch.request_and_save(&client.musicbrainz_db).await?;
+            Listen::fetch_and_save_incremental(&client.musicbrainz_db, &self.user).await?;
         }
 
         if self.fetch_recordings_redirects {

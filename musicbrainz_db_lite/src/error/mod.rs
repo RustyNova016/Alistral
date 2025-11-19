@@ -3,7 +3,6 @@ use futures::channel::mpsc::SendError;
 use sequelles::databases::sqlite::database::GetConnectionError;
 use thiserror::Error;
 
-use crate::api::listenbrainz::listen::fetching::query::ListenFetchQueryError;
 use crate::error::sqlx_error::SqlxError;
 
 pub mod sqlx_error;
@@ -42,9 +41,6 @@ pub enum Error {
 
     #[error(transparent)]
     DeadpoolError(#[from] PoolError<sqlx::Error>),
-
-    #[error(transparent)]
-    ListenFetchQueryError(#[from] ListenFetchQueryError),
 
     #[error("Listenbrainz returned an error while fetching listens: {0}")]
     ListenFetchingError(String),

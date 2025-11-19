@@ -26,7 +26,6 @@ impl MessybrainzSubmission {
 
 #[cfg(test)]
 mod tests {
-    use listenbrainz::raw::Client;
 
     use crate::models::listenbrainz::listen::Listen;
     use crate::models::listenbrainz::messybrainz_submission::MessybrainzSubmission;
@@ -37,7 +36,6 @@ mod tests {
     async fn should_get_listens_of_msid() {
         let client = test_mb_client();
         let conn = &mut *client.get_raw_connection().await.unwrap();
-        let lb_client = Client::new();
 
         // Test values. Feel free to add edge cases here
         let test_values = vec![(
@@ -48,7 +46,7 @@ mod tests {
 
         for (listened_at, user, msid) in test_values {
             let base_listen =
-                Listen::fetch_listen_by_id(conn, &lb_client, listened_at, user, msid, 100)
+                Listen::fetch_and_save_listen_by_index(&client, listened_at, user, msid)
                     .await
                     .unwrap()
                     .unwrap();

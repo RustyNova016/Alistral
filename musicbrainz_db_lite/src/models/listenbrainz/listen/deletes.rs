@@ -21,7 +21,7 @@ impl Listen {
         username: &str,
     ) -> Result<sqlx::sqlite::SqliteQueryResult, SqlxError> {
         sqlx::query!(
-            "DELETE FROM `listens` WHERE listened_at > ? AND listened_at < ? AND `user` = ?",
+            "DELETE FROM `listens` WHERE ? < listened_at AND listened_at < ? AND `user` = ?",
             start_ts,
             end_ts,
             username

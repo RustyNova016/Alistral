@@ -1,6 +1,11 @@
-use crate::models::musicbrainz::user::User;
+
 use futures::stream::BoxStream;
+use snafu::ResultExt;
 use sqlx::{SqliteConnection, query_scalar};
+
+use crate::error::sqlx_error::SqlxError;
+use crate::error::sqlx_error::SqlxSnafu;
+use crate::models::musicbrainz::user::User;
 
 use super::Listen;
 
@@ -17,14 +22,14 @@ impl Listen {
     pub async fn get_latest_listen_of_user(
         conn: &mut SqliteConnection,
         user: &str,
-    ) -> Result<Option<Listen>, sqlx::Error> {
+    ) -> Result<Option<Listen>, SqlxError> {
         sqlx::query_as!(
             Listen,
             "SELECT * FROM `listens` WHERE LOWER(user) = LOWER(?) ORDER BY listened_at DESC LIMIT 1",
             user
         )
         .fetch_optional(conn)
-        .await
+        .await.context(SqlxSnafu)
     }
 
     /// Return the mapped listens of the user
