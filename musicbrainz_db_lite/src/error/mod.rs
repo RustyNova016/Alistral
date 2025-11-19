@@ -18,9 +18,6 @@ pub enum Error {
     SerdeJsonError(#[from] serde_json::Error),
 
     #[error(transparent)]
-    ReqwestError(#[from] reqwest::Error),
-
-    #[error(transparent)]
     MigrationError(#[from] sqlx::migrate::MigrateError),
 
     #[error(

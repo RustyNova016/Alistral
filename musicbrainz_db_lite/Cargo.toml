@@ -10,23 +10,20 @@ serde_json = "1.0.140"
 itertools = "0.14.0"
 serde = "1.0.227"
 const_format = { version = "0.2.34" , features = ["rust_1_51", "rust_1_64", "assertcp"] }
-reqwest = { version = "0.12.12", features = ["json"] }
-governor = "0.10.0"
+#reqwest = { version = "0.12.12", features = ["json"] }
 regex = "1.11.3"
 url = "2.5.4"
 
 # Musicbrainz
 musicbrainz_rs = { version = "0.12.0", package = "musicbrainz_rs"  }
 listenbrainz = { branch = "alistral_version", git = "https://github.com/RustyNova016/listenbrainz-rs.git", default-features = false, features = ["tls-native"] }
-listenbrainz_rs = "0.1.0"
+listenbrainz_rs = { version = "0.1.0", features = ["tracing"]}
 
 # Async
 streamies = "0.2.2"
 futures = "0.3.31"
 tokio = { version = "1.45.1", features = [] }
-async-recursion = "1.1.1"
 async-fn-stream = "0.3.0"
-async-executor = "1.13.3"
 
 # Databasing
 sequelles = "0.2.0"
@@ -50,7 +47,6 @@ channels-console = { version = "0.3", optional = true, features=['futures'] }
 
 # Others
 chrono = "0.4.42"
-futures-lite = "2.6.1"
 
 
 [features]

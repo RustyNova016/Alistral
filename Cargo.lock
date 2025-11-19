@@ -107,7 +107,6 @@ dependencies = [
  "chrono",
  "futures",
  "itertools 0.14.0",
- "listenbrainz",
  "musicbrainz-db-lite",
  "owo-colors",
  "rust_decimal",
@@ -216,20 +215,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d92bec98840b8f03a5ff5413de5293bfcd8bf96467cf5452609f939ec6f5de16"
 
 [[package]]
-name = "async-executor"
-version = "1.13.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "497c00e0fd83a72a79a39fcbd8e3e2f055d6f6c7e025f3b3d91f4f8e76527fb8"
-dependencies = [
- "async-task",
- "concurrent-queue",
- "fastrand",
- "futures-lite",
- "pin-project-lite",
- "slab",
-]
-
-[[package]]
 name = "async-fn-stream"
 version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -264,23 +249,6 @@ name = "async-once-cell"
 version = "0.5.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4288f83726785267c6f2ef073a3d83dc3f9b81464e9f99898240cced85fce35a"
-
-[[package]]
-name = "async-recursion"
-version = "1.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3b43422f69d8ff38f95f1b2bb76517c91589a924d1559a0e935d7c8ce0274c11"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.107",
-]
-
-[[package]]
-name = "async-task"
-version = "4.7.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8b75356056920673b02621b35afd0f7dda9306d03c79a30f5c56c44cf256e3de"
 
 [[package]]
 name = "async-trait"
@@ -1326,10 +1294,7 @@ version = "2.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f78e10609fe0e0b3f4157ffab1876319b5b0db102a2c60dc4626306dc46b44ad"
 dependencies = [
- "fastrand",
  "futures-core",
- "futures-io",
- "parking",
  "pin-project-lite",
 ]
 
@@ -2140,26 +2105,6 @@ dependencies = [
 [[package]]
 name = "listenbrainz_rs"
 version = "0.1.0"
-dependencies = [
- "async-io",
- "bon",
- "chrono",
- "governor",
- "hyper",
- "hyper-util",
- "mutants",
- "reqwest",
- "serde",
- "serde_json",
- "serial_test",
- "snafu",
- "tokio",
- "tracing",
-]
-
-[[package]]
-name = "listenbrainz_rs"
-version = "0.1.0"
 source = "git+https://github.com/RustyNova016/listenbrainz_rs?rev=b859c43602cb9f1de08e1b4e7cf64026c581a26c#b859c43602cb9f1de08e1b4e7cf64026c581a26c"
 dependencies = [
  "async-io",
@@ -2173,6 +2118,7 @@ dependencies = [
  "serde",
  "serde_json",
  "snafu",
+ "tracing",
 ]
 
 [[package]]
@@ -2291,9 +2237,7 @@ dependencies = [
 name = "musicbrainz-db-lite"
 version = "0.1.0"
 dependencies = [
- "async-executor",
  "async-fn-stream",
- "async-recursion",
  "bon",
  "channels-console",
  "chrono",
@@ -2301,15 +2245,12 @@ dependencies = [
  "deadpool",
  "extend",
  "futures",
- "futures-lite",
- "governor",
  "itertools 0.14.0",
  "listenbrainz",
- "listenbrainz_rs 0.1.0 (git+https://github.com/RustyNova016/listenbrainz_rs?rev=b859c43602cb9f1de08e1b4e7cf64026c581a26c)",
+ "listenbrainz_rs",
  "musicbrainz_rs",
  "owo-colors",
  "regex",
- "reqwest",
  "sequelles",
  "serde",
  "serde_json",
@@ -4061,7 +4002,6 @@ dependencies = [
  "mio",
  "parking_lot",
  "pin-project-lite",
- "signal-hook-registry",
  "socket2",
  "tokio-macros",
  "windows-sys 0.61.2",

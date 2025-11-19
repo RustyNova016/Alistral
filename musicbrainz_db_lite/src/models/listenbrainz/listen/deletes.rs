@@ -13,7 +13,6 @@ impl Listen {
     /// Delete a range of listens. The start and end timestamps are **exclusive**. Listens at start_ts **won't** be deleted.
     ///
     /// Start timestamp is the lower date, end timestamp is the higher one
-
     pub async fn delete_listen_range(
         conn: &mut SqliteConnection,
         start_ts: i64,
