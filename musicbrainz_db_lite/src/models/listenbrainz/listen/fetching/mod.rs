@@ -1,7 +1,6 @@
 use chrono::Utc;
 use listenbrainz_rs::api::ListenBrainzAPI;
 use listenbrainz_rs::api::user::username::listens::UserListensListen;
-use listenbrainz_rs::client::ListenBrainzClient;
 use listenbrainz_rs::client::api_request::error::ApiRequestError;
 use sequelles::databases::sqlite::database::GetConnectionError;
 use snafu::ResultExt;
@@ -24,12 +23,9 @@ impl Listen {
         client: &DBClient,
         username: &str,
     ) -> Result<(), ListenFetchingError> {
-        //TODO: Add the client to the main client
-        let lbclient = ListenBrainzClient::new();
-
         // Get the new listens
         let listens = ListenBrainzAPI::get_user_username_listens_full()
-            .client(&lbclient)
+            .client(&client.listenbrainz_client)
             .username(username)
             .call()
             .await

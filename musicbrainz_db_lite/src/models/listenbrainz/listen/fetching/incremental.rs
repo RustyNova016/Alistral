@@ -1,7 +1,6 @@
 use chrono::Duration;
 use chrono::Utc;
 use listenbrainz_rs::api::ListenBrainzAPI;
-use listenbrainz_rs::client::ListenBrainzClient;
 use snafu::ResultExt as _;
 use sqlx::Acquire as _;
 
@@ -19,9 +18,6 @@ impl Listen {
         client: &DBClient,
         username: &str,
     ) -> Result<(), ListenFetchingError> {
-        //TODO: Add the client to the main client
-        let lbclient = ListenBrainzClient::new();
-
         let conn = &mut *client.database.get_conn().await.context(ConnectionSnafu)?;
         let latest_listen = Listen::get_latest_listen_of_user(conn, username).await?;
 
@@ -30,7 +26,7 @@ impl Listen {
             .map(|l| (l.listened_at_as_datetime() - Duration::days(3)).timestamp() as u64);
 
         let listens = ListenBrainzAPI::get_user_username_listens_full()
-            .client(&lbclient)
+            .client(&client.listenbrainz_client)
             .username(username)
             .maybe_start(start)
             .call()

@@ -18,7 +18,7 @@ url = "2.5.4"
 # Musicbrainz
 musicbrainz_rs = { version = "0.12.0", package = "musicbrainz_rs"  }
 listenbrainz = { branch = "alistral_version", git = "https://github.com/RustyNova016/listenbrainz-rs.git", default-features = false, features = ["tls-native"] }
-listenbrainz_rs = { package = "listenbrainz_rs_nova", git = "https://github.com/RustyNova016/listenbrainz-rs-nova", rev = "3fb7f6a491c237dcde5c7ecdaa667ce26e1f2851", features = ["tracing"] }
+listenbrainz_rs = "0.1.0"
 
 # Async
 streamies = "0.2.2"
@@ -69,3 +69,4 @@ serial_test = "3.1.1"
 sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "99b2aa533ef7e17f935b5647897c4676b588d09c"}
 tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "9760b11841bc29b7101aea62b2f275dd34c6bdae"}
 musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "60ab4d48a6898cc2fc8e0b6fc9fb774c64cfe8d2"}
+listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "b859c43602cb9f1de08e1b4e7cf64026c581a26c" }

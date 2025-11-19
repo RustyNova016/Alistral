@@ -1,5 +1,4 @@
 use listenbrainz_rs::api::ListenBrainzAPI;
-use listenbrainz_rs::client::ListenBrainzClient;
 use snafu::ResultExt as _;
 use sqlx::Acquire as _;
 
@@ -19,15 +18,12 @@ impl Listen {
         username: &str,
         msid: &str,
     ) -> Result<Option<Listen>, ListenFetchingError> {
-        //TODO: Add the client to the main client
-        let lbclient = ListenBrainzClient::new();
-
         let start = listened_at - 1;
         let end = listened_at + 1;
 
         // Get the new listens
         let listens = ListenBrainzAPI::get_user_username_listens_full()
-            .client(&lbclient)
+            .client(&client.listenbrainz_client)
             .username(username)
             .start(start as u64)
             .end(end as u64)

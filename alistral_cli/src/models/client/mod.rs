@@ -6,8 +6,8 @@ use alistral_core::AlistralClient;
 use futures::executor::block_on;
 #[cfg(feature = "interzicf")]
 use interzic::InterzicClient;
-use listenbrainz::raw::Client as ListenbrainzClient;
 use musicbrainz_db_lite::DBClient;
+use musicbrainz_db_lite::ListenBrainzClient;
 use musicbrainz_db_lite::client::MusicBrainzClient;
 #[cfg(feature = "musicbrainz")]
 use symphonize::SymphonyzeClient;
@@ -23,6 +23,7 @@ use crate::utils::constants::TOKENCACHE;
 use crate::utils::constants::YT_SECRET_FILE;
 
 pub mod al_core;
+pub mod listenbrainz_rs;
 pub mod mb_db;
 
 pub static ALISTRAL_CLIENT: LazyLock<AlistralCliClient> =
@@ -33,7 +34,7 @@ pub struct AlistralCliClient {
     pub core: Arc<AlistralClient>,
     #[cfg(feature = "interzicf")]
     pub interzic: Arc<InterzicClient>,
-    pub listenbrainz: Arc<ListenbrainzClient>,
+    pub listenbrainz: Arc<ListenBrainzClient>,
     pub musicbrainz_db: Arc<DBClient>,
     #[cfg(feature = "musicbrainz")]
     pub symphonize: Arc<SymphonyzeClient>,
@@ -47,9 +48,8 @@ impl AlistralCliClient {
         let musicbrainz_db =
             Self::create_mb_db_client(musicbrainz.clone(), listenbrainz.clone()).await;
         #[cfg(feature = "interzicf")]
-        let interzic =
-            Self::create_interzic(musicbrainz, listenbrainz.clone(), musicbrainz_db.clone()).await;
-        let core = Self::create_core_client(musicbrainz_db.clone(), listenbrainz.clone());
+        let interzic = Self::create_interzic(musicbrainz, musicbrainz_db.clone()).await;
+        let core = Self::create_core_client(musicbrainz_db.clone());
         #[cfg(feature = "musicbrainz")]
         let symphonize = Self::create_symphonize_client(musicbrainz_db.clone());
 
@@ -65,10 +65,6 @@ impl AlistralCliClient {
         })
     }
 
-    fn create_lb_client(config: &Config) -> Arc<ListenbrainzClient> {
-        Arc::new(ListenbrainzClient::new_with_url(&config.listenbrainz_url))
-    }
-
     fn create_mb_client(config: &Config) -> Arc<MusicBrainzClient> {
         let mut musicbrainz_rs = MusicBrainzClient::default();
         let url =
@@ -80,7 +76,6 @@ impl AlistralCliClient {
     #[cfg(feature = "interzicf")]
     async fn create_interzic(
         musicbrainz_rs: Arc<MusicBrainzClient>,
-        listenbrainz: Arc<ListenbrainzClient>,
         musicbrainz_db: Arc<DBClient>,
     ) -> Arc<InterzicClient> {
         let mut builder = InterzicClient::new_builder();
@@ -100,7 +95,7 @@ impl AlistralCliClient {
         let mut client = builder.build().expect("Couldn't initialize Interzic");
 
         client.set_musicbrainz_client(musicbrainz_rs);
-        client.set_listenbrainz_client(listenbrainz);
+        client.set_listenbrainz_client(Arc::new(listenbrainz::raw::Client::default()));
         client.set_musicbrainz_db_lite_client(musicbrainz_db);
 
         if YT_SECRET_FILE.exists() {

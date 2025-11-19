@@ -2138,9 +2138,29 @@ dependencies = [
 ]
 
 [[package]]
-name = "listenbrainz_rs_nova"
-version = "0.8.0"
-source = "git+https://github.com/RustyNova016/listenbrainz-rs-nova?rev=3fb7f6a491c237dcde5c7ecdaa667ce26e1f2851#3fb7f6a491c237dcde5c7ecdaa667ce26e1f2851"
+name = "listenbrainz_rs"
+version = "0.1.0"
+dependencies = [
+ "async-io",
+ "bon",
+ "chrono",
+ "governor",
+ "hyper",
+ "hyper-util",
+ "mutants",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "serial_test",
+ "snafu",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
+name = "listenbrainz_rs"
+version = "0.1.0"
+source = "git+https://github.com/RustyNova016/listenbrainz_rs?rev=b859c43602cb9f1de08e1b4e7cf64026c581a26c#b859c43602cb9f1de08e1b4e7cf64026c581a26c"
 dependencies = [
  "async-io",
  "bon",
@@ -2153,7 +2173,6 @@ dependencies = [
  "serde",
  "serde_json",
  "snafu",
- "tracing",
 ]
 
 [[package]]
@@ -2286,7 +2305,7 @@ dependencies = [
  "governor",
  "itertools 0.14.0",
  "listenbrainz",
- "listenbrainz_rs_nova",
+ "listenbrainz_rs 0.1.0 (git+https://github.com/RustyNova016/listenbrainz_rs?rev=b859c43602cb9f1de08e1b4e7cf64026c581a26c)",
  "musicbrainz_rs",
  "owo-colors",
  "regex",
@@ -4042,6 +4061,7 @@ dependencies = [
  "mio",
  "parking_lot",
  "pin-project-lite",
+ "signal-hook-registry",
  "socket2",
  "tokio-macros",
  "windows-sys 0.61.2",

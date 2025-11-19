@@ -7,7 +7,6 @@ use listenbrainz::raw::request::SubmitListens;
 use listenbrainz::raw::request::TrackMetadata;
 use tuillez::fatal_error::IntoFatal;
 
-use crate::ALISTRAL_CLIENT;
 use crate::utils::user_inputs::UserInputParser;
 
 #[derive(Parser, Debug, Clone)]
@@ -38,8 +37,9 @@ impl ListenSubmitCommand {
         extras.insert("submission_client", "Alistral (Submit listen)");
         extras.insert("submission_client_version", env!("CARGO_PKG_VERSION"));
 
-        ALISTRAL_CLIENT
-            .listenbrainz
+        let lb_client = listenbrainz::raw::Client::new();
+
+        lb_client
             .submit_listens(
                 &token,
                 SubmitListens {
