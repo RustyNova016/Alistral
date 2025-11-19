@@ -13,7 +13,7 @@ pub struct ListenReloadCommand {
 impl ListenReloadCommand {
     pub async fn run(&self) {
         let username = UserInputParser::username_or_default(&self.username);
-        Listen::fetch_and_save_full(&ALISTRAL_CLIENT.musicbrainz_db, &username)
+        Listen::fetch_and_insert_full(&ALISTRAL_CLIENT.musicbrainz_db, &username)
             .await
             .unwrap();
     }

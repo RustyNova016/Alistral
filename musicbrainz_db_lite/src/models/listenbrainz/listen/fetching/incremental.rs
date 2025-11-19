@@ -15,7 +15,7 @@ use crate::models::listenbrainz::listen::fetching::save_listens;
 
 impl Listen {
     /// Fetch and save listens of an user incrementally
-    pub async fn fetch_and_save_incremental(
+    pub async fn fetch_and_insert_incremental(
         client: &DBClient,
         username: &str,
     ) -> Result<(), ListenFetchingError> {

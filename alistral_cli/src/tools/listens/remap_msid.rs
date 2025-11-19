@@ -62,7 +62,7 @@ impl ListenRemapMsidCommand {
                 // Check if we are refreshing the listen of the current user.
                 // Refreshing other is useless as they weren't modified by this function
                 if listen.user.to_lowercase() == username.to_lowercase() {
-                    Listen::fetch_and_save_listen_by_index(
+                    Listen::fetch_and_insert_by_index(
                         &ALISTRAL_CLIENT.musicbrainz_db,
                         listen.listened_at,
                         &listen.user,

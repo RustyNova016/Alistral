@@ -13,7 +13,7 @@ use crate::models::listenbrainz::listen::fetching::save_listens;
 
 impl Listen {
     /// Fetch and save a listen by its index (listened_at, user, msid)
-    pub async fn fetch_and_save_listen_by_index(
+    pub async fn fetch_and_insert_by_index(
         client: &DBClient,
         listened_at: i64,
         username: &str,

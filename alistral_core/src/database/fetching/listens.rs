@@ -31,7 +31,7 @@ impl ListenFetchQuery {
         // Fetch the latest listens
         // ... If it's not in offline mode
         if !client.offline {
-            Listen::fetch_and_save_incremental(&client.musicbrainz_db, &self.user).await?;
+            Listen::fetch_and_insert_incremental(&client.musicbrainz_db, &self.user).await?;
         }
 
         if self.fetch_recordings_redirects {

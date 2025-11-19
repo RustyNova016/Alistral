@@ -23,7 +23,9 @@ impl ListenSeeder {
         conn: &mut sqlx::SqliteConnection,
     ) -> Result<RecordingWithListensCollection, crate::Error> {
         // Get the listens
-        Listen::fetch_and_save_incremental(&ALISTRAL_CLIENT.musicbrainz_db, &self.username).await.unwrap();
+        Listen::fetch_and_insert_incremental(&ALISTRAL_CLIENT.musicbrainz_db, &self.username)
+            .await
+            .unwrap();
 
         let min_listened_at = self
             .settings

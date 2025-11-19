@@ -45,11 +45,10 @@ mod tests {
         )];
 
         for (listened_at, user, msid) in test_values {
-            let base_listen =
-                Listen::fetch_and_save_listen_by_index(&client, listened_at, user, msid)
-                    .await
-                    .unwrap()
-                    .unwrap();
+            let base_listen = Listen::fetch_and_insert_by_index(&client, listened_at, user, msid)
+                .await
+                .unwrap()
+                .unwrap();
 
             let listens = MessybrainzSubmission::get_listens_of_msid(
                 conn,

@@ -79,7 +79,7 @@ pub(super) async fn display_wrong_mapping(
 
     match choice() {
         Choice::Next => {
-            Listen::fetch_and_save_listen_by_index(
+            Listen::fetch_and_insert_by_index(
                 &ALISTRAL_CLIENT.musicbrainz_db,
                 listen.listened_at,
                 &listen.user,

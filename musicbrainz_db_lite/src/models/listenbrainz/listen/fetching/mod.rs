@@ -20,7 +20,7 @@ pub mod incremental;
 
 impl Listen {
     /// Fetch and save all the user listens
-    pub async fn fetch_and_save_full(
+    pub async fn fetch_and_insert_full(
         client: &DBClient,
         username: &str,
     ) -> Result<(), ListenFetchingError> {
