@@ -1,5 +1,5 @@
 use sequelles::has_rowid::HasRowID;
-use sqlx::{Executor, Sqlite, SqliteConnection};
+use sqlx::SqliteConnection;
 
 use crate::models::shared_traits::has_table::HasTable;
 
@@ -12,11 +12,11 @@ pub struct User {
 
 impl User {
     pub async fn insert_or_ignore(
-        client: impl Executor<'_, Database = Sqlite>,
+        conn: &mut sqlx::SqliteConnection,
         name: &str,
     ) -> Result<(), sqlx::Error> {
         sqlx::query!("INSERT OR IGNORE INTO users VALUES (NULL, ?)", name)
-            .execute(client)
+            .execute(conn)
             .await?;
         Ok(())
     }

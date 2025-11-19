@@ -65,8 +65,6 @@ impl Listen {
             data: Some(data),
         };
 
-        listen_db.upsert_listen(conn).await.context(SqlxSnafu)?;
-
-        Ok(listen_db)
+        listen_db.upsert_listen(conn).await
     }
 }

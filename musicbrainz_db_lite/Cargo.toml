@@ -6,9 +6,9 @@ rust-version = "1.85.1"
 
 [dependencies]
 extend = "1.2.0"
-serde_json = "1.0.140"
+serde_json = "1.0.145"
 itertools = "0.14.0"
-serde = "1.0.227"
+serde = "1.0.228"
 const_format = { version = "0.2.34" , features = ["rust_1_51", "rust_1_64", "assertcp"] }
 #reqwest = { version = "0.12.12", features = ["json"] }
 regex = "1.11.3"
@@ -40,7 +40,7 @@ tuillez = "0.1.0"
 owo-colors = { version = "4.2.1", optional = true}
 
 # Macros
-bon = "3.7.2"
+bon = "3.8.1"
 
 # Debuging
 channels-console = { version = "0.3", optional = true, features=['futures'] }

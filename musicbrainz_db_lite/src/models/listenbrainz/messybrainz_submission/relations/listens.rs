@@ -57,6 +57,9 @@ mod tests {
             .await
             .unwrap();
 
+            println!("{base_listen:#?}");
+            println!("{listens:#?}");
+
             assert!(listens.contains(&base_listen));
         }
     }
