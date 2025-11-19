@@ -12,7 +12,6 @@ pub mod insert;
 pub mod relations;
 pub mod selects;
 
-
 #[derive(Debug, PartialEq, Eq, Clone, sqlx::FromRow, Deserialize, Serialize)]
 pub struct Listen {
     pub id: i64,
@@ -62,4 +61,3 @@ impl HasTable for Listen {
     const TABLE_NAME: &str = "listens";
     const FOREIGN_FIELD_NAME: &str = "listen";
 }
-

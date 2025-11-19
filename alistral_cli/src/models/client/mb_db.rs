@@ -1,7 +1,6 @@
 use std::path::PathBuf;
 use std::sync::Arc;
 
-
 use musicbrainz_db_lite::DBClient;
 use musicbrainz_db_lite::ListenBrainzClient;
 use musicbrainz_db_lite::MusicBrainzClient;

@@ -1,4 +1,3 @@
-
 use futures::stream::BoxStream;
 use snafu::ResultExt;
 use sqlx::{SqliteConnection, query_scalar};

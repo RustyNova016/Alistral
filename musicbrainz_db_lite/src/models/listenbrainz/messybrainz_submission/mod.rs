@@ -6,7 +6,6 @@ pub mod finds;
 pub mod relations;
 pub mod selects;
 
-
 /// The fingerprint that identify a listened recording. This is the data scrobblers send to LB to tell that the user listened to a recording
 #[derive(Debug, FromRow, Clone, bon::Builder)]
 pub struct MessybrainzSubmission {
@@ -44,5 +43,3 @@ impl HasRowID for MessybrainzSubmission {
         self.id
     }
 }
-
-

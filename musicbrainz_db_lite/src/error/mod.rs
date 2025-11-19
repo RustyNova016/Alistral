@@ -57,4 +57,3 @@ pub enum Error {
     #[error(transparent)]
     MusicbrainzGetRequestError(#[from] musicbrainz_rs::GetRequestError),
 }
-

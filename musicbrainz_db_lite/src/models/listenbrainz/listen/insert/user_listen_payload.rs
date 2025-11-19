@@ -16,7 +16,9 @@ impl Listen {
         listen: UserListensListen,
     ) -> Result<Listen, SqlxError> {
         // First, get the user
-        User::insert_or_ignore(&mut *conn, &listen.user_name).await.context(SqlxSnafu)?;
+        User::insert_or_ignore(&mut *conn, &listen.user_name)
+            .await
+            .context(SqlxSnafu)?;
 
         // Then upsert the MSID.
         MessybrainzSubmission::builder()
@@ -27,15 +29,19 @@ impl Listen {
             .msid(listen.recording_msid.clone())
             .build()
             .insert_or_ignore(&mut *conn)
-            .await.context(SqlxSnafu)?;
+            .await
+            .context(SqlxSnafu)?;
 
         // Set the mapping if available
         if let Some(mapping) = &listen.track_metadata.mbid_mapping {
             // First insert the mbid
-            Recording::add_redirect_mbid(conn, &mapping.recording_mbid).await.context(SqlxSnafu)?;
+            Recording::add_redirect_mbid(conn, &mapping.recording_mbid)
+                .await
+                .context(SqlxSnafu)?;
 
             let user = User::find_by_name(&mut *conn, &listen.user_name)
-                .await.context(SqlxSnafu)?
+                .await
+                .context(SqlxSnafu)?
                 .expect("The user shall be inserted");
 
             MsidMapping::set_user_mapping(
@@ -44,7 +50,8 @@ impl Listen {
                 listen.recording_msid.clone(),
                 mapping.recording_mbid.clone(),
             )
-            .await.context(SqlxSnafu)?;
+            .await
+            .context(SqlxSnafu)?;
         }
 
         let data = serde_json::to_string(&listen.track_metadata.additional_info)
