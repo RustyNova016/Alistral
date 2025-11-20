@@ -83,7 +83,7 @@ channels-console = { version = "0.3", optional = true, features=['futures'] }
 zip = "6.0.0"
 
 [features]
-default = ["full"]
+default = []
 #default = ["full"]
 full = ["musicbrainz", "lookup", "stats", "radio"]
 

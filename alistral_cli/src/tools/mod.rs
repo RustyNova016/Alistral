@@ -1,6 +1,7 @@
 pub mod bump;
 pub mod cache;
 pub mod compatibility;
+pub mod config;
 pub mod daily;
 #[cfg(feature = "interzicf")]
 pub mod interzic;
