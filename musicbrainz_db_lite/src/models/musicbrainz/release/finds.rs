@@ -5,7 +5,7 @@ use snafu::ResultExt as _;
 use crate::DBClient;
 use crate::MBIDRedirection;
 use crate::Url;
-use crate::models::errors::sqlx_error::SqlxSnafu;
+use crate::error::sqlx_error::SqlxSnafu;
 use crate::models::shared_traits::find_by_mbid::FindByMBID;
 use crate::models::shared_traits::find_by_rowid::FindByRowID;
 

@@ -1,32 +1,20 @@
-use chrono::Utc;
 use clap::Parser;
-use musicbrainz_db_lite::api::listenbrainz::listen::fetching::query::ListenFetchAPIQuery;
-use tuillez::fatal_error::IntoFatal;
+use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 
 use crate::ALISTRAL_CLIENT;
+use crate::utils::user_inputs::UserInputParser;
 
 #[derive(Parser, Debug, Clone)]
 pub struct ListenReloadCommand {
     /// Reload the listens of this user
-    pub user: Option<String>,
+    pub username: Option<String>,
 }
 
 impl ListenReloadCommand {
     pub async fn run(&self) {
-        let mut query = ListenFetchAPIQuery::try_new(
-            ALISTRAL_CLIENT
-                .config
-                .get_username_or_panic(self.user.clone()),
-            None,
-            Some(Utc::now()),
-            1000,
-        )
-        .unwrap();
-
-        query
-            .request_and_save(&ALISTRAL_CLIENT.musicbrainz_db)
+        let username = UserInputParser::username_or_default(&self.username);
+        Listen::fetch_and_insert_full(&ALISTRAL_CLIENT.musicbrainz_db, &username)
             .await
-            .expect_fatal("Couldn't reload the listens")
             .unwrap();
     }
 }

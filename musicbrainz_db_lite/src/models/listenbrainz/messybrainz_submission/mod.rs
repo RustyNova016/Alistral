@@ -1,6 +1,5 @@
 use sequelles::has_rowid::HasRowID;
 use sqlx::prelude::FromRow;
-use sqlx::{Executor, Sqlite};
 
 pub mod finds;
 pub mod relations;
@@ -10,10 +9,15 @@ pub mod selects;
 #[derive(Debug, FromRow, Clone, bon::Builder)]
 pub struct MessybrainzSubmission {
     pub id: i64,
+    #[builder(into)]
     pub msid: String,
+    #[builder(into)]
     pub recording: String,
+    #[builder(into)]
     pub artist_credit: String,
+    #[builder(into)]
     pub release: Option<String>,
+    #[builder(into)]
     pub track_number: Option<String>,
     pub duration: Option<i64>,
 }
@@ -21,7 +25,7 @@ pub struct MessybrainzSubmission {
 impl MessybrainzSubmission {
     pub async fn insert_or_ignore(
         &self,
-        client: impl Executor<'_, Database = Sqlite>,
+        conn: &mut sqlx::SqliteConnection,
     ) -> Result<(), sqlx::Error> {
         sqlx::query!(
             "INSERT OR IGNORE INTO `messybrainz_submission` VALUES (NULL, ?, ?, ?, ?, ?, ?)",
@@ -32,7 +36,7 @@ impl MessybrainzSubmission {
             self.track_number,
             self.duration
         )
-        .execute(client)
+        .execute(conn)
         .await?;
         Ok(())
     }

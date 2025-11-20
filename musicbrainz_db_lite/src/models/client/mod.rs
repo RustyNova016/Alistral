@@ -3,7 +3,7 @@ use core::time::Duration;
 use std::path::PathBuf;
 use std::sync::Arc;
 
-use listenbrainz::raw::Client as ListenbrainzClient;
+use listenbrainz_rs::client::ListenBrainzClient;
 use musicbrainz_rs::MusicBrainzClient;
 use sequelles::databases::sqlite::database::ArcSqliteDatabase;
 use sequelles::databases::sqlite::database::GetConnectionError;
@@ -17,7 +17,7 @@ pub struct DBClient {
     pub database: ArcSqliteDatabase,
 
     pub musicbrainz_client: Arc<MusicBrainzClient>,
-    pub listenbrainz_client: Arc<ListenbrainzClient>,
+    pub listenbrainz_client: Arc<ListenBrainzClient>,
 }
 
 impl DBClient {
@@ -25,7 +25,7 @@ impl DBClient {
     pub fn from_path(
         path: PathBuf,
         musicbrainz_client: Arc<MusicBrainzClient>,
-        listenbrainz_client: Arc<ListenbrainzClient>,
+        listenbrainz_client: Arc<ListenBrainzClient>,
     ) -> Result<Self, sqlx::Error> {
         let optconn = SqliteConnectOptions::from_str(path.to_string_lossy().as_ref())?
             .journal_mode(SqliteJournalMode::Wal)
@@ -50,7 +50,7 @@ impl DBClient {
     pub fn in_memory(
         name: &str,
         musicbrainz_client: Arc<MusicBrainzClient>,
-        listenbrainz_client: Arc<ListenbrainzClient>,
+        listenbrainz_client: Arc<ListenBrainzClient>,
     ) -> Result<Self, sqlx::Error> {
         let optconn =
             SqliteConnectOptions::from_str(&format!("file:{name}?mode=memory&cache=shared"))?
@@ -92,7 +92,7 @@ impl DBClient {
         DBClient::in_memory(
             "",
             Arc::new(MusicBrainzClient::default()),
-            Arc::new(ListenbrainzClient::default()),
+            Arc::new(ListenBrainzClient::default()),
         )
     }
 
@@ -103,7 +103,7 @@ impl DBClient {
         DBClient::in_memory(
             name,
             Arc::new(MusicBrainzClient::default()),
-            Arc::new(ListenbrainzClient::default()),
+            Arc::new(ListenBrainzClient::default()),
         )
     }
 }

@@ -19,4 +19,7 @@ for member in "${members[@]}"; do
     cd ../
 done
 
+mv Cargo.lock.bk ./Cargo.lock
+mv Cargo.toml.bk ./Cargo.toml
+
 exit 0

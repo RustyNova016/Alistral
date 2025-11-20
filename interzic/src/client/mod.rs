@@ -1,4 +1,3 @@
-pub mod builder;
 use std::path::Path;
 use std::sync::Arc;
 
@@ -13,6 +12,8 @@ use musicbrainz_rs::client::MusicBrainzClient;
 
 use crate::client::builder::ClientBuilder;
 use crate::models::services::youtube::error::InterzicYoutubeError;
+
+pub mod builder;
 
 pub struct InterzicClient {
     pub database_client: sqlx::SqlitePool,
