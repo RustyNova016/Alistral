@@ -23,12 +23,12 @@ static MONTHS: LazyLock<Vec<&'static str>> = LazyLock::new(|| {
 impl YimReport {
     pub async fn monthly_recap_page(&self) -> String {
         let mut out = String::new();
-        let stats = self.get_montly_stats().await;
+        //let stats = self.get_montly_stats().await;
         writeln!(out, "{}", Heading1("Monthly recap 📅")).unwrap();
 
         writeln!(out, "Here's your listen time per month:").unwrap();
         writeln!(out).unwrap();
-        writeln!(out, "{}", self.get_graph(stats)).unwrap();
+        writeln!(out, "{}", self.get_graph().await).unwrap();
 
         out
     }
@@ -51,19 +51,56 @@ impl YimReport {
         stats
     }
 
-    fn get_graph(&self, stats: HashMap<u32, RecordingWithListensCollection>) -> String {
+    async fn get_graph(&self) -> String {
         let mut bars = Vec::with_capacity(12);
 
-        for i in 1..13 {
-            let recs = stats.get(&i).cloned().unwrap_or_default();
-            let value = recs.get_time_listened().unwrap_or_default();
-            let val_label = value.floor_to_minute().to_humantime().unwrap().to_string();
+        for month in 1..13 {
+            let current = self
+                .full_user_stats
+                .clone_no_stats()
+                .filter_on_year_month(self.year, month)
+                .recording_stats()
+                .await
+                .unwrap()
+                .to_owned();
+
+            let current_time_list = current.get_time_listened().unwrap_or_default();
+            let current_var_label = current_time_list
+                .floor_to_minute()
+                .to_humantime()
+                .unwrap()
+                .to_string();
 
             bars.push(
                 Data::builder()
-                    .label(*MONTHS.get(i as usize - 1).unwrap())
-                    .value(value.num_seconds())
-                    .value_display(val_label)
+                    .label(*MONTHS.get(month as usize - 1).unwrap())
+                    .value(current_time_list.num_seconds())
+                    .value_display(current_var_label)
+                    .build(),
+            );
+
+            let previous = self
+                .full_user_stats
+                .clone_no_stats()
+                .filter_on_year_month(self.year - 1, month)
+                .recording_stats()
+                .await
+                .unwrap()
+                .to_owned();
+
+            let prev_time_list = previous.get_time_listened().unwrap_or_default();
+            let prev_var_label = prev_time_list
+                .floor_to_minute()
+                .to_humantime()
+                .unwrap()
+                .to_string();
+
+            bars.push(
+                Data::builder()
+                    .label(*MONTHS.get(month as usize - 1).unwrap())
+                    .value(prev_time_list.num_seconds())
+                    .value_display(prev_var_label)
+                    .bar_color(Color(18, 121, 198))
                     .build(),
             );
         }
