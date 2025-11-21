@@ -7,13 +7,19 @@ use crate::database::fetching::listens::ListenFetchQuery;
 use crate::database::fetching::listens::ListenFetchQueryReturn;
 use crate::datastructures::entity_with_listens::artist::collection::ArtistWithRecordingsCollection;
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
+use crate::datastructures::entity_with_listens::release::collection::ReleaseWithRecordingsCollection;
+use crate::datastructures::entity_with_listens::release_group::collection::ReleaseGroupWithReleasesCollection;
 use crate::datastructures::entity_with_listens::user::collection::UserWithListensCollection;
 use crate::datastructures::listen_collection::ListenCollection;
 
 pub mod artists;
 pub mod listens;
 pub mod recordings;
+pub mod release;
+pub mod release_groups;
 pub mod user;
+
+
 
 /// This struct hold listens data. This is a convenience over having a to create listen statistics yourself
 ///
@@ -29,6 +35,8 @@ pub struct ListenStatisticsData {
 
     artists: OnceCell<ArtistWithRecordingsCollection>,
     recordings: OnceCell<RecordingWithListensCollection>,
+    releases: OnceCell<ReleaseWithRecordingsCollection>,
+    release_groups: OnceCell<ReleaseGroupWithReleasesCollection>,
     users: OnceCell<UserWithListensCollection>,
 }
 
@@ -40,6 +48,8 @@ impl ListenStatisticsData {
             artists: OnceCell::new(),
             users: OnceCell::new(),
             recordings: OnceCell::new(),
+            releases: OnceCell::new(),
+            release_groups: OnceCell::new(),
         }
     }
 
@@ -64,7 +74,10 @@ impl ListenStatisticsData {
         &self.listens
     }
 
+    /// Clone self while only keeping the listens. 
     pub fn clone_no_stats(&self) -> Self {
         Self::new(self.client.clone(), self.listens.clone())
     }
 }
+
+
