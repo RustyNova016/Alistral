@@ -78,6 +78,7 @@ impl ListenStatisticsData {
         &self.listens
     }
 
+    /// Clone self while only keeping the listens. 
     pub fn clone_no_stats(&self) -> Self {
         Self::new(self.client.clone(), self.listens.clone())
     }
