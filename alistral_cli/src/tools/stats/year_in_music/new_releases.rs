@@ -6,12 +6,10 @@ use alistral_core::datastructures::listen_collection::traits::ListenCollectionRe
 use itertools::Itertools;
 use rust_decimal::Decimal;
 use rust_decimal_macros::dec;
-use tuillez::OwoColorize;
 
 use crate::ALISTRAL_CLIENT;
 use crate::datastructures::cli_formating::title::Heading1;
 use crate::datastructures::mappers::stats_by_release_year::StatsByReleaseYear;
-use crate::models::datastructures::tops::scorer::listen_count;
 use crate::tools::stats::year_in_music::YimReport;
 
 impl YimReport {

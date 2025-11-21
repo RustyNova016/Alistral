@@ -1,5 +1,3 @@
-use core::cmp::Ordering;
-
 use tuillez::OwoColorize as _;
 
 pub struct ComparisonArrow;
