@@ -2,7 +2,6 @@ use core::cmp::Reverse;
 use std::fmt::Write;
 
 use alistral_core::cli::colors::AlistralColors;
-use alistral_core::datastructures::entity_with_listens::artist::artist_with_recordings::ArtistWithRecordings;
 use alistral_core::datastructures::entity_with_listens::release_group::ReleaseGroupWithReleases;
 use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime as _;
 use itertools::Itertools;
@@ -64,4 +63,3 @@ impl YimReport {
         TopPrinter::format_n_rows(rows, 20).await
     }
 }
-

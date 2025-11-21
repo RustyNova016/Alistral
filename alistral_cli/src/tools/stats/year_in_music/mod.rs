@@ -19,7 +19,9 @@ use crate::utils::cli::await_next;
 use crate::utils::user_inputs::UserInputParser;
 
 pub mod artists;
+pub mod components;
 pub mod discoveries;
+pub mod month_lookup;
 pub mod month_recap;
 pub mod new_releases;
 pub mod random_stats;
@@ -124,6 +126,8 @@ impl YimReport {
         println!("{}", self.monthly_recap_page().await);
         println!("[Press enter to continue]");
         await_next();
+
+        self.all_month_lookup_page().await;
     }
 
     pub async fn top_recordings(stats: Vec<RecordingWithListens>) -> String {

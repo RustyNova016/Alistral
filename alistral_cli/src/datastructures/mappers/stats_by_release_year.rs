@@ -1,9 +1,7 @@
 use alistral_core::AlistralClient;
 use alistral_core::datastructures::entity_with_listens::recording::RecordingWithListens;
 use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
-use chrono::DateTime;
 use chrono::Datelike;
-use chrono::Utc;
 use sequelles::ZeroToManyJoin;
 
 
