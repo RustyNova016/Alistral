@@ -43,7 +43,7 @@ owo-colors = { version = "4.2.1", optional = true}
 bon = "3.8.1"
 
 # Debuging
-channels-console = { version = "0.3", optional = true, features=['futures'] }
+hotpath = { version = "0.7", optional = true, features = ["futures"] }
 
 # Others
 chrono = "0.4.42"
@@ -56,7 +56,9 @@ pretty_format = ["dep:owo-colors"]
 backtrace = ["musicbrainz_rs/backtrace", "listenbrainz_rs/backtrace"]
 
 # Debugging
-channels-console = ["dep:channels-console"]
+hotpath = ["dep:hotpath", "hotpath/hotpath"]
+hotpath-alloc = ["hotpath/hotpath-alloc"]
+hotpath-off = ["hotpath/hotpath-off"]
 
 [dev-dependencies]
 serial_test = "3.1.1"
