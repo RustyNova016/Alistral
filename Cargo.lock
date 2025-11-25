@@ -3293,7 +3293,7 @@ dependencies = [
 [[package]]
 name = "sequelles"
 version = "0.2.0"
-source = "git+https://github.com/RustyNova016/sequelles?rev=99b2aa533ef7e17f935b5647897c4676b588d09c#99b2aa533ef7e17f935b5647897c4676b588d09c"
+source = "git+https://github.com/RustyNova016/sequelles?rev=3ca0e95f377ddae06ca5ada6109fdb3669d94921#3ca0e95f377ddae06ca5ada6109fdb3669d94921"
 dependencies = [
  "async-once-cell",
  "bon",
