@@ -5,6 +5,7 @@ members = [
     "interzic", 
     "musicbrainz_db_lite", 
     "symphonize",
+    #"tuillez"
     #"sequelles",
     #"listenbrainz_rs"
 ]
@@ -17,12 +18,14 @@ debug = "line-tables-only"
 #listenbrainz_rs = {path = "./listenbrainz_rs"}
 listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "b859c43602cb9f1de08e1b4e7cf64026c581a26c" }
 
-#sequelles = {path = "./sequelles"}
-sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "3ca0e95f377ddae06ca5ada6109fdb3669d94921"}
+sequelles = {path = "./sequelles"}
+#sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "3ca0e95f377ddae06ca5ada6109fdb3669d94921"}
 
-tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "9760b11841bc29b7101aea62b2f275dd34c6bdae"}
-musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "60ab4d48a6898cc2fc8e0b6fc9fb774c64cfe8d2"}
+#tuillez = {path = "./tuillez"}
+tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c8656a4eedb571177a8ffa3b9984e78"}
+
 #musicbrainz_rs = {path = "./musicbrainz_rs"}
+musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "60ab4d48a6898cc2fc8e0b6fc9fb774c64cfe8d2"}
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
