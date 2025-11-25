@@ -51,8 +51,8 @@ pub fn mb_clippy_stream(
 ) {
     let (entity_send, entity_stream) = channel::<Arc<MainEntity>>(10);
 
-    #[cfg(feature = "channels-console")]
-    let (entity_send, entity_stream) = channels_console::instrument!(
+    #[cfg(feature = "hotpath")]
+    let (entity_send, entity_stream) = hotpath::channel!(
         (entity_send, entity_stream),
         capacity = 10,
         log = true,
