@@ -5,7 +5,6 @@ members = [
     "interzic", 
     "musicbrainz_db_lite", 
     "symphonize",
-    "sequelles"
     #"tuillez"
     #"sequelles",
     #"listenbrainz_rs"
@@ -19,8 +18,8 @@ debug = "line-tables-only"
 #listenbrainz_rs = {path = "./listenbrainz_rs"}
 listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "071eb5d46990b59404320449c61c0ffad2b61545" }
 
-#sequelles = {path = "./sequelles"}
-sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "3ca0e95f377ddae06ca5ada6109fdb3669d94921"}
+sequelles = {path = "./sequelles"}
+#sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "3ca0e95f377ddae06ca5ada6109fdb3669d94921"}
 
 #tuillez = {path = "./tuillez"}
 tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c8656a4eedb571177a8ffa3b9984e78"}

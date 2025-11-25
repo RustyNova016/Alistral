@@ -55,6 +55,7 @@ dependencies = [
  "alistral_core",
  "async-fn-stream",
  "bon",
+ "charchart",
  "chrono",
  "clap",
  "clap-markdown",
@@ -540,6 +541,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "613afe47fcd5fac7ccf1db93babcb082c5994d996f20b8b159f2ad1658eb5724"
 
 [[package]]
+name = "charchart"
+version = "0.1.0"
+source = "git+https://github.com/RustyNova016/charchart#0416103608634b6a8dc7f1ea9501da76717ce939"
+dependencies = [
+ "bon",
+ "owo-colors",
+ "rust_decimal",
+]
+
+[[package]]
 name = "chrono"
 version = "0.4.42"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -689,6 +700,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fde0e0ec90c9dfb3b4b1a0891a7dcd0e2bffde2f7efed5fe7c9bb00e5bfb915e"
 dependencies = [
  "windows-sys 0.59.0",
+]
+
+[[package]]
+name = "comfy-table"
+version = "7.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b03b7db8e0b4b2fdad6c551e634134e99ec000e5c8c3b6856c65e8bbaded7a3b"
+dependencies = [
+ "ansi-str",
+ "console",
+ "crossterm",
+ "unicode-segmentation",
+ "unicode-width 0.2.2",
 ]
 
 [[package]]
@@ -3381,7 +3405,6 @@ dependencies = [
 [[package]]
 name = "sequelles"
 version = "0.2.0"
-source = "git+https://github.com/RustyNova016/sequelles?rev=3ca0e95f377ddae06ca5ada6109fdb3669d94921#3ca0e95f377ddae06ca5ada6109fdb3669d94921"
 dependencies = [
  "async-once-cell",
  "bon",
