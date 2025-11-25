@@ -21,6 +21,7 @@ use crate::utils::user_inputs::UserInputParser;
 pub mod artists;
 pub mod components;
 pub mod discoveries;
+pub mod label_stats;
 pub mod month_lookup;
 pub mod month_recap;
 pub mod new_releases;
@@ -120,6 +121,10 @@ impl YimReport {
         await_next();
 
         println!("{}", self.release_report().await);
+        println!("[Press enter to continue]");
+        await_next();
+
+        println!("{}", self.labels_report().await);
         println!("[Press enter to continue]");
         await_next();
 

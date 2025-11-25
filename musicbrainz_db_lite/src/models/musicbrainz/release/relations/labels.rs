@@ -21,9 +21,9 @@ impl DBRelation<ReleasesLabelsDBRel> for Release {
 
     fn get_join_statement() -> &'static str {
         "
-        INNER JOIN labels_gid_redirect ON labels_gid_redirect.new_id = labels.id
-        INNER JOIN label_infos ON label_infos.label = labels_gid_redirect.gid
-        INNER JOIN releases ON releases.id = label_infos.release
+        INNER JOIN label_infos ON releases.id = label_infos.release
+        INNER JOIN labels_gid_redirect ON label_infos.label = labels_gid_redirect.gid
+        INNER JOIN labels ON labels_gid_redirect.new_id = labels.id
         "
     }
 }
