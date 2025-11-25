@@ -9,7 +9,9 @@ use crate::traits::sorter::InsertElement;
 
 impl ListenStatisticsData {
     /// Generate the recording statistics based on the stored listens
-    pub async fn release_stats(&self) -> Result<&ReleaseWithRecordingsCollection, ReleaseStatsError> {
+    pub async fn release_stats(
+        &self,
+    ) -> Result<&ReleaseWithRecordingsCollection, ReleaseStatsError> {
         self.releases.get_or_try_init(self.init_releases()).await
     }
 

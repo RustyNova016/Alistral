@@ -3,12 +3,41 @@
 // use itertools::Itertools as _;
 // use sqlx::SqliteConnection;
 
+use std::sync::Arc;
+
+use crate::DBClient;
+use crate::DBRelation;
+use crate::Label;
 // use crate::models::musicbrainz::label::Label;
 use crate::models::musicbrainz::release::Release;
 // use crate::utils::sqlx_utils::entity_relations::JoinCollection;
 // use crate::utils::sqlx_utils::entity_relations::JoinRelation;
 
+/// Recording (1:M) -> Releases
+pub struct ReleasesLabelsDBRel;
+
+impl DBRelation<ReleasesLabelsDBRel> for Release {
+    type ReturnedType = Label;
+
+    fn get_join_statement() -> &'static str {
+        "
+        INNER JOIN labels_gid_redirect ON labels_gid_redirect.new_id = labels.id
+        INNER JOIN label_infos ON label_infos.label = labels_gid_redirect.gid
+        INNER JOIN releases ON releases.id = label_infos.release
+        "
+    }
+}
+
 impl Release {
+    /// Get the labels associated to the release
+    pub async fn get_labels_or_fetch(
+        &self,
+        client: &Arc<DBClient>,
+    ) -> Result<Vec<Label>, crate::Error> {
+        self.get_related_entity_or_fetch_as_task::<ReleasesLabelsDBRel>(client)
+            .await
+    }
+
     // pub async fn get_labels_or_fetch(
     //     &self,
     //     conn: &mut SqliteConnection,

@@ -6,12 +6,14 @@ use crate::AlistralClient;
 use crate::database::fetching::listens::ListenFetchQuery;
 use crate::database::fetching::listens::ListenFetchQueryReturn;
 use crate::datastructures::entity_with_listens::artist::collection::ArtistWithRecordingsCollection;
+use crate::datastructures::entity_with_listens::label::collection::LabelWithReleasesCollection;
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use crate::datastructures::entity_with_listens::release::collection::ReleaseWithRecordingsCollection;
 use crate::datastructures::entity_with_listens::user::collection::UserWithListensCollection;
 use crate::datastructures::listen_collection::ListenCollection;
 
 pub mod artists;
+pub mod labels;
 pub mod listens;
 pub mod recordings;
 pub mod release;
@@ -30,6 +32,7 @@ pub struct ListenStatisticsData {
     listens: ListenCollection,
 
     artists: OnceCell<ArtistWithRecordingsCollection>,
+    labels: OnceCell<LabelWithReleasesCollection>,
     recordings: OnceCell<RecordingWithListensCollection>,
     releases: OnceCell<ReleaseWithRecordingsCollection>,
     users: OnceCell<UserWithListensCollection>,
@@ -41,6 +44,7 @@ impl ListenStatisticsData {
             client,
             listens,
             artists: OnceCell::new(),
+            labels: OnceCell::new(),
             users: OnceCell::new(),
             recordings: OnceCell::new(),
             releases: OnceCell::new(),
