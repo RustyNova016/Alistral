@@ -41,7 +41,7 @@ impl HasRowID for SimpleTag {
 
 #[async_trait]
 impl FormatWithAsyncDyn<MusicbrainzFormater> for SimpleTag {
-    type Error = crate::Error;
+    type Error = musicbrainz_db_lite::Error;
 
     async fn format_with_async(&self, _ft: &MusicbrainzFormater) -> Result<String, Self::Error> {
         Ok(self.name.to_string())

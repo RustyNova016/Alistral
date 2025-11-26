@@ -11,6 +11,7 @@ use crate::models::shared_traits::has_tags::HasTags;
 
 pub mod query;
 
+
 #[derive(PartialEq, Eq, Debug, Clone, FromRow)]
 pub struct Tag {
     pub id: i64,
@@ -73,3 +74,5 @@ impl FormatWithAsyncDyn<MusicbrainzFormater> for Tag {
         Ok(self.name.to_string())
     }
 }
+
+
