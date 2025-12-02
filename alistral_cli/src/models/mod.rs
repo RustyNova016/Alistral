@@ -7,3 +7,5 @@ pub mod data;
 pub mod data_storage;
 pub mod datastructures;
 pub mod error;
+#[cfg(feature = "stats")]
+pub mod hour_min;
