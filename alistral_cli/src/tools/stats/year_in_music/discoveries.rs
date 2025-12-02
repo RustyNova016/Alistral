@@ -51,7 +51,7 @@ impl YimReport {
             .collect_vec()
     }
 
-    async fn discoveries(&self, stats: &Vec<RecordingWithListens>) -> String {
+    async fn discoveries(&self, stats: &[RecordingWithListens]) -> String {
         let track_count = stats.len();
         let listen_count: usize = stats.iter().map(|rec| rec.listen_count()).sum();
         let listen_perc = Decimal::new(listen_count as i64, 0)

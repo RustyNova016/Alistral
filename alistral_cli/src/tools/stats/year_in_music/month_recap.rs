@@ -1,14 +1,10 @@
-use std::collections::HashMap;
 use std::fmt::Write;
 use std::sync::LazyLock;
 
-use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime;
 use charchart::bar_graph::BarGraph;
 use charchart::bar_graph::colors::Color;
 use charchart::bar_graph::data::Data;
-use chrono::Datelike;
-use chrono::Months;
 use tuillez::extensions::chrono_exts::DurationExt as _;
 
 use crate::datastructures::cli_formating::title::Heading1;
@@ -31,24 +27,6 @@ impl YimReport {
         writeln!(out, "{}", self.get_graph().await).unwrap();
 
         out
-    }
-
-    async fn get_montly_stats(&self) -> HashMap<u32, RecordingWithListensCollection> {
-        let mut stats = HashMap::new();
-
-        for i in 1..13 {
-            let month_start = self.year_start.with_month(i).unwrap();
-            let month_end = month_start.checked_add_months(Months::new(1)).unwrap();
-
-            let listens = self
-                .current
-                .clone_no_stats()
-                .filter_listening_date(month_start.into(), month_end.into());
-
-            stats.insert(i, listens.recording_stats().await.unwrap().to_owned());
-        }
-
-        stats
     }
 
     async fn get_graph(&self) -> String {

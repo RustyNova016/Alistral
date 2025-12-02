@@ -25,8 +25,6 @@ use crate::traits::mergable::Mergable;
 use super::listen_collection::ListenCollection;
 use super::listen_collection::traits::ListenCollectionReadable;
 
-
-
 /// A structure representing an entity with associated listens.
 #[derive(Debug, Clone)]
 pub struct EntityWithListens<Ent, Lis>
@@ -175,6 +173,3 @@ where
         }
     }
 }
-
-
-

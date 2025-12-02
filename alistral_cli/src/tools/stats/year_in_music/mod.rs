@@ -29,9 +29,6 @@ pub mod random_stats;
 pub mod recordings;
 pub mod releases;
 pub mod stats;
-pub mod tags;
-
-
 
 /// A recap of the year's statistics
 #[derive(Parser, Debug, Clone)]
@@ -51,7 +48,9 @@ impl StatsYIMCommand {
         println!("Welcome to your Year in Music recap!");
         println!();
         println!("Please wait while we fetch your data...");
-        println!("(This may take a long time. Run it in the background and come back later. Progress is saved if the app is closed)");
+        println!(
+            "(This may take a long time. Run it in the background and come back later. Progress is saved if the app is closed)"
+        );
 
         let stats = ALISTRAL_CLIENT.statistics_of_user(username).await;
 
@@ -161,6 +160,3 @@ impl YimReport {
         TopPrinter::format_n_rows(rows, 20).await
     }
 }
-
-
-

@@ -36,6 +36,4 @@ impl YimReport {
             previous.alistral_green(),
         )
     }
-
-
 }

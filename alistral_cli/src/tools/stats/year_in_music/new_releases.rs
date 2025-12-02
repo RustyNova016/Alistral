@@ -47,7 +47,7 @@ impl YimReport {
             .collect_vec()
     }
 
-    async fn new_releases(&self, stats: &Vec<RecordingWithListens>) -> String {
+    async fn new_releases(&self, stats: &[RecordingWithListens]) -> String {
         let track_count = stats.len();
         let listen_count: usize = stats.iter().map(|rec| rec.listen_count()).sum();
         let listen_perc = Decimal::new(listen_count as i64, 0)
@@ -57,7 +57,11 @@ impl YimReport {
             "You listened to {} tracks released this year, which make up a total of {} listens ({}% of this year's listens)",
             track_count.alistral_green(),
             listen_count.alistral_green(),
-            listen_perc.checked_mul(dec!(100)).unwrap().trunc_with_scale(2).alistral_green()
+            listen_perc
+                .checked_mul(dec!(100))
+                .unwrap()
+                .trunc_with_scale(2)
+                .alistral_green()
         )
     }
 }

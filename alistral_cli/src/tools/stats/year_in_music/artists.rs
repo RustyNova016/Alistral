@@ -63,4 +63,3 @@ impl YimReport {
         TopPrinter::format_n_rows(rows, 20).await
     }
 }
-

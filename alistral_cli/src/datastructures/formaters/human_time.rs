@@ -7,14 +7,8 @@ pub struct HumanTimePrinter(Option<Duration>);
 
 impl Display for HumanTimePrinter {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self.0 {
-            Some(dur) => write!(
-                f,
-                "{}",
-                dur.floor_to_minute().to_humantime().unwrap().to_string()
-            )
-            .unwrap(),
-            None => {}
+        if let Some(dur) = self.0 {
+            write!(f, "{}", dur.floor_to_minute().to_humantime().unwrap()).unwrap()
         }
 
         Ok(())

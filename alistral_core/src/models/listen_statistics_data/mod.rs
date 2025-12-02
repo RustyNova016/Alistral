@@ -21,8 +21,6 @@ pub mod release;
 pub mod release_groups;
 pub mod user;
 
-
-
 /// This struct hold listens data. This is a convenience over having a to create listen statistics yourself
 ///
 /// The design is intentionally not mutable. Having a mutation somewhere would need invalidating all of the inner statistics,
@@ -78,10 +76,8 @@ impl ListenStatisticsData {
         &self.listens
     }
 
-    /// Clone self while only keeping the listens. 
+    /// Clone self while only keeping the listens.
     pub fn clone_no_stats(&self) -> Self {
         Self::new(self.client.clone(), self.listens.clone())
     }
 }
-
-

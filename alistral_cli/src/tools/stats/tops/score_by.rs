@@ -11,9 +11,7 @@ pub enum SortBy {
     ListenDuration,
 }
 
-impl SortBy {
-
-}
+impl SortBy {}
 
 impl Display for SortBy {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {

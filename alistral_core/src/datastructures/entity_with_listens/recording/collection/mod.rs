@@ -19,8 +19,6 @@ use crate::datastructures::listen_sorter::ListenSortingStrategy;
 pub mod filter;
 pub mod sort;
 
-
-
 pub type RecordingWithListensCollection = EntityWithListensCollection<Recording, ListenCollection>;
 
 impl IterRecordingWithListens for RecordingWithListensCollection {
@@ -93,5 +91,3 @@ impl ListenCollWithTime for RecordingWithListensCollection {
         )
     }
 }
-
-

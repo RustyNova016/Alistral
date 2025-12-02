@@ -5,4 +5,3 @@ use crate::datastructures::entity_with_listens::recording::collection::Recording
 use super::EntityWithListens;
 
 pub type ArtistWithRecordings = EntityWithListens<Artist, RecordingWithListensCollection>;
-

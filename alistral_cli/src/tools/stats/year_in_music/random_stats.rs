@@ -48,8 +48,9 @@ impl YimReport {
             .get_time_listened();
 
         let secs_in_year = (self.year_end - self.year_start).num_seconds();
-        let sec_listened = current.clone().map(|dur| dur.num_seconds()).unwrap_or(0);
-        let year_percent = (Decimal::new(sec_listened, 0) / Decimal::new(secs_in_year, 0)) * dec!(100);
+        let sec_listened = current.map(|dur| dur.num_seconds()).unwrap_or(0);
+        let year_percent =
+            (Decimal::new(sec_listened, 0) / Decimal::new(secs_in_year, 0)) * dec!(100);
 
         format!(
             "Had music in your ears for {} ({} {}). That's {}% of the year!",

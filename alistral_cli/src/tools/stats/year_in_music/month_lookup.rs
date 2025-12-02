@@ -76,7 +76,7 @@ impl YimReport {
 
     async fn get_month_stats(
         &self,
-        year_start: DateTime<Local >,
+        year_start: DateTime<Local>,
         month: u32,
     ) -> RecordingWithListensCollection {
         let month_start = year_start.with_month(month).unwrap();

@@ -3405,6 +3405,7 @@ dependencies = [
 [[package]]
 name = "sequelles"
 version = "0.2.0"
+source = "git+https://github.com/RustyNova016/sequelles?rev=ecdfec3c83c610dbe6f69dd2b19447acbc895287#ecdfec3c83c610dbe6f69dd2b19447acbc895287"
 dependencies = [
  "async-once-cell",
  "bon",

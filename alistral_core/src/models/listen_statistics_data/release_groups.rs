@@ -9,12 +9,18 @@ use crate::traits::sorter::InsertElement;
 
 impl ListenStatisticsData {
     /// Generate the recording statistics based on the stored listens
-    pub async fn release_group_stats(&self) -> Result<&ReleaseGroupWithReleasesCollection, ReleaseGroupStatsError> {
-        self.release_groups.get_or_try_init(self.init_release_groups()).await
+    pub async fn release_group_stats(
+        &self,
+    ) -> Result<&ReleaseGroupWithReleasesCollection, ReleaseGroupStatsError> {
+        self.release_groups
+            .get_or_try_init(self.init_release_groups())
+            .await
     }
 
     /// Create the recording statistics
-    async fn init_release_groups(&self) -> Result<ReleaseGroupWithReleasesCollection, ReleaseGroupStatsError> {
+    async fn init_release_groups(
+        &self,
+    ) -> Result<ReleaseGroupWithReleasesCollection, ReleaseGroupStatsError> {
         let mut coll = ReleaseGroupWithReleasesCollection::new();
         let recording_stats = self
             .release_stats()
@@ -25,7 +31,7 @@ impl ListenStatisticsData {
         coll.insert_element(self.client.as_ref(), recording_stats)
             .await
             .context(ReleaseGroupLinkingSnafu)?;
-        
+
         Ok(coll)
     }
 }

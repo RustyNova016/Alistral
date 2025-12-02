@@ -10,18 +10,13 @@ where
     T: Display,
 {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        writeln!(f, "{}", format!("\n {} ", self.0).on_alistral_dark_green().black().bold())
-    }
-}
-
-
-pub struct Heading2<T: Display>(pub T);
-
-impl<T> Display for Heading2<T>
-where
-    T: Display,
-{
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        writeln!(f, "{}", format!(" {} ", self.0).on_alistral_dark_green().black().bold())
+        writeln!(
+            f,
+            "{}",
+            format!("\n {} ", self.0)
+                .on_alistral_dark_green()
+                .black()
+                .bold()
+        )
     }
 }

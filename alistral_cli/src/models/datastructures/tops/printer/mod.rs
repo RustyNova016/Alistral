@@ -3,9 +3,10 @@ use comfy_table::Table;
 use comfy_table::presets::UTF8_FULL_CONDENSED;
 
 use crate::models::datastructures::tops::printer::top_row::TopRow;
-use crate::utils::cli::await_next;
 
+#[cfg(feature = "stats")]
 pub mod top_row;
+
 pub struct TopPrinter;
 
 impl TopPrinter {
@@ -22,29 +23,6 @@ impl TopPrinter {
         column.set_cell_alignment(CellAlignment::Right);
 
         table_model
-    }
-
-    pub async fn print_rows(rows: Vec<TopRow>) {
-        let table_model = Self::get_table();
-
-        let mut i: i8 = 0;
-        let mut table = table_model.clone();
-        for row in rows {
-            table.add_row(vec![
-                row.rank_col(),
-                row.score_col(),
-                row.element_col().await,
-            ]);
-
-            if i > 13 {
-                println!("{table}");
-                await_next();
-                i = 0;
-                table = table_model.clone()
-            } else {
-                i += 1
-            }
-        }
     }
 
     pub async fn format_n_rows(rows: Vec<TopRow>, count: usize) -> String {

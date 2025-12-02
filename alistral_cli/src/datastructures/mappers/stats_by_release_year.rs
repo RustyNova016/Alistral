@@ -4,7 +4,6 @@ use alistral_core::datastructures::entity_with_listens::recording::collection::R
 use chrono::Datelike;
 use sequelles::ZeroToManyJoin;
 
-
 /// Map listens to the the first release date of the recordings
 #[derive(Debug, Default)]
 pub struct StatsByReleaseYear {
@@ -22,7 +21,8 @@ impl StatsByReleaseYear {
             .first_release_date_or_fetch(client.musicbrainz_db.clone())
             .await?;
 
-        self.mapping.push_entry(date.map(|date| date.year() as i64), recording);
+        self.mapping
+            .push_entry(date.map(|date| date.year() as i64), recording);
 
         Ok(())
     }

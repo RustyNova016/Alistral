@@ -39,7 +39,7 @@ impl YimReport {
                     score: TopScore::TimeDelta(rec.get_time_listened().unwrap_or_default()),
                     element: Box::new(rec.recording().clone()),
                     previous_ranking: prev.as_ref().map(|(rank, _)| rank + 1),
-                    previous_score: previous_score,
+                    previous_score,
                 }
             })
             .collect_vec();

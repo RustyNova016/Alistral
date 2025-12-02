@@ -18,14 +18,14 @@ pub struct StatsCommand {
 #[derive(Subcommand, Debug, Clone)]
 pub enum StatsSubcommands {
     Top(StatsTopCommand),
-    YIM(StatsYIMCommand)
+    Yim(StatsYIMCommand),
 }
 
 impl StatsCommand {
     pub async fn run(&self) {
         match &self.command {
             StatsSubcommands::Top(val) => val.run().await,
-            StatsSubcommands::YIM(val) => val.run().await,
+            StatsSubcommands::Yim(val) => val.run().await,
         }
     }
 }
