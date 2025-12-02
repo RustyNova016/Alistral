@@ -1696,9 +1696,9 @@ dependencies = [
 
 [[package]]
 name = "hotpath"
-version = "0.7.1"
+version = "0.7.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2649393dad24933993d38cc4c299e20d2b68847373b0c57bc99815f4ba35160f"
+checksum = "08382b985a19a79d95d35e2e201b02cc4b99efe2f47d82f3fd4301bb0005bb68"
 dependencies = [
  "arc-swap",
  "base64",
@@ -1713,6 +1713,7 @@ dependencies = [
  "hotpath-macros",
  "libc",
  "mach2",
+ "pin-project-lite",
  "prettytable-rs",
  "quanta",
  "regex",
@@ -1725,9 +1726,9 @@ dependencies = [
 
 [[package]]
 name = "hotpath-macros"
-version = "0.7.1"
+version = "0.7.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "efb9a177d0f0b962b3ddfd5862a779851c3f983222d596d15f7f3553c18b7c6e"
+checksum = "7d618063f89423ebe079a69f5435a13d4909219d4e359757118b75fd05ae65d0"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2344,12 +2345,9 @@ dependencies = [
 
 [[package]]
 name = "mach2"
-version = "0.4.3"
+version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d640282b302c0bb0a2a8e0233ead9035e3bed871f0b7e81fe4a1ec829765db44"
-dependencies = [
- "libc",
-]
+checksum = "dae608c151f68243f2b000364e1f7b186d9c29845f7d2d85bd31b9ad77ad552b"
 
 [[package]]
 name = "maybe-async"
