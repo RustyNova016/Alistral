@@ -56,6 +56,7 @@ clap_complete = "4.5.61"
 clap-markdown = "0.1.5"
 clap-verbosity-flag = { version = "3.0.3", default-features = false, features = ["tracing"] }
 inquire = "0.9.1"
+charchart = {version = "0.1.0", git = "https://github.com/RustyNova016/charchart"}
 
 # Error handling
 color-eyre = "0.6.5"
@@ -81,9 +82,11 @@ hotpath = { version = "0.7", optional = true, features = ["futures"] }
 
 # Other
 zip = "6.0.0"
+sequelles = "0.2.0"
+comfy-table = { version = "7.2.1", features = ["custom_styling"] }
 
 [features]
-default = ["full"]
+default = ["stats", "lookup"]
 #default = ["full"]
 full = ["musicbrainz", "lookup", "stats", "radio"]
 
@@ -111,7 +114,7 @@ async_fn_in_trait = { level = "allow", priority = 1 }
 result_large_err = { level = "allow", priority = 1 }
 
 [patch.crates-io]
-sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "3ca0e95f377ddae06ca5ada6109fdb3669d94921"}
-tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "9760b11841bc29b7101aea62b2f275dd34c6bdae"}
+sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "ecdfec3c83c610dbe6f69dd2b19447acbc895287"}
+tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c8656a4eedb571177a8ffa3b9984e78"}
 musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "60ab4d48a6898cc2fc8e0b6fc9fb774c64cfe8d2"}
 listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "b859c43602cb9f1de08e1b4e7cf64026c581a26c" }

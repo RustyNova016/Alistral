@@ -67,6 +67,7 @@ pub enum Timeframe {
 }
 
 impl Timeframe {
+    //#[cfg(any(feature = "radio", feature = "lookup", feature = "stats"))]
     #[cfg(any(feature = "radio", feature = "lookup"))]
     pub fn get_start_date(&self) -> DateTime<Utc> {
         let now = Utc::now();

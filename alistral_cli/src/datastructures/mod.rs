@@ -1,5 +1,8 @@
+pub mod cli_formating;
 #[cfg(feature = "legacy_ent_with_listen")]
 pub mod entity_with_listens;
+pub mod formaters;
+pub mod mappers;
 #[cfg(feature = "radio")]
 pub mod radio;
 #[cfg(feature = "stats")]

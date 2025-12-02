@@ -3,7 +3,9 @@ use std::sync::Arc;
 
 use sequelles::has_rowid::HasRowID;
 #[cfg(feature = "pretty_format")]
-use tuillez::formatter::FormatWithAsync;
+use tuillez::formatter::FormatWithAsyncDyn;
+#[cfg(feature = "pretty_format")]
+use tuillez::reexports::async_trait;
 
 use crate::FetchAndSave;
 use crate::Track;
@@ -134,7 +136,8 @@ impl HasMBID for MainEntity {
 }
 
 #[cfg(feature = "pretty_format")]
-impl FormatWithAsync<MusicbrainzFormater> for MainEntity {
+#[async_trait]
+impl FormatWithAsyncDyn<MusicbrainzFormater> for MainEntity {
     type Error = crate::Error;
 
     async fn format_with_async(&self, ft: &MusicbrainzFormater) -> Result<String, Self::Error> {

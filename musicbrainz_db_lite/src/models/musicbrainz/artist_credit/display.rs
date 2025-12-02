@@ -3,7 +3,9 @@ use core::fmt::Display;
 use core::fmt::Write;
 
 #[cfg(feature = "pretty_format")]
-use tuillez::formatter::FormatWithAsync;
+use tuillez::formatter::FormatWithAsyncDyn;
+#[cfg(feature = "pretty_format")]
+use tuillez::reexports::async_trait;
 
 #[cfg(feature = "pretty_format")]
 use crate::ArtistCredit;
@@ -21,7 +23,8 @@ impl Display for ArtistCredits {
 }
 
 #[cfg(feature = "pretty_format")]
-impl FormatWithAsync<MusicbrainzFormater> for Vec<ArtistCredit> {
+#[async_trait]
+impl FormatWithAsyncDyn<MusicbrainzFormater> for Vec<ArtistCredit> {
     type Error = crate::Error;
 
     async fn format_with_async(&self, ft: &MusicbrainzFormater) -> Result<String, Self::Error> {
@@ -50,7 +53,8 @@ impl FormatWithAsync<MusicbrainzFormater> for Vec<ArtistCredit> {
 }
 
 #[cfg(feature = "pretty_format")]
-impl FormatWithAsync<MusicbrainzFormater> for ArtistCredits {
+#[async_trait]
+impl FormatWithAsyncDyn<MusicbrainzFormater> for ArtistCredits {
     type Error = crate::Error;
 
     async fn format_with_async(&self, ft: &MusicbrainzFormater) -> Result<String, Self::Error> {

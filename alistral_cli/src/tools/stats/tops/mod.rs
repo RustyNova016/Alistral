@@ -11,8 +11,8 @@ use clap::ValueEnum;
 use derive_more::IsVariant;
 use musicbrainz_db_lite::HasRowID;
 use musicbrainz_db_lite::Label;
+use musicbrainz_db_lite::Recording;
 use musicbrainz_db_lite::models::musicbrainz::artist::Artist;
-use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use musicbrainz_db_lite::models::musicbrainz::release::Release;
 use musicbrainz_db_lite::models::musicbrainz::release_group::ReleaseGroup;
 use musicbrainz_db_lite::models::musicbrainz::work::Work;
@@ -28,8 +28,10 @@ use crate::datastructures::statistic_formater::StatFormatterVariant;
 use crate::datastructures::statistic_formater::StatisticFormater;
 use crate::datastructures::statistic_formater::StatisticOutput;
 use crate::datastructures::statistic_formater::StatisticType;
+use crate::tools::stats::tops::score_by::SortBy;
 use crate::utils::user_inputs::UserInputParser;
 
+pub mod score_by;
 pub mod stats_compiling;
 pub mod target_entity;
 
@@ -40,7 +42,7 @@ pub struct StatsTopCommand {
     target: StatsTarget,
 
     /// Name of the user to fetch stats listen from
-    #[arg(short, long)]
+    #[arg(long)]
     username: Option<String>,
 
     /// The type of sorting to use
@@ -50,26 +52,17 @@ pub struct StatsTopCommand {
     /// Recursively add parent works to work stats
     #[arg(long)]
     w_recursive: bool,
-}
+    // /// Time period to use for the statistics.
+    // #[clap(short, long)]
+    // timeframe: Option<Timeframe>,
 
-#[derive(ValueEnum, Clone, Debug, Copy, IsVariant)]
-pub enum SortBy {
-    /// The number of times the entity has been listened to
-    ListenCount,
+    // /// Get statistics from this date. Use YYYY-MM-DD format
+    // #[clap(short, long)]
+    // from: Option<NaiveDate>,
 
-    /// The total duration this entity has been listened for
-    ListenDuration,
-}
-
-impl Display for SortBy {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Self::ListenCount => write!(f, "listen-count")?,
-            Self::ListenDuration => write!(f, "listen-duration")?,
-        };
-
-        Ok(())
-    }
+    // /// Get statistics until this date. Use YYYY-MM-DD format
+    // #[clap(short, long)]
+    // until: Option<NaiveDate>,
 }
 
 #[derive(ValueEnum, Clone, Debug, Copy, IsVariant)]
@@ -105,6 +98,51 @@ impl StatsTopCommand {
 
         self.route_sort_type(username).await.unwrap();
     }
+
+    // Wait on full refactor of the listen stats builder
+    // pub fn from(&self) -> Option<DateTime<Utc>> {
+    //     if let Some(t) = &self.timeframe {
+    //         return Some(t.get_start_date());
+    //     }
+
+    //     if let Some(t) = &self.from {
+    //         //TODO: Proper error?
+    //         return Some(
+    //             t.and_hms_opt(0, 0, 0)
+    //                 .unwrap()
+    //                 .and_local_timezone(Local)
+    //                 .unwrap()
+    //                 .to_utc(),
+    //         );
+    //     }
+
+    //     None
+    // }
+
+    // pub fn until(&self) -> Option<DateTime<Utc>> {
+    //     if self.timeframe.is_some() {
+    //         return Some(Utc::now());
+    //     }
+
+    //     if let Some(t) = &self.until {
+    //         //TODO: Proper error?
+    //         return Some(
+    //             t.and_hms_opt(0, 0, 0)
+    //                 .unwrap()
+    //                 .and_local_timezone(Local)
+    //                 .unwrap()
+    //                 .to_utc(),
+    //         );
+    //     }
+
+    //     None
+    // }
+
+    // pub async fn get_generator(&self) -> TopGenerator {
+    //     let username = UserInputParser::username_or_default(&self.username);
+    //     let stats = ALISTRAL_CLIENT.statistics_of_user(username).await;
+    //     TopGenerator::new(stats, self.from(), self.until())
+    // }
 
     async fn route_sort_type(&self, user: String) -> Result<(), crate::Error> {
         match (self.sort_by, self.target) {

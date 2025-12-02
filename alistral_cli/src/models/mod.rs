@@ -5,4 +5,5 @@ pub mod config;
 pub mod data;
 #[cfg(feature = "radio")]
 pub mod data_storage;
+pub mod datastructures;
 pub mod error;
