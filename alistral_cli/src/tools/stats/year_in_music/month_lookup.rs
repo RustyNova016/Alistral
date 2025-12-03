@@ -1,11 +1,6 @@
 use std::fmt::Write;
 use std::sync::LazyLock;
 
-use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
-use chrono::DateTime;
-use chrono::Datelike;
-use chrono::Local;
-use chrono::Months;
 use itertools::Itertools;
 
 use crate::datastructures::cli_formating::title::Heading1;
@@ -40,12 +35,35 @@ impl YimReport {
 
     async fn month_lookup_page(&self, num: u32) -> String {
         let mut out = String::new();
-        let stats = self.get_month_stats(self.year_start, num).await;
-        let prev_year = if num == 1 {
-            self.get_month_stats(self.year_start.with_year(self.year - 1).unwrap(), 12)
+
+        let stats = self
+            .data
+            .listens_per_month_current()
+            .await
+            .get(&num)
+            .expect("Invalid month")
+            .recording_stats()
+            .await
+            .unwrap();
+
+        let prev_month = if num == 1 {
+            self.data
+                .listens_per_month_previous()
                 .await
+                .get(&12)
+                .expect("Invalid month")
+                .recording_stats()
+                .await
+                .unwrap()
         } else {
-            self.get_month_stats(self.year_start, num - 1).await
+            self.data
+                .listens_per_month_current()
+                .await
+                .get(&(num - 1))
+                .expect("Invalid month")
+                .recording_stats()
+                .await
+                .unwrap()
         };
 
         writeln!(
@@ -65,28 +83,12 @@ impl YimReport {
             "{}",
             Self::top_recordings_with_cmp(
                 stats.iter().cloned().collect_vec(),
-                prev_year.iter().cloned().collect_vec()
+                prev_month.iter().cloned().collect_vec()
             )
             .await
         )
         .unwrap();
 
         out
-    }
-
-    async fn get_month_stats(
-        &self,
-        year_start: DateTime<Local>,
-        month: u32,
-    ) -> RecordingWithListensCollection {
-        let month_start = year_start.with_month(month).unwrap();
-        let month_end = month_start.checked_add_months(Months::new(1)).unwrap();
-
-        let listens = self
-            .full_user_stats
-            .clone_no_stats()
-            .filter_listening_date(month_start.into(), month_end.into());
-
-        listens.recording_stats().await.unwrap().to_owned()
     }
 }

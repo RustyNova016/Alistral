@@ -19,7 +19,6 @@ static MONTHS: LazyLock<Vec<&'static str>> = LazyLock::new(|| {
 impl YimReport {
     pub async fn monthly_recap_page(&self) -> String {
         let mut out = String::new();
-        //let stats = self.get_montly_stats().await;
         writeln!(out, "{}", Heading1("Monthly recap 📅")).unwrap();
 
         writeln!(out, "Here's your listen time per month:").unwrap();
@@ -34,9 +33,11 @@ impl YimReport {
 
         for month in 1..13 {
             let current = self
-                .full_user_stats
-                .clone_no_stats()
-                .filter_on_year_month(self.year, month)
+                .data
+                .listens_per_month_current()
+                .await
+                .get(&month)
+                .expect("Invalid month")
                 .recording_stats()
                 .await
                 .unwrap()
@@ -58,9 +59,11 @@ impl YimReport {
             );
 
             let previous = self
-                .full_user_stats
-                .clone_no_stats()
-                .filter_on_year_month(self.year - 1, month)
+                .data
+                .listens_per_month_previous()
+                .await
+                .get(&month)
+                .expect("Invalid month")
                 .recording_stats()
                 .await
                 .unwrap()

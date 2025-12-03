@@ -54,6 +54,7 @@ version = "0.6.0"
 dependencies = [
  "alistral_core",
  "async-fn-stream",
+ "async-once-cell",
  "bon",
  "charchart",
  "chrono",

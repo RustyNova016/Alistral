@@ -7,6 +7,7 @@ use chrono::DateTime;
 use chrono::Datelike;
 use chrono::Local;
 use chrono::NaiveDateTime;
+use chrono::Utc;
 use clap::Parser;
 use itertools::Itertools as _;
 use sequelles::datastructures::ranking::Ranking;
@@ -15,6 +16,7 @@ use crate::ALISTRAL_CLIENT;
 use crate::models::datastructures::tops::printer::TopPrinter;
 use crate::models::datastructures::tops::printer::top_row::TopRow;
 use crate::models::datastructures::tops::top_score::TopScore;
+use crate::tools::stats::year_in_music::stats::YimReportData;
 use crate::utils::cli::await_next;
 use crate::utils::user_inputs::UserInputParser;
 
@@ -42,7 +44,7 @@ pub struct StatsYIMCommand {
 
 impl StatsYIMCommand {
     pub async fn run(&self) {
-        let year = self.year.unwrap_or(2024);
+        let year = self.year.unwrap_or_else(|| Utc::now().year() - 1);
         let username = UserInputParser::username_or_default(&self.username);
 
         println!("Welcome to your Year in Music recap!");
@@ -51,11 +53,12 @@ impl StatsYIMCommand {
         println!(
             "(This may take a long time. Run it in the background and come back later. Progress is saved if the app is closed)"
         );
+        println!();
 
         let stats = ALISTRAL_CLIENT.statistics_of_user(username).await;
 
         let report = YimReport::new(year, stats);
-        report.prefetch_data().await;
+        report.data.prefetch().await;
         report.print().await;
     }
 }
@@ -66,11 +69,7 @@ struct YimReport {
     year_start: DateTime<Local>,
     year_end: DateTime<Local>,
 
-    /// All the user data
-    full_user_stats: ListenStatisticsData,
-
-    current: ListenStatisticsData,
-    previous: ListenStatisticsData,
+    data: YimReportData,
 }
 
 impl YimReport {
@@ -92,13 +91,13 @@ impl YimReport {
             .clone_no_stats()
             .filter_listening_date(previous_year.into(), year_start.into());
 
+        let data = YimReportData::new(full_user_stats, current, previous);
+
         Self {
-            current,
-            previous,
             year,
             year_end,
             year_start,
-            full_user_stats,
+            data,
         }
     }
 

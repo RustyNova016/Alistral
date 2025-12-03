@@ -10,27 +10,30 @@ use crate::tools::stats::year_in_music::YimReport;
 impl YimReport {
     pub async fn recording_report(&self) -> String {
         let mut out = String::new();
-        let stats = self.current.recording_stats().await.unwrap();
+        let stats = self.data.current.recording_stats().await.unwrap();
         let stats = stats.iter().cloned().collect_vec();
 
         writeln!(out, "{}", Heading1("Best recordings of the year 🏆")).unwrap();
         writeln!(out, "{}", self.get_recording_distinct().await).unwrap();
-        writeln!(out).unwrap();
-        writeln!(out, "Here's the top 20 tracks of this year:").unwrap();
-        writeln!(out, "{}", Self::top_recordings(stats).await).unwrap();
+
+        if stats.is_empty() {
+            writeln!(out).unwrap();
+            writeln!(out, "Here's the top 20 tracks of this year:").unwrap();
+            writeln!(out, "{}", Self::top_recordings(stats).await).unwrap();
+        }
 
         out
     }
 
     async fn get_recording_distinct(&self) -> String {
-        let current = self.current.recording_stats().await.unwrap();
-        let previous = self.previous.recording_stats().await.unwrap();
+        let current = self.data.current.recording_stats().await.unwrap();
+        let previous = self.data.previous.recording_stats().await.unwrap();
 
         let current = current.iter_entities().count();
         let previous = previous.iter_entities().count();
 
         format!(
-            "You listened to {} distinct recordings this year ({} {})",
+            "You listened to {} distinct recordings this year [{} {}]",
             current.alistral_green(),
             ComparisonArrow::greater_is_better(current, previous),
             previous.alistral_green(),

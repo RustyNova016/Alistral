@@ -19,15 +19,19 @@ impl YimReport {
         writeln!(out, "In {}, you:", self.year).unwrap();
         writeln!(out, " - {}", self.listen_count_line()).unwrap();
         writeln!(out, " - {}", self.listen_duration_line().await).unwrap();
-        writeln!(out, " - {}", self.best_listen_hour().await).unwrap();
+
+        if let Some(line) = self.best_listen_hour().await {
+            writeln!(out, " - {line}").unwrap();
+        }
+
         out
     }
 
     fn listen_count_line(&self) -> String {
-        let current = self.current.listens().listen_count();
-        let previous = self.previous.listens().listen_count();
+        let current = self.data.current.listens().listen_count();
+        let previous = self.data.previous.listens().listen_count();
         format!(
-            "Listened to {} tracks ({} {})",
+            "Listened to {} tracks [{} {}]",
             current.alistral_green(),
             ComparisonArrow::greater_is_better(current, previous),
             previous.alistral_green()
@@ -36,6 +40,7 @@ impl YimReport {
 
     async fn listen_duration_line(&self) -> String {
         let current = self
+            .data
             .current
             .recording_stats()
             .await
@@ -43,6 +48,7 @@ impl YimReport {
             .get_time_listened();
 
         let previous = self
+            .data
             .previous
             .recording_stats()
             .await
@@ -55,7 +61,7 @@ impl YimReport {
             (Decimal::new(sec_listened, 0) / Decimal::new(secs_in_year, 0)) * dec!(100);
 
         format!(
-            "Had music in your ears for {} ({} {}). That's {}% of the year!",
+            "Had music in your ears for {} [{} {}]. That's {}% of the year!",
             HumanTimePrinter::from(current).alistral_green(),
             ComparisonArrow::greater_is_better(current, previous),
             HumanTimePrinter::from(previous).alistral_green(),
