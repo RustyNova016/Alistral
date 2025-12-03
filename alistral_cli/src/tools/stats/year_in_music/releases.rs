@@ -23,7 +23,7 @@ impl YimReport {
         writeln!(out, "{}", Heading1("Best releases of the year 🏆")).unwrap();
         writeln!(out, "{}", self.get_releases_distinct().await).unwrap();
 
-        if stats.is_empty() {
+        if !stats.is_empty() {
             writeln!(out).unwrap();
             writeln!(out, "Here's the top 20 releases of this year:").unwrap();
             writeln!(out, "{}", Self::top_releases(stats).await).unwrap();

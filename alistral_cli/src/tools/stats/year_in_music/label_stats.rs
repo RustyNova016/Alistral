@@ -16,7 +16,7 @@ impl YimReport {
         writeln!(out, "{}", Heading1("Best labels of the year 🏆")).unwrap();
         writeln!(out, "{}", self.get_labels_distinct().await).unwrap();
 
-        if stats.is_empty() {
+        if !stats.is_empty() {
             writeln!(out).unwrap();
             writeln!(out, "Here's the top 20 labels of this year:").unwrap();
             writeln!(out, "{}", Self::top_labels(stats).await).unwrap();
