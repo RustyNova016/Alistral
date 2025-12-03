@@ -23,7 +23,7 @@ impl YimReport {
         writeln!(out, "{}", Heading1("Best artists of the year 🏆")).unwrap();
         writeln!(out, "{}", self.get_artist_distinct().await).unwrap();
 
-        if stats.is_empty() {
+        if !stats.is_empty() {
             writeln!(out).unwrap();
             writeln!(out, "Here's the top 20 artists of this year:").unwrap();
             writeln!(out, "{}", Self::top_artists(stats).await).unwrap();

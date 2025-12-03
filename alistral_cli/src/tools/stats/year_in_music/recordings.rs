@@ -16,7 +16,7 @@ impl YimReport {
         writeln!(out, "{}", Heading1("Best recordings of the year 🏆")).unwrap();
         writeln!(out, "{}", self.get_recording_distinct().await).unwrap();
 
-        if stats.is_empty() {
+        if !stats.is_empty() {
             writeln!(out).unwrap();
             writeln!(out, "Here's the top 20 tracks of this year:").unwrap();
             writeln!(out, "{}", Self::top_recordings(stats).await).unwrap();
