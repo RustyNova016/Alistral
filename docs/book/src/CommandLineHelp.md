@@ -48,7 +48,7 @@ This document contains the help content for the `alistral` command-line program.
 * [`alistral radio shared`↴](#alistral-radio-shared)
 * [`alistral stats`↴](#alistral-stats)
 * [`alistral stats top`↴](#alistral-stats-top)
-* [`alistral unstable`↴](#alistral-unstable)
+* [`alistral stats yim`↴](#alistral-stats-yim)
 
 ## `alistral`
 
@@ -71,7 +71,6 @@ A CLI app containing a set of useful tools for Listenbrainz
 * `playlist` — Interact with playlists
 * `radio` — Generate radio playlists for you
 * `stats` — Shows top statistics for a specific target
-* `unstable` — A CLI app containing a set of useful tools for Listenbrainz
 
 ###### **Options:**
 
@@ -287,7 +286,7 @@ Daily report
 
 ###### **Arguments:**
 
-* `<DATE>` — The date to use
+* `<DATE>` — The date to use for the daily report
 * `<USERNAME>` — Name of the user to provide a daily report
 
 
@@ -434,11 +433,11 @@ You can get a listen dump [here](https://listenbrainz.org/settings/export/)
 
 ## `alistral listens reload`
 
-**Usage:** `alistral listens reload [USER]`
+**Usage:** `alistral listens reload [USERNAME]`
 
 ###### **Arguments:**
 
-* `<USER>` — Reload the listens of this user
+* `<USERNAME>` — Reload the listens of this user
 
 
 
@@ -844,6 +843,7 @@ Shows top statistics for a specific target
 ###### **Subcommands:**
 
 * `top` — Retrieve the top listened entities
+* `yim` — A recap of the year's statistics
 
 
 
@@ -862,7 +862,7 @@ Retrieve the top listened entities
 
 ###### **Options:**
 
-* `-u`, `--username <USERNAME>` — Name of the user to fetch stats listen from
+* `--username <USERNAME>` — Name of the user to fetch stats listen from
 * `-s`, `--sort-by <SORT_BY>` — The type of sorting to use
 
   Default value: `listen-count`
@@ -877,11 +877,16 @@ Retrieve the top listened entities
 
 
 
-## `alistral unstable`
+## `alistral stats yim`
 
-A CLI app containing a set of useful tools for Listenbrainz
+A recap of the year's statistics
 
-**Usage:** `alistral unstable`
+**Usage:** `alistral stats yim [YEAR] [USERNAME]`
+
+###### **Arguments:**
+
+* `<YEAR>` — What year to target
+* `<USERNAME>` — Name of the user
 
 
 
