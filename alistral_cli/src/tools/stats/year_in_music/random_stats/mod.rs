@@ -11,6 +11,7 @@ use crate::datastructures::formaters::human_time::HumanTimePrinter;
 use crate::interface::comp_arrow::ComparisonArrow;
 use crate::tools::stats::year_in_music::YimReport;
 
+pub mod listen_hour;
 impl YimReport {
     pub(super) async fn random_stats_report(&self) -> String {
         let mut out = String::new();
@@ -18,6 +19,7 @@ impl YimReport {
         writeln!(out, "In {}, you:", self.year).unwrap();
         writeln!(out, " - {}", self.listen_count_line()).unwrap();
         writeln!(out, " - {}", self.listen_duration_line().await).unwrap();
+        writeln!(out, " - {}", self.best_listen_hour().await).unwrap();
         out
     }
 
