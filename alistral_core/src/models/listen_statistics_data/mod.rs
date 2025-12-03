@@ -72,6 +72,10 @@ impl ListenStatisticsData {
         Ok(Self::new(client, listens))
     }
 
+    pub fn client(&self) -> &Arc<AlistralClient> {
+        &self.client
+    }
+
     pub fn listens(&self) -> &ListenCollection {
         &self.listens
     }

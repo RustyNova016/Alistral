@@ -84,6 +84,7 @@ hotpath = { version = "0.7", optional = true, features = ["futures"] }
 zip = "6.0.0"
 sequelles = "0.2.0"
 comfy-table = { version = "7.2.1", features = ["custom_styling"] }
+async-once-cell = "0.5.4"
 
 [features]
 default = ["stats", "lookup"]
