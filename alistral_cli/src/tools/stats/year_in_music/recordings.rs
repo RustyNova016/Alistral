@@ -1,7 +1,6 @@
 use std::fmt::Write;
 
 use alistral_core::cli::colors::AlistralColors;
-use itertools::Itertools;
 
 use crate::datastructures::cli_formating::title::Heading1;
 use crate::interface::comp_arrow::ComparisonArrow;
@@ -11,15 +10,21 @@ impl YimReport {
     pub async fn recording_report(&self) -> String {
         let mut out = String::new();
         let stats = self.data.current.recording_stats().await.unwrap();
-        let stats = stats.iter().cloned().collect_vec();
 
         writeln!(out, "{}", Heading1("Best recordings of the year 🏆")).unwrap();
         writeln!(out, "{}", self.get_recording_distinct().await).unwrap();
 
         if !stats.is_empty() {
+            let prev = self.data.previous.recording_stats().await.unwrap();
+
             writeln!(out).unwrap();
             writeln!(out, "Here's the top 20 tracks of this year:").unwrap();
-            writeln!(out, "{}", Self::top_recordings(stats).await).unwrap();
+            writeln!(
+                out,
+                "{}",
+                Self::top_recordings_with_cmp(stats.to_owned(), prev.to_owned()).await
+            )
+            .unwrap();
         }
 
         out

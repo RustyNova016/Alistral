@@ -1,8 +1,6 @@
 use std::fmt::Write;
 use std::sync::LazyLock;
 
-use itertools::Itertools;
-
 use crate::datastructures::cli_formating::title::Heading1;
 use crate::tools::stats::year_in_music::YimReport;
 use crate::utils::cli::await_next;
@@ -81,11 +79,7 @@ impl YimReport {
         writeln!(
             out,
             "{}",
-            Self::top_recordings_with_cmp(
-                stats.iter().cloned().collect_vec(),
-                prev_month.iter().cloned().collect_vec()
-            )
-            .await
+            Self::top_recordings_with_cmp(stats.to_owned(), prev_month.to_owned()).await
         )
         .unwrap();
 
