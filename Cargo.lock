@@ -72,7 +72,7 @@ dependencies = [
  "duplicate",
  "extend",
  "futures",
- "hotpath 0.8.0",
+ "hotpath",
  "indoc",
  "inquire",
  "interzic",
@@ -701,7 +701,7 @@ version = "3.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fde0e0ec90c9dfb3b4b1a0891a7dcd0e2bffde2f7efed5fe7c9bb00e5bfb915e"
 dependencies = [
- "windows-sys 0.59.0",
+ "windows-sys 0.48.0",
 ]
 
 [[package]]
@@ -1721,36 +1721,6 @@ dependencies = [
 
 [[package]]
 name = "hotpath"
-version = "0.7.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d552f1c963aa405ec1d1924b293bbf56c7a58d86c5a48c782741580c0d74a9af"
-dependencies = [
- "arc-swap",
- "base64",
- "cfg-if",
- "clap",
- "colored",
- "crossbeam-channel",
- "eyre",
- "futures-channel",
- "futures-util",
- "hdrhistogram",
- "hotpath-macros 0.7.6",
- "libc",
- "mach2",
- "pin-project-lite",
- "prettytable-rs",
- "quanta",
- "regex",
- "serde",
- "serde_json",
- "tiny_http",
- "tokio",
- "ureq",
-]
-
-[[package]]
-name = "hotpath"
 version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4b0a2c66c081fe3684a54a7e5d059c9d9ad6b3ee5ccea14f6e4f056dbd77becf"
@@ -1765,7 +1735,7 @@ dependencies = [
  "futures-channel",
  "futures-util",
  "hdrhistogram",
- "hotpath-macros 0.8.0",
+ "hotpath-macros",
  "libc",
  "mach2",
  "pin-project-lite",
@@ -1777,17 +1747,6 @@ dependencies = [
  "tiny_http",
  "tokio",
  "ureq",
-]
-
-[[package]]
-name = "hotpath-macros"
-version = "0.7.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "42688ba787763946d2ebabf9907f72137f8285e26dbff5865687f9bc0173e6e4"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.111",
 ]
 
 [[package]]
@@ -2481,7 +2440,7 @@ dependencies = [
  "deadpool",
  "extend",
  "futures",
- "hotpath 0.7.6",
+ "hotpath",
  "itertools 0.14.0",
  "listenbrainz",
  "listenbrainz_rs",
@@ -4886,7 +4845,7 @@ version = "0.1.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c2a7b1c03c876122aa43f3020e6c3c3ee5c05081c9a00739faf7503aeba10d22"
 dependencies = [
- "windows-sys 0.61.2",
+ "windows-sys 0.48.0",
 ]
 
 [[package]]
