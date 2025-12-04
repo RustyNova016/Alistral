@@ -31,19 +31,22 @@ impl YimReport {
     async fn get_graph(&self) -> String {
         let mut bars = Vec::with_capacity(12);
 
-        for month in 1..13 {
-            let current = self
-                .data
-                .listens_per_month_current()
-                .await
-                .get(&month)
-                .expect("Invalid month")
-                .recording_stats()
-                .await
-                .unwrap()
-                .to_owned();
+        let current_map = self.data.listens_per_month_current().await;
+        let previous_map = self.data.listens_per_month_previous().await;
 
-            let current_time_list = current.get_time_listened().unwrap_or_default();
+        for month in 1..13 {
+            let current_time_list = if let Some(data) = current_map.get(&month) {
+                data.recording_stats()
+                    .await
+                    .map(|stats| stats.to_owned())
+                    .unwrap_or_default()
+                    .to_owned()
+                    .get_time_listened()
+                    .unwrap_or_default()
+            } else {
+                Default::default()
+            };
+
             let current_var_label = current_time_list
                 .floor_to_minute()
                 .to_humantime()
@@ -58,18 +61,18 @@ impl YimReport {
                     .build(),
             );
 
-            let previous = self
-                .data
-                .listens_per_month_previous()
-                .await
-                .get(&month)
-                .expect("Invalid month")
-                .recording_stats()
-                .await
-                .unwrap()
-                .to_owned();
+            let prev_time_list = if let Some(data) = previous_map.get(&month) {
+                data.recording_stats()
+                    .await
+                    .map(|stats| stats.to_owned())
+                    .unwrap_or_default()
+                    .to_owned()
+                    .get_time_listened()
+                    .unwrap_or_default()
+            } else {
+                Default::default()
+            };
 
-            let prev_time_list = previous.get_time_listened().unwrap_or_default();
             let prev_var_label = prev_time_list
                 .floor_to_minute()
                 .to_humantime()
