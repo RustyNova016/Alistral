@@ -57,15 +57,13 @@ impl YimReport {
             } else {
                 Default::default()
             }
+        } else if let Some(data) = current_map.get(&(num - 1)) {
+            data.recording_stats()
+                .await
+                .map(|stats| stats.to_owned())
+                .unwrap_or_default()
         } else {
-            if let Some(data) = current_map.get(&(num - 1)) {
-                data.recording_stats()
-                    .await
-                    .map(|stats| stats.to_owned())
-                    .unwrap_or_default()
-            } else {
-                Default::default()
-            }
+            Default::default()
         };
 
         writeln!(
