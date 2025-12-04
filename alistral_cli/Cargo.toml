@@ -65,26 +65,27 @@ thiserror = "2.0.17"
 
 # Macros
 bon = "3.8.1"
-derive_more = { version = "2.0.1", features = ["full"] }
+derive_more = { version = "2.1.0", features = ["full"] }
 derive-new = "0.7.0"
 derive-getters = "0.5.0"
 strum_macros = "0.27.2"
 
 # Tracing
-tracing = "0.1.41"
-tracing-subscriber = "0.3.20"
-tracing-appender = "0.2.3"
+tracing = "0.1.43"
+tracing-subscriber = "0.3.22"
+tracing-appender = "0.2.4"
 tracing-indicatif = "0.3.13"
 tuillez = "0.1.0"
 
 # Debuging
-hotpath = { version = "0.7", optional = true, features = ["futures"] }
+hotpath = { version = "0.8.0", optional = true, features = ["futures"] }
 
 # Other
 zip = "6.0.0"
 sequelles = "0.2.0"
 comfy-table = { version = "7.2.1", features = ["custom_styling"] }
 async-once-cell = "0.5.4"
+duplicate = "2.0.1"
 
 [features]
 default = ["stats", "lookup"]
