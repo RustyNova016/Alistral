@@ -72,7 +72,7 @@ dependencies = [
  "duplicate",
  "extend",
  "futures",
- "hotpath 0.8.0",
+ "hotpath",
  "indoc",
  "inquire",
  "interzic",
@@ -545,7 +545,7 @@ checksum = "613afe47fcd5fac7ccf1db93babcb082c5994d996f20b8b159f2ad1658eb5724"
 [[package]]
 name = "charchart"
 version = "0.1.0"
-source = "git+https://github.com/RustyNova016/charchart#0416103608634b6a8dc7f1ea9501da76717ce939"
+source = "git+https://github.com/RustyNova016/charchart?rev=2fab66f30cabb2cbe7c3246a1051e79be15b8f6d#2fab66f30cabb2cbe7c3246a1051e79be15b8f6d"
 dependencies = [
  "bon",
  "owo-colors",
@@ -1721,36 +1721,6 @@ dependencies = [
 
 [[package]]
 name = "hotpath"
-version = "0.7.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d552f1c963aa405ec1d1924b293bbf56c7a58d86c5a48c782741580c0d74a9af"
-dependencies = [
- "arc-swap",
- "base64",
- "cfg-if",
- "clap",
- "colored",
- "crossbeam-channel",
- "eyre",
- "futures-channel",
- "futures-util",
- "hdrhistogram",
- "hotpath-macros 0.7.6",
- "libc",
- "mach2",
- "pin-project-lite",
- "prettytable-rs",
- "quanta",
- "regex",
- "serde",
- "serde_json",
- "tiny_http",
- "tokio",
- "ureq",
-]
-
-[[package]]
-name = "hotpath"
 version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4b0a2c66c081fe3684a54a7e5d059c9d9ad6b3ee5ccea14f6e4f056dbd77becf"
@@ -1765,7 +1735,7 @@ dependencies = [
  "futures-channel",
  "futures-util",
  "hdrhistogram",
- "hotpath-macros 0.8.0",
+ "hotpath-macros",
  "libc",
  "mach2",
  "pin-project-lite",
@@ -1777,17 +1747,6 @@ dependencies = [
  "tiny_http",
  "tokio",
  "ureq",
-]
-
-[[package]]
-name = "hotpath-macros"
-version = "0.7.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "42688ba787763946d2ebabf9907f72137f8285e26dbff5865687f9bc0173e6e4"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.111",
 ]
 
 [[package]]
@@ -2481,7 +2440,7 @@ dependencies = [
  "deadpool",
  "extend",
  "futures",
- "hotpath 0.7.6",
+ "hotpath",
  "itertools 0.14.0",
  "listenbrainz",
  "listenbrainz_rs",
