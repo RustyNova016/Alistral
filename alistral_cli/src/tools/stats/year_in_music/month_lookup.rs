@@ -36,34 +36,36 @@ impl YimReport {
     async fn month_lookup_page(&self, num: u32) -> String {
         let mut out = String::new();
 
-        let stats = self
-            .data
-            .listens_per_month_current()
-            .await
-            .get(&num)
-            .expect("Invalid month")
-            .recording_stats()
-            .await
-            .unwrap();
+        let current_map = self.data.listens_per_month_current().await;
+        let previous_map = self.data.listens_per_month_previous().await;
+
+        let stats = if let Some(data) = current_map.get(&num) {
+            data.recording_stats()
+                .await
+                .map(|stats| stats.to_owned())
+                .unwrap_or_default()
+        } else {
+            Default::default()
+        };
 
         let prev_month = if num == 1 {
-            self.data
-                .listens_per_month_previous()
-                .await
-                .get(&12)
-                .expect("Invalid month")
-                .recording_stats()
-                .await
-                .unwrap()
+            if let Some(data) = previous_map.get(&12) {
+                data.recording_stats()
+                    .await
+                    .map(|stats| stats.to_owned())
+                    .unwrap_or_default()
+            } else {
+                Default::default()
+            }
         } else {
-            self.data
-                .listens_per_month_current()
-                .await
-                .get(&(num - 1))
-                .expect("Invalid month")
-                .recording_stats()
-                .await
-                .unwrap()
+            if let Some(data) = current_map.get(&(num - 1)) {
+                data.recording_stats()
+                    .await
+                    .map(|stats| stats.to_owned())
+                    .unwrap_or_default()
+            } else {
+                Default::default()
+            }
         };
 
         writeln!(
