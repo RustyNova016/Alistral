@@ -26,6 +26,7 @@ impl Release {
             .map(
                 async |release| match release.get_labels_or_fetch(&client).await {
                     Ok(labels) => Ok((release, labels)),
+                    Err(crate::Error::NotFoundInUpstream(_)) => Ok((release, Vec::new())),
                     Err(err) => Err(err),
                 },
             )

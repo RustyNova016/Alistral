@@ -26,6 +26,7 @@ impl Recording {
             .map(
                 async |recording| match recording.get_releases(&client).await {
                     Ok(releases) => Ok((recording, releases)),
+                    Err(crate::Error::NotFoundInUpstream(_)) => Ok((recording, Vec::new())),
                     Err(err) => Err(err),
                 },
             )

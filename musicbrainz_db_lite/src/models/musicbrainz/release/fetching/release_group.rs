@@ -24,8 +24,9 @@ impl Release {
 
         let results = stream::iter(recordings)
             .map(
-                async |recording| match recording.get_release_group(&client).await {
-                    Ok(releases) => Ok((recording, releases)),
+                async |release| match release.get_release_group(&client).await {
+                    Ok(releases) => Ok((release, releases)),
+                    Err(crate::Error::NotFoundInUpstream(_)) => Ok((release, Vec::new())),
                     Err(err) => Err(err),
                 },
             )
