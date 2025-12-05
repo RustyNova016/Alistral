@@ -50,7 +50,7 @@ dependencies = [
 
 [[package]]
 name = "alistral"
-version = "0.6.2"
+version = "0.6.3"
 dependencies = [
  "alistral_core",
  "async-fn-stream",
@@ -72,7 +72,7 @@ dependencies = [
  "duplicate",
  "extend",
  "futures",
- "hotpath 0.8.0",
+ "hotpath",
  "indoc",
  "inquire",
  "interzic",
@@ -226,7 +226,6 @@ dependencies = [
  "blocking",
  "bon",
  "governor",
- "hotpath 0.7.6",
  "serde",
  "serde_json",
  "snafu",
@@ -314,17 +313,6 @@ dependencies = [
  "rustix",
  "slab",
  "windows-sys 0.61.2",
-]
-
-[[package]]
-name = "async-lock"
-version = "3.4.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5fd03604047cee9b6ce9de9f70c6cd540a0520c813cbd49bae61f33ab80ed1dc"
-dependencies = [
- "event-listener",
- "event-listener-strategy",
- "pin-project-lite",
 ]
 
 [[package]]
@@ -1765,35 +1753,6 @@ dependencies = [
 
 [[package]]
 name = "hotpath"
-version = "0.7.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d552f1c963aa405ec1d1924b293bbf56c7a58d86c5a48c782741580c0d74a9af"
-dependencies = [
- "arc-swap",
- "base64",
- "cfg-if",
- "clap",
- "colored",
- "crossbeam-channel",
- "eyre",
- "futures-util",
- "hdrhistogram",
- "hotpath-macros 0.7.6",
- "libc",
- "mach2",
- "pin-project-lite",
- "prettytable-rs",
- "quanta",
- "regex",
- "serde",
- "serde_json",
- "tiny_http",
- "tokio",
- "ureq",
-]
-
-[[package]]
-name = "hotpath"
 version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4b0a2c66c081fe3684a54a7e5d059c9d9ad6b3ee5ccea14f6e4f056dbd77becf"
@@ -1808,7 +1767,7 @@ dependencies = [
  "futures-channel",
  "futures-util",
  "hdrhistogram",
- "hotpath-macros 0.8.0",
+ "hotpath-macros",
  "libc",
  "mach2",
  "pin-project-lite",
@@ -1820,17 +1779,6 @@ dependencies = [
  "tiny_http",
  "tokio",
  "ureq",
-]
-
-[[package]]
-name = "hotpath-macros"
-version = "0.7.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "42688ba787763946d2ebabf9907f72137f8285e26dbff5865687f9bc0173e6e4"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.111",
 ]
 
 [[package]]
@@ -2374,16 +2322,14 @@ dependencies = [
 [[package]]
 name = "listenbrainz_rs"
 version = "0.1.0"
+source = "git+https://github.com/RustyNova016/listenbrainz_rs?rev=d252f036af026df1df47d438e32edbe1e4ba82e3#d252f036af026df1df47d438e32edbe1e4ba82e3"
 dependencies = [
  "api_bindium",
  "async-executor",
  "bon",
  "chrono",
- "hotpath 0.7.6",
- "macro_rules_attribute",
  "serde",
  "serde_json",
- "smol-macros",
  "snafu",
  "tracing",
  "tracing-indicatif",
@@ -2452,22 +2398,6 @@ name = "mach2"
 version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "dae608c151f68243f2b000364e1f7b186d9c29845f7d2d85bd31b9ad77ad552b"
-
-[[package]]
-name = "macro_rules_attribute"
-version = "0.2.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "65049d7923698040cd0b1ddcced9b0eb14dd22c5f86ae59c3740eab64a676520"
-dependencies = [
- "macro_rules_attribute-proc_macro",
- "paste",
-]
-
-[[package]]
-name = "macro_rules_attribute-proc_macro"
-version = "0.2.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "670fdfda89751bc4a84ac13eaa63e205cf0fd22b4c9a5fbfa085b63c1f1d3a30"
 
 [[package]]
 name = "maybe-async"
@@ -2541,7 +2471,7 @@ dependencies = [
  "deadpool",
  "extend",
  "futures",
- "hotpath 0.8.0",
+ "hotpath",
  "itertools 0.14.0",
  "listenbrainz",
  "listenbrainz_rs",
@@ -2801,12 +2731,6 @@ dependencies = [
  "smallvec",
  "windows-link",
 ]
-
-[[package]]
-name = "paste"
-version = "1.0.15"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "57c0d7b74b563b49d38dae00a0c37d4d6de9b432382b2892f0574ddcae73fd0a"
 
 [[package]]
 name = "pbkdf2"
@@ -3776,19 +3700,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "smol-macros"
-version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bfcaedb62e0475a6898988138995ec7b1e5d116167a72bb12c7b59d0649fbbc2"
-dependencies = [
- "async-executor",
- "async-io",
- "async-lock",
- "event-listener",
- "futures-lite",
-]
-
-[[package]]
 name = "snafu"
 version = "0.8.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4697,10 +4608,8 @@ checksum = "d39cb1dbab692d82a977c0392ffac19e188bd9186a9f32806f0aaa859d75585a"
 dependencies = [
  "base64",
  "cookie_store",
- "der",
  "flate2",
  "log",
- "native-tls",
  "percent-encoding",
  "rustls",
  "rustls-pki-types",
@@ -4708,7 +4617,6 @@ dependencies = [
  "serde_json",
  "ureq-proto",
  "utf-8",
- "webpki-root-certs",
  "webpki-roots",
 ]
 
@@ -4919,15 +4827,6 @@ checksum = "5a6580f308b1fad9207618087a65c04e7a10bc77e02c8e84e9b00dd4b12fa0bb"
 dependencies = [
  "js-sys",
  "wasm-bindgen",
-]
-
-[[package]]
-name = "webpki-root-certs"
-version = "1.0.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ee3e3b5f5e80bc89f30ce8d0343bf4e5f12341c51f3e26cbeecbc7c85443e85b"
-dependencies = [
- "rustls-pki-types",
 ]
 
 [[package]]

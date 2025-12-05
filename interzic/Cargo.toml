@@ -19,7 +19,7 @@ listenbrainz = { branch = "alistral_version", git = "https://github.com/RustyNov
 
 # Tracing
 tuillez = "0.1.0"
-tracing = "0.1.41"
+tracing = "0.1.43"
 
 # --- Service crates ---
 google-youtube3 = "6.0.0"
@@ -28,7 +28,7 @@ google-youtube3 = "6.0.0"
 regex = "1.11.3"
 sqlx = "0.8.2"
 thiserror = "2.0.3"
-governor = "0.10.0"
+governor = "0.10.2"
 serde = "1.0.228"
 serde_json = "1.0.145"
 futures = "0.3.31"
@@ -41,4 +41,4 @@ result_large_err = { level = "allow", priority = 1 }
 sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "ecdfec3c83c610dbe6f69dd2b19447acbc895287"}
 tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c8656a4eedb571177a8ffa3b9984e78"}
 musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "60ab4d48a6898cc2fc8e0b6fc9fb774c64cfe8d2"}
-listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "b859c43602cb9f1de08e1b4e7cf64026c581a26c" }
+listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "d252f036af026df1df47d438e32edbe1e4ba82e3" }

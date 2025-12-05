@@ -14,12 +14,9 @@ impl YimReport {
         let mut out = String::new();
         writeln!(out, "{}", Heading1("Discoveries of the year 🔎")).unwrap();
 
-        if let Some(stats) = self
-            .data
-            .discovery_years_current()
-            .await
-            .get(&(self.year as u64))
-        {
+        let stats = self.data.discovery_years_current().await;
+
+        if !stats.is_empty() {
             writeln!(out, "{}", self.new_discoveries().await).unwrap();
             writeln!(out).unwrap();
             writeln!(out, "Here's the top 20 tracks:").unwrap();
@@ -32,24 +29,15 @@ impl YimReport {
     }
 
     async fn new_discoveries(&self) -> String {
-        let current_year = self
-            .data
-            .discovery_years_current()
-            .await
-            .get(&(self.year as u64))
-            .expect("no_new_releases should have been called instead");
+        let current_year = self.data.discovery_years_current().await;
 
         let track_count = current_year.len();
         let listen_count: usize = current_year.iter().map(|rec| rec.listen_count()).sum();
         let listen_perc = Decimal::new(listen_count as i64, 0)
             / Decimal::new(self.num_listens_in_year().await as i64, 0);
 
-        if let Some(previous) = self
-            .data
-            .discovery_years_previous()
-            .await
-            .get(&((self.year - 1) as u64))
-        {
+        let previous = self.data.discovery_years_previous().await;
+        if !previous.is_empty() {
             let track_count_prev = previous.len();
             let listen_count_prev: usize = previous.iter().map(|rec| rec.listen_count()).sum();
 
@@ -84,12 +72,8 @@ impl YimReport {
     async fn no_new_discoveries(&self) -> String {
         let mut out = "You haven't discovered any tracks this year...".to_string();
 
-        if let Some(previous) = self
-            .data
-            .discovery_years_previous()
-            .await
-            .get(&((self.year - 1) as u64))
-        {
+        let previous = self.data.discovery_years_previous().await;
+        if !previous.is_empty() {
             let track_count = previous.len();
             let listen_count: usize = previous.iter().map(|rec| rec.listen_count()).sum();
             writeln!(

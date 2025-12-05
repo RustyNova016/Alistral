@@ -1,6 +1,6 @@
 [package]
 name = "alistral"
-version = "0.6.2"
+version = "0.6.3"
 edition = "2024"
 repository = "https://github.com/RustyNova016/alistral"
 publish = true
@@ -74,7 +74,7 @@ strum_macros = "0.27.2"
 tracing = "0.1.43"
 tracing-subscriber = "0.3.22"
 tracing-appender = "0.2.4"
-tracing-indicatif = "0.3.13"
+tracing-indicatif = "0.3.14"
 tuillez = "0.1.0"
 
 # Debuging
@@ -119,4 +119,4 @@ result_large_err = { level = "allow", priority = 1 }
 sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "ecdfec3c83c610dbe6f69dd2b19447acbc895287"}
 tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c8656a4eedb571177a8ffa3b9984e78"}
 musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "60ab4d48a6898cc2fc8e0b6fc9fb774c64cfe8d2"}
-listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "b859c43602cb9f1de08e1b4e7cf64026c581a26c" }
+listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "d252f036af026df1df47d438e32edbe1e4ba82e3" }
