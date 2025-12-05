@@ -1,7 +1,7 @@
 use chrono::Utc;
-use listenbrainz_rs::api::ListenBrainzAPI;
+use listenbrainz_rs::ListenBrainzAPIEnpoints;
 use listenbrainz_rs::api::user::username::listens::UserListensListen;
-use listenbrainz_rs::client::api_request::error::ApiRequestError;
+use listenbrainz_rs::api::user::username::listens_reader::ListenFullFetchError;
 use sequelles::databases::sqlite::database::GetConnectionError;
 use snafu::ResultExt;
 use sqlx::Acquire;
@@ -24,7 +24,7 @@ impl Listen {
         username: &str,
     ) -> Result<(), ListenFetchingError> {
         // Get the new listens
-        let listens = ListenBrainzAPI::get_user_username_listens_full()
+        let listens = ListenBrainzAPIEnpoints::get_user_username_listens_full()
             .client(&client.listenbrainz_client)
             .username(username)
             .call()
@@ -66,7 +66,7 @@ pub enum ListenFetchingError {
     #[snafu(display("Couldn't fetch the listens"))]
     LBApiRequestError {
         #[cfg_attr(feature = "backtrace", snafu(backtrace))]
-        source: ApiRequestError,
+        source: ListenFullFetchError,
     },
 
     ConnectionError {

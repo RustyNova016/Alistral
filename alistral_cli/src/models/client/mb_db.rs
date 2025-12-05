@@ -2,9 +2,9 @@ use std::path::PathBuf;
 use std::sync::Arc;
 
 use musicbrainz_db_lite::DBClient;
-use musicbrainz_db_lite::ListenBrainzClient;
 use musicbrainz_db_lite::MusicBrainzClient;
 use musicbrainz_db_lite::SqlitePoolConnection;
+use musicbrainz_db_lite::listenbrainz_rs::ListenBrainzClient;
 use sqlx::Acquire;
 
 use crate::database::DB_LOCATION;
