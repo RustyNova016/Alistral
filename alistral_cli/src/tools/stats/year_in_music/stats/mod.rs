@@ -26,6 +26,7 @@ impl YimReport {
 }
 
 pub(super) struct YimReportData {
+    year: i32,
     user_data: ListenStatisticsData,
 
     pub current: ListenStatisticsData,
@@ -40,8 +41,8 @@ pub(super) struct YimReportData {
     release_years_current: OnceCell<HashMap<u64, Vec<RecordingWithListens>>>,
     release_years_previous: OnceCell<HashMap<u64, Vec<RecordingWithListens>>>,
 
-    discovery_years_current: OnceCell<HashMap<u64, Vec<RecordingWithListens>>>,
-    discovery_years_previous: OnceCell<HashMap<u64, Vec<RecordingWithListens>>>,
+    discovery_years_current: OnceCell<Vec<RecordingWithListens>>,
+    discovery_years_previous: OnceCell<Vec<RecordingWithListens>>,
 
     listens_per_month_current: OnceCell<HashMap<u32, ListenStatisticsData>>,
     listens_per_month_previous: OnceCell<HashMap<u32, ListenStatisticsData>>,
@@ -49,12 +50,15 @@ pub(super) struct YimReportData {
 
 impl YimReportData {
     pub fn new(
+        year: i32,
         user_data: ListenStatisticsData,
 
         current: ListenStatisticsData,
         previous: ListenStatisticsData,
     ) -> Self {
         Self {
+            year,
+
             user_data,
             current,
             previous,

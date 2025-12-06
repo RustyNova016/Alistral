@@ -91,7 +91,7 @@ impl YimReport {
             .clone_no_stats()
             .filter_listening_date(previous_year.into(), year_start.into());
 
-        let data = YimReportData::new(full_user_stats, current, previous);
+        let data = YimReportData::new(year, full_user_stats, current, previous);
 
         Self {
             year,

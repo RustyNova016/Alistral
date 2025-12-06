@@ -1,6 +1,6 @@
 use chrono::Duration;
 use chrono::Utc;
-use listenbrainz_rs::api::ListenBrainzAPI;
+use listenbrainz_rs::ListenBrainzAPIEnpoints;
 use snafu::ResultExt as _;
 use sqlx::Acquire as _;
 
@@ -25,7 +25,7 @@ impl Listen {
         let start = latest_listen
             .map(|l| (l.listened_at_as_datetime() - Duration::days(3)).timestamp() as u64);
 
-        let listens = ListenBrainzAPI::get_user_username_listens_full()
+        let listens = ListenBrainzAPIEnpoints::get_user_username_listens_full()
             .client(&client.listenbrainz_client)
             .username(username)
             .maybe_start(start)

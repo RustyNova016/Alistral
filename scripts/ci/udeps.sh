@@ -16,6 +16,8 @@ for member in "${members[@]}"; do
     then
         exit 1
     fi
+
+    rm Cargo.lock
     cd ../
 done
 

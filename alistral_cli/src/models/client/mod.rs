@@ -7,8 +7,8 @@ use futures::executor::block_on;
 #[cfg(feature = "interzicf")]
 use interzic::InterzicClient;
 use musicbrainz_db_lite::DBClient;
-use musicbrainz_db_lite::ListenBrainzClient;
 use musicbrainz_db_lite::client::MusicBrainzClient;
+use musicbrainz_db_lite::listenbrainz_rs::ListenBrainzClient;
 #[cfg(feature = "musicbrainz")]
 use symphonize::SymphonyzeClient;
 use tuillez::fatal_error::IntoFatal;

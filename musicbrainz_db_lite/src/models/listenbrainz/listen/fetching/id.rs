@@ -1,4 +1,4 @@
-use listenbrainz_rs::api::ListenBrainzAPI;
+use listenbrainz_rs::ListenBrainzAPIEnpoints;
 use snafu::ResultExt as _;
 use sqlx::Acquire as _;
 
@@ -22,7 +22,7 @@ impl Listen {
         let end = listened_at + 1;
 
         // Get the new listens
-        let listens = ListenBrainzAPI::get_user_username_listens_full()
+        let listens = ListenBrainzAPIEnpoints::get_user_username_listens_full()
             .client(&client.listenbrainz_client)
             .username(username)
             .start(start as u64)

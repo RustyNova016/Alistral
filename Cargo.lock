@@ -50,7 +50,7 @@ dependencies = [
 
 [[package]]
 name = "alistral"
-version = "0.6.2"
+version = "0.6.3"
 dependencies = [
  "alistral_core",
  "async-fn-stream",
@@ -218,6 +218,22 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a23eb6b1614318a8071c9b2521f36b424b2c83db5eb3a0fead4a6c0809af6e61"
 
 [[package]]
+name = "api_bindium"
+version = "0.1.0"
+source = "git+https://github.com/RustyNova016/api_bindium?rev=d7e9738b55c8d0a11644663b1c1088447ce16122#d7e9738b55c8d0a11644663b1c1088447ce16122"
+dependencies = [
+ "async-io",
+ "blocking",
+ "bon",
+ "governor",
+ "serde",
+ "serde_json",
+ "snafu",
+ "tracing",
+ "ureq",
+]
+
+[[package]]
 name = "arbitrary"
 version = "1.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -257,6 +273,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "async-executor"
+version = "1.13.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "497c00e0fd83a72a79a39fcbd8e3e2f055d6f6c7e025f3b3d91f4f8e76527fb8"
+dependencies = [
+ "async-task",
+ "concurrent-queue",
+ "fastrand",
+ "futures-lite",
+ "pin-project-lite",
+ "slab",
+]
+
+[[package]]
 name = "async-fn-stream"
 version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -282,7 +312,6 @@ dependencies = [
  "polling",
  "rustix",
  "slab",
- "tracing",
  "windows-sys 0.61.2",
 ]
 
@@ -1426,7 +1455,10 @@ version = "2.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f78e10609fe0e0b3f4157ffab1876319b5b0db102a2c60dc4626306dc46b44ad"
 dependencies = [
+ "fastrand",
  "futures-core",
+ "futures-io",
+ "parking",
  "pin-project-lite",
 ]
 
@@ -2290,18 +2322,17 @@ dependencies = [
 [[package]]
 name = "listenbrainz_rs"
 version = "0.1.0"
-source = "git+https://github.com/RustyNova016/listenbrainz_rs?rev=071eb5d46990b59404320449c61c0ffad2b61545#071eb5d46990b59404320449c61c0ffad2b61545"
+source = "git+https://github.com/RustyNova016/listenbrainz_rs?rev=d252f036af026df1df47d438e32edbe1e4ba82e3#d252f036af026df1df47d438e32edbe1e4ba82e3"
 dependencies = [
- "async-io",
- "blocking",
+ "api_bindium",
+ "async-executor",
  "bon",
  "chrono",
- "governor",
- "mutants",
  "serde",
  "serde_json",
  "snafu",
  "tracing",
+ "tracing-indicatif",
  "ureq",
 ]
 
@@ -2481,12 +2512,6 @@ dependencies = [
  "tokio",
  "tracing",
 ]
-
-[[package]]
-name = "mutants"
-version = "0.0.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bc0287524726960e07b119cebd01678f852f147742ae0d925e6a520dca956126"
 
 [[package]]
 name = "native-tls"
