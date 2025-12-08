@@ -61,7 +61,7 @@ charchart = {version = "0.1.0", git = "https://github.com/RustyNova016/charchart
 # Error handling
 color-eyre = "0.6.5"
 thiserror = "2.0.17"
-#snafu = { version = "0.8.9", features = ["rust_1_81", "backtrace"] }
+snafu = { version = "0.8.9", features = ["rust_1_81"] }
 
 # Macros
 bon = "3.8.1"
@@ -108,6 +108,7 @@ interzicf = ["interzic"]
 hotpath = ["dep:hotpath", "hotpath/hotpath"]
 hotpath-alloc = ["hotpath/hotpath-alloc"]
 hotpath-off = ["hotpath/hotpath-off"]
+backtrace = ["snafu/backtrace", "musicbrainz-db-lite/backtrace", "alistral_core/backtrace"]
 
 [lints.rust]
 async_fn_in_trait = { level = "allow", priority = 1 }
