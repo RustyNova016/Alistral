@@ -42,7 +42,7 @@ impl YimReport {
             let listen_count_prev: usize = previous.iter().map(|rec| rec.listen_count()).sum();
 
             format!(
-                "You discovered {} tracks released this year [{} {}], which make up a total of {} listens [{} {}] ({}% of this year's listens)",
+                "You discovered {} tracks this year [{} {}], which make up a total of {} listens [{} {}] ({}% of this year's listens)",
                 track_count.alistral_green(),
                 ComparisonArrow::greater_is_better(track_count, track_count_prev),
                 track_count_prev.alistral_green(),
@@ -57,7 +57,7 @@ impl YimReport {
             )
         } else {
             format!(
-                "You listened to {} tracks released this year, which make up a total of {} listens ({}% of this year's listens)",
+                "You discovered {} tracks this year, which make up a total of {} listens ({}% of this year's listens)",
                 track_count.alistral_green(),
                 listen_count.alistral_green(),
                 listen_perc
