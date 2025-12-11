@@ -32,6 +32,8 @@ pub(super) struct YimReportData {
     pub current: ListenStatisticsData,
     pub previous: ListenStatisticsData,
 
+    discoveries_per_year: OnceCell<HashMap<i32, Vec<RecordingWithListens>>>,
+
     listens_with_duration_current: OnceCell<Vec<(Listen, Duration)>>,
     listens_with_duration_previous: OnceCell<Vec<(Listen, Duration)>>,
 
@@ -62,6 +64,8 @@ impl YimReportData {
             user_data,
             current,
             previous,
+
+            discoveries_per_year: OnceCell::new(),
 
             listens_with_duration_current: OnceCell::new(),
             listens_with_duration_previous: OnceCell::new(),
