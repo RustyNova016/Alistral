@@ -36,13 +36,13 @@ impl ListenStatisticsData {
 pub enum ReleaseStatsError {
     #[snafu(display("Couldn't generate artist statistics"))]
     ReleaseLinkingError {
-        #[snafu(backtrace)]
+        #[cfg_attr(feature = "backtrace", snafu(backtrace))]
         source: ReleaseStatsLinkingError,
     },
 
     #[snafu(display("Couldn't generate recording statistics"))]
     RecordingStatsError {
-        #[snafu(backtrace)]
+        #[cfg_attr(feature = "backtrace", snafu(backtrace))]
         source: RecordingStatsError,
     },
 }

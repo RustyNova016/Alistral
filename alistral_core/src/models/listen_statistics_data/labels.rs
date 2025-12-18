@@ -34,13 +34,13 @@ impl ListenStatisticsData {
 pub enum LabelStatsError {
     #[snafu(display("Couldn't generate release group statistics"))]
     ReleaseGroupLinkingError {
-        #[snafu(backtrace)]
+        #[cfg_attr(feature = "backtrace", snafu(backtrace))]
         source: LabelStatsLinkingError,
     },
 
     #[snafu(display("Couldn't generate release statistics"))]
     ReleaseStatsError {
-        #[snafu(backtrace)]
+        #[cfg_attr(feature = "backtrace", snafu(backtrace))]
         source: ReleaseStatsError,
     },
 }

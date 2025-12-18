@@ -87,6 +87,7 @@ dependencies = [
  "sequelles",
  "serde",
  "serde_json",
+ "snafu",
  "sqlx",
  "streamies 0.2.2",
  "strsim",
@@ -3704,6 +3705,7 @@ version = "0.8.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6e84b3f4eacbf3a1ce05eac6763b4d629d60cbc94d632e4092c54ade71f1e1a2"
 dependencies = [
+ "backtrace",
  "futures-core",
  "pin-project",
  "snafu-derive",

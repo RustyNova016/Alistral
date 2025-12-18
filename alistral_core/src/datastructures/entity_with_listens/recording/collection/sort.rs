@@ -2,7 +2,6 @@ use itertools::Itertools as _;
 use musicbrainz_db_lite::GetConnectionError;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::listenbrainz::listen::relations::listen_recordings::ListenRecordingDBRel;
-use snafu::Backtrace;
 use snafu::ResultExt;
 use snafu::Snafu;
 use tracing::instrument;
@@ -70,13 +69,14 @@ impl Linker<RecordingWithListensCollection, Listen> for AlistralClient {
 pub enum RecordingStatsError {
     #[snafu(display("Could not get a connection for the database"))]
     ConnectionError {
-        #[snafu(backtrace)]
+        #[cfg_attr(feature = "backtrace", snafu(backtrace))]
         source: GetConnectionError,
     },
 
     #[snafu(display("Something went wrong with the database"))]
     DatabaseError {
-        backtrace: Backtrace,
         source: musicbrainz_db_lite::Error,
+        #[cfg(feature = "backtrace")]
+        backtrace: snafu::Backtrace,
     },
 }
