@@ -2,7 +2,7 @@
 members = [
     "alistral_cli",
     "alistral_core", 
-    "interzic", 
+    #"interzic", 
     "musicbrainz_db_lite", 
     "symphonize",
     #"tuillez"
@@ -26,6 +26,9 @@ tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c865
 
 #musicbrainz_rs = {path = "./musicbrainz_rs"}
 musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "60ab4d48a6898cc2fc8e0b6fc9fb774c64cfe8d2"}
+
+#interzic = {path = "./interzic"}
+interzic = {git = "https://github.com/RustyNova016/interzic", rev = "f714ab972312aa1a1ecd3bbf7b0a8599c908ac79"}
 
 [workspace.lints.rust]
 unsafe_code = "forbid"

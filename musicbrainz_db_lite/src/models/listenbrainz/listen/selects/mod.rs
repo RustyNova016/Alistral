@@ -8,6 +8,8 @@ use crate::models::musicbrainz::user::User;
 
 use super::Listen;
 
+pub mod advanced;
+
 #[derive(Debug, Default)]
 pub enum ListenMappingFilter {
     Mapped,
@@ -199,3 +201,4 @@ impl Listen {
         .fetch(conn)
     }
 }
+
