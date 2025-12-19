@@ -35,7 +35,7 @@ snafu = {version = "0.8.9", features = ["rust_1_81", "futures"]}
 thiserror = "2.0.3"
 
 # Logging
-tracing = "0.1.43"
+tracing = "0.1.44"
 tuillez = "0.1.0"
 owo-colors = { version = "4.2.1", optional = true}
 

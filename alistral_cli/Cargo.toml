@@ -71,7 +71,7 @@ derive-getters = "0.5.0"
 strum_macros = "0.27.2"
 
 # Tracing
-tracing = "0.1.43"
+tracing = "0.1.44"
 tracing-subscriber = "0.3.22"
 tracing-appender = "0.2.4"
 tracing-indicatif = "0.3.14"

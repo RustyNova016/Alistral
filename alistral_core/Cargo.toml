@@ -28,7 +28,7 @@ snafu = { version = "0.8.9", features = ["rust_1_81"] }
 
 # Tracing
 tracing-indicatif = "0.3.14"
-tracing = "0.1.43"
+tracing = "0.1.44"
 tuillez = "0.1.0"
 
 # Other 
