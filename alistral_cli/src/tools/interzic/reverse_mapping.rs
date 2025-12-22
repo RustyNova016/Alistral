@@ -1,4 +1,5 @@
 use clap::Parser;
+#[cfg(any(feature = "youtube"))]
 use interzic::models::services::youtube::Youtube;
 use tuillez::fatal_error::OptIntoFatal;
 

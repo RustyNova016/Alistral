@@ -1,11 +1,11 @@
-#[cfg(feature = "interzicf")]
+#[cfg(feature = "interzic")]
 use std::path::PathBuf;
 use std::sync::LazyLock;
 
 use musicbrainz_db_lite::models::musicbrainz::MusicbrainzFormater;
 
 use crate::ALISTRAL_CLIENT;
-#[cfg(feature = "interzicf")]
+#[cfg(feature = "interzic")]
 use crate::utils::constants::paths::CONFIG_DIR;
 
 pub mod paths;
@@ -24,7 +24,7 @@ pub static LISTENBRAINZ_FMT: LazyLock<MusicbrainzFormater> =
         client: ALISTRAL_CLIENT.musicbrainz_db.clone(),
     });
 
-#[cfg(feature = "interzicf")]
+#[cfg(all(feature = "youtube", feature = "interzic"))]
 pub static YT_SECRET_FILE: LazyLock<PathBuf> = LazyLock::new(|| {
     let mut path = CONFIG_DIR.clone();
 
@@ -33,7 +33,7 @@ pub static YT_SECRET_FILE: LazyLock<PathBuf> = LazyLock::new(|| {
     path
 });
 
-#[cfg(feature = "interzicf")]
+#[cfg(all(feature = "youtube", feature = "interzic"))]
 pub static TOKENCACHE: LazyLock<PathBuf> = LazyLock::new(|| {
     let mut path = CONFIG_DIR.clone();
 
@@ -42,7 +42,7 @@ pub static TOKENCACHE: LazyLock<PathBuf> = LazyLock::new(|| {
     path
 });
 
-#[cfg(feature = "interzicf")]
+#[cfg(feature = "interzic")]
 pub static INTERZIC_DB: LazyLock<PathBuf> = LazyLock::new(|| {
     let mut path = CONFIG_DIR.clone();
 

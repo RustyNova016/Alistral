@@ -88,21 +88,24 @@ async-once-cell = "0.5.4"
 duplicate = "2.0.1"
 
 [features]
-default = ["stats", "lookup"]
+default = []
 #default = ["full"]
-full = ["musicbrainz", "lookup", "stats", "radio"]
+full = ["musicbrainz", "lookup", "stats", "radio", "youtube"]
 
 # Commands
 musicbrainz = ["symphonize"]
 lookup = ["legacy_ent_with_listen"]
-radio = ["interzicf"]
+radio = ["interzic"]
 stats = []
 
 # Parts
 legacy_ent_with_listen = []
 
 # Subcrates
-interzicf = ["interzic"]
+interzic = ["dep:interzic"]
+
+# External Services
+youtube = ["interzic?/youtube"]
 
 # Debugging
 hotpath = ["dep:hotpath", "hotpath/hotpath"]

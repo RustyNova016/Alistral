@@ -60,6 +60,7 @@ impl ClientBuilder {
                     "database_client".to_string(),
                 ))?,
             musicbrainz_client: None,
+            #[cfg(feature = "youtube")]
             youtube_client: None,
             listenbrainz_client: None,
             musicbrainz_db_lite_client: None,

@@ -1,6 +1,7 @@
 use interzic::models::messy_recording::MessyRecording;
 use interzic::models::playlist_stub::PlaylistStub;
 use interzic::models::services::listenbrainz::Listenbrainz;
+#[cfg(any(feature = "youtube"))]
 use interzic::models::services::youtube::Youtube;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use tracing::Span;
@@ -35,6 +36,7 @@ impl RadioExportTarget {
                 )
                 .await?;
             }
+            #[cfg(any(feature = "youtube"))]
             Self::Youtube => {
                 let _playlist_id =
                     Youtube::create_playlist(&ALISTRAL_CLIENT.interzic, playlist, username).await?;

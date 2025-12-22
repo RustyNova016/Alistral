@@ -6,6 +6,7 @@ use musicbrainz_rs::entity::relations::RelationContent;
 use crate::InterzicClient;
 use crate::models::external_id::ExternalId;
 use crate::models::messy_recording::MessyRecording;
+#[cfg(feature = "youtube")]
 use crate::models::services::youtube::Youtube;
 
 pub struct Musicbrainz;
@@ -34,25 +35,15 @@ impl Musicbrainz {
     }
 
     async fn save_url(
-        client: &InterzicClient,
-        url: &str,
-        recording: &MessyRecording,
-    ) -> Result<(), crate::Error> {
-        let (ext_id, service) = if let Some(id) = Youtube::extract_id_from_url(url) {
-            (id, "youtube".to_string())
-        } else {
-            return Ok(());
-        };
+        #[cfg_attr(not(feature = "youtube"), allow(unused_variables))] client: &InterzicClient,
+        #[cfg_attr(not(feature = "youtube"), allow(unused_variables))] url: &str,
+        #[cfg_attr(not(feature = "youtube"), allow(unused_variables))] recording: &MessyRecording,
+    ) -> Result<Option<ExternalId>, crate::Error> {
+        #[cfg(feature = "youtube")]
+        if let Some(id) = Youtube::save_url(client, url, recording).await? {
+            return Ok(Some(id));
+        }
 
-        let id = ExternalId {
-            id: 0,
-            recording_id: recording.id,
-            ext_id,
-            service,
-            user_overwrite: "".to_string(),
-        };
-
-        id.upsert(&client.database_client).await?;
-        Ok(())
+        Ok(None)
     }
 }

@@ -1,6 +1,7 @@
 use clap::Parser;
 use clap::ValueEnum;
 use interzic::models::messy_recording::MessyRecording;
+#[cfg(feature = "youtube")]
 use interzic::models::services::youtube::Youtube;
 use tuillez::fatal_error::FatalError;
 use tuillez::fatal_error::IntoFatal;
@@ -38,6 +39,7 @@ pub struct GetMappingCommand {
 
 #[derive(ValueEnum, Clone, Debug)]
 pub enum InterzicMappingTarget {
+    #[cfg(feature = "youtube")]
     Youtube,
 }
 
@@ -70,11 +72,13 @@ impl GetMappingCommand {
             }
         };
 
+        #[allow(unused)]
         let recording = recording
             .upsert(&ALISTRAL_CLIENT.interzic.database_client)
             .await?;
 
         match self.target {
+            #[cfg(feature = "youtube")]
             InterzicMappingTarget::Youtube => {
                 let id = Youtube::get_id_or_query(
                     &ALISTRAL_CLIENT.interzic,

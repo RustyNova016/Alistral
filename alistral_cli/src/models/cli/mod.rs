@@ -19,14 +19,14 @@ use crate::tools::bump::bump_down::BumpDownCommand;
 use crate::tools::cache::CacheCommand;
 use crate::tools::compatibility::compatibility_command;
 use crate::tools::daily::DailyCommand;
-#[cfg(feature = "interzicf")]
+#[cfg(feature = "interzic")]
 use crate::tools::interzic::InterzicCommand;
 use crate::tools::listens::ListenCommand;
 #[cfg(feature = "lookup")]
 use crate::tools::lookup::LookupCommand;
 #[cfg(feature = "musicbrainz")]
 use crate::tools::musicbrainz::MusicbrainzCommand;
-#[cfg(feature = "interzicf")]
+#[cfg(feature = "interzic")]
 use crate::tools::playlist::PlaylistCommand;
 #[cfg(feature = "stats")]
 use crate::tools::stats::StatsCommand;
@@ -125,7 +125,7 @@ pub enum Commands {
     /// Commands for musicbrainz stuff
     Musicbrainz(MusicbrainzCommand),
 
-    #[cfg(feature = "interzicf")]
+    #[cfg(feature = "interzic")]
     /// Interact with playlists
     Playlist(PlaylistCommand),
 
@@ -167,7 +167,7 @@ impl Commands {
             #[cfg(feature = "musicbrainz")]
             Self::Musicbrainz(val) => val.run().await,
 
-            #[cfg(feature = "interzicf")]
+            #[cfg(feature = "interzic")]
             Self::Playlist(val) => val.run().await?,
         }
 
