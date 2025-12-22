@@ -1,3 +1,5 @@
+use submarine::auth::AuthBuilder;
+
 pub mod cache;
 pub mod error;
 pub mod playlists;
@@ -12,6 +14,19 @@ pub struct SubsonicClient {
 }
 
 impl SubsonicClient {
+    pub fn new(name: String, url: &str, username: &str, password: &str) -> Self {
+        let auth = AuthBuilder::new(username, "v1.16.1")
+            .client_name("Interzic") //TODO: Set from client
+            .hashed(password);
+
+        let sub_client = submarine::Client::new(url, auth);
+
+        Self {
+            name,
+            inner_client: sub_client,
+        }
+    }
+
     pub fn name(&self) -> &str {
         &self.name
     }

@@ -23,6 +23,7 @@ impl RadioExportTarget {
         playlist: PlaylistStub,
         username: Option<String>,
         token: Option<&str>,
+        client_name: &str,
     ) -> Result<(), crate::Error> {
         match self {
             RadioExportTarget::Listenbrainz => {
@@ -36,13 +37,26 @@ impl RadioExportTarget {
                 )
                 .await?;
             }
-            #[cfg(any(feature = "youtube"))]
+            #[cfg(feature = "youtube")]
             Self::Youtube => {
                 let _playlist_id =
                     Youtube::create_playlist(&ALISTRAL_CLIENT.interzic, playlist, username).await?;
             }
+            #[cfg(feature = "subsonic")]
             Self::Subsonic => {
-                ALISTRAL_CLIENT.interzic.get_subsonic_client("name")
+                let Some(client) = ALISTRAL_CLIENT.interzic.get_subsonic_client(client_name) else {
+                    use tracing::error;
+
+                    error!(
+                        "Couldn't find the subsonic server with name `{client_name}`. You may want to add one with `alistral interzic add-subsonic`"
+                    );
+                    return Ok(());
+                };
+
+                client
+                    .create_playlist(&ALISTRAL_CLIENT.interzic, playlist, username)
+                    .await
+                    .unwrap();
             }
         }
 

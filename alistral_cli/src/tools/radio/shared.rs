@@ -27,6 +27,7 @@ pub async fn shared_radio(
     collector: RadioCollector,
     token: &str,
     target: RadioExportTarget,
+    client_name: &str
 ) -> Result<(), crate::Error> {
     let username = seeder.username().clone();
     let conn = &mut *ALISTRAL_CLIENT.get_conn().await;
@@ -85,7 +86,7 @@ pub async fn shared_radio(
     };
 
     target
-        .export(playlist, Some(username), Some(token))
+        .export(playlist, Some(username), Some(token), client_name)
         .await
         .expect_fatal("Couldn't send the playlist");
 

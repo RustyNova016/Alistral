@@ -1,5 +1,8 @@
 use snafu::ResultExt;
+use tracing::instrument;
 use tracing::warn;
+use tuillez::pg_counted;
+use tuillez::pg_inc;
 
 use crate::InterzicClient;
 use crate::models::playlist_stub::PlaylistStub;
@@ -7,6 +10,7 @@ use crate::models::services::subsonic::SubsonicClient;
 use crate::models::services::subsonic::error::SubsonicSnafu;
 
 impl SubsonicClient {
+    #[instrument(skip(client, playlist), fields(indicatif.pb_show = tracing::field::Empty))]
     pub async fn create_playlist(
         &self,
         client: &InterzicClient,
@@ -14,6 +18,7 @@ impl SubsonicClient {
         user_overwrite: Option<String>,
     ) -> Result<submarine::data::PlaylistWithSongs, super::error::SubsonicServiceError> {
         let mut items = Vec::new();
+        pg_counted!(playlist.recordings.len(), "Creating playlist");
 
         for recording in playlist.recordings {
             let rec = self
@@ -23,12 +28,15 @@ impl SubsonicClient {
 
             if let Some(rec) = rec {
                 items.push(rec);
+            } else {
+                warn!(
+                    "Recording `{}` not found in the subsonic server `{}`",
+                    format!("{} {}", recording.title, recording.artist_credits),
+                    self.name
+                );
             }
 
-            warn!(
-                "Recording `{}` not found in the subsonic server `{}`",
-                recording, self.name
-            );
+            pg_inc!();
         }
 
         self.inner_client

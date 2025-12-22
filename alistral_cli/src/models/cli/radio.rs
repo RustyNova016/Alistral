@@ -42,6 +42,10 @@ pub struct RadioCommand {
     /// Where to output the radio
     #[arg(short, long, default_value_t = RadioExportTarget::Listenbrainz)]
     output: RadioExportTarget,
+
+    /// The name of the subsonic/listenbrainz instance to send the playlist to.
+    #[arg(long)]
+    instance: String,
 }
 
 impl RadioCommand {
@@ -76,7 +80,12 @@ impl RadioCommand {
 
     pub async fn run(&self) -> Result<(), crate::Error> {
         self.command
-            .run(self.get_collector(), self, self.output.clone())
+            .run(
+                self.get_collector(),
+                self,
+                self.output.clone(),
+                &self.instance,
+            )
             .await
     }
 }
@@ -206,6 +215,7 @@ impl RadioSubcommands {
         collector: RadioCollector,
         command: &RadioCommand,
         target: RadioExportTarget,
+        client_name: &str,
     ) -> Result<(), crate::Error> {
         match self {
             Self::Circles {
@@ -220,6 +230,7 @@ impl RadioSubcommands {
                     *unlistened,
                     collector,
                     target,
+                    client_name,
                 )
                 .await;
             }
@@ -230,6 +241,7 @@ impl RadioSubcommands {
                     collector,
                     &Config::check_token(&Config::check_username(username), token),
                     target,
+                    client_name
                 )
                 .await?;
             }
@@ -246,6 +258,7 @@ impl RadioSubcommands {
                     *cooldown,
                     collector,
                     target,
+                    client_name
                 )
                 .await?;
             }
@@ -267,6 +280,7 @@ impl RadioSubcommands {
                     command.get_collector(),
                     *at_listening_time,
                     target,
+                    client_name
                 )
                 .await?;
             }
@@ -286,6 +300,7 @@ impl RadioSubcommands {
                     command.get_collector(),
                     &Config::check_token(&Config::check_username(&None), token),
                     target,
+                    client_name
                 )
                 .await?;
             }
@@ -300,9 +315,8 @@ pub enum RadioExportTarget {
     Listenbrainz,
     #[cfg(any(feature = "youtube"))]
     Youtube,
-    Subsonic
-
-    //TODO: #527 Allow exporting radio to JSPF
+    #[cfg(feature = "subsonic")]
+    Subsonic, //TODO: #527 Allow exporting radio to JSPF
 }
 
 impl Display for RadioExportTarget {
@@ -311,6 +325,7 @@ impl Display for RadioExportTarget {
             Self::Listenbrainz => write!(f, "listenbrainz"),
             #[cfg(any(feature = "youtube"))]
             Self::Youtube => write!(f, "youtube"),
+            #[cfg(feature = "subsonic")]
             Self::Subsonic => write!(f, "subsonic"),
         }
     }

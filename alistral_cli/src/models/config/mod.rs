@@ -11,12 +11,15 @@ use serde::Deserialize;
 use serde::Serialize;
 use std::collections::HashMap;
 
+use crate::models::config::interzic::InterzicConfig;
+
 use super::cli::Cli;
 
 pub mod bumps;
 pub mod config_guard;
 pub mod config_trait;
 pub mod global_config;
+pub mod interzic;
 pub mod listen_config;
 pub mod mapper;
 pub mod recording_timeout;
@@ -43,6 +46,9 @@ pub struct Config {
 
     #[serde(default = "default_mb_url")]
     pub musicbrainz_url: String,
+
+    #[serde(default)]
+    pub interzic: InterzicConfig,
 }
 
 impl Config {
@@ -134,6 +140,7 @@ impl Default for Config {
             bumps: Default::default(),
             listenbrainz_domain: default_lb_url(),
             musicbrainz_url: default_mb_url(),
+            interzic: InterzicConfig::default()
         }
     }
 }

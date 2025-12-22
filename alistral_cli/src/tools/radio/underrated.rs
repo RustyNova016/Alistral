@@ -21,6 +21,7 @@ pub async fn underrated_mix(
     collector: RadioCollector,
     token: &str,
     target: RadioExportTarget,
+    client_name: &str
 ) -> Result<(), crate::Error> {
     let conn = &mut *ALISTRAL_CLIENT.get_conn().await;
     let username = seeder.username().clone();
@@ -78,7 +79,7 @@ pub async fn underrated_mix(
     };
 
     target
-        .export(playlist, Some(username), Some(token))
+        .export(playlist, Some(username), Some(token), client_name)
         .await
         .expect_fatal("Couldn't send the playlist");
 

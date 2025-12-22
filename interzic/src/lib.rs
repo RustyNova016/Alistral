@@ -10,3 +10,7 @@ pub use crate::error::Error;
 pub mod reexports {
     pub use musicbrainz_rs::client::MUSICBRAINZ_CLIENT;
 }
+
+
+#[cfg(feature = "subsonic")]
+pub use submarine::Client as SubmarineClient;

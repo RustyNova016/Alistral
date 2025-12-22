@@ -1,3 +1,4 @@
+#[cfg(feature = "subsonic")]
 use std::collections::HashMap;
 use std::sync::Arc;
 
@@ -5,15 +6,16 @@ use musicbrainz_db_lite::DBClient;
 use musicbrainz_rs::client::MusicBrainzClient;
 
 use crate::client::builder::ClientBuilder;
-use crate::models::services::subsonic::SubsonicClient;
 #[cfg(feature = "youtube")]
 use crate::client::youtube_client::YoutubeClient;
+#[cfg(feature = "subsonic")]
+use crate::models::services::subsonic::SubsonicClient;
 
 pub mod builder;
+#[cfg(feature = "subsonic")]
 pub mod subsonic;
 #[cfg(feature = "youtube")]
 pub mod youtube_client;
-
 
 pub struct InterzicClient {
     pub database_client: sqlx::SqlitePool,
@@ -25,6 +27,7 @@ pub struct InterzicClient {
     #[cfg(feature = "youtube")]
     youtube_client: Option<Arc<YoutubeClient>>,
 
+    #[cfg(feature = "subsonic")]
     subsonic_clients: HashMap<String, SubsonicClient>,
 }
 
@@ -32,7 +35,6 @@ impl InterzicClient {
     pub fn new_builder() -> ClientBuilder {
         ClientBuilder::default()
     }
-
 
     pub fn set_listenbrainz_client(&mut self, client: Arc<listenbrainz::raw::Client>) {
         self.listenbrainz_client = Some(client);
@@ -67,6 +69,3 @@ impl InterzicClient {
             .ok_or(crate::Error::MissingMusicbrainzClient)
     }
 }
-
-
-
