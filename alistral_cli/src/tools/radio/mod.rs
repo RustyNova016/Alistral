@@ -41,6 +41,9 @@ impl RadioExportTarget {
                 let _playlist_id =
                     Youtube::create_playlist(&ALISTRAL_CLIENT.interzic, playlist, username).await?;
             }
+            Self::Subsonic => {
+                ALISTRAL_CLIENT.interzic.get_subsonic_client("name")
+            }
         }
 
         //TODO: #528 display playlist url after export

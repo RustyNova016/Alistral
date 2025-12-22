@@ -1,5 +1,6 @@
 use core::str::FromStr as _;
 use core::time::Duration;
+use std::collections::HashMap;
 use std::fs::File;
 use std::io;
 use std::path::Path;
@@ -64,6 +65,7 @@ impl ClientBuilder {
             youtube_client: None,
             listenbrainz_client: None,
             musicbrainz_db_lite_client: None,
+            subsonic_clients: HashMap::new(),
         })
     }
 }

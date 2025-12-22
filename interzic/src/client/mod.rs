@@ -1,13 +1,16 @@
+use std::collections::HashMap;
 use std::sync::Arc;
 
 use musicbrainz_db_lite::DBClient;
 use musicbrainz_rs::client::MusicBrainzClient;
 
 use crate::client::builder::ClientBuilder;
+use crate::models::services::subsonic::SubsonicClient;
 #[cfg(feature = "youtube")]
 use crate::client::youtube_client::YoutubeClient;
 
 pub mod builder;
+pub mod subsonic;
 #[cfg(feature = "youtube")]
 pub mod youtube_client;
 
@@ -21,6 +24,8 @@ pub struct InterzicClient {
 
     #[cfg(feature = "youtube")]
     youtube_client: Option<Arc<YoutubeClient>>,
+
+    subsonic_clients: HashMap<String, SubsonicClient>,
 }
 
 impl InterzicClient {

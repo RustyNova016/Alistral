@@ -300,6 +300,8 @@ pub enum RadioExportTarget {
     Listenbrainz,
     #[cfg(any(feature = "youtube"))]
     Youtube,
+    Subsonic
+
     //TODO: #527 Allow exporting radio to JSPF
 }
 
@@ -309,6 +311,7 @@ impl Display for RadioExportTarget {
             Self::Listenbrainz => write!(f, "listenbrainz"),
             #[cfg(any(feature = "youtube"))]
             Self::Youtube => write!(f, "youtube"),
+            Self::Subsonic => write!(f, "subsonic"),
         }
     }
 }

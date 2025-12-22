@@ -5,6 +5,7 @@ use musicbrainz_db_lite::HasArtistCredits as _;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use sqlx::prelude::FromRow;
 
+/// A string based representation of a recording
 #[derive(Clone, FromRow, Debug)]
 pub struct MessyRecording {
     pub id: i64,
