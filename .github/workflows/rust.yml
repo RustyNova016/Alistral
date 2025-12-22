@@ -57,7 +57,7 @@ jobs:
       - uses: taiki-e/install-action@cargo-hack
 
       - name: Run clippy
-        run: cargo hack clippy --feature-powerset --skip hotpath,hotpath-alloc,hotpath-off,youtube,interzic -- -D warnings
+        run: cargo hack clippy --feature-powerset --skip hotpath,hotpath-alloc,hotpath-off,youtube,interzic,navidrome -- -D warnings
 
   docs:
     name: Documentation

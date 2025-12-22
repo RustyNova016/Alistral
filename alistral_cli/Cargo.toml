@@ -88,9 +88,9 @@ async-once-cell = "0.5.4"
 duplicate = "2.0.1"
 
 [features]
-default = ["radio", "subsonic"]
+default = ["interzic", "subsonic"]
 #default = ["full"]
-full = ["musicbrainz", "lookup", "stats", "radio", "youtube"]
+full = ["musicbrainz", "lookup", "stats", "radio", "youtube", "subsonic"]
 
 # Commands
 musicbrainz = ["symphonize"]

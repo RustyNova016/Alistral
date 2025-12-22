@@ -1,12 +1,10 @@
 use std::sync::Arc;
 
 use interzic::InterzicClient;
-use interzic::models::services::subsonic::SubsonicClient;
 use musicbrainz_db_lite::DBClient;
 use musicbrainz_db_lite::MusicBrainzClient;
 
 use crate::models::client::AlistralCliClient;
-use crate::models::config::global_config::CONFIG;
 use crate::utils::constants::INTERZIC_DB;
 
 impl AlistralCliClient {
@@ -58,10 +56,15 @@ async fn set_youtube(client: &mut InterzicClient) {
     }
 }
 
+#[cfg(feature = "subsonic")]
 async fn set_subsonic(client: &mut InterzicClient) {
+    use crate::models::config::global_config::CONFIG;
+
     let config = CONFIG.config.read().await;
 
     for conf in &config.interzic.subsonic_clients {
+        use interzic::models::services::subsonic::SubsonicClient;
+
         client.add_subsonic_client(SubsonicClient::new(
             conf.name.to_string(),
             &conf.url,
