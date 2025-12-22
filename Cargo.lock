@@ -78,7 +78,7 @@ dependencies = [
  "interzic",
  "itertools 0.14.0",
  "listenbrainz",
- "musicbrainz-db-lite",
+ "musicbrainz-db-lite 0.1.0",
  "rand 0.9.2",
  "regex",
  "reqwest",
@@ -112,7 +112,7 @@ dependencies = [
  "chrono",
  "futures",
  "itertools 0.14.0",
- "musicbrainz-db-lite",
+ "musicbrainz-db-lite 0.1.0",
  "owo-colors",
  "rust_decimal",
  "rust_decimal_macros",
@@ -2134,13 +2134,14 @@ dependencies = [
 [[package]]
 name = "interzic"
 version = "0.1.0"
+source = "git+https://github.com/RustyNova016/interzic?rev=f714ab972312aa1a1ecd3bbf7b0a8599c908ac79#f714ab972312aa1a1ecd3bbf7b0a8599c908ac79"
 dependencies = [
  "async-fn-stream",
  "futures",
  "google-youtube3",
  "governor",
  "listenbrainz",
- "musicbrainz-db-lite",
+ "musicbrainz-db-lite 0.1.0 (git+https://github.com/RustyNova016/Alistral.git?rev=6f00f3f26c51647775206e93ec86231dd1de4335)",
  "musicbrainz_rs",
  "regex",
  "serde",
@@ -2481,6 +2482,37 @@ dependencies = [
  "serde",
  "serde_json",
  "serial_test",
+ "snafu",
+ "sqlx",
+ "streamies 0.2.2",
+ "thiserror 2.0.17",
+ "tokio",
+ "tracing",
+ "tuillez",
+ "url",
+]
+
+[[package]]
+name = "musicbrainz-db-lite"
+version = "0.1.0"
+source = "git+https://github.com/RustyNova016/Alistral.git?rev=6f00f3f26c51647775206e93ec86231dd1de4335#6f00f3f26c51647775206e93ec86231dd1de4335"
+dependencies = [
+ "async-fn-stream",
+ "bon",
+ "chrono",
+ "const_format",
+ "deadpool",
+ "extend",
+ "futures",
+ "itertools 0.14.0",
+ "listenbrainz",
+ "listenbrainz_rs",
+ "musicbrainz_rs",
+ "owo-colors",
+ "regex",
+ "sequelles",
+ "serde",
+ "serde_json",
  "snafu",
  "sqlx",
  "streamies 0.2.2",
@@ -4014,7 +4046,7 @@ dependencies = [
  "format-url",
  "futures",
  "governor",
- "musicbrainz-db-lite",
+ "musicbrainz-db-lite 0.1.0",
  "owo-colors",
  "regex",
  "reqwest",
