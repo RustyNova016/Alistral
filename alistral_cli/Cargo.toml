@@ -65,7 +65,7 @@ thiserror = "2.0.17"
 
 # Macros
 bon = "3.8.1"
-derive_more = { version = "2.1.0", features = ["full"] }
+derive_more = { version = "2.1.1", features = ["full"] }
 derive-new = "0.7.0"
 derive-getters = "0.5.0"
 strum_macros = "0.27.2"
