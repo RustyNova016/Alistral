@@ -16,13 +16,13 @@ musicbrainz-db-lite = { path = "../musicbrainz_db_lite" }
 #listenbrainz = "0.8.1"
 listenbrainz = { branch = "alistral_version", git = "https://github.com/RustyNova016/listenbrainz-rs.git", default-features = false, features = ["tls-native"] }
 
-
 # Tracing
 tuillez = "0.1.0"
 tracing = "0.1.43"
 
 # --- Service crates ---
-google-youtube3 = "6.0.0"
+google-youtube3 = { version = "6.0.0", optional = true }
+submarine = { version = "0.1.1", optional = true, features = ["navidrome"] }
 
 # --- Other crates ---
 regex = "1.11.3"
@@ -33,6 +33,16 @@ serde = "1.0.228"
 serde_json = "1.0.148"
 futures = "0.3.31"
 async-fn-stream = "0.3.0"
+snafu = "0.8.9"
+bon = "3.8.1"
+
+[features]
+default = []
+
+youtube = ["dep:google-youtube3"]
+subsonic = ["dep:submarine"]
+
+backtrace = []
 
 [lints.clippy]
 result_large_err = { level = "allow", priority = 1 }
@@ -42,3 +52,4 @@ sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "ecdfec3c8
 tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c8656a4eedb571177a8ffa3b9984e78"}
 musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "60ab4d48a6898cc2fc8e0b6fc9fb774c64cfe8d2"}
 listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "14c1a52bc8cf62d3e867c944725d95b4826d563d" }
+submarine = { git = "https://github.com/RustyNova016/submarine", rev = "15c6f5e07724af5d037708baa6e20c937eeb324b" }

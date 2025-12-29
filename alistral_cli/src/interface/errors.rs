@@ -1,20 +1,21 @@
-#[cfg(feature = "interzicf")]
+#[cfg(all(feature = "youtube", feature = "interzic"))]
 use interzic::models::services::youtube::error::InterzicYoutubeError;
-#[cfg(feature = "interzicf")]
+#[cfg(all(feature = "youtube", feature = "interzic"))]
 use interzic::models::services::youtube::error::YoutubeError;
 
 pub fn process_errors(error: &crate::Error) -> Option<String> {
     match &error {
-        #[cfg(feature = "interzicf")]
+        #[cfg(feature = "interzic")]
         crate::Error::Interzic(err) => process_interzic_error(err),
         crate::Error::Listenbrainz(err) => process_listenbrainz_error(err),
         _ => None,
     }
 }
 
-#[cfg(feature = "interzicf")]
+#[cfg(feature = "interzic")]
 fn process_interzic_error(error: &interzic::Error) -> Option<String> {
     match error {
+        #[cfg(feature = "youtube")]
         interzic::Error::YoutubeError(err) => process_interzic_youtube_error(err),
         _ => None,
     }
@@ -33,7 +34,7 @@ fn process_listenbrainz_error(error: &listenbrainz::Error) -> Option<String> {
     }
 }
 
-#[cfg(feature = "interzicf")]
+#[cfg(all(feature = "youtube", feature = "interzic"))]
 fn process_interzic_youtube_error(error: &InterzicYoutubeError) -> Option<String> {
     #[expect(
         clippy::match_single_binding,
@@ -44,7 +45,7 @@ fn process_interzic_youtube_error(error: &InterzicYoutubeError) -> Option<String
     }
 }
 
-#[cfg(feature = "interzicf")]
+#[cfg(all(feature = "youtube", feature = "interzic"))]
 fn process_youtube_error(error: &YoutubeError) -> Option<String> {
     match error {
         YoutubeError::QuotaExceededError(_) => Some("The quota of your Youtube application (youtube api v3) is fully spent. Please wait until it comes back".to_string()),

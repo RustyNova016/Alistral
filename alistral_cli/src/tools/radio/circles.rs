@@ -28,6 +28,7 @@ pub async fn create_radio_mix(
     unlistened: bool,
     collector: RadioCollector,
     target: RadioExportTarget,
+    client_name: &str,
 ) {
     let username = seeder.username().clone();
     let conn = &mut *ALISTRAL_CLIENT.get_conn().await;
@@ -68,7 +69,7 @@ pub async fn create_radio_mix(
     };
 
     target
-        .export(playlist, Some(username), Some(&token))
+        .export(playlist, Some(username), Some(&token), client_name)
         .await
         .expect_fatal("Couldn't send the playlist");
 }

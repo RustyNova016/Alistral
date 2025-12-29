@@ -27,6 +27,8 @@ tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c865
 #musicbrainz_rs = {path = "./musicbrainz_rs"}
 musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "60ab4d48a6898cc2fc8e0b6fc9fb774c64cfe8d2"}
 
+submarine = { git = "https://github.com/RustyNova016/submarine", rev = "15c6f5e07724af5d037708baa6e20c937eeb324b" }
+
 [workspace.lints.rust]
 unsafe_code = "forbid"
 

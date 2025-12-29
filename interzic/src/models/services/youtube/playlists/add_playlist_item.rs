@@ -9,7 +9,7 @@ use tuillez::pg_counted;
 use tuillez::pg_inc;
 
 use crate::InterzicClient;
-use crate::client::YoutubeClient;
+use crate::client::youtube_client::YoutubeClient;
 use crate::models::messy_recording::MessyRecording;
 use crate::models::playlist_stub::PlaylistStub;
 use crate::models::services::youtube::Youtube;

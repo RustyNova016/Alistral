@@ -1,5 +1,7 @@
 use core::str::FromStr as _;
 use core::time::Duration;
+#[cfg(feature = "subsonic")]
+use std::collections::HashMap;
 use std::fs::File;
 use std::io;
 use std::path::Path;
@@ -60,9 +62,12 @@ impl ClientBuilder {
                     "database_client".to_string(),
                 ))?,
             musicbrainz_client: None,
+            #[cfg(feature = "youtube")]
             youtube_client: None,
             listenbrainz_client: None,
             musicbrainz_db_lite_client: None,
+            #[cfg(feature = "subsonic")]
+            subsonic_clients: HashMap::new(),
         })
     }
 }

@@ -30,7 +30,7 @@ serde = { version = "1.0.228", features = ["rc"] }
 serde_json = "1.0.148"
 extend = "1.2.0"
 directories = "6.0.0"
-reqwest = { version = "0.12.24", features = ["json"] }
+reqwest = { version = "0.12.28", features = ["json"] }
 rand = "0.9.2"
 regex = "1.12.1"
 sqlx = { version = "0.8.6", features = ["runtime-tokio", "macros"] }
@@ -61,7 +61,7 @@ charchart = {version = "0.1.0", git = "https://github.com/RustyNova016/charchart
 # Error handling
 color-eyre = "0.6.5"
 thiserror = "2.0.17"
-#snafu = { version = "0.8.9", features = ["rust_1_81", "backtrace"] }
+snafu = { version = "0.8.9", features = ["rust_1_81", "backtrace"] }
 
 # Macros
 bon = "3.8.1"
@@ -71,43 +71,48 @@ derive-getters = "0.5.0"
 strum_macros = "0.27.2"
 
 # Tracing
-tracing = "0.1.43"
+tracing = "0.1.44"
 tracing-subscriber = "0.3.22"
 tracing-appender = "0.2.4"
 tracing-indicatif = "0.3.14"
 tuillez = "0.1.0"
 
 # Debuging
-hotpath = { version = "0.9.0", optional = true, features = ["futures"] }
+hotpath = { version = "0.9.2", optional = true, features = ["futures"] }
 
 # Other
-zip = "6.0.0"
+zip = "7.0.0"
 sequelles = "0.2.0"
 comfy-table = { version = "7.2.1", features = ["custom_styling"] }
 async-once-cell = "0.5.4"
 duplicate = "2.0.1"
 
 [features]
-default = ["stats", "lookup"]
+default = ["interzic", "subsonic", "youtube"]
 #default = ["full"]
-full = ["musicbrainz", "lookup", "stats", "radio"]
+full = ["musicbrainz", "lookup", "stats", "radio", "youtube", "subsonic"]
 
 # Commands
 musicbrainz = ["symphonize"]
 lookup = ["legacy_ent_with_listen"]
-radio = ["interzicf"]
+radio = ["interzic"]
 stats = []
 
 # Parts
 legacy_ent_with_listen = []
 
 # Subcrates
-interzicf = ["interzic"]
+interzic = ["dep:interzic"]
+
+# External Services
+youtube = ["interzic?/youtube"]
+subsonic = ["interzic?/subsonic"]
 
 # Debugging
 hotpath = ["dep:hotpath", "hotpath/hotpath"]
 hotpath-alloc = ["hotpath/hotpath-alloc"]
 hotpath-off = ["hotpath/hotpath-off"]
+backtrace = []
 
 [lints.rust]
 async_fn_in_trait = { level = "allow", priority = 1 }
@@ -120,3 +125,4 @@ sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "ecdfec3c8
 tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c8656a4eedb571177a8ffa3b9984e78"}
 musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "60ab4d48a6898cc2fc8e0b6fc9fb774c64cfe8d2"}
 listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "14c1a52bc8cf62d3e867c944725d95b4826d563d" }
+submarine = { git = "https://github.com/RustyNova016/submarine", rev = "15c6f5e07724af5d037708baa6e20c937eeb324b" }

@@ -2,6 +2,7 @@ use std::io;
 use thiserror::Error;
 
 use crate::models::messy_recording::MessyRecording;
+#[cfg(feature = "youtube")]
 use crate::models::services::youtube::error::InterzicYoutubeError;
 
 #[derive(Error, Debug)]
@@ -43,6 +44,7 @@ pub enum Error {
     MessyRecordingSaveError(sqlx::Error, MessyRecording),
 
     // --- Service Errors ---
+    #[cfg(feature = "youtube")]
     #[error(transparent)]
     YoutubeError(#[from] InterzicYoutubeError),
 

@@ -1,6 +1,7 @@
 use clap::Parser;
 use clap::ValueEnum;
 use interzic::models::messy_recording::MessyRecording;
+#[cfg(feature = "youtube")]
 use interzic::models::services::youtube::Youtube;
 use tuillez::fatal_error::FatalError;
 use tuillez::fatal_error::IntoFatal;
@@ -14,6 +15,10 @@ use crate::utils::cli::read_mbid_from_input;
 pub struct GetMappingCommand {
     /// Get the mapping of which service?
     pub target: InterzicMappingTarget,
+
+    /// The name of the subsonic/listenbrainz instance to send the playlist to.
+    #[arg(long)]
+    pub instance: String,
 
     /// The title of the recording
     #[arg(short, long)]
@@ -38,7 +43,11 @@ pub struct GetMappingCommand {
 
 #[derive(ValueEnum, Clone, Debug)]
 pub enum InterzicMappingTarget {
+    #[cfg(feature = "youtube")]
     Youtube,
+
+    #[cfg(feature = "subsonic")]
+    Subsonic,
 }
 
 impl GetMappingCommand {
@@ -70,11 +79,13 @@ impl GetMappingCommand {
             }
         };
 
+        #[allow(unused)]
         let recording = recording
             .upsert(&ALISTRAL_CLIENT.interzic.database_client)
             .await?;
 
         match self.target {
+            #[cfg(feature = "youtube")]
             InterzicMappingTarget::Youtube => {
                 let id = Youtube::get_id_or_query(
                     &ALISTRAL_CLIENT.interzic,
@@ -86,6 +97,19 @@ impl GetMappingCommand {
                 match id {
                     None => println!("Couldn't find a mapping for the recording"),
                     Some(id) => println!("Mapped to video: https://youtu.be/{id}",),
+                }
+            }
+
+            #[cfg(feature = "subsonic")]
+            InterzicMappingTarget::Subsonic => {
+                let sub = ALISTRAL_CLIENT.get_subsonic_instance(&self.instance)?;
+
+                match sub
+                    .get_or_fetch(&ALISTRAL_CLIENT.interzic, &recording, self.user.clone())
+                    .await?
+                {
+                    Some(id) => println!("Mapped to song: {id}"),
+                    None => println!("Couldn't find a mapping for the recording"),
                 }
             }
         }

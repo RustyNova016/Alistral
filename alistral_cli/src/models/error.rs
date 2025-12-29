@@ -4,6 +4,8 @@ use tuillez::extensions::chrono_exts::TimeError;
 use tuillez::fatal_error::FatalError;
 
 use crate::interface::errors::process_errors;
+#[cfg(feature = "interzic")]
+use crate::models::client::interzic_client::InterzicClientError;
 
 #[derive(Error, Debug)]
 //#[expect(clippy::enum_variant_names)]
@@ -48,13 +50,17 @@ pub enum Error {
     #[error(transparent)]
     FatalError(#[from] FatalError),
 
+    #[cfg(feature = "interzic")]
+    #[error(transparent)]
+    InterzicClientError(#[from] InterzicClientError),
+
     // ==================
     //  Error Reexports
     // ==================
     #[error(transparent)]
     AlistralCore(#[from] alistral_core::Error),
 
-    #[cfg(feature = "interzicf")]
+    #[cfg(feature = "interzic")]
     #[error(transparent)]
     Interzic(#[from] interzic::Error),
 

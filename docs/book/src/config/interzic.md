@@ -2,6 +2,10 @@
 
 Interzic is the translation layer between different music providers, services, or even apps (ex: Youtube, Spotify, listenbrainz, Tauon, etc...). However, many services requires API keys to function. Here's how to set them:
 
+## Subsonic / Navidrome
+
+
+
 ## Youtube
 
 Youtube integration requires creating a google cloud app [here](https://console.cloud.google.com/apis/dashboard). This app needs the `YouTube API v3` service. 

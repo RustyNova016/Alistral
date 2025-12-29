@@ -14,7 +14,7 @@ use super::config_trait::ConfigFile as _;
 pub(crate) static CONFIG: LazyLock<GlobalConfig> = LazyLock::new(GlobalConfig::load);
 
 pub struct GlobalConfig {
-    config: Arc<RwLock<Config>>,
+    pub config: Arc<RwLock<Config>>,
 }
 
 impl GlobalConfig {

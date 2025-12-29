@@ -1,5 +1,6 @@
 use clap::Parser;
 use interzic::models::messy_recording::MessyRecording;
+#[cfg(feature = "youtube")]
 use interzic::models::services::youtube::Youtube;
 use tuillez::fatal_error::FatalError;
 use tuillez::fatal_error::IntoFatal as _;
@@ -14,6 +15,10 @@ use crate::utils::cli::read_mbid_from_input;
 pub struct OverwriteCommand {
     /// Set the mapping of this service
     pub target: InterzicMappingTarget,
+
+    /// The name of the subsonic/listenbrainz instance to send the playlist to.
+    #[arg(long)]
+    pub instance: String,
 
     /// Set the mapping of this user
     pub user: String,
@@ -71,6 +76,7 @@ impl OverwriteCommand {
             .await?;
 
         match self.target {
+            #[cfg(feature = "youtube")]
             InterzicMappingTarget::Youtube => {
                 Youtube::save_ext_id(
                     &ALISTRAL_CLIENT.interzic,
@@ -80,7 +86,20 @@ impl OverwriteCommand {
                     recording.id,
                     Some(self.user.to_string()),
                 )
-                .await?
+                .await?;
+            }
+
+            #[cfg(feature = "subsonic")]
+            InterzicMappingTarget::Subsonic => {
+                let sub = ALISTRAL_CLIENT.get_subsonic_instance(&self.instance)?;
+
+                sub.save_external_id(
+                    &ALISTRAL_CLIENT.interzic,
+                    self.id.clone(),
+                    recording.id,
+                    Some(self.user.to_string()),
+                )
+                .await?;
             }
         };
 

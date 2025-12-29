@@ -1,6 +1,7 @@
 use interzic::models::messy_recording::MessyRecording;
 use interzic::models::playlist_stub::PlaylistStub;
 use interzic::models::services::listenbrainz::Listenbrainz;
+#[cfg(feature = "youtube")]
 use interzic::models::services::youtube::Youtube;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use tracing::Span;
@@ -22,6 +23,7 @@ impl RadioExportTarget {
         playlist: PlaylistStub,
         username: Option<String>,
         token: Option<&str>,
+        client_name: &str,
     ) -> Result<(), crate::Error> {
         match self {
             RadioExportTarget::Listenbrainz => {
@@ -35,9 +37,26 @@ impl RadioExportTarget {
                 )
                 .await?;
             }
+            #[cfg(feature = "youtube")]
             Self::Youtube => {
                 let _playlist_id =
                     Youtube::create_playlist(&ALISTRAL_CLIENT.interzic, playlist, username).await?;
+            }
+            #[cfg(feature = "subsonic")]
+            Self::Subsonic => {
+                let Some(client) = ALISTRAL_CLIENT.interzic.get_subsonic_client(client_name) else {
+                    use tracing::error;
+
+                    error!(
+                        "Couldn't find the subsonic server with name `{client_name}`. You may want to add one with `alistral interzic add-subsonic`"
+                    );
+                    return Ok(());
+                };
+
+                client
+                    .create_playlist(&ALISTRAL_CLIENT.interzic, playlist, username)
+                    .await
+                    .unwrap();
             }
         }
 

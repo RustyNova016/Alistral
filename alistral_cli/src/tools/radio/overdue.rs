@@ -32,6 +32,7 @@ pub async fn overdue_radio(
     collector: RadioCollector,
     at_listening_time: bool,
     target: RadioExportTarget,
+    client_name: &str,
 ) -> Result<(), crate::Error> {
     let username = seeder.username().clone();
     let conn = &mut *ALISTRAL_CLIENT.get_conn().await;
@@ -83,7 +84,7 @@ pub async fn overdue_radio(
     };
 
     target
-        .export(playlist, Some(username), Some(token))
+        .export(playlist, Some(username), Some(token), client_name)
         .await
         .expect_fatal("Couldn't send the playlist");
 

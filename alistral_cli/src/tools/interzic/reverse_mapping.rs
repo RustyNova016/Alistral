@@ -1,5 +1,7 @@
 use clap::Parser;
+#[cfg(feature = "youtube")]
 use interzic::models::services::youtube::Youtube;
+#[cfg(feature = "youtube")]
 use tuillez::fatal_error::OptIntoFatal;
 
 use crate::ALISTRAL_CLIENT;
@@ -11,6 +13,10 @@ pub struct ReverseMappingCommand {
     /// Get the mapping of which service?
     pub source: InterzicMappingTarget,
 
+    /// The name of the subsonic/listenbrainz instance to send the playlist to.
+    #[arg(long)]
+    pub instance: String,
+
     /// The id on the external service
     pub id: String,
 
@@ -21,6 +27,7 @@ pub struct ReverseMappingCommand {
 impl ReverseMappingCommand {
     pub async fn run(&self) -> Result<(), crate::Error> {
         let recordings = match self.source {
+            #[cfg(feature = "youtube")]
             InterzicMappingTarget::Youtube => {
                 Youtube::get_recordings_from_id(
                     &ALISTRAL_CLIENT.interzic,
@@ -30,6 +37,12 @@ impl ReverseMappingCommand {
                     self.user.as_deref(),
                 )
                 .await?
+            }
+            #[cfg(feature = "subsonic")]
+            InterzicMappingTarget::Subsonic => {
+                let sub = ALISTRAL_CLIENT.get_subsonic_instance(&self.instance)?;
+                sub.get_recording_id(&ALISTRAL_CLIENT.interzic, &self.id, self.user.as_deref())
+                    .await?
             }
         };
 
