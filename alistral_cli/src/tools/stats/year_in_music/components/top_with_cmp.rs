@@ -5,12 +5,16 @@ use alistral_core::datastructures::entity_with_listens::label::collection::Label
 use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use alistral_core::datastructures::entity_with_listens::release_group::collection::ReleaseGroupWithReleasesCollection;
 use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime as _;
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use duplicate::duplicate_item;
 use itertools::Itertools as _;
 use sequelles::datastructures::ranking::Ranking;
 
-use crate::models::datastructures::tops::printer::TopPrinter;
+use crate::models::datastructures::tops::printer::top_cell::TopCell;
+use crate::models::datastructures::tops::printer::top_columns::TopColumnSort;
+use crate::models::datastructures::tops::printer::top_columns::TopColumnType;
 use crate::models::datastructures::tops::printer::top_row::TopRow;
+use crate::models::datastructures::tops::printer::top_table_printer::TopTablePrinter;
 use crate::models::datastructures::tops::top_score::TopScore;
 use crate::tools::stats::year_in_music::YimReport;
 
@@ -63,10 +67,26 @@ impl YimReport {
                     element: Box::new(rec.entity().clone()),
                     previous_ranking: prev.as_ref().map(|(rank, _)| rank + 1),
                     previous_score,
+                    listen_count: Some(TopCell::new(
+                        Some(rec.listen_count()),
+                        prev.as_ref().map(|prev| prev.1.listen_count()),
+                        true,
+                    )),
                 }
             })
             .collect_vec();
 
-        TopPrinter::format_n_rows(rows, 20).await
+        let table = TopTablePrinter::builder()
+            .columns(vec![
+                TopColumnType::Rank,
+                TopColumnType::ListenDuration,
+                TopColumnType::ListenCount,
+                TopColumnType::Title,
+            ])
+            .sorted_column(TopColumnType::ListenDuration)
+            .sort_order(TopColumnSort::Desc)
+            .build();
+
+        table.format_n_rows(rows, 20).await
     }
 }

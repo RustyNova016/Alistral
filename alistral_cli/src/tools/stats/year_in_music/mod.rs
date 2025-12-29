@@ -2,6 +2,7 @@ use core::cmp::Reverse;
 
 use alistral_core::datastructures::entity_with_listens::recording::RecordingWithListens;
 use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime as _;
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use alistral_core::models::listen_statistics_data::ListenStatisticsData;
 use chrono::DateTime;
 use chrono::Datelike;
@@ -13,8 +14,11 @@ use itertools::Itertools as _;
 use sequelles::datastructures::ranking::Ranking;
 
 use crate::ALISTRAL_CLIENT;
-use crate::models::datastructures::tops::printer::TopPrinter;
+use crate::models::datastructures::tops::printer::top_cell::TopCell;
+use crate::models::datastructures::tops::printer::top_columns::TopColumnSort;
+use crate::models::datastructures::tops::printer::top_columns::TopColumnType;
 use crate::models::datastructures::tops::printer::top_row::TopRow;
+use crate::models::datastructures::tops::printer::top_table_printer::TopTablePrinter;
 use crate::models::datastructures::tops::top_score::TopScore;
 use crate::tools::stats::year_in_music::stats::YimReportData;
 use crate::utils::cli::await_next;
@@ -153,9 +157,21 @@ impl YimReport {
                 element: Box::new(rec.recording().clone()),
                 previous_ranking: None,
                 previous_score: None,
+                listen_count: Some(TopCell::new(Some(rec.listen_count()), None, false)),
             })
             .collect_vec();
 
-        TopPrinter::format_n_rows(rows, 20).await
+        let table = TopTablePrinter::builder()
+            .columns(vec![
+                TopColumnType::Rank,
+                TopColumnType::ListenDuration,
+                TopColumnType::ListenCount,
+                TopColumnType::Title,
+            ])
+            .sorted_column(TopColumnType::ListenDuration)
+            .sort_order(TopColumnSort::Desc)
+            .build();
+
+        table.format_n_rows(rows, 20).await
     }
 }
