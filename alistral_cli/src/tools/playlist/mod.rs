@@ -4,7 +4,6 @@ use tuillez::fatal_error::FatalError;
 
 use crate::tools::playlist::convert::PlaylistConvertCommand;
 
-
 pub mod convert;
 
 #[derive(Parser, Debug, Clone)]
@@ -42,5 +41,5 @@ pub enum PlaylistTarget {
     #[cfg(feature = "youtube")]
     Youtube,
     #[cfg(feature = "subsonic")]
-    Subsonic
+    Subsonic,
 }

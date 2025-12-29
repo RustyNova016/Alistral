@@ -140,7 +140,7 @@ impl Default for Config {
             bumps: Default::default(),
             listenbrainz_domain: default_lb_url(),
             musicbrainz_url: default_mb_url(),
-            interzic: InterzicConfig::default()
+            interzic: InterzicConfig::default(),
         }
     }
 }

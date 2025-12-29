@@ -241,7 +241,7 @@ impl RadioSubcommands {
                     collector,
                     &Config::check_token(&Config::check_username(username), token),
                     target,
-                    client_name
+                    client_name,
                 )
                 .await?;
             }
@@ -258,7 +258,7 @@ impl RadioSubcommands {
                     *cooldown,
                     collector,
                     target,
-                    client_name
+                    client_name,
                 )
                 .await?;
             }
@@ -280,7 +280,7 @@ impl RadioSubcommands {
                     command.get_collector(),
                     *at_listening_time,
                     target,
-                    client_name
+                    client_name,
                 )
                 .await?;
             }
@@ -300,7 +300,7 @@ impl RadioSubcommands {
                     command.get_collector(),
                     &Config::check_token(&Config::check_username(&None), token),
                     target,
-                    client_name
+                    client_name,
                 )
                 .await?;
             }

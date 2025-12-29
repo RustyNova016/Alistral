@@ -11,5 +11,5 @@ pub struct SubsonicConfig {
     /// The username of the user
     pub username: String,
     /// The password of the user
-    pub password: String
+    pub password: String,
 }

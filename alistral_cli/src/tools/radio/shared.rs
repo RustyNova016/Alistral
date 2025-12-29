@@ -27,7 +27,7 @@ pub async fn shared_radio(
     collector: RadioCollector,
     token: &str,
     target: RadioExportTarget,
-    client_name: &str
+    client_name: &str,
 ) -> Result<(), crate::Error> {
     let username = seeder.username().clone();
     let conn = &mut *ALISTRAL_CLIENT.get_conn().await;

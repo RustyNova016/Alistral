@@ -21,7 +21,7 @@ pub async fn underrated_mix(
     collector: RadioCollector,
     token: &str,
     target: RadioExportTarget,
-    client_name: &str
+    client_name: &str,
 ) -> Result<(), crate::Error> {
     let conn = &mut *ALISTRAL_CLIENT.get_conn().await;
     let username = seeder.username().clone();
