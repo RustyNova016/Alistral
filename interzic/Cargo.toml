@@ -19,7 +19,7 @@ listenbrainz = { branch = "alistral_version", git = "https://github.com/RustyNov
 
 # Tracing
 tuillez = "0.1.0"
-tracing = "0.1.43"
+tracing = "0.1.44"
 
 # --- Service crates ---
 google-youtube3 = "6.0.0"
