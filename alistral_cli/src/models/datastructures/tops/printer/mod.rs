@@ -14,13 +14,19 @@ impl TopPrinter {
         let mut table_model = Table::new();
         table_model
             .load_preset(UTF8_FULL_CONDENSED)
-            .set_header(vec!["Rank", "Score", "Title"]);
+            .set_header(vec!["Rank", "Score", "Listens", "Title"]);
 
-        // Set the default alignment for the score column to right
-        let column = table_model
+        // Set the default alignment for the "score" column to right
+        let score_column = table_model
             .column_mut(1)
-            .expect("Our table has three columns");
-        column.set_cell_alignment(CellAlignment::Right);
+            .expect("Couldn't get a reference to the score column");
+        score_column.set_cell_alignment(CellAlignment::Right);
+
+        // Set the default alignment for the "listens" column to right
+        let listens_column = table_model
+            .column_mut(2)
+            .expect("Couldn't get a reference to the score column");
+        listens_column.set_cell_alignment(CellAlignment::Right);
 
         table_model
     }
@@ -33,6 +39,7 @@ impl TopPrinter {
                 table.add_row(vec![
                     row.rank_col(),
                     row.score_col(),
+                    row.listen_count_col(),
                     row.element_col().await,
                 ]);
             }

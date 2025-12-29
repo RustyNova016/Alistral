@@ -10,6 +10,7 @@ pub struct TopRow {
     pub ranking: usize,
     pub previous_ranking: Option<usize>,
 
+    pub listen_count: usize,
     pub score: TopScore,
     pub previous_score: Option<TopScore>,
 
@@ -28,6 +29,10 @@ impl TopRow {
                 format!("≪ {previous_ranking:>3}").true_color_tup((100, 100, 100))
             ),
         }
+    }
+
+    pub fn listen_count_col(&self) -> String {
+        format!("{}", self.listen_count)
     }
 
     pub fn score_col(&self) -> String {
