@@ -313,7 +313,7 @@ impl RadioSubcommands {
 #[derive(ValueEnum, Clone, Debug)]
 pub enum RadioExportTarget {
     Listenbrainz,
-    #[cfg(any(feature = "youtube"))]
+    #[cfg(feature = "youtube")]
     Youtube,
     #[cfg(feature = "subsonic")]
     Subsonic, //TODO: #527 Allow exporting radio to JSPF
@@ -323,7 +323,7 @@ impl Display for RadioExportTarget {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::Listenbrainz => write!(f, "listenbrainz"),
-            #[cfg(any(feature = "youtube"))]
+            #[cfg(feature = "youtube")]
             Self::Youtube => write!(f, "youtube"),
             #[cfg(feature = "subsonic")]
             Self::Subsonic => write!(f, "subsonic"),

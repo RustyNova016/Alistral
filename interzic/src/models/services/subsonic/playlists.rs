@@ -22,7 +22,7 @@ impl SubsonicClient {
 
         for recording in playlist.recordings {
             let rec = self
-                .get_of_fetch(client, &recording, user_overwrite.clone())
+                .get_or_fetch(client, &recording, user_overwrite.clone())
                 .await
                 .unwrap();
 

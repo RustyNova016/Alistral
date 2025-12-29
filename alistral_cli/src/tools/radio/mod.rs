@@ -1,7 +1,7 @@
 use interzic::models::messy_recording::MessyRecording;
 use interzic::models::playlist_stub::PlaylistStub;
 use interzic::models::services::listenbrainz::Listenbrainz;
-#[cfg(any(feature = "youtube"))]
+#[cfg(feature = "youtube")]
 use interzic::models::services::youtube::Youtube;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use tracing::Span;

@@ -15,7 +15,7 @@ pub fn process_errors(error: &crate::Error) -> Option<String> {
 #[cfg(feature = "interzic")]
 fn process_interzic_error(error: &interzic::Error) -> Option<String> {
     match error {
-        #[cfg(any(feature = "youtube"))]
+        #[cfg(feature = "youtube")]
         interzic::Error::YoutubeError(err) => process_interzic_youtube_error(err),
         _ => None,
     }

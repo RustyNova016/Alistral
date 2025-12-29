@@ -24,7 +24,7 @@ impl SubsonicClient {
     }
 
     /// Get the external id from this service saved in the database
-    pub async fn get_saved(
+    pub async fn get_ext_id(
         &self,
         client: &InterzicClient,
         recording_id: i64,
@@ -39,21 +39,37 @@ impl SubsonicClient {
         .await?)
     }
 
+    /// Get the recording id using the external id
+    pub async fn get_recording_id(
+        &self,
+        client: &InterzicClient,
+        ext_id: &str,
+        user_overwrite: Option<&str>,
+    ) -> Result<Vec<MessyRecording>, sqlx::Error> {
+        MessyRecording::recordings_from_mapping(
+            &client.database_client,
+            ext_id,
+            &self.service_name(),
+            user_overwrite,
+        )
+        .await
+    }
+
     /// Get the external id from the database or ask the subsonic server
-    pub async fn get_of_fetch(
+    pub async fn get_or_fetch(
         &self,
         client: &InterzicClient,
         messy_recording: &MessyRecording,
         user_overwrite: Option<String>,
     ) -> Result<Option<String>, crate::Error> {
         if let Some(id) = self
-            .get_saved(client, messy_recording.id, user_overwrite.clone())
+            .get_ext_id(client, messy_recording.id, user_overwrite.clone())
             .await?
         {
             return Ok(Some(id));
         }
 
-        let Some(ext_id) = self.find_recording(&messy_recording).await else {
+        let Some(ext_id) = self.find_recording(messy_recording).await else {
             return Ok(None);
         };
 

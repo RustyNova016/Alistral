@@ -16,6 +16,10 @@ pub struct GetMappingCommand {
     /// Get the mapping of which service?
     pub target: InterzicMappingTarget,
 
+    /// The name of the subsonic/listenbrainz instance to send the playlist to.
+    #[arg(long)]
+    pub instance: String,
+
     /// The title of the recording
     #[arg(short, long)]
     pub recording: Option<String>,
@@ -41,6 +45,9 @@ pub struct GetMappingCommand {
 pub enum InterzicMappingTarget {
     #[cfg(feature = "youtube")]
     Youtube,
+
+    #[cfg(feature = "subsonic")]
+    Subsonic,
 }
 
 impl GetMappingCommand {
@@ -90,6 +97,19 @@ impl GetMappingCommand {
                 match id {
                     None => println!("Couldn't find a mapping for the recording"),
                     Some(id) => println!("Mapped to video: https://youtu.be/{id}",),
+                }
+            }
+
+            #[cfg(feature = "subsonic")]
+            InterzicMappingTarget::Subsonic => {
+                let sub = ALISTRAL_CLIENT.get_subsonic_instance(&self.instance)?;
+
+                match sub
+                    .get_or_fetch(&ALISTRAL_CLIENT.interzic, &recording, self.user.clone())
+                    .await?
+                {
+                    Some(id) => println!("Mapped to song: {id}"),
+                    None => println!("Couldn't find a mapping for the recording"),
                 }
             }
         }

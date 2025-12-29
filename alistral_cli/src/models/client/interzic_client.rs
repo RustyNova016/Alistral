@@ -1,8 +1,10 @@
 use std::sync::Arc;
 
 use interzic::InterzicClient;
+use interzic::models::services::subsonic::SubsonicClient;
 use musicbrainz_db_lite::DBClient;
 use musicbrainz_db_lite::MusicBrainzClient;
+use snafu::OptionExt;
 
 use crate::models::client::AlistralCliClient;
 use crate::utils::constants::INTERZIC_DB;
@@ -40,6 +42,34 @@ impl AlistralCliClient {
 
         Arc::new(client)
     }
+
+    pub fn get_subsonic_instance(
+        &self,
+        name: &str,
+    ) -> Result<&SubsonicClient, InterzicClientError> {
+        self.interzic
+            .get_subsonic_client(name)
+            .context(SubsonicInstanceNotFoundSnafu {
+                name: name.to_string(),
+            })
+    }
+}
+
+#[derive(Debug, snafu::Snafu)]
+pub enum InterzicClientError {
+    #[snafu(display(
+        "Couldn't find the subsonic instance with the name `{name}`. You may want to add one with `alistral interzic add-subsonic`"
+    ))]
+    SubsonicInstanceNotFound {
+        name: String,
+
+        #[snafu(implicit)]
+        location: snafu::Location,
+
+        // For non snafu sources
+        #[cfg(feature = "backtrace")]
+        backtrace: snafu::Backtrace,
+    },
 }
 
 #[cfg(feature = "youtube")]
