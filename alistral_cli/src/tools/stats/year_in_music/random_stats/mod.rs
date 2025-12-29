@@ -8,6 +8,7 @@ use rust_decimal_macros::dec;
 
 use crate::datastructures::cli_formating::title::Heading1;
 use crate::datastructures::formaters::human_time::HumanTimePrinter;
+use crate::datastructures::formaters::minute_time::MinuteTimePrinter;
 use crate::interface::comp_arrow::ComparisonArrow;
 use crate::tools::stats::year_in_music::YimReport;
 
@@ -61,8 +62,9 @@ impl YimReport {
             (Decimal::new(sec_listened, 0) / Decimal::new(secs_in_year, 0)) * dec!(100);
 
         format!(
-            "Had music in your ears for {} [{} {}]. That's {}% of the year!",
+            "Had music in your ears for {} ({}) [{} {}]. That's {}% of the year!",
             HumanTimePrinter::from(current).alistral_green(),
+            MinuteTimePrinter::from(current).alistral_green(),
             ComparisonArrow::greater_is_better(current, previous),
             HumanTimePrinter::from(previous).alistral_green(),
             year_percent.round_dp(2).alistral_green()
