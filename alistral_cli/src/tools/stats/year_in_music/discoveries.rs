@@ -20,7 +20,7 @@ impl YimReport {
             writeln!(out, "{}", self.new_discoveries().await).unwrap();
             writeln!(out).unwrap();
             writeln!(out, "Here's the top 20 tracks:").unwrap();
-            writeln!(out, "{}", Self::top_recordings(stats.to_owned()).await).unwrap();
+            writeln!(out, "{}", self.top_recordings(stats.to_owned()).await).unwrap();
         } else {
             writeln!(out, "{}", self.no_new_discoveries().await).unwrap();
         }

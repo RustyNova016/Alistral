@@ -15,7 +15,7 @@ pub struct TopRow {
     pub previous_score: Option<TopScore>,
 
     pub listen_count: Option<TopCell<usize>>,
-    
+
     pub element:
         Box<dyn FormatWithAsyncDyn<MusicbrainzFormater, Error = musicbrainz_db_lite::Error>>,
 }

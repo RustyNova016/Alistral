@@ -44,6 +44,9 @@ pub struct StatsYIMCommand {
 
     /// Name of the user
     username: Option<String>,
+
+    #[arg(long)]
+    listen_counts: bool,
 }
 
 impl StatsYIMCommand {
@@ -61,7 +64,7 @@ impl StatsYIMCommand {
 
         let stats = ALISTRAL_CLIENT.statistics_of_user(username).await;
 
-        let report = YimReport::new(year, stats);
+        let report = YimReport::new(year, stats, self.listen_counts);
         report.data.prefetch().await;
         report.print().await;
     }
@@ -73,11 +76,13 @@ struct YimReport {
     year_start: DateTime<Local>,
     year_end: DateTime<Local>,
 
+    listen_counts: bool,
+
     data: YimReportData,
 }
 
 impl YimReport {
-    pub fn new(year: i32, full_user_stats: ListenStatisticsData) -> Self {
+    pub fn new(year: i32, full_user_stats: ListenStatisticsData, listen_counts: bool) -> Self {
         let year_start =
             NaiveDateTime::parse_from_str(&format!("{}-01-01 00:00:00", year), "%Y-%m-%d %H:%M:%S")
                 .unwrap()
@@ -102,6 +107,7 @@ impl YimReport {
             year_end,
             year_start,
             data,
+            listen_counts,
         }
     }
 
@@ -144,7 +150,7 @@ impl YimReport {
         println!("That's all folks! See you next year (Or anytime you want)!");
     }
 
-    pub async fn top_recordings(stats: Vec<RecordingWithListens>) -> String {
+    pub async fn top_recordings(&self, stats: Vec<RecordingWithListens>) -> String {
         let rankings = Ranking::from(stats);
         let rankings =
             rankings.get_ranks(|rec| Reverse(rec.get_time_listened().unwrap_or_default()));
@@ -162,12 +168,7 @@ impl YimReport {
             .collect_vec();
 
         let table = TopTablePrinter::builder()
-            .columns(vec![
-                TopColumnType::Rank,
-                TopColumnType::ListenDuration,
-                TopColumnType::ListenCount,
-                TopColumnType::Title,
-            ])
+            .columns(self.get_top_columns())
             .sorted_column(TopColumnType::ListenDuration)
             .sort_order(TopColumnSort::Desc)
             .build();

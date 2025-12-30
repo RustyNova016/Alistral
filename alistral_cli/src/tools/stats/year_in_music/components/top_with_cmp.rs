@@ -26,7 +26,7 @@ impl YimReport {
         [top_release_groups_with_cmp]   [ReleaseGroupWithReleasesCollection];
         [top_labels_with_cmp]           [LabelWithReleasesCollection];
     )]
-    pub async fn method(mut stats: stat_type, mut prev: stat_type) -> String {
+    pub async fn method(&self, mut stats: stat_type, mut prev: stat_type) -> String {
         // Get all the entities
         let entities = stats
             .iter()
@@ -77,16 +77,23 @@ impl YimReport {
             .collect_vec();
 
         let table = TopTablePrinter::builder()
-            .columns(vec![
-                TopColumnType::Rank,
-                TopColumnType::ListenDuration,
-                TopColumnType::ListenCount,
-                TopColumnType::Title,
-            ])
+            .columns(self.get_top_columns())
             .sorted_column(TopColumnType::ListenDuration)
             .sort_order(TopColumnSort::Desc)
             .build();
 
         table.format_n_rows(rows, 20).await
+    }
+
+    pub fn get_top_columns(&self) -> Vec<TopColumnType> {
+        let mut cols = vec![TopColumnType::Rank, TopColumnType::ListenDuration];
+
+        if self.listen_counts {
+            cols.push(TopColumnType::ListenCount);
+        }
+
+        cols.push(TopColumnType::Title);
+
+        cols
     }
 }

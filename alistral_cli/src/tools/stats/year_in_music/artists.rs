@@ -22,7 +22,7 @@ impl YimReport {
             writeln!(
                 out,
                 "{}",
-                Self::top_artists_with_cmp(stats.clone(), prev.clone()).await
+                self.top_artists_with_cmp(stats.clone(), prev.clone()).await
             )
             .unwrap();
         }
