@@ -920,7 +920,7 @@ A recap of the year's statistics
 
 ###### **Options:**
 
-* `--listen-counts`
+* `--listen-counts` — Show the listen counts of the entities as well
 
 
 
