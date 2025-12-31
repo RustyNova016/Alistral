@@ -221,17 +221,18 @@ checksum = "a23eb6b1614318a8071c9b2521f36b424b2c83db5eb3a0fead4a6c0809af6e61"
 [[package]]
 name = "api_bindium"
 version = "0.1.0"
-source = "git+https://github.com/RustyNova016/api_bindium?rev=d7e9738b55c8d0a11644663b1c1088447ce16122#d7e9738b55c8d0a11644663b1c1088447ce16122"
+source = "git+https://github.com/RustyNova016/api_bindium?rev=76ed9d777fe42c09c0446fd5deb6010560a4f67f#76ed9d777fe42c09c0446fd5deb6010560a4f67f"
 dependencies = [
  "async-io",
  "blocking",
  "bon",
  "governor",
- "serde",
+ "serde_core",
  "serde_json",
  "snafu",
  "tracing",
  "ureq",
+ "url-escape",
 ]
 
 [[package]]
@@ -2416,7 +2417,7 @@ dependencies = [
 [[package]]
 name = "listenbrainz_rs"
 version = "0.1.0"
-source = "git+https://github.com/RustyNova016/listenbrainz_rs?rev=14c1a52bc8cf62d3e867c944725d95b4826d563d#14c1a52bc8cf62d3e867c944725d95b4826d563d"
+source = "git+https://github.com/RustyNova016/listenbrainz_rs?rev=e793fb35f7a5ef276ffad99ffb8d8b5c1e013248#e793fb35f7a5ef276ffad99ffb8d8b5c1e013248"
 dependencies = [
  "api_bindium",
  "async-executor",
@@ -2427,7 +2428,6 @@ dependencies = [
  "snafu",
  "tracing",
  "tracing-indicatif",
- "ureq",
 ]
 
 [[package]]
@@ -4902,6 +4902,15 @@ dependencies = [
  "idna",
  "percent-encoding",
  "serde",
+]
+
+[[package]]
+name = "url-escape"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "44e0ce4d1246d075ca5abec4b41d33e87a6054d08e2366b63205665e950db218"
+dependencies = [
+ "percent-encoding",
 ]
 
 [[package]]
