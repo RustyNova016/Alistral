@@ -5,7 +5,7 @@ The latest build can be found in the [release](https://github.com/RustyNova016/a
 
 ## Manual build
 
-Manual builds require rust > 1.85.0 and openssl
+Manual builds require rust > 1.89.0 and openssl
 
 Manually build with:
 
@@ -15,8 +15,10 @@ cd ./alistral
 # Get the latest stable release (ignore this line for the beta builds)
 git checkout $(git describe --tags $(git rev-list --tags --max-count=1))
 export SQLX_OFFLINE=true
-cargo build --release
+cargo build --features full --release
 ```
+
+*Note: Prefer `--features full` over `--all-features` as it removes debug code*
 
 ## Packages:
 
