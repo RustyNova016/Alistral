@@ -29,4 +29,4 @@ tokio = "1.45.1"
 sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "ecdfec3c83c610dbe6f69dd2b19447acbc895287"}
 tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c8656a4eedb571177a8ffa3b9984e78"}
 musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "60ab4d48a6898cc2fc8e0b6fc9fb774c64cfe8d2"}
-listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "14c1a52bc8cf62d3e867c944725d95b4826d563d" }
+listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "e793fb35f7a5ef276ffad99ffb8d8b5c1e013248" }
