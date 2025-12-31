@@ -61,7 +61,9 @@ impl StatsYIMCommand {
         println!(
             "This may take a long time. Run it in the background and come back later. Progress is saved if the app is closed"
         );
-        println!("You can also check out options to personalise your report here: https://rustynova016.github.io/Alistral/CommandLineHelp.html#alistral-stats-yim");
+        println!(
+            "You can also check out options to personalise your report here: https://rustynova016.github.io/Alistral/CommandLineHelp.html#alistral-stats-yim"
+        );
         println!();
 
         let stats = ALISTRAL_CLIENT.statistics_of_user(username).await;

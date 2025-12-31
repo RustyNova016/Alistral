@@ -1,4 +1,3 @@
-
 use musicbrainz_db_lite::models::musicbrainz::MusicbrainzFormater;
 use tuillez::formatter::FormatWithAsyncDyn;
 
