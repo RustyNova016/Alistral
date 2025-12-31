@@ -94,7 +94,7 @@ impl YimReport {
             let listen_count: usize = previous.iter().map(|rec| rec.listen_count()).sum();
             writeln!(
                 out,
-                "Which is less than last year's {track_count} discoveries ({listen_count} listens)"
+                "Which is less than last year's {track_count} new releases ({listen_count} listens)"
             )
             .unwrap();
         }
