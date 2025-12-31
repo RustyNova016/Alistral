@@ -2,6 +2,118 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.6.4] - 2025-12-31
+
+### 🚀 Features
+
+- Show total minutes in yim
+- Isolate youtube feature
+- Add subsonic support
+- Export radio to subsonic
+- Playlist export to subsonic
+- Add subsonic to interzic commands
+- Added listen count column to yim
+- Toggle listencount in tops
+- Migrate other fields of row
+- Fix installation instruction to add the `full` flag
+
+### 🐛 Bug Fixes
+
+- Listen progress bar
+- Missing isrc lint not refreshing data
+- Discovery Percent seems wrong again
+- Missing feature gate
+- Fix wording in new release report
+
+### ⚙️ Miscellaneous Tasks
+
+- Format
+- Fix clippy lints
+
+## [0.6.3] - 2025-12-06
+
+### 🚀 Features
+
+- Add comparisons to tops
+- Deleted entities crash fetching
+
+### 🐛 Bug Fixes
+
+- Division by zero in graph
+
+### 💼 Other
+
+- Discoveries having wrong stats
+
+### ⚙️ Miscellaneous Tasks
+
+- Bump hotpath
+- Update lb_rs
+
+## [0.6.2] - 2025-12-03
+
+### 🐛 Bug Fixes
+
+- Yim top
+
+### ⚙️ Miscellaneous Tasks
+
+- V0.6.2
+
+## [0.6.1] - 2025-12-03
+
+### 🚀 Features
+
+- Lookup User: Add Duration Listened
+- Today in history missing some recordings
+- Add `first_release_date` or fetch or check_releases
+- Convert release groups stats to new system
+- Added releases to listen stats
+- Add labels to user data
+- Use dyn compatible format with async
+- New top printer
+- New releases of the year
+- Top recordings
+- Artist stats
+- Added release ghroup stat compiling
+- Discoveries page
+- Month recap
+- Month lookup
+- Added previous year to monthly recap
+- Label recap
+- Added progress bar to YIM
+- Add most listened hour
+
+### 🐛 Bug Fixes
+
+- Duplicate recording in recording iter
+- Processed clippy lints not accepting urls
+- No listen years
+
+### 💼 Other
+
+- Added channels-console
+- Implemented new listen fetcher
+- Rename function
+
+### 🚜 Refactor
+
+- Update mb_rs on beta
+- Moved listen fetching to listenbrainz_rs
+- Removed old lb client from mb rs
+
+### ⚙️ Miscellaneous Tasks
+
+- Cargo fmt
+- Sqlx prepare
+- Ci fixes
+- Fix tests
+- Remove hotpath features from clippy hack check
+- Fix minimal version
+- Update LB_RS
+- Cleanup the code
+- Release v0.6.1
+
 ## [0.6.0] - 2025-10-13
 
 ### 🚀 Features
@@ -65,6 +177,7 @@ All notable changes to this project will be documented in this file.
 - Update major deps
 - Fix ci for caching
 - Fix min_version ci
+- Release v0.6.0
 
 ## [0.5.14] - 2025-09-01
 
