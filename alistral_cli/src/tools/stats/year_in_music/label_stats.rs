@@ -22,7 +22,7 @@ impl YimReport {
             writeln!(
                 out,
                 "{}",
-                Self::top_labels_with_cmp(stats.clone(), prev.clone()).await
+                self.top_labels_with_cmp(stats.clone(), prev.clone()).await
             )
             .unwrap();
         }

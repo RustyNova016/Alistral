@@ -22,7 +22,8 @@ impl YimReport {
             writeln!(
                 out,
                 "{}",
-                Self::top_release_groups_with_cmp(stats.clone(), prev.clone()).await
+                self.top_release_groups_with_cmp(stats.clone(), prev.clone())
+                    .await
             )
             .unwrap();
         }

@@ -79,7 +79,8 @@ impl YimReport {
         writeln!(
             out,
             "{}",
-            Self::top_recordings_with_cmp(stats.to_owned(), prev_month.to_owned()).await
+            self.top_recordings_with_cmp(stats.to_owned(), prev_month.to_owned())
+                .await
         )
         .unwrap();
 

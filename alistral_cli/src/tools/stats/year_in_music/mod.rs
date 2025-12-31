@@ -2,6 +2,7 @@ use core::cmp::Reverse;
 
 use alistral_core::datastructures::entity_with_listens::recording::RecordingWithListens;
 use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime as _;
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use alistral_core::models::listen_statistics_data::ListenStatisticsData;
 use chrono::DateTime;
 use chrono::Datelike;
@@ -13,9 +14,12 @@ use itertools::Itertools as _;
 use sequelles::datastructures::ranking::Ranking;
 
 use crate::ALISTRAL_CLIENT;
-use crate::models::datastructures::tops::printer::TopPrinter;
+use crate::datastructures::formaters::human_time::HumanTimePrinter;
+use crate::models::datastructures::tops::printer::top_cell::TopCell;
+use crate::models::datastructures::tops::printer::top_columns::TopColumnSort;
+use crate::models::datastructures::tops::printer::top_columns::TopColumnType;
 use crate::models::datastructures::tops::printer::top_row::TopRow;
-use crate::models::datastructures::tops::top_score::TopScore;
+use crate::models::datastructures::tops::printer::top_table_printer::TopTablePrinter;
 use crate::tools::stats::year_in_music::stats::YimReportData;
 use crate::utils::cli::await_next;
 use crate::utils::user_inputs::UserInputParser;
@@ -40,6 +44,10 @@ pub struct StatsYIMCommand {
 
     /// Name of the user
     username: Option<String>,
+
+    /// Show the listen counts of the entities as well
+    #[arg(long)]
+    listen_counts: bool,
 }
 
 impl StatsYIMCommand {
@@ -51,13 +59,16 @@ impl StatsYIMCommand {
         println!();
         println!("Please wait while we fetch your data...");
         println!(
-            "(This may take a long time. Run it in the background and come back later. Progress is saved if the app is closed)"
+            "This may take a long time. Run it in the background and come back later. Progress is saved if the app is closed"
+        );
+        println!(
+            "You can also check out options to personalise your report here: https://rustynova016.github.io/Alistral/CommandLineHelp.html#alistral-stats-yim"
         );
         println!();
 
         let stats = ALISTRAL_CLIENT.statistics_of_user(username).await;
 
-        let report = YimReport::new(year, stats);
+        let report = YimReport::new(year, stats, self.listen_counts);
         report.data.prefetch().await;
         report.print().await;
     }
@@ -69,11 +80,13 @@ struct YimReport {
     year_start: DateTime<Local>,
     year_end: DateTime<Local>,
 
+    listen_counts: bool,
+
     data: YimReportData,
 }
 
 impl YimReport {
-    pub fn new(year: i32, full_user_stats: ListenStatisticsData) -> Self {
+    pub fn new(year: i32, full_user_stats: ListenStatisticsData, listen_counts: bool) -> Self {
         let year_start =
             NaiveDateTime::parse_from_str(&format!("{}-01-01 00:00:00", year), "%Y-%m-%d %H:%M:%S")
                 .unwrap()
@@ -98,6 +111,7 @@ impl YimReport {
             year_end,
             year_start,
             data,
+            listen_counts,
         }
     }
 
@@ -140,7 +154,7 @@ impl YimReport {
         println!("That's all folks! See you next year (Or anytime you want)!");
     }
 
-    pub async fn top_recordings(stats: Vec<RecordingWithListens>) -> String {
+    pub async fn top_recordings(&self, stats: Vec<RecordingWithListens>) -> String {
         let rankings = Ranking::from(stats);
         let rankings =
             rankings.get_ranks(|rec| Reverse(rec.get_time_listened().unwrap_or_default()));
@@ -148,14 +162,25 @@ impl YimReport {
         let rows = rankings
             .into_iter()
             .map(|(rank, rec)| TopRow {
-                ranking: rank + 1,
-                score: TopScore::TimeDelta(rec.get_time_listened().unwrap_or_default()),
                 element: Box::new(rec.recording().clone()),
-                previous_ranking: None,
-                previous_score: None,
+                ranking: Some(TopCell::new(Some(rank + 1), None, false)),
+
+                listen_duration: Some(TopCell::new(
+                    Some(HumanTimePrinter::from(rec.get_time_listened())),
+                    None,
+                    false,
+                )),
+
+                listen_count: Some(TopCell::new(Some(rec.listen_count()), None, false)),
             })
             .collect_vec();
 
-        TopPrinter::format_n_rows(rows, 20).await
+        let table = TopTablePrinter::builder()
+            .columns(self.get_top_columns())
+            .sorted_column(TopColumnType::ListenDuration)
+            .sort_order(TopColumnSort::Desc)
+            .build();
+
+        table.format_n_rows(rows, 20).await
     }
 }
