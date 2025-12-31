@@ -10,12 +10,12 @@ use duplicate::duplicate_item;
 use itertools::Itertools as _;
 use sequelles::datastructures::ranking::Ranking;
 
+use crate::datastructures::formaters::human_time::HumanTimePrinter;
 use crate::models::datastructures::tops::printer::top_cell::TopCell;
 use crate::models::datastructures::tops::printer::top_columns::TopColumnSort;
 use crate::models::datastructures::tops::printer::top_columns::TopColumnType;
 use crate::models::datastructures::tops::printer::top_row::TopRow;
 use crate::models::datastructures::tops::printer::top_table_printer::TopTablePrinter;
-use crate::models::datastructures::tops::top_score::TopScore;
 use crate::tools::stats::year_in_music::YimReport;
 
 impl YimReport {
@@ -57,16 +57,25 @@ impl YimReport {
                     .iter()
                     .find(|prev| prev.1.entity().mbid == rec.entity().mbid);
 
-                let previous_score = prev.as_ref().map(|(_, rec)| {
-                    TopScore::TimeDelta(rec.get_time_listened().unwrap_or_default())
-                });
+                let previous_score = prev
+                    .as_ref()
+                    .map(|(_, rec)| rec.get_time_listened().unwrap_or_default());
 
                 TopRow {
-                    ranking: rank + 1,
-                    score: TopScore::TimeDelta(rec.get_time_listened().unwrap_or_default()),
                     element: Box::new(rec.entity().clone()),
-                    previous_ranking: prev.as_ref().map(|(rank, _)| rank + 1),
-                    previous_score,
+
+                    ranking: Some(TopCell::new(
+                        Some(rank + 1),
+                        prev.as_ref().map(|(rank, _)| rank + 1),
+                        true,
+                    )),
+
+                    listen_duration: Some(TopCell::new(
+                        Some(HumanTimePrinter::from(rec.get_time_listened())),
+                        Some(HumanTimePrinter::from(previous_score)),
+                        true,
+                    )),
+
                     listen_count: Some(TopCell::new(
                         Some(rec.listen_count()),
                         prev.as_ref().map(|prev| prev.1.listen_count()),

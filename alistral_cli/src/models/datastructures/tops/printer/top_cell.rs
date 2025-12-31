@@ -15,7 +15,7 @@ pub struct TopCell<T> {
 
 impl<T> TopCell<T>
 where
-    T: Default + Ord + Clone + Display,
+    T: Default + Clone + Display,
 {
     pub fn new(current: Option<T>, previous: Option<T>, show_prev: bool) -> TopCell<T> {
         Self {

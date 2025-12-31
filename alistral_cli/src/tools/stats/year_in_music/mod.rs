@@ -14,12 +14,12 @@ use itertools::Itertools as _;
 use sequelles::datastructures::ranking::Ranking;
 
 use crate::ALISTRAL_CLIENT;
+use crate::datastructures::formaters::human_time::HumanTimePrinter;
 use crate::models::datastructures::tops::printer::top_cell::TopCell;
 use crate::models::datastructures::tops::printer::top_columns::TopColumnSort;
 use crate::models::datastructures::tops::printer::top_columns::TopColumnType;
 use crate::models::datastructures::tops::printer::top_row::TopRow;
 use crate::models::datastructures::tops::printer::top_table_printer::TopTablePrinter;
-use crate::models::datastructures::tops::top_score::TopScore;
 use crate::tools::stats::year_in_music::stats::YimReportData;
 use crate::utils::cli::await_next;
 use crate::utils::user_inputs::UserInputParser;
@@ -45,6 +45,7 @@ pub struct StatsYIMCommand {
     /// Name of the user
     username: Option<String>,
 
+    /// Show the listen counts of the entities as well
     #[arg(long)]
     listen_counts: bool,
 }
@@ -58,8 +59,9 @@ impl StatsYIMCommand {
         println!();
         println!("Please wait while we fetch your data...");
         println!(
-            "(This may take a long time. Run it in the background and come back later. Progress is saved if the app is closed)"
+            "This may take a long time. Run it in the background and come back later. Progress is saved if the app is closed"
         );
+        println!("You can also check out options to personalise your report here: https://rustynova016.github.io/Alistral/CommandLineHelp.html#alistral-stats-yim");
         println!();
 
         let stats = ALISTRAL_CLIENT.statistics_of_user(username).await;
@@ -158,11 +160,15 @@ impl YimReport {
         let rows = rankings
             .into_iter()
             .map(|(rank, rec)| TopRow {
-                ranking: rank + 1,
-                score: TopScore::TimeDelta(rec.get_time_listened().unwrap_or_default()),
                 element: Box::new(rec.recording().clone()),
-                previous_ranking: None,
-                previous_score: None,
+                ranking: Some(TopCell::new(Some(rank + 1), None, false)),
+
+                listen_duration: Some(TopCell::new(
+                    Some(HumanTimePrinter::from(rec.get_time_listened())),
+                    None,
+                    false,
+                )),
+
                 listen_count: Some(TopCell::new(Some(rec.listen_count()), None, false)),
             })
             .collect_vec();

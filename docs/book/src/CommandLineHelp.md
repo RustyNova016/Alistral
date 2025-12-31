@@ -20,6 +20,7 @@ This document contains the help content for the `alistral` command-line program.
 * [`alistral config default-user`↴](#alistral-config-default-user)
 * [`alistral daily`↴](#alistral-daily)
 * [`alistral interzic`↴](#alistral-interzic)
+* [`alistral interzic add-subsonic`↴](#alistral-interzic-add-subsonic)
 * [`alistral interzic get-mapping`↴](#alistral-interzic-get-mapping)
 * [`alistral interzic reload`↴](#alistral-interzic-reload)
 * [`alistral interzic reverse-mapping`↴](#alistral-interzic-reverse-mapping)
@@ -299,6 +300,7 @@ A CLI app containing a set of useful tools for Listenbrainz
 
 ###### **Subcommands:**
 
+* `add-subsonic` — Add a subsonic client
 * `get-mapping` — Fetch the id of a recording on an external service
 * `reload` — Reload recording data from Musicbrainz
 * `reverse-mapping` — Get the recording mapped to this id
@@ -306,21 +308,37 @@ A CLI app containing a set of useful tools for Listenbrainz
 
 
 
+## `alistral interzic add-subsonic`
+
+Add a subsonic client
+
+**Usage:** `alistral interzic add-subsonic <NAME> <URL> <USERNAME> <PASSWORD>`
+
+###### **Arguments:**
+
+* `<NAME>` — The name of this instance
+* `<URL>` — The url of the instance
+* `<USERNAME>` — The username of the instance user's
+* `<PASSWORD>` — The password of the user
+
+
+
 ## `alistral interzic get-mapping`
 
 Fetch the id of a recording on an external service
 
-**Usage:** `alistral interzic get-mapping [OPTIONS] <TARGET>`
+**Usage:** `alistral interzic get-mapping [OPTIONS] --instance <INSTANCE> <TARGET>`
 
 ###### **Arguments:**
 
 * `<TARGET>` — Get the mapping of which service?
 
-  Possible values: `youtube`
+  Possible values: `youtube`, `subsonic`
 
 
 ###### **Options:**
 
+* `--instance <INSTANCE>` — The name of the subsonic/listenbrainz instance to send the playlist to
 * `-r`, `--recording <RECORDING>` — The title of the recording
 * `-a`, `--artist <ARTIST>` — The artist credit
 * `-g`, `--release <RELEASE>` — The title of the release
@@ -345,16 +363,20 @@ Reload recording data from Musicbrainz
 
 Get the recording mapped to this id
 
-**Usage:** `alistral interzic reverse-mapping <SOURCE> <ID> [USER]`
+**Usage:** `alistral interzic reverse-mapping --instance <INSTANCE> <SOURCE> <ID> [USER]`
 
 ###### **Arguments:**
 
 * `<SOURCE>` — Get the mapping of which service?
 
-  Possible values: `youtube`
+  Possible values: `youtube`, `subsonic`
 
 * `<ID>` — The id on the external service
 * `<USER>` — Search the mapping of this user
+
+###### **Options:**
+
+* `--instance <INSTANCE>` — The name of the subsonic/listenbrainz instance to send the playlist to
 
 
 
@@ -362,19 +384,20 @@ Get the recording mapped to this id
 
 Overwrite a mapping for an user
 
-**Usage:** `alistral interzic overwrite [OPTIONS] <TARGET> <USER> <ID>`
+**Usage:** `alistral interzic overwrite [OPTIONS] --instance <INSTANCE> <TARGET> <USER> <ID>`
 
 ###### **Arguments:**
 
 * `<TARGET>` — Set the mapping of this service
 
-  Possible values: `youtube`
+  Possible values: `youtube`, `subsonic`
 
 * `<USER>` — Set the mapping of this user
 * `<ID>` — The id on the external service
 
 ###### **Options:**
 
+* `--instance <INSTANCE>` — The name of the subsonic/listenbrainz instance to send the playlist to
 * `-r`, `--recording <RECORDING>` — The title of the recording
 * `-a`, `--artist <ARTIST>` — The artist credit
 * `-g`, `--release <RELEASE>` — The title of the release
@@ -657,7 +680,7 @@ Interact with playlists
 
 Convert a playlist from one service to another
 
-**Usage:** `alistral playlist convert <SOURCE> <ID> <TARGET> [USER]`
+**Usage:** `alistral playlist convert [OPTIONS] <SOURCE> <ID> <TARGET> [USER]`
 
 ###### **Arguments:**
 
@@ -668,9 +691,15 @@ Convert a playlist from one service to another
 * `<ID>` — The id of the playlist on the external service
 * `<TARGET>` — Convert to this service
 
-  Possible values: `youtube`
+  Possible values: `youtube`, `subsonic`
 
 * `<USER>` — Use the mapping of this user
+
+###### **Options:**
+
+* `-i`, `--instance <INSTANCE>`
+
+  Default value: ``
 
 
 
@@ -678,7 +707,7 @@ Convert a playlist from one service to another
 
 Generate radio playlists for you
 
-**Usage:** `alistral radio [OPTIONS] <COMMAND>`
+**Usage:** `alistral radio [OPTIONS] --instance <INSTANCE> <COMMAND>`
 
 ###### **Subcommands:**
 
@@ -707,8 +736,9 @@ Generate radio playlists for you
 
   Default value: `listenbrainz`
 
-  Possible values: `listenbrainz`, `youtube`
+  Possible values: `listenbrainz`, `youtube`, `subsonic`
 
+* `--instance <INSTANCE>` — The name of the subsonic/listenbrainz instance to send the playlist to
 
 
 
@@ -881,12 +911,16 @@ Retrieve the top listened entities
 
 A recap of the year's statistics
 
-**Usage:** `alistral stats yim [YEAR] [USERNAME]`
+**Usage:** `alistral stats yim [OPTIONS] [YEAR] [USERNAME]`
 
 ###### **Arguments:**
 
 * `<YEAR>` — What year to target
 * `<USERNAME>` — Name of the user
+
+###### **Options:**
+
+* `--listen-counts`
 
 
 
