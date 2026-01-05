@@ -64,7 +64,7 @@ jobs:
                       override: true
 
                   - name: Build
-                    run: cargo build --features full--release    
+                    run: cargo build --features full --release    
 
                   - name: Rename
                     run: mv target/release/alistral.exe target/release/alistral-windows.exe
