@@ -61,7 +61,7 @@ hotpath-alloc = ["hotpath/hotpath-alloc"]
 hotpath-off = ["hotpath/hotpath-off"]
 
 [dev-dependencies]
-serial_test = "3.1.1"
+serial_test = "3.3.1"
 
 [patch.crates-io]
 sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "ecdfec3c83c610dbe6f69dd2b19447acbc895287"}
