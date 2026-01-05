@@ -33,7 +33,7 @@ jobs:
                         override: true
 
                   - name: Build
-                    run: cargo build --all --release
+                    run: cargo build --features full --release
 
                   - name: Rename
                     run: mv target/release/alistral target/release/alistral-linux
@@ -64,7 +64,7 @@ jobs:
                       override: true
 
                   - name: Build
-                    run: cargo build --all --release    
+                    run: cargo build --features full--release    
 
                   - name: Rename
                     run: mv target/release/alistral.exe target/release/alistral-windows.exe
@@ -95,7 +95,7 @@ jobs:
                       override: true
 
                   - name: Build
-                    run: cargo build --all --release    
+                    run: cargo build --features full --release    
 
                   - name: Rename
                     run: mv target/release/alistral target/release/alistral-macos
