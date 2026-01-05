@@ -68,12 +68,19 @@ impl TopTablePrinter {
         table_model
     }
 
-    pub async fn format_n_rows(&self, mut rows: Vec<TopRow>, count: usize) -> String {
+    pub async fn format_n_rows(&self, rows: Vec<TopRow>, count: usize) -> String {
         let mut table = self.create_table();
+        let mut printed_rows = Vec::with_capacity(count);
 
-        let _ = rows.split_off(count);
+        for (i, row) in rows.into_iter().enumerate() {
+            if i == count {
+                break;
+            }
 
-        self.add_vec(&mut table, rows).await;
+            printed_rows.push(row);
+        }
+
+        self.add_vec(&mut table, printed_rows).await;
 
         table.to_string()
     }
