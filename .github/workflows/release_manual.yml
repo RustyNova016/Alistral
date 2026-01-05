@@ -17,7 +17,7 @@ jobs:
             env: 
               SQLX_OFFLINE: true
             name: Create Release Linux
-            runs-on: ubuntu-latest
+            runs-on: ubuntu-22.04 # Prevent building on the latest GLIBC. There's not really a need to, and Debian 12 users are still behind
             strategy:
                   fail-fast: false
             needs: get-tag
@@ -31,7 +31,7 @@ jobs:
                         override: true
 
                   - name: Build
-                    run: cargo build --all --release
+                    run: cargo build --features full --release
 
                   - name: Rename
                     run: mv target/release/alistral target/release/alistral-linux
@@ -62,7 +62,7 @@ jobs:
                       override: true
 
                   - name: Build
-                    run: cargo build --all --release    
+                    run: cargo build --features full --release    
 
                   - name: Rename
                     run: mv target/release/alistral.exe target/release/alistral-windows.exe
@@ -93,7 +93,7 @@ jobs:
                       override: true
 
                   - name: Build
-                    run: cargo build --all --release    
+                    run: cargo build --features full --release    
 
                   - name: Rename
                     run: mv target/release/alistral target/release/alistral-macos
