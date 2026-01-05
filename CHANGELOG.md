@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.6.5] - 2026-01-05
+
+### 🚀 Features
+
+- Top table crash if there's less than 20 items to display
+
+### 🐛 Bug Fixes
+
+- Build release on features full
+
 ## [0.6.4] - 2025-12-31
 
 ### 🚀 Features
@@ -29,6 +39,8 @@ All notable changes to this project will be documented in this file.
 
 - Format
 - Fix clippy lints
+- Update listenbrainz_rs
+- Release v0.6.4
 
 ## [0.6.3] - 2025-12-06
 
