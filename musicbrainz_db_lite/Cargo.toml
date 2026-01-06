@@ -12,7 +12,7 @@ serde = "1.0.228"
 const_format = { version = "0.2.34" , features = ["rust_1_51", "rust_1_64", "assertcp"] }
 #reqwest = { version = "0.12.12", features = ["json"] }
 regex = "1.11.3"
-url = "2.5.4"
+url = "2.5.8"
 
 # Musicbrainz
 musicbrainz_rs = { version = "0.12.0", package = "musicbrainz_rs"  }
