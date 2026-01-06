@@ -44,7 +44,7 @@ impl TopRow {
         } else {
             format!(
                 "{} {}",
-                ComparisonArrow::lesser_is_better_inv(&cell.current, &cell.previous),
+                ComparisonArrow::greater_is_better(&cell.current, &cell.previous),
                 cell.format(4, 4)
             )
         }
