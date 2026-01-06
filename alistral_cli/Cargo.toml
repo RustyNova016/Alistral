@@ -37,7 +37,7 @@ sqlx = { version = "0.8.6", features = ["runtime-tokio", "macros"] }
 indoc = "2.0.7"
 strsim = "0.11.1"
 dotenvy = "0.15.7"
-url = "2.5.4"
+url = "2.5.8"
 
 # Async
 futures = "0.3.31"
