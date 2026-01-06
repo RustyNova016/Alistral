@@ -126,3 +126,4 @@ tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c865
 musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "60ab4d48a6898cc2fc8e0b6fc9fb774c64cfe8d2"}
 listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "e793fb35f7a5ef276ffad99ffb8d8b5c1e013248" }
 submarine = { git = "https://github.com/RustyNova016/submarine", rev = "15c6f5e07724af5d037708baa6e20c937eeb324b" }
+zip = { git = "https://github.com/RustyNova016/zip2", rev=  "4ebae293241d41249f3dd2283e9cc98899d42e33" }
