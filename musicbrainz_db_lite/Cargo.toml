@@ -10,7 +10,6 @@ serde_json = "1.0.148"
 itertools = "0.14.0"
 serde = "1.0.228"
 const_format = { version = "0.2.34" , features = ["rust_1_51", "rust_1_64", "assertcp"] }
-#reqwest = { version = "0.12.12", features = ["json"] }
 regex = "1.11.3"
 url = "2.5.4"
 
@@ -22,7 +21,7 @@ listenbrainz_rs = { version = "0.1.0", features = ["async", "rate_limit", "traci
 # Async
 streamies = "0.2.2"
 futures = "0.3.31"
-tokio = { version = "1.49.0", features = [] }
+tokio = { version = "1.47.0", features = [] }
 async-fn-stream = "0.3.0"
 
 # Databasing
@@ -61,7 +60,7 @@ hotpath-alloc = ["hotpath/hotpath-alloc"]
 hotpath-off = ["hotpath/hotpath-off"]
 
 [dev-dependencies]
-serial_test = "3.1.1"
+serial_test = "3.3.1"
 
 [patch.crates-io]
 sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "ecdfec3c83c610dbe6f69dd2b19447acbc895287"}
