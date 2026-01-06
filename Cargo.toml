@@ -29,6 +29,8 @@ musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = 
 
 submarine = { git = "https://github.com/RustyNova016/submarine", rev = "15c6f5e07724af5d037708baa6e20c937eeb324b" }
 
+zip = { git = "https://github.com/RustyNova016/zip2", rev=  "4ebae293241d41249f3dd2283e9cc98899d42e33" }
+
 [workspace.lints.rust]
 unsafe_code = "forbid"
 
