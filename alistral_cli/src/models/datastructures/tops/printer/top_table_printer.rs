@@ -14,6 +14,9 @@ pub struct TopTablePrinter {
 
     #[builder(default = TopColumnSort::Desc)]
     sort_order: TopColumnSort,
+
+    #[builder(default = false)]
+    show_durations: bool,
 }
 
 impl TopTablePrinter {
@@ -29,7 +32,7 @@ impl TopTablePrinter {
         for col in &self.columns {
             match col {
                 TopColumnType::Rank => new_row.push(row.rank_col()),
-                TopColumnType::Title => new_row.push(row.element_col().await),
+                TopColumnType::Title => new_row.push(row.element_col(self.show_durations).await),
                 TopColumnType::ListenCount => new_row.push(row.listen_col(5, 5)),
                 TopColumnType::ListenDuration => new_row.push(row.score_col()),
             }
