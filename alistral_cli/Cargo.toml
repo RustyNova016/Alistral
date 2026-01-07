@@ -27,7 +27,7 @@ rust_decimal = "1.39.0"
 rust_decimal_macros = "1.39.0"
 chrono = "0.4.42"
 serde = { version = "1.0.228", features = ["rc"] }
-serde_json = "1.0.148"
+serde_json = "1.0.149"
 extend = "1.2.0"
 directories = "6.0.0"
 reqwest = { version = "0.12.28", features = ["json"] }
