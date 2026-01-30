@@ -8,6 +8,10 @@ use crate::models::musicbrainz::user::User;
 
 use super::Listen;
 
+pub mod error;
+pub mod get_or_fetch;
+pub mod listen_query;
+
 #[derive(Debug, Default)]
 pub enum ListenMappingFilter {
     Mapped,
@@ -36,23 +40,12 @@ impl Listen {
         conn: &mut SqliteConnection,
         user: &str,
     ) -> Result<Vec<Listen>, sqlx::Error> {
-        sqlx::query_as!(
-            Listen,
-            "
-        SELECT 
-            listens.*
-        FROM
-            users
-            INNER JOIN listens ON users.name = listens.user
-            INNER JOIN msid_mapping ON listens.recording_msid = msid_mapping.recording_msid
-        WHERE
-            LOWER(msid_mapping.user) = users.id
-            AND 
-            LOWER(listens.user) = LOWER(?)",
-            user
-        )
-        .fetch_all(conn)
-        .await
+        let query = Self::listen_query_string()
+            .mapped(true)
+            .users(&[user])
+            .call();
+
+        sqlx::query_as(&query).fetch_all(conn).await
     }
 
     /// Return the unmapped listens of the user
@@ -60,22 +53,14 @@ impl Listen {
         conn: &mut SqliteConnection,
         user: &str,
     ) -> Result<Vec<Listen>, sqlx::Error> {
-        sqlx::query_as!(
-            Listen,
-            "
-            SELECT 
-                listens.*
-            FROM
-                listens
-                LEFT JOIN msid_mapping ON listens.recording_msid = msid_mapping.recording_msid
-            WHERE
-                msid_mapping.recording_mbid IS NULL
-                AND 
-                LOWER(listens.user) = LOWER(?)",
-            user
-        )
-        .fetch_all(conn)
-        .await
+        let query = Self::listen_query_string()
+            .unmapped(true)
+            .users(&[user])
+            .call();
+
+        println!("{query}");
+
+        sqlx::query_as(&query).fetch_all(conn).await
     }
 
     /// Get the recordings that aren't in the database but got listened by the user

@@ -27,6 +27,7 @@ async-fn-stream = "0.3.0"
 # Databasing
 sequelles = "0.2.0"
 sqlx = { version = "0.8.2", features = ["runtime-tokio", "macros", "sqlite"] }
+sea-query = { version = "0.32.7", default-features = false, features = ["backend-sqlite", "derive"] }
 deadpool = "0.12.3"
 
 # Error handling

@@ -1,6 +1,8 @@
+use sea_query::enum_def;
 use sqlx::{Executor, Sqlite, SqliteConnection};
 
 #[derive(Debug, Clone)]
+#[enum_def(table_name = "msid_mapping")]
 pub struct MsidMapping {
     pub id: i64,
 

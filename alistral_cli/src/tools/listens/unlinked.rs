@@ -1,9 +1,11 @@
 use std::cmp::Reverse;
 
 use alistral_core::datastructures::entity_with_listens::messybrainz::collection::MessybrainzWithListensCollection;
+use alistral_core::datastructures::listen_collection::ListenCollection;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use clap::Parser;
 use itertools::Itertools;
+use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 
 use crate::ALISTRAL_CLIENT;
 use crate::models::cli::common::SortSorterBy;
@@ -46,12 +48,19 @@ impl ListenUnlinkedCommand {
     pub async fn run(&self) {
         let username = UserInputParser::username_or_default(&self.username);
         let conn = &mut *ALISTRAL_CLIENT.get_conn().await;
-        let stats = ALISTRAL_CLIENT.statistics_of_user(username.clone()).await;
-        let listens = stats.listens();
+
+        let listens = Listen::get_or_fetch_listens()
+            .client(&ALISTRAL_CLIENT.musicbrainz_db)
+            .incremental(true)
+            .unmapped(true)
+            .users(&[&username])
+            .call()
+            .await
+            .unwrap();
 
         let unlinkeds = MessybrainzWithListensCollection::from_listencollection_default(
             conn,
-            listens.to_owned(),
+            ListenCollection::new(listens),
         )
         .await
         .expect("Couldn't associate the listen to their messybrainz data");
