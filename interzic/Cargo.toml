@@ -27,7 +27,7 @@ submarine = { version = "0.1.1", optional = true, features = ["navidrome"] }
 # --- Other crates ---
 regex = "1.11.3"
 sqlx = "0.8.2"
-thiserror = "2.0.3"
+thiserror = "2.0.18"
 governor = "0.10.2"
 serde = "1.0.228"
 serde_json = "1.0.148"

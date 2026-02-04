@@ -60,7 +60,7 @@ charchart = {version = "0.1.0", git = "https://github.com/RustyNova016/charchart
 
 # Error handling
 color-eyre = "0.6.5"
-thiserror = "2.0.17"
+thiserror = "2.0.18"
 snafu = { version = "0.8.9", features = ["rust_1_81", "backtrace"] }
 
 # Macros
