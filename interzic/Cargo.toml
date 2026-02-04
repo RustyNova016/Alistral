@@ -25,7 +25,7 @@ google-youtube3 = { version = "6.0.0", optional = true }
 submarine = { version = "0.1.1", optional = true, features = ["navidrome"] }
 
 # --- Other crates ---
-regex = "1.11.3"
+regex = "1.12.3"
 sqlx = "0.8.2"
 thiserror = "2.0.3"
 governor = "0.10.2"
