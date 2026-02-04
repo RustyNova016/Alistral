@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.6.6] - 2026-02-04
+
+### 🚀 Features
+
+- YIM tables: Listen duration up/down arrows should be swapped
+- RUSTSEC-2026-0001: Potential Undefined Behaviors in `Arc<T>`/`Rc<T>` impls of `from_value` on OOM
+- Added dev flake
+
+### 🐛 Bug Fixes
+
+- Zip with wrong minimum version
+
+### ⚙️ Miscellaneous Tasks
+
+- Fix building on windows
+- Bump dependencies
+- Bump deps
+- Update sub_deps
+- Bump deps
+- Update sub deps
+
 ## [0.6.5] - 2026-01-05
 
 ### 🚀 Features
@@ -11,6 +32,10 @@ All notable changes to this project will be documented in this file.
 ### 🐛 Bug Fixes
 
 - Build release on features full
+
+### ⚙️ Miscellaneous Tasks
+
+- Release v0.6.5
 
 ## [0.6.4] - 2025-12-31
 
