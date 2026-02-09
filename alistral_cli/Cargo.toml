@@ -55,7 +55,7 @@ clap = { version = "4.5.57", features = [
 clap_complete = "4.5.65"
 clap-markdown = "0.1.5"
 clap-verbosity-flag = { version = "3.0.3", default-features = false, features = ["tracing"] }
-inquire = "0.9.2"
+inquire = "0.9.3"
 charchart = {version = "0.1.0", git = "https://github.com/RustyNova016/charchart", rev = "2fab66f30cabb2cbe7c3246a1051e79be15b8f6d"}
 
 # Error handling
