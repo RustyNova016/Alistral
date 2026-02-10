@@ -76,7 +76,7 @@ dependencies = [
  "indoc",
  "inquire",
  "interzic",
- "itertools 0.14.0",
+ "itertools",
  "listenbrainz",
  "musicbrainz-db-lite",
  "rand 0.10.0",
@@ -112,7 +112,7 @@ dependencies = [
  "bon",
  "chrono",
  "futures",
- "itertools 0.14.0",
+ "itertools",
  "musicbrainz-db-lite",
  "owo-colors",
  "rust_decimal",
@@ -211,12 +211,6 @@ dependencies = [
  "once_cell_polyfill",
  "windows-sys 0.61.2",
 ]
-
-[[package]]
-name = "anyhow"
-version = "1.0.100"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a23eb6b1614318a8071c9b2521f36b424b2c83db5eb3a0fead4a6c0809af6e61"
 
 [[package]]
 name = "api_bindium"
@@ -1652,9 +1646,9 @@ checksum = "0cc23270f6e1808e30a928bdc84dea0b9b4136a8bc82338574f23baf47bbd280"
 
 [[package]]
 name = "google-apis-common"
-version = "7.0.0"
+version = "8.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7530ee92a7e9247c3294ae1b84ea98474dbc27563c49a14d3938e816499bf38f"
+checksum = "020dd415ee200770d835d01674084400a4d11e6c108ae941f660e8264f49d4ca"
 dependencies = [
  "base64 0.22.1",
  "chrono",
@@ -1662,7 +1656,6 @@ dependencies = [
  "http-body-util",
  "hyper 1.8.1",
  "hyper-util",
- "itertools 0.13.0",
  "mime",
  "percent-encoding",
  "serde",
@@ -1675,9 +1668,9 @@ dependencies = [
 
 [[package]]
 name = "google-youtube3"
-version = "6.0.0+20240626"
+version = "7.0.0+20251222"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f893ed206b53693b15dd4b8aba4aaa83af5d2dc6f994c654a0dc31284cc18eac"
+checksum = "e22583377376fc9daf9f5ccc344200d3e1bfb9088049177d21dcd71bfde72b19"
 dependencies = [
  "chrono",
  "google-apis-common",
@@ -2375,15 +2368,6 @@ checksum = "a6cb138bb79a146c1bd460005623e142ef0181e3d0219cb493e02f7d08a35695"
 
 [[package]]
 name = "itertools"
-version = "0.13.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "413ee7dfc52ee1a4949ceeb7dbc8a33f2d6c088194d9f922fb8318faf1f01186"
-dependencies = [
- "either",
-]
-
-[[package]]
-name = "itertools"
 version = "0.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2b192c782037fadd9cfa75548310488aabdbf3d2da73885b31bd0abd03351285"
@@ -2672,7 +2656,7 @@ dependencies = [
  "extend",
  "futures",
  "hotpath",
- "itertools 0.14.0",
+ "itertools",
  "listenbrainz",
  "listenbrainz_rs",
  "musicbrainz_rs",
@@ -3401,7 +3385,7 @@ dependencies = [
  "percent-encoding",
  "pin-project-lite",
  "rustls 0.21.12",
- "rustls-pemfile 1.0.4",
+ "rustls-pemfile",
  "serde",
  "serde_json",
  "serde_urlencoded",
@@ -3623,15 +3607,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1c74cae0a4cf6ccbbf5f359f08efdf8ee7e1dc532573bf0db71968cb56b1448c"
 dependencies = [
  "base64 0.21.7",
-]
-
-[[package]]
-name = "rustls-pemfile"
-version = "2.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dce314e5fee3f39953d46bb63bb8a46d40c2f8fb7cc5a3b6cab2bde9721d6e50"
-dependencies = [
- "rustls-pki-types",
 ]
 
 [[package]]
@@ -5814,14 +5789,12 @@ dependencies = [
 
 [[package]]
 name = "yup-oauth2"
-version = "11.0.0"
+version = "12.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4ed5f19242090128c5809f6535cc7b8d4e2c32433f6c6005800bbc20a644a7f0"
+checksum = "ef19a12dfb29fe39f78e1547e1be49717b84aef8762a4001359ed4f94d3accc1"
 dependencies = [
- "anyhow",
  "async-trait",
  "base64 0.22.1",
- "futures",
  "http 1.4.0",
  "http-body-util",
  "hyper 1.8.1",
@@ -5830,10 +5803,10 @@ dependencies = [
  "log",
  "percent-encoding",
  "rustls 0.23.36",
- "rustls-pemfile 2.2.0",
  "seahash",
  "serde",
  "serde_json",
+ "thiserror 2.0.17",
  "time",
  "tokio",
  "url",
