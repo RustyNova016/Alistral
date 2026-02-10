@@ -1,10 +1,10 @@
 use std::sync::Arc;
 
 use async_once_cell::OnceCell;
+use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
+use musicbrainz_db_lite::models::listenbrainz::listen::selects::error::ListenFetchGetError;
 
 use crate::AlistralClient;
-use crate::database::fetching::listens::ListenFetchQuery;
-use crate::database::fetching::listens::ListenFetchQueryReturn;
 use crate::datastructures::entity_with_listens::artist::collection::ArtistWithRecordingsCollection;
 use crate::datastructures::entity_with_listens::label::collection::LabelWithReleasesCollection;
 use crate::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
@@ -58,18 +58,17 @@ impl ListenStatisticsData {
     pub async fn new_from_user_listens(
         client: Arc<AlistralClient>,
         name: String,
-    ) -> Result<Self, crate::Error> {
-        let query = ListenFetchQuery::builder()
-            .user(name)
-            .returns(ListenFetchQueryReturn::Mapped)
-            .fetch_recordings_redirects(false)
-            .build();
-
-        let listens = query
-            .fetch(client.musicbrainz_db.get_conn().await?.as_mut(), &client)
+    ) -> Result<Self, ListenFetchGetError> {
+        let listens = Listen::get_or_fetch_listens()
+            .client(&client.musicbrainz_db)
+            .incremental(true)
+            .users(&[&name])
+            .mapped(true)
+            .unmapped(true)
+            .call()
             .await?;
 
-        Ok(Self::new(client, listens))
+        Ok(Self::new(client, listens.into()))
     }
 
     pub fn client(&self) -> &Arc<AlistralClient> {

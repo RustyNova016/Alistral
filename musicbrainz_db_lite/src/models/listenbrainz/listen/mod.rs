@@ -1,4 +1,5 @@
 use chrono::{DateTime, TimeZone, Utc};
+use sea_query::enum_def;
 use sequelles::has_rowid::HasRowID;
 use serde::Deserialize;
 use serde::Serialize;
@@ -16,6 +17,7 @@ pub mod relations;
 pub mod selects;
 
 #[derive(Debug, PartialEq, Eq, Clone, sqlx::FromRow, Deserialize, Serialize)]
+#[enum_def(table_name = "listens")]
 pub struct Listen {
     pub id: i64,
 

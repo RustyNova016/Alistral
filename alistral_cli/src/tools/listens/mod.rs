@@ -32,6 +32,7 @@ pub enum ListenSubcommands {
     Reload(ListenReloadCommand),
     RemapMsid(ListenRemapMsidCommand),
     Submit(ListenSubmitCommand),
+    #[clap(aliases = &["unmapped"])]
     Unlinked(ListenUnlinkedCommand),
     WrongMapping(ListenWrongMappingCommand),
 }

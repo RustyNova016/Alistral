@@ -1,47 +1,29 @@
-use chrono::Utc;
-use listenbrainz_rs::ListenBrainzAPIEnpoints;
 use listenbrainz_rs::api::user::username::listens::UserListensListen;
 use listenbrainz_rs::api::user::username::listens_reader::ListenFullFetchError;
 use sequelles::databases::sqlite::database::GetConnectionError;
-use snafu::ResultExt;
-use sqlx::Acquire;
 use tracing::instrument;
 use tuillez::pg_counted;
 use tuillez::pg_inc;
 
 use crate::DBClient;
 use crate::error::sqlx_error::SqlxError;
-use crate::error::sqlx_error::SqlxSnafu;
 use crate::models::listenbrainz::listen::Listen;
 
+pub mod full;
 pub mod id;
 pub mod incremental;
 
 impl Listen {
-    /// Fetch and save all the user listens
-    pub async fn fetch_and_insert_full(
+    pub async fn fetch_and_insert(
         client: &DBClient,
         username: &str,
+        incremental: bool,
     ) -> Result<(), ListenFetchingError> {
-        // Get the new listens
-        let listens = ListenBrainzAPIEnpoints::get_user_username_listens_full()
-            .client(&client.listenbrainz_client)
-            .username(username)
-            .call()
-            .await
-            .context(LBApiRequestSnafu)?;
-
-        let conn = &mut *client.database.get_conn().await.context(ConnectionSnafu)?;
-        let mut trans = conn.begin().await.context(SqlxSnafu)?;
-
-        // Remove the old listens
-        Listen::delete_listen_range(&mut trans, 0, Utc::now().timestamp(), username).await?;
-
-        save_listens(listens, &mut trans).await?;
-
-        trans.commit().await.context(SqlxSnafu)?;
-
-        Ok(())
+        if incremental {
+            Self::fetch_and_insert_incremental(client, username).await
+        } else {
+            Self::fetch_and_insert_full(client, username).await
+        }
     }
 }
 
@@ -67,13 +49,24 @@ pub enum ListenFetchingError {
     LBApiRequestError {
         #[cfg_attr(feature = "backtrace", snafu(backtrace))]
         source: ListenFullFetchError,
+
+        #[snafu(implicit)]
+        location: snafu::Location,
     },
 
     ConnectionError {
         #[cfg_attr(feature = "backtrace", snafu(backtrace))]
         source: GetConnectionError,
+
+        #[snafu(implicit)]
+        location: snafu::Location,
     },
 
     #[snafu(transparent)]
-    SqlxError { source: SqlxError },
+    SqlxError {
+        source: SqlxError,
+
+        #[snafu(implicit)]
+        location: snafu::Location,
+    },
 }

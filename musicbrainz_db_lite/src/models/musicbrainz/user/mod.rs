@@ -1,9 +1,11 @@
+use sea_query::enum_def;
 use sequelles::has_rowid::HasRowID;
 use sqlx::SqliteConnection;
 
 use crate::models::shared_traits::has_table::HasTable;
 
 #[derive(Debug, sqlx::FromRow, Clone, PartialEq, Eq)]
+#[enum_def(table_name = "users")]
 pub struct User {
     pub id: i64,
 
