@@ -20,7 +20,7 @@ listenbrainz_rs = { version = "0.1.0", features = ["async", "rate_limit", "traci
 
 # Async
 streamies = "0.2.2"
-futures = "0.3.31"
+futures = "0.3.32"
 tokio = { version = "1.47.0", features = [] }
 async-fn-stream = "0.3.0"
 
