@@ -40,7 +40,7 @@ tuillez = "0.1.0"
 owo-colors = { version = "4.2.1", optional = true}
 
 # Macros
-bon = "3.9.0"
+bon = "3.8.1"
 
 # Debuging
 hotpath = { version = "0.10.0", optional = true, features = ["futures"] }
