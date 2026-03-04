@@ -25,7 +25,7 @@ listenbrainz = { branch = "alistral_version", git = "https://github.com/RustyNov
 itertools = "0.14.0"
 rust_decimal = "1.40.0"
 rust_decimal_macros = "1.40.0"
-chrono = "0.4.42"
+chrono = "0.4.44"
 serde = { version = "1.0.228", features = ["rc"] }
 serde_json = "1.0.149"
 extend = "1.2.0"
@@ -40,10 +40,11 @@ dotenvy = "0.15.7"
 url = "2.5.8"
 
 # Async
-futures = "0.3.31"
+futures = "0.3.32"
 tokio = { version = "1.49.0", features = ["rt", "rt-multi-thread", "parking_lot"] }
 streamies = "0.2.2"
 async-fn-stream = "0.3.2"
+async-once-cell = "0.5.4"
 
 # Cli
 clap = { version = "4.5.60", features = [
@@ -55,7 +56,7 @@ clap = { version = "4.5.60", features = [
 clap_complete = "4.5.66"
 clap-markdown = "0.1.5"
 clap-verbosity-flag = { version = "3.0.3", default-features = false, features = ["tracing"] }
-inquire = "0.9.3"
+inquire = "0.9.4"
 charchart = {version = "0.1.0", git = "https://github.com/RustyNova016/charchart", rev = "2fab66f30cabb2cbe7c3246a1051e79be15b8f6d"}
 
 # Error handling
@@ -64,7 +65,7 @@ thiserror = "2.0.18"
 snafu = { version = "0.8.9", features = ["rust_1_81", "backtrace"] }
 
 # Macros
-bon = "3.8.2"
+bon = "3.9.0"
 derive_more = { version = "2.1.1", features = ["full"] }
 derive-new = "0.7.0"
 derive-getters = "0.5.0"
@@ -78,13 +79,12 @@ tracing-indicatif = "0.3.14"
 tuillez = "0.1.0"
 
 # Debuging
-hotpath = { version = "0.10.1", optional = true, features = ["futures"] }
+hotpath = { version = "0.13.0", optional = true, features = ["futures"] }
 
 # Other
 zip = "7.0.0"
 sequelles = "0.2.0"
 comfy-table = { version = "7.2.2", features = ["custom_styling"] }
-async-once-cell = "0.5.4"
 duplicate = "2.0.1"
 
 [features]
