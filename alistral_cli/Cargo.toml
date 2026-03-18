@@ -47,7 +47,7 @@ async-fn-stream = "0.3.2"
 async-once-cell = "0.5.4"
 
 # Cli
-clap = { version = "4.5.60", features = [
+clap = { version = "4.6.0", features = [
     "unicode",
     "wrap_help",
     "derive",
