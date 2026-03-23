@@ -36,6 +36,8 @@ use crate::tools::unstable::UnstableCommand;
 pub mod common;
 pub mod config;
 #[cfg(feature = "radio")]
+pub mod parsers;
+#[cfg(feature = "radio")]
 pub mod radio;
 
 /// Tools for Listenbrainz
