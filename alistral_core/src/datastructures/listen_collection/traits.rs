@@ -149,17 +149,6 @@ pub trait ListenCollectionReadable {
             self.average_duration_between_listens().num_seconds(),
         ))
     }
-
-    /// Return the estimated amount of listens the user will do in the provided duration.
-    /// This return partial values, and you may need to convert to a whole integer
-    ///
-    /// If the collection is empty, or all the listens are at the same date, returns 0
-    fn estimated_listen_count_for_duration(&self, duration: Duration) -> Decimal {
-        let duration = Decimal::from(duration.num_seconds());
-        let average = Decimal::from(self.average_duration_between_listens().num_seconds());
-
-        duration.checked_div(average).unwrap_or(Decimal::ZERO)
-    }
 }
 
 impl ListenCollectionReadable for ListenCollection {

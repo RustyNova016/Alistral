@@ -9,7 +9,6 @@ use clap::Parser;
 use clap::ValueEnum;
 use interzic::models::playlist_stub::PlaylistStub;
 use interzic::models::services::listenbrainz::Listenbrainz;
-use interzic::models::services::youtube::Youtube;
 use itertools::Itertools;
 use tracing::debug;
 use tracing::error;
@@ -24,6 +23,7 @@ use yumako_jams::radio_variables::RadioVariables;
 
 use crate::ALISTRAL_CLIENT;
 use crate::models::cli::parsers::yumako_parser::parse_yumako_variables;
+use crate::models::cli::radio::RadioExportTarget;
 use crate::models::config::Config;
 use crate::models::config::config_trait::ConfigFile as _;
 use crate::models::config::recording_timeout::RecordingTimeoutConfig;
@@ -57,7 +57,12 @@ pub struct RadioYumakoCommand {
 }
 
 impl RadioYumakoCommand {
-    pub async fn run(&self, conn: &mut sqlx::SqliteConnection) -> Result<(), crate::Error> {
+    pub async fn run(
+        &self,
+        target: RadioExportTarget,
+        client_name: &str,
+    ) -> Result<(), crate::Error> {
+        let conn = &mut *ALISTRAL_CLIENT.get_conn().await;
         let username = Config::check_username(&self.username);
         let token = Config::check_token(&username, &self.token);
 
@@ -79,9 +84,17 @@ impl RadioYumakoCommand {
 
         let radio_items = Self::collect_radio(radio, args).await?;
 
-        self.output_radio(conn, radio_schema, radio_items, username, &token)
-            .await
-            .expect_fatal("Couldn't send the playlist")?;
+        self.output_radio(
+            conn,
+            radio_schema,
+            radio_items,
+            Some(username),
+            Some(&token),
+            target,
+            client_name,
+        )
+        .await
+        .expect_fatal("Couldn't send the playlist")?;
 
         Ok(())
     }
@@ -145,31 +158,38 @@ impl RadioYumakoCommand {
         conn: &mut sqlx::SqliteConnection,
         radio_schema: Radio,
         radio_items: Vec<RadioItem>,
-        username: String,
-        token: &str,
+        username: Option<String>,
+        token: Option<&str>,
+        target: RadioExportTarget,
+        client_name: &str,
     ) -> Result<(), crate::Error> {
-        match self.output {
-            RadioOutput::List => {
-                print_radio(&radio_items).await?;
-            }
-            RadioOutput::Listenbrainz => {
-                Listenbrainz::create_playlist(
-                    &ALISTRAL_CLIENT.interzic,
-                    Self::radio_to_playlist(conn, radio_schema, radio_items).await?,
-                    username,
-                    token,
-                )
-                .await?;
-            }
-            RadioOutput::Youtube => {
-                let _playlist_id = Youtube::create_playlist(
-                    &ALISTRAL_CLIENT.interzic,
-                    Self::radio_to_playlist(conn, radio_schema, radio_items).await?,
-                    Some(username),
-                )
-                .await?;
-            }
-        };
+        let playlist = Self::radio_to_playlist(conn, radio_schema, radio_items).await?;
+        target
+            .export(playlist, username, token, client_name)
+            .await?;
+
+        // match self.output {
+        //     RadioOutput::List => {
+        //         print_radio(&radio_items).await?;
+        //     }
+        //     RadioOutput::Listenbrainz => {
+        //         Listenbrainz::create_playlist(
+        //             &ALISTRAL_CLIENT.interzic,
+        //             ,
+        //             username,
+        //             token,
+        //         )
+        //         .await?;
+        //     }
+        //     RadioOutput::Youtube => {} // RadioOutput::Youtube => {
+        //                                //     let _playlist_id = Youtube::create_playlist(
+        //                                //         &ALISTRAL_CLIENT.interzic,
+        //                                //         Self::radio_to_playlist(conn, radio_schema, radio_items).await?,
+        //                                //         Some(username),
+        //                                //     )
+        //                                //     .await?;
+        //                                // }
+        // };
 
         Ok(())
     }
@@ -224,9 +244,7 @@ pub fn compilation_error(err: yumako_jams::Error) {
     // println!("{err:#?}")
 }
 
-async fn print_radio(
-    radio: &Vec<RadioItem>,
-) -> Result<(), crate::Error> {
+async fn print_radio(radio: &Vec<RadioItem>) -> Result<(), crate::Error> {
     for track in radio {
         println!(
             "[{}] {}",

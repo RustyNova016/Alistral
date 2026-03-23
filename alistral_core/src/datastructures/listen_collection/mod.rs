@@ -139,12 +139,6 @@ impl Mergable for ListenCollection {
     }
 }
 
-impl From<ListenCollection> for Vec<Listen> {
-    fn from(value: ListenCollection) -> Self {
-        value.data
-    }
-}
-
 impl ExtractTimeframe for ListenCollection {
     fn extract_timeframe(
         self,

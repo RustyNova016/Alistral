@@ -12,6 +12,7 @@ use musicbrainz_db_lite::listenbrainz_rs::ListenBrainzClient;
 #[cfg(feature = "musicbrainz")]
 use symphonize::SymphonyzeClient;
 use tuillez::fatal_error::IntoFatal;
+use ::yumako_jams::client::YumakoClient;
 
 use crate::models::config::Config;
 use crate::models::config::config_trait::ConfigFile;

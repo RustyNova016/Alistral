@@ -72,11 +72,6 @@ where
         self.oldest_listen_date()
             .map(|discovery| Utc::now() - discovery)
     }
-
-    /// Set the listens.
-    pub fn set_listens(&mut self, listens: Lis) {
-        self.listens = listens
-    }
 }
 
 impl<Ent, Lis> ListenCollectionReadable for EntityWithListens<Ent, Lis>

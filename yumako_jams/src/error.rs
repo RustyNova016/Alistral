@@ -1,7 +1,8 @@
 use core::fmt::Display;
 
-use musicbrainz_db_lite::database::pool::DBLitePoolError;
-use musicbrainz_db_lite::database::raw_conn_pool::RawPoolError;
+use alistral_core::datastructures::entity_with_listens::recording::collection::sort::RecordingStatsError;
+use musicbrainz_db_lite::GetConnectionError;
+use musicbrainz_db_lite::models::listenbrainz::listen::selects::error::ListenFetchGetError;
 use thiserror::Error;
 
 #[derive(Error, Debug)]
@@ -35,12 +36,6 @@ pub enum Error {
     UnknownStepTypeError(String),
 
     #[error(transparent)]
-    DBConnectionError(#[from] DBLitePoolError),
-
-    #[error(transparent)]
-    DBRawConnectionError(#[from] RawPoolError),
-
-    #[error(transparent)]
     AlistralCoreError(#[from] alistral_core::Error),
 
     #[error(transparent)]
@@ -49,8 +44,19 @@ pub enum Error {
     #[error(transparent)]
     IOError(#[from] std::io::Error),
 
-    #[error("Couldn't parse the radio file. Make sure you have a proper schema.\nJSON Error: {0}\nTOML Error: {1}")]
-    RadioFileTypeError(serde_json::Error, toml::de::Error)
+    #[error(
+        "Couldn't parse the radio file. Make sure you have a proper schema.\nJSON Error: {0}\nTOML Error: {1}"
+    )]
+    RadioFileTypeError(serde_json::Error, toml::de::Error),
+
+    #[error(transparent)]
+    ListenFetchGetError(#[from] ListenFetchGetError),
+
+    #[error(transparent)]
+    RecordingStatsError(#[from] RecordingStatsError),
+
+    #[error(transparent)]
+    GetConnectionError(#[from] GetConnectionError),
 }
 
 impl Error {

@@ -58,25 +58,9 @@ pub enum Error {
     )]
     YumakoArgumentDataDeserializingError(String, String, serde_json::Error),
 
-    #[error("Couldn't parse the arguments")]
-    YumakoArgumentParsingError(), //TODO: Impl error for lyn::Error
-
-    #[error(
-        "Couldn't read the data of a variable. \nVariable: {0}. \nProvided data: {1}\nError: {2}"
-    )]
-    YumakoArgumentDataDeserializingError(String, String, serde_json::Error),
-
     #[cfg(feature = "interzic")]
     #[error(transparent)]
     YumakoError(#[from] yumako_jams::Error),
-
-    #[error("Couldn't parse the arguments")]
-    YumakoArgumentParsingError(), //TODO: Impl error for lyn::Error
-
-    #[error(
-        "Couldn't read the data of a variable. \nVariable: {0}. \nProvided data: {1}\nError: {2}"
-    )]
-    YumakoArgumentDataDeserializingError(String, String, serde_json::Error),
 
     #[cfg(feature = "interzic")]
     #[error(transparent)]
@@ -101,9 +85,6 @@ pub enum Error {
 
     #[error(transparent)]
     MusicbrainzDBLite(#[from] musicbrainz_db_lite::Error),
-
-    #[error(transparent)]
-    YumakoError(#[from] yumako_jams::Error),
 }
 
 impl From<Error> for FatalError {

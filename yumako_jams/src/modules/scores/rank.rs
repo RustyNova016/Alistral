@@ -1,5 +1,7 @@
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
+use async_fn_stream::try_fn_stream;
 use chrono::Duration;
+use priority_queue::DoublePriorityQueue;
 use rust_decimal::Decimal;
 use serde::Deserialize;
 use serde::Serialize;
@@ -23,7 +25,7 @@ impl RadioModule for UserTopScorer {
     fn create_stream<'a>(self, stream: RadioStream<'a>, _: &'a YumakoClient) -> LayerResult<'a> {
         let stream = try_fn_stream(|emitter| async move {
             // First we grab the user's data
-            let listen_data = Re
+            //let listen_data = Re
             
 
             let mut collection = DoublePriorityQueue::new();

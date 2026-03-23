@@ -1,7 +1,8 @@
-use alistral_core::database::fetching::listens::ListenFetchQuery;
-use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListenStrategy;
+use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
+use alistral_core::traits::sorter::InsertElement;
 use async_fn_stream::try_fn_stream;
 use futures::StreamExt;
+use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -21,16 +22,24 @@ impl RadioModule for ListenSeeder {
         _stream: RadioStream<'a>,
         client: &'a crate::client::YumakoClient,
     ) -> LayerResult<'a> {
-        Ok(try_fn_stream(async |emitter| {
-            let tracks = ListenFetchQuery::get_recordings_with_listens(
-                &client.alistral_core,
-                self.user,
-                &RecordingWithListenStrategy::new(&client.alistral_core)
-            )
-            .await?
-            .into_iter();
+        let user = self.user.clone();
+        Ok(try_fn_stream(async move |emitter| {
+            // Get the listens
+            let tracks = Listen::get_or_fetch_listens()
+                .client(&client.alistral_core.musicbrainz_db)
+                .incremental(true)
+                .users(&[&user])
+                .mapped(true)
+                .unmapped(true)
+                .call()
+                .await?;
 
-            for track in tracks {
+            // Compile the stats
+            let mut coll = RecordingWithListensCollection::new();
+            coll.insert_elements(&*client.alistral_core, tracks).await?;
+
+            // Emit the results
+            for track in coll {
                 emitter.emit(RadioItem::from(track)).await;
             }
 

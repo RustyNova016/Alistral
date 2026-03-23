@@ -90,7 +90,7 @@ duplicate = "2.0.1"
 lyn = "0.1.0"
 
 [features]
-default = ["stats"]
+default = ["radio", "subsonic"]
 #default = ["full"]
 full = ["musicbrainz", "lookup", "stats", "radio", "youtube", "subsonic"]
 

@@ -45,7 +45,7 @@ Removes all the tracks that have been recently listened.
 
 ## listens
 
-This filter only let tracks that have a minimum (inclusive) or maximum (inclusive) of listens..
+This filter only let tracks that have a minimum (inclusive) or maximum (inclusive) of listens.
 
 Setting a maximum of 0 only give unlistened tracks
 

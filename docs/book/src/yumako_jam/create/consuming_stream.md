@@ -13,7 +13,7 @@ Our process would be something like this:
 4. Remove the seeds
 5. Throw it into the pot
 6. Repeat until all the fruits are in the pot and cook the fruits
-8. Put the jam into a jar
+7. Put the jam into a jar
 
 Here, at instruction 6, we are forced to process all the fruits from our basket (the seeder) before we can continue. 
 
