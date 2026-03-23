@@ -26,7 +26,7 @@ use super::listen_collection::ListenCollection;
 use super::listen_collection::traits::ListenCollectionReadable;
 
 /// A structure representing an entity with associated listens.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct EntityWithListens<Ent, Lis>
 where
     Ent: HasRowID,
@@ -59,6 +59,11 @@ where
 
     pub fn into_listens(self) -> Lis {
         self.listens
+    }
+
+    /// Set the listens.
+    pub fn set_listens(&mut self, listens: Lis) {
+        self.listens = listens
     }
 
     /// Return the amount of time this entity having known about (Since first associated listen)
