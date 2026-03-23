@@ -1,0 +1,126 @@
+{
+    "name": "Overdue Radio",
+    "stack": [
+        {
+            "step_type": "listen_seeder",
+            "id": "listen_seeder"
+        },
+        {
+            "step_type": "listen_filter",
+            "id": "listen_filter",
+            "inputs": {
+                "minimum": 3
+            }
+        },
+        {
+            "step_type": "cooldown_filter",
+            "id": "cooldown_filter",
+            "inputs": {
+                "duration": "0 minutes"
+            }
+        },
+        {
+            "step_type": "timeout_filter",
+            "id": "timeout_filter"
+        },
+        {
+            "step_type": "join",
+            "id": "blacklist_join",
+            "inputs": {
+                "join_type": "Left",
+                "radio_schema": {
+                    "name": "blacklist",
+                    "stack": [
+                        {
+                            "step_type": "artist_seeder",
+                            "id": "artist_seeder",
+                            "inputs": {
+                                "artist_mbids": [
+                                    "9df7ddfb-75fe-4470-9269-5810d9263b09",
+                                    "fcadeac1-28dd-449f-b480-b183348eed5a",
+                                    "1c2d93bd-f516-4eb6-a936-11e9e70cc5f8",
+                                    "366dd263-d146-4c0d-9b29-a1b78abe04a5",
+                                    "b89fe68a-6958-4dde-845b-285088716fdd",
+                                    "f1a86b91-560d-41f3-a7eb-a5943205b6cd"
+                                ]
+                            }
+                        },
+                        {
+                            "step_type": "release_seeder",
+                            "id": "release_seeder",
+                            "inputs": {
+                                "release_mbids": [
+                                    "7f4abbee-dfaf-4edf-9d8c-f749145bdee7"
+                                ]
+                            }
+                        }
+                    ],
+                    "inputs": {}
+                },
+                "radio": {}
+            }
+        },
+        {
+            "step_type": "listen_interval",
+            "id": "listen_interval"
+        },
+        {
+            "step_type": "latest_listens",
+            "id": "latest_listens"
+        },
+        {
+            "step_type": "overdue_count_scorer",
+            "id": "overdue_count_scorer",
+            "inputs": {
+                "merge": "Add"
+            }
+        },
+        {
+            "step_type": "sort_module",
+            "id": "sort_module",
+            "inputs": {
+                "direction": "Desc"
+            }
+        }
+    ],
+    "inputs": {
+        "minimum_listens": {
+            "description": "The minimum all time listens the tracks need to have before getting suggested",
+            "targets": [
+                "listen_filter.minimum"
+            ]
+        },
+        "username": {
+            "targets": [
+                "listen_seeder.user",
+                "and_filter.radio.username",
+                "latest_listens.user"
+            ]
+        },
+        "timeouts": {
+            "targets": [
+                "timeout_filter.timeouts"
+            ]
+        },
+        "count": {
+            "targets": []
+        },
+        "duration": {
+            "targets": []
+        },
+        "listen_range": {
+            "description": "The time range of listens to use",
+            "targets": [
+                "listen_interval.period"
+            ],
+            "default": "AllTime"
+        },
+        "minimum_seed_listens": {
+            "description": "The number of minimum listens to use for the score",
+            "targets": [
+                "listen_interval.listen_interval"
+            ],
+            "default": 0
+        }
+    }
+}
