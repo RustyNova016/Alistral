@@ -125,6 +125,7 @@ pub trait ListenCollectionReadable {
     }
 
     /// How many listens should happens by the  
+    /// How many listens should happens by the  
     fn overdue_factor_at(&self, date: &DateTime<Utc>) -> Decimal {
         Decimal::from_i64(self.overdue_by_at(date).num_seconds())
             .unwrap()
@@ -139,6 +140,14 @@ pub trait ListenCollectionReadable {
     /// # Option
     ///
     /// Return none when [`Self::average_duration_between_listens`] return 0.
+    ///     - When there's no listens
+    ///     - All the listens are at the same time
+    ///
+    /// You may want to unwrap with: `.unwrap_or(Decimal::MAX)`
+    ///
+    /// # Option
+    ///
+    /// Return none when [`average_duration_between_listens`] return 0.
     ///     - When there's no listens
     ///     - All the listens are at the same time
     ///

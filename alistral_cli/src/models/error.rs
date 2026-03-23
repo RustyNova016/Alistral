@@ -55,6 +55,18 @@ pub enum Error {
     #[error(transparent)]
     FatalError(#[from] FatalError),
 
+    #[error("Couldn't parse the arguments")]
+    YumakoArgumentParsingError(), //TODO: Impl error for lyn::Error
+
+    #[error(
+        "Couldn't read the data of a variable. \nVariable: {0}. \nProvided data: {1}\nError: {2}"
+    )]
+    YumakoArgumentDataDeserializingError(String, String, serde_json::Error),
+
+    #[cfg(feature = "interzic")]
+    #[error(transparent)]
+    YumakoError(#[from] yumako_jams::Error),
+
     #[cfg(feature = "interzic")]
     #[error(transparent)]
     InterzicClientError(#[from] InterzicClientError),
@@ -120,6 +132,9 @@ impl GetFriendlyError for Error {
             Self::UserSqlError(_) => None,
             Self::SQLx(_) => None,
             Self::MusicbrainzDBLite(_) => None,
+            Self::YumakoError(_) => None,
+            Self::YumakoArgumentDataDeserializingError(_, _, _) => None,
+            Self::YumakoArgumentParsingError() => None,
             Self::FriendlyPanic(val) => val.get_friendly_error(),
             Self::BumpCommandError(val) => val.get_friendly_error(),
             Self::CacheCommandError(val) => val.get_friendly_error(),
