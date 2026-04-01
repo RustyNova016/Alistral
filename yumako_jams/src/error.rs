@@ -5,6 +5,9 @@ use musicbrainz_db_lite::GetConnectionError;
 use musicbrainz_db_lite::models::listenbrainz::listen::selects::error::ListenFetchGetError;
 use thiserror::Error;
 
+use crate::modules::error::StreamModuleError;
+
+
 #[derive(Error, Debug)]
 pub enum Error {
     #[error(
@@ -57,6 +60,9 @@ pub enum Error {
 
     #[error(transparent)]
     GetConnectionError(#[from] GetConnectionError),
+
+    #[error(transparent)]
+    StreamModuleError(#[from] StreamModuleError),
 }
 
 impl Error {

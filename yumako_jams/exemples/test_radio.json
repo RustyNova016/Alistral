@@ -2,49 +2,25 @@
     "name": "Test Radio",
     "stack": [
         {
-            "step_type": "listen_seeder",
-            "id": "listen_seeder"
-        },
-        {
-            "step_type": "minimum_listen_filter",
-            "id": "minimum_listen_filter",
-            "inputs": {
-                "minimum": 5
-            }
-        },
-        {
-            "step_type": "and_filter",
-            "id": "and_filter",
-            "inputs": {
-                "radio_schema": {
-                    "name": "Test Inner Radio",
-                    "stack": [
-                        {
-                            "step_type": "listen_seeder",
-                            "id": "listen_seeder"
-                        }
-                    ],
-                    "inputs": {
-                        "username": {
-                            "targets": [
-                                "listen_seeder.user"
-                            ]
-                        }
-                    }
-                }
-            }
+            "step_type": "artist_seeder",
+            "id": "artist_seeder"
         }
     ],
     "inputs": {
-        "minimum_listens": {
+        "artist": {
             "targets": [
-                "minimum_listen_filter.minimum"
+                "artist_seeder.artist_mbid"
             ]
         },
+        "duration": {
+            "targets": []
+        },
         "username": {
+            "targets": []
+        },
+        "timeouts": {
             "targets": [
-                "listen_seeder.user",
-                "and_filter.radio.username"
+                "timeout_filter.timeouts"
             ]
         }
     }

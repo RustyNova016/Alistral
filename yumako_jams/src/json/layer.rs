@@ -21,6 +21,7 @@ use crate::modules::scores::listenrate::ListenRateScorer;
 use crate::modules::scores::overdue_count::OverdueCountScorer;
 use crate::modules::scores::overdue_duration::OverdueDurationScorer;
 use crate::modules::scores::sort::SortModule;
+use crate::modules::seeders::artist_seeder::ArtistSeeder;
 use crate::modules::seeders::listen_seeder::ListenSeeder;
 use crate::radio_variables::RadioVariables;
 
@@ -48,6 +49,9 @@ impl Layer {
             "and_filter" => AndFilter::create(&self, variables)?.create_stream(stream, client),
             "artist_discography_mapper" => {
                 ArtistDiscographyMapper::create(&self, variables)?.create_stream(stream, client)
+            }
+            "artist_seeder" => {
+                ArtistSeeder::create(&self, variables)?.create_stream(stream, client)
             }
             "bumps_score" => BumpScore::create(&self, variables)?.create_stream(stream, client),
             "clear_listens" => {

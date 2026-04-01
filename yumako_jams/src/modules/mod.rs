@@ -4,3 +4,4 @@ pub mod mappers;
 pub mod radio_module;
 pub mod scores;
 pub mod seeders;
+pub mod error;

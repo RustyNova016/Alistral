@@ -9,7 +9,7 @@ alistral_core = { path = "../alistral_core" }
 musicbrainz-db-lite = { path = "../musicbrainz_db_lite" }
 tuillez = "0.1.0"
 
-async-fn-stream = "0.2.2"
+async-fn-stream = "0.3.2"
 futures = "0.3.30"
 json = "0.12.4"
 serde = "1.0.217"
@@ -28,6 +28,7 @@ itertools = "0.14.0"
 priority-queue = "2.3.0"
 toml = "0.8.20"
 reqwest = "0.12.15"
+snafu = "0.9.0"
 
 [lints]
 workspace = true

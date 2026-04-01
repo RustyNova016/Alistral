@@ -53,7 +53,7 @@ name = "alistral"
 version = "0.6.6"
 dependencies = [
  "alistral_core",
- "async-fn-stream 0.3.2",
+ "async-fn-stream",
  "async-once-cell",
  "bon",
  "charchart",
@@ -88,7 +88,7 @@ dependencies = [
  "sequelles",
  "serde",
  "serde_json",
- "snafu",
+ "snafu 0.8.9",
  "sqlx",
  "streamies 0.2.2",
  "strsim",
@@ -121,7 +121,7 @@ dependencies = [
  "rust_decimal_macros",
  "sequelles",
  "serde",
- "snafu",
+ "snafu 0.8.9",
  "sqlx",
  "streamies 0.2.2",
  "thiserror 2.0.18",
@@ -231,7 +231,7 @@ dependencies = [
  "governor",
  "serde_core",
  "serde_json",
- "snafu",
+ "snafu 0.8.9",
  "tracing",
  "ureq",
  "url-escape",
@@ -291,16 +291,6 @@ dependencies = [
  "futures-lite",
  "pin-project-lite",
  "slab",
-]
-
-[[package]]
-name = "async-fn-stream"
-version = "0.2.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e71711442f1016c768c259bec59300a10efe753bc3e686ec19e2c6a54a97c29b"
-dependencies = [
- "futures-util",
- "pin-project-lite",
 ]
 
 [[package]]
@@ -2354,7 +2344,7 @@ dependencies = [
 name = "interzic"
 version = "0.1.0"
 dependencies = [
- "async-fn-stream 0.3.2",
+ "async-fn-stream",
  "bon",
  "futures",
  "google-youtube3",
@@ -2365,7 +2355,7 @@ dependencies = [
  "regex",
  "serde",
  "serde_json",
- "snafu",
+ "snafu 0.8.9",
  "sqlx",
  "submarine",
  "thiserror 2.0.18",
@@ -2555,7 +2545,7 @@ dependencies = [
  "chrono",
  "serde",
  "serde_json",
- "snafu",
+ "snafu 0.8.9",
  "tracing",
  "tracing-indicatif",
 ]
@@ -2710,7 +2700,7 @@ dependencies = [
 name = "musicbrainz-db-lite"
 version = "0.1.0"
 dependencies = [
- "async-fn-stream 0.3.2",
+ "async-fn-stream",
  "bon",
  "chrono",
  "const_format",
@@ -2729,7 +2719,7 @@ dependencies = [
  "serde",
  "serde_json",
  "serial_test",
- "snafu",
+ "snafu 0.8.9",
  "sqlx",
  "streamies 0.2.2",
  "thiserror 2.0.18",
@@ -2755,7 +2745,7 @@ dependencies = [
  "reqwest 0.12.28",
  "serde",
  "serde_json",
- "snafu",
+ "snafu 0.8.9",
  "tokio",
  "tracing",
 ]
@@ -3872,7 +3862,7 @@ dependencies = [
  "chrono",
  "deadpool 0.12.3",
  "futures",
- "snafu",
+ "snafu 0.8.9",
  "sqlx",
 ]
 
@@ -4111,7 +4101,16 @@ dependencies = [
  "backtrace",
  "futures-core",
  "pin-project",
- "snafu-derive",
+ "snafu-derive 0.8.9",
+]
+
+[[package]]
+name = "snafu"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d1d4bced6a69f90b2056c03dcff2c4737f98d6fb9e0853493996e1d253ca29c6"
+dependencies = [
+ "snafu-derive 0.9.0",
 ]
 
 [[package]]
@@ -4119,6 +4118,18 @@ name = "snafu-derive"
 version = "0.8.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c1c97747dbf44bb1ca44a561ece23508e99cb592e862f22222dcf42f51d1e451"
+dependencies = [
+ "heck 0.5.0",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.117",
+]
+
+[[package]]
+name = "snafu-derive"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "54254b8531cafa275c5e096f62d48c81435d1015405a91198ddb11e967301d40"
 dependencies = [
  "heck 0.5.0",
  "proc-macro2",
@@ -5927,7 +5938,7 @@ name = "yumako_jams"
 version = "0.1.0"
 dependencies = [
  "alistral_core",
- "async-fn-stream 0.2.2",
+ "async-fn-stream",
  "chrono",
  "extend",
  "futures",
@@ -5941,6 +5952,7 @@ dependencies = [
  "rust_decimal",
  "serde",
  "serde_json",
+ "snafu 0.9.0",
  "sqlx",
  "streamies 0.2.2",
  "thiserror 2.0.18",
