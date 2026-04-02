@@ -8,6 +8,7 @@ members = [
     #"tuillez"
     #"sequelles",
     #"listenbrainz_rs"
+    "yumako_jams"
 ]
 resolver = "3"
 

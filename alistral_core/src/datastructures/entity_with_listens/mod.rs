@@ -12,6 +12,7 @@ pub mod tags;
 pub mod traits;
 pub mod user;
 pub mod work;
+
 use chrono::Duration;
 use chrono::Utc;
 use musicbrainz_db_lite::HasRowID;
@@ -26,7 +27,7 @@ use super::listen_collection::ListenCollection;
 use super::listen_collection::traits::ListenCollectionReadable;
 
 /// A structure representing an entity with associated listens.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct EntityWithListens<Ent, Lis>
 where
     Ent: HasRowID,
@@ -61,6 +62,11 @@ where
         self.listens
     }
 
+    /// Set the listens.
+    pub fn set_listens(&mut self, listens: Lis) {
+        self.listens = listens
+    }
+
     /// Return the amount of time this entity having known about (Since first associated listen)
     pub fn known_for(&self) -> Option<Duration> {
         self.oldest_listen_date()
@@ -83,8 +89,25 @@ where
     Ent: HasRowID,
 {
     /// Add a listen if it doesn't already exist in the collection. This doesn't check if the listen belong to the entity
-    pub fn insert_unique_listens_unchecked(&mut self, new_listen: Listen) {
+    pub fn insert_unique_listen_unchecked(&mut self, new_listen: Listen) {
         self.listens.push_unique(new_listen);
+    }
+
+    /// Add a collection of listen if it doesn't already exist in the collection. This doesn't check if the listen belong to the entity
+    pub fn insert_unique_listens_unchecked<I: IntoIterator<Item = Listen>>(
+        &mut self,
+        new_listens: I,
+    ) {
+        for lis in new_listens {
+            self.listens.push_unique(lis);
+        }
+    }
+
+    pub fn retain<F>(&mut self, f: F)
+    where
+        F: FnMut(&Listen) -> bool,
+    {
+        self.listens.retain(f);
     }
 }
 
