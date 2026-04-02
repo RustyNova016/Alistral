@@ -24,6 +24,7 @@ use crate::modules::scores::overdue_duration::OverdueDurationScorer;
 use crate::modules::scores::sort::SortModule;
 use crate::modules::seeders::artist_seeder::ArtistSeeder;
 use crate::modules::seeders::listen_seeder::ListenSeeder;
+use crate::modules::seeders::release_seeder::ReleaseSeeder;
 use crate::radio_variables::RadioVariables;
 
 /// A layer represent a step in the radio processing. It calls a module based on the step type
@@ -77,6 +78,9 @@ impl Layer {
                 ListenRateScorer::create(&self, variables)?.create_stream(stream, client)
             }
             "join" => SetJoin::create(&self, variables)?.create_stream(stream, client),
+            "release_seeder" => {
+                ReleaseSeeder::create(&self, variables)?.create_stream(stream, client)
+            }
             "sort_module" => SortModule::create(&self, variables)?.create_stream(stream, client),
             "timeout_filter" => {
                 TimeoutFilter::create(&self, variables)?.create_stream(stream, client)

@@ -54,3 +54,28 @@ This seeder provide all the tracks listened by an user
 }
 ```
 
+## Release Seeder
+
+This seeder provide all the recording's of an artist
+
+### Inputs
+
+- `release_mbids: String[]`: The mbids of releases to seed from
+
+### Stream Info
+
+- The stream is [finite](../create/consuming_stream.md)
+- The scores are set to 0
+- No listens are added
+
+### Example
+
+```json
+{
+    "step_type": "release_seeder",
+    "id": "release_seeder",
+    "inputs": {
+        "release_mbids": ["d96154ed-2403-428e-ae8e-39ca2cc01430"]
+    }
+}
+```

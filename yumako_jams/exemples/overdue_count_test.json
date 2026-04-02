@@ -44,6 +44,15 @@
                                     "f1a86b91-560d-41f3-a7eb-a5943205b6cd"
                                 ]
                             }
+                        },
+                        {
+                            "step_type": "release_seeder",
+                            "id": "release_seeder",
+                            "inputs": {
+                                "release_mbids": [
+                                    "7f4abbee-dfaf-4edf-9d8c-f749145bdee7"
+                                ]
+                            }
                         }
                     ],
                     "inputs": {}
