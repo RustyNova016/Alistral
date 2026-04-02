@@ -1,6 +1,6 @@
 # Seeders
 
-Seeders provide the initial tracks for your radios. 
+Seeders provide radio items for your radios. They can be set anywhere. 
 
 ## Artist Seeder
 
@@ -8,7 +8,7 @@ This seeder provide all the recording's of an artist
 
 ### Inputs
 
-- `artist_mbid: String`: The mbid of the artist
+- `artist_mbids: String[]`: The mbids of artists to seed from
 
 ### Stream Info
 
@@ -23,7 +23,7 @@ This seeder provide all the recording's of an artist
     "step_type": "artist_seeder",
     "id": "artist_seeder",
     "inputs": {
-        "artist_mbid": "1f8ef6a0-6d01-4ea2-92d4-693bc565fb61"
+        "artist_mbids": ["1f8ef6a0-6d01-4ea2-92d4-693bc565fb61"]
     }
 }
 ```

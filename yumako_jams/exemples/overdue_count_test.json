@@ -35,7 +35,14 @@
                             "step_type": "artist_seeder",
                             "id": "artist_seeder",
                             "inputs": {
-                                "artist_mbid": "9df7ddfb-75fe-4470-9269-5810d9263b09"
+                                "artist_mbids": [
+                                    "9df7ddfb-75fe-4470-9269-5810d9263b09",
+                                    "fcadeac1-28dd-449f-b480-b183348eed5a",
+                                    "1c2d93bd-f516-4eb6-a936-11e9e70cc5f8",
+                                    "366dd263-d146-4c0d-9b29-a1b78abe04a5",
+                                    "b89fe68a-6958-4dde-845b-285088716fdd",
+                                    "f1a86b91-560d-41f3-a7eb-a5943205b6cd"
+                                ]
                             }
                         }
                     ],
