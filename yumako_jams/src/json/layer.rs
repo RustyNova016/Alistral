@@ -10,6 +10,7 @@ use crate::modules::filters::booleans::AndFilter;
 use crate::modules::filters::cooldown::CooldownFilter;
 use crate::modules::filters::listens::ListenFilter;
 use crate::modules::filters::timeout::TimeoutFilter;
+use crate::modules::joins::set_join::SetJoin;
 use crate::modules::listen_data::clear_listens::ClearListens;
 use crate::modules::listen_data::last_listens::LatestListens;
 use crate::modules::listen_data::listen_interval::ListenInterval;
@@ -75,6 +76,7 @@ impl Layer {
             "listenrate_scorer" => {
                 ListenRateScorer::create(&self, variables)?.create_stream(stream, client)
             }
+            "join" => SetJoin::create(&self, variables)?.create_stream(stream, client),
             "sort_module" => SortModule::create(&self, variables)?.create_stream(stream, client),
             "timeout_filter" => {
                 TimeoutFilter::create(&self, variables)?.create_stream(stream, client)

@@ -29,6 +29,7 @@ priority-queue = "2.3.0"
 toml = "0.8.20"
 reqwest = "0.12.15"
 snafu = "0.9.0"
+pin-project-lite = "0.2.17"
 
 [lints]
 workspace = true

@@ -7,7 +7,6 @@ use thiserror::Error;
 
 use crate::modules::error::StreamModuleError;
 
-
 #[derive(Error, Debug)]
 pub enum Error {
     #[error(

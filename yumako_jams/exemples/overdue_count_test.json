@@ -24,6 +24,27 @@
             "id": "timeout_filter"
         },
         {
+            "step_type": "join",
+            "id": "blacklist_join",
+            "inputs": {
+                "join_type": "Left",
+                "radio_schema": {
+                    "name": "blacklist",
+                    "stack": [
+                        {
+                            "step_type": "artist_seeder",
+                            "id": "artist_seeder",
+                            "inputs": {
+                                "artist_mbid": "9df7ddfb-75fe-4470-9269-5810d9263b09"
+                            }
+                        }
+                    ],
+                    "inputs": {}
+                },
+                "radio": {}
+            }
+        },
+        {
             "step_type": "listen_interval",
             "id": "listen_interval"
         },

@@ -2,6 +2,7 @@ use core::str::FromStr;
 use std::sync::Arc;
 use std::sync::LazyLock;
 
+use ::yumako_jams::client::YumakoClient;
 use alistral_core::AlistralClient;
 use futures::executor::block_on;
 #[cfg(feature = "interzic")]
@@ -12,7 +13,6 @@ use musicbrainz_db_lite::listenbrainz_rs::ListenBrainzClient;
 #[cfg(feature = "musicbrainz")]
 use symphonize::SymphonyzeClient;
 use tuillez::fatal_error::IntoFatal;
-use ::yumako_jams::client::YumakoClient;
 
 use crate::models::config::Config;
 use crate::models::config::config_trait::ConfigFile;
@@ -62,7 +62,7 @@ impl AlistralCliClient {
             musicbrainz_db,
             #[cfg(feature = "musicbrainz")]
             symphonize,
-            yumako_jams
+            yumako_jams,
         })
     }
 
