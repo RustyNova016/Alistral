@@ -1,5 +1,7 @@
 use clap::Parser;
+use tuillez::fatal_error::FatalError;
 
+use crate::interface::errors::friendly_error::GetFriendlyError;
 use crate::interface::tracing::init_tracer;
 use models::cli::Cli;
 
@@ -34,7 +36,14 @@ async fn main() -> ColEyre {
                 ALISTRAL_CLIENT.clean_up_mb_db().await;
             }
         }
-        Err(err) => err.panic(),
+
+        Err(err) => {
+            if let Some(err) = err.get_friendly_error() {
+                err.print_no_panic();
+            } else {
+                FatalError::from(err).panic()
+            }
+        }
     }
 
     Ok(())

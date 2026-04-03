@@ -6,10 +6,14 @@ use chrono::Duration;
 use chrono::Utc;
 use clap::Parser;
 use rust_decimal::Decimal;
+use snafu::ResultExt;
 use tuillez::extensions::chrono_exts::DurationExt as _;
 use tuillez::formatter::FormatWithAsync;
 
 use crate::ALISTRAL_CLIENT;
+use crate::interface::errors::friendly_error::FriendlyPanic;
+use crate::interface::errors::friendly_error::FriendlyPanicSnafu;
+use crate::interface::errors::friendly_error::GetFriendlyError;
 use crate::models::config::Config;
 use crate::utils::constants::LISTENBRAINZ_FMT;
 use crate::utils::user_inputs::UserInputParser;
@@ -39,7 +43,7 @@ pub struct BumpCommand {
 }
 
 impl BumpCommand {
-    pub async fn run(&self) {
+    pub async fn run(&self) -> Result<(), BumpCommandError> {
         let username = UserInputParser::username_or_default(&self.username);
 
         let recording = match &self.recording {
@@ -62,8 +66,11 @@ impl BumpCommand {
             }
         };
 
-        let multiplier = Decimal::from_str(self.multiplier.as_deref().unwrap_or("1.1"))
-            .expect("Couldn't parse the multiplier");
+        let multiplier = Decimal::from_str(self.multiplier.as_deref().unwrap_or("1.1")).context(
+            MultiplierParsingSnafu {
+                value: self.multiplier.as_deref().unwrap_or("").to_string(),
+            },
+        )?;
 
         let duration = match &self.duration {
             Some(dur) => Duration::from_human_string(dur).expect("Couldn't parse the duration."),
@@ -88,5 +95,29 @@ impl BumpCommand {
             multiplier,
             Utc::now() + duration,
         );
+
+        Ok(())
+    }
+}
+
+#[derive(Debug, snafu::Snafu)]
+pub enum BumpCommandError {
+    MultiplierParsingError {
+        source: rust_decimal::Error,
+        value: String,
+    },
+}
+
+impl GetFriendlyError for BumpCommandError {
+    fn get_friendly_error(&self) -> Option<FriendlyPanic> {
+        match self {
+            Self::MultiplierParsingError { source: _, value } => Some(
+                FriendlyPanicSnafu {
+                    title: "Error reading arguments".to_string(),
+                    body: format!("Couldn't parse `{}` as a decimal value", value),
+                }
+                .build(),
+            ),
+        }
     }
 }
