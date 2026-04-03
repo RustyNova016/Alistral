@@ -85,6 +85,11 @@ pub enum Error {
 
     #[error(transparent)]
     MusicbrainzDBLite(#[from] musicbrainz_db_lite::Error),
+
+    #[error(
+        "Something went wrong and should be displayed above. If you see this then something else went wrong as well. Please report it :)"
+    )]
+    FriendlyPanic,
 }
 
 impl From<Error> for FatalError {

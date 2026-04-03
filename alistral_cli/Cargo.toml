@@ -88,6 +88,7 @@ sequelles = "0.2.0"
 comfy-table = { version = "7.2.2", features = ["custom_styling"] }
 duplicate = "2.0.1"
 lyn = "0.1.0"
+json5 = "1.3.1"
 
 [features]
 default = ["radio", "subsonic"]

@@ -37,3 +37,26 @@ pub static LOG_DIR: LazyLock<PathBuf> = LazyLock::new(|| {
 
     path
 });
+
+pub static YUMAKO_CONF_DIR: LazyLock<PathBuf> = LazyLock::new(|| {
+    let mut path = CONFIG_DIR.to_path_buf();
+    path.push("yumako_jams");
+
+    if !fs::exists(&path).unwrap() {
+        fs::create_dir_all(&path).expect("Couldn't create config directory");
+    }
+
+    path
+});
+
+
+pub static YUMAKO_VARS_DIR: LazyLock<PathBuf> = LazyLock::new(|| {
+    let mut path = CONFIG_DIR.to_path_buf();
+    path.push("vars");
+
+    if !fs::exists(&path).unwrap() {
+        fs::create_dir_all(&path).expect("Couldn't create config directory");
+    }
+
+    path
+});

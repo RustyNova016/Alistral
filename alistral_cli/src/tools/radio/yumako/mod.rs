@@ -1,6 +1,7 @@
 use core::fmt::Display;
 use core::ops::Deref as _;
 use std::collections::HashMap;
+use std::path::PathBuf;
 
 use alistral_core::cli::colors::AlistralColors;
 use chrono::DateTime;
@@ -32,6 +33,8 @@ use crate::tools::radio::convert_recordings;
 use crate::utils::constants::LISTENBRAINZ_FMT;
 use crate::utils::data_file::DataFile as _;
 
+pub mod variable_file;
+
 #[derive(Parser, Debug, Clone)]
 pub struct RadioYumakoCommand {
     /// The name of the radio to inspect
@@ -51,6 +54,10 @@ pub struct RadioYumakoCommand {
     /// Where to output the radio
     #[arg(short, long, default_value_t = RadioOutput::Listenbrainz)]
     output: RadioOutput,
+
+    /// Variable file
+    #[arg(long)]
+    var_file: Option<PathBuf>,
 
     /// Radio arguments
     arguments: Vec<String>,
@@ -101,6 +108,7 @@ impl RadioYumakoCommand {
 
     /// Set up the radio arguments from the user inputs and config
     fn get_radio_arguments(&self, username: &str) -> Result<RadioVariables, crate::Error> {
+        let var_file = self.read_variable_file()?;
         let mut args = parse_yumako_variables(&self.arguments.join(" "))?;
 
         args.entry("username".to_string()).or_insert(
