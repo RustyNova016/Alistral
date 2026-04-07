@@ -4,6 +4,7 @@ use owo_colors::OwoColorize as _;
 
 use crate::cli::constants::CLEAR_UNTIL_END_OF_LINE;
 
+//TODO: Move to CLI. Shouldn't be here
 pub trait AlistralColors: Display {
     fn true_color_tup(&self, color: (u8, u8, u8)) -> String {
         self.truecolor(color.0, color.1, color.2).to_string()
@@ -37,6 +38,14 @@ pub trait AlistralColors: Display {
         format!(" {self} {CLEAR_UNTIL_END_OF_LINE}")
             .bold()
             .on_alistral_dark_green()
+            .black()
+            .to_string()
+    }
+
+    fn as_color_title(&self, color: (u8, u8, u8)) -> String {
+        format!(" {self} {CLEAR_UNTIL_END_OF_LINE}")
+            .bold()
+            .on_truecolor_tup(color)
             .black()
             .to_string()
     }

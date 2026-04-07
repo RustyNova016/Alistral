@@ -10,7 +10,6 @@ use clap_complete::generate;
 use clap_verbosity_flag::InfoLevel;
 use clap_verbosity_flag::Verbosity;
 use config::ConfigCli;
-use tuillez::fatal_error::FatalError;
 
 #[cfg(feature = "radio")]
 use crate::models::cli::radio::RadioCommand;
@@ -58,7 +57,7 @@ pub struct Cli {
 }
 
 impl Cli {
-    pub async fn run(&self) -> Result<bool, FatalError> {
+    pub async fn run(&self) -> Result<bool, crate::Error> {
         // Invoked as: `$ my-app --markdown-help`
         if self.markdown_help {
             clap_markdown::print_help_markdown::<Self>();
@@ -139,11 +138,11 @@ pub enum Commands {
 }
 
 impl Commands {
-    pub async fn run(&self) -> Result<(), FatalError> {
+    pub async fn run(&self) -> Result<(), crate::Error> {
         match self {
-            Self::Bump(val) => val.run().await,
-            Self::BumpDown(val) => val.run().await,
-            Self::Cache(val) => val.run().await,
+            Self::Bump(val) => val.run().await?,
+            Self::BumpDown(val) => val.run().await?,
+            Self::Cache(val) => val.run().await?,
             Self::Compatibility { user_a, user_b } => {
                 compatibility_command(user_a, user_b).await;
             }

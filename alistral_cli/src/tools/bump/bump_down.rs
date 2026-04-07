@@ -1,6 +1,7 @@
 use clap::Parser;
 
 use crate::tools::bump::BumpCommand;
+use crate::tools::bump::BumpCommandError;
 
 /// bump a recording to show up more frequently in radios that uses scores. By default, it uses the lastest listen as target.
 ///
@@ -25,7 +26,7 @@ pub struct BumpDownCommand {
 }
 
 impl BumpDownCommand {
-    pub async fn run(&self) {
+    pub async fn run(&self) -> Result<(), BumpCommandError> {
         let cmd = BumpCommand {
             duration: self.duration.clone(),
             multiplier: self.multiplier.clone().or_else(|| Some("0.9".to_string())),

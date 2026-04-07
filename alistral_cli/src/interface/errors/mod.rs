@@ -3,6 +3,8 @@ use interzic::models::services::youtube::error::InterzicYoutubeError;
 #[cfg(all(feature = "youtube", feature = "interzic"))]
 use interzic::models::services::youtube::error::YoutubeError;
 
+pub mod friendly_error;
+
 pub fn process_errors(error: &crate::Error) -> Option<String> {
     match &error {
         #[cfg(feature = "interzic")]

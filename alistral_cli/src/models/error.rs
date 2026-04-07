@@ -3,9 +3,13 @@ use thiserror::Error;
 use tuillez::extensions::chrono_exts::TimeError;
 use tuillez::fatal_error::FatalError;
 
+use crate::interface::errors::friendly_error::FriendlyPanic;
+use crate::interface::errors::friendly_error::GetFriendlyError;
 use crate::interface::errors::process_errors;
 #[cfg(feature = "interzic")]
 use crate::models::client::interzic_client::InterzicClientError;
+use crate::tools::bump::BumpCommandError;
+use crate::tools::cache::CacheCommandError;
 
 #[derive(Error, Debug)]
 //#[expect(clippy::enum_variant_names)]
@@ -73,6 +77,48 @@ pub enum Error {
 
     #[error(transparent)]
     MusicbrainzDBLite(#[from] musicbrainz_db_lite::Error),
+
+    #[error(transparent)]
+    FriendlyPanic(#[from] FriendlyPanic),
+
+    // ==================
+    //  Command Errors
+    // ==================
+    #[error(transparent)]
+    BumpCommandError(#[from] BumpCommandError),
+
+    #[error(transparent)]
+    CacheCommandError(#[from] CacheCommandError),
+}
+
+impl GetFriendlyError for Error {
+    fn get_friendly_error(&self) -> Option<FriendlyPanic> {
+        match self {
+            Self::AlistralCore(_) => None,
+            Self::ConfigDeserialization(_) => None,
+            Self::ConfigRead(_) => None,
+            Self::ConfigFileCreation(_) => None,
+            Self::ConfigFileWrite(_) => None,
+            Self::MissingUser(_) => None,
+            Self::MissingDatabaseFile(_) => None,
+            Self::DatabaseIo(_) => None,
+            Self::Reqwest(_) => None,
+            Self::RequestDecode(_) => None,
+            Self::Listenbrainz(_) => None,
+            Self::MissingPlaylistUserData(_) => None,
+            Self::FatalError(_) => None,
+            #[cfg(feature = "interzic")]
+            Self::InterzicClientError(_) => None,
+            #[cfg(feature = "interzic")]
+            Self::Interzic(_) => None,
+            Self::TimeError(_) => None,
+            Self::SQLx(_) => None,
+            Self::MusicbrainzDBLite(_) => None,
+            Self::FriendlyPanic(val) => val.get_friendly_error(),
+            Self::BumpCommandError(val) => val.get_friendly_error(),
+            Self::CacheCommandError(val) => val.get_friendly_error(),
+        }
+    }
 }
 
 impl From<Error> for FatalError {
