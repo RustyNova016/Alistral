@@ -1,8 +1,10 @@
 use deadpool::managed::PoolError;
 use futures::channel::mpsc::SendError;
+use musicbrainz_rs::ApiEndpointError;
 use sequelles::databases::sqlite::database::GetConnectionError;
 use thiserror::Error;
 
+use crate::api::musicbrainz::url::fetch_url::UrlFetchingError;
 use crate::error::sqlx_error::SqlxError;
 
 pub mod sqlx_error;
@@ -52,5 +54,8 @@ pub enum Error {
     GetConnectionError(#[from] GetConnectionError),
 
     #[error(transparent)]
-    MusicbrainzGetRequestError(#[from] musicbrainz_rs::GetRequestError),
+    UrlFetchingError(#[from] UrlFetchingError),
+
+    #[error(transparent)]
+    ApiEndpointError(#[from] ApiEndpointError),
 }

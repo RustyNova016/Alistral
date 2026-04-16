@@ -11,7 +11,7 @@ impl FetchMBID<MBWork> for Work {
     async fn fetch_from_mbid(
         client: &DBClient,
         mbid: &str,
-    ) -> Result<MBWork, musicbrainz_rs::GetRequestError> {
+    ) -> Result<MBWork, musicbrainz_rs::ApiEndpointError> {
         MBWork::fetch()
             .id(mbid)
             .with_aliases()
@@ -24,7 +24,7 @@ impl FetchMBID<MBWork> for Work {
             .with_work_relations()
             .with_label_relations()
             .with_recording_relations()
-            .execute_with_client(&client.musicbrainz_client)
+            .execute_with_client_async(&client.musicbrainz_client)
             .await
     }
 }

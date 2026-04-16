@@ -22,7 +22,7 @@ impl Musicbrainz {
                 .as_ref()
                 .ok_or(crate::Error::MissingRequiredMBIDError())?)
             .with_url_relations()
-            .execute_with_client(client.musicbrainz_rs_client()?)
+            .execute_with_client_async(client.musicbrainz_rs_client()?)
             .await?;
 
         for rel in result.relations.unwrap_or_else(Vec::new) {

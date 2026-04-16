@@ -50,7 +50,7 @@ impl Artist {
                     .with_work_relations()
                     .limit(90)
                     .offset(offset as u16)
-                    .execute_with_client(&client.musicbrainz_client)
+                    .execute_with_client_async(&client.musicbrainz_client)
                     .await?;
 
                 progress += results.entities.len();
