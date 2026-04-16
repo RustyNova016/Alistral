@@ -220,23 +220,6 @@ checksum = "5f0e0fee31ef5ed1ba1316088939cea399010ed7731dba877ed44aeb407a75ea"
 
 [[package]]
 name = "api_bindium"
-version = "0.1.0"
-source = "git+https://github.com/RustyNova016/api_bindium?rev=76ed9d777fe42c09c0446fd5deb6010560a4f67f#76ed9d777fe42c09c0446fd5deb6010560a4f67f"
-dependencies = [
- "async-io",
- "blocking",
- "bon",
- "governor",
- "serde_core",
- "serde_json",
- "snafu 0.8.9",
- "tracing",
- "ureq",
- "url-escape",
-]
-
-[[package]]
-name = "api_bindium"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9fd2b5604962dee5b3caed7623897b48afd64b47d008b0eec813473e34532cce"
@@ -244,6 +227,7 @@ dependencies = [
  "async-io",
  "blocking",
  "bon",
+ "governor",
  "hotpath 0.15.0",
  "serde_core",
  "serde_json",
@@ -2594,15 +2578,15 @@ dependencies = [
 [[package]]
 name = "listenbrainz_rs"
 version = "0.1.0"
-source = "git+https://github.com/RustyNova016/listenbrainz_rs?rev=e793fb35f7a5ef276ffad99ffb8d8b5c1e013248#e793fb35f7a5ef276ffad99ffb8d8b5c1e013248"
+source = "git+https://github.com/RustyNova016/listenbrainz_rs?rev=5fb2e388f61513c3bf798141822a2f0082dc2727#5fb2e388f61513c3bf798141822a2f0082dc2727"
 dependencies = [
- "api_bindium 0.1.0",
+ "api_bindium",
  "async-executor",
  "bon",
  "chrono",
  "serde",
  "serde_json",
- "snafu 0.8.9",
+ "snafu 0.9.0",
  "tracing",
  "tracing-indicatif",
 ]
@@ -2774,7 +2758,7 @@ name = "musicbrainz_rs"
 version = "0.12.0"
 source = "git+https://github.com/RustyNova016/musicbrainz_rs?rev=d798ad783fca0c44ea618d787ae648a2037d2de5#d798ad783fca0c44ea618d787ae648a2037d2de5"
 dependencies = [
- "api_bindium 0.4.0",
+ "api_bindium",
  "bon",
  "chrono",
  "glob",
