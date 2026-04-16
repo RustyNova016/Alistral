@@ -28,7 +28,7 @@ tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c865
 #musicbrainz_rs = {path = "./musicbrainz_rs"}
 musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "d798ad783fca0c44ea618d787ae648a2037d2de5"}
 
-submarine = { git = "https://github.com/RustyNova016/submarine", rev = "15c6f5e07724af5d037708baa6e20c937eeb324b" }
+submarine = { git = "https://github.com/eppixx/submarine", rev = "6a9b0a929bacff1fd89b7b0dddd44ff906f1d666" }
 
 zip = { git = "https://github.com/RustyNova016/zip2", rev=  "4ebae293241d41249f3dd2283e9cc98899d42e33" }
 
