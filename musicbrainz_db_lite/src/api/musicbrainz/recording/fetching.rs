@@ -14,7 +14,7 @@ impl FetchMBID<MSRecording> for Recording {
     async fn fetch_from_mbid(
         client: &DBClient,
         mbid: &str,
-    ) -> Result<MSRecording, musicbrainz_rs::GetRequestError> {
+    ) -> Result<MSRecording, musicbrainz_rs::ApiEndpointError> {
         debug!("Sending fetch query for recording `{}`", mbid);
 
         MSRecording::fetch()
@@ -44,7 +44,7 @@ impl FetchMBID<MSRecording> for Recording {
             // Extra relations
             .with_work_level_relations()
             .with_medias()
-            .execute_with_client(&client.musicbrainz_client)
+            .execute_with_client_async(&client.musicbrainz_client)
             .await
     }
 }

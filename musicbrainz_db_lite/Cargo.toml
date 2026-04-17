@@ -13,8 +13,8 @@ const_format = { version = "0.2.34" , features = ["rust_1_51", "rust_1_64", "ass
 regex = "1.11.3"
 url = "2.5.4"
 
-# Musicbrainz
-musicbrainz_rs = { version = "0.12.0", package = "musicbrainz_rs"  }
+# Api bindings
+musicbrainz_rs = { version = "0.12.0", features = ["async", "rate_limit", "rustls", "extras", "tracing"]}
 listenbrainz = { branch = "alistral_version", git = "https://github.com/RustyNova016/listenbrainz-rs.git", default-features = false, features = ["tls-native"] }
 listenbrainz_rs = { version = "0.1.0", features = ["async", "rate_limit", "tracing"]}
 
@@ -31,7 +31,7 @@ sea-query = { version = "0.32.7", default-features = false, features = ["backend
 deadpool = "0.13.0"
 
 # Error handling
-snafu = {version = "0.8.9", features = ["rust_1_81", "futures"]}
+snafu = {version = "0.9.0", features = ["rust_1_81", "futures"]}
 thiserror = "2.0.3"
 
 # Logging
@@ -43,10 +43,14 @@ owo-colors = { version = "4.2.1", optional = true}
 bon = "3.8.1"
 
 # Debuging
-hotpath = { version = "0.14.0", optional = true, features = ["futures"] }
+hotpath = { version = "0.15.0", optional = true, features = ["futures"] }
 
 # Others
 chrono = "0.4.42"
+
+[dev-dependencies]
+tokio = { version = "1.47.0", features = ["full"] }
+serial_test = "3.3.1"
 
 
 [features]
@@ -56,14 +60,11 @@ pretty_format = ["dep:owo-colors"]
 backtrace = ["musicbrainz_rs/backtrace", "listenbrainz_rs/backtrace"]
 
 # Debugging
-hotpath = ["dep:hotpath", "hotpath/hotpath"]
-hotpath-alloc = ["hotpath/hotpath-alloc"]
-
-[dev-dependencies]
-serial_test = "3.4.0"
+hotpath = ["dep:hotpath", "hotpath/hotpath", "musicbrainz_rs/hotpath"]
+hotpath-alloc = ["hotpath/hotpath-alloc", "musicbrainz_rs/hotpath-alloc"]
 
 [patch.crates-io]
-sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "ecdfec3c83c610dbe6f69dd2b19447acbc895287"}
+sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "8393f82ea91c8df6008459ac72a0e16a86fe20d7"}
 tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c8656a4eedb571177a8ffa3b9984e78"}
-musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "60ab4d48a6898cc2fc8e0b6fc9fb774c64cfe8d2"}
-listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "e793fb35f7a5ef276ffad99ffb8d8b5c1e013248" }
+musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "d798ad783fca0c44ea618d787ae648a2037d2de5"}
+listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "5fb2e388f61513c3bf798141822a2f0082dc2727" }

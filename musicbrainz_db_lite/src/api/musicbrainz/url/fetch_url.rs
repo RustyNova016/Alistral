@@ -1,11 +1,13 @@
-use core::fmt::Write as _;
 use std::sync::Arc;
 
 use futures::StreamExt as _;
 use futures::stream;
-use musicbrainz_rs::ApiRequest;
-use serde::Deserialize;
-use serde::Serialize;
+use musicbrainz_rs::ParsingError;
+use musicbrainz_rs::api_bindium::ApiRequestError;
+use musicbrainz_rs::api_bindium::endpoints::UriBuilderError;
+use musicbrainz_rs::entity::url::MultiUrlResponse;
+use snafu::ResultExt;
+use snafu::Snafu;
 use streamies::TryStreamies;
 
 use crate::DBClient;
@@ -16,25 +18,35 @@ impl Url {
     pub async fn fetch_by_ressource(
         client: &DBClient,
         url: &str,
-    ) -> Result<MBUrl, musicbrainz_rs::GetRequestError> {
-        let req = ApiRequest::new(format!(
-            "https://musicbrainz.org/ws/2/url?resource={url}&fmt=json&inc=artist-rels+label-rels+release-group-rels+release-rels+recording-rels+url-rels+work-rels"
-        ));
-
-        req.get(&client.musicbrainz_client).await
+    ) -> Result<Option<MBUrl>, UrlFetchingError> {
+        let mut res = Self::fetch_by_ressource_bulk(client, vec![url]).await?;
+        debug_assert!(res.urls.len() == 1);
+        Ok(res.urls.pop())
     }
 
     pub async fn fetch_by_ressource_bulk(
         client: &DBClient,
         urls: Vec<&str>,
-    ) -> Result<MultiUrlResponse, musicbrainz_rs::GetRequestError> {
-        let mut req =  "https://musicbrainz.org/ws/2/url?fmt=json&inc=artist-rels+label-rels+release-group-rels+release-rels+recording-rels+url-rels+work-rels".to_string();
-
-        for url in urls {
-            write!(&mut req, "&resource={url}").unwrap()
-        }
-
-        ApiRequest::new(req).get(&client.musicbrainz_client).await
+    ) -> Result<MultiUrlResponse, UrlFetchingError> {
+        client
+            .musicbrainz_client
+            .endpoints()
+            .ws_2_url()
+            .ressources(urls)
+            .artist_rels(true)
+            .label_rels(true)
+            .recording_rels(true)
+            .release_group_rels(true)
+            .release_rels(true)
+            .url_rels(true)
+            .work_rels(true)
+            .call()
+            .context(UriBuiderSnafu)?
+            .send_async(&client.musicbrainz_client.api_client)
+            .await
+            .context(ApiSnafu)?
+            .parse()
+            .context(ParsingSnafu)
     }
 
     pub async fn fetch_and_save_by_ressource_as_task(
@@ -42,16 +54,10 @@ impl Url {
         url: &str,
     ) -> Result<Option<Url>, crate::Error> {
         let res = match Self::fetch_by_ressource(&client, url).await {
-            Ok(val) => val,
+            Ok(Some(val)) => val,
+            Ok(None) => return Ok(None),
             Err(err) => {
-                if err
-                    .as_musicbrainz_error()
-                    .is_some_and(|err| err.is_not_found())
-                {
-                    return Ok(None);
-                } else {
-                    return Err(err.into());
-                }
+                return Err(err.into());
             }
         };
 
@@ -66,16 +72,7 @@ impl Url {
     ) -> Result<Vec<Url>, crate::Error> {
         let res = match Self::fetch_by_ressource_bulk(&client, urls).await {
             Ok(val) => val,
-            Err(err) => {
-                if err
-                    .as_musicbrainz_error()
-                    .is_some_and(|err| err.is_not_found())
-                {
-                    return Ok(Vec::new());
-                } else {
-                    return Err(err.into());
-                }
-            }
+            Err(err) => return Err(err.into()),
         };
 
         stream::iter(res.urls)
@@ -86,8 +83,35 @@ impl Url {
     }
 }
 
-#[derive(Debug, Deserialize, Serialize)]
-#[serde(rename_all = "kebab-case")]
-pub struct MultiUrlResponse {
-    pub urls: Vec<MBUrl>,
+#[derive(Debug, Snafu)]
+pub enum UrlFetchingError {
+    UriBuider {
+        source: UriBuilderError,
+
+        #[snafu(implicit)]
+        location: snafu::Location,
+
+        #[cfg(feature = "backtrace")]
+        backtrace: snafu::Backtrace,
+    },
+
+    ApiError {
+        source: ApiRequestError,
+
+        #[snafu(implicit)]
+        location: snafu::Location,
+
+        #[cfg(feature = "backtrace")]
+        backtrace: snafu::Backtrace,
+    },
+
+    ParsingError {
+        source: ParsingError,
+
+        #[snafu(implicit)]
+        location: snafu::Location,
+
+        #[cfg(feature = "backtrace")]
+        backtrace: snafu::Backtrace,
+    },
 }

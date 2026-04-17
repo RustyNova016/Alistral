@@ -1,3 +1,6 @@
+// Apparently I nest my functions too much :P
+#![recursion_limit = "256"]
+
 use clap::Parser;
 use tuillez::fatal_error::FatalError;
 

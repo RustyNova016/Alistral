@@ -62,7 +62,7 @@ impl FetchMBID<MBUrl> for Url {
     async fn fetch_from_mbid(
         client: &crate::DBClient,
         mbid: &str,
-    ) -> Result<MBUrl, musicbrainz_rs::GetRequestError> {
+    ) -> Result<MBUrl, musicbrainz_rs::ApiEndpointError> {
         MBUrl::fetch()
             .id(mbid)
             .with_area_relations()
@@ -80,7 +80,7 @@ impl FetchMBID<MBUrl> for Url {
             .with_series_relations()
             .with_url_relations()
             .with_work_relations()
-            .execute_with_client(&client.musicbrainz_client)
+            .execute_with_client_async(&client.musicbrainz_client)
             .await
     }
 }

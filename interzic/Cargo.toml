@@ -33,7 +33,7 @@ serde = "1.0.228"
 serde_json = "1.0.148"
 futures = "0.3.31"
 async-fn-stream = "0.3.0"
-snafu = "0.8.9"
+snafu = "0.9.0"
 bon = "3.8.1"
 
 [features]
@@ -48,8 +48,8 @@ backtrace = []
 result_large_err = { level = "allow", priority = 1 }
 
 [patch.crates-io]
-sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "ecdfec3c83c610dbe6f69dd2b19447acbc895287"}
+sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "8393f82ea91c8df6008459ac72a0e16a86fe20d7"}
 tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c8656a4eedb571177a8ffa3b9984e78"}
-musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "60ab4d48a6898cc2fc8e0b6fc9fb774c64cfe8d2"}
-listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "e793fb35f7a5ef276ffad99ffb8d8b5c1e013248" }
-submarine = { git = "https://github.com/RustyNova016/submarine", rev = "15c6f5e07724af5d037708baa6e20c937eeb324b" }
+musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "d798ad783fca0c44ea618d787ae648a2037d2de5"}
+listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "5fb2e388f61513c3bf798141822a2f0082dc2727" }
+submarine = { git = "https://github.com/eppixx/submarine", rev = "6a9b0a929bacff1fd89b7b0dddd44ff906f1d666" }

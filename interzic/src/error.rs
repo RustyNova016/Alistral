@@ -12,13 +12,13 @@ pub enum Error {
     SecretFileLoadError(io::Error),
 
     #[error(transparent)]
-    MusicbrainzGetRequestError(#[from] musicbrainz_rs::GetRequestError),
-
-    #[error(transparent)]
     SQLXError(#[from] sqlx::Error),
 
     #[error(transparent)]
     ListenBrainzError(#[from] listenbrainz::Error),
+
+    #[error(transparent)]
+    MBApiEndpointError(#[from] musicbrainz_rs::ApiEndpointError),
 
     #[error(transparent)]
     MigrationError(#[from] sqlx::migrate::MigrateError),

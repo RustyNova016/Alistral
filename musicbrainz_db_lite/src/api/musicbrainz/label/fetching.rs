@@ -9,7 +9,7 @@ impl FetchMBID<MBLabel> for Label {
     async fn fetch_from_mbid(
         client: &DBClient,
         mbid: &str,
-    ) -> Result<MBLabel, musicbrainz_rs::GetRequestError> {
+    ) -> Result<MBLabel, musicbrainz_rs::ApiEndpointError> {
         MBLabel::fetch()
             .id(mbid)
             .with_aliases()
@@ -24,7 +24,7 @@ impl FetchMBID<MBLabel> for Label {
             .with_releases()
             .with_tags()
             .with_url_relations()
-            .execute_with_client(&client.musicbrainz_client)
+            .execute_with_client_async(&client.musicbrainz_client)
             .await
     }
 }
