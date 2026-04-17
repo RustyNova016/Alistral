@@ -39,7 +39,7 @@ jobs:
                     run: mv target/release/alistral target/release/alistral-linux
         
                   - name: Release
-                    uses: softprops/action-gh-release@v2
+                    uses: softprops/action-gh-release@v3
                     with:
                       files: target/release/alistral-linux
                       tag_name: ${{needs.get-tag.outputs.tag}}
@@ -70,7 +70,7 @@ jobs:
                     run: mv target/release/alistral.exe target/release/alistral-windows.exe
         
                   - name: Release
-                    uses: softprops/action-gh-release@v2
+                    uses: softprops/action-gh-release@v3
                     with:
                          files: target/release/alistral-windows.exe
                          tag_name: ${{needs.get-tag.outputs.tag}}
@@ -101,7 +101,7 @@ jobs:
                     run: mv target/release/alistral target/release/alistral-macos
         
                   - name: Release
-                    uses: softprops/action-gh-release@v2
+                    uses: softprops/action-gh-release@v3
                     with:
                          files: target/release/alistral-macos
                          tag_name: ${{needs.get-tag.outputs.tag}}
