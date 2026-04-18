@@ -4,7 +4,7 @@ use tuillez::formatter::FormatWithAsyncDyn;
 use crate::datastructures::formaters::human_time::HumanTimePrinter;
 use crate::interface::comp_arrow::ComparisonArrow;
 use crate::models::datastructures::tops::printer::top_cell::TopCell;
-use crate::utils::constants::LISTENBRAINZ_FMT;
+use crate::utils::constants::{LISTENBRAINZ_FMT, YIM_FMT};
 
 pub struct TopRow {
     pub ranking: Option<TopCell<usize>>,
@@ -66,9 +66,13 @@ impl TopRow {
         }
     }
 
-    pub async fn element_col(&self) -> String {
+    pub async fn element_col(&self, with_duration: bool) -> String {
         self.element
-            .format_with_async(&LISTENBRAINZ_FMT)
+            .format_with_async(if with_duration {
+                &YIM_FMT
+            } else {
+                &LISTENBRAINZ_FMT
+            })
             .await
             .unwrap()
     }

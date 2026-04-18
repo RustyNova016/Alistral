@@ -28,4 +28,7 @@ pub struct MusicbrainzFormater {
 
     /// Add the artist credits of the enitity as well.
     pub artist_credits: bool,
+
+    /// Show duration information where applicable
+    pub duration: bool,
 }

@@ -1,4 +1,8 @@
 #[cfg(feature = "pretty_format")]
+use chrono::Duration;
+#[cfg(feature = "pretty_format")]
+use tuillez::extensions::chrono_exts::DurationExt;
+#[cfg(feature = "pretty_format")]
 use tuillez::formatter::FormatWithAsyncDyn;
 #[cfg(feature = "pretty_format")]
 use tuillez::reexports::async_trait;
@@ -29,17 +33,33 @@ impl FormatWithAsyncDyn<MusicbrainzFormater> for Recording {
             &format!("https://musicbrainz.org/recording/{}", &self.mbid),
         );
 
-        if ft.artist_credits {
-            Ok(format!(
+        let title_with_maybe_artist_format = if ft.artist_credits {
+            format!(
                 "{} by {}",
                 name_format,
                 self.get_related_entity_or_fetch_as_task::<ArtistCreditDBRel>(&ft.client)
                     .await?
                     .format_with_async(ft)
                     .await?
+            )
+        } else {
+            name_format
+        };
+
+        if ft.duration && self.length.is_some() {
+            Ok(format!(
+                "{} {}",
+                title_with_maybe_artist_format,
+                format!(
+                    "({})",
+                    Duration::seconds(self.length.unwrap() / 1000)
+                        .to_humantime()
+                        .unwrap()
+                )
+                .truecolor(100, 100, 100),
             ))
         } else {
-            Ok(name_format)
+            Ok(title_with_maybe_artist_format)
         }
     }
 }
