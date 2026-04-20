@@ -9,7 +9,7 @@ extend = "1.2.0"
 serde_json = "1.0.148"
 itertools = "0.14.0"
 serde = "1.0.228"
-const_format = { version = "0.2.34" , features = ["rust_1_51", "rust_1_64", "assertcp"] }
+const_format = { version = "0.2.36" , features = ["rust_1_51", "rust_1_64", "assertcp"] }
 regex = "1.11.3"
 url = "2.5.4"
 
