@@ -1,6 +1,6 @@
 [package]
 name = "alistral"
-version = "0.6.6"
+version = "0.6.7"
 edition = "2024"
 repository = "https://github.com/RustyNova016/alistral"
 publish = true

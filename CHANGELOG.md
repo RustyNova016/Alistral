@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.6.7] - 2026-04-27
+
+### 🚀 Features
+
+- RUSTSEC-2026-0009: Denial of Service via Stack Exhaustion
+- Add nicer error for user error
+
+### 🐛 Bug Fixes
+
+- Unlinked listen filtering
+
+### ⚙️ Miscellaneous Tasks
+
+- Update deps
+- Update deps
+- Fix clippy
+- Updated mb_rs to 0.13
+- Updated lb_rs to latest master
+- Updated submarine to latest master
+- Updated tokio to 1.52.0
+- Updated snafu to 0.9.0
+- Updated hotpath to 0.15.0
+- Update deps
+
 ## [0.6.6] - 2026-02-04
 
 ### 🚀 Features
@@ -22,6 +46,7 @@ All notable changes to this project will be documented in this file.
 - Update sub_deps
 - Bump deps
 - Update sub deps
+- Release v0.6.6
 
 ## [0.6.5] - 2026-01-05
 
