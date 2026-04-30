@@ -33,7 +33,7 @@ impl UserInputParser {
         }
     }
 
-    #[expect(dead_code)]
+
     pub fn parse_naive_date(date: Option<NaiveDate>) -> Option<DateTime<Local>> {
         Some(
             date?
@@ -44,7 +44,7 @@ impl UserInputParser {
         )
     }
 
-    #[expect(dead_code)]
+
     pub fn parse_naive_date_utc(date: Option<NaiveDate>) -> Option<DateTime<Utc>> {
         Some(
             date?

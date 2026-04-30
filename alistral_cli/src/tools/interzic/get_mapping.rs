@@ -79,7 +79,7 @@ impl GetMappingCommand {
             }
         };
 
-        #[expect(unused)]
+
         let recording = recording
             .upsert(&ALISTRAL_CLIENT.interzic.database_client)
             .await?;

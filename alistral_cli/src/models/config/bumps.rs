@@ -1,11 +1,10 @@
 use chrono::DateTime;
 use chrono::Utc;
-use derive_new::new;
 use rust_decimal::Decimal;
 use serde::Deserialize;
 use serde::Serialize;
 
-#[derive(Serialize, Deserialize, new, Default, Debug)]
+#[derive(Serialize, Deserialize, Default, Debug)]
 pub struct Bump {
     pub(self) recording: String,
     pub(self) username: String,
@@ -13,7 +12,7 @@ pub struct Bump {
     pub(self) expiration_date: DateTime<Utc>,
 }
 
-#[derive(Serialize, Deserialize, new, Default, Debug)]
+#[derive(Serialize, Deserialize, Default, Debug)]
 pub struct BumpList(Vec<Bump>);
 
 impl BumpList {
