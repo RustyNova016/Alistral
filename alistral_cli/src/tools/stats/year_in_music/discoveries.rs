@@ -34,7 +34,7 @@ impl YimReport {
         let track_count = current_year.len();
         let listen_count: usize = current_year.iter().map(|rec| rec.listen_count()).sum();
         let listen_perc = Decimal::new(listen_count as i64, 0)
-            / Decimal::new(self.num_listens_in_year().await as i64, 0);
+            / Decimal::new(self.num_listens_in_year() as i64, 0);
 
         let previous = self.data.discovery_years_previous().await;
         if !previous.is_empty() {

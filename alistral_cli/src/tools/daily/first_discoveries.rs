@@ -7,7 +7,7 @@ use chrono::DateTime;
 use chrono::Datelike as _;
 use chrono::Local;
 use itertools::Itertools as _;
-use snafu::ResultExt;
+use snafu::ResultExt as _;
 use tuillez::OwoColorize as _;
 use tuillez::formatter::FormatWithAsync as _;
 

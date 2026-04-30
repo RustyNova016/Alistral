@@ -35,8 +35,8 @@ impl GetFriendlyError for CacheCopyToDebugCommandError {
         &self,
     ) -> Option<crate::interface::errors::friendly_error::FriendlyPanic> {
         match self {
-            Self::DeleteDatabase { source: _ } => None,
-            Self::CopyError { source: _ } => None,
+            Self::DeleteDatabase { .. } => None,
+            Self::CopyError { .. } => None,
         }
     }
 }

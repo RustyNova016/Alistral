@@ -51,7 +51,7 @@ pub enum CacheSubcommands {
 }
 
 impl CacheCommand {
-    pub async fn run(&self) -> Result<(), CacheCommandError> {
+    pub fn run(&self) -> Result<(), CacheCommandError> {
         match &self.command {
             CacheSubcommands::Clear(val) => val.run().context(CacheClearCommandSnafu),
             CacheSubcommands::CopyToDebug(val) => val.run().context(CacheCopyToDebugCommandSnafu),

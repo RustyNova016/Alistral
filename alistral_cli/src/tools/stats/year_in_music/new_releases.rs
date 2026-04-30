@@ -18,7 +18,7 @@ impl YimReport {
             .data
             .release_years_current()
             .await
-            .get(&(self.year as u64))
+            .get(&(self.year.try_into().unwrap()))
         {
             writeln!(out, "{}", self.new_releases().await).unwrap();
             writeln!(out).unwrap();
@@ -36,19 +36,19 @@ impl YimReport {
             .data
             .release_years_current()
             .await
-            .get(&(self.year as u64))
+            .get(&(self.year.try_into().unwrap()))
             .expect("no_new_releases should have been called instead");
 
         let track_count = current_year.len();
         let listen_count: usize = current_year.iter().map(|rec| rec.listen_count()).sum();
         let listen_perc = Decimal::new(listen_count as i64, 0)
-            / Decimal::new(self.num_listens_in_year().await as i64, 0);
+            / Decimal::new(self.num_listens_in_year() as i64, 0);
 
         if let Some(previous) = self
             .data
             .release_years_previous()
             .await
-            .get(&((self.year - 1) as u64))
+            .get(&((self.year - 1).try_into().unwrap()))
         {
             let track_count_prev = previous.len();
             let listen_count_prev: usize = previous.iter().map(|rec| rec.listen_count()).sum();
@@ -88,7 +88,7 @@ impl YimReport {
             .data
             .release_years_previous()
             .await
-            .get(&((self.year - 1) as u64))
+            .get(&((self.year - 1).try_into().unwrap()))
         {
             let track_count = previous.len();
             let listen_count: usize = previous.iter().map(|rec| rec.listen_count()).sum();

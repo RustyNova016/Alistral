@@ -28,7 +28,7 @@ impl Display for TopColumnType {
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum TopColumnSort {
-    #[expect(dead_code)]
+    #[expect(dead_code, reason = "todo")]
     Asc,
     Desc,
 }

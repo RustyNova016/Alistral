@@ -41,8 +41,7 @@ impl AlistralCliClient {
         let config = Config::load_unguarded()?;
         let musicbrainz = Self::create_mb_client(&config);
         let listenbrainz = Self::create_lb_client(&config);
-        let musicbrainz_db =
-            Self::create_mb_db_client(musicbrainz.clone(), listenbrainz.clone()).await;
+        let musicbrainz_db = Self::create_mb_db_client(musicbrainz.clone(), listenbrainz.clone());
         #[cfg(feature = "interzic")]
         let interzic = Self::create_interzic(musicbrainz, musicbrainz_db.clone()).await;
         let core = Self::create_core_client(musicbrainz_db.clone());

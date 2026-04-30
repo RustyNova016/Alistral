@@ -20,7 +20,7 @@ pub mod listens_per_month;
 pub mod release_years;
 
 impl YimReport {
-    pub async fn num_listens_in_year(&self) -> usize {
+    pub fn num_listens_in_year(&self) -> usize {
         self.data.current.listens().listen_count()
     }
 }

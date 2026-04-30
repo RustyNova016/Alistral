@@ -45,8 +45,8 @@ impl GetFriendlyError for CacheClearCommandError {
         &self,
     ) -> Option<crate::interface::errors::friendly_error::FriendlyPanic> {
         match self {
-            Self::DeleteDatabase { source: _ } => None,
-            Self::DeleteDebugDatabase { source: _ } => None,
+            Self::DeleteDatabase { .. } => None,
+            Self::DeleteDebugDatabase { .. } => None,
         }
     }
 }

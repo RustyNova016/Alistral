@@ -3,6 +3,7 @@ use std::path::PathBuf;
 use chrono::DateTime;
 use chrono::Local;
 use chrono::NaiveDate;
+#[cfg(feature = "lookup")]
 use chrono::Utc;
 
 use crate::models::config::Config;
@@ -43,6 +44,7 @@ impl UserInputParser {
         )
     }
 
+    #[cfg(feature = "lookup")]
     pub fn parse_naive_date_utc(date: Option<NaiveDate>) -> Option<DateTime<Utc>> {
         Some(
             date?

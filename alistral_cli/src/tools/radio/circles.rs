@@ -151,9 +151,9 @@ impl RadioCircle {
         recordings: Vec<&Recording>,
     ) -> Result<Option<Recording>, crate::Error> {
         if self.unlistened {
-            recordings
-                .iter()
-                .for_each(|r| self.recording_blacklist.push(r.mbid.clone()));
+            for r in recordings.iter() {
+                self.recording_blacklist.push(r.mbid.clone());
+            }
         }
 
         loop {

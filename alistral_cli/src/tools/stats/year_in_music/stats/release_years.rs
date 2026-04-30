@@ -52,7 +52,9 @@ async fn generate_new_releases(
             continue;
         };
 
-        out.entry(release_date.year() as u64).or_default().push(rec);
+        out.entry(release_date.year().try_into().unwrap())
+            .or_default()
+            .push(rec);
     }
 
     out

@@ -44,7 +44,7 @@ impl ListenCommand {
             ListenSubcommands::ImportDump(cmd) => cmd.run().await,
             ListenSubcommands::Reload(cmd) => cmd.run().await,
             ListenSubcommands::RemapMsid(cmd) => cmd.run().await,
-            ListenSubcommands::Submit(cmd) => cmd.run().await,
+            ListenSubcommands::Submit(cmd) => cmd.run(),
             ListenSubcommands::Unlinked(cmd) => cmd.run().await,
             ListenSubcommands::WrongMapping(cmd) => cmd.run().await,
         }

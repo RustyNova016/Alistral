@@ -12,9 +12,6 @@ use crate::tools::lookup::lookup_components::duration_string::LookupDurationStri
 pub struct UserLookup {
     pub(super) user: String,
 
-    #[expect(dead_code)]
-    pub(super) all_time: ListenStatisticsData,
-
     pub(super) now: ListenStatisticsData,
     pub(super) before: Option<ListenStatisticsData>,
 }
@@ -36,7 +33,6 @@ impl UserLookup {
 
         Self {
             user,
-            all_time: stats,
             now: now_stats,
             before: Some(before_stats),
         }
@@ -45,7 +41,6 @@ impl UserLookup {
     pub fn new(stats: ListenStatisticsData, user: String) -> Self {
         Self {
             user,
-            all_time: stats.clone_no_stats(),
             now: stats,
             before: None,
         }

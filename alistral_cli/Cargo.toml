@@ -112,11 +112,93 @@ hotpath = ["dep:hotpath", "hotpath/hotpath"]
 hotpath-alloc = ["hotpath/hotpath-alloc"]
 backtrace = []
 
+# =========
+#   Lints
+# =========
+
+# Do not move to the workplace. The workplace is disabled in the CI and thus won't find the lints 
+
 [lints.rust]
 async_fn_in_trait = { level = "allow", priority = 1 }
 
 [lints.clippy]
 result_large_err = { level = "allow", priority = 1 }
+
+# Lint groups taken from https://emschwartz.me/your-clippy-config-should-be-stricter/
+
+# Don't Panic - prevent panics from unwraps and unsafe slicing or indexing
+string_slice = "warn"
+indexing_slicing = "warn"
+#unwrap_used = "warn" #TODO
+#panic = "warn"
+#todo = "warn"
+#unimplemented = "warn"
+#unreachable = "warn"
+get_unwrap = "warn"
+#unwrap_in_result = "warn"
+unchecked_time_subtraction = "warn"
+panic_in_result_fn = "warn"
+
+# Don't Fail Silently - prevent dropped futures and swallowed errors
+let_underscore_future = "warn"
+let_underscore_must_use = "warn"
+unused_result_ok = "warn"
+map_err_ignore = "warn"
+assertions_on_result_states = "warn"
+
+# Don't Do Bad Async Stuff - prevent deadlocks and concurrency bugs
+await_holding_lock = "warn"
+await_holding_refcell_ref = "warn"
+if_let_mutex = "warn"  # only relevant on editions before 2024
+#large_futures = "warn" #TODO: Fix in dependencies
+
+# Don't Do Unsafe Things with Memory
+mem_forget = "warn"
+undocumented_unsafe_blocks = "warn"
+multiple_unsafe_ops_per_block = "warn"
+unnecessary_safety_doc = "warn"
+unnecessary_safety_comment = "warn"
+
+# Don't Do Potentially Incorrect Things with Numbers
+float_cmp = "warn"
+float_cmp_const = "warn"
+lossy_float_literal = "warn"
+cast_sign_loss = "warn"
+invalid_upcast_comparisons = "warn"
+
+# Don't Do Bad Things That are Easy to Avoid
+rc_mutex = "warn"
+debug_assert_with_mut_call = "warn"
+iter_not_returning_iterator = "warn"
+expl_impl_clone_on_copy = "warn"
+infallible_try_from = "warn"
+dbg_macro = "warn"
+
+# Don't `allow` Your Way Around These Lints - every suppression must be
+# a deliberate #[expect(..., reason = "…")] rather than a silent #[allow]
+allow_attributes = "warn"
+allow_attributes_without_reason = "warn"
+
+# Don't do things that'll hurt down the line
+alloc_instead_of_core = "deny"
+std_instead_of_core = "deny"
+
+# Don't do useless things
+needless_collect = "warn"
+needless_continue = "warn"
+needless_for_each = "warn"
+needless_pass_by_ref_mut = "warn"
+needless_raw_string_hashes = "warn"
+needless_type_cast = "warn"
+#unused_async = "warn"
+unused_peekable = "warn"
+#unused_self = "warn"
+unused_trait_names = "warn"
+unnecessary_box_returns = "warn"
+unnecessary_literal_bound = "warn"
+unnecessary_wraps = "warn"
+unneeded_field_pattern = "warn"
+useless_let_if_seq = "warn"
 
 [patch.crates-io]
 sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "8393f82ea91c8df6008459ac72a0e16a86fe20d7"}

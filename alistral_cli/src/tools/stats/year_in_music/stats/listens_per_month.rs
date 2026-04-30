@@ -10,20 +10,18 @@ use crate::tools::stats::year_in_music::YimReportData;
 impl YimReportData {
     pub async fn listens_per_month_current(&self) -> &HashMap<u32, ListenStatisticsData> {
         self.listens_per_month_current
-            .get_or_init(async { generate_listens_per_month(self.current.clone_no_stats()).await })
+            .get_or_init(async { generate_listens_per_month(self.current.clone_no_stats()) })
             .await
     }
 
     pub async fn listens_per_month_previous(&self) -> &HashMap<u32, ListenStatisticsData> {
         self.listens_per_month_previous
-            .get_or_init(async { generate_listens_per_month(self.previous.clone_no_stats()).await })
+            .get_or_init(async { generate_listens_per_month(self.previous.clone_no_stats()) })
             .await
     }
 }
 
-async fn generate_listens_per_month(
-    listens: ListenStatisticsData,
-) -> HashMap<u32, ListenStatisticsData> {
+fn generate_listens_per_month(listens: ListenStatisticsData) -> HashMap<u32, ListenStatisticsData> {
     let mut mapping: HashMap<u32, Vec<Listen>> = HashMap::new();
 
     for listen in listens.listens().iter_listens() {

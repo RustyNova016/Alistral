@@ -77,10 +77,9 @@ impl ConfigCommands {
             Self::BlacklistMapperMSID { msid, remove } => {
                 let conf = Config::load()?;
                 if !remove {
-                    conf.write_or_panic()
-                        .add_blacklisted_msid(msid.to_string())?;
+                    conf.write_or_panic().add_blacklisted_msid(msid.to_string());
                 } else {
-                    conf.write_or_panic().remove_blacklisted_msid(msid)?;
+                    conf.write_or_panic().remove_blacklisted_msid(msid);
                 }
             }
             Self::Listens(val) => val.run().await?,

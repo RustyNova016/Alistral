@@ -142,7 +142,7 @@ impl Commands {
         match self {
             Self::Bump(val) => val.run().await?,
             Self::BumpDown(val) => val.run().await?,
-            Self::Cache(val) => val.run().await?,
+            Self::Cache(val) => val.run()?,
             Self::Compatibility { user_a, user_b } => {
                 compatibility_command(user_a, user_b).await;
             }

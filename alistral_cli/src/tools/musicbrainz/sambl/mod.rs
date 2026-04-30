@@ -50,8 +50,8 @@ impl MusicbrainzSamblCommand {
             .buffered(16)
             .map_err(crate::Error::from);
 
-        let _ = join!(crawler_poller(crawler), samble_clippy_poller(sambl_stream));
-
+        let (err, _) = join!(crawler_poller(crawler), samble_clippy_poller(sambl_stream));
+        err.unwrap();
         println!("No more data to process");
     }
 

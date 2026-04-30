@@ -22,8 +22,6 @@ where
 {
     data: EntityWithListensCollection<Ent, Lis>,
     stat_type: PhantomData<Stats>,
-    #[expect(dead_code)] // Will be used later
-    stat_output: StatisticOutput,
 }
 
 impl<Ent, Lis, Stats> StatisticFormater<Ent, Lis, Stats>
@@ -32,11 +30,10 @@ where
     Lis: ListenCollectionReadable,
     Stats: StatisticType,
 {
-    pub fn new(data: EntityWithListensCollection<Ent, Lis>, stat_output: StatisticOutput) -> Self {
+    pub fn new(data: EntityWithListensCollection<Ent, Lis>) -> Self {
         Self {
             data,
             stat_type: Default::default(),
-            stat_output,
         }
     }
 }
@@ -94,10 +91,4 @@ where
 
     async fn get_line(&self, element: &EntityWithListens<Ent, Lis>)
     -> Result<String, crate::Error>;
-}
-
-pub enum StatisticOutput {
-    Print,
-    #[expect(dead_code)]
-    Art,
 }

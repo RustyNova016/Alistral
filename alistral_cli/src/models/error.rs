@@ -51,7 +51,6 @@ pub enum Error {
     #[error("No user data is available for this playlist export target: {0}")]
     MissingPlaylistUserData(String),
 
-    #[expect(clippy::enum_variant_names)]
     #[error(transparent)]
     FatalError(#[from] FatalError),
 
@@ -69,7 +68,6 @@ pub enum Error {
     #[error(transparent)]
     Interzic(#[from] interzic::Error),
 
-    #[expect(clippy::enum_variant_names)]
     #[error(transparent)]
     TimeError(#[from] TimeError),
 

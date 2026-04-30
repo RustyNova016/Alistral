@@ -19,10 +19,7 @@ pub enum DailyCommandError {
 impl GetFriendlyError for DailyCommandError {
     fn get_friendly_error(&self) -> Option<FriendlyPanic> {
         match self {
-            Self::RecordingStatsError {
-                source: _,
-                location: _,
-            } => None,
+            Self::RecordingStatsError { .. } => None,
         }
     }
 }

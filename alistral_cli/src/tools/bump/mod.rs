@@ -111,7 +111,7 @@ pub enum BumpCommandError {
 impl GetFriendlyError for BumpCommandError {
     fn get_friendly_error(&self) -> Option<FriendlyPanic> {
         match self {
-            Self::MultiplierParsingError { source: _, value } => Some(
+            Self::MultiplierParsingError { value, .. } => Some(
                 FriendlyPanicSnafu {
                     title: "Error reading arguments".to_string(),
                     body: format!("Couldn't parse `{value}` as a decimal value"),

@@ -40,7 +40,7 @@ pub(super) async fn display_wrong_mapping(
         &messybrainz_data.recording.to_lowercase(),
         &recording.title.to_lowercase(),
     );
-    if title_score == 1.0 {
+    if (title_score - 1.0).abs() < 0.01 {
     } else if title_score < 0.5 {
         println!("Title similarity: {}", title_score.red());
     } else {
@@ -56,7 +56,7 @@ pub(super) async fn display_wrong_mapping(
             .to_string()
             .to_lowercase(),
     );
-    if artist_score == 1.0 {
+    if (artist_score - 1.0).abs() < 0.01 {
     } else if artist_score < 0.5 {
         println!("Artist similarity: {}", artist_score.red());
     } else {

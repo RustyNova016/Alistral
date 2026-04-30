@@ -27,7 +27,7 @@ pub(crate) type ColEyre = color_eyre::Result<()>;
 
 #[tokio::main]
 async fn main() -> ColEyre {
-    let _ = dotenvy::dotenv();
+    dotenvy::dotenv()?;
     color_eyre::install()?;
     let cli = Cli::parse();
     let _worker_guard = init_tracer(&cli);

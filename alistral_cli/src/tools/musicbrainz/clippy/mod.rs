@@ -136,11 +136,14 @@ pub async fn mb_clippy(start_recordings: Vec<Recording>, filter: Arc<WhitelistBl
         .buffered(16)
         .map_err(crate::Error::from);
 
-    let _ = join!(
+    let (err_a, err_b, _) = join!(
         crawler_poller(crawler),
         mb_clippy_poller(mb_stream),
         samble_clippy_poller(sambl_stream)
     );
+
+    err_a.unwrap();
+    err_b.unwrap();
 
     println!("No more data to process");
 }

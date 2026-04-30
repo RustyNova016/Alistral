@@ -63,7 +63,7 @@ impl ListenWrongMappingCommand {
             .to_lowercase();
             let score = sorensen_dice(&formated_messy, &formated_recording);
 
-            if score != 1.0 {
+            if (score - 1.0).abs() > 0.01 {
                 let continu = display_wrong_mapping(
                     conn,
                     &mut config.write_or_panic(),
