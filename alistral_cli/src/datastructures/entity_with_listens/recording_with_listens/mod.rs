@@ -5,11 +5,11 @@ use alistral_core::datastructures::listen_collection::traits::ListenCollectionRe
 use chrono::{DateTime, Duration, Utc};
 use collection::RecordingWithListensCollection;
 use derive_getters::Getters;
-use musicbrainz_db_lite::HasRowID;
+use musicbrainz_db_lite::HasRowID as _;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use musicbrainz_db_lite::models::musicbrainz::user::User;
-use rust_decimal::{Decimal, prelude::FromPrimitive};
+use rust_decimal::{Decimal, prelude::FromPrimitive as _};
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -71,7 +71,7 @@ impl RecordingWithListens {
                         recording,
                         listens: ListenCollection::default(),
                     })
-                    .push(listen.clone());
+                    .push(listen);
             });
 
         Ok(out.into())

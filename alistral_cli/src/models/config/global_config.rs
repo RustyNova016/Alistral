@@ -1,5 +1,5 @@
-use std::ops::Deref;
-use std::ops::DerefMut;
+use core::ops::Deref;
+use core::ops::DerefMut;
 use std::sync::Arc;
 use std::sync::LazyLock;
 use std::thread::panicking;

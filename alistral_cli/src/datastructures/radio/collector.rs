@@ -1,6 +1,6 @@
 use chrono::Duration;
 use futures::Stream;
-use futures::StreamExt;
+use futures::StreamExt as _;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 
 #[derive(Debug, bon::Builder)]

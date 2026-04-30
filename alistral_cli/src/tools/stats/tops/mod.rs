@@ -26,7 +26,6 @@ use crate::datastructures::statistic_formater::ListenCountStats;
 use crate::datastructures::statistic_formater::ListenDurationStats;
 use crate::datastructures::statistic_formater::StatFormatterVariant;
 use crate::datastructures::statistic_formater::StatisticFormater;
-use crate::datastructures::statistic_formater::StatisticOutput;
 use crate::datastructures::statistic_formater::StatisticType;
 use crate::tools::stats::tops::score_by::SortBy;
 use crate::utils::user_inputs::UserInputParser;
@@ -77,7 +76,7 @@ pub enum StatsTarget {
 }
 
 impl Display for StatsTarget {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let inner = match self {
             Self::Recording => "recording",
             Self::Artist => "artist",
@@ -246,7 +245,7 @@ impl StatsTopCommand {
         S: StatisticType,
         StatisticFormater<Ent, Lis, S>: StatFormatterVariant<Ent, Lis>,
     {
-        let stats = StatisticFormater::<Ent, Lis, S>::new(data, StatisticOutput::Print);
+        let stats = StatisticFormater::<Ent, Lis, S>::new(data);
 
         stats.print_paged().await
     }

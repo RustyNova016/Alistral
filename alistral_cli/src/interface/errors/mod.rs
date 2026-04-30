@@ -25,7 +25,7 @@ fn process_interzic_error(error: &interzic::Error) -> Option<String> {
 
 fn process_listenbrainz_error(error: &listenbrainz::Error) -> Option<String> {
     match error {
-        listenbrainz::Error::Api { code: _, error } => {
+        listenbrainz::Error::Api { error, .. } => {
             if error == "Invalid authorization token." {
                 return Some("The authentification token is invalid.".to_string());
             }

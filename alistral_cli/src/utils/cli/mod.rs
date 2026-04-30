@@ -8,6 +8,10 @@ pub mod formating;
 /// Block the current trhead until the user press enter
 pub fn await_next() {
     let buf = &mut String::new();
+    #[expect(
+        clippy::let_underscore_must_use,
+        reason = "We are just waiting for the user to press enter. We don't care about any io errors"
+    )]
     let _ = io::stdin().read_line(buf);
 }
 

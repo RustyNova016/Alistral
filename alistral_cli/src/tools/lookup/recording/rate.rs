@@ -1,6 +1,6 @@
 use core::fmt::Write as _;
 
-use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use tuillez::extensions::chrono_exts::DateTimeUtcExt as _;
 use tuillez::extensions::chrono_exts::DurationExt as _;
 

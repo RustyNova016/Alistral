@@ -1,15 +1,15 @@
 use std::sync::Arc;
 
 use clap::Parser;
-use futures::SinkExt;
-use futures::StreamExt;
-use futures::TryStreamExt;
+use futures::SinkExt as _;
+use futures::StreamExt as _;
+use futures::TryStreamExt as _;
 use futures::join;
 use musicbrainz_db_lite::Artist;
-use musicbrainz_db_lite::FetchAndSave;
+use musicbrainz_db_lite::FetchAndSave as _;
 use musicbrainz_db_lite::models::musicbrainz::main_entities::MainEntity;
 use musicbrainz_db_lite::models::musicbrainz::main_entities::crawler::crawler;
-use streamies::TryStreamies;
+use streamies::TryStreamies as _;
 
 use crate::ALISTRAL_CLIENT;
 use crate::tools::musicbrainz::clippy::crawler_poller;
@@ -50,8 +50,8 @@ impl MusicbrainzSamblCommand {
             .buffered(16)
             .map_err(crate::Error::from);
 
-        let _ = join!(crawler_poller(crawler), samble_clippy_poller(sambl_stream));
-
+        let (err, _) = join!(crawler_poller(crawler), samble_clippy_poller(sambl_stream));
+        err.unwrap();
         println!("No more data to process");
     }
 

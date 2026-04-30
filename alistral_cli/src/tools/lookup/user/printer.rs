@@ -1,6 +1,6 @@
 use core::fmt::Write as _;
 
-use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime;
+use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime as _;
 use alistral_core::models::listen_statistics_data::ListenStatisticsData;
 use chrono::DateTime;
 use chrono::Utc;
@@ -11,9 +11,6 @@ use crate::tools::lookup::lookup_components::duration_string::LookupDurationStri
 
 pub struct UserLookup {
     pub(super) user: String,
-
-    #[expect(dead_code)]
-    pub(super) all_time: ListenStatisticsData,
 
     pub(super) now: ListenStatisticsData,
     pub(super) before: Option<ListenStatisticsData>,
@@ -36,7 +33,6 @@ impl UserLookup {
 
         Self {
             user,
-            all_time: stats,
             now: now_stats,
             before: Some(before_stats),
         }
@@ -45,7 +41,6 @@ impl UserLookup {
     pub fn new(stats: ListenStatisticsData, user: String) -> Self {
         Self {
             user,
-            all_time: stats.clone_no_stats(),
             now: stats,
             before: None,
         }
@@ -80,7 +75,7 @@ impl UserLookup {
     pub fn get_listen_count_field(&self) -> String {
         let now_data = self.now.listens().len();
 
-        let mut string = format!("Listen count: {}", now_data);
+        let mut string = format!("Listen count: {now_data}");
 
         if let Some(data_before) = self.before.as_ref().map(|data| data.listens().len()) {
             string = format!(

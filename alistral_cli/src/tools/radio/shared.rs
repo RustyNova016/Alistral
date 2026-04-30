@@ -1,8 +1,8 @@
 use chrono::Duration;
-use futures::StreamExt;
+use futures::StreamExt as _;
 use futures::stream;
 use interzic::models::playlist_stub::PlaylistStub;
-use itertools::Itertools;
+use itertools::Itertools as _;
 use tracing::info;
 
 use crate::ALISTRAL_CLIENT;
@@ -19,7 +19,10 @@ use crate::models::error::ResultTEExt as _;
 use crate::tools::radio::convert_recordings;
 use crate::utils::data_file::DataFile as _;
 
-#[expect(clippy::too_many_arguments)]
+#[expect(
+    clippy::too_many_arguments,
+    reason = "Will be reworked in `yumako_jams`"
+)]
 pub async fn shared_radio(
     seeder: ListenSeeder,
     other_user: String,

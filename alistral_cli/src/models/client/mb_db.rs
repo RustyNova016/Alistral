@@ -5,22 +5,23 @@ use musicbrainz_db_lite::DBClient;
 use musicbrainz_db_lite::MusicBrainzClient;
 use musicbrainz_db_lite::SqlitePoolConnection;
 use musicbrainz_db_lite::listenbrainz_rs::ListenBrainzClient;
-use sqlx::Acquire;
+use sqlx::Acquire as _;
 
 use crate::database::DB_LOCATION;
 use crate::models::client::AlistralCliClient;
 use crate::utils::env::temp_database;
 
 impl AlistralCliClient {
-    pub(super) async fn create_mb_db_client(
+    pub(super) fn create_mb_db_client(
         musicbrainz_client: Arc<MusicBrainzClient>,
         listenbrainz_client: Arc<ListenBrainzClient>,
     ) -> Arc<DBClient> {
         //TODO: set db location in config
-        let mut location = DB_LOCATION.to_path_buf();
-        if temp_database() {
-            location = PathBuf::from("./temp.db");
-        }
+        let location = if temp_database() {
+            PathBuf::from("./temp.db")
+        } else {
+            DB_LOCATION.to_path_buf()
+        };
 
         let musicbrainz_db = DBClient::from_path(location, musicbrainz_client, listenbrainz_client)
             .expect("Couldn't create database client");

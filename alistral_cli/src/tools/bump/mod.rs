@@ -1,4 +1,4 @@
-use std::str::FromStr;
+use core::str::FromStr as _;
 
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use alistral_core::models::listen_statistics_data::ListenStatisticsData;
@@ -6,9 +6,9 @@ use chrono::Duration;
 use chrono::Utc;
 use clap::Parser;
 use rust_decimal::Decimal;
-use snafu::ResultExt;
+use snafu::ResultExt as _;
 use tuillez::extensions::chrono_exts::DurationExt as _;
-use tuillez::formatter::FormatWithAsync;
+use tuillez::formatter::FormatWithAsync as _;
 
 use crate::ALISTRAL_CLIENT;
 use crate::interface::errors::friendly_error::FriendlyPanic;
@@ -111,10 +111,10 @@ pub enum BumpCommandError {
 impl GetFriendlyError for BumpCommandError {
     fn get_friendly_error(&self) -> Option<FriendlyPanic> {
         match self {
-            Self::MultiplierParsingError { source: _, value } => Some(
+            Self::MultiplierParsingError { value, .. } => Some(
                 FriendlyPanicSnafu {
                     title: "Error reading arguments".to_string(),
-                    body: format!("Couldn't parse `{}` as a decimal value", value),
+                    body: format!("Couldn't parse `{value}` as a decimal value"),
                 }
                 .build(),
             ),

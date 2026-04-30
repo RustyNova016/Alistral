@@ -1,10 +1,10 @@
 // Apparently I nest my functions too much :P
 #![recursion_limit = "256"]
 
-use clap::Parser;
+use clap::Parser as _;
 use tuillez::fatal_error::FatalError;
 
-use crate::interface::errors::friendly_error::GetFriendlyError;
+use crate::interface::errors::friendly_error::GetFriendlyError as _;
 use crate::interface::tracing::init_tracer;
 use models::cli::Cli;
 
@@ -27,7 +27,7 @@ pub(crate) type ColEyre = color_eyre::Result<()>;
 
 #[tokio::main]
 async fn main() -> ColEyre {
-    let _ = dotenvy::dotenv();
+    dotenvy::dotenv()?;
     color_eyre::install()?;
     let cli = Cli::parse();
     let _worker_guard = init_tracer(&cli);

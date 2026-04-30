@@ -6,17 +6,17 @@ use std::sync::LazyLock;
 
 use alistral_core::cli::colors::AlistralColors as _;
 use clap::Parser;
-use futures::SinkExt;
+use futures::SinkExt as _;
 use futures::Stream;
-use futures::StreamExt;
-use futures::TryStreamExt;
+use futures::StreamExt as _;
+use futures::TryStreamExt as _;
 use futures::join;
 use futures::pin_mut;
-use itertools::Itertools;
+use itertools::Itertools as _;
 use musicbrainz_db_lite::models::musicbrainz::main_entities::MainEntity;
 use musicbrainz_db_lite::models::musicbrainz::main_entities::crawler::crawler;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
-use streamies::TryStreamies;
+use streamies::TryStreamies as _;
 use symphonize::clippy::clippy_lint::MbClippyLint;
 use tokio::sync::Semaphore;
 use tuillez::OwoColorize as _;
@@ -63,9 +63,9 @@ pub struct MusicbrainzClippyCommand {
 impl MusicbrainzClippyCommand {
     pub async fn run(&self) {
         let filter = if let Some(whitelist) = self.whitelist.clone() {
-            WhitelistBlacklist::WhiteList(whitelist.clone())
+            WhitelistBlacklist::WhiteList(whitelist)
         } else if let Some(blacklist) = self.blacklist.clone() {
-            WhitelistBlacklist::BlackList(blacklist.clone())
+            WhitelistBlacklist::BlackList(blacklist)
         } else {
             WhitelistBlacklist::BlackList(Vec::new())
         };
@@ -136,11 +136,14 @@ pub async fn mb_clippy(start_recordings: Vec<Recording>, filter: Arc<WhitelistBl
         .buffered(16)
         .map_err(crate::Error::from);
 
-    let _ = join!(
+    let (err_a, err_b, _) = join!(
         crawler_poller(crawler),
         mb_clippy_poller(mb_stream),
         samble_clippy_poller(sambl_stream)
     );
+
+    err_a.unwrap();
+    err_b.unwrap();
 
     println!("No more data to process");
 }

@@ -7,11 +7,11 @@ use chrono::NaiveDate;
 use chrono::TimeZone as _;
 use chrono::Utc;
 use itertools::Itertools as _;
-use musicbrainz_db_lite::GetOrFetch;
+use musicbrainz_db_lite::GetOrFetch as _;
 use musicbrainz_db_lite::ReleaseGroup;
 use tracing::instrument;
 use tuillez::OwoColorize as _;
-use tuillez::formatter::FormatWithAsync;
+use tuillez::formatter::FormatWithAsync as _;
 use tuillez::pg_spinner;
 
 use crate::ALISTRAL_CLIENT;

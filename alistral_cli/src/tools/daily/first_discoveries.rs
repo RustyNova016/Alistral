@@ -6,19 +6,25 @@ use alistral_core::models::listen_statistics_data::ListenStatisticsData;
 use chrono::DateTime;
 use chrono::Datelike as _;
 use chrono::Local;
-use itertools::Itertools;
+use itertools::Itertools as _;
+use snafu::ResultExt as _;
 use tuillez::OwoColorize as _;
 use tuillez::formatter::FormatWithAsync as _;
 
 use crate::tools::daily::DailyCommand;
+use crate::tools::daily::error::DailyCommandError;
+use crate::tools::daily::error::RecordingStatsSnafu;
 use crate::utils::constants::LISTENBRAINZ_FMT;
 
 impl DailyCommand {
-    pub async fn print_first_discoveries(stats: &ListenStatisticsData, today: DateTime<Local>) {
-        let mut recordings = Self::get_first_discoveries(stats, today).await;
+    pub async fn print_first_discoveries(
+        stats: &ListenStatisticsData,
+        today: DateTime<Local>,
+    ) -> Result<(), DailyCommandError> {
+        let mut recordings = Self::get_first_discoveries(stats, today).await?;
 
         if recordings.is_empty() {
-            return;
+            return Ok(());
         }
 
         println!(
@@ -45,15 +51,17 @@ impl DailyCommand {
         }
 
         println!();
+
+        Ok(())
     }
 
     async fn get_first_discoveries(
         stats: &ListenStatisticsData,
         today: DateTime<Local>,
-    ) -> Vec<RecordingWithListens> {
-        let stats = stats.recording_stats().await.unwrap();
+    ) -> Result<Vec<RecordingWithListens>, DailyCommandError> {
+        let stats = stats.recording_stats().await.context(RecordingStatsSnafu)?;
 
-        stats
+        let recordings = stats
             .iter()
             .filter(|rec| {
                 rec.listens().oldest_listen_date().is_some_and(|discovery| {
@@ -61,6 +69,8 @@ impl DailyCommand {
                 })
             })
             .cloned()
-            .collect_vec()
+            .collect_vec();
+
+        Ok(recordings)
     }
 }

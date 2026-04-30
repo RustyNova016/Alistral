@@ -2,7 +2,7 @@ use clap::Parser;
 #[cfg(feature = "youtube")]
 use interzic::models::services::youtube::Youtube;
 #[cfg(feature = "youtube")]
-use tuillez::fatal_error::OptIntoFatal;
+use tuillez::fatal_error::OptIntoFatal as _;
 
 use crate::ALISTRAL_CLIENT;
 use crate::tools::interzic::get_mapping::InterzicMappingTarget;

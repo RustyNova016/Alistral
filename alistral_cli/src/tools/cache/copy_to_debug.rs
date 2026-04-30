@@ -1,7 +1,7 @@
 use std::fs;
 
 use clap::Parser;
-use snafu::ResultExt;
+use snafu::ResultExt as _;
 
 use crate::database::DEBUG_DB_LOCATION;
 use crate::database::RELEASE_DB_LOCATION;
@@ -35,8 +35,8 @@ impl GetFriendlyError for CacheCopyToDebugCommandError {
         &self,
     ) -> Option<crate::interface::errors::friendly_error::FriendlyPanic> {
         match self {
-            Self::DeleteDatabase { source: _ } => None,
-            Self::CopyError { source: _ } => None,
+            Self::DeleteDatabase { .. } => None,
+            Self::CopyError { .. } => None,
         }
     }
 }

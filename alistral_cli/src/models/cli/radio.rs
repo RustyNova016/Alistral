@@ -3,7 +3,7 @@ use core::fmt::Display;
 use clap::ArgAction;
 use clap::ValueEnum;
 use clap::{Parser, Subcommand};
-use tuillez::extensions::chrono_exts::DurationExt;
+use tuillez::extensions::chrono_exts::DurationExt as _;
 
 use crate::datastructures::radio::collector::RadioCollector;
 use crate::datastructures::radio::seeders::SeederSettings;
@@ -320,7 +320,7 @@ pub enum RadioExportTarget {
 }
 
 impl Display for RadioExportTarget {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match self {
             Self::Listenbrainz => write!(f, "listenbrainz"),
             #[cfg(feature = "youtube")]

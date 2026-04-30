@@ -4,7 +4,7 @@ use chrono::DateTime;
 use chrono::Duration;
 use chrono::Utc;
 #[cfg(feature = "radio")]
-use itertools::Itertools;
+use itertools::Itertools as _;
 use serde::Deserialize;
 use serde::Serialize;
 

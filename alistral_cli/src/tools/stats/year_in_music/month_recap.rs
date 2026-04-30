@@ -1,7 +1,7 @@
-use std::fmt::Write;
+use core::fmt::Write as _;
 use std::sync::LazyLock;
 
-use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime;
+use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime as _;
 use charchart::bar_graph::BarGraph;
 use charchart::bar_graph::colors::Color;
 use charchart::bar_graph::data::Data;

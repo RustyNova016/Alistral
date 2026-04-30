@@ -5,7 +5,7 @@ use clap::Parser;
 use listenbrainz::raw::request::Payload;
 use listenbrainz::raw::request::SubmitListens;
 use listenbrainz::raw::request::TrackMetadata;
-use tuillez::fatal_error::IntoFatal;
+use tuillez::fatal_error::IntoFatal as _;
 
 use crate::utils::user_inputs::UserInputParser;
 
@@ -31,7 +31,7 @@ pub struct ListenSubmitCommand {
 }
 
 impl ListenSubmitCommand {
-    pub async fn run(&self) {
+    pub fn run(&self) {
         let token = UserInputParser::user_token_or_default(&self.username, &self.token);
         let mut extras = HashMap::new();
         extras.insert("submission_client", "Alistral (Submit listen)");

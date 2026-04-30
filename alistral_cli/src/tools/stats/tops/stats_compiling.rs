@@ -61,7 +61,7 @@ impl StatsTopCommand {
         );
 
         if self.w_recursive {
-            strat = strat.with_recursive_parents()
+            strat = strat.with_recursive_parents();
         }
 
         strat

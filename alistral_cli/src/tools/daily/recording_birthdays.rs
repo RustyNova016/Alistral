@@ -75,7 +75,7 @@ impl DailyCommand {
             };
 
             if release.day() == today.day() && release.month() == today.month() {
-                recs.push(rec.clone())
+                recs.push(rec.clone());
             }
         }
 

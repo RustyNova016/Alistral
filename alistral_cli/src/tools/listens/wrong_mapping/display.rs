@@ -7,7 +7,7 @@ use musicbrainz_db_lite::models::listenbrainz::messybrainz_submission::Messybrai
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use strsim::sorensen_dice;
 use tuillez::OwoColorize as _;
-use tuillez::formatter::FormatWithAsync;
+use tuillez::formatter::FormatWithAsync as _;
 use tuillez::utils::hyperlink_rename;
 
 use crate::ALISTRAL_CLIENT;
@@ -40,7 +40,7 @@ pub(super) async fn display_wrong_mapping(
         &messybrainz_data.recording.to_lowercase(),
         &recording.title.to_lowercase(),
     );
-    if title_score == 1.0 {
+    if (title_score - 1.0).abs() < 0.01 {
     } else if title_score < 0.5 {
         println!("Title similarity: {}", title_score.red());
     } else {
@@ -56,7 +56,7 @@ pub(super) async fn display_wrong_mapping(
             .to_string()
             .to_lowercase(),
     );
-    if artist_score == 1.0 {
+    if (artist_score - 1.0).abs() < 0.01 {
     } else if artist_score < 0.5 {
         println!("Artist similarity: {}", artist_score.red());
     } else {
@@ -113,7 +113,7 @@ fn choice() -> Choice {
 
         match ans {
             Ok(choice) => return choice,
-            Err(InquireError::OperationCanceled) | Err(InquireError::OperationInterrupted) => {
+            Err(InquireError::OperationCanceled | InquireError::OperationInterrupted) => {
                 return Choice::Exit;
             }
             _ => println!("There was an error, please try again"),

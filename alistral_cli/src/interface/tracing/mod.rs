@@ -132,7 +132,7 @@ where
             match *metadata.level() {
                 Level::ERROR => "[Error] ".red().to_string(),
                 Level::WARN => "[Warn] ".yellow().to_string(),
-                Level::INFO => "".to_string(),
+                Level::INFO => String::new(),
                 Level::DEBUG => "[Debug] ".cyan().to_string(),
                 Level::TRACE => "[Trace] ".bright_black().to_string(),
             }

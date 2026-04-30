@@ -1,4 +1,3 @@
-use crate::models::error::Error;
 use derive_getters::Getters;
 use serde::Deserialize;
 use serde::Serialize;
@@ -12,17 +11,13 @@ pub struct MapperConfig {
 }
 
 impl Config {
-    pub fn add_blacklisted_msid(&mut self, msid: String) -> Result<(), Error> {
+    pub fn add_blacklisted_msid(&mut self, msid: String) {
         let mapper_config = self.mapper.get_or_insert_default();
         mapper_config.backlisted.push(msid);
-
-        Ok(())
     }
 
-    pub fn remove_blacklisted_msid(&mut self, msid: &String) -> Result<(), Error> {
+    pub fn remove_blacklisted_msid(&mut self, msid: &String) {
         let mapper_config = self.mapper.get_or_insert_default();
         mapper_config.backlisted.retain(|id| id != msid);
-
-        Ok(())
     }
 }

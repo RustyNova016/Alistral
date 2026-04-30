@@ -1,4 +1,4 @@
-use std::fmt::Write;
+use core::fmt::Write as _;
 use std::sync::LazyLock;
 
 use crate::datastructures::cli_formating::title::Heading1;

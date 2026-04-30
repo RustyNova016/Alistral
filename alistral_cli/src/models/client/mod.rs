@@ -1,4 +1,4 @@
-use core::str::FromStr;
+use core::str::FromStr as _;
 use std::sync::Arc;
 use std::sync::LazyLock;
 
@@ -11,10 +11,10 @@ use musicbrainz_db_lite::client::MusicBrainzClient;
 use musicbrainz_db_lite::listenbrainz_rs::ListenBrainzClient;
 #[cfg(feature = "musicbrainz")]
 use symphonize::SymphonyzeClient;
-use tuillez::fatal_error::IntoFatal;
+use tuillez::fatal_error::IntoFatal as _;
 
 use crate::models::config::Config;
-use crate::models::config::config_trait::ConfigFile;
+use crate::models::config::config_trait::ConfigFile as _;
 
 pub mod al_core;
 #[cfg(feature = "interzic")]
@@ -41,8 +41,7 @@ impl AlistralCliClient {
         let config = Config::load_unguarded()?;
         let musicbrainz = Self::create_mb_client(&config);
         let listenbrainz = Self::create_lb_client(&config);
-        let musicbrainz_db =
-            Self::create_mb_db_client(musicbrainz.clone(), listenbrainz.clone()).await;
+        let musicbrainz_db = Self::create_mb_db_client(musicbrainz.clone(), listenbrainz.clone());
         #[cfg(feature = "interzic")]
         let interzic = Self::create_interzic(musicbrainz, musicbrainz_db.clone()).await;
         let core = Self::create_core_client(musicbrainz_db.clone());
@@ -71,7 +70,7 @@ impl AlistralCliClient {
 
     /// Create the client, or fancy panic if an error occur
     pub async fn create_or_fatal() -> Self {
-        AlistralCliClient::create()
+        Self::create()
             .await
             .unwrap_fatal()
             .map_err(|err| err.panic())

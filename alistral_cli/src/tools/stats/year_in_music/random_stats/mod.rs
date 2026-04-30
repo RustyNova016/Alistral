@@ -1,8 +1,8 @@
-use std::fmt::Write;
+use core::fmt::Write as _;
 
-use alistral_core::cli::colors::AlistralColors;
-use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime;
-use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
+use alistral_core::cli::colors::AlistralColors as _;
+use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime as _;
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use rust_decimal::Decimal;
 use rust_decimal_macros::dec;
 

@@ -54,7 +54,7 @@ where
 {
     fn sort_elements(&self) -> Vec<&EntityWithListens<Ent, Lis>> {
         let mut data = self.data.iter().collect_vec();
-        data.sort_by_cached_key(|e| std::cmp::Reverse(e.listen_count()));
+        data.sort_by_cached_key(|e| core::cmp::Reverse(e.listen_count()));
         data
     }
 

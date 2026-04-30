@@ -28,7 +28,7 @@ impl UserInputParser {
 
     /// Get the MBID from an input string
     pub fn read_mbid_from_input(input: &str) -> Option<String> {
-        if UserInputParser::is_uuid(input) {
+        if Self::is_uuid(input) {
             return Some(input.to_string());
         }
 

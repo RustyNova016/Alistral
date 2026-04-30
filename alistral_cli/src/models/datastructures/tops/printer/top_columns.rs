@@ -16,7 +16,7 @@ pub enum TopColumnType {
 }
 
 impl Display for TopColumnType {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match self {
             Self::ListenCount => write!(f, "Listen Count"),
             Self::ListenDuration => write!(f, "Listen Duration"),
@@ -28,7 +28,7 @@ impl Display for TopColumnType {
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum TopColumnSort {
-    #[expect(dead_code)]
+    #[expect(dead_code, reason = "todo")]
     Asc,
     Desc,
 }

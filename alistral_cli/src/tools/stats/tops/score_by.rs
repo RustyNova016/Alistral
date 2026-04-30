@@ -1,4 +1,4 @@
-use std::fmt::Display;
+use core::fmt::Display;
 
 use clap::ValueEnum;
 
@@ -14,7 +14,7 @@ pub enum SortBy {
 impl SortBy {}
 
 impl Display for SortBy {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match self {
             Self::ListenCount => write!(f, "listen-count")?,
             Self::ListenDuration => write!(f, "listen-duration")?,

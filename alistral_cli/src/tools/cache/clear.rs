@@ -1,5 +1,5 @@
 use clap::Parser;
-use snafu::ResultExt;
+use snafu::ResultExt as _;
 
 use crate::database::DEBUG_DB_LOCATION;
 use crate::database::RELEASE_DB_LOCATION;
@@ -45,8 +45,8 @@ impl GetFriendlyError for CacheClearCommandError {
         &self,
     ) -> Option<crate::interface::errors::friendly_error::FriendlyPanic> {
         match self {
-            Self::DeleteDatabase { source: _ } => None,
-            Self::DeleteDebugDatabase { source: _ } => None,
+            Self::DeleteDatabase { .. } => None,
+            Self::DeleteDebugDatabase { .. } => None,
         }
     }
 }

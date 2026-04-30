@@ -1,7 +1,7 @@
 use std::io;
 
 use clap::Command;
-use clap::CommandFactory;
+use clap::CommandFactory as _;
 use clap::Parser;
 use clap::Subcommand;
 use clap_complete::Generator;
@@ -142,12 +142,12 @@ impl Commands {
         match self {
             Self::Bump(val) => val.run().await?,
             Self::BumpDown(val) => val.run().await?,
-            Self::Cache(val) => val.run().await?,
+            Self::Cache(val) => val.run()?,
             Self::Compatibility { user_a, user_b } => {
                 compatibility_command(user_a, user_b).await;
             }
             Self::Config(val) => val.command.run().await?,
-            Self::Daily(val) => val.run().await,
+            Self::Daily(val) => val.run().await?,
 
             #[cfg(feature = "stats")]
             Self::Stats(val) => val.run().await,

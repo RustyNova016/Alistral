@@ -1,6 +1,6 @@
 use clap::Parser;
 use display::display_wrong_mapping;
-use itertools::Itertools;
+use itertools::Itertools as _;
 use musicbrainz_db_lite::HasArtistCredits as _;
 use musicbrainz_db_lite::models::listenbrainz::messybrainz_submission::MessybrainzSubmission;
 use strsim::sorensen_dice;
@@ -63,7 +63,7 @@ impl ListenWrongMappingCommand {
             .to_lowercase();
             let score = sorensen_dice(&formated_messy, &formated_recording);
 
-            if score != 1.0 {
+            if (score - 1.0).abs() > 0.01 {
                 let continu = display_wrong_mapping(
                     conn,
                     &mut config.write_or_panic(),

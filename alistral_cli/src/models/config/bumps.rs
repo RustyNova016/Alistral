@@ -1,9 +1,10 @@
-use chrono::{DateTime, Utc};
-use derive_new::new;
-use rust_decimal::{Decimal, prelude::One};
-use serde::{Deserialize, Serialize};
+use chrono::DateTime;
+use chrono::Utc;
+use rust_decimal::Decimal;
+use serde::Deserialize;
+use serde::Serialize;
 
-#[derive(Serialize, Deserialize, new, Default, Debug)]
+#[derive(Serialize, Deserialize, Default, Debug)]
 pub struct Bump {
     pub(self) recording: String,
     pub(self) username: String,
@@ -11,7 +12,7 @@ pub struct Bump {
     pub(self) expiration_date: DateTime<Utc>,
 }
 
-#[derive(Serialize, Deserialize, new, Default, Debug)]
+#[derive(Serialize, Deserialize, Default, Debug)]
 pub struct BumpList(Vec<Bump>);
 
 impl BumpList {
@@ -39,7 +40,7 @@ impl BumpList {
             .iter()
             .filter(|b| b.recording.as_str() == recording_mbid && b.expiration_date > Utc::now())
             .map(|b| b.value);
-        let mut res = Decimal::one();
+        let mut res = Decimal::ONE;
 
         for val in values {
             res *= val;
