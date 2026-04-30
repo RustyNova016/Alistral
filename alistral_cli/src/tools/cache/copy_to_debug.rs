@@ -1,7 +1,7 @@
 use std::fs;
 
 use clap::Parser;
-use snafu::ResultExt;
+use snafu::ResultExt as _;
 
 use crate::database::DEBUG_DB_LOCATION;
 use crate::database::RELEASE_DB_LOCATION;

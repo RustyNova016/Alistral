@@ -1,10 +1,10 @@
-use std::cmp::Reverse;
+use core::cmp::Reverse;
 
 use alistral_core::datastructures::entity_with_listens::messybrainz::collection::MessybrainzWithListensCollection;
 use alistral_core::datastructures::listen_collection::ListenCollection;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use clap::Parser;
-use itertools::Itertools;
+use itertools::Itertools as _;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 
 use crate::ALISTRAL_CLIENT;

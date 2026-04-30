@@ -8,9 +8,9 @@ use tuillez::extensions::chrono_exts::DurationExt as _;
 pub struct HumanTimePrinter(Option<Duration>);
 
 impl Display for HumanTimePrinter {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         if let Some(dur) = self.0 {
-            write!(f, "{}", dur.floor_to_minute().to_humantime().unwrap()).unwrap()
+            write!(f, "{}", dur.floor_to_minute().to_humantime().unwrap()).unwrap();
         }
 
         Ok(())
@@ -30,7 +30,7 @@ impl From<Duration> for HumanTimePrinter {
 }
 
 impl PartialOrd for HumanTimePrinter {
-    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+    fn partial_cmp(&self, other: &Self) -> Option<core::cmp::Ordering> {
         Some(self.cmp(other))
     }
 }

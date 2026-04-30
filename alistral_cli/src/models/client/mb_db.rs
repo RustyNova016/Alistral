@@ -5,7 +5,7 @@ use musicbrainz_db_lite::DBClient;
 use musicbrainz_db_lite::MusicBrainzClient;
 use musicbrainz_db_lite::SqlitePoolConnection;
 use musicbrainz_db_lite::listenbrainz_rs::ListenBrainzClient;
-use sqlx::Acquire;
+use sqlx::Acquire as _;
 
 use crate::database::DB_LOCATION;
 use crate::models::client::AlistralCliClient;

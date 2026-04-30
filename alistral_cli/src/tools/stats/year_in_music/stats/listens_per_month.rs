@@ -1,8 +1,8 @@
 use std::collections::HashMap;
 
-use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use alistral_core::models::listen_statistics_data::ListenStatisticsData;
-use chrono::Datelike;
+use chrono::Datelike as _;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 
 use crate::tools::stats::year_in_music::YimReportData;

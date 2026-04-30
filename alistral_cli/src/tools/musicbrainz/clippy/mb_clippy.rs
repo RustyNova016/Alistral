@@ -3,7 +3,7 @@ use std::sync::Arc;
 
 use futures::Stream;
 use futures::StreamExt as _;
-use futures::TryStreamExt;
+use futures::TryStreamExt as _;
 use futures::channel::mpsc::Sender;
 use futures::channel::mpsc::channel;
 use futures::pin_mut;

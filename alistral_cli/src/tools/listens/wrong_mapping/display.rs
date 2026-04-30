@@ -7,7 +7,7 @@ use musicbrainz_db_lite::models::listenbrainz::messybrainz_submission::Messybrai
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use strsim::sorensen_dice;
 use tuillez::OwoColorize as _;
-use tuillez::formatter::FormatWithAsync;
+use tuillez::formatter::FormatWithAsync as _;
 use tuillez::utils::hyperlink_rename;
 
 use crate::ALISTRAL_CLIENT;
@@ -113,7 +113,7 @@ fn choice() -> Choice {
 
         match ans {
             Ok(choice) => return choice,
-            Err(InquireError::OperationCanceled) | Err(InquireError::OperationInterrupted) => {
+            Err(InquireError::OperationCanceled | InquireError::OperationInterrupted) => {
                 return Choice::Exit;
             }
             _ => println!("There was an error, please try again"),

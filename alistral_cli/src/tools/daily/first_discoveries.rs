@@ -6,7 +6,7 @@ use alistral_core::models::listen_statistics_data::ListenStatisticsData;
 use chrono::DateTime;
 use chrono::Datelike as _;
 use chrono::Local;
-use itertools::Itertools;
+use itertools::Itertools as _;
 use tuillez::OwoColorize as _;
 use tuillez::formatter::FormatWithAsync as _;
 

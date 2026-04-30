@@ -2,7 +2,7 @@ use alistral_core::datastructures::entity_with_listens::recording::RecordingWith
 use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use alistral_core::datastructures::listen_collection::ListenCollection;
 use derive_getters::Getters;
-use itertools::Itertools;
+use itertools::Itertools as _;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 
 use crate::ALISTRAL_CLIENT;

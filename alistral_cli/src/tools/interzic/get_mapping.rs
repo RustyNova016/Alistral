@@ -4,8 +4,8 @@ use interzic::models::messy_recording::MessyRecording;
 #[cfg(feature = "youtube")]
 use interzic::models::services::youtube::Youtube;
 use tuillez::fatal_error::FatalError;
-use tuillez::fatal_error::IntoFatal;
-use tuillez::fatal_error::OptIntoFatal;
+use tuillez::fatal_error::IntoFatal as _;
+use tuillez::fatal_error::OptIntoFatal as _;
 
 use crate::ALISTRAL_CLIENT;
 use crate::utils::cli::read_mbid_from_input;
@@ -79,7 +79,7 @@ impl GetMappingCommand {
             }
         };
 
-        #[allow(unused)]
+        #[expect(unused)]
         let recording = recording
             .upsert(&ALISTRAL_CLIENT.interzic.database_client)
             .await?;

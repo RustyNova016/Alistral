@@ -1,6 +1,6 @@
 use clap::Parser;
 use interzic::models::services::listenbrainz::Listenbrainz;
-use tuillez::fatal_error::IntoFatal;
+use tuillez::fatal_error::IntoFatal as _;
 
 use crate::ALISTRAL_CLIENT;
 use crate::tools::playlist::PlaylistOrigin;

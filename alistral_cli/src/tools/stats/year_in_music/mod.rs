@@ -5,7 +5,7 @@ use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTi
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use alistral_core::models::listen_statistics_data::ListenStatisticsData;
 use chrono::DateTime;
-use chrono::Datelike;
+use chrono::Datelike as _;
 use chrono::Local;
 use chrono::NaiveDateTime;
 use chrono::Utc;
@@ -88,7 +88,7 @@ struct YimReport {
 impl YimReport {
     pub fn new(year: i32, full_user_stats: ListenStatisticsData, listen_counts: bool) -> Self {
         let year_start =
-            NaiveDateTime::parse_from_str(&format!("{}-01-01 00:00:00", year), "%Y-%m-%d %H:%M:%S")
+            NaiveDateTime::parse_from_str(&format!("{year}-01-01 00:00:00"), "%Y-%m-%d %H:%M:%S")
                 .unwrap()
                 .and_local_timezone(Local)
                 .earliest()

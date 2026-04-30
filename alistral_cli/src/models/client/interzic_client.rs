@@ -4,7 +4,7 @@ use interzic::InterzicClient;
 use interzic::models::services::subsonic::SubsonicClient;
 use musicbrainz_db_lite::DBClient;
 use musicbrainz_db_lite::MusicBrainzClient;
-use snafu::OptionExt;
+use snafu::OptionExt as _;
 
 use crate::models::client::AlistralCliClient;
 use crate::utils::constants::INTERZIC_DB;

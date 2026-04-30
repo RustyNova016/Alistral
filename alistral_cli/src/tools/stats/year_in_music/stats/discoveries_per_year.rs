@@ -1,9 +1,9 @@
 use std::collections::HashMap;
 
 use alistral_core::datastructures::entity_with_listens::recording::RecordingWithListens;
-use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
-use chrono::Datelike;
-use itertools::Itertools;
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
+use chrono::Datelike as _;
+use itertools::Itertools as _;
 
 use crate::tools::stats::year_in_music::YimReportData;
 

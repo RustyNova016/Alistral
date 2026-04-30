@@ -1,7 +1,7 @@
 use core::future::ready;
 
 use alistral_core::datastructures::entity_with_listens::recording::RecordingWithListens;
-use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use futures::{Stream, StreamExt};
 
 pub fn min_listen_filter(

@@ -6,7 +6,7 @@ use alistral_core::datastructures::listen_collection::traits::ListenCollectionRe
 use itertools::Itertools as _;
 use musicbrainz_db_lite::HasRowID;
 use musicbrainz_db_lite::models::musicbrainz::MusicbrainzFormater;
-use tuillez::extensions::chrono_exts::DurationExt;
+use tuillez::extensions::chrono_exts::DurationExt as _;
 use tuillez::formatter::FormatWithAsync;
 
 use crate::datastructures::statistic_formater::ListenDurationStats;
@@ -61,7 +61,7 @@ where
 {
     fn sort_elements(&self) -> Vec<&EntityWithListens<Ent, Lis>> {
         let mut data = self.data.iter().collect_vec();
-        data.sort_by_cached_key(|e| std::cmp::Reverse(e.get_time_listened().unwrap_or_default()));
+        data.sort_by_cached_key(|e| core::cmp::Reverse(e.get_time_listened().unwrap_or_default()));
         data
     }
 

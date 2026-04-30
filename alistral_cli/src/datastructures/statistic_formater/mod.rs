@@ -4,8 +4,8 @@ use alistral_core::datastructures::entity_with_listens::EntityWithListens;
 use alistral_core::datastructures::entity_with_listens::collection::EntityWithListensCollection;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use futures::Stream;
-use futures::StreamExt;
-use futures::TryStreamExt;
+use futures::StreamExt as _;
+use futures::TryStreamExt as _;
 use futures::stream;
 use musicbrainz_db_lite::HasRowID;
 
@@ -22,7 +22,7 @@ where
 {
     data: EntityWithListensCollection<Ent, Lis>,
     stat_type: PhantomData<Stats>,
-    #[allow(dead_code)] // Will be used later
+    #[expect(dead_code)] // Will be used later
     stat_output: StatisticOutput,
 }
 

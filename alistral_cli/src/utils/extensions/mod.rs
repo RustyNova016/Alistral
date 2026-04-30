@@ -1,5 +1,5 @@
 use chrono::DateTime;
-use chrono::TimeZone;
+use chrono::TimeZone as _;
 use chrono::Utc;
 use extend::ext;
 use listenbrainz::raw::response::{UserListensListen, UserListensMBIDMapping, UserListensPayload};
@@ -30,13 +30,13 @@ pub impl UserListensPayload {
     }
 
     fn get_date_of_oldest_listen_of_payload(&self) -> Option<DateTime<Utc>> {
-        self.get_oldest_payload_listen()
-            .and_then(|listen| Utc.timestamp_opt(listen.listened_at, 0).single())
+        let listen = self.get_oldest_payload_listen()?;
+        Utc.timestamp_opt(listen.listened_at, 0).single()
     }
 
     fn get_date_of_latest_listen_of_payload(&self) -> Option<DateTime<Utc>> {
-        self.get_latest_payload_listen()
-            .and_then(|listen| Utc.timestamp_opt(listen.listened_at, 0).single())
+        let listen = self.get_latest_payload_listen()?;
+        Utc.timestamp_opt(listen.listened_at, 0).single()
     }
 }
 

@@ -1,5 +1,5 @@
 use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime as _;
-use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 
 use crate::tools::lookup::lookup_components::comp_arrow::LookupCompArrow;
 use crate::tools::lookup::lookup_components::duration_string::LookupDurationString;
@@ -11,7 +11,7 @@ impl RecordingLookup {
         let now_stats = self.now_recording_stats().await;
         let rank = now_stats.get_rank(&self.recording).unwrap() + 1;
 
-        let mut string = format!("Rank: #{}", rank);
+        let mut string = format!("Rank: #{rank}");
 
         if let Some(rank_before) = self
             .before_recording_stats()

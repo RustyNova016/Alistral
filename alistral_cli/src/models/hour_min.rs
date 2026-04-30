@@ -1,6 +1,6 @@
 use core::fmt::Display;
 use core::ops::AddAssign;
-use core::ops::Rem;
+use core::ops::Rem as _;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct HourMinute {
@@ -14,12 +14,12 @@ impl AddAssign for HourMinute {
         let add_hours = (self.minutes + rhs.minutes).div_euclid(60);
 
         self.minutes = minutes;
-        self.hours = (self.hours + rhs.hours + add_hours).rem(24)
+        self.hours = (self.hours + rhs.hours + add_hours).rem(24);
     }
 }
 
 impl Display for HourMinute {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         write!(f, "{:0>2}:{:0>2}", self.hours, self.minutes)
     }
 }

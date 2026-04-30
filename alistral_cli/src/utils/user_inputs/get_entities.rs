@@ -1,4 +1,4 @@
-use musicbrainz_db_lite::GetOrFetch;
+use musicbrainz_db_lite::GetOrFetch as _;
 use musicbrainz_db_lite::Recording;
 
 use crate::ALISTRAL_CLIENT;

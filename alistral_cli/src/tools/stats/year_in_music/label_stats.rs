@@ -1,6 +1,6 @@
-use std::fmt::Write;
+use core::fmt::Write as _;
 
-use alistral_core::cli::colors::AlistralColors;
+use alistral_core::cli::colors::AlistralColors as _;
 
 use crate::datastructures::cli_formating::title::Heading1;
 use crate::interface::comp_arrow::ComparisonArrow;

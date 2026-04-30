@@ -1,6 +1,6 @@
-use std::fmt::Write;
+use core::fmt::Write as _;
 
-use alistral_core::cli::colors::AlistralColors;
+use alistral_core::cli::colors::AlistralColors as _;
 
 use crate::interface::comp_arrow::ComparisonArrow;
 use crate::tools::stats::year_in_music::YimReport;
@@ -27,7 +27,7 @@ impl YimReport {
                 ComparisonArrow::greater_is_better(current_top.1.len(), previous_top.1.len()),
                 previous_top.1.len().alistral_green()
             )
-            .unwrap()
+            .unwrap();
         }
 
         Some(out)

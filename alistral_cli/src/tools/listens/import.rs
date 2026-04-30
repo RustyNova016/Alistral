@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 use std::fs::File;
-use std::io::BufRead;
+use std::io::BufRead as _;
 use std::io::BufReader;
 
 use clap::Parser;
@@ -12,7 +12,7 @@ use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use musicbrainz_db_lite::models::musicbrainz::user::User;
 use serde::Deserialize;
 use serde::Serialize;
-use sqlx::Acquire;
+use sqlx::Acquire as _;
 use tracing::info;
 
 use crate::ALISTRAL_CLIENT;

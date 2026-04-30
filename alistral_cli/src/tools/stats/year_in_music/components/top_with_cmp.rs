@@ -5,7 +5,7 @@ use alistral_core::datastructures::entity_with_listens::label::collection::Label
 use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use alistral_core::datastructures::entity_with_listens::release_group::collection::ReleaseGroupWithReleasesCollection;
 use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime as _;
-use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use duplicate::duplicate_item;
 use itertools::Itertools as _;
 use sequelles::datastructures::ranking::Ranking;

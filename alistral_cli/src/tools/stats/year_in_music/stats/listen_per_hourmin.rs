@@ -44,7 +44,7 @@ fn generate_listen_per_hourmin(listens: &[(Listen, Duration)]) -> HashMap<HourMi
 
             out.entry(time).or_default().push(listen.clone());
 
-            current_time += Duration::minutes(1)
+            current_time += Duration::minutes(1);
         }
     }
 

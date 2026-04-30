@@ -1,7 +1,7 @@
 use clap::Parser;
 use interzic::models::messy_recording::MessyRecording;
 use interzic::models::services::musicbrainz::Musicbrainz;
-use tuillez::fatal_error::IntoFatal;
+use tuillez::fatal_error::IntoFatal as _;
 use tuillez::fatal_error::OptIntoFatal as _;
 
 use crate::ALISTRAL_CLIENT;

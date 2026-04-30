@@ -26,7 +26,7 @@ impl RadioExportTarget {
         client_name: &str,
     ) -> Result<(), crate::Error> {
         match self {
-            RadioExportTarget::Listenbrainz => {
+            Self::Listenbrainz => {
                 Listenbrainz::create_playlist(
                     &ALISTRAL_CLIENT.interzic,
                     playlist,

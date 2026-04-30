@@ -1,4 +1,4 @@
-use alistral_core::cli::colors::AlistralColors;
+use alistral_core::cli::colors::AlistralColors as _;
 
 /// A friendly panic should be displayed above. If you see this message, this means something went wrong and you should report it!
 #[derive(Debug, snafu::Snafu, Clone)]

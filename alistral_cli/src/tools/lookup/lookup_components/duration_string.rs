@@ -6,7 +6,7 @@ use tuillez::extensions::chrono_exts::DurationExt as _;
 pub struct LookupDurationString(pub Option<Duration>);
 
 impl Display for LookupDurationString {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let Some(dur) = &self.0 else {
             write!(f, "<unknown>")?;
             return Ok(());

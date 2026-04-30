@@ -8,7 +8,7 @@ use tuillez::extensions::chrono_exts::DateTimeUtcExt as _;
 pub struct LookupLocalDate(pub Option<DateTime<Utc>>);
 
 impl Display for LookupLocalDate {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let Some(date) = &self.0 else {
             write!(f, "-")?;
             return Ok(());

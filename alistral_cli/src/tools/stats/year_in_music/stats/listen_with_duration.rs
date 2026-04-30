@@ -1,7 +1,7 @@
 use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use chrono::Duration;
-use itertools::Itertools;
+use itertools::Itertools as _;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 
 use crate::tools::stats::year_in_music::stats::YimReportData;

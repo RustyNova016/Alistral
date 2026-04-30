@@ -77,7 +77,7 @@ pub enum StatsTarget {
 }
 
 impl Display for StatsTarget {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let inner = match self {
             Self::Recording => "recording",
             Self::Artist => "artist",

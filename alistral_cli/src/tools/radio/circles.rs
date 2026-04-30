@@ -1,16 +1,16 @@
 use async_fn_stream::try_fn_stream;
 use futures::Stream;
-use futures::TryStreamExt;
+use futures::TryStreamExt as _;
 use futures::pin_mut;
 use interzic::models::playlist_stub::PlaylistStub;
-use itertools::Itertools;
+use itertools::Itertools as _;
 use musicbrainz_db_lite::models::musicbrainz::artist::Artist;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
-use rand::prelude::SliceRandom;
+use rand::prelude::SliceRandom as _;
 use rand::rng;
 use tracing::info;
 use tracing::warn;
-use tuillez::formatter::FormatWithAsync;
+use tuillez::formatter::FormatWithAsync as _;
 
 use crate::ALISTRAL_CLIENT;
 use crate::datastructures::radio::collector::RadioCollector;

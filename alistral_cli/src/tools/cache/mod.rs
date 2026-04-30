@@ -4,7 +4,7 @@ use std::path::Path;
 
 use clap::Parser;
 use clap::Subcommand;
-use snafu::ResultExt;
+use snafu::ResultExt as _;
 
 use crate::interface::errors::friendly_error::GetFriendlyError;
 use crate::tools::cache::clear::CacheClearCommand;

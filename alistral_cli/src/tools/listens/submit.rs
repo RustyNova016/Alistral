@@ -5,7 +5,7 @@ use clap::Parser;
 use listenbrainz::raw::request::Payload;
 use listenbrainz::raw::request::SubmitListens;
 use listenbrainz::raw::request::TrackMetadata;
-use tuillez::fatal_error::IntoFatal;
+use tuillez::fatal_error::IntoFatal as _;
 
 use crate::utils::user_inputs::UserInputParser;
 

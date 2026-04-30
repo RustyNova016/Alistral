@@ -1,8 +1,8 @@
 use chrono::Duration;
-use futures::StreamExt;
+use futures::StreamExt as _;
 use futures::stream;
 use interzic::models::playlist_stub::PlaylistStub;
-use itertools::Itertools;
+use itertools::Itertools as _;
 use tracing::info;
 
 use crate::ALISTRAL_CLIENT;

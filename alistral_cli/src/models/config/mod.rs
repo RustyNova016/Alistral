@@ -1,6 +1,5 @@
-pub mod whitelisted_wrong_mappings;
 use bumps::BumpList;
-use clap::CommandFactory;
+use clap::CommandFactory as _;
 use config_guard::ConfigGuard;
 use config_trait::ConfigFile;
 use derive_getters::Getters;
@@ -23,6 +22,7 @@ pub mod interzic;
 pub mod listen_config;
 pub mod mapper;
 pub mod recording_timeout;
+pub mod whitelisted_wrong_mappings;
 
 #[derive(Debug, Serialize, Deserialize, Getters)]
 pub struct Config {

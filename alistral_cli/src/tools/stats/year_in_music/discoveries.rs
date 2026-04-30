@@ -1,4 +1,4 @@
-use std::fmt::Write;
+use core::fmt::Write as _;
 
 use alistral_core::cli::colors::AlistralColors as _;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;

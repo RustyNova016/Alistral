@@ -17,7 +17,7 @@ impl<T> TopCell<T>
 where
     T: Default + Clone + Display,
 {
-    pub fn new(current: Option<T>, previous: Option<T>, show_prev: bool) -> TopCell<T> {
+    pub fn new(current: Option<T>, previous: Option<T>, show_prev: bool) -> Self {
         Self {
             current,
             previous,
@@ -34,7 +34,7 @@ where
         } else {
             format!(
                 "{cur:<width$} {}",
-                format!("≪ {prev:>width$}", width = max_len_prev).true_color_tup((100, 100, 100)),
+                format!("≪ {prev:>max_len_prev$}").true_color_tup((100, 100, 100)),
                 width = max_len_cur,
             )
         }

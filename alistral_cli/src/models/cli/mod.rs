@@ -1,7 +1,7 @@
 use std::io;
 
 use clap::Command;
-use clap::CommandFactory;
+use clap::CommandFactory as _;
 use clap::Parser;
 use clap::Subcommand;
 use clap_complete::Generator;

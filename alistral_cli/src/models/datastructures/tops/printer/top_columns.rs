@@ -16,7 +16,7 @@ pub enum TopColumnType {
 }
 
 impl Display for TopColumnType {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match self {
             Self::ListenCount => write!(f, "Listen Count"),
             Self::ListenDuration => write!(f, "Listen Duration"),

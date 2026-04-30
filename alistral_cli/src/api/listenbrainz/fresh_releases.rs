@@ -17,7 +17,7 @@ where
 impl<Tz> FreshReleaseRequest<Tz>
 where
     Tz: TimeZone,
-    <Tz as TimeZone>::Offset: std::fmt::Display,
+    <Tz as TimeZone>::Offset: core::fmt::Display,
 {
     pub fn get_parameters(&self) -> String {
         format!(
@@ -43,7 +43,7 @@ where
 impl<Tz> Default for FreshReleaseRequest<Tz>
 where
     Tz: TimeZone,
-    chrono::DateTime<Tz>: std::default::Default,
+    chrono::DateTime<Tz>: core::default::Default,
 {
     fn default() -> Self {
         Self {
