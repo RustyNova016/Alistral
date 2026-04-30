@@ -33,7 +33,6 @@ impl UserInputParser {
         }
     }
 
-
     pub fn parse_naive_date(date: Option<NaiveDate>) -> Option<DateTime<Local>> {
         Some(
             date?
@@ -43,7 +42,6 @@ impl UserInputParser {
                 .unwrap(),
         )
     }
-
 
     pub fn parse_naive_date_utc(date: Option<NaiveDate>) -> Option<DateTime<Utc>> {
         Some(

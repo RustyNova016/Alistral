@@ -3,8 +3,10 @@ use chrono::NaiveDate;
 use clap::Parser;
 
 use crate::ALISTRAL_CLIENT;
+use crate::tools::daily::error::DailyCommandError;
 use crate::utils::user_inputs::UserInputParser;
 
+pub mod error;
 pub mod first_discoveries;
 pub mod fresh_releases;
 pub mod recording_birthdays;
@@ -20,13 +22,16 @@ pub struct DailyCommand {
 }
 
 impl DailyCommand {
-    pub async fn run(&self) {
+    pub async fn run(&self) -> Result<(), DailyCommandError> {
         let today = UserInputParser::parse_naive_date(self.date).unwrap_or(Local::now());
         let username = UserInputParser::username_or_default(&self.username);
         let stats = ALISTRAL_CLIENT.statistics_of_user(username.clone()).await;
 
         Self::print_recording_birthdays(&stats, today).await;
-        Self::print_first_discoveries(&stats, today).await;
+        Self::print_first_discoveries(&stats, today).await?;
         Self::print_fresh_releases(&stats, today).await;
+
+        Ok(())
     }
 }
+

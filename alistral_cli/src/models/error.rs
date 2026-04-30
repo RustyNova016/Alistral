@@ -10,6 +10,7 @@ use crate::interface::errors::process_errors;
 use crate::models::client::interzic_client::InterzicClientError;
 use crate::tools::bump::BumpCommandError;
 use crate::tools::cache::CacheCommandError;
+use crate::tools::daily::error::DailyCommandError;
 
 #[derive(Error, Debug)]
 //#[expect(clippy::enum_variant_names)]
@@ -89,6 +90,9 @@ pub enum Error {
 
     #[error(transparent)]
     CacheCommandError(#[from] CacheCommandError),
+
+    #[error(transparent)]
+    DailyCommandError(#[from] DailyCommandError),
 }
 
 impl GetFriendlyError for Error {
@@ -117,6 +121,7 @@ impl GetFriendlyError for Error {
             Self::FriendlyPanic(val) => val.get_friendly_error(),
             Self::BumpCommandError(val) => val.get_friendly_error(),
             Self::CacheCommandError(val) => val.get_friendly_error(),
+            Self::DailyCommandError(val) => val.get_friendly_error(),
         }
     }
 }

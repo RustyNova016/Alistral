@@ -147,7 +147,7 @@ impl Commands {
                 compatibility_command(user_a, user_b).await;
             }
             Self::Config(val) => val.command.run().await?,
-            Self::Daily(val) => val.run().await,
+            Self::Daily(val) => val.run().await?,
 
             #[cfg(feature = "stats")]
             Self::Stats(val) => val.run().await,
