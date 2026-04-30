@@ -87,7 +87,7 @@ comfy-table = { version = "7.2.2", features = ["custom_styling"] }
 duplicate = "2.0.1"
 
 [features]
-default = ["stats", "subsonic", "radio"]
+default = ["stats"]
 #default = ["full"]
 full = ["musicbrainz", "lookup", "stats", "radio", "youtube", "subsonic"]
 
