@@ -2,10 +2,9 @@ const fs = require('fs');
 
 module.exports = ({ github, context }) => {
     const checkOutputFiles = [
-        { name: 'Clippy (no features)', file: 'clippy-no-features-output.txt' },
-        { name: 'Clippy (all features)', file: 'clippy-output.txt' },
+        { name: 'Rust Formating', file: 'rustfmt-output.txt' },
+        { name: 'Clippy', file: 'clippy-output.txt' },
         { name: 'Documentation', file: 'docs-output.txt' },
-        { name: 'Rustfmt', file: 'rustfmt-output.txt' },
         { name: 'MSRV', file: 'msrv-output.txt' },
         { name: 'Minimum Versions', file: 'minimum-versions-output.txt' },
         { name: 'Dependencies', file: 'dependancies-output.txt' }

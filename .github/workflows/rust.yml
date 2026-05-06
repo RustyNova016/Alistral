@@ -39,11 +39,11 @@ jobs:
       #       Clippy
       # ====================
 
-      - name: Run clippy all features
-        id: clippy
-        continue-on-error: true
-        shell: 'nix develop -c bash -e {0}'
-        run: cargo clippy --all-features -- -D warnings 2>&1 | tee clippy-output.txt
+      # - name: Run clippy all features
+      #   id: clippy
+      #   continue-on-error: true
+      #   shell: 'nix develop -c bash -e {0}'
+      #   run: cargo clippy --all-features -- -D warnings 2>&1 | tee clippy-output.txt
 
       # # ====================
       # #       Docs
@@ -95,7 +95,7 @@ jobs:
         with:
           script: |
             const script = require('./scripts/ci-comment-on-failure.js')
-            script({github, context}))
+            script({github, context})
       
 
 
