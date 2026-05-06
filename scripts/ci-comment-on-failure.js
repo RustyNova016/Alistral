@@ -1,5 +1,15 @@
 const fs = require('fs');
 
+// function format_check(check) {
+//     if (fs.existsSync(check.file)) {
+//         const output = fs.readFileSync(check.file, 'utf8');
+//         if (output.trim()) {
+//             failureMessage += `<details>\n<summary><b>${check.name}</b></summary>\n\n<pre style="background: #1e1e1e; color: #d4d4d4; padding: 12px; border-radius: 6px; overflow-x: auto; font-family: monospace; line-height: 1.4;">${output}</pre>\n</details>\n\n`;
+//             hasFailures = true;
+//         }
+//     }
+// }
+
 module.exports = ({ github, context }) => {
     const checkOutputFiles = [
         { name: 'Rust Formating', file: 'rustfmt-output.txt' },
@@ -17,7 +27,9 @@ module.exports = ({ github, context }) => {
     let hasFailures = false;
 
     for (const check of checkOutputFiles) {
+
         try {
+            //format_check(check)
             if (fs.existsSync(check.file)) {
                 const output = fs.readFileSync(check.file, 'utf8');
                 if (output.trim()) {
