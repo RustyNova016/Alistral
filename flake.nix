@@ -1,56 +1,52 @@
 {
-  description = "Power tools for Listenbrainz";
+  description = "Rust devShell";
 
   inputs = {
-    utils.url = "github:numtide/flake-utils";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    rust-overlay.url = "github:oxalica/rust-overlay";
+    flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    utils,
-    ...
-  }:
-    utils.lib.eachDefaultSystem
-    (
-      system: let
-        pkgs = import nixpkgs {inherit system;};
-        toolchain = pkgs.rustPlatform;
-      in rec
+  outputs =
+    {
+      nixpkgs,
+      rust-overlay,
+      flake-utils,
+      ...
+    }:
+    flake-utils.lib.eachDefaultSystem (
+      system:
+      let
+        overlays = [ (import rust-overlay) ];
+        pkgs = import nixpkgs {
+          inherit system overlays;
+        };
+      in
       {
-        # Executed by `nix build`
-        packages.default = toolchain.buildRustPackage {
-          pname = "alistral";
-          version = "0.6.5";
-          src = ./alistral_cli;
-          cargoLock.lockFile = ./Cargo.lock;
+        devShells.default =
+          with pkgs;
+          mkShell {
+            buildInputs = [
+              openssl # In case native SSL is used
+              pkg-config
 
-          # For other makeRustPlatform features see:
-          # https://github.com/NixOS/nixpkgs/blob/master/doc/languages-frameworks/rust.section.md#cargo-features-cargo-features
-        };
+              # CI / Linting tools
+              cargo-mutants
+              cargo-hack
+              cargo-msrv
+              cargo-audit
+              cargo-machete
 
-        # Executed by `nix run`
-        apps.default = utils.lib.mkApp {drv = packages.default;};
-
-        # Used by `nix develop`
-        devShells.default = pkgs.mkShell {
-          buildInputs = with pkgs; [
-            (with toolchain; [
-              cargo
-              rustc
-              rustLibSrc
-            ])
-            clippy
-            rustfmt
-            pkg-config
-
-            # App Deps
-            openssl
-          ];
-
-          # Specify the rust-src path (many editors rely on this)
-          RUST_SRC_PATH = "${toolchain.rustLibSrc}";
-        };
+              (rust-bin.stable.latest.default.override {
+                extensions = [
+                  "cargo"
+                  "clippy"
+                  "rust-src"
+                  "rust-analyzer"
+                ];
+              })
+            ];
+          };
       }
     );
 }
