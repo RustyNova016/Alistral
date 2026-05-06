@@ -11,7 +11,10 @@ module.exports = ({ github, context }) => {
         { name: 'Dependencies', file: 'dependancies-output.txt' }
     ];
 
-    let failureMessage = '❌ **CI Checks Failed**\n\n';
+    let failureMessage = `
+        <h1>❌ **CI Checks Failed**</h1>
+        <div>Some checks have failed. Please review the errors and fix them</div>
+    `;
     let hasFailures = false;
 
     for (const check of checkOutputFiles) {
