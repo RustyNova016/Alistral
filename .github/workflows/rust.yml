@@ -57,7 +57,7 @@ jobs:
         id: rustfmt
         continue-on-error: true
         shell: 'nix develop --impure -c bash -e {0}'
-        run: cargo --color fmt --all --check | ansi2html -i | tee rustfmt-output.txt
+        run: cargo --color always fmt --all --check | ansi2html -i | tee rustfmt-output.txt
 
       # ====================
       #       Clippy
