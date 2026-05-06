@@ -1,4 +1,4 @@
-const fs = require('fs');
+
 
 // function format_check(check) {
 //     if (fs.existsSync(check.file)) {
@@ -10,7 +10,7 @@ const fs = require('fs');
 //     }
 // }
 
-module.exports = ({ github, context }) => {
+module.exports = ({ github, context, octokit, fs }) => {
     const checkOutputFiles = [
         { name: 'Rust Formating', file: 'rustfmt-output.txt' },
         { name: 'Clippy', file: 'clippy-output.txt' },
@@ -43,9 +43,6 @@ module.exports = ({ github, context }) => {
     }
 
     if (hasFailures) {
-        const context = JSON.parse(process.env.GITHUB_CONTEXT);
-        const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
-
         octokit.rest.issues.createComment({
             issue_number: context.issue.number,
             owner: context.repo.owner,

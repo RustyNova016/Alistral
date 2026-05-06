@@ -95,8 +95,10 @@ jobs:
       - uses: actions/github-script@v9
         with:
           script: |
+            const fs = require('fs');
             const script = require('./scripts/ci-comment-on-failure.js')
-            script({github, context})
+            const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
+            script({github, context, octokit, fs})
       
 
 
