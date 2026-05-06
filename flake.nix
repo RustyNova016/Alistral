@@ -36,6 +36,7 @@
               cargo-msrv
               cargo-audit
               cargo-machete
+              ansi2html
 
               (rust-bin.stable.latest.default.override {
                 extensions = [

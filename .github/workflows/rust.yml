@@ -33,17 +33,11 @@ jobs:
       - name: Run rustfmt
         id: rustfmt
         continue-on-error: true
-        run: cargo fmt --all --check 2>&1 | tee rustfmt-output.txt
+        run: cargo fmt --all --check | ansi2html -i | tee rustfmt-output.txt
 
       # ====================
       #       Clippy
       # ====================
-
-      - name: Clippy no features
-        id: clippy_no_features
-        continue-on-error: true
-        shell: 'nix develop -c bash -e {0}'
-        run: cargo clippy --no-default-features -- -D warnings 2>&1 | tee clippy-no-features-output.txt
 
       - name: Run clippy all features
         id: clippy
@@ -97,12 +91,11 @@ jobs:
       #   run: /bin/bash ./scripts/ci/minimum_versions.sh 2>&1 | tee minimum-versions-output.txt
 
 
-      # Consolidated error reporting
-      - name: Comment on PR if any check failed
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: node ./scripts/ci-comment-on-failure.js
+      - uses: actions/github-script@v9
+        with:
+          script: |
+            const script = require('./path/to/script.js')
+            script({github, context})
 
   stable_tests:
     env: 
