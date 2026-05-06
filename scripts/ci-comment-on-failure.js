@@ -20,13 +20,12 @@ module.exports = ({ github, context, octokit, fs }) => {
         { name: 'Dependencies', file: 'dependancies-output.txt' }
     ];
 
-    let failureMessage = `# ❌ **CI Checks Failed**
-        Some checks have failed. Please review the errors and fix them
-    `;
+    let failureMessage = `# ❌ **CI Checks Failed**\n`
+    failureMessage += `Some checks have failed. Please review the errors and fix them`
+
     let hasFailures = false;
 
     for (const check of checkOutputFiles) {
-
         try {
             //format_check(check)
             if (fs.existsSync(check.file)) {
