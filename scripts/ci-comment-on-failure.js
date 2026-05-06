@@ -43,16 +43,13 @@ module.exports = ({ github, context, octokit, fs }) => {
     }
 
     if (hasFailures) {
-        octokit.rest.issues.createComment({
+        github.rest.issues.createComment({
             issue_number: context.issue.number,
             owner: context.repo.owner,
-            repo: context.repo.name,
+            repo: context.repo.repo,
             body: failureMessage
-        }).then(() => {
-            throw new Error('CI checks failed. See PR comment for details.');
-        }).catch((error) => {
-            console.error('Failed to create comment:', error);
-            process.exit(1);
         });
+
+        throw new Error('CI checks failed. See PR comment for details.');
     }
 }

@@ -20,9 +20,6 @@ jobs:
       - uses: cachix/install-nix-action@v31
         with:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Pre-build devShell
-        run: nix build --no-link .#devShells.$(nix eval --impure --raw --expr 'builtins.currentSystem').default
 
       - name: Restore and save Nix store
         uses: nix-community/cache-nix-action@v7
@@ -46,6 +43,9 @@ jobs:
           purge-last-accessed: P1DT12H
           # except any version with the key that is the same as the `primary-key`
           purge-primary-key: never
+
+      - name: Pre-build devShell
+        run: nix build --no-link .#devShells.$(nix eval --impure --raw --expr 'builtins.currentSystem').default
 
       - uses: Swatinem/rust-cache@v2
 
@@ -115,7 +115,7 @@ jobs:
       #   run: /bin/bash ./scripts/ci/minimum_versions.sh 2>&1 | tee minimum-versions-output.txt
 
 
-      - uses: actions/github-script@v9
+      - uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
