@@ -20,9 +20,8 @@ module.exports = ({ github, context, octokit, fs }) => {
         { name: 'Dependencies', file: 'dependancies-output.txt' }
     ];
 
-    let failureMessage = `
-        <h1>❌ **CI Checks Failed**</h1>
-        <div>Some checks have failed. Please review the errors and fix them</div>
+    let failureMessage = `# ❌ **CI Checks Failed**
+        Some checks have failed. Please review the errors and fix them
     `;
     let hasFailures = false;
 
