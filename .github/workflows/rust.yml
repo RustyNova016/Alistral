@@ -90,7 +90,7 @@ jobs:
       - name: Run rustfmt
         id: rustfmt
         continue-on-error: true
-        run: cargo fmt --all --check
+        run: cargo fmt --all --check 2>&1 | tee rustfmt-output.txt
 
       - name: Comment on PR if fail
         if: steps.rustfmt.outcome == 'failure'
