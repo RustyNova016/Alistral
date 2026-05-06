@@ -97,7 +97,6 @@ jobs:
           script: |
             const fs = require('fs');
             const script = require('./scripts/ci-comment-on-failure.js')
-            const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
             script({github, context, octokit, fs})
       
 
