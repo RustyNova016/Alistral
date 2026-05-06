@@ -33,6 +33,7 @@ jobs:
       - name: Run rustfmt
         id: rustfmt
         continue-on-error: true
+        shell: 'nix develop -c bash -e {0}'
         run: cargo fmt --all --check | ansi2html -i | tee rustfmt-output.txt
 
       # ====================
