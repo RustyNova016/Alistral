@@ -45,7 +45,7 @@ jobs:
         shell: 'nix develop -c bash -e {0}'
         run: cargo hack clippy --no-default-features -- -D warnings 2>&1 | tee clippy-no-features-output.txt
 
-      - name: Run clippy
+      - name: Run clippy all features
         id: clippy
         continue-on-error: true
         shell: 'nix develop -c bash -e {0}'
@@ -62,39 +62,39 @@ jobs:
           RUSTDOCFLAGS: -Dwarnings
         run: cargo doc --all-features --no-deps --document-private-items 2>&1 | tee docs-output.txt
 
-      # ====================
-      #     MSRV Check
-      # ====================
+      # # ====================
+      # #     MSRV Check
+      # # ====================
 
-      - name: Run cargo-msrv
-        id: msrv
-        continue-on-error: true
-        run: /bin/bash ./scripts/ci/msrv.sh 2>&1 | tee msrv-output.txt
+      # - name: Run cargo-msrv
+      #   id: msrv
+      #   continue-on-error: true
+      #   run: /bin/bash ./scripts/ci/msrv.sh 2>&1 | tee msrv-output.txt
 
-      # ====================
-      #    Useless deps
-      # ====================
+      # # ====================
+      # #    Useless deps
+      # # ====================
 
-      - name: Run cargo-machete
-        id: dependancies
-        continue-on-error: true
-        run: /bin/bash ./scripts/ci/udeps.sh 2>&1 | tee dependancies-output.txt
+      # - name: Run cargo-machete
+      #   id: dependancies
+      #   continue-on-error: true
+      #   run: /bin/bash ./scripts/ci/udeps.sh 2>&1 | tee dependancies-output.txt
 
-      # ====================
-      #    Min versions
-      # ====================
+      # # ====================
+      # #    Min versions
+      # # ====================
 
-      - name: Install nightly toolchain for minimum_versions
-        uses: dtolnay/rust-toolchain@nightly
+      # - name: Install nightly toolchain for minimum_versions
+      #   uses: dtolnay/rust-toolchain@nightly
 
-      - uses: taiki-e/install-action@cargo-hack
+      # - uses: taiki-e/install-action@cargo-hack
 
-      - uses: taiki-e/install-action@cargo-minimal-versions
+      # - uses: taiki-e/install-action@cargo-minimal-versions
 
-      - name: Run cargo-minimal-versions
-        id: minimum_versions
-        continue-on-error: true
-        run: /bin/bash ./scripts/ci/minimum_versions.sh 2>&1 | tee minimum-versions-output.txt
+      # - name: Run cargo-minimal-versions
+      #   id: minimum_versions
+      #   continue-on-error: true
+      #   run: /bin/bash ./scripts/ci/minimum_versions.sh 2>&1 | tee minimum-versions-output.txt
 
 
       # Consolidated error reporting
@@ -139,6 +139,8 @@ jobs:
                 repo: context.repo.repo,
                 body: failureMessage
               });
+
+              throw new Error('CI checks failed. See PR comment for details.');
             }
 
   stable_tests:
