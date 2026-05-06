@@ -43,7 +43,7 @@ module.exports = ({ github, context, octokit, fs }) => {
     }
 
     if (hasFailures) {
-        github.rest.issues.createComment({
+        octokit.rest.issues.createComment({
             issue_number: context.issue.number,
             owner: context.repo.owner,
             repo: context.repo.name,
