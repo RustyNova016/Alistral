@@ -45,7 +45,7 @@ async fn main() -> ColEyre {
                 err.print_no_panic();
             } else {
                 FatalError::from(err).panic()
-            }
+}
         }
     }
 

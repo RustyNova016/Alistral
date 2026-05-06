@@ -90,6 +90,20 @@ jobs:
       - name: Run rustfmt
         run: cargo fmt --all --check
 
+      - name: Comment on PR if fail
+        if: steps.rustfmt.outcome == 'failure' && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const output = fs.readFileSync('rustfmt-output.txt', 'utf8');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `❌ **Rustfmt check failed**\n\n\`\`\`\n${output}\n\`\`\``
+            });
+
   # This is just a curtesy check to tell whether it should be breaking changes or not
   # If CI fail because of this, just bump the version
   msrv:
