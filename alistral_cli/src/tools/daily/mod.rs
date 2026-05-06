@@ -27,7 +27,7 @@ impl DailyCommand {
         let username = UserInputParser::username_or_default(&self.username);
         let stats = ALISTRAL_CLIENT.statistics_of_user(username.clone()).await;
 
-        Self::print_recording_birthdays(&stats, today).await;
+        Self::print_recording_birthdays(&&stats, today).await;
         Self::print_first_discoveries(&stats, today).await?;
         Self::print_fresh_releases(&stats, today).await;
 
