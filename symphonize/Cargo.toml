@@ -23,7 +23,7 @@ futures = "0.3.31"
 streamies = {git = "https://github.com/RustyNova016/streamies.git", version = "0.3.0"}
 
 [dev-dependencies]
-tokio = "1.49.0"
+tokio = "1.52.3"
 
 [patch.crates-io]
 sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "8393f82ea91c8df6008459ac72a0e16a86fe20d7"}
