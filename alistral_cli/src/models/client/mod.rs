@@ -64,7 +64,7 @@ impl AlistralCliClient {
         let mut musicbrainz_rs = MusicBrainzClient::default();
         let url =
             url::Url::from_str(&config.musicbrainz_url).expect("Couldn't parse musicbrainz's url");
-        musicbrainz_rs.musicbrainz_domain = url.domain().unwrap().to_string();
+        musicbrainz_rs.musicbrainz_domain = url.authority().to_string();
         Arc::new(musicbrainz_rs)
     }
 
