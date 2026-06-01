@@ -50,7 +50,7 @@ chrono = "0.4.42"
 
 [dev-dependencies]
 tokio = { version = "1.47.0", features = ["full"] }
-serial_test = "3.3.1"
+serial_test = "3.5.0"
 
 
 [features]
