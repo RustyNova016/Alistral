@@ -44,8 +44,8 @@ async fn main() -> ColEyre {
             if let Some(err) = err.get_friendly_error() {
                 err.print_no_panic();
             } else {
-                FatalError::from(err).panic()
-            }
+                     FatalError::from(err).panic()
+}
         }
     }
 
