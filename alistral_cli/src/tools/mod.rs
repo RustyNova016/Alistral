@@ -1,6 +1,8 @@
 pub mod bump;
 pub mod cache;
 pub mod compatibility;
+/// Bits of CLI outputs that can be reused
+pub mod components;
 pub mod daily;
 #[cfg(feature = "interzic")]
 pub mod interzic;
