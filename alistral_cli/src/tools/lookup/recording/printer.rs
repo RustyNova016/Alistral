@@ -10,6 +10,7 @@ use musicbrainz_db_lite::Recording;
 use tuillez::OwoColorize as _;
 
 use crate::ALISTRAL_CLIENT;
+use crate::tools::components::listen_per_year_graph::listen_count_per_year_graph;
 
 pub struct RecordingLookup {
     pub(super) recording: Recording,
@@ -95,6 +96,22 @@ impl RecordingLookup {
 
         writeln!(&mut report).unwrap();
         writeln!(&mut report, "{}", self.get_listen_rate_section().await).unwrap();
+
+        let grap = listen_count_per_year_graph(
+            self.get_now_target_recording_stats()
+                .await
+                .listens()
+                .clone(),
+        );
+        writeln!(
+            &mut report,
+            "{}",
+            "\n Listens per year".to_string().on_green().black().bold()
+        )
+        .unwrap();
+        writeln!(&mut report).unwrap();
+        writeln!(&mut report, "{}", grap).unwrap();
+        writeln!(&mut report).unwrap();
 
         report
     }
