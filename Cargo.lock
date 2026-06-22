@@ -67,7 +67,6 @@ dependencies = [
  "derive-getters",
  "derive_more",
  "directories",
- "dotenvy",
  "duplicate",
  "extend",
  "futures",
