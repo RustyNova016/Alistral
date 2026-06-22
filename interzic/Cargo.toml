@@ -8,7 +8,7 @@ description = "Bunch of utilities to link musicbrainz data to different services
 [dependencies]
 
 # --- MB ecosystem crates ---
-musicbrainz_rs = {version = "0.12.0", features = ["extras"]}
+musicbrainz_rs = {version = "0.13.0", features = ["async", "rate_limit", "rustls", "extras", "tracing"]}
 #musicbrainz_rs = { branch = "develop", git = "https://github.com/RustyNova016/musicbrainz_rs.git", features = ["extras"]}
 
 #TODO: Make musicbrainz-db-lite optional
@@ -50,6 +50,6 @@ result_large_err = { level = "allow", priority = 1 }
 [patch.crates-io]
 sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "8393f82ea91c8df6008459ac72a0e16a86fe20d7"}
 tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c8656a4eedb571177a8ffa3b9984e78"}
-musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "d798ad783fca0c44ea618d787ae648a2037d2de5"}
+musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "9dcc97612c3f4b269c6781dbf5d8b0f5301c9308"}
 listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "5fb2e388f61513c3bf798141822a2f0082dc2727" }
 submarine = { git = "https://github.com/eppixx/submarine", rev = "6a9b0a929bacff1fd89b7b0dddd44ff906f1d666" }

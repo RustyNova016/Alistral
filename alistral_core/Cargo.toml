@@ -38,5 +38,5 @@ rust_decimal_macros = "1.36.0"
 [patch.crates-io]
 sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "8393f82ea91c8df6008459ac72a0e16a86fe20d7"}
 tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c8656a4eedb571177a8ffa3b9984e78"}
-musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "d798ad783fca0c44ea618d787ae648a2037d2de5"}
+musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "9dcc97612c3f4b269c6781dbf5d8b0f5301c9308"}
 listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "5fb2e388f61513c3bf798141822a2f0082dc2727" }
