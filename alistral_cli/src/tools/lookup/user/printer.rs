@@ -6,6 +6,7 @@ use chrono::DateTime;
 use chrono::Utc;
 use tuillez::OwoColorize as _;
 
+use crate::tools::components::listen_per_year_graph::listen_count_per_year_graph;
 use crate::tools::lookup::lookup_components::comp_arrow::LookupCompArrow;
 use crate::tools::lookup::lookup_components::duration_string::LookupDurationString;
 
@@ -68,6 +69,17 @@ impl UserLookup {
             self.get_listen_duration_field().await
         )
         .unwrap();
+
+        let grap = listen_count_per_year_graph(self.now.listens().clone());
+        writeln!(
+            &mut report,
+            "{}",
+            "\n Listens per year".to_string().on_green().black().bold()
+        )
+        .unwrap();
+        writeln!(&mut report).unwrap();
+        writeln!(&mut report, "{}", grap).unwrap();
+        writeln!(&mut report).unwrap();
 
         report
     }

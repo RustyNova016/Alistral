@@ -1,3 +1,4 @@
+pub mod group_by;
 use core::cmp::Reverse;
 use core::ops::Deref;
 
