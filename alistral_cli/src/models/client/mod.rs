@@ -1,4 +1,3 @@
-use core::str::FromStr as _;
 use std::sync::Arc;
 use std::sync::LazyLock;
 
@@ -7,7 +6,6 @@ use futures::executor::block_on;
 #[cfg(feature = "interzic")]
 use interzic::InterzicClient;
 use musicbrainz_db_lite::DBClient;
-use musicbrainz_db_lite::client::MusicBrainzClient;
 use musicbrainz_db_lite::listenbrainz_rs::ListenBrainzClient;
 #[cfg(feature = "musicbrainz")]
 use symphonize::SymphonyzeClient;
@@ -21,6 +19,7 @@ pub mod al_core;
 pub mod interzic_client;
 pub mod listenbrainz_rs;
 pub mod mb_db;
+pub mod musicbrainz_rs;
 
 pub static ALISTRAL_CLIENT: LazyLock<AlistralCliClient> =
     LazyLock::new(AlistralCliClient::create_blocking_or_fatal);
@@ -58,14 +57,6 @@ impl AlistralCliClient {
             #[cfg(feature = "musicbrainz")]
             symphonize,
         })
-    }
-
-    fn create_mb_client(config: &Config) -> Arc<MusicBrainzClient> {
-        let mut musicbrainz_rs = MusicBrainzClient::default();
-        let url =
-            url::Url::from_str(&config.musicbrainz_url).expect("Couldn't parse musicbrainz's url");
-        musicbrainz_rs.musicbrainz_domain = url.domain().unwrap().to_string();
-        Arc::new(musicbrainz_rs)
     }
 
     /// Create the client, or fancy panic if an error occur

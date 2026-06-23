@@ -1,3 +1,4 @@
+pub mod ratelimit;
 use bumps::BumpList;
 use clap::CommandFactory as _;
 use config_guard::ConfigGuard;
@@ -11,6 +12,7 @@ use serde::Serialize;
 use std::collections::HashMap;
 
 use crate::models::config::interzic::InterzicConfig;
+use crate::models::config::musicbrainz_server::MusicbrainzServer;
 
 use super::cli::Cli;
 
@@ -21,6 +23,7 @@ pub mod global_config;
 pub mod interzic;
 pub mod listen_config;
 pub mod mapper;
+pub mod musicbrainz_server;
 pub mod recording_timeout;
 pub mod whitelisted_wrong_mappings;
 
@@ -44,11 +47,12 @@ pub struct Config {
     #[serde(default = "default_lb_url")]
     pub listenbrainz_domain: String,
 
-    #[serde(default = "default_mb_url")]
-    pub musicbrainz_url: String,
+    pub musicbrainz_url: Option<String>,
 
     #[serde(default)]
     pub interzic: InterzicConfig,
+
+    pub musicbrainz_server: Option<MusicbrainzServer>,
 }
 
 impl Config {
@@ -139,16 +143,13 @@ impl Default for Config {
             default_user: Default::default(),
             bumps: Default::default(),
             listenbrainz_domain: default_lb_url(),
-            musicbrainz_url: default_mb_url(),
+            musicbrainz_url: None,
             interzic: InterzicConfig::default(),
+            musicbrainz_server: None,
         }
     }
 }
 
 fn default_lb_url() -> String {
     "api.listenbrainz.org".to_string()
-}
-
-fn default_mb_url() -> String {
-    "http://musicbrainz.org/ws/2".to_string()
 }
