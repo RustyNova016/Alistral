@@ -14,6 +14,7 @@ pub mod paths;
 pub static MUSIBRAINZ_FMT: LazyLock<MusicbrainzFormater> = LazyLock::new(|| MusicbrainzFormater {
     artist_credits: true,
     listenbrainz_link: false,
+    duration: false,
     client: ALISTRAL_CLIENT.musicbrainz_db.clone(),
 });
 
@@ -21,8 +22,17 @@ pub static LISTENBRAINZ_FMT: LazyLock<MusicbrainzFormater> =
     LazyLock::new(|| MusicbrainzFormater {
         artist_credits: true,
         listenbrainz_link: true,
+        duration: false,
         client: ALISTRAL_CLIENT.musicbrainz_db.clone(),
     });
+
+#[cfg(feature = "stats")]
+pub static YIM_FMT: LazyLock<MusicbrainzFormater> = LazyLock::new(|| MusicbrainzFormater {
+    artist_credits: true,
+    listenbrainz_link: true,
+    duration: true,
+    client: ALISTRAL_CLIENT.musicbrainz_db.clone(),
+});
 
 #[cfg(all(feature = "youtube", feature = "interzic"))]
 pub static YT_SECRET_FILE: LazyLock<PathBuf> = LazyLock::new(|| {

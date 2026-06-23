@@ -89,6 +89,7 @@ impl YimReport {
             .columns(self.get_top_columns())
             .sorted_column(TopColumnType::ListenDuration)
             .sort_order(TopColumnSort::Desc)
+            .show_durations(true)
             .build();
 
         table.format_n_rows(rows, 20).await
