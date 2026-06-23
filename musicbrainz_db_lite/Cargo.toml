@@ -14,7 +14,7 @@ regex = "1.11.3"
 url = "2.5.4"
 
 # Api bindings
-musicbrainz_rs = { version = "0.12.0", features = ["async", "rate_limit", "rustls", "extras", "tracing"]}
+musicbrainz_rs = { version = "0.13.0", features = ["async", "rate_limit", "rustls", "extras", "tracing"]}
 listenbrainz = { branch = "alistral_version", git = "https://github.com/RustyNova016/listenbrainz-rs.git", default-features = false, features = ["tls-native"] }
 listenbrainz_rs = { version = "0.1.0", features = ["async", "rate_limit", "tracing"]}
 
