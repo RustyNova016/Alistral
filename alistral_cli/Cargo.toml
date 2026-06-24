@@ -77,7 +77,7 @@ tracing-indicatif = "0.3.14"
 tuillez = "0.1.0"
 
 # Debuging
-hotpath = { version = "0.16.0", optional = true, features = ["futures"] }
+hotpath = { version = "0.18.0", optional = true, features = ["futures"] }
 
 # Other
 zip = "8.0.0"
