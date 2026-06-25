@@ -9,7 +9,7 @@ musicbrainz-db-lite = { path = "../musicbrainz_db_lite" }
 tuillez = "0.1.0"
 
 thiserror = "2.0.11"
-sqlx = "0.8.3"
+sqlx = "0.9.0"
 owo-colors = "4.2.1"
 regex = "1.11.3"
 format-url = "0.6.2"

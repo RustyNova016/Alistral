@@ -33,7 +33,7 @@ directories = "6.0.0"
 reqwest = { version = "0.12.28", features = ["json"] }
 rand = "0.10.1"
 regex = "1.12.3"
-sqlx = { version = "0.8.6", features = ["runtime-tokio", "macros"] }
+sqlx = { version = "0.9.0", features = ["runtime-tokio", "macros"] }
 indoc = "2.0.7"
 strsim = "0.11.1"
 url = "2.5.8"
