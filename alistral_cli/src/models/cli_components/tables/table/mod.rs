@@ -38,6 +38,10 @@ where
         }
     }
 
+    pub fn set_show_previous(&mut self, show: bool) {
+        self.show_prev = show
+    }
+
     pub async fn format(&self, nb_rows: usize, offset: usize) -> String {
         let mut table = Table::new();
 
