@@ -70,7 +70,7 @@ dependencies = [
  "duplicate",
  "extend",
  "futures",
- "hotpath 0.16.1",
+ "hotpath 0.18.0",
  "indoc",
  "inquire",
  "interzic",
@@ -1958,9 +1958,9 @@ dependencies = [
 
 [[package]]
 name = "hotpath"
-version = "0.16.1"
+version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bff002d5c53fa1c6891f32156b9451d16654bc8a761894d7660b25c0a332d517"
+checksum = "dc2c28b1fa962e433f800ed1ea0bf53dc028d3745cf2acec6cfd28b65ac96afa"
 dependencies = [
  "arc-swap",
  "cfg-if",
@@ -1968,8 +1968,8 @@ dependencies = [
  "futures-channel",
  "futures-util",
  "hdrhistogram",
- "hotpath-macros 0.16.1",
- "hotpath-meta 0.16.1",
+ "hotpath-macros 0.18.0",
+ "hotpath-meta 0.18.0",
  "libc",
  "pin-project-lite",
  "prettytable-rs",
@@ -1994,9 +1994,9 @@ dependencies = [
 
 [[package]]
 name = "hotpath-macros"
-version = "0.16.1"
+version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9e2f4ac4534511584b7082657e133dcf3d8727b2f456a6b2a2c3eb02b82c1277"
+checksum = "a585238d8daf746e27df0f24d1bbdcd2410e9febff63f9a0173f90d7e71c50f6"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2011,9 +2011,9 @@ checksum = "b4fcd1a53780c79401c81008b262470386d6dfee64599b337cae37a9674c082d"
 
 [[package]]
 name = "hotpath-macros-meta"
-version = "0.16.1"
+version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a6a87070853e9402ec79184f8d8d930d7eb86cd274aecdcf973f73b6f40271b0"
+checksum = "309f63c2f755dead454dd4b3ea8ab5c947f14f8ea435fbcd37fa820e17290e80"
 
 [[package]]
 name = "hotpath-meta"
@@ -2026,11 +2026,11 @@ dependencies = [
 
 [[package]]
 name = "hotpath-meta"
-version = "0.16.1"
+version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c31cfef2b9d280ad754c23b40b50cc74676489597f3cebfe0c180389e08a53ed"
+checksum = "68faa91a9e1114dff668cd90560f332da6bbde40dae37ec28ea1c43ca5ce3be3"
 dependencies = [
- "hotpath-macros-meta 0.16.1",
+ "hotpath-macros-meta 0.18.0",
 ]
 
 [[package]]
@@ -2790,7 +2790,7 @@ dependencies = [
  "deadpool",
  "extend",
  "futures",
- "hotpath 0.16.1",
+ "hotpath 0.18.0",
  "itertools 0.15.0",
  "listenbrainz",
  "listenbrainz_rs",
