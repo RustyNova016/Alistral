@@ -86,7 +86,7 @@ dependencies = [
  "serde",
  "serde_json",
  "snafu",
- "sqlx 0.8.6",
+ "sqlx 0.9.0",
  "streamies 0.2.2",
  "strsim 0.11.1",
  "strum_macros",
@@ -118,7 +118,7 @@ dependencies = [
  "sequelles",
  "serde",
  "snafu",
- "sqlx 0.8.6",
+ "sqlx 0.9.0",
  "streamies 0.2.2",
  "thiserror 2.0.18",
  "tracing",
@@ -2460,17 +2460,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "inherent"
-version = "1.0.13"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c727f80bfa4a6c6e2508d2f05b6f4bfce242030bd88ed15ae5331c5b5d30fba7"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.117",
-]
-
-[[package]]
 name = "inout"
 version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2509,7 +2498,7 @@ dependencies = [
  "serde",
  "serde_json",
  "snafu",
- "sqlx 0.8.6",
+ "sqlx 0.9.0",
  "submarine",
  "thiserror 2.0.18",
  "tracing",
@@ -2911,7 +2900,7 @@ dependencies = [
  "musicbrainz_rs",
  "owo-colors",
  "regex",
- "sea-query 0.32.7",
+ "sea-query",
  "sequelles",
  "serde",
  "serde_json",
@@ -4027,36 +4016,12 @@ checksum = "94143f37725109f92c262ed2cf5e59bce7498c01bcc1502d7b9afe439a4e9f49"
 
 [[package]]
 name = "sea-query"
-version = "0.32.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8a5d1c518eaf5eda38e5773f902b26ab6d5e9e9e2bb2349ca6c64cf96f80448c"
-dependencies = [
- "inherent",
- "sea-query-derive 0.4.3",
-]
-
-[[package]]
-name = "sea-query"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8d190cfb3bcceb8a8d7d04dee5a0c77f60c7627979cdcb47fdcb8934f009badf"
 dependencies = [
  "itoa",
- "sea-query-derive 1.0.0",
-]
-
-[[package]]
-name = "sea-query-derive"
-version = "0.4.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bae0cbad6ab996955664982739354128c58d16e126114fe88c2a493642502aab"
-dependencies = [
- "darling 0.20.11",
- "heck 0.4.1",
- "proc-macro2",
- "quote",
- "syn 2.0.117",
- "thiserror 2.0.18",
+ "sea-query-derive",
 ]
 
 [[package]]
@@ -4079,7 +4044,7 @@ version = "0.9.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4eaa419cdb9157da1361186b1959983eb2ea0dcb9a3c69dc45c449ecb2af8fef"
 dependencies = [
- "sea-query 1.0.1",
+ "sea-query",
  "sqlx 0.9.0",
 ]
 
@@ -4141,7 +4106,7 @@ dependencies = [
  "bon",
  "chrono",
  "deadpool",
- "sea-query 1.0.1",
+ "sea-query",
  "sea-query-sqlx",
  "sequelles_derive",
  "snafu",
@@ -4524,8 +4489,6 @@ dependencies = [
  "sha2 0.10.9",
  "smallvec",
  "thiserror 2.0.18",
- "tokio",
- "tokio-stream",
  "tracing",
  "url",
 ]
@@ -4611,7 +4574,6 @@ dependencies = [
  "sqlx-postgres 0.8.6",
  "sqlx-sqlite 0.8.6",
  "syn 2.0.117",
- "tokio",
  "url",
 ]
 
@@ -6609,8 +6571,3 @@ dependencies = [
  "cc",
  "pkg-config",
 ]
-
-[[patch.unused]]
-name = "zip"
-version = "7.0.0"
-source = "git+https://github.com/RustyNova016/zip2?rev=4ebae293241d41249f3dd2283e9cc98899d42e33#4ebae293241d41249f3dd2283e9cc98899d42e33"

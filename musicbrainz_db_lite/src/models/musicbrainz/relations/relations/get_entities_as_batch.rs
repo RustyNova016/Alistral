@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
 use itertools::Itertools as _;
+use sqlx::AssertSqlSafe;
 use sqlx::FromRow;
 use sqlx::sqlite::SqliteRow;
 
@@ -26,7 +27,7 @@ where
         let ids = left_entities.iter().map(|r| r.id).collect_vec();
         let id_string = serde_json::to_string(&ids)?;
 
-        let joins: Vec<JoinRelation<i64, V>> = sqlx::query_as(&format!(
+        let joins: Vec<JoinRelation<i64, V>> = sqlx::query_as(AssertSqlSafe(format!(
             "
                 SELECT
                     left.id as original_id,
@@ -44,7 +45,7 @@ where
             ",
             left_table = T::RELATION_TABLE,
             right_table = U::TABLE_NAME,
-        ))
+        )))
         .bind(id_string)
         .fetch_all(conn)
         .await?;

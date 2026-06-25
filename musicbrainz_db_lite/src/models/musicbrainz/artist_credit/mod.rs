@@ -7,7 +7,7 @@ use crate::models::shared_traits::has_table::HasTable;
 
 pub mod display;
 
-#[derive(Debug, Clone, PartialEq, Eq, FromRow)]
+#[derive(Debug, Clone, PartialEq, Eq, FromRow, sequelles::Table)]
 pub struct ArtistCredit {
     pub artist_credit: i64,
     pub position: i64,

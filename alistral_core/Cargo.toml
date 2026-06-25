@@ -19,7 +19,7 @@ streamies = "0.2.2"
 
 # Databasing
 sequelles = { version = "0.2.0", features = ["chrono"] }
-sqlx = { version = "0.8.3", features = ["runtime-tokio", "macros"] }
+sqlx = { version = "0.9.0", features = ["runtime-tokio", "macros"] }
 
 # Macros
 bon = "3.8.1"

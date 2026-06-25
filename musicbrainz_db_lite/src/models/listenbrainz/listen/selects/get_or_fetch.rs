@@ -1,5 +1,6 @@
 use bon::bon;
 use snafu::ResultExt;
+use sqlx::AssertSqlSafe;
 
 use crate::DBClient;
 use crate::models::listenbrainz::listen::Listen;
@@ -25,13 +26,13 @@ impl Listen {
                 .context(ListenFetchingSnafu)?;
         }
 
-        let query = Listen::listen_query_string()
+        let (sql, vals) = Listen::select_listen_query()
             .unmapped(unmapped)
             .mapped(mapped)
             .users(users)
             .call();
 
-        sqlx::query_as(&query)
+        sqlx::query_as_with(AssertSqlSafe(sql), vals)
             .fetch_all(&mut *client.get_conn().await.context(ConnectionSnafu)?)
             .await
             .context(ListenSelectSnafu)

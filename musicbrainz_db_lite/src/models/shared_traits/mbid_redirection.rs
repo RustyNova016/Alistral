@@ -1,4 +1,5 @@
 use sequelles::has_rowid::HasRowID;
+use sqlx::AssertSqlSafe;
 use sqlx::FromRow;
 use sqlx::sqlite::SqliteRow;
 
@@ -20,10 +21,10 @@ where
         mbid: &str,
     ) -> impl std::future::Future<Output = Result<(), sqlx::Error>> + Send {
         async move {
-            sqlx::query(&format!(
+            sqlx::query(AssertSqlSafe(format!(
                 "INSERT OR IGNORE INTO `{}_gid_redirect` VALUES (?, NULL, 0)",
                 Self::TABLE_NAME
-            ))
+            )))
             .bind(mbid)
             .execute(conn)
             .await?;
@@ -38,10 +39,10 @@ where
         id: i64,
     ) -> impl std::future::Future<Output = Result<(), sqlx::Error>> + Send {
         async move {
-            sqlx::query(&format!(
+            sqlx::query(AssertSqlSafe(format!(
                 "INSERT OR IGNORE INTO `{}_gid_redirect` VALUES (?, ?, 0) ON CONFLICT DO UPDATE SET `new_id` = ?",
                 Self::TABLE_NAME
-            ))
+            )))
         .bind(mbid)
         .bind(id)
         .bind(id)
@@ -59,7 +60,7 @@ where
         Self: Sized + for<'a> FromRow<'a, SqliteRow> + Send + Unpin,
     {
         async move {
-            sqlx::query_as(&format!(
+            sqlx::query_as(AssertSqlSafe(format!(
                 r#"
                     SELECT
                         {table}.*
@@ -73,7 +74,7 @@ where
                         1
                 "#,
                 table = Self::TABLE_NAME
-            ))
+            )))
             .bind(mbid)
             .fetch_optional(conn)
             .await
@@ -86,10 +87,10 @@ where
         id: i64,
     ) -> impl std::future::Future<Output = Result<Vec<String>, sqlx::Error>> + Send {
         async move {
-            sqlx::query_scalar(&format!(
+            sqlx::query_scalar(AssertSqlSafe(format!(
                 "SELECT gid FROM `{}_gid_redirect` WHERE new_id = ?",
                 Self::TABLE_NAME
-            ))
+            )))
             .bind(id)
             .fetch_all(conn)
             .await
@@ -102,10 +103,10 @@ where
         mbid: &str,
     ) -> impl std::future::Future<Output = Result<Vec<String>, sqlx::Error>> + Send {
         async move {
-            sqlx::query_scalar(&format!(
+            sqlx::query_scalar(AssertSqlSafe(format!(
                     "SELECT gid FROM `{entity}_gid_redirect` WHERE new_id = (SELECT new_id FROM `{entity}_gid_redirect` WHERE gid = ?)",
                     entity = Self::TABLE_NAME
-                ))
+                )))
                 .bind(mbid)
                 .fetch_all(conn)
                 .await

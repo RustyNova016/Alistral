@@ -3,8 +3,11 @@ use sea_query::Asterisk;
 use sea_query::Cond;
 use sea_query::Condition;
 use sea_query::Expr;
+use sea_query::ExprTrait;
 use sea_query::Query;
 use sea_query::SqliteQueryBuilder;
+use sequelles::sea_query_sqlx::SqlxBinder;
+use sequelles::sea_query_sqlx::SqlxValues;
 
 use crate::models::listenbrainz::listen::Listen;
 use crate::models::listenbrainz::listen::ListenIden;
@@ -15,6 +18,7 @@ use crate::models::musicbrainz::user::UserIden;
 impl Listen {
     /// Create a listen query string
     #[builder]
+    #[deprecated]
     pub fn listen_query_string(
         users: &[&str],
         #[builder(default)] mapped: bool,
@@ -50,6 +54,45 @@ impl Listen {
                 sea_query::Order::Desc,
             )
             .to_string(SqliteQueryBuilder)
+    }
+
+    /// Select listens
+    #[builder]
+    pub fn select_listen_query(
+        users: &[&str],
+        #[builder(default)] mapped: bool,
+        #[builder(default)] unmapped: bool,
+    ) -> (String, SqlxValues) {
+        Query::select()
+            .column((ListenIden::Table, Asterisk))
+            .from(ListenIden::Table)
+            .inner_join(
+                UserIden::Table,
+                Expr::col((ListenIden::Table, ListenIden::User))
+                    .equals((UserIden::Table, UserIden::Name)),
+            )
+            .left_join(
+                MsidMappingIden::Table,
+                Condition::all()
+                    .add(
+                        Expr::col((MsidMappingIden::Table, MsidMappingIden::RecordingMsid))
+                            .equals((ListenIden::Table, ListenIden::RecordingMsid)),
+                    )
+                    .add(
+                        Expr::col((MsidMappingIden::Table, MsidMappingIden::User))
+                            .equals((UserIden::Table, UserIden::Id)),
+                    ),
+            )
+            .cond_where(
+                Condition::all()
+                    .add(user_filter(users))
+                    .add(mapping_filter(mapped, unmapped)),
+            )
+            .order_by(
+                (ListenIden::Table, ListenIden::ListenedAt),
+                sea_query::Order::Desc,
+            )
+            .build_sqlx(SqliteQueryBuilder)
     }
 }
 

@@ -36,7 +36,7 @@ where
                 panic!("No join has been specified!")
             }
 
-            Ok(sqlx::query_as(&format!(
+            Ok(sqlx::query_as(AssertSqlSafe(format!(
                 r#"     SELECT
                         right.*
                     FROM
@@ -46,7 +46,7 @@ where
                         left.id = ?"#,
                 left_table = Self::TABLE_NAME,
                 right_table = Self::RELATION_TABLE,
-            ))
+            )))
             .bind(self.rowid())
             .fetch_all(conn)
             .await?)
@@ -85,8 +85,9 @@ where
                 panic!("No join has been specified!")
             }
 
-            let joins: Vec<JoinRelation<i64, Relation<Self, U>>> = sqlx::query_as(&format!(
-                "
+            let joins: Vec<JoinRelation<i64, Relation<Self, U>>> =
+                sqlx::query_as(AssertSqlSafe(format!(
+                    "
                 SELECT
                     left.id as original_id,
                     right.*
@@ -101,12 +102,12 @@ where
                             JSON_EACH(?)
                     )
             ",
-                left_table = Self::TABLE_NAME,
-                right_table = Self::RELATION_TABLE,
-            ))
-            .bind(id_string)
-            .fetch_all(conn)
-            .await?;
+                    left_table = Self::TABLE_NAME,
+                    right_table = Self::RELATION_TABLE,
+                )))
+                .bind(id_string)
+                .fetch_all(conn)
+                .await?;
 
             Ok(JoinCollection::from(joins)
                 .into_hashmap(left_entities, |id, value| &value.rowid() == id))
@@ -141,10 +142,11 @@ where
                 panic!("No join has been specified!")
             };
 
-            sqlx::query(&format!(
+            //TODO: Check if can be replaced by `HasDelete`
+            sqlx::query(AssertSqlSafe(format!(
                 "DELETE FROM `{}` as t WHERE {where_clause}",
                 Self::RELATION_TABLE
-            ))
+            )))
             .bind(self.rowid())
             .execute(conn)
             .await?;
@@ -265,6 +267,7 @@ use std::collections::HashMap;
 use itertools::Itertools as _;
 use self_relation::impl_has_self_relation;
 use sequelles::has_rowid::HasRowID;
+use sqlx::AssertSqlSafe;
 
 use crate::models::musicbrainz::artist::Artist;
 use crate::models::musicbrainz::genre::Genre;

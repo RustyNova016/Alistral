@@ -59,3 +59,4 @@ pub use sequelles::has_rowid::HasRowID;
 
 // === Crate Reexports ===
 pub use listenbrainz_rs;
+pub use sqlx;

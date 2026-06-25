@@ -1,6 +1,7 @@
 use core::marker::PhantomData;
 
 use sequelles::has_rowid::HasRowID;
+use sqlx::AssertSqlSafe;
 use sqlx::prelude::FromRow;
 use traits::HasRelation;
 
@@ -83,7 +84,7 @@ where
                 `entity1` = excluded.`entity1` RETURNING *;",
             T::RELATION_TABLE
         );
-        let mut query = sqlx::query_as(&sql);
+        let mut query = sqlx::query_as(AssertSqlSafe(sql));
         query = query.bind(&self.type_id);
         query = query.bind(&self.relation_type);
         query = query.bind(&self.direction);
@@ -106,7 +107,7 @@ where
         entity: T,
     ) -> Result<Vec<Relation<T, U>>, sqlx::Error> {
         let sql = format!("SELECT * FROM {} WHERE `entity0` = ?", T::RELATION_TABLE);
-        let relations: Vec<Relation<T, U>> = sqlx::query_as(&sql)
+        let relations: Vec<Relation<T, U>> = sqlx::query_as(AssertSqlSafe(sql))
             .bind(entity.rowid())
             .fetch_all(conn)
             .await?;
