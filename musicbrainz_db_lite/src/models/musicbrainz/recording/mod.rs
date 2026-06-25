@@ -22,9 +22,15 @@ pub mod fetching;
 pub mod finds;
 pub mod methods;
 pub mod relations;
-pub mod upsert;
 
-#[derive(Debug, Default, PartialEq, Eq, Clone, FromRow, Deserialize, Serialize)]
+#[derive(
+    Debug, Default, PartialEq, Eq, Clone, FromRow, Deserialize, Serialize, sequelles::Table,
+)]
+#[sequelles(db_name = "recording")]
+#[sequelles(sqlite)]
+#[sequelles(upsert)]
+#[sequelles(primary_key(key_name = "pk", columns(id)))]
+#[sequelles(unique_key(key_name = "mbib", columns(mbid)))]
 pub struct Recording {
     pub id: i64,
     pub mbid: String,
