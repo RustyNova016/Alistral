@@ -20,7 +20,7 @@ debug = "line-tables-only"
 listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "5fb2e388f61513c3bf798141822a2f0082dc2727" }
 
 #sequelles = {path = "./sequelles"}
-sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "291162860f6c78719dd2b05e67a545fd491addd7"}
+sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "daf0eda1a88f9e3946e76db25f53227188a629c0"}
 
 #tuillez = {path = "./tuillez"}
 tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c8656a4eedb571177a8ffa3b9984e78"}

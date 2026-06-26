@@ -11,7 +11,7 @@ use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use musicbrainz_db_lite::models::musicbrainz::user::User;
 use musicbrainz_db_lite::models::musicbrainz::user::UserName;
 use rust_decimal::{Decimal, prelude::FromPrimitive as _};
-use sequelles::SelectUnique;
+use sequelles::SelectUnique as _;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -51,9 +51,14 @@ impl RecordingWithListens {
             .user
             .clone();
 
-        let user = User::select_unique(&mut *conn, UserName { name: user_name.clone() })
-            .await?
-            .ok_or(crate::Error::MissingUser(user_name.clone()))?;
+        let user = User::select_unique(
+            &mut *conn,
+            UserName {
+                name: user_name.clone(),
+            },
+        )
+        .await?
+        .ok_or(crate::Error::MissingUser(user_name.clone()))?;
 
         prefetch_recordings_of_listens(&mut *conn, &listens.data).await?;
 

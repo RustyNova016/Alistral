@@ -4,7 +4,7 @@ use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::listenbrainz::messybrainz_submission::MessybrainzSubmission;
 use musicbrainz_db_lite::models::musicbrainz::user::User;
 use musicbrainz_db_lite::models::musicbrainz::user::UserName;
-use sequelles::SelectUnique;
+use sequelles::SelectUnique as _;
 
 use crate::ALISTRAL_CLIENT;
 use crate::utils::listenbrainz_api::map_msid_to_mbid;
@@ -49,7 +49,7 @@ impl ListenRemapMsidCommand {
         .await
         .expect("Error while getting the user")
         .expect("Couldn't find user");
-    
+
         let msids = MessybrainzSubmission::get_messybrainzs_from_mbid(
             conn,
             &original_recording.mbid,

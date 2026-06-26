@@ -20,9 +20,14 @@ impl Listen {
     ) -> Result<Option<Recording>, crate::Error> {
         let conn = &mut *client.get_conn().await?;
 
-        let user = User::select_unique(&mut *conn, UserName {name: self.user.clone()})
-            .await?
-            .expect("User should be in due to foreign keys");
+        let user = User::select_unique(
+            &mut *conn,
+            UserName {
+                name: self.user.clone(),
+            },
+        )
+        .await?
+        .expect("User should be in due to foreign keys");
 
         let Some(msid_mapping) =
             MsidMapping::find_by_user_msid(conn, user.id, &self.recording_msid).await?

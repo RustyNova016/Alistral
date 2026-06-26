@@ -1,6 +1,7 @@
 use musicbrainz_db_lite::GetConnectionError;
 
 #[derive(thiserror::Error, Debug)]
+#[allow(clippy::large_enum_variant)]
 pub enum Error {
     #[error(transparent)]
     DatabaseError(#[from] musicbrainz_db_lite::Error),
