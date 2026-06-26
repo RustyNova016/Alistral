@@ -1,4 +1,6 @@
 use listenbrainz_rs::api::user::username::listens::UserListensListen;
+use sequelles::InsertOrIgnore;
+use sequelles::SelectUnique;
 use snafu::ResultExt;
 
 use crate::MBIDRedirection as _;
@@ -7,8 +9,10 @@ use crate::User;
 use crate::error::sqlx_error::SqlxError;
 use crate::error::sqlx_error::SqlxSnafu;
 use crate::models::listenbrainz::listen::Listen;
-use crate::models::listenbrainz::messybrainz_submission::MessybrainzSubmission;
+use crate::models::listenbrainz::messybrainz_submission::MessybrainzSubmissionInsert;
 use crate::models::listenbrainz::msid_mapping::MsidMapping;
+use crate::models::musicbrainz::user::UserInsert;
+use crate::models::musicbrainz::user::UserName;
 
 impl Listen {
     pub async fn insert_user_listen_listen(
@@ -16,13 +20,15 @@ impl Listen {
         listen: UserListensListen,
     ) -> Result<Listen, SqlxError> {
         // First, get the user
-        User::insert_or_ignore(&mut *conn, &listen.user_name)
+        UserInsert::builder()
+            .name(listen.user_name.to_owned())
+            .build()
+            .insert_or_ignore(&mut *conn)
             .await
             .context(SqlxSnafu)?;
 
         // Then upsert the MSID.
-        MessybrainzSubmission::builder()
-            .id(0)
+        MessybrainzSubmissionInsert::builder()
             .artist_credit(listen.track_metadata.artist_name)
             .recording(listen.track_metadata.track_name)
             .maybe_release(listen.track_metadata.release_name)
@@ -39,10 +45,15 @@ impl Listen {
                 .await
                 .context(SqlxSnafu)?;
 
-            let user = User::find_by_name(&mut *conn, &listen.user_name)
-                .await
-                .context(SqlxSnafu)?
-                .expect("The user shall be inserted");
+            let user = User::select_unique(
+                &mut *conn,
+                UserName {
+                    name: listen.user_name.clone(),
+                },
+            )
+            .await
+            .context(SqlxSnafu)?
+            .expect("User should be in due to foreign keys");
 
             MsidMapping::set_user_mapping(
                 &mut *conn,

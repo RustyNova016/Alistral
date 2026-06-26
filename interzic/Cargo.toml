@@ -51,7 +51,7 @@ backtrace = []
 result_large_err = { level = "allow", priority = 1 }
 
 [patch.crates-io]
-sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "8e9085781b4819459b8cbd49a5901a7c92394a1b"}
+sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "291162860f6c78719dd2b05e67a545fd491addd7"}
 tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c8656a4eedb571177a8ffa3b9984e78"}
 musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "9dcc97612c3f4b269c6781dbf5d8b0f5301c9308"}
 listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "5fb2e388f61513c3bf798141822a2f0082dc2727" }

@@ -10,6 +10,10 @@ use musicbrainz_db_lite::models::listenbrainz::messybrainz_submission::Messybrai
 use musicbrainz_db_lite::models::listenbrainz::msid_mapping::MsidMapping;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use musicbrainz_db_lite::models::musicbrainz::user::User;
+use musicbrainz_db_lite::models::musicbrainz::user::UserInsert;
+use musicbrainz_db_lite::models::musicbrainz::user::UserName;
+use sequelles::InsertOrIgnore;
+use sequelles::SelectUnique;
 use serde::Deserialize;
 use serde::Serialize;
 use sqlx::Acquire as _;
@@ -146,7 +150,12 @@ impl ImportListen {
         user_name: &str,
     ) -> Result<(), crate::Error> {
         // First, get the user
-        User::insert_or_ignore(&mut *conn, user_name).await.unwrap();
+        UserInsert::builder()
+            .name(user_name)
+            .build()
+            .insert_or_ignore(&mut *conn)
+            .await
+            .unwrap();
 
         let data = serde_json::to_string(&self.track_metadata.additional_info)
             .expect("Crashing from serializing a serde::Value isn't possible");
@@ -169,9 +178,14 @@ impl ImportListen {
                 .await
                 .unwrap();
 
-            let user = User::find_by_name(&mut *conn, user_name)
-                .await?
-                .expect("The user shall be inserted");
+            let user = User::select_unique(
+                &mut *conn,
+                UserName {
+                    name: user_name.to_string(),
+                },
+            )
+            .await?
+            .expect("The user shall be inserted");
 
             MsidMapping::set_user_mapping(
                 &mut *conn,

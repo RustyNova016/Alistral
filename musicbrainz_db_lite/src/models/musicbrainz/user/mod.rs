@@ -1,37 +1,20 @@
 use sea_query::enum_def;
 use sequelles::has_rowid::HasRowID;
-use sqlx::SqliteConnection;
 
 use crate::models::shared_traits::has_table::HasTable;
 
-#[derive(Debug, sqlx::FromRow, Clone, PartialEq, Eq)]
+#[derive(Debug, sqlx::FromRow, Clone, PartialEq, Eq, sequelles::Table)]
+#[sequelles(db_name("users"))]
+#[sequelles(sqlite)]
+#[sequelles(insert, insert_struct, select_unique)]
+#[sequelles(primary_key(key_name = "pk", columns(id)))]
+#[sequelles(unique(key_name = "name", columns(name)))]
 #[enum_def(table_name = "users")]
 pub struct User {
+    #[sequelles(auto_increment)]
     pub id: i64,
 
     pub name: String,
-}
-
-impl User {
-    pub async fn insert_or_ignore(
-        conn: &mut sqlx::SqliteConnection,
-        name: &str,
-    ) -> Result<(), sqlx::Error> {
-        sqlx::query!("INSERT OR IGNORE INTO users VALUES (NULL, ?)", name)
-            .execute(conn)
-            .await?;
-        Ok(())
-    }
-
-    /// Finds an user by its name
-    pub async fn find_by_name(
-        conn: &mut SqliteConnection,
-        name: &str,
-    ) -> Result<Option<User>, sqlx::Error> {
-        sqlx::query_as!(User, "SELECT * FROM users WHERE name = ?", name)
-            .fetch_optional(conn)
-            .await
-    }
 }
 
 impl HasRowID for User {

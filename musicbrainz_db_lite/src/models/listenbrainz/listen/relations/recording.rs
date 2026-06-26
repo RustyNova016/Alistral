@@ -1,10 +1,12 @@
 use itertools::Itertools;
+use sequelles::SelectUnique;
 use sqlx::SqliteConnection;
 
 use crate::models::listenbrainz::listen::Listen;
 use crate::models::listenbrainz::msid_mapping::MsidMapping;
 use crate::models::musicbrainz::recording::Recording;
 use crate::models::musicbrainz::user::User;
+use crate::models::musicbrainz::user::UserName;
 use crate::utils::sqlx_utils::entity_relations::JoinRelation;
 
 impl Listen {
@@ -14,9 +16,14 @@ impl Listen {
         client: &crate::DBClient,
     ) -> Result<Option<Recording>, crate::Error> {
         // TODO: Convert to one SQL query
-        let user = User::find_by_name(conn, &self.user)
-            .await?
-            .expect("User should be in due to foreign keys");
+        let user = User::select_unique(
+            &mut *conn,
+            UserName {
+                name: self.user.clone(),
+            },
+        )
+        .await?
+        .expect("User should be in due to foreign keys");
 
         let recording_mbid =
             MsidMapping::find_by_user_msid(conn, user.id, &self.recording_msid).await?;

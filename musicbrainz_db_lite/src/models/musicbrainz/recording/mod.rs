@@ -26,7 +26,7 @@ pub mod relations;
 #[derive(
     Debug, Default, PartialEq, Eq, Clone, FromRow, Deserialize, Serialize, sequelles::Table,
 )]
-#[sequelles(db_name = "recording")]
+#[sequelles(db_name = "recordings")]
 #[sequelles(sqlite)]
 #[sequelles(upsert)]
 #[sequelles(primary_key(key_name = "pk", columns(id)))]

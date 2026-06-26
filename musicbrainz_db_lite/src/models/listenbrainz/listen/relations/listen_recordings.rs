@@ -1,5 +1,7 @@
 use std::sync::Arc;
 
+use sequelles::SelectUnique;
+
 use crate::DBClient;
 use crate::DBRelation;
 use crate::GetOrFetch;
@@ -7,6 +9,7 @@ use crate::Recording;
 use crate::User;
 use crate::models::listenbrainz::listen::Listen;
 use crate::models::listenbrainz::msid_mapping::MsidMapping;
+use crate::models::musicbrainz::user::UserName;
 
 pub struct ListenRecordingDBRel;
 
@@ -17,7 +20,7 @@ impl Listen {
     ) -> Result<Option<Recording>, crate::Error> {
         let conn = &mut *client.get_conn().await?;
 
-        let user = User::find_by_name(conn, &self.user)
+        let user = User::select_unique(&mut *conn, UserName {name: self.user.clone()})
             .await?
             .expect("User should be in due to foreign keys");
 

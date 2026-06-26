@@ -70,9 +70,11 @@ impl HasTable for Listen {
 
 #[cfg(test)]
 mod test {
-    use crate::User;
+    use sequelles::InsertOrIgnore;
+
     use crate::models::listenbrainz::listen::Listen;
-    use crate::models::listenbrainz::messybrainz_submission::MessybrainzSubmission;
+    use crate::models::listenbrainz::messybrainz_submission::MessybrainzSubmissionInsert;
+    use crate::models::musicbrainz::user::UserInsert;
     use crate::tests::fixtures::default_client::test_mb_client;
 
     #[tokio::test]
@@ -80,10 +82,14 @@ mod test {
         let client = test_mb_client();
         let conn = &mut *client.get_raw_connection().await.unwrap();
 
-        User::insert_or_ignore(conn, "TestNova").await.unwrap();
+        UserInsert::builder()
+            .name("TestNova")
+            .build()
+            .insert_or_ignore(conn)
+            .await
+            .unwrap();
 
-        MessybrainzSubmission::builder()
-            .id(0)
+        MessybrainzSubmissionInsert::builder()
             .msid("test")
             .recording("Test")
             .artist_credit("Test")

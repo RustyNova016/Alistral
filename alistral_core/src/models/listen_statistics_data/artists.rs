@@ -1,3 +1,4 @@
+use snafu::Location;
 use snafu::ResultExt;
 use snafu::Snafu;
 
@@ -33,13 +34,18 @@ impl ListenStatisticsData {
 pub enum ArtistStatsError {
     #[snafu(display("Couldn't generate artist statistics"))]
     ArtistLinkingError {
-        #[snafu(backtrace)]
+        //#[snafu(backtrace)]
         source: ArtistStatsLinkingError,
+        #[snafu(implicit)]
+        location: Location,
     },
 
     #[snafu(display("Couldn't generate recording statistics"))]
     RecordingStatsError {
-        #[snafu(backtrace)]
+        //#[snafu(backtrace)]
         source: RecordingStatsError,
+
+        #[snafu(implicit)]
+        location: Location,
     },
 }
