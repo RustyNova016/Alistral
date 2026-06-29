@@ -60,3 +60,6 @@ pub use sequelles::has_rowid::HasRowID;
 // === Crate Reexports ===
 pub use listenbrainz_rs;
 pub use sqlx;
+
+/// The SQLx migrator for the DB
+pub static MIGRATOR: sqlx::migrate::Migrator = sqlx::migrate!("./migrations");
