@@ -18,18 +18,14 @@ pub mod selects;
 
 #[derive(Debug, PartialEq, Eq, Clone, sqlx::FromRow, Deserialize, Serialize, sequelles::Table)]
 #[enum_def(table_name = "listens")]
-#[sequelles(db_name = "listens")]
+#[sequelles(db_name = "listens", snafu)]
 #[sequelles(sqlite)]
 #[sequelles(insert, upsert)]
 pub struct Listen {
     pub id: i64,
-
     pub listened_at: i64,
-
     pub user: String,
-
     pub recording_msid: String,
-
     pub data: Option<String>,
 }
 

@@ -6,6 +6,7 @@ use thiserror::Error;
 
 use crate::api::musicbrainz::url::fetch_url::UrlFetchingError;
 use crate::error::sqlx_error::SqlxError;
+use crate::models::musicbrainz::user::UserSqlError;
 
 pub mod sqlx_error;
 #[derive(Error, Debug)]
@@ -58,4 +59,6 @@ pub enum Error {
 
     #[error(transparent)]
     ApiEndpointError(#[from] ApiEndpointError),
+    #[error(transparent)]
+    UserSqlError(#[from] UserSqlError),
 }

@@ -1,6 +1,7 @@
 use listenbrainz_rs::api::user::username::listens::UserListensListen;
 use listenbrainz_rs::api::user::username::listens_reader::ListenFullFetchError;
 use sequelles::databases::sqlite::database::GetConnectionError;
+use snafu::ResultExt;
 use tracing::instrument;
 use tuillez::pg_counted;
 use tuillez::pg_inc;
@@ -8,6 +9,7 @@ use tuillez::pg_inc;
 use crate::DBClient;
 use crate::error::sqlx_error::SqlxError;
 use crate::models::listenbrainz::listen::Listen;
+use crate::models::listenbrainz::listen::insert::user_listen_payload::UserListensListenInsertError;
 
 pub mod full;
 pub mod id;
@@ -36,7 +38,11 @@ async fn save_listens(
     pg_counted!(listens.len(), "Saving Listens");
 
     for listen in listens {
-        saved_listens.push(Listen::insert_user_listen_listen(trans, listen).await?);
+        saved_listens.push(
+            Listen::insert_user_listen_listen(trans, listen)
+                .await
+                .context(InsertListenSnafu)?,
+        );
         pg_inc!();
     }
 
@@ -57,6 +63,13 @@ pub enum ListenFetchingError {
     ConnectionError {
         #[cfg_attr(feature = "backtrace", snafu(backtrace))]
         source: GetConnectionError,
+
+        #[snafu(implicit)]
+        location: snafu::Location,
+    },
+
+    InsertListenError {
+        source: UserListensListenInsertError,
 
         #[snafu(implicit)]
         location: snafu::Location,

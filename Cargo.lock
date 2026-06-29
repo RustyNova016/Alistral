@@ -3851,7 +3851,7 @@ checksum = "8a7852d02fc848982e0c167ef163aaff9cd91dc640ba85e263cb1ce46fae51cd"
 [[package]]
 name = "sequelles"
 version = "0.2.0"
-source = "git+https://github.com/RustyNova016/sequelles?rev=daf0eda1a88f9e3946e76db25f53227188a629c0#daf0eda1a88f9e3946e76db25f53227188a629c0"
+source = "git+https://github.com/RustyNova016/sequelles?rev=943ca14f07a01941dd0e6f02b629a3b49ef495ac#943ca14f07a01941dd0e6f02b629a3b49ef495ac"
 dependencies = [
  "async-io",
  "async-once-cell",
@@ -3868,7 +3868,7 @@ dependencies = [
 [[package]]
 name = "sequelles_derive"
 version = "0.1.0"
-source = "git+https://github.com/RustyNova016/sequelles?rev=daf0eda1a88f9e3946e76db25f53227188a629c0#daf0eda1a88f9e3946e76db25f53227188a629c0"
+source = "git+https://github.com/RustyNova016/sequelles?rev=943ca14f07a01941dd0e6f02b629a3b49ef495ac#943ca14f07a01941dd0e6f02b629a3b49ef495ac"
 dependencies = [
  "convert_case 0.11.0",
  "deluxe",
@@ -3883,7 +3883,7 @@ dependencies = [
 [[package]]
 name = "sequelles_sql_gen"
 version = "0.1.0"
-source = "git+https://github.com/RustyNova016/sequelles?rev=daf0eda1a88f9e3946e76db25f53227188a629c0#daf0eda1a88f9e3946e76db25f53227188a629c0"
+source = "git+https://github.com/RustyNova016/sequelles?rev=943ca14f07a01941dd0e6f02b629a3b49ef495ac#943ca14f07a01941dd0e6f02b629a3b49ef495ac"
 dependencies = [
  "itertools 0.15.0",
 ]

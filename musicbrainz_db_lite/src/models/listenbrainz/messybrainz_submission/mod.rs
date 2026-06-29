@@ -7,7 +7,7 @@ pub mod selects;
 
 /// The fingerprint that identify a listened recording. This is the data scrobblers send to LB to tell that the user listened to a recording
 #[derive(Debug, FromRow, Clone, sequelles::Table)]
-#[sequelles(db_name = "messybrainz_submission")]
+#[sequelles(db_name = "messybrainz_submission", snafu)]
 #[sequelles(sqlite)]
 #[sequelles(upsert, insert, insert_struct)]
 #[sequelles(primary_key(key_name = "pk", columns(id)))]
