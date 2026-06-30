@@ -9,7 +9,7 @@ pub mod selects;
 #[derive(Debug, FromRow, Clone, sequelles::Table)]
 #[sequelles(db_name = "messybrainz_submission", snafu)]
 #[sequelles(sqlite)]
-#[sequelles(upsert, insert, insert_struct)]
+#[sequelles(upsert, insert, insert_struct, selsert, select_unique)]
 #[sequelles(primary_key(key_name = "pk", columns(id)))]
 #[sequelles(unique_key(key_name = "msid", columns(msid)))]
 pub struct MessybrainzSubmission {

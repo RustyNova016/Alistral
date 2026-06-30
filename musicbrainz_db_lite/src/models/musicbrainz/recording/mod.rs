@@ -1,3 +1,4 @@
+
 use chrono::DateTime;
 use chrono::Utc;
 use sequelles::has_rowid::HasRowID;
@@ -22,15 +23,17 @@ pub mod fetching;
 pub mod finds;
 pub mod methods;
 pub mod relations;
+#[cfg(test)]
+pub mod tests;
 
 #[derive(
     Debug, Default, PartialEq, Eq, Clone, FromRow, Deserialize, Serialize, sequelles::Table,
 )]
 #[sequelles(db_name = "recordings")]
 #[sequelles(sqlite)]
-#[sequelles(upsert)]
+#[sequelles(upsert, select_unique)]
 #[sequelles(primary_key(key_name = "pk", columns(id)))]
-#[sequelles(unique_key(key_name = "mbib", columns(mbid)))]
+#[sequelles(unique_key(key_name = "mbid", columns(mbid)))]
 pub struct Recording {
     pub id: i64,
     pub mbid: String,

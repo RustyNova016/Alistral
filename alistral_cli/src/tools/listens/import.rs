@@ -7,6 +7,7 @@ use clap::Parser;
 use musicbrainz_db_lite::MBIDRedirection as _;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::listenbrainz::messybrainz_submission::MessybrainzSubmission;
+use musicbrainz_db_lite::models::listenbrainz::messybrainz_submission::MessybrainzSubmissionInsert;
 use musicbrainz_db_lite::models::listenbrainz::msid_mapping::MsidMapping;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use musicbrainz_db_lite::models::musicbrainz::user::UserInsert;
@@ -164,17 +165,16 @@ impl ImportListen {
         let data = serde_json::to_string(&self.track_metadata.additional_info)
             .expect("Crashing from serializing a serde::Value isn't possible");
 
-        let messybrainz = MessybrainzSubmission {
-            id: 0,
-            msid: self.track_metadata.recording_msid.clone(),
-            recording: self.track_metadata.track_name,
-            artist_credit: self.track_metadata.artist_name,
-            release: self.track_metadata.release_name,
-            track_number: None, // TODO: Find where is it stored in the json... If it even is stored...
-            duration: None, //TODO: Get the duration from additiona info or ditch it from the schema?
-        };
+        let messybrainz = MessybrainzSubmissionInsert::builder()
+            .msid(self.track_metadata.recording_msid.clone())
+            .recording(self.track_metadata.track_name)
+            .artist_credit(self.track_metadata.artist_name)
+            .maybe_release(self.track_metadata.release_name)
+            .build()
+            .insert_or_ignore(&mut *conn)
+            .await
+            .unwrap();
 
-        messybrainz.insert_or_ignore(&mut *conn).await.unwrap();
 
         if let Some(mapping) = self.track_metadata.mbid_mapping {
             // First insert the mbid
@@ -206,30 +206,30 @@ impl ImportListen {
     }
 }
 
-// #[cfg(test)]
-// mod tests {
-//     use crate::ALISTRAL_CLIENT;
-//     use crate::tools::listens::import::ListenImportDumpCommand;
-//     use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
-// use sqlx::SqlitePool;
+#[cfg(test)]
+mod tests {
+    use crate::ALISTRAL_CLIENT;
+    use crate::tools::listens::import::ListenImportDumpCommand;
+    use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
+    use sqlx::SqlitePool;
 
-//     #[sqlx::test]
-//     async fn load_listen_dump_test() {
-//         let cmd = ListenImportDumpCommand {
-//             path: "tests/data/listen_dump.zip".to_string(),
-//             username: Some("TestNova".to_string()),
-//         };
+    #[sqlx::test]
+    async fn load_listen_dump_test() {
+        let cmd = ListenImportDumpCommand {
+            path: "tests/data/listen_dump.zip".to_string(),
+            username: Some("TestNova".to_string()),
+        };
 
-//         cmd.run().await;
+        cmd.run().await;
 
-//         //TODO: #451 Make sqlx prepare query macros in tests + Convert the queries
-//         let listen: Listen = sqlx::query_as("SELECT * FROM listens WHERE listened_at = 1705054374")
-//             .fetch_one(&mut *ALISTRAL_CLIENT.get_conn().await)
-//             .await
-//             .expect("This listen should exist");
-//         listen
-//             .get_recording_or_fetch_with_task(ALISTRAL_CLIENT.musicbrainz_db.clone())
-//             .await
-//             .expect("The listen should be mapped");
-//     }
-// }
+        //TODO: #451 Make sqlx prepare query macros in tests + Convert the queries
+        let listen: Listen = sqlx::query_as("SELECT * FROM listens WHERE listened_at = 1705054374")
+            .fetch_one(&mut *ALISTRAL_CLIENT.get_conn().await)
+            .await
+            .expect("This listen should exist");
+        listen
+            .get_recording_or_fetch_with_task(ALISTRAL_CLIENT.musicbrainz_db.clone())
+            .await
+            .expect("The listen should be mapped");
+    }
+}
