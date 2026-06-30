@@ -6,7 +6,6 @@ use std::io::BufReader;
 use clap::Parser;
 use musicbrainz_db_lite::MBIDRedirection as _;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
-use musicbrainz_db_lite::models::listenbrainz::messybrainz_submission::MessybrainzSubmission;
 use musicbrainz_db_lite::models::listenbrainz::messybrainz_submission::MessybrainzSubmissionInsert;
 use musicbrainz_db_lite::models::listenbrainz::msid_mapping::MsidMapping;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
@@ -165,7 +164,7 @@ impl ImportListen {
         let data = serde_json::to_string(&self.track_metadata.additional_info)
             .expect("Crashing from serializing a serde::Value isn't possible");
 
-        let messybrainz = MessybrainzSubmissionInsert::builder()
+        MessybrainzSubmissionInsert::builder()
             .msid(self.track_metadata.recording_msid.clone())
             .recording(self.track_metadata.track_name)
             .artist_credit(self.track_metadata.artist_name)
@@ -174,7 +173,6 @@ impl ImportListen {
             .insert_or_ignore(&mut *conn)
             .await
             .unwrap();
-
 
         if let Some(mapping) = self.track_metadata.mbid_mapping {
             // First insert the mbid
@@ -211,7 +209,6 @@ mod tests {
     use crate::ALISTRAL_CLIENT;
     use crate::tools::listens::import::ListenImportDumpCommand;
     use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
-    use sqlx::SqlitePool;
 
     #[sqlx::test]
     async fn load_listen_dump_test() {

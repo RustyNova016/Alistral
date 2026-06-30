@@ -1,10 +1,8 @@
-use core::str::FromStr;
 use std::fs::{self};
 use std::path::PathBuf;
 use std::sync::LazyLock;
 
 use directories::BaseDirs;
-use uuid::Uuid;
 
 pub mod interfaces;
 pub mod listenbrainz;
@@ -42,7 +40,12 @@ pub static DEBUG_DB_LOCATION: LazyLock<PathBuf> = LazyLock::new(|| {
     path
 });
 
+#[cfg(test)]
 pub static TEST_DB_LOCATION: LazyLock<PathBuf> = LazyLock::new(|| {
+    use core::str::FromStr;
+
+    use uuid::Uuid;
+
     let mut path = PathBuf::from_str("./target/db/").unwrap();
 
     if !fs::exists(&path).unwrap() {
@@ -58,7 +61,7 @@ pub static DB_LOCATION: LazyLock<PathBuf> = LazyLock::new(|| {
     #[cfg(test)]
     return TEST_DB_LOCATION.clone();
 
-    #[cfg(debug_assertions)]
+    #[cfg(all(debug_assertions, not(test)))]
     return DEBUG_DB_LOCATION.clone();
 
     #[cfg(not(debug_assertions))]

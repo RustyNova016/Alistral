@@ -1,6 +1,6 @@
 use musicbrainz_rs::entity::recording::Recording as MBRecording;
 use musicbrainz_rs::entity::release::Release as MBRelease;
-use sequelles::Upsert;
+
 use sqlx::Acquire;
 use sqlx::SqliteConnection;
 
@@ -27,14 +27,12 @@ impl Recording {
         value: MBRecording,
     ) -> Result<Self, crate::Error> {
         Recording::add_redirect_mbid(conn, &value.id).await?;
-        Ok(Recording::find_by_mbid(conn, &value.id) // Get old data
+        Recording::find_by_mbid(conn, &value.id) // Get old data
             .await?
             .unwrap_or_else(Recording::default) // Or create new
             .merge_api_data(value.clone()) // Merge new data if it exists
             .upsert(conn) // Upsert the new data
             .await
-            .transpose()
-            .unwrap()?)
     }
 
     pub fn merge_api_data(self, new: MBRecording) -> Self {
