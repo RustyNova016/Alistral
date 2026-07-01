@@ -1,3 +1,4 @@
+use sqlx::AssertSqlSafe;
 use sqlx::FromRow;
 
 use crate::models::shared_traits::has_genre::HasGenres;
@@ -16,8 +17,9 @@ impl GenreTag {
         conn: &mut sqlx::SqliteConnection,
         foreign_key: i64,
     ) -> Result<(), crate::Error> {
-        let returned = sqlx::query_as(&format!(
-            "
+        let returned = sqlx::query_as(AssertSqlSafe(
+            format!(
+                "
         INSERT INTO
             `{}_genre` (
                 `count`,
@@ -31,8 +33,10 @@ impl GenreTag {
         SET
             `count` = excluded.`count`
         RETURNING *;",
-            T::TABLE_NAME,
-            T::FOREIGN_FIELD_NAME
+                T::TABLE_NAME,
+                T::FOREIGN_FIELD_NAME
+            )
+            .as_str(),
         ))
         .bind(self.count)
         .bind(foreign_key)

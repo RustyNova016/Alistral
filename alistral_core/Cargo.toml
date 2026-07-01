@@ -2,7 +2,7 @@
 name = "alistral_core"
 version = "0.6.7"
 edition = "2024"
-rust-version = "1.85.1"
+rust-version = "1.94.0"
 
 [dependencies]
 musicbrainz-db-lite = { path = "../musicbrainz_db_lite" }
@@ -19,11 +19,11 @@ streamies = "0.2.2"
 
 # Databasing
 sequelles = { version = "0.2.0", features = ["chrono"] }
-sqlx = { version = "0.8.3", features = ["runtime-tokio", "macros"] }
+sqlx = { version = "0.9.0", features = ["runtime-tokio", "macros"] }
 
 # Macros
 bon = "3.8.1"
-thiserror = "2.0.11"
+thiserror = "2.0.18"
 snafu = { version = "0.9.0", features = ["rust_1_81"] }
 
 # Tracing
@@ -36,7 +36,7 @@ rust_decimal = "1.36.0"
 rust_decimal_macros = "1.36.0"
 
 [patch.crates-io]
-sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "8393f82ea91c8df6008459ac72a0e16a86fe20d7"}
+sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "04918eda92d0602852cc50bb761da990159b6ff4"}
 tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c8656a4eedb571177a8ffa3b9984e78"}
 musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "9dcc97612c3f4b269c6781dbf5d8b0f5301c9308"}
 listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "5fb2e388f61513c3bf798141822a2f0082dc2727" }

@@ -24,7 +24,14 @@ pub mod methods;
 pub mod relations;
 pub mod upsert;
 
-#[derive(Debug, Default, PartialEq, Eq, Clone, FromRow, Deserialize, Serialize)]
+#[derive(
+    Debug, Default, PartialEq, Eq, Clone, FromRow, Deserialize, Serialize, sequelles::Table,
+)]
+#[sequelles(db_name = "recordings")]
+#[sequelles(sqlite)]
+#[sequelles(select_unique, insert_struct)]
+#[sequelles(primary_key(key_name = "pk", columns(id)))]
+#[sequelles(unique_key(key_name = "mbid", columns(mbid)))]
 pub struct Recording {
     pub id: i64,
     pub mbid: String,

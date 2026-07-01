@@ -6,10 +6,12 @@ use std::io::BufReader;
 use clap::Parser;
 use musicbrainz_db_lite::MBIDRedirection as _;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
-use musicbrainz_db_lite::models::listenbrainz::messybrainz_submission::MessybrainzSubmission;
+use musicbrainz_db_lite::models::listenbrainz::messybrainz_submission::MessybrainzSubmissionInsert;
 use musicbrainz_db_lite::models::listenbrainz::msid_mapping::MsidMapping;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
-use musicbrainz_db_lite::models::musicbrainz::user::User;
+use musicbrainz_db_lite::models::musicbrainz::user::UserInsert;
+use sequelles::InsertOrIgnore as _;
+use sequelles::Selsert as _;
 use serde::Deserialize;
 use serde::Serialize;
 use sqlx::Acquire as _;
@@ -146,22 +148,31 @@ impl ImportListen {
         user_name: &str,
     ) -> Result<(), crate::Error> {
         // First, get the user
-        User::insert_or_ignore(&mut *conn, user_name).await.unwrap();
+        UserInsert::builder()
+            .name(user_name)
+            .build()
+            .insert_or_ignore(&mut *conn)
+            .await
+            .unwrap();
+
+        let user = UserInsert::builder()
+            .name(user_name)
+            .build()
+            .selsert(&mut *conn)
+            .await?;
 
         let data = serde_json::to_string(&self.track_metadata.additional_info)
             .expect("Crashing from serializing a serde::Value isn't possible");
 
-        let messybrainz = MessybrainzSubmission {
-            id: 0,
-            msid: self.track_metadata.recording_msid.clone(),
-            recording: self.track_metadata.track_name,
-            artist_credit: self.track_metadata.artist_name,
-            release: self.track_metadata.release_name,
-            track_number: None, // TODO: Find where is it stored in the json... If it even is stored...
-            duration: None, //TODO: Get the duration from additiona info or ditch it from the schema?
-        };
-
-        messybrainz.insert_or_ignore(&mut *conn).await.unwrap();
+        MessybrainzSubmissionInsert::builder()
+            .msid(self.track_metadata.recording_msid.clone())
+            .recording(self.track_metadata.track_name)
+            .artist_credit(self.track_metadata.artist_name)
+            .maybe_release(self.track_metadata.release_name)
+            .build()
+            .insert_or_ignore(&mut *conn)
+            .await
+            .unwrap();
 
         if let Some(mapping) = self.track_metadata.mbid_mapping {
             // First insert the mbid
@@ -169,17 +180,14 @@ impl ImportListen {
                 .await
                 .unwrap();
 
-            let user = User::find_by_name(&mut *conn, user_name)
-                .await?
-                .expect("The user shall be inserted");
-
             MsidMapping::set_user_mapping(
                 &mut *conn,
                 user.id,
                 self.track_metadata.recording_msid.clone(),
                 mapping.recording_mbid.to_string(),
             )
-            .await?;
+            .await
+            .unwrap();
         }
 
         let listen = Listen {

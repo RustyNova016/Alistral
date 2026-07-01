@@ -9,7 +9,4 @@ pub struct SqlxError {
 
     #[snafu(implicit)]
     location: Location,
-
-    #[cfg(feature = "backtrace")]
-    backtrace: snafu::Backtrace,
 }

@@ -1,4 +1,5 @@
 use sequelles::has_rowid::HasRowID;
+use sqlx::AssertSqlSafe;
 use sqlx::prelude::FromRow;
 #[cfg(feature = "pretty_format")]
 use tuillez::formatter::FormatWithAsyncDyn;
@@ -11,7 +12,12 @@ use crate::models::shared_traits::has_tags::HasTags;
 
 pub mod query;
 
-#[derive(PartialEq, Eq, Debug, Clone, FromRow)]
+// TODO: Rework to make each entity have its own struct
+#[derive(PartialEq, Eq, Debug, Clone, FromRow, sequelles::Table)]
+// #[sequelles(db_name = "tags")]
+// #[sequelles(sqlite)]
+// #[sequelles(upsert)]
+// #[sequelles(primary_key(key_name = "pk", columns(id)))]
 pub struct Tag {
     pub id: i64,
     pub name: String,
@@ -25,8 +31,9 @@ impl Tag {
         conn: &mut sqlx::SqliteConnection,
         foreign_key: i64,
     ) -> Result<(), crate::Error> {
-        let returned: Tag = sqlx::query_as(&format!(
-            "
+        let returned: Tag = sqlx::query_as(AssertSqlSafe(
+            format!(
+                "
         INSERT INTO
             `{}_tag` (
                 `name`,
@@ -42,8 +49,10 @@ impl Tag {
             `count` = excluded.`count`,
             `score` = excluded.`score`
         RETURNING *;",
-            T::TABLE_NAME,
-            T::FOREIGN_FIELD_NAME
+                T::TABLE_NAME,
+                T::FOREIGN_FIELD_NAME
+            )
+            .as_str(),
         ))
         .bind(&self.name)
         .bind(self.count)

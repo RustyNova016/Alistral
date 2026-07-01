@@ -1,5 +1,6 @@
 use itertools::Itertools as _;
 use sequelles::has_rowid::HasRowID;
+use sqlx::AssertSqlSafe;
 
 use crate::models::musicbrainz::tags::Tag;
 use crate::models::shared_traits::has_tags::HasTags;
@@ -13,7 +14,7 @@ impl Tag {
     where
         T: HasRowID + HasTags,
     {
-        Ok(sqlx::query_as(&format!(
+        Ok(sqlx::query_as(AssertSqlSafe(format!(
             "
             SELECT
                 {table}_tag.*
@@ -24,7 +25,7 @@ impl Tag {
         ",
             id_field = T::FOREIGN_FIELD_NAME,
             table = T::TABLE_NAME
-        ))
+        )))
         .bind(entity.rowid())
         .fetch_all(conn)
         .await?)
@@ -40,7 +41,7 @@ impl Tag {
         let ids = entities.iter().map(|r| r.rowid()).collect_vec();
         let id_string = serde_json::to_string(&ids)?;
 
-        Ok(sqlx::query_as(&format!(
+        Ok(sqlx::query_as(AssertSqlSafe(format!(
             "
             SELECT
                 {id_field} as original_id,
@@ -57,7 +58,7 @@ impl Tag {
         ",
             id_field = T::FOREIGN_FIELD_NAME,
             table = T::TABLE_NAME
-        ))
+        )))
         .bind(id_string)
         .fetch_all(conn)
         .await?)

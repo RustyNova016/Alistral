@@ -1,3 +1,4 @@
+use musicbrainz_db_lite::models::musicbrainz::user::UserSqlError;
 use std::io;
 use thiserror::Error;
 use tuillez::extensions::chrono_exts::TimeError;
@@ -76,6 +77,8 @@ pub enum Error {
 
     #[error(transparent)]
     MusicbrainzDBLite(#[from] musicbrainz_db_lite::Error),
+    #[error(transparent)]
+    UserSqlError(#[from] UserSqlError),
 
     #[error(transparent)]
     FriendlyPanic(#[from] FriendlyPanic),
@@ -114,6 +117,7 @@ impl GetFriendlyError for Error {
             #[cfg(feature = "interzic")]
             Self::Interzic(_) => None,
             Self::TimeError(_) => None,
+            Self::UserSqlError(_) => None,
             Self::SQLx(_) => None,
             Self::MusicbrainzDBLite(_) => None,
             Self::FriendlyPanic(val) => val.get_friendly_error(),

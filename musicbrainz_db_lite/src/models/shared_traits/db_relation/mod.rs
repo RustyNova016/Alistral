@@ -2,6 +2,7 @@ use itertools::Itertools as _;
 use sequelles::JoinCollection;
 use sequelles::JoinRelation;
 use sequelles::has_rowid::HasRowID;
+use sqlx::AssertSqlSafe;
 use sqlx::sqlite::SqliteRow;
 
 use crate::models::shared_traits::has_table::HasTable;
@@ -39,7 +40,10 @@ where
                 join = Self::get_join_statement()
             );
 
-            Ok(sqlx::query_as(&query).bind(id).fetch_all(conn).await?)
+            Ok(sqlx::query_as(AssertSqlSafe(query))
+                .bind(id)
+                .fetch_all(conn)
+                .await?)
         }
     }
 
@@ -54,8 +58,9 @@ where
             let ids = entities.iter().map(|r| r.rowid()).collect_vec();
             let id_string = serde_json::to_string(&ids)?;
 
-            let joins: Vec<JoinRelation<Self::ReturnedType>> = sqlx::query_as(&format!(
-                "
+            let joins: Vec<JoinRelation<Self::ReturnedType>> =
+                sqlx::query_as(AssertSqlSafe(format!(
+                    "
             SELECT
                 {this}.id as original_id,
                 {other}.*
@@ -70,13 +75,13 @@ where
                         JSON_EACH(?)
                 )
         ",
-                this = Self::TABLE_NAME,
-                other = Self::ReturnedType::TABLE_NAME,
-                join = Self::get_join_statement()
-            ))
-            .bind(id_string)
-            .fetch_all(conn)
-            .await?;
+                    this = Self::TABLE_NAME,
+                    other = Self::ReturnedType::TABLE_NAME,
+                    join = Self::get_join_statement()
+                )))
+                .bind(id_string)
+                .fetch_all(conn)
+                .await?;
 
             Ok(joins.into())
         }

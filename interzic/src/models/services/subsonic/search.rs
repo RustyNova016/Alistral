@@ -20,6 +20,7 @@ impl SubsonicClient {
             .unwrap();
 
         // Search by MBID
+        #[allow(clippy::collapsible_if)]
         if let Some(target_mbid) = &recording.mbid {
             if let Some(song) = res.song.iter().find(|res| {
                 res.music_brainz_id

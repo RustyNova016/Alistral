@@ -1,3 +1,4 @@
+use sqlx::AssertSqlSafe;
 use sqlx::FromRow;
 use sqlx::sqlite::SqliteRow;
 
@@ -18,7 +19,7 @@ where
     where
         V: for<'a> FromRow<'a, SqliteRow> + Send + Unpin,
     {
-        Ok(sqlx::query_as(&format!(
+        Ok(sqlx::query_as(AssertSqlSafe(format!(
             r#"SELECT
                         right.*
                     FROM
@@ -28,7 +29,7 @@ where
                         left.id = ?"#,
             left_table = T::RELATION_TABLE,
             right_table = U::TABLE_NAME
-        ))
+        )))
         .bind(self.id)
         .fetch_one(conn)
         .await?)

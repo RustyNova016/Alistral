@@ -12,7 +12,7 @@ where
     let data = Entity::find_by_mbid_with_pool(&client.mb_database, mbid)
         .await
         .unwrap()
-        .expect("Couldn't find provided entity MBID");
+        .unwrap_or_else(|| panic!("Couldn't find provided entity MBID {mbid}"));
 
     Lint::check(client, &data.into()).await.unwrap().is_some()
 }

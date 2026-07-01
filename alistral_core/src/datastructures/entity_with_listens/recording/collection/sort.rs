@@ -67,6 +67,7 @@ impl Linker<RecordingWithListensCollection, Listen> for AlistralClient {
 }
 
 #[derive(Debug, Snafu)]
+#[allow(clippy::large_enum_variant)]
 pub enum RecordingStatsError {
     #[snafu(display("Could not get a connection for the database"))]
     ConnectionError {

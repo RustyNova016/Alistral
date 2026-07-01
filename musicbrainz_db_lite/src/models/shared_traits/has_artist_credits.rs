@@ -1,6 +1,7 @@
 use std::sync::Arc;
 
 use sequelles::has_rowid::HasRowID;
+use sqlx::AssertSqlSafe;
 
 use crate::ArtistCredits;
 use crate::FetchAndSave;
@@ -94,10 +95,10 @@ where
         credits_id: i64,
     ) -> impl std::future::Future<Output = Result<(), sqlx::Error>> + Send {
         async move {
-            sqlx::query(&format!(
+            sqlx::query(AssertSqlSafe(format!(
                 "UPDATE `{}` SET `artist_credit` = $1 WHERE `id` = $2",
                 Self::TABLE_NAME
-            ))
+            )))
             .bind(credits_id)
             .bind(self.rowid())
             .execute(conn)

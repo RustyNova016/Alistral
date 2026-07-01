@@ -16,17 +16,16 @@ pub mod insert;
 pub mod relations;
 pub mod selects;
 
-#[derive(Debug, PartialEq, Eq, Clone, sqlx::FromRow, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, sqlx::FromRow, Deserialize, Serialize, sequelles::Table)]
 #[enum_def(table_name = "listens")]
+#[sequelles(db_name = "listens", snafu)]
+#[sequelles(sqlite)]
+#[sequelles(insert, upsert)]
 pub struct Listen {
     pub id: i64,
-
     pub listened_at: i64,
-
     pub user: String,
-
     pub recording_msid: String,
-
     pub data: Option<String>,
 }
 
@@ -67,9 +66,11 @@ impl HasTable for Listen {
 
 #[cfg(test)]
 mod test {
-    use crate::User;
+    use sequelles::InsertOrIgnore;
+
     use crate::models::listenbrainz::listen::Listen;
-    use crate::models::listenbrainz::messybrainz_submission::MessybrainzSubmission;
+    use crate::models::listenbrainz::messybrainz_submission::MessybrainzSubmissionInsert;
+    use crate::models::musicbrainz::user::UserInsert;
     use crate::tests::fixtures::default_client::test_mb_client;
 
     #[tokio::test]
@@ -77,10 +78,14 @@ mod test {
         let client = test_mb_client();
         let conn = &mut *client.get_raw_connection().await.unwrap();
 
-        User::insert_or_ignore(conn, "TestNova").await.unwrap();
+        UserInsert::builder()
+            .name("TestNova")
+            .build()
+            .insert_or_ignore(conn)
+            .await
+            .unwrap();
 
-        MessybrainzSubmission::builder()
-            .id(0)
+        MessybrainzSubmissionInsert::builder()
             .msid("test")
             .recording("Test")
             .artist_credit("Test")

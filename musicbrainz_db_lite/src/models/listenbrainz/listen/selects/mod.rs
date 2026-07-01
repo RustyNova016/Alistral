@@ -1,5 +1,6 @@
 use futures::stream::BoxStream;
 use snafu::ResultExt;
+use sqlx::AssertSqlSafe;
 use sqlx::{SqliteConnection, query_scalar};
 
 use crate::error::sqlx_error::SqlxError;
@@ -40,12 +41,14 @@ impl Listen {
         conn: &mut SqliteConnection,
         user: &str,
     ) -> Result<Vec<Listen>, sqlx::Error> {
-        let query = Self::listen_query_string()
+        let (sql, vals) = Self::select_listen_query()
             .mapped(true)
             .users(&[user])
             .call();
 
-        sqlx::query_as(&query).fetch_all(conn).await
+        sqlx::query_as_with(AssertSqlSafe(sql), vals)
+            .fetch_all(conn)
+            .await
     }
 
     /// Return the unmapped listens of the user
@@ -53,14 +56,14 @@ impl Listen {
         conn: &mut SqliteConnection,
         user: &str,
     ) -> Result<Vec<Listen>, sqlx::Error> {
-        let query = Self::listen_query_string()
+        let (sql, vals) = Self::select_listen_query()
             .unmapped(true)
             .users(&[user])
             .call();
 
-        println!("{query}");
-
-        sqlx::query_as(&query).fetch_all(conn).await
+        sqlx::query_as_with(AssertSqlSafe(sql), vals)
+            .fetch_all(conn)
+            .await
     }
 
     /// Get the recordings that aren't in the database but got listened by the user
