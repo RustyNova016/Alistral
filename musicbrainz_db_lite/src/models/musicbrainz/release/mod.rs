@@ -7,6 +7,7 @@ use crate::HasArtistCredits;
 use crate::HasMBID;
 use crate::MBIDRedirection;
 use crate::MBRelease;
+use crate::models::musicbrainz::MusicbrainzEntity;
 use crate::models::musicbrainz::relations::impl_relations::impl_relations;
 use crate::models::shared_traits::has_genre::HasGenres;
 use crate::models::shared_traits::has_table::HasTable;
@@ -86,3 +87,9 @@ impl HasMBID for Release {
 impl HasTags for Release {}
 impl HasGenres for Release {}
 impl MBIDRedirection for Release {}
+
+impl MusicbrainzEntity for Release {
+    fn entity_name() -> &'static str {
+        "release"
+    }
+}

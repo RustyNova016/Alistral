@@ -9,6 +9,7 @@ use super::relations::impl_relations::impl_relations;
 use crate::HasMBID;
 use crate::MBIDRedirection;
 use crate::MBRecording;
+use crate::models::musicbrainz::MusicbrainzEntity;
 use crate::models::shared_traits::has_artist_credits::HasArtistCredits;
 use crate::models::shared_traits::has_genre::HasGenres;
 use crate::models::shared_traits::has_table::HasTable;
@@ -90,5 +91,11 @@ impl HasArtistCredits<MBRecording> for Recording {
 impl Recording {
     pub fn first_release_date(&self) -> Option<DateTime<Utc>> {
         DateTime::from_timestamp(self.first_release_date?, 0)
+    }
+}
+
+impl MusicbrainzEntity for Recording {
+    fn entity_name() -> &'static str {
+        "recording"
     }
 }

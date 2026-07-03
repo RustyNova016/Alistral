@@ -1,5 +1,6 @@
 use core::fmt::Display;
 
+use alistral_core::datastructures::entity_with_listens::EntityWithListens;
 use alistral_core::datastructures::entity_with_listens::collection::EntityWithListensCollection;
 use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use alistral_core::datastructures::entity_with_listens::release::collection::ReleaseWithRecordingsCollection;
@@ -9,24 +10,30 @@ use alistral_core::datastructures::listen_collection::traits::ListenCollectionRe
 use clap::Parser;
 use clap::ValueEnum;
 use derive_more::IsVariant;
+use itertools::Itertools;
 use musicbrainz_db_lite::HasRowID;
 use musicbrainz_db_lite::Label;
 use musicbrainz_db_lite::Recording;
+use musicbrainz_db_lite::models::musicbrainz::MusicbrainzEntity;
+use musicbrainz_db_lite::models::musicbrainz::MusicbrainzFormater;
 use musicbrainz_db_lite::models::musicbrainz::artist::Artist;
 use musicbrainz_db_lite::models::musicbrainz::release::Release;
 use musicbrainz_db_lite::models::musicbrainz::release_group::ReleaseGroup;
 use musicbrainz_db_lite::models::musicbrainz::work::Work;
+use tuillez::formatter::FormatWithAsyncDyn;
 
 use crate::ALISTRAL_CLIENT;
 use crate::database::interfaces::statistics_data::artist_stats;
 use crate::database::interfaces::statistics_data::recording_stats;
 use crate::database::interfaces::statistics_data::release_group_stats;
 use crate::database::interfaces::statistics_data::release_stats;
-use crate::datastructures::statistic_formater::ListenCountStats;
 use crate::datastructures::statistic_formater::ListenDurationStats;
 use crate::datastructures::statistic_formater::StatFormatterVariant;
 use crate::datastructures::statistic_formater::StatisticFormater;
 use crate::datastructures::statistic_formater::StatisticType;
+use crate::models::cli_components::tables::order_by::OrderTableByListenCount;
+use crate::models::cli_components::tables::rows::top_listen_row::TopListenCountsRow;
+use crate::models::cli_components::tables::table::TopTable;
 use crate::tools::stats::tops::score_by::SortBy;
 use crate::utils::user_inputs::UserInputParser;
 
@@ -147,40 +154,38 @@ impl StatsTopCommand {
         match (self.sort_by, self.target) {
             (SortBy::ListenCount, StatsTarget::Artist) => {
                 let data = artist_stats(&ALISTRAL_CLIENT, user.clone()).await?;
-                self.run_stats::<Artist, RecordingWithListensCollection, ListenCountStats>(data)
-                    .await
+                Self::print_stats(data).await;
+                Ok(())
             }
             (SortBy::ListenCount, StatsTarget::Recording) => {
                 let data = recording_stats(&ALISTRAL_CLIENT, user.clone()).await?;
-                self.run_stats::<Recording, ListenCollection, ListenCountStats>(data)
-                    .await
+                Self::print_stats(data).await;
+                Ok(())
             }
             (SortBy::ListenCount, StatsTarget::Release) => {
                 let data = release_stats(&ALISTRAL_CLIENT, user.clone()).await?;
-                self.run_stats::<Release, RecordingWithListensCollection, ListenCountStats>(data)
-                    .await
+                Self::print_stats(data).await;
+                Ok(())
             }
             (SortBy::ListenCount, StatsTarget::ReleaseGroup) => {
                 let data = release_group_stats(&ALISTRAL_CLIENT, user.clone()).await?;
-                self.run_stats::<ReleaseGroup, ReleaseWithRecordingsCollection, ListenCountStats>(
-                    data,
-                )
-                .await
+                Self::print_stats(data).await;
+                Ok(())
             }
             (SortBy::ListenCount, StatsTarget::Work) => {
                 let data = self.work_stats(user).await?;
-                self.run_stats::<Work, RecordingWithListensCollection, ListenCountStats>(data)
-                    .await
+                Self::print_stats(data).await;
+                Ok(())
             }
             (SortBy::ListenCount, StatsTarget::Tag) => {
                 let data = self.tag_stats(user).await?;
-                self.run_stats::<SimpleTag, RecordingWithListensCollection, ListenCountStats>(data)
-                    .await
+                Self::print_stats(data).await;
+                Ok(())
             }
             (SortBy::ListenCount, StatsTarget::Label) => {
                 let data = self.label_stats(user).await?;
-                self.run_stats::<Label, ReleaseWithRecordingsCollection, ListenCountStats>(data)
-                    .await
+                Self::print_stats(data).await;
+                Ok(())
             }
 
             // ====================
@@ -233,6 +238,24 @@ impl StatsTopCommand {
               //     Ok(())
               // }
         }
+    }
+
+    async fn print_stats<Ent, Lis>(data: EntityWithListensCollection<Ent, Lis>)
+    where
+        Ent: HasRowID
+            + Clone
+            + MusicbrainzEntity
+            + FormatWithAsyncDyn<MusicbrainzFormater, Error = musicbrainz_db_lite::Error>,
+        Lis: ListenCollectionReadable,
+        TopListenCountsRow<Ent>: From<EntityWithListens<Ent, Lis>>,
+    {
+        let rows = data
+            .into_iter()
+            .map(|entity_listens| TopListenCountsRow::from(entity_listens))
+            .collect_vec();
+
+        let mut table = TopTable::new(rows, OrderTableByListenCount, true);
+        table.print_paged(20).await;
     }
 
     async fn run_stats<Ent, Lis, S>(

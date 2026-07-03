@@ -4,6 +4,7 @@ use std::sync::LazyLock;
 use std::sync::Mutex;
 
 use musicbrainz_db_lite::HasRowID;
+use musicbrainz_db_lite::models::musicbrainz::MusicbrainzEntity;
 use musicbrainz_db_lite::models::musicbrainz::MusicbrainzFormater;
 use tuillez::formatter::FormatWithAsyncDyn;
 use tuillez::reexports::async_trait;
@@ -45,5 +46,11 @@ impl FormatWithAsyncDyn<MusicbrainzFormater> for SimpleTag {
 
     async fn format_with_async(&self, _ft: &MusicbrainzFormater) -> Result<String, Self::Error> {
         Ok(self.name.to_string())
+    }
+}
+
+impl MusicbrainzEntity for SimpleTag {
+    fn entity_name() -> &'static str {
+        "tag"
     }
 }

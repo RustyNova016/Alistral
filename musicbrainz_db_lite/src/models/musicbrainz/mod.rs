@@ -29,3 +29,8 @@ pub struct MusicbrainzFormater {
     /// Add the artist credits of the enitity as well.
     pub artist_credits: bool,
 }
+
+/// Trait for all the musicbrainz entities
+pub trait MusicbrainzEntity {
+    fn entity_name() -> &'static str;
+}
