@@ -67,4 +67,4 @@ hotpath-alloc = ["hotpath/hotpath-alloc", "musicbrainz_rs/hotpath-alloc"]
 sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "04918eda92d0602852cc50bb761da990159b6ff4"}
 tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c8656a4eedb571177a8ffa3b9984e78"}
 musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "9dcc97612c3f4b269c6781dbf5d8b0f5301c9308"}
-listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "5fb2e388f61513c3bf798141822a2f0082dc2727" }
+listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "2bb416832815f58169897ee687d6c4357c9d1115" }

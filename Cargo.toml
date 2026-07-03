@@ -17,7 +17,7 @@ debug = "line-tables-only"
 
 [patch.crates-io]
 #listenbrainz_rs = {path = "./listenbrainz_rs"}
-listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "5fb2e388f61513c3bf798141822a2f0082dc2727" }
+listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "2bb416832815f58169897ee687d6c4357c9d1115" }
 
 #sequelles = {path = "./sequelles"}
 sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "04918eda92d0602852cc50bb761da990159b6ff4"}

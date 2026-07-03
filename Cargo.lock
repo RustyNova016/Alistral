@@ -2604,7 +2604,7 @@ dependencies = [
 [[package]]
 name = "listenbrainz_rs"
 version = "0.1.0"
-source = "git+https://github.com/RustyNova016/listenbrainz_rs?rev=5fb2e388f61513c3bf798141822a2f0082dc2727#5fb2e388f61513c3bf798141822a2f0082dc2727"
+source = "git+https://github.com/RustyNova016/listenbrainz_rs?rev=2bb416832815f58169897ee687d6c4357c9d1115#2bb416832815f58169897ee687d6c4357c9d1115"
 dependencies = [
  "api_bindium",
  "async-executor",
