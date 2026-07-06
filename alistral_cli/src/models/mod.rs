@@ -1,7 +1,5 @@
-pub mod maybe_reversed;
-pub mod order_with;
-pub mod cli_components;
 pub mod cli;
+pub mod cli_components;
 pub mod client;
 pub mod config;
 #[cfg(any(feature = "legacy_ent_with_listen", feature = "radio"))]
@@ -12,3 +10,4 @@ pub mod datastructures;
 pub mod error;
 #[cfg(feature = "stats")]
 pub mod hour_min;
+pub mod maybe_reversed;

@@ -5,5 +5,3 @@ pub mod formaters;
 pub mod mappers;
 #[cfg(feature = "radio")]
 pub mod radio;
-#[cfg(feature = "stats")]
-pub mod statistic_formater;
