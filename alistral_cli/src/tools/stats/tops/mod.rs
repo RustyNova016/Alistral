@@ -7,7 +7,7 @@ use alistral_core::datastructures::listen_collection::traits::ListenCollectionRe
 use clap::Parser;
 use clap::ValueEnum;
 use derive_more::IsVariant;
-use itertools::Itertools;
+use itertools::Itertools as _;
 use musicbrainz_db_lite::HasRowID;
 use musicbrainz_db_lite::models::musicbrainz::MusicbrainzEntity;
 use musicbrainz_db_lite::models::musicbrainz::MusicbrainzFormater;
@@ -232,10 +232,7 @@ impl StatsTopCommand {
         Lis: ListenCollectionReadable,
         TopListenCountsRow<Ent>: From<EntityWithListens<Ent, Lis>>,
     {
-        let rows = data
-            .into_iter()
-            .map(|entity_listens| TopListenCountsRow::from(entity_listens))
-            .collect_vec();
+        let rows = data.into_iter().map(TopListenCountsRow::from).collect_vec();
 
         let table = TopTable::new(rows, OrderTableByListenCount, true, false);
         table.print_paged(20).await;
@@ -253,7 +250,7 @@ impl StatsTopCommand {
     {
         let rows = data
             .into_iter()
-            .map(|entity_listens| TopListenDurationRow::from(entity_listens))
+            .map(TopListenDurationRow::from)
             .collect_vec();
 
         let table = TopTable::new(rows, OrderTableByListenDuration, true, false);

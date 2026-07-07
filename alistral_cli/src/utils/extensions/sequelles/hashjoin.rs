@@ -1,7 +1,7 @@
 use core::hash::Hash;
 use std::collections::HashMap;
 
-use itertools::Itertools;
+use itertools::Itertools as _;
 
 pub trait HashJoin<T> {
     type Output;

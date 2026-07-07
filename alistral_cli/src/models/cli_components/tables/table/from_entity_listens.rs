@@ -1,6 +1,6 @@
 use alistral_core::datastructures::entity_with_listens::EntityWithListens;
 use alistral_core::datastructures::entity_with_listens::entity_comparison::EntityListensComparison;
-use itertools::Itertools;
+use itertools::Itertools as _;
 
 use crate::models::cli_components::tables::TableSort;
 use crate::models::cli_components::tables::rows::TableRow;

@@ -10,4 +10,5 @@ pub mod datastructures;
 pub mod error;
 #[cfg(feature = "stats")]
 pub mod hour_min;
+#[cfg(feature = "stats")]
 pub mod maybe_reversed;

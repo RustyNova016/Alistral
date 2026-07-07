@@ -2,7 +2,7 @@ use core::fmt::Write as _;
 
 use alistral_core::cli::colors::AlistralColors as _;
 
-use crate::interface::comp_arrow::ComparisonArrow;
+use crate::models::cli_components::comp_arrow::ComparisonArrow;
 use crate::tools::stats::year_in_music::YimReport;
 
 impl YimReport {

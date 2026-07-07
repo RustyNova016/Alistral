@@ -1,5 +1,5 @@
 use crate::datastructures::formaters::human_time::HumanTimePrinter;
-use crate::interface::comp_arrow::ComparisonArrow;
+use crate::models::cli_components::comp_arrow::ComparisonArrow;
 use crate::models::cli_components::tables::cells::top_cell::TopCell;
 
 #[derive(Debug, Default)]

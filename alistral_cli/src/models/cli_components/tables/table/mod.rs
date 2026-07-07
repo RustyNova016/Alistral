@@ -1,9 +1,8 @@
-pub mod from_entity_listens;
 use std::collections::HashMap;
 
 use comfy_table::Table;
 use comfy_table::presets::UTF8_FULL_CONDENSED;
-use itertools::Itertools;
+use itertools::Itertools as _;
 use sequelles::datastructures::ranking::Ranking;
 use tracing::warn;
 
@@ -13,7 +12,9 @@ use crate::models::cli_components::tables::cells::rank_cell::RankCell;
 use crate::models::cli_components::tables::cells::top_cell::TopCell;
 use crate::models::cli_components::tables::rows::TableRow;
 use crate::models::maybe_reversed::MaybeReversed;
-use crate::utils::extensions::sequelles::hashjoin::HashJoin;
+use crate::utils::extensions::sequelles::hashjoin::HashJoin as _;
+
+pub mod from_entity_listens;
 
 pub struct TopTable<R, S> {
     rows: Vec<R>,

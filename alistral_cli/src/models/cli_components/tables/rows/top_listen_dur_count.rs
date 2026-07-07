@@ -2,7 +2,7 @@ use alistral_core::datastructures::entity_with_listens::EntityWithListens;
 use alistral_core::datastructures::entity_with_listens::entity_comparison::EntityListensComparison;
 use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
-use convert_case::Casing;
+use convert_case::Casing as _;
 use musicbrainz_db_lite::HasRowID;
 use musicbrainz_db_lite::models::musicbrainz::MusicbrainzEntity;
 use musicbrainz_db_lite::models::musicbrainz::MusicbrainzFormater;
@@ -65,12 +65,8 @@ where
             )),
 
             listen_counts: ListenCountCell(TopCell::new(
-                value
-                    .current_or_empty()
-                    .map(|cur| cur.listen_count().into()),
-                value
-                    .previous_or_empty()
-                    .map(|prev| prev.listen_count().into()),
+                value.current_or_empty().map(|cur| cur.listen_count()),
+                value.previous_or_empty().map(|prev| prev.listen_count()),
             )),
         }
     }

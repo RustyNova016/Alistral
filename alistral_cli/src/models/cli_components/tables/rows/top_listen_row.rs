@@ -1,6 +1,6 @@
 use alistral_core::datastructures::entity_with_listens::EntityWithListens;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
-use convert_case::Casing;
+use convert_case::Casing as _;
 use musicbrainz_db_lite::HasRowID;
 use musicbrainz_db_lite::models::musicbrainz::MusicbrainzEntity;
 use musicbrainz_db_lite::models::musicbrainz::MusicbrainzFormater;
