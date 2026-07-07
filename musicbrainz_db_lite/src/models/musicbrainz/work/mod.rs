@@ -3,6 +3,7 @@ use sqlx::FromRow;
 
 use crate::HasMBID;
 use crate::MBIDRedirection;
+use crate::models::musicbrainz::MusicbrainzEntity;
 use crate::models::musicbrainz::relations::impl_relations::impl_relations;
 use crate::models::shared_traits::has_genre::HasGenres;
 use crate::models::shared_traits::has_table::HasTable;
@@ -48,3 +49,9 @@ impl HasMBID for Work {
 impl HasTags for Work {}
 impl HasGenres for Work {}
 impl MBIDRedirection for Work {}
+
+impl MusicbrainzEntity for Work {
+    fn entity_name() -> &'static str {
+        "work"
+    }
+}

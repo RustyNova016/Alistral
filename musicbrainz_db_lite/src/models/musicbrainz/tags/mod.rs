@@ -6,6 +6,7 @@ use tuillez::formatter::FormatWithAsyncDyn;
 #[cfg(feature = "pretty_format")]
 use tuillez::reexports::async_trait;
 
+use crate::models::musicbrainz::MusicbrainzEntity;
 #[cfg(feature = "pretty_format")]
 use crate::models::musicbrainz::MusicbrainzFormater;
 use crate::models::shared_traits::has_tags::HasTags;
@@ -80,5 +81,11 @@ impl FormatWithAsyncDyn<MusicbrainzFormater> for Tag {
 
     async fn format_with_async(&self, _ft: &MusicbrainzFormater) -> Result<String, Self::Error> {
         Ok(self.name.to_string())
+    }
+}
+
+impl MusicbrainzEntity for Tag {
+    fn entity_name() -> &'static str {
+        "tag"
     }
 }

@@ -1,8 +1,4 @@
-use core::cmp::Reverse;
-
 use alistral_core::datastructures::entity_with_listens::recording::RecordingWithListens;
-use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime as _;
-use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use alistral_core::models::listen_statistics_data::ListenStatisticsData;
 use chrono::DateTime;
 use chrono::Datelike as _;
@@ -10,16 +6,13 @@ use chrono::Local;
 use chrono::NaiveDateTime;
 use chrono::Utc;
 use clap::Parser;
-use itertools::Itertools as _;
-use sequelles::datastructures::ranking::Ranking;
+use musicbrainz_db_lite::Recording;
 
 use crate::ALISTRAL_CLIENT;
-use crate::datastructures::formaters::human_time::HumanTimePrinter;
-use crate::models::datastructures::tops::printer::top_cell::TopCell;
-use crate::models::datastructures::tops::printer::top_columns::TopColumnSort;
-use crate::models::datastructures::tops::printer::top_columns::TopColumnType;
-use crate::models::datastructures::tops::printer::top_row::TopRow;
-use crate::models::datastructures::tops::printer::top_table_printer::TopTablePrinter;
+use crate::models::cli_components::tables::order_by::OrderTableByListenDuration;
+use crate::models::cli_components::tables::rows::top_listen_dur_count::TopListenDurCountRow;
+use crate::models::cli_components::tables::rows::top_listen_duration_row::TopListenDurationRow;
+use crate::models::cli_components::tables::table::TopTable;
 use crate::tools::stats::year_in_music::stats::YimReportData;
 use crate::utils::cli::await_next;
 use crate::utils::user_inputs::UserInputParser;
@@ -155,32 +148,14 @@ impl YimReport {
     }
 
     pub async fn top_recordings(&self, stats: Vec<RecordingWithListens>) -> String {
-        let rankings = Ranking::from(stats);
-        let rankings =
-            rankings.get_ranks(|rec| Reverse(rec.get_time_listened().unwrap_or_default()));
-
-        let rows = rankings
-            .into_iter()
-            .map(|(rank, rec)| TopRow {
-                element: Box::new(rec.recording().clone()),
-                ranking: Some(TopCell::new(Some(rank + 1), None, false)),
-
-                listen_duration: Some(TopCell::new(
-                    Some(HumanTimePrinter::from(rec.get_time_listened())),
-                    None,
-                    false,
-                )),
-
-                listen_count: Some(TopCell::new(Some(rec.listen_count()), None, false)),
-            })
-            .collect_vec();
-
-        let table = TopTablePrinter::builder()
-            .columns(self.get_top_columns())
-            .sorted_column(TopColumnType::ListenDuration)
-            .sort_order(TopColumnSort::Desc)
-            .build();
-
-        table.format_n_rows(rows, 20).await
+        if self.listen_counts {
+            let table: TopTable<TopListenDurCountRow<Recording>, OrderTableByListenDuration> =
+                TopTable::from_entity_listens(stats, OrderTableByListenDuration, true);
+            table.format(20, 0).await
+        } else {
+            let table: TopTable<TopListenDurationRow<Recording>, OrderTableByListenDuration> =
+                TopTable::from_entity_listens(stats, OrderTableByListenDuration, true);
+            table.format(20, 0).await
+        }
     }
 }

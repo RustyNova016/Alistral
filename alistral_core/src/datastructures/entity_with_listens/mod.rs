@@ -1,3 +1,5 @@
+pub mod entity_comparison;
+pub mod trait_impl;
 use chrono::Duration;
 use chrono::Utc;
 use musicbrainz_db_lite::HasRowID;
@@ -28,20 +30,12 @@ pub mod work;
 
 /// A structure representing an entity with associated listens.
 #[derive(Debug, Clone)]
-pub struct EntityWithListens<Ent, Lis>
-where
-    Ent: HasRowID,
-    Lis: ListenCollectionReadable,
-{
+pub struct EntityWithListens<Ent, Lis> {
     entity: Ent,
     listens: Lis,
 }
 
-impl<Ent, Lis> EntityWithListens<Ent, Lis>
-where
-    Ent: HasRowID,
-    Lis: ListenCollectionReadable,
-{
+impl<Ent, Lis> EntityWithListens<Ent, Lis> {
     pub fn new(entity: Ent, listens: Lis) -> Self {
         Self { entity, listens }
     }
@@ -61,7 +55,13 @@ where
     pub fn into_listens(self) -> Lis {
         self.listens
     }
+}
 
+impl<Ent, Lis> EntityWithListens<Ent, Lis>
+where
+    Ent: HasRowID,
+    Lis: ListenCollectionReadable,
+{
     /// Return the amount of time this entity having known about (Since first associated listen)
     pub fn known_for(&self) -> Option<Duration> {
         self.oldest_listen_date()

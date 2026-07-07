@@ -6,7 +6,7 @@ use rust_decimal::Decimal;
 use rust_decimal_macros::dec;
 
 use crate::datastructures::cli_formating::title::Heading1;
-use crate::interface::comp_arrow::ComparisonArrow;
+use crate::models::cli_components::comp_arrow::ComparisonArrow;
 use crate::tools::stats::year_in_music::YimReport;
 
 impl YimReport {
