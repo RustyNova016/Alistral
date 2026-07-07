@@ -24,10 +24,7 @@ pub mod converters;
 
 /// An indexed collection of [`EntityWithListens`]
 #[derive(Debug, Clone)]
-pub struct EntityWithListensCollection<Ent, Lis>(pub HashMap<i64, EntityWithListens<Ent, Lis>>)
-where
-    Ent: HasRowID,
-    Lis: ListenCollectionReadable;
+pub struct EntityWithListensCollection<Ent, Lis>(pub HashMap<i64, EntityWithListens<Ent, Lis>>);
 
 impl<Ent, Lis> EntityWithListensCollection<Ent, Lis>
 where

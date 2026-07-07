@@ -7,12 +7,19 @@ pub struct EntityNameCell<T> {
     pub entity: T,
 }
 
+impl<T> From<T> for EntityNameCell<T> {
+    fn from(value: T) -> Self {
+        Self { entity: value }
+    }
+}
+
 impl<T> EntityNameCell<T>
 where
     T: FormatWithAsyncDyn<MusicbrainzFormater, Error = musicbrainz_db_lite::Error>,
 {
     pub async fn format(&self) -> String {
-        self.entity.format_with_async(&LISTENBRAINZ_FMT)
+        self.entity
+            .format_with_async(&LISTENBRAINZ_FMT)
             .await
             .unwrap()
     }

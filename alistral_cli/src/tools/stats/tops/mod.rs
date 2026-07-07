@@ -20,7 +20,7 @@ use crate::database::interfaces::statistics_data::release_group_stats;
 use crate::database::interfaces::statistics_data::release_stats;
 use crate::models::cli_components::tables::order_by::OrderTableByListenCount;
 use crate::models::cli_components::tables::order_by::OrderTableByListenDuration;
-use crate::models::cli_components::tables::rows::top_listen_dur_row::TopListenDurCountsRow;
+use crate::models::cli_components::tables::rows::top_listen_duration_row::TopListenDurationRow;
 use crate::models::cli_components::tables::rows::top_listen_row::TopListenCountsRow;
 use crate::models::cli_components::tables::table::TopTable;
 use crate::tools::stats::tops::score_by::SortBy;
@@ -237,7 +237,7 @@ impl StatsTopCommand {
             .map(|entity_listens| TopListenCountsRow::from(entity_listens))
             .collect_vec();
 
-        let table = TopTable::new(rows, OrderTableByListenCount, true);
+        let table = TopTable::new(rows, OrderTableByListenCount, true, false);
         table.print_paged(20).await;
     }
 
@@ -253,10 +253,10 @@ impl StatsTopCommand {
     {
         let rows = data
             .into_iter()
-            .map(|entity_listens| TopListenDurCountsRow::from(entity_listens))
+            .map(|entity_listens| TopListenDurationRow::from(entity_listens))
             .collect_vec();
 
-        let table = TopTable::new(rows, OrderTableByListenDuration, true);
+        let table = TopTable::new(rows, OrderTableByListenDuration, true, false);
         table.print_paged(20).await;
     }
 }

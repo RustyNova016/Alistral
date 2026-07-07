@@ -3,33 +3,27 @@ use core::fmt::Display;
 use alistral_core::cli::colors::AlistralColors as _;
 
 /// A cell in a top table
+#[derive(Debug, Default, Clone)]
 pub struct TopCell<T> {
     /// The data of the current slice
     pub current: Option<T>,
     /// The data of the previous slice
     pub previous: Option<T>,
-
-    /// If true, show comparison between current and previous
-    pub show_prev: bool,
 }
 
 impl<T> TopCell<T>
 where
     T: Default + Clone + Display,
 {
-    pub fn new(current: Option<T>, previous: Option<T>, show_prev: bool) -> Self {
-        Self {
-            current,
-            previous,
-            show_prev,
-        }
+    pub fn new(current: Option<T>, previous: Option<T>) -> Self {
+        Self { current, previous }
     }
 
-    pub fn format(&self, max_len_cur: usize, max_len_prev: usize) -> String {
+    pub fn format(&self, max_len_cur: usize, max_len_prev: usize, show_prev: bool) -> String {
         let cur = self.current.clone().unwrap_or_default();
         let prev = self.previous.clone().unwrap_or_default();
 
-        if !self.show_prev {
+        if !show_prev {
             cur.to_string()
         } else {
             format!(

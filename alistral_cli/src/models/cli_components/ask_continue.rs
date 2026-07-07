@@ -5,4 +5,3 @@ pub fn cli_ask_continue() -> bool {
 
     Select::new("", options).prompt().unwrap() == "Next"
 }
-
