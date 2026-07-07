@@ -25,7 +25,7 @@ jobs:
           - ubuntu-latest
           - macos-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - run: rustup toolchain install stable --profile minimal --no-self-update
 
@@ -44,7 +44,7 @@ jobs:
       SQLX_OFFLINE: true
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       # Install minimal toolchain
       - name: Install minimal stable toolchain
@@ -69,7 +69,7 @@ jobs:
       SQLX_OFFLINE: true
       RUSTDOCFLAGS: -Dwarnings
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: dtolnay/rust-toolchain@nightly
       - uses: Swatinem/rust-cache@v2
       - uses: dtolnay/install@cargo-docs-rs
@@ -78,7 +78,7 @@ jobs:
   fmt:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -97,7 +97,7 @@ jobs:
       SQLX_OFFLINE: true
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
 
     - name: Install Rust
       uses: dtolnay/rust-toolchain@stable
@@ -116,7 +116,7 @@ jobs:
       SQLX_OFFLINE: true
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - uses: dtolnay/rust-toolchain@nightly
     - uses: Swatinem/rust-cache@v2
     - uses: taiki-e/install-action@cargo-hack
@@ -140,7 +140,7 @@ jobs:
       SQLX_OFFLINE: true
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
 
     - name: Install Rust
       uses: dtolnay/rust-toolchain@stable
