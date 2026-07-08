@@ -1,4 +1,5 @@
 use alistral_core::datastructures::entity_with_listens::EntityWithListens;
+use alistral_core::datastructures::entity_with_listens::entity_comparison::EntityListensComparison;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use convert_case::Casing as _;
 use musicbrainz_db_lite::HasRowID;
@@ -31,6 +32,25 @@ where
             },
             listen_counts: ListenCountCell(TopCell::new(Some(value.listen_count()), None)),
             //rank: RankCell(0)
+        }
+    }
+}
+
+impl<Ent, Lis> From<EntityListensComparison<Ent, Lis>> for TopListenCountsRow<Ent>
+where
+    Ent: Clone,
+    Lis: Default,
+    EntityWithListens<Ent, Lis>: Clone + ListenCollectionReadable,
+{
+    fn from(value: EntityListensComparison<Ent, Lis>) -> Self {
+        Self {
+            entity_name: EntityNameCell {
+                entity: value.entity().unwrap().clone(),
+            },
+            listen_counts: ListenCountCell(TopCell::new(
+                value.current_or_empty().map(|cur| cur.listen_count()),
+                value.previous_or_empty().map(|prev| prev.listen_count()),
+            )),
         }
     }
 }

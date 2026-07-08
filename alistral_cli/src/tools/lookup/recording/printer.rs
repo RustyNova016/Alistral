@@ -1,7 +1,9 @@
 use core::fmt::Write as _;
 
+use alistral_core::datastructures::entity_with_listens::entity_comparison::EntityListensComparison;
 use alistral_core::datastructures::entity_with_listens::recording::RecordingWithListens;
 use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
+use alistral_core::datastructures::listen_collection::ListenCollection;
 use alistral_core::models::listen_statistics_data::ListenStatisticsData;
 use chrono::DateTime;
 use chrono::Utc;
@@ -11,6 +13,7 @@ use tuillez::OwoColorize as _;
 
 use crate::ALISTRAL_CLIENT;
 use crate::tools::components::listen_per_year_graph::listen_count_per_year_graph;
+use crate::tools::lookup::recording::components::top_next_recordings;
 
 pub struct RecordingLookup {
     pub(super) recording: Recording,
@@ -113,6 +116,30 @@ impl RecordingLookup {
         writeln!(&mut report, "{}", grap).unwrap();
         writeln!(&mut report).unwrap();
 
+        writeln!(
+            &mut report,
+            "{}",
+            "\n Most frequents next listens"
+                .to_string()
+                .on_green()
+                .black()
+                .bold()
+        )
+        .unwrap();
+        writeln!(&mut report).unwrap();
+        writeln!(
+            &mut report,
+            "{}",
+            top_next_recordings(
+                &self.get_comp_stats().await,
+                self.all_time.listens(),
+                self.before.is_some()
+            )
+            .await
+        )
+        .unwrap();
+        writeln!(&mut report).unwrap();
+
         report
     }
 
@@ -148,5 +175,12 @@ impl RecordingLookup {
             .unwrap()
             .get_by_mbid(&self.recording.mbid)
             .unwrap()
+    }
+
+    pub async fn get_comp_stats(&self) -> EntityListensComparison<Recording, ListenCollection> {
+        EntityListensComparison::new(
+            Some(self.get_now_target_recording_stats().await.clone()),
+            self.get_before_target_recording_stats().await.cloned(),
+        )
     }
 }

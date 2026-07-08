@@ -1,11 +1,13 @@
+pub mod collection;
+pub mod default;
 use musicbrainz_db_lite::HasRowID;
 
 use crate::datastructures::entity_with_listens::EntityWithListens;
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone)]
 pub struct EntityListensComparison<Ent, Lis> {
-    current: Option<EntityWithListens<Ent, Lis>>,
-    previous: Option<EntityWithListens<Ent, Lis>>,
+    pub(self) current: Option<EntityWithListens<Ent, Lis>>,
+    pub(self) previous: Option<EntityWithListens<Ent, Lis>>,
 }
 
 impl<Ent, Lis> EntityListensComparison<Ent, Lis> {
@@ -99,5 +101,14 @@ impl<Ent, Lis> EntityListensComparison<Ent, Lis> {
             )),
             (None, None) => None,
         }
+    }
+
+    pub fn map_as<F, U>(&self, f: F) -> (Option<U>, Option<U>)
+    where
+        F: Fn(&EntityWithListens<Ent, Lis>) -> U,
+    {
+        let current = self.current.as_ref().map(&f);
+        let previous = self.previous.as_ref().map(f);
+        (current, previous)
     }
 }
