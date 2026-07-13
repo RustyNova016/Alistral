@@ -24,7 +24,7 @@ impl FormatWithAsyncDyn<MusicbrainzFormater> for Label {
                 &self.name.truecolor(214, 0, 214).to_string(),
                 &self.disambiguation,
             ),
-            &format!("https://musicbrainz.org/label/{}", &self.mbid),
+            &format!("https://musicbrainz.org/label/{}", self.mbid),
         ))
     }
 }

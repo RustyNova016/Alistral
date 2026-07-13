@@ -20,9 +20,9 @@ impl FormatWithAsyncDyn<MusicbrainzFormater> for Artist {
         use crate::utils::display::format_disambiguation;
 
         let link = if !ft.listenbrainz_link {
-            format!("https://musicbrainz.org/artist/{}", &self.mbid)
+            format!("https://musicbrainz.org/artist/{}", self.mbid)
         } else {
-            format!("https://listenbrainz.org/artist/{}", &self.mbid)
+            format!("https://listenbrainz.org/artist/{}", self.mbid)
         };
 
         Ok(hyperlink_rename(

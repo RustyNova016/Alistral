@@ -20,7 +20,7 @@ impl Work {
                 &self.title.truecolor(0, 214, 214).to_string(),
                 &self.disambiguation,
             ),
-            &format!("https://musicbrainz.org/work/{}", &self.mbid),
+            &format!("https://musicbrainz.org/work/{}", self.mbid),
         ))
     }
 }
@@ -41,7 +41,7 @@ impl FormatWithAsyncDyn<MusicbrainzFormater> for Work {
                 &self.title.truecolor(0, 214, 214).to_string(),
                 &self.disambiguation,
             ),
-            &format!("https://musicbrainz.org/work/{}", &self.mbid),
+            &format!("https://musicbrainz.org/work/{}", self.mbid),
         ))
     }
 }

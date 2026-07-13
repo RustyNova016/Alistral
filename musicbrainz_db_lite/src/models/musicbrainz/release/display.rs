@@ -22,9 +22,9 @@ impl FormatWithAsyncDyn<MusicbrainzFormater> for Release {
         use crate::utils::display::format_disambiguation;
 
         let link = if !ft.listenbrainz_link {
-            format!("https://musicbrainz.org/release/{}", &self.mbid)
+            format!("https://musicbrainz.org/release/{}", self.mbid)
         } else {
-            format!("https://listenbrainz.org/release/{}", &self.mbid)
+            format!("https://listenbrainz.org/release/{}", self.mbid)
         };
 
         let name_format = hyperlink_rename(

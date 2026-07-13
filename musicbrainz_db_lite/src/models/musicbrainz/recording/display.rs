@@ -26,7 +26,7 @@ impl FormatWithAsyncDyn<MusicbrainzFormater> for Recording {
                 &self.title.truecolor(0, 214, 114).to_string(),
                 &self.disambiguation,
             ),
-            &format!("https://musicbrainz.org/recording/{}", &self.mbid),
+            &format!("https://musicbrainz.org/recording/{}", self.mbid),
         );
 
         if ft.artist_credits {
