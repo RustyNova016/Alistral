@@ -23,7 +23,7 @@ impl FormatWithAsyncDyn<MusicbrainzFormater> for Track {
         if ft.artist_credits {
             Ok(format!(
                 "{} by {}",
-                &name_format,
+                name_format,
                 self.get_related_entity::<ArtistCreditDBRel>(
                     &mut *ft.client.get_raw_connection().await?
                 )

@@ -35,9 +35,9 @@ impl FormatWithAsyncDyn<MusicbrainzFormater> for Vec<ArtistCredit> {
 
         for credit in self {
             let link = if !ft.listenbrainz_link {
-                format!("https://musicbrainz.org/artist/{}", &credit.artist_gid)
+                format!("https://musicbrainz.org/artist/{}", credit.artist_gid)
             } else {
-                format!("https://listenbrainz.org/artist/{}", &credit.artist_gid)
+                format!("https://listenbrainz.org/artist/{}", credit.artist_gid)
             };
 
             write!(

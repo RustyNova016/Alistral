@@ -200,7 +200,7 @@ impl RecordingWithListens {
     }
 
     pub async fn get_global_listen_count(&self) -> Result<u64, crate::Error> {
-        let counts = get_global_listen_counts(&[self.recording.mbid.to_string()]).await?;
+        let counts = get_global_listen_counts(core::slice::from_ref(&self.recording.mbid)).await?;
         let Some(count) = counts.first() else {
             return Ok(0);
         };
