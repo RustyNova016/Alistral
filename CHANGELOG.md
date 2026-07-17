@@ -2,6 +2,54 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.6.8] - 2026-07-17
+
+### 🚀 Features
+
+- Remove derive_new
+- Add ordering trait
+- Add first discovery error handling
+- More clippy fixes
+- Added listen per year graph for user lookup
+- Add listen per year for recording
+- Update nix config
+- Configurable MB ratelimit and HTTP
+- Listencount top table
+- Listen duration table
+- Fresquent next listens
+- Added unstable multiscrobbler
+
+### 🐛 Bug Fixes
+
+- *(deps)* Update rust crate hotpath to 0.16.0
+- *(deps)* Update rust crate zip to v8
+- *(deps)* Update rust crate itertools to 0.15.0
+- *(deps)* Update rust crate hotpath to 0.18.0
+- Sqlx changes
+- *(deps)* Update rust crate hotpath to 0.19.0
+
+### 🚜 Refactor
+
+- Removed dotenvy
+- Move recording::upsert to sequelles
+- Move some structs to sequelles derive
+- Rework YIM table
+
+### ⚙️ Miscellaneous Tasks
+
+- Clippy Fixes
+- Remove dependabot
+- Update dependencies
+- Update dependencies
+- Fix clippy
+- Update again to use upserts
+- Fix clippy
+- Fixed import test
+- Revert recording upsert as it require an huge refactor
+- CI fix
+- Update rust
+- Release v0.6.8
+
 ## [0.6.7] - 2026-04-27
 
 ### 🚀 Features
@@ -25,6 +73,7 @@ All notable changes to this project will be documented in this file.
 - Updated snafu to 0.9.0
 - Updated hotpath to 0.15.0
 - Update deps
+- Release v0.6.7
 
 ## [0.6.6] - 2026-02-04
 
