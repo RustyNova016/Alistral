@@ -29,6 +29,7 @@ use crate::tools::musicbrainz::MusicbrainzCommand;
 use crate::tools::playlist::PlaylistCommand;
 #[cfg(feature = "stats")]
 use crate::tools::stats::StatsCommand;
+use crate::tools::unstable::UnstableCommand;
 
 pub mod common;
 pub mod config;
@@ -135,6 +136,8 @@ pub enum Commands {
     #[cfg(feature = "stats")]
     /// Shows top statistics for a specific target
     Stats(StatsCommand),
+
+    Unstable(UnstableCommand),
 }
 
 impl Commands {
@@ -168,6 +171,7 @@ impl Commands {
 
             #[cfg(feature = "interzic")]
             Self::Playlist(val) => val.run().await?,
+            Self::Unstable(val) => val.run().await,
         }
 
         Ok(())

@@ -1,3 +1,4 @@
+pub mod listen_metadata;
 use chrono::{DateTime, TimeZone, Utc};
 use sea_query::enum_def;
 use sequelles::has_rowid::HasRowID;
@@ -7,6 +8,7 @@ use snafu::ResultExt;
 
 use crate::error::sqlx_error::SqlxError;
 use crate::error::sqlx_error::SqlxSnafu;
+use crate::models::listenbrainz::listen::listen_metadata::ListenMetadata;
 use crate::models::shared_traits::has_table::HasTable;
 use crate::utils::macros::hardlink_methods::impl_db_relation_methods;
 
@@ -20,7 +22,8 @@ pub mod selects;
 #[enum_def(table_name = "listens")]
 #[sequelles(db_name = "listens", snafu)]
 #[sequelles(sqlite)]
-#[sequelles(insert, upsert)]
+#[sequelles(insert, upsert, delete)]
+#[sequelles(primary_key(key_name = "pk", columns(id)))]
 pub struct Listen {
     pub id: i64,
     pub listened_at: i64,
@@ -32,6 +35,13 @@ pub struct Listen {
 impl_db_relation_methods!(Listen);
 
 impl Listen {
+    pub fn listen_metadata(&self) -> Result<Option<ListenMetadata>, serde_json::Error> {
+        self.data
+            .as_ref()
+            .map(|s| serde_json::from_str(s))
+            .transpose()
+    }
+
     pub fn listened_at_as_datetime(&self) -> DateTime<Utc> {
         // unwrap() is best combined with time zone types where the mapping can never fail like Utc.
         Utc.timestamp_opt(self.listened_at, 0).unwrap()
