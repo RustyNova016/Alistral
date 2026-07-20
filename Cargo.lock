@@ -71,7 +71,7 @@ dependencies = [
  "duplicate",
  "extend",
  "futures",
- "hotpath 0.19.1",
+ "hotpath 0.21.5",
  "indoc",
  "inquire",
  "interzic",
@@ -1954,9 +1954,9 @@ dependencies = [
 
 [[package]]
 name = "hotpath"
-version = "0.19.1"
+version = "0.21.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "467479f30ae7262ad93eff1f6653a58ecfca4b44dd9ff82ef4b469ba1ad00017"
+checksum = "902f40dea4993d99db66732fddd9143e92657f1d47a642395f92b339b1375659"
 dependencies = [
  "arc-swap",
  "cfg-if",
@@ -1964,8 +1964,8 @@ dependencies = [
  "futures-channel",
  "futures-util",
  "hdrhistogram",
- "hotpath-macros 0.19.1",
- "hotpath-meta 0.19.1",
+ "hotpath-macros 0.21.5",
+ "hotpath-meta 0.21.5",
  "libc",
  "pin-project-lite",
  "prettytable-rs",
@@ -1990,9 +1990,9 @@ dependencies = [
 
 [[package]]
 name = "hotpath-macros"
-version = "0.19.1"
+version = "0.21.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7edb8da2a00454786fbb75ab24c4f72380afeb9b5136776caa7737df9895bfa7"
+checksum = "191f6e3b11c1f817e5c3737158812bc8d3a383e9d9d89526703ea6dc1e9fe647"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2007,9 +2007,9 @@ checksum = "b7f6b2adb32728a10077f9eb66ece7c122ae0d86f3430187bbd8605089e3df7e"
 
 [[package]]
 name = "hotpath-macros-meta"
-version = "0.19.1"
+version = "0.21.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e804ccbbd13922ff16b752ab72043d15ea38411a03a82917b8ea5b36b6b45655"
+checksum = "604e1929e4e069ce456916d2bb267ddd2b7d680bfb5b89abca06a9b6d3fe50a7"
 
 [[package]]
 name = "hotpath-meta"
@@ -2022,11 +2022,11 @@ dependencies = [
 
 [[package]]
 name = "hotpath-meta"
-version = "0.19.1"
+version = "0.21.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7f76b1b9a176e5677878243b0c9052d2e0a62405359bd6990bbd85b59cafa2aa"
+checksum = "85c1f5d817c1a70efc3aa66d27909e86878ea22991c0b6fc5f36d6dbd26856a3"
 dependencies = [
- "hotpath-macros-meta 0.19.1",
+ "hotpath-macros-meta 0.21.5",
 ]
 
 [[package]]
@@ -2762,7 +2762,7 @@ dependencies = [
  "deadpool",
  "extend",
  "futures",
- "hotpath 0.19.1",
+ "hotpath 0.21.5",
  "itertools 0.15.0",
  "listenbrainz",
  "listenbrainz_rs",
@@ -4135,7 +4135,7 @@ version = "0.9.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5f103c50866b8743da9429b8a581d81a27c2d3a9c4ac7df8f8571c1dd7896eda"
 dependencies = [
- "heck 0.4.1",
+ "heck 0.5.0",
  "proc-macro2",
  "quote",
  "syn 2.0.118",
@@ -4538,7 +4538,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "32497e9a4c7b38532efcdebeef879707aa9f794296a4f0244f6f69e9bc8574bd"
 dependencies = [
  "fastrand",
- "getrandom 0.3.4",
+ "getrandom 0.4.3",
  "once_cell",
  "rustix",
  "windows-sys 0.61.2",

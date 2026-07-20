@@ -29,7 +29,8 @@ pub fn crawler(
     let (crawl_sender, crawl_reciever) = hotpath::channel!(
         (crawl_sender, crawl_reciever),
         log = true,
-        label = "Crawler Channel"
+        label = "Crawler Channel",
+        proxy = true
     );
 
     let task = crawl_task(out_sender, crawl_reciever, client)
