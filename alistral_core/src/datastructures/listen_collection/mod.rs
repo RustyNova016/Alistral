@@ -1,5 +1,6 @@
 pub mod find;
 pub mod group_by;
+pub mod trait_impl;
 use core::cmp::Reverse;
 use core::ops::Deref;
 
