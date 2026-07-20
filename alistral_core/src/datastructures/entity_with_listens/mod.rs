@@ -1,5 +1,3 @@
-pub mod entity_comparison;
-pub mod trait_impl;
 use chrono::Duration;
 use chrono::Utc;
 use musicbrainz_db_lite::HasRowID;
@@ -16,20 +14,23 @@ use super::listen_collection::traits::ListenCollectionReadable;
 pub mod artist;
 pub mod collection;
 pub mod entity_as_listens;
+pub mod entity_comparison;
 pub mod label;
 pub mod listen_timeframe;
+pub mod listens;
 pub mod messybrainz;
 pub mod recording;
 pub mod release;
 pub mod release_group;
 pub mod statistic_data;
 pub mod tags;
+pub mod trait_impl;
 pub mod traits;
 pub mod user;
 pub mod work;
 
 /// A structure representing an entity with associated listens.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct EntityWithListens<Ent, Lis> {
     entity: Ent,
     listens: Lis,
@@ -46,14 +47,6 @@ impl<Ent, Lis> EntityWithListens<Ent, Lis> {
 
     pub fn into_entity(self) -> Ent {
         self.entity
-    }
-
-    pub fn listens(&self) -> &Lis {
-        &self.listens
-    }
-
-    pub fn into_listens(self) -> Lis {
-        self.listens
     }
 }
 
@@ -76,16 +69,6 @@ where
 {
     fn iter_listens(&self) -> impl Iterator<Item = &Listen> {
         self.listens.iter_listens()
-    }
-}
-
-impl<Ent> EntityWithListens<Ent, ListenCollection>
-where
-    Ent: HasRowID,
-{
-    /// Add a listen if it doesn't already exist in the collection. This doesn't check if the listen belong to the entity
-    pub fn insert_unique_listens_unchecked(&mut self, new_listen: Listen) {
-        self.listens.push_unique(new_listen);
     }
 }
 
