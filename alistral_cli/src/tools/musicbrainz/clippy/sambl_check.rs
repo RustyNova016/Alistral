@@ -42,7 +42,8 @@ pub fn samble_clippy_stream(
         (entity_send, entity_stream),
         capacity = 10,
         log = true,
-        label = "Sambl Lint Channel"
+        label = "Sambl Lint Channel",
+        proxy = true
     );
 
     let stream = entity_stream

@@ -56,7 +56,8 @@ pub fn mb_clippy_stream(
         (entity_send, entity_stream),
         capacity = 10,
         log = true,
-        label = "Clippy Lint Channel"
+        label = "Clippy Lint Channel",
+        proxy = true
     );
 
     let stream = entity_stream
