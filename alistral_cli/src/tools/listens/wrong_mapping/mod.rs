@@ -34,11 +34,13 @@ impl ListenWrongMappingCommand {
                     .expect("Couldn't fetch the messybrainz data of the listen")
                     .expect("Couldn't find the messybrainz data of the listen");
 
-            let recording = listen
+            let Some(recording) = listen
                 .get_recording_or_fetch(conn, &ALISTRAL_CLIENT.musicbrainz_db)
                 .await
                 .expect("Couldn't fetch recording data")
-                .expect("The listen should be mapped");
+            else {
+                continue;
+            };
 
             if config
                 .read_or_panic()
