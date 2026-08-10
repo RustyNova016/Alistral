@@ -1,0 +1,983 @@
+# Command-Line Help for `alistral`
+
+This document contains the help content for the `alistral` command-line program.
+
+**Command Overview:**
+
+* [`alistral`↴](#alistral)
+* [`alistral bump`↴](#alistral-bump)
+* [`alistral bump-down`↴](#alistral-bump-down)
+* [`alistral cache`↴](#alistral-cache)
+* [`alistral cache clear`↴](#alistral-cache-clear)
+* [`alistral cache copy-to-debug`↴](#alistral-cache-copy-to-debug)
+* [`alistral compatibility`↴](#alistral-compatibility)
+* [`alistral config`↴](#alistral-config)
+* [`alistral config blacklist-mapper-msid`↴](#alistral-config-blacklist-mapper-msid)
+* [`alistral config set-token`↴](#alistral-config-set-token)
+* [`alistral config timeout`↴](#alistral-config-timeout)
+* [`alistral config listens`↴](#alistral-config-listens)
+* [`alistral config listens refresh-unmapped-listens`↴](#alistral-config-listens-refresh-unmapped-listens)
+* [`alistral config default-user`↴](#alistral-config-default-user)
+* [`alistral daily`↴](#alistral-daily)
+* [`alistral docs`↴](#alistral-docs)
+* [`alistral docs config-schema`↴](#alistral-docs-config-schema)
+* [`alistral interzic`↴](#alistral-interzic)
+* [`alistral interzic add-subsonic`↴](#alistral-interzic-add-subsonic)
+* [`alistral interzic get-mapping`↴](#alistral-interzic-get-mapping)
+* [`alistral interzic reload`↴](#alistral-interzic-reload)
+* [`alistral interzic reverse-mapping`↴](#alistral-interzic-reverse-mapping)
+* [`alistral interzic overwrite`↴](#alistral-interzic-overwrite)
+* [`alistral listens`↴](#alistral-listens)
+* [`alistral listens clear`↴](#alistral-listens-clear)
+* [`alistral listens import-dump`↴](#alistral-listens-import-dump)
+* [`alistral listens reload`↴](#alistral-listens-reload)
+* [`alistral listens remap-msid`↴](#alistral-listens-remap-msid)
+* [`alistral listens submit`↴](#alistral-listens-submit)
+* [`alistral listens unlinked`↴](#alistral-listens-unlinked)
+* [`alistral listens wrong-mapping`↴](#alistral-listens-wrong-mapping)
+* [`alistral lookup`↴](#alistral-lookup)
+* [`alistral lookup user`↴](#alistral-lookup-user)
+* [`alistral lookup recording`↴](#alistral-lookup-recording)
+* [`alistral musicbrainz`↴](#alistral-musicbrainz)
+* [`alistral musicbrainz clippy`↴](#alistral-musicbrainz-clippy)
+* [`alistral musicbrainz sambl`↴](#alistral-musicbrainz-sambl)
+* [`alistral playlist`↴](#alistral-playlist)
+* [`alistral playlist convert`↴](#alistral-playlist-convert)
+* [`alistral radio`↴](#alistral-radio)
+* [`alistral radio circles`↴](#alistral-radio-circles)
+* [`alistral radio underrated`↴](#alistral-radio-underrated)
+* [`alistral radio rate`↴](#alistral-radio-rate)
+* [`alistral radio overdue`↴](#alistral-radio-overdue)
+* [`alistral radio shared`↴](#alistral-radio-shared)
+* [`alistral stats`↴](#alistral-stats)
+* [`alistral stats top`↴](#alistral-stats-top)
+* [`alistral stats yim`↴](#alistral-stats-yim)
+* [`alistral unstable`↴](#alistral-unstable)
+* [`alistral unstable duplicates`↴](#alistral-unstable-duplicates)
+
+## `alistral`
+
+A CLI app containing a set of useful tools for Listenbrainz
+
+**Usage:** `alistral [OPTIONS] [COMMAND]`
+
+###### **Subcommands:**
+
+* `bump` — bump a recording to show up more frequently in radios that uses scores. By default, it uses the lastest listen as target
+* `bump-down` — bump a recording to show up more frequently in radios that uses scores. By default, it uses the lastest listen as target
+* `cache` — Commands to deal with the local cache
+* `compatibility` — 
+* `config` — Commands to deal with the app's configuration
+* `daily` — Daily report
+* `docs` — A CLI app containing a set of useful tools for Listenbrainz
+* `interzic` — A CLI app containing a set of useful tools for Listenbrainz
+* `listens` — A CLI app containing a set of useful tools for Listenbrainz
+* `lookup` — Get detailled information about an entity
+* `musicbrainz` — Commands for musicbrainz stuff
+* `playlist` — Interact with playlists
+* `radio` — Generate radio playlists for you
+* `stats` — Shows top statistics for a specific target
+* `unstable` — A CLI app containing a set of useful tools for Listenbrainz
+
+###### **Options:**
+
+* `-v`, `--verbose` — Increase logging verbosity
+* `-q`, `--quiet` — Decrease logging verbosity
+* `--generate <GENERATOR>`
+
+  Possible values: `bash`, `elvish`, `fish`, `powershell`, `zsh`
+
+* `--no-cleanup`
+
+  Default value: `false`
+
+
+
+## `alistral bump`
+
+bump a recording to show up more frequently in radios that uses scores. By default, it uses the lastest listen as target.
+
+bump-down is an alias for `bump <RECORDING> <DURATION> 0.9`
+
+All the bumps are added multiplicatively, so a recording won't disapear. Use the blacklist to remove them.
+
+**Usage:** `alistral bump [OPTIONS] [RECORDING]`
+
+###### **Arguments:**
+
+* `<RECORDING>` — The recording to bump
+
+###### **Options:**
+
+* `-d`, `--duration <DURATION>` — The duration the bump last for (Default: 3 months)
+* `-m`, `--multiplier <MULTIPLIER>` — The multiplier added to the score (Default: 1.1)
+* `-u`, `--username <USERNAME>`
+
+
+
+## `alistral bump-down`
+
+bump a recording to show up more frequently in radios that uses scores. By default, it uses the lastest listen as target.
+
+bump-down is an alias for `bump <RECORDING> <DURATION> 0.9`
+
+All the bumps are added multiplicatively, so a recording won't disapear. Use the blacklist to remove them.
+
+**Usage:** `alistral bump-down [OPTIONS] [RECORDING]`
+
+###### **Arguments:**
+
+* `<RECORDING>` — The recording to bump
+
+###### **Options:**
+
+* `-d`, `--duration <DURATION>` — The duration the bump last for (Default: 3 months)
+* `-m`, `--multiplier <MULTIPLIER>` — The multiplier added to the score (Default: 1.1)
+* `-u`, `--username <USERNAME>`
+
+
+
+## `alistral cache`
+
+Commands to deal with the local cache
+
+**Usage:** `alistral cache <COMMAND>`
+
+###### **Subcommands:**
+
+* `clear` — Wipe the cache's data
+* `copy-to-debug` — Copy the release database to the debug one
+
+
+
+## `alistral cache clear`
+
+Wipe the cache's data
+
+This is useful if you need disk space, or need to manually rebuild in case of corruption
+
+Most times you only need the `--main` argument. If you need to delete the debug database, use `--debug`
+
+**Usage:** `alistral cache clear [OPTIONS]`
+
+###### **Options:**
+
+* `-m`, `--main`
+* `-d`, `--debug`
+
+
+
+## `alistral cache copy-to-debug`
+
+Copy the release database to the debug one.
+
+⚠️ This wipes the debug database.
+
+**Usage:** `alistral cache copy-to-debug`
+
+
+
+## `alistral compatibility`
+
+**Usage:** `alistral compatibility <USER_A> <USER_B>`
+
+###### **Arguments:**
+
+* `<USER_A>` — The name of the first user
+* `<USER_B>` — The name of the second user
+
+
+
+## `alistral config`
+
+Commands to deal with the app's configuration
+
+**Usage:** `alistral config <COMMAND>`
+
+###### **Subcommands:**
+
+* `blacklist-mapper-msid` — Prevent an MSID to appear in the mbid mapper
+* `set-token` — Associate an user token to an username. This makes `--token` arguments optional, and prevent always having to insert it
+* `timeout` — Prevent the recording to appear on radios for a while. If you're burn out of a track and need it gone, use this
+* `listens` — Configuration targeting listen data
+* `default-user` — Set the default username
+
+
+
+## `alistral config blacklist-mapper-msid`
+
+Prevent an MSID to appear in the mbid mapper
+
+**Usage:** `alistral config blacklist-mapper-msid [OPTIONS] <MSID>`
+
+###### **Arguments:**
+
+* `<MSID>` — The msid to blacklist
+
+###### **Options:**
+
+* `--remove` — Remove it from the blacklist
+
+
+
+## `alistral config set-token`
+
+Associate an user token to an username. This makes `--token` arguments optional, and prevent always having to insert it
+
+**Usage:** `alistral config set-token <USERNAME> <TOKEN>`
+
+###### **Arguments:**
+
+* `<USERNAME>` — Name of the user to add the token
+* `<TOKEN>` — User token
+
+
+
+## `alistral config timeout`
+
+Prevent the recording to appear on radios for a while. If you're burn out of a track and need it gone, use this
+
+**Usage:** `alistral config timeout <RECORDING> <DURATION>`
+
+###### **Arguments:**
+
+* `<RECORDING>` — A string containing a MBID of a recording
+* `<DURATION>` — A duration to timeout for
+
+
+
+## `alistral config listens`
+
+Configuration targeting listen data
+
+**Usage:** `alistral config listens <COMMAND>`
+
+###### **Subcommands:**
+
+* `refresh-unmapped-listens` — Toggle / Set whether the unmapped listens should be automatically updated when fetching listens
+
+
+
+## `alistral config listens refresh-unmapped-listens`
+
+Toggle / Set whether the unmapped listens should be automatically updated when fetching listens
+
+**Usage:** `alistral config listens refresh-unmapped-listens <STATE>`
+
+###### **Arguments:**
+
+* `<STATE>` — What do you want it set to?
+
+  Possible values: `toggle`, `true`, `false`
+
+
+
+
+## `alistral config default-user`
+
+Set the default username
+
+**Usage:** `alistral config default-user <USERNAME>`
+
+###### **Arguments:**
+
+* `<USERNAME>`
+
+
+
+## `alistral daily`
+
+Daily report
+
+**Usage:** `alistral daily [DATE] [USERNAME]`
+
+###### **Arguments:**
+
+* `<DATE>` — The date to use for the daily report
+* `<USERNAME>` — Name of the user to provide a daily report
+
+
+
+## `alistral docs`
+
+A CLI app containing a set of useful tools for Listenbrainz
+
+**Usage:** `alistral docs <COMMAND>`
+
+###### **Subcommands:**
+
+* `config-schema` — Create the json schema of the config
+
+
+
+## `alistral docs config-schema`
+
+Create the json schema of the config
+
+**Usage:** `alistral docs config-schema`
+
+
+
+## `alistral interzic`
+
+A CLI app containing a set of useful tools for Listenbrainz
+
+**Usage:** `alistral interzic <COMMAND>`
+
+###### **Subcommands:**
+
+* `add-subsonic` — Add a subsonic client
+* `get-mapping` — Fetch the id of a recording on an external service
+* `reload` — Reload recording data from Musicbrainz
+* `reverse-mapping` — Get the recording mapped to this id
+* `overwrite` — Overwrite a mapping for an user
+
+
+
+## `alistral interzic add-subsonic`
+
+Add a subsonic client
+
+**Usage:** `alistral interzic add-subsonic <NAME> <URL> <USERNAME> <PASSWORD>`
+
+###### **Arguments:**
+
+* `<NAME>` — The name of this instance
+* `<URL>` — The url of the instance
+* `<USERNAME>` — The username of the instance user's
+* `<PASSWORD>` — The password of the user
+
+
+
+## `alistral interzic get-mapping`
+
+Fetch the id of a recording on an external service
+
+**Usage:** `alistral interzic get-mapping [OPTIONS] --instance <INSTANCE> <TARGET>`
+
+###### **Arguments:**
+
+* `<TARGET>` — Get the mapping of which service?
+
+  Possible values: `youtube`, `subsonic`
+
+
+###### **Options:**
+
+* `--instance <INSTANCE>` — The name of the subsonic/listenbrainz instance to send the playlist to
+* `-r`, `--recording <RECORDING>` — The title of the recording
+* `-a`, `--artist <ARTIST>` — The artist credit
+* `-g`, `--release <RELEASE>` — The title of the release
+* `-m`, `--mbid <MBID>` — The mbid to search from (Overwrite `recording`, `artist`, and `release`)
+* `-u`, `--user <USER>` — Search the mapping of this user
+
+
+
+## `alistral interzic reload`
+
+Reload recording data from Musicbrainz
+
+**Usage:** `alistral interzic reload [MBID]`
+
+###### **Arguments:**
+
+* `<MBID>` — Reload only this mbid
+
+
+
+## `alistral interzic reverse-mapping`
+
+Get the recording mapped to this id
+
+**Usage:** `alistral interzic reverse-mapping --instance <INSTANCE> <SOURCE> <ID> [USER]`
+
+###### **Arguments:**
+
+* `<SOURCE>` — Get the mapping of which service?
+
+  Possible values: `youtube`, `subsonic`
+
+* `<ID>` — The id on the external service
+* `<USER>` — Search the mapping of this user
+
+###### **Options:**
+
+* `--instance <INSTANCE>` — The name of the subsonic/listenbrainz instance to send the playlist to
+
+
+
+## `alistral interzic overwrite`
+
+Overwrite a mapping for an user
+
+**Usage:** `alistral interzic overwrite [OPTIONS] --instance <INSTANCE> <TARGET> <USER> <ID>`
+
+###### **Arguments:**
+
+* `<TARGET>` — Set the mapping of this service
+
+  Possible values: `youtube`, `subsonic`
+
+* `<USER>` — Set the mapping of this user
+* `<ID>` — The id on the external service
+
+###### **Options:**
+
+* `--instance <INSTANCE>` — The name of the subsonic/listenbrainz instance to send the playlist to
+* `-r`, `--recording <RECORDING>` — The title of the recording
+* `-a`, `--artist <ARTIST>` — The artist credit
+* `-g`, `--release <RELEASE>` — The title of the release
+* `-m`, `--mbid <MBID>` — The mbid to search from (Overwrite `recording`, `artist`, and `release`)
+
+
+
+## `alistral listens`
+
+A CLI app containing a set of useful tools for Listenbrainz
+
+**Usage:** `alistral listens <COMMAND>`
+
+###### **Subcommands:**
+
+* `clear` — Remove all the listens in the database
+* `import-dump` — Load a listen dump from the website
+* `reload` — 
+* `remap-msid` — Changes all the listens of a recording into another. Useful if LB mapped to a recording you never listened
+* `submit` — 
+* `unlinked` — List all of your unlinked listens
+* `wrong-mapping` — Try to find listens that have mapped to the wrong recordings
+
+
+
+## `alistral listens clear`
+
+Remove all the listens in the database.
+
+Optionally only target one user
+
+**Usage:** `alistral listens clear [USER]`
+
+###### **Arguments:**
+
+* `<USER>`
+
+
+
+## `alistral listens import-dump`
+
+Load a listen dump from the website
+
+Allows to load an exported dump of you listens. This is may not be any faster than using the app.
+
+You can get a listen dump [here](https://listenbrainz.org/settings/export/)
+
+**Usage:** `alistral listens import-dump <PATH> [USERNAME]`
+
+###### **Arguments:**
+
+* `<PATH>` — Path to the dump file
+* `<USERNAME>` — Name of the user to import those listens for
+
+
+
+## `alistral listens reload`
+
+**Usage:** `alistral listens reload [USERNAME]`
+
+###### **Arguments:**
+
+* `<USERNAME>` — Reload the listens of this user
+
+
+
+## `alistral listens remap-msid`
+
+Changes all the listens of a recording into another. Useful if LB mapped to a recording you never listened
+
+**Usage:** `alistral listens remap-msid <ORIGINAL_ID> <NEW_ID> [USERNAME] [TOKEN]`
+
+###### **Arguments:**
+
+* `<ORIGINAL_ID>` — The MBID of the recording
+* `<NEW_ID>` — The MBID of the recorind to replace it with
+* `<USERNAME>` — Your username
+* `<TOKEN>` — Your account token
+
+
+
+## `alistral listens submit`
+
+**Usage:** `alistral listens submit [OPTIONS] <RECORDING> <ARTIST_CREDITS>`
+
+###### **Arguments:**
+
+* `<RECORDING>` — The name of the recording listened to
+* `<ARTIST_CREDITS>` — The artist credits of the listen
+
+###### **Options:**
+
+* `-g`, `--release <RELEASE>` — The release of the recording
+* `-u`, `--username <USERNAME>` — Submit the listen on this user
+* `-t`, `--token <TOKEN>` — The token of the user
+
+
+
+## `alistral listens unlinked`
+
+List all of your unlinked listens
+
+This command will list all your unmapped listens, grouped by similarity. It also gives a link to quickly look up the listen in listenbrainz, and go link it
+
+```text
+
+(1) Paul's Dream (Dune) - Caster -> <https://listenbrainz.org/user/user/?min_ts=1709228551&max_ts=1709228553>
+
+(7) Raise Your Weapon - KLOUD -> <https://listenbrainz.org/user/user/?min_ts=1709824520&max_ts=1709824522>
+
+Total: 8 unlinked recordings
+
+```
+
+> Note: Listens are grouped by "Messybrainz ID" (MSID). This is the way Listenbrainz recognize similar listens > by attributing them the same MSID. Linking a listen will link the others as long as they have the same MSID.
+
+> This also means that the same recording can be shown twice in the list. > For example: "Panic - Dion Timer" won't have the same MSID as "Panic by Dion Timmer", even if they are the same recording.
+
+**Usage:** `alistral listens unlinked [OPTIONS] [USERNAME]`
+
+###### **Arguments:**
+
+* `<USERNAME>` — Name of the user to fetch unlinked listen from
+
+###### **Options:**
+
+* `-s`, `--sort <SORT>` — Sort the listens by type
+
+  Possible values:
+  - `count`:
+    The count of listens for this element. This is descending by default
+  - `name`:
+    The name of the associated element
+  - `oldest`:
+    The oldest element
+
+
+
+
+## `alistral listens wrong-mapping`
+
+Try to find listens that have mapped to the wrong recordings
+
+**Usage:** `alistral listens wrong-mapping [USERNAME]`
+
+###### **Arguments:**
+
+* `<USERNAME>` — Your username
+
+
+
+## `alistral lookup`
+
+Get detailled information about an entity
+
+**Usage:** `alistral lookup <COMMAND>`
+
+###### **Subcommands:**
+
+* `user` — 
+* `recording` — 
+
+
+
+## `alistral lookup user`
+
+**Usage:** `alistral lookup user [OPTIONS] [USERNAME]`
+
+###### **Arguments:**
+
+* `<USERNAME>` — Get the data of this user
+
+###### **Options:**
+
+* `-t`, `--timeframe <TIMEFRAME>` — Time period to use for the statistics
+
+  Possible values:
+  - `last30-days`:
+    Uses the last 30 days from now
+  - `last90-days`:
+    Uses the last 30 days from now
+  - `last365-days`:
+    Uses the last 365 days from now
+
+* `-f`, `--from <FROM>` — Get statistics from this date. Use YYYY-MM-DD format
+* `-u`, `--until <UNTIL>` — Get statistics until this date. Use YYYY-MM-DD format
+
+
+
+## `alistral lookup recording`
+
+**Usage:** `alistral lookup recording [OPTIONS] <ID> [USERNAME]`
+
+###### **Arguments:**
+
+* `<ID>` — The id of the entity (Accept URLs)
+* `<USERNAME>` — Get the data of this user
+
+###### **Options:**
+
+* `-t`, `--timeframe <TIMEFRAME>` — Time period to use for the statistics
+
+  Possible values:
+  - `last30-days`:
+    Uses the last 30 days from now
+  - `last90-days`:
+    Uses the last 30 days from now
+  - `last365-days`:
+    Uses the last 365 days from now
+
+* `-f`, `--from <FROM>` — Get statistics from this date. Use YYYY-MM-DD format
+* `-u`, `--until <UNTIL>` — Get statistics until this date. Use YYYY-MM-DD format
+
+
+
+## `alistral musicbrainz`
+
+Commands for musicbrainz stuff
+
+**Usage:** `alistral musicbrainz <COMMAND>`
+
+###### **Subcommands:**
+
+* `clippy` — Search for potential mistakes, missing data and style issues. This allows to quickly pin down errors that can be corrected
+* `sambl` — Search for potential mistakes, missing data and style issues. This allows to quickly pin down errors that can be corrected
+
+
+
+## `alistral musicbrainz clippy`
+
+Search for potential mistakes, missing data and style issues. This allows to quickly pin down errors that can be corrected
+
+⚠️ All tips are suggestions. Take them with a grain of salt. If you are unsure, it's preferable to skip.
+
+**Usage:** `alistral musicbrainz clippy [OPTIONS] [START_MBID]`
+
+###### **Arguments:**
+
+* `<START_MBID>` — The MBID of a recording to start from
+
+###### **Options:**
+
+* `-w`, `--whitelist <WHITELIST>` — List of lints that should only be checked (Note: Put this argument last or before another argument)
+* `-b`, `--blacklist <BLACKLIST>` — List of lints that should not be checked (Note: Put this argument last or before another argument)
+* `-s`, `--sort` — Sort the initial recordings by their name
+
+
+
+## `alistral musicbrainz sambl`
+
+Search for potential mistakes, missing data and style issues. This allows to quickly pin down errors that can be corrected
+
+⚠️ All tips are suggestions. Take them with a grain of salt. If you are unsure, it's preferable to skip.
+
+**Usage:** `alistral musicbrainz sambl [OPTIONS] [START_ARTISTS]...`
+
+###### **Arguments:**
+
+* `<START_ARTISTS>` — The MBID of a recording to start from
+
+###### **Options:**
+
+* `-s`, `--sort` — Sort the initial artists by their name
+
+
+
+## `alistral playlist`
+
+Interact with playlists
+
+**Usage:** `alistral playlist <COMMAND>`
+
+###### **Subcommands:**
+
+* `convert` — Convert a playlist from one service to another
+
+
+
+## `alistral playlist convert`
+
+Convert a playlist from one service to another
+
+**Usage:** `alistral playlist convert [OPTIONS] <SOURCE> <ID> <TARGET> [USER]`
+
+###### **Arguments:**
+
+* `<SOURCE>` — Get the playlist from which service?
+
+  Possible values: `listenbrainz`
+
+* `<ID>` — The id of the playlist on the external service
+* `<TARGET>` — Convert to this service
+
+  Possible values: `youtube`, `subsonic`
+
+* `<USER>` — Use the mapping of this user
+
+###### **Options:**
+
+* `-i`, `--instance <INSTANCE>`
+
+  Default value: ``
+
+
+
+## `alistral radio`
+
+Generate radio playlists for you
+
+**Usage:** `alistral radio [OPTIONS] --instance <INSTANCE> <COMMAND>`
+
+###### **Subcommands:**
+
+* `circles` — Randomly adds recordings from artists you already listened to
+* `underrated` — Generate a playlist containing your underrated listens
+* `rate` — Generate playlists depending on the listen rate of recordings
+* `overdue` — Generate playlists based on recording that the user should have listened to by now
+* `shared` — Generate playlists based on the listened recordings of two users
+
+###### **Options:**
+
+* `--min-count <MIN_COUNT>` — The minimum count of tracks the radio should add to the playlist. (Default: 50, gets overidden by `--min-duration`)
+* `--min-duration <MIN_DURATION>` — The minimum duration the playlist should last for. This accept natural language (Ex: "1 hour 36 mins")
+* `--seed-listen-range <SEED_LISTEN_RANGE>` — For radios based on listens, what time range of listens to use as reference
+
+  Possible values:
+  - `last30-days`:
+    Uses the last 30 days from now
+  - `last90-days`:
+    Uses the last 30 days from now
+  - `last365-days`:
+    Uses the last 365 days from now
+
+* `--min-seed-listens <MIN_SEED_LISTENS>` — When used with `seed_listen_range`, how many listens should be given as a minimum, even if they are outside of the range (Default: 3)
+* `-o`, `--output <OUTPUT>` — Where to output the radio
+
+  Default value: `listenbrainz`
+
+  Possible values: `listenbrainz`, `youtube`, `subsonic`
+
+* `--instance <INSTANCE>` — The name of the subsonic/listenbrainz instance to send the playlist to
+
+
+
+## `alistral radio circles`
+
+Randomly adds recordings from artists you already listened to
+
+**Usage:** `alistral radio circles [OPTIONS] [USERNAME] [TOKEN]`
+
+###### **Arguments:**
+
+* `<USERNAME>` — Name of the user to fetch listens from
+* `<TOKEN>` — Your user token.
+
+   You can find it at <https://listenbrainz.org/settings/>. If it's set in the config file, you can ignore this argument
+
+###### **Options:**
+
+* `--unlistened` — Use this flag to only get unlistened recordings. This is great for exploration playlists
+
+
+
+## `alistral radio underrated`
+
+Generate a playlist containing your underrated listens
+
+This radio will create a playlist containing all the tracks that you listen to, but seemingly no one else does.
+
+> The mix is made by calculating a score for each listen. This score is composed of two values: > - The rank in the user's top 1000 recording of all time (First place get 100 points, second get 999.9, etc...) > - The percentage of the recording's listens being from the user (Made with this formula: (user listens / worldwide listens) *100)
+
+**Usage:** `alistral radio underrated [OPTIONS] [USERNAME]`
+
+###### **Arguments:**
+
+* `<USERNAME>` — Name of the user to fetch listens from
+
+###### **Options:**
+
+* `-t`, `--token <TOKEN>` — Your user token.
+
+   You can find it at <https://listenbrainz.org/settings/>. If it's set in the config file, you can ignore this argument
+
+
+
+## `alistral radio rate`
+
+Generate playlists depending on the listen rate of recordings
+
+This algorythm bases itself on your listen rate of recording to get more forgotten tracks. It takes the recordings with the lowest listen rates, and put them into a playlist
+
+**Usage:** `alistral radio rate [OPTIONS] [USERNAME]`
+
+###### **Arguments:**
+
+* `<USERNAME>` — Name of the user to fetch listens from
+
+###### **Options:**
+
+* `-t`, `--token <TOKEN>` — Your user token.
+
+   You can find it at <https://listenbrainz.org/settings/>. If it's set in the config file, you can ignore this argument
+* `--min <MIN>` — Minimum listen count
+* `-c`, `--cooldown <COOLDOWN>` — The amount of hours needed to wait after a recording have been given before it is re-suggested
+
+  Default value: `0`
+
+
+
+## `alistral radio overdue`
+
+Generate playlists based on recording that the user should have listened to by now
+
+Similar to listen rates, this algorithm calculate the average time between listens, and estimate when the next listen will happen. It then put together a playlist made out of recordings you should have listened by now.
+
+**Usage:** `alistral radio overdue [OPTIONS] [USERNAME]`
+
+###### **Arguments:**
+
+* `<USERNAME>` — Name of the user to fetch listens from
+
+###### **Options:**
+
+* `-t`, `--token <TOKEN>` — Your user token.
+
+   You can find it at <https://listenbrainz.org/settings/>. If it's set in the config file, you can ignore this argument
+* `--min <MIN>` — Minimum listen count
+* `-c`, `--cooldown <COOLDOWN>` — The amount of hours needed to wait after a recording have been given before it is re-suggested
+
+  Default value: `0`
+* `-o`, `--overdue-factor` — Sort the recordings by the time overdue / the average time between listens
+
+   Instead of sorting by date, the listens are sorted by how many estimated listens should have happened by now (Time elapsed since last listen / Average time per listens)
+
+  Default value: `false`
+* `-a`, `--at-listening-time` — Makes `overdue_factor` more accurate by calculating the score at the time the listen will be listened at instead of now.
+
+   This may slowdown the playlist creation by a lot!
+
+  Default value: `false`
+
+
+
+## `alistral radio shared`
+
+Generate playlists based on the listened recordings of two users
+
+**Usage:** `alistral radio shared [OPTIONS] <USERNAME_A> <USERNAME_B>`
+
+###### **Arguments:**
+
+* `<USERNAME_A>`
+* `<USERNAME_B>`
+
+###### **Options:**
+
+* `-t`, `--token <TOKEN>` — Your user token.
+
+   You can find it at <https://listenbrainz.org/settings/>. If it's set in the config file, you can ignore this argument
+* `--min <MIN>` — Minimum listen count
+* `-c`, `--cooldown <COOLDOWN>` — The amount of hours needed to wait after a recording have been given before it is re-suggested
+
+  Default value: `0`
+
+
+
+## `alistral stats`
+
+Shows top statistics for a specific target
+
+**Usage:** `alistral stats <COMMAND>`
+
+###### **Subcommands:**
+
+* `top` — Retrieve the top listened entities
+* `yim` — A recap of the year's statistics
+
+
+
+## `alistral stats top`
+
+Retrieve the top listened entities
+
+**Usage:** `alistral stats top [OPTIONS] <TARGET>`
+
+###### **Arguments:**
+
+* `<TARGET>` — The type of entity to sort by
+
+  Possible values: `recording`, `artist`, `release`, `release-group`, `work`, `tag`, `label`
+
+
+###### **Options:**
+
+* `--username <USERNAME>` — Name of the user to fetch stats listen from
+* `-s`, `--sort-by <SORT_BY>` — The type of sorting to use
+
+  Default value: `listen-count`
+
+  Possible values:
+  - `listen-count`:
+    The number of times the entity has been listened to
+  - `listen-duration`:
+    The total duration this entity has been listened for
+
+* `--w-recursive` — Recursively add parent works to work stats
+
+
+
+## `alistral stats yim`
+
+A recap of the year's statistics
+
+**Usage:** `alistral stats yim [OPTIONS] [YEAR] [USERNAME]`
+
+###### **Arguments:**
+
+* `<YEAR>` — What year to target
+* `<USERNAME>` — Name of the user
+
+###### **Options:**
+
+* `--listen-counts` — Show the listen counts of the entities as well
+
+
+
+## `alistral unstable`
+
+A CLI app containing a set of useful tools for Listenbrainz
+
+**Usage:** `alistral unstable <COMMAND>`
+
+###### **Subcommands:**
+
+* `duplicates` — Remove duplicate multiscrobbler listens
+
+
+
+## `alistral unstable duplicates`
+
+Remove duplicate multiscrobbler listens
+
+**Usage:** `alistral unstable duplicates [USERNAME]`
+
+###### **Arguments:**
+
+* `<USERNAME>` — Reload the listens of this user
+
+
+
+<hr/>
+
+<small><i>
+    This document was generated automatically by
+    <a href="https://crates.io/crates/clap-markdown"><code>clap-markdown</code></a>.
+</i></small>
+

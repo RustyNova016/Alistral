@@ -1,0 +1,45 @@
+site_name: Alistral
+site_url: https://rustynova016.github.io/Alistral/
+repo_url: https://github.com/RustyNova016/Alistral
+repo_name: RustyNova016/Alistral
+theme:
+  name: material
+  font:
+    text: Fira Sans
+    code: Fira Mono
+  features:
+    - navigation.path
+  palette:
+    # Palette toggle for automatic mode
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: lucide/sun-moon
+        name: Switch to light mode
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default 
+      toggle:
+        icon: lucide/sun
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: lucide/moon
+        name: Switch to system preference
+
+nav:
+  - Home: index.md
+  - Install: install.md
+  - CLI Help: CommandLineHelp.md
+  - Config: 
+    - config/config_file.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/RustyNova016/Alistral
+
+extra_css:
+  - stylesheets/extra.css

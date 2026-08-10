@@ -6,6 +6,7 @@ use serde::Deserialize;
 use serde::Serialize;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "docs", derive(schemars::JsonSchema))]
 pub struct RateLimitConfig {
     tokens: u32,
     each: u32,

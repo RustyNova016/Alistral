@@ -18,6 +18,8 @@ use crate::tools::bump::bump_down::BumpDownCommand;
 use crate::tools::cache::CacheCommand;
 use crate::tools::compatibility::compatibility_command;
 use crate::tools::daily::DailyCommand;
+#[cfg(feature = "docs")]
+use crate::tools::docs::DocsCommand;
 #[cfg(feature = "interzic")]
 use crate::tools::interzic::InterzicCommand;
 use crate::tools::listens::ListenCommand;
@@ -110,6 +112,8 @@ pub enum Commands {
 
     /// Daily report
     Daily(DailyCommand),
+    #[cfg(feature = "docs")]
+    Docs(DocsCommand),
 
     #[cfg(feature = "interzic")]
     Interzic(InterzicCommand),
@@ -151,6 +155,8 @@ impl Commands {
             }
             Self::Config(val) => val.command.run().await?,
             Self::Daily(val) => val.run().await?,
+            #[cfg(feature = "docs")]
+            Self::Docs(val) => val.run().await,
 
             #[cfg(feature = "stats")]
             Self::Stats(val) => val.run().await,

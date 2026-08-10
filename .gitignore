@@ -18,3 +18,7 @@ temp.db
 /musicbrainz_rs
 /sequelles
 /tuillez
+
+# Docs
+/docs/mkdocs/site
+/docs/mkdocs/.cache

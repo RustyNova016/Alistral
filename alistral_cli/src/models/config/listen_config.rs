@@ -5,6 +5,7 @@ use serde::Serialize;
 use crate::models::cli::common::ConfigBool;
 
 #[derive(Debug, Serialize, Deserialize, Getters)]
+#[cfg_attr(feature = "docs", derive(schemars::JsonSchema))]
 pub struct ListenConfig {
     pub refresh_unmapped_listens: bool,
 }

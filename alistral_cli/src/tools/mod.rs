@@ -4,6 +4,8 @@ pub mod compatibility;
 /// Bits of CLI outputs that can be reused
 pub mod components;
 pub mod daily;
+#[cfg(feature = "docs")]
+pub mod docs;
 #[cfg(feature = "interzic")]
 pub mod interzic;
 pub mod listens;

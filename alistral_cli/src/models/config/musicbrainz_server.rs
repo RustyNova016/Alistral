@@ -8,6 +8,7 @@ use crate::models::config::Config;
 use crate::models::config::ratelimit::RateLimitConfig;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "docs", derive(schemars::JsonSchema))]
 pub struct MusicbrainzServer {
     pub use_https: bool,
     pub authority: String,
