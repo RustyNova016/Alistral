@@ -5,6 +5,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     rust-overlay.url = "github:oxalica/rust-overlay";
     flake-utils.url = "github:numtide/flake-utils";
+    npm-package.url = "github:netbrain/npm-package";
   };
 
   outputs =
@@ -12,6 +13,7 @@
       nixpkgs,
       rust-overlay,
       flake-utils,
+      npm-package,
       ...
     }:
     flake-utils.lib.eachDefaultSystem (
@@ -40,6 +42,7 @@
             buildInputs = [
               openssl # In case native SSL is used
               pkg-config
+              jq
 
               # CI / Linting tools
               cargo-mutants
@@ -47,6 +50,13 @@
               cargo-msrv
               cargo-audit
               cargo-machete
+
+              # Docs
+              zensical
+              (npm-package.lib.${system}.npmPackage {
+                name = "jsonschema2md";
+                packageName = "@adobe/jsonschema2md";
+              })
 
               (rust-bin.stable.latest.default.override {
                 extensions = [
