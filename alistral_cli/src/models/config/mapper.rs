@@ -5,6 +5,7 @@ use serde::Serialize;
 use super::Config;
 
 #[derive(Debug, Serialize, Deserialize, Getters, Default)]
+#[cfg_attr(feature = "docs", derive(schemars::JsonSchema))]
 pub struct MapperConfig {
     /// List of recordings that shouldn't be proposed to be mapped
     pub(super) backlisted: Vec<String>,

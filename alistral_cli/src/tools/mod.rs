@@ -1,3 +1,5 @@
+#[cfg(feature = "docs")]
+pub mod docs;
 pub mod bump;
 pub mod cache;
 pub mod compatibility;

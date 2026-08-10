@@ -5,6 +5,7 @@ use serde::Deserialize;
 use serde::Serialize;
 
 #[derive(Serialize, Deserialize, Default, Debug)]
+#[cfg_attr(feature = "docs", derive(schemars::JsonSchema))]
 pub struct Bump {
     pub(self) recording: String,
     pub(self) username: String,
@@ -13,6 +14,7 @@ pub struct Bump {
 }
 
 #[derive(Serialize, Deserialize, Default, Debug)]
+#[cfg_attr(feature = "docs", derive(schemars::JsonSchema))]
 pub struct BumpList(Vec<Bump>);
 
 impl BumpList {

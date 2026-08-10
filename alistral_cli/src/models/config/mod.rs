@@ -28,6 +28,7 @@ pub mod recording_timeout;
 pub mod whitelisted_wrong_mappings;
 
 #[derive(Debug, Serialize, Deserialize, Getters)]
+#[cfg_attr(feature = "docs", derive(schemars::JsonSchema))]
 pub struct Config {
     /// Saved usertokens
     tokens: HashMap<String, String>,

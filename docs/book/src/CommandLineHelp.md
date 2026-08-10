@@ -19,6 +19,8 @@ This document contains the help content for the `alistral` command-line program.
 * [`alistral config listens refresh-unmapped-listens`↴](#alistral-config-listens-refresh-unmapped-listens)
 * [`alistral config default-user`↴](#alistral-config-default-user)
 * [`alistral daily`↴](#alistral-daily)
+* [`alistral docs`↴](#alistral-docs)
+* [`alistral docs config-schema`↴](#alistral-docs-config-schema)
 * [`alistral interzic`↴](#alistral-interzic)
 * [`alistral interzic add-subsonic`↴](#alistral-interzic-add-subsonic)
 * [`alistral interzic get-mapping`↴](#alistral-interzic-get-mapping)
@@ -50,6 +52,8 @@ This document contains the help content for the `alistral` command-line program.
 * [`alistral stats`↴](#alistral-stats)
 * [`alistral stats top`↴](#alistral-stats-top)
 * [`alistral stats yim`↴](#alistral-stats-yim)
+* [`alistral unstable`↴](#alistral-unstable)
+* [`alistral unstable duplicates`↴](#alistral-unstable-duplicates)
 
 ## `alistral`
 
@@ -65,6 +69,7 @@ A CLI app containing a set of useful tools for Listenbrainz
 * `compatibility` — 
 * `config` — Commands to deal with the app's configuration
 * `daily` — Daily report
+* `docs` — A CLI app containing a set of useful tools for Listenbrainz
 * `interzic` — A CLI app containing a set of useful tools for Listenbrainz
 * `listens` — A CLI app containing a set of useful tools for Listenbrainz
 * `lookup` — Get detailled information about an entity
@@ -72,6 +77,7 @@ A CLI app containing a set of useful tools for Listenbrainz
 * `playlist` — Interact with playlists
 * `radio` — Generate radio playlists for you
 * `stats` — Shows top statistics for a specific target
+* `unstable` — A CLI app containing a set of useful tools for Listenbrainz
 
 ###### **Options:**
 
@@ -289,6 +295,26 @@ Daily report
 
 * `<DATE>` — The date to use for the daily report
 * `<USERNAME>` — Name of the user to provide a daily report
+
+
+
+## `alistral docs`
+
+A CLI app containing a set of useful tools for Listenbrainz
+
+**Usage:** `alistral docs <COMMAND>`
+
+###### **Subcommands:**
+
+* `config-schema` — Create the json schema of the config
+
+
+
+## `alistral docs config-schema`
+
+Create the json schema of the config
+
+**Usage:** `alistral docs config-schema`
 
 
 
@@ -921,6 +947,30 @@ A recap of the year's statistics
 ###### **Options:**
 
 * `--listen-counts` — Show the listen counts of the entities as well
+
+
+
+## `alistral unstable`
+
+A CLI app containing a set of useful tools for Listenbrainz
+
+**Usage:** `alistral unstable <COMMAND>`
+
+###### **Subcommands:**
+
+* `duplicates` — Remove duplicate multiscrobbler listens
+
+
+
+## `alistral unstable duplicates`
+
+Remove duplicate multiscrobbler listens
+
+**Usage:** `alistral unstable duplicates [USERNAME]`
+
+###### **Arguments:**
+
+* `<USERNAME>` — Reload the listens of this user
 
 
 
