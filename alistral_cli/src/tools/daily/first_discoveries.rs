@@ -11,6 +11,7 @@ use snafu::ResultExt as _;
 use tuillez::OwoColorize as _;
 use tuillez::formatter::FormatWithAsync as _;
 
+use crate::models::client::AlistralCliClient;
 use crate::tools::daily::DailyCommand;
 use crate::tools::daily::error::DailyCommandError;
 use crate::tools::daily::error::RecordingStatsSnafu;
@@ -18,10 +19,11 @@ use crate::utils::constants::LISTENBRAINZ_FMT;
 
 impl DailyCommand {
     pub async fn print_first_discoveries(
+        client: &AlistralCliClient,
         stats: &ListenStatisticsData,
         today: DateTime<Local>,
     ) -> Result<(), DailyCommandError> {
-        let mut recordings = Self::get_first_discoveries(stats, today).await?;
+        let mut recordings = Self::get_first_discoveries(client, stats, today).await?;
 
         if recordings.is_empty() {
             return Ok(());
@@ -56,6 +58,7 @@ impl DailyCommand {
     }
 
     async fn get_first_discoveries(
+        client: &AlistralCliClient,
         stats: &ListenStatisticsData,
         today: DateTime<Local>,
     ) -> Result<Vec<RecordingWithListens>, DailyCommandError> {
@@ -64,6 +67,17 @@ impl DailyCommand {
         let recordings = stats
             .iter()
             .filter(|rec| {
+                if client
+                    .config
+                    .commands()
+                    .as_ref()
+                    .and_then(|c| c.daily())
+                    .and_then(|c| c.minimum_listens.as_ref())
+                    .is_none_or(|c| &rec.listen_count() < c)
+                {
+                    return false;
+                }
+
                 rec.listens().oldest_listen_date().is_some_and(|discovery| {
                     discovery.day() == today.day() && discovery.month() == today.month()
                 })

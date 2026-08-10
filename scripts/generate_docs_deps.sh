@@ -4,4 +4,4 @@ jsonschema2md -d ./docs/json_schemas/ -o ./docs/mkdocs/docs/schemas/
 
 cargo run --all-features -- --markdown-help > ./docs/book/src/CommandLineHelp.md 
 
-zensical build --clean -f ./docs/mkdocs/
+zensical build --clean -f ./docs/mkdocs/mkdocs.yml

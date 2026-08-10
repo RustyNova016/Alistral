@@ -1,3 +1,4 @@
+pub mod commands;
 pub mod ratelimit;
 use bumps::BumpList;
 use clap::CommandFactory as _;
@@ -11,6 +12,7 @@ use serde::Deserialize;
 use serde::Serialize;
 use std::collections::HashMap;
 
+use crate::models::config::commands::CommandConfig;
 use crate::models::config::interzic::InterzicConfig;
 use crate::models::config::musicbrainz_server::MusicbrainzServer;
 
@@ -54,6 +56,8 @@ pub struct Config {
     pub interzic: InterzicConfig,
 
     pub musicbrainz_server: Option<MusicbrainzServer>,
+
+    pub commands: Option<CommandConfig>,
 }
 
 impl Config {
@@ -147,6 +151,7 @@ impl Default for Config {
             musicbrainz_url: None,
             interzic: InterzicConfig::default(),
             musicbrainz_server: None,
+            commands: None,
         }
     }
 }
