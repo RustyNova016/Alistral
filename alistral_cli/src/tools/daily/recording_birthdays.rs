@@ -6,7 +6,6 @@ use alistral_core::models::listen_statistics_data::ListenStatisticsData;
 use chrono::DateTime;
 use chrono::Datelike as _;
 use chrono::Local;
-use tracing::instrument;
 use tuillez::OwoColorize as _;
 use tuillez::formatter::FormatWithAsync as _;
 use tuillez::pg_counted;
@@ -14,12 +13,17 @@ use tuillez::pg_inc;
 use tuillez::pg_spinner;
 
 use crate::ALISTRAL_CLIENT;
+use crate::models::client::AlistralCliClient;
 use crate::tools::daily::DailyCommand;
 use crate::utils::constants::LISTENBRAINZ_FMT;
 
 impl DailyCommand {
-    pub async fn print_recording_birthdays(stats: &ListenStatisticsData, today: DateTime<Local>) {
-        let mut recordings = Self::get_recording_birthdays(stats, today).await;
+    pub async fn print_recording_birthdays(
+        client: &AlistralCliClient,
+        stats: &ListenStatisticsData,
+        today: DateTime<Local>,
+    ) {
+        let mut recordings = Self::get_recording_birthdays(client, stats, today).await;
 
         if recordings.is_empty() {
             return;
@@ -50,8 +54,8 @@ impl DailyCommand {
         println!();
     }
 
-    #[instrument(skip(stats), fields(indicatif.pb_show = tracing::field::Empty))]
     async fn get_recording_birthdays(
+        client: &AlistralCliClient,
         stats: &ListenStatisticsData,
         today: DateTime<Local>,
     ) -> Vec<RecordingWithListens> {
@@ -73,6 +77,17 @@ impl DailyCommand {
             else {
                 continue;
             };
+
+            if client
+                .config
+                .commands()
+                .as_ref()
+                .and_then(|c| c.daily())
+                .and_then(|c| c.minimum_listens.as_ref())
+                .is_none_or(|c| &rec.listen_count() < c)
+            {
+                continue;
+            }
 
             if release.day() == today.day() && release.month() == today.month() {
                 recs.push(rec.clone());
