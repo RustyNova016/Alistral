@@ -9,12 +9,13 @@ pub mod search;
 pub struct SubsonicClient {
     /// Name of the subsonic instance. This isn't the name of the underlying application, but the identifier for this instance
     name: String,
+    force_mbid: bool,
 
     inner_client: submarine::Client,
 }
 
 impl SubsonicClient {
-    pub fn new(name: String, url: &str, username: &str, password: &str) -> Self {
+    pub fn new(name: String, url: &str, username: &str, password: &str, force_mbid: bool) -> Self {
         let auth = AuthBuilder::new(username, "v1.16.1")
             .client_name("Interzic") //TODO: Set from client
             .hashed(password);
@@ -24,6 +25,7 @@ impl SubsonicClient {
         Self {
             name,
             inner_client: sub_client,
+            force_mbid,
         }
     }
 

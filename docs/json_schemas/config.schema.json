@@ -1,0 +1,280 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Config",
+  "type": "object",
+  "properties": {
+    "artist_listened_to": {
+      "type": [
+        "string",
+        "number",
+        "null"
+      ],
+      "pattern": "^-?\\d+(\\.\\d+)?([eE]\\d+)?$"
+    },
+    "bumps": {
+      "$ref": "#/$defs/BumpList",
+      "default": []
+    },
+    "commands": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/CommandConfig"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "default_user": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "interzic": {
+      "$ref": "#/$defs/InterzicConfig",
+      "default": {
+        "subsonic_clients": []
+      }
+    },
+    "listenbrainz_domain": {
+      "type": "string",
+      "default": "api.listenbrainz.org"
+    },
+    "listens": {
+      "$ref": "#/$defs/ListenConfig",
+      "default": {
+        "refresh_unmapped_listens": true
+      }
+    },
+    "mapper": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/MapperConfig"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "musicbrainz_server": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/MusicbrainzServer"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "musicbrainz_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "tokens": {
+      "description": "Saved usertokens",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "tokens"
+  ],
+  "$defs": {
+    "Bump": {
+      "type": "object",
+      "properties": {
+        "expiration_date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "recording": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "value": {
+          "type": [
+            "string",
+            "number"
+          ],
+          "pattern": "^-?\\d+(\\.\\d+)?([eE]\\d+)?$"
+        }
+      },
+      "required": [
+        "recording",
+        "username",
+        "value",
+        "expiration_date"
+      ]
+    },
+    "BumpList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Bump"
+      }
+    },
+    "CommandConfig": {
+      "description": "Configuration for the commands",
+      "type": "object",
+      "properties": {
+        "daily": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DailyCommandConfig"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "DailyCommandConfig": {
+      "description": "Configuration of the daily command",
+      "type": "object",
+      "properties": {
+        "minimum_listens": {
+          "description": "The minimum listens needed to display a track's anniversary / first discovery",
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "uint",
+          "minimum": 0
+        }
+      }
+    },
+    "InterzicConfig": {
+      "type": "object",
+      "properties": {
+        "subsonic_clients": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SubsonicConfig"
+          }
+        }
+      },
+      "required": [
+        "subsonic_clients"
+      ]
+    },
+    "ListenConfig": {
+      "type": "object",
+      "properties": {
+        "refresh_unmapped_listens": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "refresh_unmapped_listens"
+      ]
+    },
+    "MapperConfig": {
+      "type": "object",
+      "properties": {
+        "backlisted": {
+          "description": "List of recordings that shouldn't be proposed to be mapped",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "backlisted"
+      ]
+    },
+    "MusicbrainzServer": {
+      "type": "object",
+      "properties": {
+        "authority": {
+          "type": "string"
+        },
+        "ratelimit": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RateLimitConfig"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "use_https": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "use_https",
+        "authority"
+      ]
+    },
+    "RateLimitConfig": {
+      "type": "object",
+      "properties": {
+        "each": {
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        },
+        "max_burst": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "uint32",
+          "minimum": 0
+        },
+        "tokens": {
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "tokens",
+        "each"
+      ]
+    },
+    "SubsonicConfig": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "The name of the subsonic instance",
+          "type": "string"
+        },
+        "password": {
+          "description": "The password of the user",
+          "type": "string"
+        },
+        "strict_mbid": {
+          "description": "If set to true, only subsonic tracks that match the MBID of the requested recording are mapped\n\nOnly set this if your subsonic server is capable of searching by MBID (Like navidrome),\nand your collection has been passed through Musicbrainz Picard",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "url": {
+          "description": "The url of the subsonic instance",
+          "type": "string"
+        },
+        "username": {
+          "description": "The username of the user",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "url",
+        "username",
+        "password"
+      ]
+    }
+  }
+}
