@@ -26,6 +26,7 @@ impl InterzicAddSubsonicCommand {
             password: self.password.to_string(),
             url: self.url.to_string(),
             username: self.username.to_string(),
+            strict_mbid: Some(false),
         };
 
         CONFIG

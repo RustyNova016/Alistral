@@ -100,6 +100,7 @@ async fn set_subsonic(client: &mut InterzicClient) {
             &conf.url,
             &conf.username,
             &conf.password,
+            conf.strict_mbid.unwrap_or_default(),
         ));
     }
 }

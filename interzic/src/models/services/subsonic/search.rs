@@ -4,6 +4,37 @@ use crate::models::services::subsonic::SubsonicClient;
 impl SubsonicClient {
     /// Find a recording in the subsonic server. This return the external id on the server
     pub async fn find_recording(&self, recording: &MessyRecording) -> Option<String> {
+        if let Some(mbid) = &recording.mbid {
+            if let Some(track) = self.search_by_mbid(mbid).await {
+                return Some(track);
+            } else if self.force_mbid {
+                return None;
+            }
+        }
+
+        self.search_by_name(recording).await
+    }
+
+    async fn search_by_mbid(&self, mbid: &str) -> Option<String> {
+        let res = self
+            .inner_client
+            .search3(
+                mbid,
+                Some(0),
+                Some(0),
+                Some(0),
+                Some(0),
+                Some(20),
+                Some(0),
+                None::<String>,
+            )
+            .await
+            .unwrap();
+
+        res.song.first().map(|song| song.id.to_owned())
+    }
+
+    async fn search_by_name(&self, recording: &MessyRecording) -> Option<String> {
         let res = self
             .inner_client
             .search3(

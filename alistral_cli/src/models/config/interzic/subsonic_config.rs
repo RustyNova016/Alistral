@@ -14,4 +14,10 @@ pub struct SubsonicConfig {
     pub username: String,
     /// The password of the user
     pub password: String,
+
+    /// If set to true, only subsonic tracks that match the MBID of the requested recording are mapped
+    ///
+    /// Only set this if your subsonic server is capable of searching by MBID (Like navidrome),
+    /// and your collection has been passed through Musicbrainz Picard
+    pub strict_mbid: Option<bool>,
 }
