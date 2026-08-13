@@ -1,0 +1,38 @@
+when:
+  - event: pull_request
+  - event: push
+    branch: master
+
+steps:
+  # - start-notification:
+  #   image: ghcr.io/yyewolf/woodpecker-plugins/github-comment
+  #   settings:
+  #     github_token:
+  #       from_secret: github_token
+  #     comment: "🚀 Starting build process..."
+  #     message_id: uniquely-identifiable-message-id
+  #     update_in_place: true
+
+  - name: Check Rust lints
+    image: nixos/nix
+    commands: 
+      - echo "experimental-features = nix-command flakes" > /etc/nix/nix.conf
+      - nix develop -c sh "cargo fmt --all --check"
+      - nix develop -c sh "cargo hack clippy --no-default-features -- -D warnings"
+
+  
+  # - final-result:
+  #   image: ghcr.io/yyewolf/woodpecker-plugins/github-comment
+  #   settings:
+  #     github_token:
+  #       from_secret: github_token
+  #     comment: |
+  #       ## ✅ Build Complete
+        
+  #       - ✅ Tests passed
+  #       - ✅ Build successful  
+  #       - ✅ Artifacts generated
+        
+  #       Ready for review! 🎉
+  #     message_id: uniquely-identifiable-message-id
+  #     update_in_place: true
