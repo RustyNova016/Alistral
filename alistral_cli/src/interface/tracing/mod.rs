@@ -52,9 +52,14 @@ pub fn init_tracer(cli: &Cli) -> WorkerGuard {
     // === Registry ===
 
     let (log_file, guard) = get_logging_layer();
-    tracing_subscriber::registry()
-        //.with(console_subscriber::spawn())
-        .with(console_layer)
+
+    let reg = tracing_subscriber::registry();
+
+    // Activate hotpath
+    #[cfg(feature = "hotpath")]
+    let reg = reg.with(hotpath::sqlx_tracing_layer());
+
+    reg.with(console_layer)
         .with(indicatif_layer.with_filter(IndicatifFilter::new(false)))
         .with(log_file)
         .init();
