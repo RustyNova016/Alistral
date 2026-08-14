@@ -1,3 +1,4 @@
+pub mod cleanup;
 use std::fs::remove_file;
 use std::io;
 use std::path::Path;
@@ -7,6 +8,7 @@ use clap::Subcommand;
 use snafu::ResultExt as _;
 
 use crate::interface::errors::friendly_error::GetFriendlyError;
+use crate::tools::cache::cleanup::CacheCleanCommand;
 use crate::tools::cache::clear::CacheClearCommand;
 use crate::tools::cache::clear::CacheClearCommandError;
 use crate::tools::cache::copy_to_debug::CacheCopyToDebugCommand;
@@ -47,13 +49,18 @@ pub struct CacheCommand {
 #[derive(Subcommand, Debug, Clone)]
 pub enum CacheSubcommands {
     Clear(CacheClearCommand),
+    Clean(CacheCleanCommand),
     CopyToDebug(CacheCopyToDebugCommand),
 }
 
 impl CacheCommand {
-    pub fn run(&self) -> Result<(), CacheCommandError> {
+    pub async fn run(&self) -> Result<(), CacheCommandError> {
         match &self.command {
             CacheSubcommands::Clear(val) => val.run().context(CacheClearCommandSnafu),
+            CacheSubcommands::Clean(val) => {
+                val.run().await;
+                Ok(())
+            }
             CacheSubcommands::CopyToDebug(val) => val.run().context(CacheCopyToDebugCommandSnafu),
         }
     }
