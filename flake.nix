@@ -50,6 +50,7 @@
               cargo-msrv
               cargo-audit
               cargo-machete
+              cargo-nextest
 
               # Docs
               zensical

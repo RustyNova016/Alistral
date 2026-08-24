@@ -12,83 +12,88 @@ env:
   RUST_BACKTRACE: 1
 
 jobs:
-  stable_tests:
-    env: 
-      SQLX_OFFLINE: true
-    runs-on: ${{ matrix.os }}
-    needs: clippy
-    strategy:
-      fail-fast: false
-      matrix:
-        os:
-          - windows-latest
-          - ubuntu-latest
-          - macos-latest
-    steps:
-      - uses: actions/checkout@v7
 
-      - run: rustup toolchain install stable --profile minimal --no-self-update
-
-      - uses: Swatinem/rust-cache@v2
-        with: 
-          key: "(${{ matrix.os }})"
-
-      - name: Install cargo-nextest
-        uses: taiki-e/install-action@nextest
-        
-      - name: Run tests
-        run: cargo nextest run --all-features
-
-  clippy:
-    env: 
-      SQLX_OFFLINE: true
+  checks:
     runs-on: ubuntu-latest
     steps:
+      # Checkout the repo
       - uses: actions/checkout@v7
 
-      # Install minimal toolchain
-      - name: Install minimal stable toolchain
-        uses: dtolnay/rust-toolchain@stable
+      # Install nix
+      - uses: cachix/install-nix-action@v31
+
+      - name: Restore and save Nix store
+        uses: nix-community/cache-nix-action@v7
         with:
-          components: clippy
+          # restore and save a cache using this key
+          primary-key: nix-${{ runner.os }}-${{ hashFiles('**/*.nix', '**/flake.lock') }}
+          # if there's no cache hit, restore a cache by this prefix
+          restore-prefixes-first-match: nix-${{ runner.os }}-
+          # collect garbage until the Nix store size (in bytes) is at most this number
+          # before trying to save a new cache
+          # 1G = 1073741824
+          gc-max-store-size-linux: 1G
+          # do purge caches
+          purge: true
+          # purge all versions of the cache
+          purge-prefixes: nix-${{ runner.os }}-
+          # created more than this number of seconds ago
+          purge-created: 0
+          # or last accessed this duration (ISO 8601 duration format)
+          # before the start of the `Post Restore and save Nix store` phase
+          purge-last-accessed: P1DT12H
+          # except any version with the key that is the same as the `primary-key`
+          purge-primary-key: never
 
       - uses: Swatinem/rust-cache@v2
 
-      - uses: taiki-e/install-action@cargo-hack
+      - name: Run fmt test
+        shell: 'nix develop -c bash -e {0}'
+        run: cargo fmt --all --check      
+        
+      - name: Run doc tests
+        shell: 'nix develop -c bash -e {0}'
+        run: cargo doc --all-features --no-deps --document-private-items
 
-      - name: Clippy no features
+      - name: Run clippy no features
+        shell: 'nix develop -c bash -e {0}'
         run: cargo hack clippy --no-default-features -- -D warnings
 
-      - name: Run clippy
+      - name: Run clippy all features
+        shell: 'nix develop -c bash -e {0}'
         run: cargo hack clippy --all-features -- -D warnings
 
-  docs:
-    name: Documentation
-    runs-on: ubuntu-latest
-    env:
-      SQLX_OFFLINE: true
-      RUSTDOCFLAGS: -Dwarnings
-    steps:
-      - uses: actions/checkout@v7
-      - uses: dtolnay/rust-toolchain@nightly
-      - uses: Swatinem/rust-cache@v2
-      - uses: dtolnay/install@cargo-docs-rs
-      - run: cargo doc --all-features --no-deps --document-private-items
+      - name: Run tests
+        shell: 'nix develop -c bash -e {0}'
+        run: cargo nextest run --all-features
 
-  fmt:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
+  # stable_tests:
+  #   env: 
+  #     SQLX_OFFLINE: true
+  #   runs-on: ${{ matrix.os }}
+  #   needs: clippy
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       os:
+  #         - windows-latest
+  #         - ubuntu-latest
+  #         - macos-latest
+  #   steps:
+  #     - uses: actions/checkout@v7
 
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-            components: rustfmt
+  #     - run: rustup toolchain install stable --profile minimal --no-self-update
 
-      - uses: Swatinem/rust-cache@v2
+  #     - uses: Swatinem/rust-cache@v2
+  #       with: 
+  #         key: "(${{ matrix.os }})"
 
-      - name: Run rustfmt
-        run: cargo fmt --all --check
+  #     - name: Install cargo-nextest
+  #       uses: taiki-e/install-action@nextest
+        
+  #     - name: Run tests
+  #       run: cargo nextest run --all-features
+
 
   # This is just a curtesy check to tell whether it should be breaking changes or not
   # If CI fail because of this, just bump the version
