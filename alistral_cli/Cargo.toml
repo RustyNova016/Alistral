@@ -77,7 +77,7 @@ tracing-indicatif = "0.3.14"
 tuillez = "0.1.0"
 
 # Debuging
-hotpath = { version = "0.23.0", optional = true, features = ["futures", "sqlx"] }
+hotpath = { version = "0.24.0", optional = true, features = ["futures", "sqlx"] }
 
 # Other
 zip = "8.0.0"
