@@ -14,6 +14,7 @@ use tuillez::OwoColorize as _;
 use crate::ALISTRAL_CLIENT;
 use crate::tools::components::listen_per_year_graph::listen_count_per_year_graph;
 use crate::tools::lookup::recording::components::top_next_recordings;
+use crate::tools::lookup::recording::components::top_previous_recordings;
 
 pub struct RecordingLookup {
     pub(super) recording: Recording,
@@ -114,6 +115,30 @@ impl RecordingLookup {
         .unwrap();
         writeln!(&mut report).unwrap();
         writeln!(&mut report, "{}", grap).unwrap();
+        writeln!(&mut report).unwrap();
+
+        writeln!(
+            &mut report,
+            "{}",
+            "\n Most frequents previous listens"
+                .to_string()
+                .on_green()
+                .black()
+                .bold()
+        )
+        .unwrap();
+        writeln!(&mut report).unwrap();
+        writeln!(
+            &mut report,
+            "{}",
+            top_previous_recordings(
+                &self.get_comp_stats().await,
+                self.all_time.listens(),
+                self.before.is_some()
+            )
+            .await
+        )
+        .unwrap();
         writeln!(&mut report).unwrap();
 
         writeln!(
