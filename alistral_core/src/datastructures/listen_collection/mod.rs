@@ -90,6 +90,17 @@ impl ListenCollection {
                     .then_with(|| a.id.cmp(&b.id))
             })
     }
+
+    /// Get the previous listen chronologically to the one provided. If multiple listens are at the same date, uses id to differenciate them
+    pub fn get_previous_listen(&self, listen: &Listen) -> Option<&Listen> {
+        self.iter()
+            .filter(|l| l.listened_at < listen.listened_at)
+            .max_by(|a, b| {
+                a.listened_at
+                    .cmp(&b.listened_at)
+                    .then_with(|| a.id.cmp(&b.id))
+            })
+    }
 }
 
 impl From<Listen> for ListenCollection {
