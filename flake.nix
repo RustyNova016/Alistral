@@ -28,7 +28,7 @@
         # Executed by `nix build`
         packages.default = pkgs.rustPlatform.buildRustPackage {
           pname = "alistral";
-          version = "0.6.5";
+          version = "0.6.9";
           src = ./alistral_cli;
           cargoLock.lockFile = ./Cargo.lock;
 

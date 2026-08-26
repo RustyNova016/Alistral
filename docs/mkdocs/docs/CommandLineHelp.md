@@ -9,6 +9,7 @@ This document contains the help content for the `alistral` command-line program.
 * [`alistral bump-down`↴](#alistral-bump-down)
 * [`alistral cache`↴](#alistral-cache)
 * [`alistral cache clear`↴](#alistral-cache-clear)
+* [`alistral cache clean`↴](#alistral-cache-clean)
 * [`alistral cache copy-to-debug`↴](#alistral-cache-copy-to-debug)
 * [`alistral compatibility`↴](#alistral-compatibility)
 * [`alistral config`↴](#alistral-config)
@@ -49,6 +50,7 @@ This document contains the help content for the `alistral` command-line program.
 * [`alistral radio rate`↴](#alistral-radio-rate)
 * [`alistral radio overdue`↴](#alistral-radio-overdue)
 * [`alistral radio shared`↴](#alistral-radio-shared)
+* [`alistral sex`↴](#alistral-sex)
 * [`alistral stats`↴](#alistral-stats)
 * [`alistral stats top`↴](#alistral-stats-top)
 * [`alistral stats yim`↴](#alistral-stats-yim)
@@ -76,6 +78,7 @@ A CLI app containing a set of useful tools for Listenbrainz
 * `musicbrainz` — Commands for musicbrainz stuff
 * `playlist` — Interact with playlists
 * `radio` — Generate radio playlists for you
+* `sex` — 
 * `stats` — Shows top statistics for a specific target
 * `unstable` — A CLI app containing a set of useful tools for Listenbrainz
 
@@ -146,6 +149,7 @@ Commands to deal with the local cache
 ###### **Subcommands:**
 
 * `clear` — Wipe the cache's data
+* `clean` — Cleanup the cache's data by removing data not closely associated to listens
 * `copy-to-debug` — Copy the release database to the debug one
 
 
@@ -164,6 +168,14 @@ Most times you only need the `--main` argument. If you need to delete the debug 
 
 * `-m`, `--main`
 * `-d`, `--debug`
+
+
+
+## `alistral cache clean`
+
+Cleanup the cache's data by removing data not closely associated to listens
+
+**Usage:** `alistral cache clean`
 
 
 
@@ -887,6 +899,12 @@ Generate playlists based on the listened recordings of two users
 * `-c`, `--cooldown <COOLDOWN>` — The amount of hours needed to wait after a recording have been given before it is re-suggested
 
   Default value: `0`
+
+
+
+## `alistral sex`
+
+**Usage:** `alistral sex`
 
 
 

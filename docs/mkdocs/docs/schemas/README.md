@@ -12,6 +12,10 @@
 
 * [Untitled object in Config](./config-defs-bump.md) – `path#/$defs/Bump`
 
+* [Untitled object in Config](./config-defs-commandconfig.md "Configuration for the commands") – `path#/$defs/CommandConfig`
+
+* [Untitled object in Config](./config-defs-dailycommandconfig.md "Configuration of the daily command") – `path#/$defs/DailyCommandConfig`
+
 * [Untitled object in Config](./config-defs-interzicconfig.md) – `path#/$defs/InterzicConfig`
 
 * [Untitled object in Config](./config-defs-listenconfig.md) – `path#/$defs/ListenConfig`
