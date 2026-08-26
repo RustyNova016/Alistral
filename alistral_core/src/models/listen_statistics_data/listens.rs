@@ -21,6 +21,19 @@ impl ListenStatisticsData {
         Self::new(self.client, ListenCollection::new(listens))
     }
 
+    /// Split the stats into two [`ListenStatisticsData`]. One with the period desired, and the second one with the previous period, of same lenght
+    pub fn comparison_split(&self, from: DateTime<Utc>, until: DateTime<Utc>) -> (Self, Self) {
+        let period = until - from;
+        let before_start = from - period;
+
+        let now_stats = self.clone_no_stats().filter_listening_date(from, until);
+        let before_stats = self
+            .clone_no_stats()
+            .filter_listening_date(before_start, from);
+
+        (now_stats, before_stats)
+    }
+
     /// Filter the listens on a specific year and month. This invalidate the inner statistics
     pub fn filter_on_year_month(self, year: i32, month: u32) -> Self {
         let listens = self

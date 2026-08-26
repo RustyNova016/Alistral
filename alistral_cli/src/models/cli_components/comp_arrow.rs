@@ -15,6 +15,7 @@ impl ComparisonArrow {
     }
 
     /// Get a comparison arrow. ▼ (red) if a > b, ▲ (green) if a < b, - if equal
+    #[cfg(any(feature = "stats", feature = "lookup"))]
     pub fn lesser_is_better_inv<T: PartialOrd>(a: T, b: T) -> String {
         if a > b {
             "▼".red().to_string()

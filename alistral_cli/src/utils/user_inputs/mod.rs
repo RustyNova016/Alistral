@@ -34,6 +34,7 @@ impl UserInputParser {
         }
     }
 
+    /// Parse a naive date as midnight of the date
     pub fn parse_naive_date(date: Option<NaiveDate>) -> Option<DateTime<Local>> {
         Some(
             date?
