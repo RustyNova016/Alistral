@@ -2,6 +2,40 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.6.9] - 2026-08-26
+
+### 🚀 Features
+
+- *(core)* Add stats functions
+- Listens wrong-mapping crash, "The listen should be mapped"
+- Added config json doc
+- Filter daily report to only show lines with minimum of listens
+- Add strict MBID mode to subsonic
+- Database cleanup
+- Added daily stats on daily
+- Show previous listens in lookup
+- Added sex command
+
+### 🐛 Bug Fixes
+
+- *(deps)* Update rust crate hotpath to 0.21.0
+- *(deps)* Update rust crate reqwest to 0.13.0
+- *(deps)* Update rust crate hotpath to 0.22.0
+- *(deps)* Update rust crate hotpath to 0.23.0
+
+### 📚 Documentation
+
+- Move docs to MkDocs
+- Add noob doc
+
+### ⚙️ Miscellaneous Tasks
+
+- Fix breaking changes in hotpath
+- Fix ci
+- Update event-listener
+- Use nix
+- Release v0.6.9
+
 ## [0.6.8] - 2026-07-17
 
 ### 🚀 Features

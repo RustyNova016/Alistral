@@ -20,6 +20,7 @@ path
 | :------------------------------------------- | :------- | :------- | :------------- | :---------------------------------------------------------------------------------------- |
 | [artist\_listened\_to](#artist_listened_to)  | Multiple | Optional | can be null    | [Config](config-properties-artist_listened_to.md "path#/properties/artist_listened_to")   |
 | [bumps](#bumps)                              | `array`  | Optional | cannot be null | [Config](config-defs-bumplist.md "path#/properties/bumps")                                |
+| [commands](#commands)                        | Merged   | Optional | cannot be null | [Config](config-properties-commands.md "path#/properties/commands")                       |
 | [default\_user](#default_user)               | `string` | Optional | can be null    | [Config](config-properties-default_user.md "path#/properties/default_user")               |
 | [interzic](#interzic)                        | `object` | Optional | cannot be null | [Config](config-defs-interzicconfig.md "path#/properties/interzic")                       |
 | [listenbrainz\_domain](#listenbrainz_domain) | `string` | Optional | cannot be null | [Config](config-properties-listenbrainz_domain.md "path#/properties/listenbrainz_domain") |
@@ -82,6 +83,30 @@ The default value is:
 ```json
 []
 ```
+
+## commands
+
+
+
+`commands`
+
+* is optional
+
+* Type: merged type ([Details](config-properties-commands.md))
+
+* cannot be null
+
+* defined in: [Config](config-properties-commands.md "path#/properties/commands")
+
+### commands Type
+
+merged type ([Details](config-properties-commands.md))
+
+any of
+
+* [Untitled object in Config](config-defs-commandconfig.md "check type definition")
+
+* [Untitled null in Config](config-properties-commands-anyof-1.md "check type definition")
 
 ## default\_user
 
@@ -381,6 +406,78 @@ Reference this group by using
 | Property | Type | Required | Nullable | Defined by |
 | :------- | :--- | :------- | :------- | :--------- |
 
+## Definitions group CommandConfig
+
+Reference this group by using
+
+```json
+{"$ref":"path#/$defs/CommandConfig"}
+```
+
+| Property        | Type   | Required | Nullable       | Defined by                                                                                           |
+| :-------------- | :----- | :------- | :------------- | :--------------------------------------------------------------------------------------------------- |
+| [daily](#daily) | Merged | Optional | cannot be null | [Config](config-defs-commandconfig-properties-daily.md "path#/$defs/CommandConfig/properties/daily") |
+
+### daily
+
+
+
+`daily`
+
+* is optional
+
+* Type: merged type ([Details](config-defs-commandconfig-properties-daily.md))
+
+* cannot be null
+
+* defined in: [Config](config-defs-commandconfig-properties-daily.md "path#/$defs/CommandConfig/properties/daily")
+
+#### daily Type
+
+merged type ([Details](config-defs-commandconfig-properties-daily.md))
+
+any of
+
+* [Untitled object in Config](config-defs-dailycommandconfig.md "check type definition")
+
+* [Untitled null in Config](config-defs-commandconfig-properties-daily-anyof-1.md "check type definition")
+
+## Definitions group DailyCommandConfig
+
+Reference this group by using
+
+```json
+{"$ref":"path#/$defs/DailyCommandConfig"}
+```
+
+| Property                             | Type      | Required | Nullable    | Defined by                                                                                                                         |
+| :----------------------------------- | :-------- | :------- | :---------- | :--------------------------------------------------------------------------------------------------------------------------------- |
+| [minimum\_listens](#minimum_listens) | `integer` | Optional | can be null | [Config](config-defs-dailycommandconfig-properties-minimum_listens.md "path#/$defs/DailyCommandConfig/properties/minimum_listens") |
+
+### minimum\_listens
+
+The minimum listens needed to display a track's anniversary / first discovery
+
+`minimum_listens`
+
+* is optional
+
+* Type: `integer`
+
+* can be null
+
+* defined in: [Config](config-defs-dailycommandconfig-properties-minimum_listens.md "path#/$defs/DailyCommandConfig/properties/minimum_listens")
+
+#### minimum\_listens Type
+
+`integer`
+
+#### minimum\_listens Constraints
+
+**minimum**: the value of this number must greater than or equal to: `0`
+
+**unknown format**: the value of this string must follow the format: `uint`
+
 ## Definitions group InterzicConfig
 
 Reference this group by using
@@ -639,12 +736,13 @@ Reference this group by using
 {"$ref":"path#/$defs/SubsonicConfig"}
 ```
 
-| Property                | Type     | Required | Nullable       | Defined by                                                                                                   |
-| :---------------------- | :------- | :------- | :------------- | :----------------------------------------------------------------------------------------------------------- |
-| [name](#name)           | `string` | Required | cannot be null | [Config](config-defs-subsonicconfig-properties-name.md "path#/$defs/SubsonicConfig/properties/name")         |
-| [password](#password)   | `string` | Required | cannot be null | [Config](config-defs-subsonicconfig-properties-password.md "path#/$defs/SubsonicConfig/properties/password") |
-| [url](#url)             | `string` | Required | cannot be null | [Config](config-defs-subsonicconfig-properties-url.md "path#/$defs/SubsonicConfig/properties/url")           |
-| [username](#username-1) | `string` | Required | cannot be null | [Config](config-defs-subsonicconfig-properties-username.md "path#/$defs/SubsonicConfig/properties/username") |
+| Property                     | Type      | Required | Nullable       | Defined by                                                                                                         |
+| :--------------------------- | :-------- | :------- | :------------- | :----------------------------------------------------------------------------------------------------------------- |
+| [name](#name)                | `string`  | Required | cannot be null | [Config](config-defs-subsonicconfig-properties-name.md "path#/$defs/SubsonicConfig/properties/name")               |
+| [password](#password)        | `string`  | Required | cannot be null | [Config](config-defs-subsonicconfig-properties-password.md "path#/$defs/SubsonicConfig/properties/password")       |
+| [strict\_mbid](#strict_mbid) | `boolean` | Optional | can be null    | [Config](config-defs-subsonicconfig-properties-strict_mbid.md "path#/$defs/SubsonicConfig/properties/strict_mbid") |
+| [url](#url)                  | `string`  | Required | cannot be null | [Config](config-defs-subsonicconfig-properties-url.md "path#/$defs/SubsonicConfig/properties/url")                 |
+| [username](#username-1)      | `string`  | Required | cannot be null | [Config](config-defs-subsonicconfig-properties-username.md "path#/$defs/SubsonicConfig/properties/username")       |
 
 ### name
 
@@ -681,6 +779,27 @@ The password of the user
 #### password Type
 
 `string`
+
+### strict\_mbid
+
+If set to true, only subsonic tracks that match the MBID of the requested recording are mapped
+
+Only set this if your subsonic server is capable of searching by MBID (Like navidrome),
+and your collection has been passed through Musicbrainz Picard
+
+`strict_mbid`
+
+* is optional
+
+* Type: `boolean`
+
+* can be null
+
+* defined in: [Config](config-defs-subsonicconfig-properties-strict_mbid.md "path#/$defs/SubsonicConfig/properties/strict_mbid")
+
+#### strict\_mbid Type
+
+`boolean`
 
 ### url
 

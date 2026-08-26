@@ -16,12 +16,13 @@ path#/$defs/SubsonicConfig
 
 # SubsonicConfig Properties
 
-| Property              | Type     | Required | Nullable       | Defined by                                                                                                   |
-| :-------------------- | :------- | :------- | :------------- | :----------------------------------------------------------------------------------------------------------- |
-| [name](#name)         | `string` | Required | cannot be null | [Config](config-defs-subsonicconfig-properties-name.md "path#/$defs/SubsonicConfig/properties/name")         |
-| [password](#password) | `string` | Required | cannot be null | [Config](config-defs-subsonicconfig-properties-password.md "path#/$defs/SubsonicConfig/properties/password") |
-| [url](#url)           | `string` | Required | cannot be null | [Config](config-defs-subsonicconfig-properties-url.md "path#/$defs/SubsonicConfig/properties/url")           |
-| [username](#username) | `string` | Required | cannot be null | [Config](config-defs-subsonicconfig-properties-username.md "path#/$defs/SubsonicConfig/properties/username") |
+| Property                     | Type      | Required | Nullable       | Defined by                                                                                                         |
+| :--------------------------- | :-------- | :------- | :------------- | :----------------------------------------------------------------------------------------------------------------- |
+| [name](#name)                | `string`  | Required | cannot be null | [Config](config-defs-subsonicconfig-properties-name.md "path#/$defs/SubsonicConfig/properties/name")               |
+| [password](#password)        | `string`  | Required | cannot be null | [Config](config-defs-subsonicconfig-properties-password.md "path#/$defs/SubsonicConfig/properties/password")       |
+| [strict\_mbid](#strict_mbid) | `boolean` | Optional | can be null    | [Config](config-defs-subsonicconfig-properties-strict_mbid.md "path#/$defs/SubsonicConfig/properties/strict_mbid") |
+| [url](#url)                  | `string`  | Required | cannot be null | [Config](config-defs-subsonicconfig-properties-url.md "path#/$defs/SubsonicConfig/properties/url")                 |
+| [username](#username)        | `string`  | Required | cannot be null | [Config](config-defs-subsonicconfig-properties-username.md "path#/$defs/SubsonicConfig/properties/username")       |
 
 ## name
 
@@ -58,6 +59,27 @@ The password of the user
 ### password Type
 
 `string`
+
+## strict\_mbid
+
+If set to true, only subsonic tracks that match the MBID of the requested recording are mapped
+
+Only set this if your subsonic server is capable of searching by MBID (Like navidrome),
+and your collection has been passed through Musicbrainz Picard
+
+`strict_mbid`
+
+* is optional
+
+* Type: `boolean`
+
+* can be null
+
+* defined in: [Config](config-defs-subsonicconfig-properties-strict_mbid.md "path#/$defs/SubsonicConfig/properties/strict_mbid")
+
+### strict\_mbid Type
+
+`boolean`
 
 ## url
 

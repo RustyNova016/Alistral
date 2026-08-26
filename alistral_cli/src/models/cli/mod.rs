@@ -180,7 +180,9 @@ impl Commands {
             Self::Playlist(val) => val.run().await?,
             Self::Unstable(val) => val.run().await,
             Self::Sex => {
-                println!("https://musiclinkz.alephrium.com/release/a597ae76-61dd-4196-9b29-a9bd4bbf9bce")
+                println!(
+                    "https://musiclinkz.alephrium.com/release/a597ae76-61dd-4196-9b29-a9bd4bbf9bce"
+                )
             }
         }
 
