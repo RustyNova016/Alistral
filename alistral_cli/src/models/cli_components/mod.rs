@@ -1,6 +1,7 @@
 #[cfg(any(feature = "stats", feature = "lookup"))]
 pub mod ask_continue;
-#[cfg(any(feature = "stats", feature = "lookup"))]
 pub mod comp_arrow;
+/// Component to format values
+pub mod formaters;
 #[cfg(any(feature = "stats", feature = "lookup"))]
 pub mod tables;

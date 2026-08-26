@@ -6,9 +6,9 @@ use chrono::DateTime;
 use chrono::Utc;
 use tuillez::OwoColorize as _;
 
+use crate::models::cli_components::formaters::mh_duration_formater::MHDurationFormater;
 use crate::tools::components::listen_per_year_graph::listen_count_per_year_graph;
 use crate::tools::lookup::lookup_components::comp_arrow::LookupCompArrow;
-use crate::tools::lookup::lookup_components::duration_string::LookupDurationString;
 
 pub struct UserLookup {
     pub(super) user: String,
@@ -103,7 +103,7 @@ impl UserLookup {
         let now_data = self.now.recording_stats().await.unwrap();
         let time = now_data.get_time_listened();
 
-        let mut string = format!("Total playtime: {}", LookupDurationString(time));
+        let mut string = format!("Total playtime: {}", MHDurationFormater(time));
 
         if let Some(before_data) = self.before.as_ref() {
             let before_data = before_data.recording_stats().await.unwrap();
@@ -112,7 +112,7 @@ impl UserLookup {
             string = format!(
                 "{string} [{} {}]",
                 LookupCompArrow::comp_asc(time, before_time),
-                LookupDurationString(before_time)
+                MHDurationFormater(before_time)
             );
         }
 

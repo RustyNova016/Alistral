@@ -53,6 +53,6 @@ result_large_err = { level = "allow", priority = 1 }
 [patch.crates-io]
 sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "04918eda92d0602852cc50bb761da990159b6ff4"}
 tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c8656a4eedb571177a8ffa3b9984e78"}
-musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "9dcc97612c3f4b269c6781dbf5d8b0f5301c9308"}
-listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "2bb416832815f58169897ee687d6c4357c9d1115" }
+musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "6f57831c54c4db93e82ed4855feee2ff16f64e2c"}
+listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "fd73fd764309edb504d58c5923cabed0927271e7" }
 submarine = { git = "https://github.com/eppixx/submarine", rev = "6a9b0a929bacff1fd89b7b0dddd44ff906f1d666" }
