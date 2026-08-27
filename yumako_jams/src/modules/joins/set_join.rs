@@ -12,7 +12,7 @@ use tracing::trace;
 
 use crate::RadioStream;
 use crate::YumakoClient;
-use crate::json::radio::Radio;
+use crate::models::radio_file::radio::Radio;
 use crate::modules::radio_module::LayerResult;
 use crate::modules::radio_module::RadioModule;
 use crate::radio_item::RadioItem;

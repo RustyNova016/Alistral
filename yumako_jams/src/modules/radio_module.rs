@@ -5,7 +5,7 @@ use serde_json::Value;
 
 use crate::RadioStream;
 use crate::client::YumakoClient;
-use crate::json::layer::Layer;
+use crate::models::radio_file::layer::Layer;
 
 pub type LayerResult<'a> = Result<RadioStream<'a>, crate::Error>;
 

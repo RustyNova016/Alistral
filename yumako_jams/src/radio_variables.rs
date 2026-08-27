@@ -5,7 +5,9 @@ use serde::de::DeserializeOwned;
 use serde_json::Value;
 use tuillez::extensions::chrono_exts::DurationExt;
 
-use crate::json::radio_input::RadioInput;
+use crate::models::radio_file::radio_input::RadioInput;
+
+
 
 /// Represent all the variable of a radio
 #[derive(Clone, Debug)]

@@ -10,11 +10,12 @@ use serde::Serialize;
 
 use crate::RadioStream;
 use crate::client::YumakoClient;
-use crate::json::layer::Layer;
-use crate::json::radio_input::RadioInput;
+use crate::models::radio_file::layer::Layer;
+use crate::models::radio_file::radio_input::RadioInput;
 use crate::modules::radio_module::LayerResult;
 use crate::radio_variables::RadioVariables;
 
+/// The full radio declaration
 #[derive(Serialize, Deserialize, Clone)]
 pub struct Radio {
     pub name: String,

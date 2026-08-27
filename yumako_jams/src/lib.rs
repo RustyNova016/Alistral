@@ -1,6 +1,6 @@
 pub mod client;
 pub mod error;
-pub mod json;
+pub mod models;
 pub mod modules;
 pub mod radio_item;
 pub mod radio_stream;
