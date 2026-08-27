@@ -11,7 +11,7 @@ use snafu::ResultExt;
 
 use crate::modules::error::ArtistSeederSnafu;
 use crate::modules::radio_module::RadioModule;
-use crate::radio_item::RadioItem;
+use crate::models::radio_stream::radio_item::RadioItem;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct ArtistSeeder {
