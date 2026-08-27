@@ -132,6 +132,7 @@ impl GetFriendlyError for Error {
             Self::UserSqlError(_) => None,
             Self::SQLx(_) => None,
             Self::MusicbrainzDBLite(_) => None,
+            #[cfg(feature = "interzic")]
             Self::YumakoError(_) => None,
             Self::YumakoArgumentDataDeserializingError(_, _, _) => None,
             Self::YumakoArgumentParsingError() => None,

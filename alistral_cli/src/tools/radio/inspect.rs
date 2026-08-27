@@ -7,7 +7,6 @@ use chrono::Utc;
 use clap::Parser;
 use serde_json::Value;
 use tuillez::fatal_error::IntoFatal;
-use yumako_jams::json::radio::Radio;
 
 use crate::models::config::config_trait::ConfigFile as _;
 use crate::models::config::recording_timeout::RecordingTimeoutConfig;
@@ -23,23 +22,23 @@ pub struct RadioInspectCommand {
 
 impl RadioInspectCommand {
     pub async fn run(&self) -> Result<(), crate::Error> {
-        let radio_schema =
-            Radio::from_file(format!("./yumako_jams/exemples/{}.json", self.radio_name))
-                .expect_fatal("Couldn't read the radio")?;
+        // let radio_schema =
+        //     Radio::from_file(format!("./yumako_jams/exemples/{}.json", self.radio_name))
+        //         .expect_fatal("Couldn't read the radio")?;
 
-        let mut vars = HashMap::new();
-        vars.insert(
-            "username".to_string(),
-            Value::String("RustyNova".to_string()),
-        );
-        vars.insert(
-            "timeouts".to_string(),
-            serde_json::to_value(load_timeouts()).unwrap(),
-        );
-        vars.insert(
-            "listen_range".to_string(),
-            Value::String("Last90Days".to_string()),
-        );
+        // let mut vars = HashMap::new();
+        // vars.insert(
+        //     "username".to_string(),
+        //     Value::String("RustyNova".to_string()),
+        // );
+        // vars.insert(
+        //     "timeouts".to_string(),
+        //     serde_json::to_value(load_timeouts()).unwrap(),
+        // );
+        // vars.insert(
+        //     "listen_range".to_string(),
+        //     Value::String("Last90Days".to_string()),
+        // );
 
         // debug!("Compiling radio");
         // let mut radio = match radio_schema.to_stream(&ALISTRAL_CLIENT.yumako_jams, vars) {
