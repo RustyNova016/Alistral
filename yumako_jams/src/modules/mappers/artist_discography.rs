@@ -13,7 +13,7 @@ use crate::RadioStream;
 use crate::client::YumakoClient;
 use crate::modules::radio_module::LayerResult;
 use crate::modules::radio_module::RadioModule;
-use crate::radio_item::RadioItem;
+use crate::models::radio_stream::radio_item::RadioItem;
 
 #[derive(Debug, Deserialize)]
 pub struct ArtistDiscographyMapper {}

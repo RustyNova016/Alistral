@@ -9,6 +9,7 @@ use rust_decimal::Decimal;
 use crate::modules::listen_data::ListenAction;
 use crate::modules::scores::ScoreMerging;
 
+/// A recording going through the radio's steps
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct RadioItem {
     pub recording: RecordingWithListens,

@@ -16,7 +16,7 @@ use tuillez::fatal_error::IntoFatal;
 use tuillez::formatter::FormatWithAsync;
 use yumako_jams::RadioStream;
 use yumako_jams::models::radio_file::radio::Radio;
-use yumako_jams::radio_item::RadioItem;
+use yumako_jams::models::radio_stream::radio_item::RadioItem;
 use yumako_jams::radio_stream::RadioStreamaExt;
 use yumako_jams::radio_variables::RadioVariables;
 

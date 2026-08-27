@@ -2,7 +2,6 @@ pub mod client;
 pub mod error;
 pub mod models;
 pub mod modules;
-pub mod radio_item;
 pub mod radio_stream;
 pub mod radio_variables;
 // pub mod repository; // TODO
