@@ -68,3 +68,6 @@ sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "04918eda9
 tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c8656a4eedb571177a8ffa3b9984e78"}
 musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "6f57831c54c4db93e82ed4855feee2ff16f64e2c"}
 listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "fd73fd764309edb504d58c5923cabed0927271e7" }
+
+[lints.clippy]
+result_large_err = { level = "allow", priority = 1 }
