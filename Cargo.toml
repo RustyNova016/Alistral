@@ -39,6 +39,9 @@ unsafe_code = "forbid"
 #perf = "warn"
 #cargo = "warn"
 
+# Allowed
+result_large_err = "allow"
+
 # Applied
 enum_glob_use = { level = "deny", priority = 1 }
 semicolon_if_nothing_returned = { level = "warn", priority = 1 }
