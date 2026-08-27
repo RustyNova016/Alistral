@@ -5,6 +5,7 @@ use musicbrainz_db_lite::GetConnectionError;
 use musicbrainz_db_lite::models::listenbrainz::listen::selects::error::ListenFetchGetError;
 use thiserror::Error;
 
+use crate::models::radio_stream::radio_module::RadioModuleError;
 use crate::modules::error::StreamModuleError;
 
 #[derive(Error, Debug)]
@@ -62,6 +63,10 @@ pub enum Error {
 
     #[error(transparent)]
     StreamModuleError(#[from] StreamModuleError),
+
+    //TODO: SNAFU error. Convert usage to use snafu as well.
+    #[error(transparent)]
+    RadioModuleError(#[from] RadioModuleError),
 }
 
 impl Error {

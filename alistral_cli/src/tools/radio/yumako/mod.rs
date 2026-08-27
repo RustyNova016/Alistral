@@ -83,17 +83,17 @@ impl RadioYumakoCommand {
 
         let radio_items = Self::collect_radio(radio, args).await?;
 
-        self.output_radio(
-            conn,
-            radio_schema,
-            radio_items,
-            Some(username),
-            Some(&token),
-            target,
-            client_name,
-        )
-        .await
-        .expect_fatal("Couldn't send the playlist")?;
+        // self.output_radio(
+        //     conn,
+        //     radio_schema,
+        //     radio_items,
+        //     Some(username),
+        //     Some(&token),
+        //     target,
+        //     client_name,
+        // )
+        // .await
+        // .expect_fatal("Couldn't send the playlist")?;
 
         Ok(())
     }

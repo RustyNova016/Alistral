@@ -8,7 +8,7 @@ use serde::Serialize;
 
 use crate::RadioStream;
 use crate::modules::radio_module::LayerResult;
-use crate::modules::radio_module::RadioModule;
+use crate::modules::radio_module::RadioModuleI;
 use crate::models::radio_stream::radio_item::RadioItem;
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -16,7 +16,7 @@ pub struct ListenSeeder {
     user: String,
 }
 
-impl RadioModule for ListenSeeder {
+impl RadioModuleI for ListenSeeder {
     fn create_stream<'a>(
         self,
         _stream: RadioStream<'a>,

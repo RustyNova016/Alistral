@@ -6,7 +6,9 @@ use futures::StreamExt;
 use futures::TryStreamExt as _;
 use futures::future::BoxFuture;
 use futures::stream::BoxStream;
+use musicbrainz_db_lite::HasMBID;
 use rust_decimal::Decimal;
+use tracing::debug;
 use tracing::instrument;
 use tuillez::pg_counted;
 use tuillez::pg_inc;
@@ -34,6 +36,19 @@ pub impl<'a> RadioStream<'a> {
         self.map_ok(move |mut t| {
             let score = f(&t);
             t.set_score(score, merge);
+            t
+        })
+        .boxed()
+    }
+
+    /// Combination of `map_ok` and `set_score` on the [`RadioItem`]s.
+    fn map_scores<F>(self, f: F, merge: ScoreMerging, layer_id: String) -> RadioStream<'a>
+    where
+        F: Fn(&RadioItem) -> Decimal + Send + 'a,
+    {
+        self.map_ok(move |mut t| {
+            let score = f(&t);
+            t.update_score(score, merge, &layer_id);
             t
         })
         .boxed()

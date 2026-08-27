@@ -12,7 +12,7 @@ use crate::RadioStream;
 use crate::client::YumakoClient;
 use crate::models::radio_file::radio::Radio;
 use crate::modules::radio_module::LayerResult;
-use crate::modules::radio_module::RadioModule;
+use crate::modules::radio_module::RadioModuleI;
 use crate::radio_stream::RadioStreamaExt;
 use crate::radio_variables::RadioVariables;
 
@@ -22,7 +22,7 @@ pub struct AndFilter {
     radio_schema: Radio,
 }
 
-impl RadioModule for AndFilter {
+impl RadioModuleI for AndFilter {
     fn create_stream<'a>(
         self,
         mut stream: RadioStream<'a>,

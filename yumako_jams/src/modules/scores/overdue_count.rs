@@ -5,8 +5,8 @@ use serde::Serialize;
 
 use crate::RadioStream;
 use crate::client::YumakoClient;
+use crate::models::radio_stream::radio_module::RadioModule;
 use crate::modules::radio_module::LayerResult;
-use crate::modules::radio_module::RadioModule;
 use crate::modules::scores::ScoreMerging;
 use crate::radio_stream::RadioStreamaExt as _;
 
@@ -15,16 +15,18 @@ pub struct OverdueCountScorer {
     merge: ScoreMerging,
 }
 
-impl RadioModule for OverdueCountScorer {
-    fn create_stream<'a>(self, stream: RadioStream<'a>, _: &'a YumakoClient) -> LayerResult<'a> {
+impl RadioModule<OverdueCountScorer> {
+    /// Add the module to the stream
+    pub fn into_stream<'a>(self, stream: RadioStream<'a>, _: &'a YumakoClient) -> LayerResult<'a> {
         //TODO: use current_time
-        Ok(stream.set_scores(
+        Ok(stream.map_scores(
             |t| {
                 t.estimated_listen_count_for_duration(
                     Utc::now() - t.latest_listen_date().unwrap_or_else(Utc::now),
                 )
             },
-            self.merge,
+            self.inputs.merge,
+            self.id,
         ))
     }
 }
