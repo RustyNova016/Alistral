@@ -13,7 +13,7 @@ use tuillez::pg_inc;
 use crate::RadioStream;
 use crate::client::YumakoClient;
 use crate::modules::radio_module::LayerResult;
-use crate::modules::radio_module::RadioModule;
+use crate::modules::radio_module::RadioModuleI;
 use crate::models::radio_stream::radio_item::RadioItem;
 use crate::radio_stream::RadioStreamaExt as _;
 
@@ -26,7 +26,7 @@ pub struct SortModule {
     max_count: u64,
 }
 
-impl RadioModule for SortModule {
+impl RadioModuleI for SortModule {
     #[instrument(skip(self, stream), fields(indicatif.pb_show = tracing::field::Empty))]
     fn create_stream<'a>(self, stream: RadioStream<'a>, _: &'a YumakoClient) -> LayerResult<'a> {
         let stream = try_fn_stream(|emitter| async move {

@@ -10,28 +10,28 @@ use snafu::ResultExt;
 
 use crate::models::radio_stream::radio_item::RadioItem;
 use crate::modules::error::ReleaseSeederSnafu;
-use crate::modules::radio_module::RadioModule;
+use crate::modules::radio_module::RadioModuleI;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct ReleaseSeeder {
     release_mbids: Vec<String>,
 }
 
-impl RadioModule for ReleaseSeeder {
+impl RadioModuleI for ReleaseSeeder {
     fn create_stream<'a>(
         self,
         mut stream: crate::RadioStream<'a>,
         client: &'a crate::YumakoClient,
     ) -> crate::modules::radio_module::LayerResult<'a> {
         for release in self.release_mbids {
-            stream = select(stream, create_artist_stream(client, release)?).boxed()
+            stream = select(stream, create_release_stream(client, release)?).boxed()
         }
 
         Ok(stream.boxed())
     }
 }
 
-fn create_artist_stream(
+fn create_release_stream(
     client: &crate::YumakoClient,
     release_mbid: String,
 ) -> crate::modules::radio_module::LayerResult<'_> {

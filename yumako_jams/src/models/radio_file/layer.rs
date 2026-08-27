@@ -6,6 +6,7 @@ use serde_json::Value;
 
 use crate::RadioStream;
 use crate::client::YumakoClient;
+use crate::models::radio_stream::radio_module::RadioModule;
 use crate::modules::filters::booleans::AndFilter;
 use crate::modules::filters::cooldown::CooldownFilter;
 use crate::modules::filters::listens::ListenFilter;
@@ -16,7 +17,7 @@ use crate::modules::listen_data::last_listens::LatestListens;
 use crate::modules::listen_data::listen_interval::ListenInterval;
 use crate::modules::mappers::artist_discography::ArtistDiscographyMapper;
 use crate::modules::radio_module::LayerResult;
-use crate::modules::radio_module::RadioModule;
+use crate::modules::radio_module::RadioModuleI;
 use crate::modules::scores::bump::BumpScore;
 use crate::modules::scores::listenrate::ListenRateScorer;
 use crate::modules::scores::overdue_count::OverdueCountScorer;
@@ -86,7 +87,7 @@ impl Layer {
                 TimeoutFilter::create(&self, variables)?.create_stream(stream, client)
             }
             "overdue_count_scorer" => {
-                OverdueCountScorer::create(&self, variables)?.create_stream(stream, client)
+                RadioModule::<OverdueCountScorer>::from_layer(&self, variables)?.into_stream(stream, client)
             }
             "overdue_duration_scorer" => {
                 OverdueDurationScorer::create(&self, variables)?.create_stream(stream, client)

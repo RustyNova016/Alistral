@@ -15,7 +15,7 @@ use crate::RadioStream;
 use crate::client::YumakoClient;
 use crate::modules::listen_data::ListenAction;
 use crate::modules::radio_module::LayerResult;
-use crate::modules::radio_module::RadioModule;
+use crate::modules::radio_module::RadioModuleI;
 use crate::models::radio_stream::radio_item::RadioItem;
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -29,7 +29,7 @@ pub struct LatestListens {
     buffer: usize,
 }
 
-impl RadioModule for LatestListens {
+impl RadioModuleI for LatestListens {
     fn create_stream<'a>(
         self,
         stream: RadioStream<'a>,

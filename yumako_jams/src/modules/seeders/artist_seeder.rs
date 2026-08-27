@@ -10,7 +10,7 @@ use snafu::OptionExt;
 use snafu::ResultExt;
 
 use crate::modules::error::ArtistSeederSnafu;
-use crate::modules::radio_module::RadioModule;
+use crate::modules::radio_module::RadioModuleI;
 use crate::models::radio_stream::radio_item::RadioItem;
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -18,7 +18,7 @@ pub struct ArtistSeeder {
     artist_mbids: Vec<String>,
 }
 
-impl RadioModule for ArtistSeeder {
+impl RadioModuleI for ArtistSeeder {
     fn create_stream<'a>(
         self,
         mut stream: crate::RadioStream<'a>,

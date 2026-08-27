@@ -15,7 +15,7 @@ use crate::YumakoClient;
 use crate::models::radio_file::radio::Radio;
 use crate::models::radio_stream::radio_item::RadioItem;
 use crate::modules::radio_module::LayerResult;
-use crate::modules::radio_module::RadioModule;
+use crate::modules::radio_module::RadioModuleI;
 use crate::radio_stream::RadioStreamaExt;
 use crate::radio_variables::RadioVariables;
 
@@ -35,7 +35,7 @@ pub enum JoinOperation {
     Full,
 }
 
-impl RadioModule for SetJoin {
+impl RadioModuleI for SetJoin {
     fn create_stream<'a>(
         self,
         stream: RadioStream<'a>,

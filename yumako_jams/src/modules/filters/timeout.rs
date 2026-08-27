@@ -11,14 +11,14 @@ use serde::Serialize;
 use crate::RadioStream;
 use crate::client::YumakoClient;
 use crate::modules::radio_module::LayerResult;
-use crate::modules::radio_module::RadioModule;
+use crate::modules::radio_module::RadioModuleI;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct TimeoutFilter {
     timeouts: HashMap<String, DateTime<Utc>>,
 }
 
-impl RadioModule for TimeoutFilter {
+impl RadioModuleI for TimeoutFilter {
     fn create_stream<'a>(self, stream: RadioStream<'a>, _: &'a YumakoClient) -> LayerResult<'a> {
         Ok(stream
             .try_filter(move |r| {

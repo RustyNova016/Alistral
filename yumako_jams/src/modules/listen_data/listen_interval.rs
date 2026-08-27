@@ -11,7 +11,7 @@ use tracing::debug;
 use crate::RadioStream;
 use crate::client::YumakoClient;
 use crate::modules::radio_module::LayerResult;
-use crate::modules::radio_module::RadioModule;
+use crate::modules::radio_module::RadioModuleI;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct ListenInterval {
@@ -25,7 +25,7 @@ pub struct ListenInterval {
     period: StatPeriod,
 }
 
-impl RadioModule for ListenInterval {
+impl RadioModuleI for ListenInterval {
     fn create_stream<'a>(
         self,
         stream: RadioStream<'a>,

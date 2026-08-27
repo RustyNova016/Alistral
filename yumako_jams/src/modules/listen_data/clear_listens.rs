@@ -7,12 +7,12 @@ use crate::RadioStream;
 use crate::client::YumakoClient;
 use crate::modules::listen_data::ListenAction;
 use crate::modules::radio_module::LayerResult;
-use crate::modules::radio_module::RadioModule;
+use crate::modules::radio_module::RadioModuleI;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct ClearListens {}
 
-impl RadioModule for ClearListens {
+impl RadioModuleI for ClearListens {
     fn create_stream<'a>(
         self,
         stream: RadioStream<'a>,
