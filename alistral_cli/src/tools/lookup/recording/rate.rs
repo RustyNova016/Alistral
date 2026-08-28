@@ -13,16 +13,25 @@ impl RecordingLookup {
         let mut section = String::new();
 
         writeln!(&mut section, "[Listen Rate]").unwrap();
+
         writeln!(
             &mut section,
             "   - {}",
             self.get_dur_between_listens_field().await
         )
         .unwrap();
+
         writeln!(
             &mut section,
             "   - {}",
             self.get_estimated_date_of_next_listen_field().await
+        )
+        .unwrap();
+
+        writeln!(
+            &mut section,
+            "   - {}",
+            self.get_estimated_missed_recordings().await
         )
         .unwrap();
 
@@ -65,5 +74,15 @@ impl RecordingLookup {
             .map(|d| d.floor_to_second());
 
         format!("Estimated next listen: {}", LookupLocalDate(date))
+    }
+
+    async fn get_estimated_missed_recordings(&self) -> String {
+        let num = self
+            .get_all_time_target_recording_stats()
+            .await
+            .listens()
+            .overdue_factor();
+
+        format!("Number of listens overdue: {num}")
     }
 }
