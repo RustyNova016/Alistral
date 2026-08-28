@@ -1,11 +1,13 @@
 use std::sync::Arc;
 
 use alistral_core::AlistralClient;
+use interzic::InterzicClient;
 use musicbrainz_db_lite::GetConnectionError;
 use musicbrainz_db_lite::SqlitePoolConnection;
 
 pub struct YumakoClient {
     pub alistral_core: Arc<AlistralClient>,
+    pub interzic: Arc<InterzicClient>
 }
 
 impl YumakoClient {
