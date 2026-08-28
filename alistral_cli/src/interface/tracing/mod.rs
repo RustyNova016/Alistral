@@ -91,13 +91,14 @@ where
     let (non_blocking, guard) = tracing_appender::non_blocking(file_appender);
 
     let filter = filter::Targets::new()
-        .with_target("alistral", Level::DEBUG)
-        .with_target("alistral_core", Level::DEBUG)
-        .with_target("musicbrainz_db_lite", Level::DEBUG)
-        .with_target("interzic", Level::DEBUG)
-        .with_target("symphonize", Level::DEBUG)
-        .with_target("musicbrainz_rs_nova", Level::DEBUG)
-        .with_target("musicbrainz_rs", Level::DEBUG)
+        .with_target("alistral", Level::TRACE)
+        .with_target("alistral_core", Level::TRACE)
+        .with_target("musicbrainz_db_lite", Level::TRACE)
+        .with_target("interzic", Level::TRACE)
+        .with_target("symphonize", Level::TRACE)
+        .with_target("musicbrainz_rs_nova", Level::TRACE)
+        .with_target("musicbrainz_rs", Level::TRACE)
+        .with_target("yumako_jams", Level::TRACE)
         .with_target("sqlx_core", Level::INFO);
 
     (

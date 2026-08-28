@@ -6,8 +6,8 @@ use serde::Serialize;
 
 use crate::RadioStream;
 use crate::client::YumakoClient;
+use crate::models::radio_stream::radio_module::RadioModule;
 use crate::modules::radio_module::LayerResult;
-use crate::modules::radio_module::RadioModuleI;
 use crate::modules::scores::ScoreMerging;
 use crate::radio_stream::RadioStreamaExt as _;
 
@@ -16,12 +16,19 @@ pub struct BumpScore {
     bumps: HashMap<String, Decimal>,
 }
 
-impl RadioModuleI for BumpScore {
-    fn create_stream<'a>(self, stream: RadioStream<'a>, _: &'a YumakoClient) -> LayerResult<'a> {
-        //TODO: use current_time
-        Ok(stream.set_scores(
-            move |t| t.score * self.bumps.get(&t.entity().mbid).unwrap_or(&Decimal::ONE),
-            ScoreMerging::Replace,
+impl RadioModule<BumpScore> {
+    /// Add the module to the stream
+    pub fn into_stream<'a>(self, stream: RadioStream<'a>, _: &'a YumakoClient) -> LayerResult<'a> {
+        Ok(stream.map_scores(
+            move |t| {
+                *self
+                    .inputs
+                    .bumps
+                    .get(&t.entity().mbid)
+                    .unwrap_or(&Decimal::ONE)
+            },
+            ScoreMerging::Multiply,
+            self.id,
         ))
     }
 }

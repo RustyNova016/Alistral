@@ -1,5 +1,4 @@
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
-use chrono::Utc;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -21,9 +20,7 @@ impl RadioModule<OverdueCountScorer> {
         //TODO: use current_time
         Ok(stream.map_scores(
             |t| {
-                t.estimated_listen_count_for_duration(
-                    Utc::now() - t.latest_listen_date().unwrap_or_else(Utc::now),
-                )
+                t.overdue_factor()
             },
             self.inputs.merge,
             self.id,

@@ -6,7 +6,6 @@ use musicbrainz_db_lite::HasMBID;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use rust_decimal::Decimal;
-use tracing::debug;
 use tracing::trace;
 
 use crate::modules::listen_data::ListenAction;
