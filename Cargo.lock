@@ -2835,8 +2835,9 @@ dependencies = [
 
 [[package]]
 name = "musicbrainz_rs"
-version = "0.13.0"
-source = "git+https://github.com/RustyNova016/musicbrainz_rs?rev=6f57831c54c4db93e82ed4855feee2ff16f64e2c#6f57831c54c4db93e82ed4855feee2ff16f64e2c"
+version = "0.14.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "16dc884df7a9e0cbb9b020940cf73c45e4cc2700d86ffa4daac47237e1d5fac4"
 dependencies = [
  "api_bindium",
  "bon",
@@ -5803,3 +5804,8 @@ dependencies = [
  "cc",
  "pkg-config",
 ]
+
+[[patch.unused]]
+name = "musicbrainz_rs"
+version = "0.13.0"
+source = "git+https://github.com/RustyNova016/musicbrainz_rs?rev=6f57831c54c4db93e82ed4855feee2ff16f64e2c#6f57831c54c4db93e82ed4855feee2ff16f64e2c"
