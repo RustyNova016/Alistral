@@ -8,8 +8,8 @@ use futures::future::BoxFuture;
 use futures::stream::BoxStream;
 use musicbrainz_db_lite::HasMBID;
 use rust_decimal::Decimal;
-use tracing::debug;
 use tracing::instrument;
+use tracing::trace;
 use tuillez::pg_counted;
 use tuillez::pg_inc;
 use tuillez::tracing_indicatif::span_ext::IndicatifSpanExt;
@@ -91,6 +91,23 @@ pub impl<'a> RadioStream<'a> {
 
         Ok(collect_with_inner(self, min_count, min_duration).boxed())
     }
+
+    // fn try_filter_items<Fut, F>(self, f: F, layer_id: String)
+    // where
+    //     Fut: Future<Output = bool>,
+    //     F: FnMut(&Self::Ok) -> Fut,
+    //     Self: Sized,
+    // {
+    //     self.try_filter(|item| {
+    //         if f(item) {
+    //             trace!("[{layer_id}] Keeping {}", item.entity().get_mbid())
+    //             true
+    //         } else {
+    //             trace!("[{layer_id}] Removing {}", item.entity().get_mbid())
+    //             true
+    //         }
+    //     })
+    // }
 }
 
 #[instrument(skip(this), fields(indicatif.pb_show = tracing::field::Empty))]

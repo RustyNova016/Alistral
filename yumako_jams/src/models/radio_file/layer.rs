@@ -56,7 +56,9 @@ impl Layer {
             "artist_seeder" => {
                 ArtistSeeder::create(&self, variables)?.create_stream(stream, client)
             }
-            "bumps_score" => BumpScore::create(&self, variables)?.create_stream(stream, client),
+            "bumps_score" => {
+                RadioModule::<BumpScore>::from_layer(&self, variables)?.into_stream(stream, client)
+            }
             "clear_listens" => {
                 ClearListens::create(&self, variables)?.create_stream(stream, client)
             }
@@ -66,18 +68,16 @@ impl Layer {
             "latest_listens" => {
                 LatestListens::create(&self, variables)?.create_stream(stream, client)
             }
-            "listen_filter" => {
-                ListenFilter::create(&self, variables)?.create_stream(stream, client)
-            }
+            "listen_filter" => RadioModule::<ListenFilter>::from_layer(&self, variables)?
+                .into_stream(stream, client),
             "listen_interval" => {
                 ListenInterval::create(&self, variables)?.create_stream(stream, client)
             }
             "listen_seeder" => {
                 ListenSeeder::create(&self, variables)?.create_stream(stream, client)
             }
-            "listenrate_scorer" => {
-                ListenRateScorer::create(&self, variables)?.create_stream(stream, client)
-            }
+            "listenrate_scorer" => RadioModule::<ListenRateScorer>::from_layer(&self, variables)?
+                .into_stream(stream, client),
             "join" => SetJoin::create(&self, variables)?.create_stream(stream, client),
             "release_seeder" => {
                 ReleaseSeeder::create(&self, variables)?.create_stream(stream, client)
@@ -87,7 +87,8 @@ impl Layer {
                 TimeoutFilter::create(&self, variables)?.create_stream(stream, client)
             }
             "overdue_count_scorer" => {
-                RadioModule::<OverdueCountScorer>::from_layer(&self, variables)?.into_stream(stream, client)
+                RadioModule::<OverdueCountScorer>::from_layer(&self, variables)?
+                    .into_stream(stream, client)
             }
             "overdue_duration_scorer" => {
                 OverdueDurationScorer::create(&self, variables)?.create_stream(stream, client)
