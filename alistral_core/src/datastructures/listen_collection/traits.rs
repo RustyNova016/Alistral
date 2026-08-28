@@ -118,13 +118,12 @@ pub trait ListenCollectionReadable {
         duration.checked_div(average).unwrap_or(Decimal::ZERO)
     }
 
-    /// The duration until / passed since the estimated date of the next listen,
-    /// and the provided date
+    /// How many listens should have been done at this time if the user keep the same listening rate
     fn overdue_factor(&self) -> Decimal {
         self.overdue_factor_at(&Utc::now())
     }
 
-    /// How many listens should happens by the  
+    /// How many listens should have been done at time X if the user keep the same listening rate
     fn overdue_factor_at(&self, date: &DateTime<Utc>) -> Decimal {
         Decimal::from_i64(self.overdue_by_at(date).num_seconds())
             .unwrap()
@@ -132,6 +131,7 @@ pub trait ListenCollectionReadable {
                 Decimal::from_i64(self.average_duration_between_listens().num_seconds()).unwrap(),
             )
             .unwrap_or(Decimal::NEGATIVE_ONE)
+            + Decimal::ONE
     }
 
     /// Get the number of listens estimated to be made for a time period
