@@ -5,23 +5,25 @@ use chrono::Duration;
 use chrono::Utc;
 use futures::StreamExt as _;
 use futures::TryStreamExt;
+use musicbrainz_db_lite::HasMBID;
 use serde::Deserialize;
 use serde::Serialize;
+use tracing::trace;
 use tuillez::extensions::chrono_exts::DurationExt as _;
 
 use crate::RadioStream;
 use crate::client::YumakoClient;
+use crate::models::radio_stream::radio_module::RadioModule;
 use crate::modules::radio_module::LayerResult;
-use crate::modules::radio_module::RadioModuleI;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct CooldownFilter {
     duration: String,
 }
 
-impl RadioModuleI for CooldownFilter {
-    fn create_stream<'a>(self, stream: RadioStream<'a>, _: &'a YumakoClient) -> LayerResult<'a> {
-        let cooldown = Duration::from_human_string(&self.duration).map_err(|_| {
+impl RadioModule<CooldownFilter> {
+    pub fn into_stream<'a>(self, stream: RadioStream<'a>, _: &'a YumakoClient) -> LayerResult<'a> {
+        let cooldown = Duration::from_human_string(&self.inputs.duration).map_err(|_| {
             crate::Error::VariableDecodeError(
                 "duration".to_string(),
                 "The duration couldn't be parsed. Make sure it fits the `humantime` specification"
@@ -36,8 +38,25 @@ impl RadioModuleI for CooldownFilter {
                 };
 
                 let after_cooldown = last_listen_date + cooldown;
+                let now = Utc::now();
 
-                ready(after_cooldown <= Utc::now())
+                if after_cooldown <= now {
+                    trace!(
+                        "[{}] Removing {}, in cooldown ({} < {after_cooldown})",
+                        self.id,
+                        r.entity().get_mbid(),
+                        now
+                    );
+                    ready(false)
+                } else {
+                    trace!(
+                        "[{}] keeping {} ({after_cooldown} < {})",
+                        self.id,
+                        r.entity().get_mbid(),
+                        now
+                    );
+                    ready(true)
+                }
             })
             .boxed())
     }

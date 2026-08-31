@@ -7,7 +7,6 @@ use serde_json::Value;
 use crate::RadioStream;
 use crate::client::YumakoClient;
 use crate::models::radio_stream::radio_module::RadioModule;
-use crate::modules::filters::booleans::AndFilter;
 use crate::modules::filters::cooldown::CooldownFilter;
 use crate::modules::filters::listens::ListenFilter;
 use crate::modules::filters::timeout::TimeoutFilter;
@@ -49,7 +48,6 @@ impl Layer {
         let variables = radio_variables.get_layer_variables(&self.id)?;
 
         match self.step_type.as_str() {
-            "and_filter" => AndFilter::create(&self, variables)?.create_stream(stream, client),
             "artist_discography_mapper" => {
                 ArtistDiscographyMapper::create(&self, variables)?.create_stream(stream, client)
             }
@@ -62,9 +60,8 @@ impl Layer {
             "clear_listens" => {
                 ClearListens::create(&self, variables)?.create_stream(stream, client)
             }
-            "cooldown_filter" => {
-                CooldownFilter::create(&self, variables)?.create_stream(stream, client)
-            }
+            "cooldown_filter" => RadioModule::<CooldownFilter>::from_layer(&self, variables)?
+                .into_stream(stream, client),
             "latest_listens" => {
                 LatestListens::create(&self, variables)?.create_stream(stream, client)
             }

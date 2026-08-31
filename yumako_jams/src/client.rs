@@ -6,6 +6,7 @@ use musicbrainz_db_lite::SqlitePoolConnection;
 
 pub struct YumakoClient {
     pub alistral_core: Arc<AlistralClient>,
+    //pub interzic: Arc<InterzicClient>
 }
 
 impl YumakoClient {

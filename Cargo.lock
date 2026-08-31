@@ -5742,6 +5742,7 @@ dependencies = [
  "extend",
  "futures",
  "i_splits",
+ "interzic",
  "itertools 0.14.0",
  "json",
  "musicbrainz-db-lite",
