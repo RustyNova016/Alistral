@@ -82,7 +82,7 @@ hotpath = { version = "0.24.0", optional = true, features = ["futures", "sqlx"] 
 # Other
 zip = "8.0.0"
 sequelles = "0.2.0"
-comfy-table = { version = "7.2.2", features = ["custom_styling"] }
+comfy-table = { version = "8.0.0", features = ["custom_styling"] }
 duplicate = "2.0.1"
 uuid = { version = "1.23.4", features = ["v7"] }
 convert_case = "0.12.0"
