@@ -1,0 +1,27 @@
+{
+    "name": "Test Radio",
+    "stack": [
+        {
+            "step_type": "artist_seeder",
+            "id": "artist_seeder"
+        }
+    ],
+    "inputs": {
+        "artist": {
+            "targets": [
+                "artist_seeder.artist_mbid"
+            ]
+        },
+        "duration": {
+            "targets": []
+        },
+        "username": {
+            "targets": []
+        },
+        "timeouts": {
+            "targets": [
+                "timeout_filter.timeouts"
+            ]
+        }
+    }
+}

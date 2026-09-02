@@ -16,6 +16,7 @@ alistral_core = { path = "../alistral_core" }
 interzic = { path = "../interzic", optional = true }
 musicbrainz-db-lite = { path = "../musicbrainz_db_lite", features = ["pretty_format"] }
 symphonize = { path = "../symphonize", optional = true}
+yumako_jams = { path = "../yumako_jams" }
 
 # Musicbrainz dependencies
 #listenbrainz = "0.8.1"
@@ -84,6 +85,7 @@ zip = "8.0.0"
 sequelles = "0.2.0"
 comfy-table = { version = "7.2.2", features = ["custom_styling"] }
 duplicate = "2.0.1"
+lyn = "0.1.0"
 uuid = { version = "1.23.4", features = ["v7"] }
 convert_case = "0.12.0"
 schemars = { version = "1.2.2", optional = true, features = ["chrono04", "rust_decimal1"] }
@@ -98,7 +100,7 @@ lookup = ["legacy_ent_with_listen"]
 radio = ["interzic"]
 stats = []
 
-# Parts
+# Parts 
 legacy_ent_with_listen = []
 
 # Subcrates

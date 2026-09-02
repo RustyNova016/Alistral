@@ -60,6 +60,8 @@ where
         self.oldest_listen_date()
             .map(|discovery| Utc::now() - discovery)
     }
+
+
 }
 
 impl<Ent, Lis> ListenCollectionReadable for EntityWithListens<Ent, Lis>

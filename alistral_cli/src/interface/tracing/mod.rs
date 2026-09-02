@@ -32,11 +32,18 @@ pub fn init_tracer(cli: &Cli) -> WorkerGuard {
     // === Console and indicatif ===
 
     let filter = filter::Targets::new()
-        .with_target("alistral", Level::DEBUG)
-        .with_target("alistral_core", Level::DEBUG)
-        .with_target("musicbrainz_db_lite", Level::DEBUG)
-        .with_target("interzic", Level::DEBUG)
-        .with_target("symphonize", Level::DEBUG);
+        .with_target("tokio", Level::TRACE)
+        .with_target("runtime", Level::TRACE)
+        .with_target("alistral", Level::TRACE)
+        .with_target("alistral_core", Level::TRACE)
+        .with_target("musicbrainz_db_lite", Level::TRACE)
+        .with_target("interzic", Level::TRACE)
+        .with_target("symphonize", Level::DEBUG)
+        .with_target("yumako_jams", Level::TRACE);
+
+    // spawn the console server in the background,
+    // returning a `Layer`:
+    // let console_layer = console_subscriber::spawn();
 
     let indicatif_layer = IndicatifLayer::new()
         .with_progress_style(COUNT_STYLE.to_owned())
@@ -84,13 +91,14 @@ where
     let (non_blocking, guard) = tracing_appender::non_blocking(file_appender);
 
     let filter = filter::Targets::new()
-        .with_target("alistral", Level::DEBUG)
-        .with_target("alistral_core", Level::DEBUG)
-        .with_target("musicbrainz_db_lite", Level::DEBUG)
-        .with_target("interzic", Level::DEBUG)
-        .with_target("symphonize", Level::DEBUG)
-        .with_target("musicbrainz_rs_nova", Level::DEBUG)
-        .with_target("musicbrainz_rs", Level::DEBUG)
+        .with_target("alistral", Level::TRACE)
+        .with_target("alistral_core", Level::TRACE)
+        .with_target("musicbrainz_db_lite", Level::TRACE)
+        .with_target("interzic", Level::TRACE)
+        .with_target("symphonize", Level::TRACE)
+        .with_target("musicbrainz_rs_nova", Level::TRACE)
+        .with_target("musicbrainz_rs", Level::TRACE)
+        .with_target("yumako_jams", Level::TRACE)
         .with_target("sqlx_core", Level::INFO);
 
     (
@@ -175,6 +183,7 @@ fn get_domain(writer: &mut format::Writer<'_>, metadata: &Metadata<'static>) -> 
         "alistral_core" => "[Alistral]".alistral_green(),
         "musicbrainz_db_lite" => "[MusicBrainz DB]".db_lite_purple(),
         "interzic" => "[Interzic]".interzic_turquoize(),
+        "yumako_jams" => "[Yumako Jams]".yumako_red(),
         _ => format!("[{top_crate}]"),
     };
 

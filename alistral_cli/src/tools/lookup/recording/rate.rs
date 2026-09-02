@@ -27,6 +27,12 @@ impl RecordingLookup {
             self.get_estimated_date_of_next_listen_field().await
         )
         .unwrap();
+            writeln!(
+            &mut section,
+            "   - {}",
+            self.get_estimated_missed_recordings().await
+        )
+        .unwrap();
 
         writeln!(
             &mut section,

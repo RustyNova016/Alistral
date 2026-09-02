@@ -1,0 +1,76 @@
+{
+    "name": "Listenrate Radio",
+    "stack": [
+        {
+            "step_type": "listen_seeder",
+            "id": "listen_seeder"
+        },
+        {
+            "step_type": "listen_filter",
+            "id": "listen_filter",
+            "inputs": {
+                "minimum": 3
+            }
+        },
+        {
+            "step_type": "cooldown_filter",
+            "id": "cooldown_filter",
+            "inputs": {
+                "duration": "0 minutes"
+            }
+        },
+        {
+            "step_type": "timeout_filter",
+            "id": "timeout_filter"
+        },
+        {
+            "step_type": "listen_interval",
+            "id": "listen_interval"
+        },
+        {
+            "step_type": "artist_discography_mapper",
+            "id": "artist_discography_mapper"
+        },
+        {
+            "step_type": "listen_filter",
+            "id": "unlistened_filter",
+            "inputs": {
+                
+            }
+        }
+    ],
+    "inputs": {
+        "minimum_listens": {
+            "description": "The minimum all time listens the tracks need to have before getting suggested",
+            "targets": [
+                "minimum_listen_filter.minimum"
+            ]
+        },
+        "username": {
+            "targets": [
+                "listen_seeder.user",
+                "and_filter.radio.username",
+                "latest_listens.user"
+            ]
+        },
+        "timeouts": {
+            "targets": [
+                "timeout_filter.timeouts"
+            ]
+        },
+        "listen_range": {
+            "description": "The time range of listens to use",
+            "targets": [
+                "listen_interval.period"
+            ],
+            "default": "AllTime"
+        },
+        "minimum_seed_listens": {
+            "description": "The number of minimum listens to use for the score",
+            "targets": [
+                "listen_interval.listen_interval"
+            ],
+            "default": 0
+        }
+    }
+}
