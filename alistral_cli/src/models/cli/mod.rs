@@ -25,6 +25,7 @@ use crate::tools::interzic::InterzicCommand;
 use crate::tools::listens::ListenCommand;
 #[cfg(feature = "lookup")]
 use crate::tools::lookup::LookupCommand;
+use crate::tools::metrics::MetricsCommand;
 #[cfg(feature = "musicbrainz")]
 use crate::tools::musicbrainz::MusicbrainzCommand;
 #[cfg(feature = "interzic")]
@@ -124,6 +125,7 @@ pub enum Commands {
     #[cfg(feature = "lookup")]
     /// Get detailled information about an entity
     Lookup(LookupCommand),
+    Metrics(MetricsCommand),
 
     #[cfg(feature = "musicbrainz")]
     /// Commands for musicbrainz stuff
@@ -172,6 +174,7 @@ impl Commands {
 
             #[cfg(feature = "lookup")]
             Self::Lookup(cmd) => cmd.run().await,
+            Self::Metrics(val) => val.run().await,
 
             #[cfg(feature = "musicbrainz")]
             Self::Musicbrainz(val) => val.run().await,

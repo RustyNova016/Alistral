@@ -1,3 +1,4 @@
+pub mod metrics;
 pub mod bump;
 pub mod cache;
 pub mod compatibility;
