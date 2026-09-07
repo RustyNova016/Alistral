@@ -15,7 +15,7 @@ chrono = "0.4.42"
 # Async 
 async-once-cell = "0.5.4"
 futures = "0.3.31"
-streamies = "0.2.2"
+streamies = "0.3.0"
 
 # Databasing
 sequelles = { version = "0.2.0", features = ["chrono"] }
