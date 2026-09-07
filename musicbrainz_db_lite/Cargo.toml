@@ -19,7 +19,7 @@ listenbrainz = { branch = "alistral_version", git = "https://github.com/RustyNov
 listenbrainz_rs = { version = "0.1.0", features = ["async", "rate_limit", "tracing"]}
 
 # Async
-streamies = "0.2.2"
+streamies = "0.3.0"
 futures = "0.3.31"
 tokio = { version = "1.47.0", features = [] }
 async-fn-stream = "0.3.0"
