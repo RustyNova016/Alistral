@@ -1,0 +1,59 @@
+{
+    "name": "Listenrate Radio",
+    "stack": [
+        {
+            "step_type": "listen_seeder",
+            "id": "listen_seeder"
+        },
+        {
+            "step_type": "listen_filter",
+            "id": "listen_filter",
+            "inputs": {
+                "minimum": 3
+            }
+        },
+        {
+            "step_type": "cooldown_filter",
+            "id": "cooldown_filter",
+            "inputs": {
+                "duration": "0 minutes"
+            }
+        },
+        {
+            "step_type": "timeout_filter",
+            "id": "timeout_filter"
+        },
+        {
+            "step_type": "listenrate_scorer",
+            "id": "listenrate_scorer",
+            "inputs": {
+                "merge": "Add"
+            }
+        },
+        {
+            "step_type": "sort_module",
+            "id": "sort_module",
+            "inputs": {
+                "direction": "Asc"
+            }
+        }
+    ],
+    "inputs": {
+        "minimum_listens": {
+            "targets": [
+                "listen_filter.minimum"
+            ]
+        },
+        "username": {
+            "targets": [
+                "listen_seeder.user",
+                "and_filter.radio.username"
+            ]
+        },
+        "timeouts": {
+            "targets": [
+                "timeout_filter.timeouts"
+            ]
+        }
+    }
+}

@@ -143,6 +143,14 @@ pub trait ListenCollectionReadable {
     ///     - All the listens are at the same time
     ///
     /// You may want to unwrap with: `.unwrap_or(Decimal::MAX)`
+    ///
+    /// # Option
+    ///
+    /// Return none when [`average_duration_between_listens`] return 0.
+    ///     - When there's no listens
+    ///     - All the listens are at the same time
+    ///
+    /// You may want to unwrap with: `.unwrap_or(Decimal::MAX)`
     fn get_listen_rate(&self, period: Duration) -> Option<Decimal> {
         Decimal::from(period.num_seconds()).checked_div(Decimal::from(
             self.average_duration_between_listens().num_seconds(),
