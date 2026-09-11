@@ -7,15 +7,13 @@ use tuillez::extensions::chrono_exts::DurationExt;
 
 use crate::models::radio_file::radio_input::RadioInput;
 
-
-
 /// Represent all the variable of a radio
-#[derive(Clone, Debug)]
-pub struct RadioVariables {
+#[derive(Clone, Debug, Default)]
+pub struct RadioInputs {
     values: HashMap<String, Value>,
 }
 
-impl RadioVariables {
+impl RadioInputs {
     pub fn new(values: HashMap<String, Value>) -> Self {
         Self { values }
     }

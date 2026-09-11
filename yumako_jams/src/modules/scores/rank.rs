@@ -8,7 +8,7 @@ use serde::Serialize;
 
 use crate::RadioStream;
 use crate::client::YumakoClient;
-use crate::modules::radio_module::LayerResult;
+use crate::models::radio_stream::radio_module::LayerResult;
 use crate::modules::radio_module::RadioModule;
 use crate::modules::scores::ScoreMerging;
 use crate::radio_stream::RadioStreamaExt as _;
@@ -26,7 +26,6 @@ impl RadioModule for UserTopScorer {
         let stream = try_fn_stream(|emitter| async move {
             // First we grab the user's data
             //let listen_data = Re
-            
 
             let mut collection = DoublePriorityQueue::new();
 

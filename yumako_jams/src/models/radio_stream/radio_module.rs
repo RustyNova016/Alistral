@@ -5,7 +5,10 @@ use serde_json::Value;
 use snafu::IntoError;
 use snafu::ResultExt;
 
+use crate::RadioStream;
 use crate::models::radio_file::layer::Layer;
+
+pub type LayerResult<'a> = Result<RadioStream<'a>, crate::Error>;
 
 pub struct RadioModule<Inputs> {
     pub id: String,

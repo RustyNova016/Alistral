@@ -10,20 +10,21 @@ use tracing::trace;
 
 use crate::RadioStream;
 use crate::client::YumakoClient;
+use crate::models::radio_stream::radio_module::LayerResult;
 use crate::models::radio_stream::radio_module::RadioModule;
-use crate::modules::radio_module::LayerResult;
 
 #[derive(Serialize, Deserialize, Clone)]
-pub struct InterzicFilter {
-}
+pub struct InterzicFilter {}
 
 impl RadioModule<InterzicFilter> {
     /// Add the module to the stream
-    pub fn into_stream<'a>(self, stream: RadioStream<'a>, client: &'a YumakoClient) -> LayerResult<'a> {
+    pub fn into_stream<'a>(
+        self,
+        stream: RadioStream<'a>,
+        client: &'a YumakoClient,
+    ) -> LayerResult<'a> {
         Ok(stream
             .try_filter(move |ele| {
-                
-
                 let listen_count = ele.listen_count();
                 let minimum_listens = self.inputs.minimum.unwrap_or(0);
                 if listen_count < minimum_listens {

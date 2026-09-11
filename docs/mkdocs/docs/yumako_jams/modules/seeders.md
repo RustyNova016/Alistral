@@ -1,10 +1,10 @@
 # Seeders
 
-Seeders provide radio items for your radios. They can be set anywhere. 
+Seeders provide new radio items for your radios. While it's commonly found as the first thing on a radio, more can be added afterward, and will add radio items after the previous(es) seeders finished
 
 ## Artist Seeder
 
-This seeder provide all the recording's of an artist
+This seeder provide all the recording's of an artist. The discography tracks are in a random order, but the artists are in the order they have been declared
 
 ### Inputs
 

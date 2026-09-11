@@ -1,5 +1,3 @@
-pub mod inspect;
-pub mod yumako;
 use interzic::models::messy_recording::MessyRecording;
 use interzic::models::playlist_stub::PlaylistStub;
 use interzic::models::services::listenbrainz::Listenbrainz;
@@ -18,6 +16,7 @@ pub mod listen_rate;
 pub mod overdue;
 pub mod shared;
 pub mod underrated;
+pub mod yumako;
 
 impl RadioExportTarget {
     pub async fn export(
