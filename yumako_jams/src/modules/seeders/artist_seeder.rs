@@ -1,41 +1,54 @@
 use async_fn_stream::try_fn_stream;
 use futures::StreamExt;
+use futures::TryStreamExt;
 use futures::pin_mut;
-use futures::stream::select;
 use musicbrainz_db_lite::Artist;
 use musicbrainz_db_lite::GetOrFetch;
+use musicbrainz_db_lite::HasMBID;
 use serde::Deserialize;
 use serde::Serialize;
 use snafu::OptionExt;
 use snafu::ResultExt;
+use tracing::trace;
 
-use crate::modules::error::ArtistSeederSnafu;
-use crate::modules::radio_module::RadioModuleI;
+use crate::RadioStream;
+use crate::YumakoClient;
 use crate::models::radio_stream::radio_item::RadioItem;
+use crate::models::radio_stream::radio_module::RadioModule;
+use crate::modules::error::ArtistSeederSnafu;
+use crate::modules::radio_module::LayerResult;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct ArtistSeeder {
     artist_mbids: Vec<String>,
 }
 
-impl RadioModuleI for ArtistSeeder {
-    fn create_stream<'a>(
+impl RadioModule<ArtistSeeder> {
+    /// Add the module to the stream
+    pub fn into_stream<'a>(
         self,
-        mut stream: crate::RadioStream<'a>,
-        client: &'a crate::YumakoClient,
-    ) -> crate::modules::radio_module::LayerResult<'a> {
-        for artist in self.artist_mbids {
-            stream = select(stream, create_artist_stream(client, artist)?).boxed()
+        mut stream: RadioStream<'a>,
+        client: &'a YumakoClient,
+    ) -> LayerResult<'a> {
+        for artist in self.inputs.artist_mbids {
+            let moved_id = self.id.clone();
+
+            let stream2 = create_artist_stream(client, artist)?.inspect_ok(move |item| {
+                trace!(
+                    "[{}] Seeded recording {}",
+                    moved_id.clone(),
+                    item.entity().get_mbid()
+                );
+            });
+
+            stream = stream.chain(stream2).boxed()
         }
 
         Ok(stream.boxed())
     }
 }
 
-fn create_artist_stream(
-    client: &crate::YumakoClient,
-    artist_mbid: String,
-) -> crate::modules::radio_module::LayerResult<'_> {
+fn create_artist_stream(client: &crate::YumakoClient, artist_mbid: String) -> LayerResult<'_> {
     Ok(try_fn_stream(async move |emitter| {
         // Load the artist
         let artist =

@@ -1,17 +1,20 @@
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use alistral_core::models::stat_periods::StatPeriod;
 use alistral_core::traits::vec_like::VecLike;
 use chrono::DateTime;
 use chrono::Utc;
 use futures::StreamExt;
 use futures::TryStreamExt;
+use musicbrainz_db_lite::HasMBID;
 use serde::Deserialize;
 use serde::Serialize;
 use tracing::debug;
+use tracing::trace;
 
 use crate::RadioStream;
 use crate::client::YumakoClient;
+use crate::models::radio_stream::radio_module::RadioModule;
 use crate::modules::radio_module::LayerResult;
-use crate::modules::radio_module::RadioModuleI;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct ListenInterval {
@@ -25,14 +28,11 @@ pub struct ListenInterval {
     period: StatPeriod,
 }
 
-impl RadioModuleI for ListenInterval {
-    fn create_stream<'a>(
-        self,
-        stream: RadioStream<'a>,
-        _client: &'a YumakoClient,
-    ) -> LayerResult<'a> {
-        let min = self.get_start_date();
-        let max = self.get_end_date();
+
+impl RadioModule<ListenInterval> {
+    pub fn into_stream<'a>(self, stream: RadioStream<'a>, _: &'a YumakoClient) -> LayerResult<'a> {
+        let min = self.inputs.get_start_date();
+        let max = self.inputs.get_end_date();
 
         debug!(
             "ListenInterval: start: {min}, end: {max}, end_ts: {}",
@@ -45,6 +45,14 @@ impl RadioModuleI for ListenInterval {
                     let listened_at = l.listened_at_as_datetime();
                     min <= listened_at && listened_at <= max
                 });
+
+                trace!(
+                    "[{}] Filtered the listens of {} between {min} and {max}. Now has {} listens",
+                    self.id,
+                    track.entity().get_mbid(),
+                    track.listen_count()
+                );
+
                 track
             })
             .boxed())

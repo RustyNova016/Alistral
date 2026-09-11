@@ -1,6 +1,6 @@
-# Create a radio playlist
+# Generate a radio playlist
 
-To create a radio playlist, you can use `alistral radio create`. This takes in the arguments as follows:
+To generate a radio playlist, you can use `alistral radio create`. This takes in the arguments as follows:
 
 ## Radio name
 

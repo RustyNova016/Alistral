@@ -2,22 +2,22 @@ use std::collections::HashMap;
 
 use async_fn_stream::try_fn_stream;
 use futures::StreamExt;
+use musicbrainz_db_lite::HasMBID;
 use serde::Deserialize;
 use serde::Serialize;
 
 use serde_json::Value;
 use streamies::Streamies;
-use tracing::debug;
 use tracing::trace;
 
 use crate::RadioStream;
 use crate::YumakoClient;
 use crate::models::radio_file::radio::Radio;
 use crate::models::radio_stream::radio_item::RadioItem;
+use crate::models::radio_stream::radio_module::RadioModule;
 use crate::modules::radio_module::LayerResult;
-use crate::modules::radio_module::RadioModuleI;
 use crate::radio_stream::RadioStreamaExt;
-use crate::radio_variables::RadioVariables;
+use crate::radio_variables::RadioInputs;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct SetJoin {
@@ -35,15 +35,16 @@ pub enum JoinOperation {
     Full,
 }
 
-impl RadioModuleI for SetJoin {
-    fn create_stream<'a>(
+impl RadioModule<SetJoin> {
+    pub fn into_stream<'a>(
         self,
         stream: RadioStream<'a>,
         client: &'a YumakoClient,
     ) -> LayerResult<'a> {
         let other_radio = self
+            .inputs
             .radio_schema
-            .to_stream(client, RadioVariables::new(self.radio))?;
+            .to_stream(client, RadioInputs::new(self.inputs.radio))?;
 
         // We create a stream here to capture the other stream collection as part of the first poll's work
         // If we don't do that, we force having a to read a whole radio upon compilation,
@@ -51,26 +52,40 @@ impl RadioModuleI for SetJoin {
         // This also allow us to keep the compilation sync
         Ok(try_fn_stream(async move |emitter| {
             // Collect the other radio
-            let other_tracks = other_radio
+            let right_tracks = other_radio
                 .to_item_stream(&emitter)
                 .inspect(|elem| trace!("Collecting: {}", elem.entity().title))
                 .collect_vec()
                 .await;
-            let mut stream = stream.to_item_stream(&emitter);
+            let mut left_stream = stream.to_item_stream(&emitter);
             let mut left_mbids = Vec::new();
 
             // Filter the stream
-            while let Some(track) = stream.next().await {
+            while let Some(track) = left_stream.next().await {
                 left_mbids.push(track.entity().mbid.clone());
-                if check_left_track(&track, &other_tracks, self.join_type) {
+                if check_left_track(&track, &right_tracks, self.inputs.join_type) {
+                    trace!(
+                        "[{}] Keeping {} from the current radio",
+                        self.id,
+                        track.entity().get_mbid()
+                    );
                     emitter.emit(track).await;
                 } else {
-                    debug!("Removing `{}` from the radio", track.entity().title);
+                    trace!(
+                        "[{}] Removing {}, in timeout",
+                        self.id,
+                        track.entity().get_mbid()
+                    );
                 }
             }
 
-            for track in other_tracks {
-                if check_right_track(&track, &left_mbids, self.join_type) {
+            for track in right_tracks {
+                if check_right_track(&track, &left_mbids, self.inputs.join_type) {
+                    trace!(
+                        "[{}] Adding {} from the other radio",
+                        self.id,
+                        track.entity().get_mbid()
+                    );
                     emitter.emit(track).await;
                 }
             }

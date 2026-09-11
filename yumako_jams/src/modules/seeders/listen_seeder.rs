@@ -7,23 +7,26 @@ use serde::Deserialize;
 use serde::Serialize;
 
 use crate::RadioStream;
-use crate::modules::radio_module::LayerResult;
-use crate::modules::radio_module::RadioModuleI;
+use crate::YumakoClient;
 use crate::models::radio_stream::radio_item::RadioItem;
+use crate::models::radio_stream::radio_module::RadioModule;
+use crate::modules::radio_module::LayerResult;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct ListenSeeder {
     user: String,
 }
 
-impl RadioModuleI for ListenSeeder {
-    fn create_stream<'a>(
+impl RadioModule<ListenSeeder> {
+    /// Add the module to the stream
+    pub fn into_stream<'a>(
         self,
-        _stream: RadioStream<'a>,
-        client: &'a crate::client::YumakoClient,
+        stream: RadioStream<'a>,
+        client: &'a YumakoClient,
     ) -> LayerResult<'a> {
-        let user = self.user.clone();
-        Ok(try_fn_stream(async move |emitter| {
+        let user = self.inputs.user.clone();
+
+        let stream2 = try_fn_stream(async move |emitter| {
             // Get the listens
             let tracks = Listen::get_or_fetch_listens()
                 .client(&client.alistral_core.musicbrainz_db)
@@ -44,7 +47,8 @@ impl RadioModuleI for ListenSeeder {
             }
 
             Ok(())
-        })
-        .boxed())
+        });
+
+        Ok(stream.chain(stream2).boxed())
     }
 }

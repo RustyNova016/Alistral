@@ -1,3 +1,5 @@
+pub mod errors;
+pub mod inputs;
 use core::fmt::Display;
 use core::ops::Deref as _;
 use std::collections::HashMap;
@@ -18,7 +20,7 @@ use yumako_jams::RadioStream;
 use yumako_jams::models::radio_file::radio::Radio;
 use yumako_jams::models::radio_stream::radio_item::RadioItem;
 use yumako_jams::radio_stream::RadioStreamaExt;
-use yumako_jams::radio_variables::RadioVariables;
+use yumako_jams::radio_variables::RadioInputs;
 
 use crate::ALISTRAL_CLIENT;
 use crate::models::cli::parsers::yumako_parser::parse_yumako_variables;
@@ -47,9 +49,8 @@ pub struct RadioYumakoCommand {
     #[arg(short, long)]
     token: Option<String>,
 
-    /// Where to output the radio
-    #[arg(short, long, default_value_t = RadioOutput::Listenbrainz)]
-    output: RadioOutput,
+    #[arg(short, long)]
+    input_file: Option<String>,
 
     /// Radio arguments
     arguments: Vec<String>,
@@ -99,7 +100,7 @@ impl RadioYumakoCommand {
     }
 
     /// Set up the radio arguments from the user inputs and config
-    fn get_radio_arguments(&self, username: &str) -> Result<RadioVariables, crate::Error> {
+    fn get_radio_arguments(&self, username: &str) -> Result<RadioInputs, crate::Error> {
         let mut args = parse_yumako_variables(&self.arguments.join(" "))?;
 
         args.entry("username".to_string()).or_insert(
@@ -114,7 +115,7 @@ impl RadioYumakoCommand {
         );
 
         // Wrap the args
-        Ok(RadioVariables::new(args))
+        Ok(RadioInputs::new(args))
     }
 
     /// Find the radio schema
@@ -127,7 +128,7 @@ impl RadioYumakoCommand {
 
     async fn collect_radio(
         radio: RadioStream<'_>,
-        args: RadioVariables,
+        args: RadioInputs,
     ) -> Result<Vec<RadioItem>, crate::Error> {
         let radio = radio.collect_with_args(args)?.await;
         let mut error_count = 0;

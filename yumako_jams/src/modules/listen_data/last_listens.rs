@@ -13,10 +13,10 @@ use streamies::TryStreamies;
 
 use crate::RadioStream;
 use crate::client::YumakoClient;
+use crate::models::radio_stream::radio_item::RadioItem;
+use crate::models::radio_stream::radio_module::RadioModule;
 use crate::modules::listen_data::ListenAction;
 use crate::modules::radio_module::LayerResult;
-use crate::modules::radio_module::RadioModuleI;
-use crate::models::radio_stream::radio_item::RadioItem;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct LatestListens {
@@ -29,8 +29,8 @@ pub struct LatestListens {
     buffer: usize,
 }
 
-impl RadioModuleI for LatestListens {
-    fn create_stream<'a>(
+impl RadioModule<LatestListens> {
+    pub fn into_stream<'a>(
         self,
         stream: RadioStream<'a>,
         client: &'a YumakoClient,
@@ -39,10 +39,11 @@ impl RadioModuleI for LatestListens {
         let this_moved = this.clone();
 
         Ok(stream
+            // Todo: convert to async_batcher
             .ready_chunks_ok(50000)
-            .map_ok(move |tracks| convert_batch(this_moved.clone(), client, tracks))
+            .map_ok(move |tracks| convert_batch(this_moved.inputs.clone(), client, tracks))
             .extract_future_ok()
-            .buffered(this.buffer)
+            .buffered(this.inputs.buffer)
             .map(|item| match item {
                 //TODO: Add merge_results in streamies
                 Ok(Err(err)) | Err(err) => Err(err),
@@ -67,7 +68,7 @@ fn default_buffer() -> usize {
 }
 
 async fn convert_batch(
-    this: Arc<LatestListens>,
+    this: LatestListens,
     client: &YumakoClient,
     mut tracks: Vec<RadioItem>,
 ) -> Result<Vec<RadioItem>, crate::Error> {

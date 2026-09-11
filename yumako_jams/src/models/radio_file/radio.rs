@@ -13,7 +13,7 @@ use crate::client::YumakoClient;
 use crate::models::radio_file::layer::Layer;
 use crate::models::radio_file::radio_input::RadioInput;
 use crate::modules::radio_module::LayerResult;
-use crate::radio_variables::RadioVariables;
+use crate::radio_variables::RadioInputs;
 
 /// The full radio declaration
 #[derive(Serialize, Deserialize, Clone)]
@@ -32,8 +32,8 @@ pub struct Radio {
 }
 
 impl Radio {
-    pub fn to_stream(self, client: &YumakoClient, inputs: RadioVariables) -> LayerResult<'_> {
-        let variables = RadioVariables::new_with_aliases(inputs.into_hashmap(), self.inputs);
+    pub fn to_stream(self, client: &YumakoClient, inputs: RadioInputs) -> LayerResult<'_> {
+        let variables = RadioInputs::new_with_aliases(inputs.into_hashmap(), self.inputs);
         let mut stream: RadioStream = stream::empty().boxed();
 
         for layer in self.stack {

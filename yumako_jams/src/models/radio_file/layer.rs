@@ -16,7 +16,6 @@ use crate::modules::listen_data::last_listens::LatestListens;
 use crate::modules::listen_data::listen_interval::ListenInterval;
 use crate::modules::mappers::artist_discography::ArtistDiscographyMapper;
 use crate::modules::radio_module::LayerResult;
-use crate::modules::radio_module::RadioModuleI;
 use crate::modules::scores::bump::BumpScore;
 use crate::modules::scores::listenrate::ListenRateScorer;
 use crate::modules::scores::overdue_count::OverdueCountScorer;
@@ -25,7 +24,7 @@ use crate::modules::scores::sort::SortModule;
 use crate::modules::seeders::artist_seeder::ArtistSeeder;
 use crate::modules::seeders::listen_seeder::ListenSeeder;
 use crate::modules::seeders::release_seeder::ReleaseSeeder;
-use crate::radio_variables::RadioVariables;
+use crate::radio_variables::RadioInputs;
 
 /// A layer represent a step in the radio processing. It calls a module based on the step type
 #[derive(Serialize, Deserialize, Clone)]
@@ -43,52 +42,51 @@ impl Layer {
         self,
         client: &'a YumakoClient,
         stream: RadioStream<'a>,
-        radio_variables: &RadioVariables,
+        radio_variables: &RadioInputs,
     ) -> LayerResult<'a> {
         let variables = radio_variables.get_layer_variables(&self.id)?;
 
         match self.step_type.as_str() {
             "artist_discography_mapper" => {
-                ArtistDiscographyMapper::create(&self, variables)?.create_stream(stream, client)
+                RadioModule::<ArtistDiscographyMapper>::from_layer(&self, variables)?
+                    .into_stream(stream, client)
             }
-            "artist_seeder" => {
-                ArtistSeeder::create(&self, variables)?.create_stream(stream, client)
-            }
+            "artist_seeder" => RadioModule::<ArtistSeeder>::from_layer(&self, variables)?
+                .into_stream(stream, client),
             "bumps_score" => {
                 RadioModule::<BumpScore>::from_layer(&self, variables)?.into_stream(stream, client)
             }
-            "clear_listens" => {
-                ClearListens::create(&self, variables)?.create_stream(stream, client)
-            }
+            "clear_listens" => RadioModule::<ClearListens>::from_layer(&self, variables)?
+                .into_stream(stream, client),
             "cooldown_filter" => RadioModule::<CooldownFilter>::from_layer(&self, variables)?
                 .into_stream(stream, client),
-            "latest_listens" => {
-                LatestListens::create(&self, variables)?.create_stream(stream, client)
-            }
+            "latest_listens" => RadioModule::<LatestListens>::from_layer(&self, variables)?
+                .into_stream(stream, client),
             "listen_filter" => RadioModule::<ListenFilter>::from_layer(&self, variables)?
                 .into_stream(stream, client),
-            "listen_interval" => {
-                ListenInterval::create(&self, variables)?.create_stream(stream, client)
-            }
-            "listen_seeder" => {
-                ListenSeeder::create(&self, variables)?.create_stream(stream, client)
-            }
+            "listen_interval" => RadioModule::<ListenInterval>::from_layer(&self, variables)?
+                .into_stream(stream, client),
+            "listen_seeder" => RadioModule::<ListenSeeder>::from_layer(&self, variables)?
+                .into_stream(stream, client),
             "listenrate_scorer" => RadioModule::<ListenRateScorer>::from_layer(&self, variables)?
                 .into_stream(stream, client),
-            "join" => SetJoin::create(&self, variables)?.create_stream(stream, client),
-            "release_seeder" => {
-                ReleaseSeeder::create(&self, variables)?.create_stream(stream, client)
+            "join" => {
+                RadioModule::<SetJoin>::from_layer(&self, variables)?.into_stream(stream, client)
             }
-            "sort_module" => SortModule::create(&self, variables)?.create_stream(stream, client),
-            "timeout_filter" => {
-                TimeoutFilter::create(&self, variables)?.create_stream(stream, client)
+            "release_seeder" => RadioModule::<ReleaseSeeder>::from_layer(&self, variables)?
+                .into_stream(stream, client),
+            "sort_module" => {
+                RadioModule::<SortModule>::from_layer(&self, variables)?.into_stream(stream, client)
             }
+            "timeout_filter" => RadioModule::<TimeoutFilter>::from_layer(&self, variables)?
+                .into_stream(stream, client),
             "overdue_count_scorer" => {
                 RadioModule::<OverdueCountScorer>::from_layer(&self, variables)?
                     .into_stream(stream, client)
             }
             "overdue_duration_scorer" => {
-                OverdueDurationScorer::create(&self, variables)?.create_stream(stream, client)
+                RadioModule::<OverdueDurationScorer>::from_layer(&self, variables)?
+                    .into_stream(stream, client)
             }
             _ => Err(crate::Error::UnknownStepTypeError(
                 self.step_type.to_string(),

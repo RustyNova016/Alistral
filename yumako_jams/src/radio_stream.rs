@@ -6,17 +6,15 @@ use futures::StreamExt;
 use futures::TryStreamExt as _;
 use futures::future::BoxFuture;
 use futures::stream::BoxStream;
-use musicbrainz_db_lite::HasMBID;
 use rust_decimal::Decimal;
 use tracing::instrument;
-use tracing::trace;
 use tuillez::pg_counted;
 use tuillez::pg_inc;
 use tuillez::tracing_indicatif::span_ext::IndicatifSpanExt;
 
 use crate::models::radio_stream::radio_item::RadioItem;
 use crate::modules::scores::ScoreMerging;
-use crate::radio_variables::RadioVariables;
+use crate::radio_variables::RadioInputs;
 
 /// The stream output of the radio
 pub type RadioStream<'a> = BoxStream<'a, RadioResult>;
@@ -80,7 +78,7 @@ pub impl<'a> RadioStream<'a> {
 
     fn collect_with_args(
         self,
-        args: RadioVariables,
+        args: RadioInputs,
     ) -> Result<BoxFuture<'a, Vec<RadioResult>>, crate::Error> {
         let min_count = args.get_count().transpose()?.unwrap_or(50);
 

@@ -6,15 +6,14 @@ use priority_queue::DoublePriorityQueue;
 use rust_decimal::Decimal;
 use serde::Deserialize;
 use serde::Serialize;
-use tracing::instrument;
 use tuillez::pg_counted;
 use tuillez::pg_inc;
 
 use crate::RadioStream;
 use crate::client::YumakoClient;
-use crate::modules::radio_module::LayerResult;
-use crate::modules::radio_module::RadioModuleI;
 use crate::models::radio_stream::radio_item::RadioItem;
+use crate::models::radio_stream::radio_module::RadioModule;
+use crate::modules::radio_module::LayerResult;
 use crate::radio_stream::RadioStreamaExt as _;
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -26,11 +25,11 @@ pub struct SortModule {
     max_count: u64,
 }
 
-impl RadioModuleI for SortModule {
-    #[instrument(skip(self, stream), fields(indicatif.pb_show = tracing::field::Empty))]
-    fn create_stream<'a>(self, stream: RadioStream<'a>, _: &'a YumakoClient) -> LayerResult<'a> {
+impl RadioModule<SortModule> {
+    /// Add the module to the stream
+    pub fn into_stream<'a>(self, stream: RadioStream<'a>, _: &'a YumakoClient) -> LayerResult<'a> {
         let stream = try_fn_stream(|emitter| async move {
-            pg_counted!(self.max_count, "Buffering Sorter");
+            pg_counted!(self.inputs.max_count, "Buffering Sorter");
             let mut collection = DoublePriorityQueue::new();
 
             let mut stream = stream.to_item_stream(&emitter).map(SortItem);
@@ -43,7 +42,7 @@ impl RadioModuleI for SortModule {
                             let score = val.score();
                             collection.push(val, score);
 
-                            if collection.len() as u64 <= self.max_count {
+                            if collection.len() as u64 <= self.inputs.max_count {
                                 pg_inc!();
                                 continue;
                             }
@@ -52,7 +51,7 @@ impl RadioModuleI for SortModule {
                     }
                 }
 
-                let yielded = match self.direction {
+                let yielded = match self.inputs.direction {
                     SortDirection::Asc => collection.pop_min(),
                     SortDirection::Desc => collection.pop_max(),
                 };

@@ -1,30 +1,46 @@
 use async_fn_stream::try_fn_stream;
 use futures::StreamExt;
-use futures::stream::select;
+use futures::TryStreamExt;
 use musicbrainz_db_lite::GetOrFetch;
+use musicbrainz_db_lite::HasMBID;
 use musicbrainz_db_lite::Release;
 use serde::Deserialize;
 use serde::Serialize;
 use snafu::OptionExt;
 use snafu::ResultExt;
+use tracing::trace;
 
+use crate::RadioStream;
+use crate::YumakoClient;
 use crate::models::radio_stream::radio_item::RadioItem;
+use crate::models::radio_stream::radio_module::RadioModule;
 use crate::modules::error::ReleaseSeederSnafu;
-use crate::modules::radio_module::RadioModuleI;
+use crate::modules::radio_module::LayerResult;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct ReleaseSeeder {
     release_mbids: Vec<String>,
 }
 
-impl RadioModuleI for ReleaseSeeder {
-    fn create_stream<'a>(
+impl RadioModule<ReleaseSeeder> {
+    /// Add the module to the stream
+    pub fn into_stream<'a>(
         self,
-        mut stream: crate::RadioStream<'a>,
-        client: &'a crate::YumakoClient,
-    ) -> crate::modules::radio_module::LayerResult<'a> {
-        for release in self.release_mbids {
-            stream = select(stream, create_release_stream(client, release)?).boxed()
+        mut stream: RadioStream<'a>,
+        client: &'a YumakoClient,
+    ) -> LayerResult<'a> {
+        for artist in self.inputs.release_mbids {
+            let moved_id = self.id.clone();
+
+            let stream2 = create_release_stream(client, artist)?.inspect_ok(move |item| {
+                trace!(
+                    "[{}] Seeded recording {}",
+                    moved_id.clone(),
+                    item.entity().get_mbid()
+                );
+            });
+
+            stream = stream.chain(stream2).boxed()
         }
 
         Ok(stream.boxed())

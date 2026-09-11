@@ -11,15 +11,15 @@ use streamies::TryStreamies as _;
 
 use crate::RadioStream;
 use crate::client::YumakoClient;
-use crate::modules::radio_module::LayerResult;
-use crate::modules::radio_module::RadioModuleI;
 use crate::models::radio_stream::radio_item::RadioItem;
+use crate::models::radio_stream::radio_module::RadioModule;
+use crate::modules::radio_module::LayerResult;
 
 #[derive(Debug, Deserialize)]
 pub struct ArtistDiscographyMapper {}
 
-impl RadioModuleI for ArtistDiscographyMapper {
-    fn create_stream<'a>(
+impl RadioModule<ArtistDiscographyMapper> {
+    pub fn into_stream<'a>(
         self,
         stream: RadioStream<'a>,
         client: &'a YumakoClient,
