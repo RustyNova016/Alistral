@@ -7,9 +7,12 @@ use futures::StreamExt as _;
 use futures::stream;
 use serde::Deserialize;
 use serde::Serialize;
+use snafu::ResultExt;
 
 use crate::RadioStream;
 use crate::client::YumakoClient;
+use crate::models::radio_file::error::RadioFileError;
+use crate::models::radio_file::error::RadioParsingSnafu;
 use crate::models::radio_file::layer::Layer;
 use crate::models::radio_file::radio_input::RadioInput;
 use crate::models::radio_stream::radio_module::LayerResult;
@@ -55,19 +58,9 @@ impl Radio {
         serde_json::from_reader(reader).map_err(crate::Error::RadioReadError)
     }
 
-    /// Parse a file's content into a radio. This can parse both JSON and TOML
-    pub fn from_file_content(body: &str) -> Result<Self, crate::Error> {
-        let json_err = match serde_json::from_str::<Self>(body) {
-            Ok(radio) => return Ok(radio),
-            Err(err) => err,
-        };
-
-        let toml_err = match toml::from_str::<Self>(body) {
-            Ok(radio) => return Ok(radio),
-            Err(err) => err,
-        };
-
-        return Err(crate::Error::RadioFileTypeError(json_err, toml_err));
+    /// Parse a file's content into a radio. This can parse either JSON, JSON5
+    pub fn from_file_content(body: &str) -> Result<Self, RadioFileError> {
+        json5::from_str::<Self>(body).context(RadioParsingSnafu)
     }
 }
 

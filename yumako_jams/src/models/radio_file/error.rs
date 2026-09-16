@@ -8,4 +8,11 @@ pub enum RadioFileError {
         #[snafu(implicit)]
         location: snafu::Location,
     },
+
+    RadioParsingError {
+        source: json5::Error,
+
+        #[snafu(implicit)]
+        location: snafu::Location,
+    },
 }

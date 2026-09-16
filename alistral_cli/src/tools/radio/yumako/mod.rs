@@ -1,5 +1,6 @@
 pub mod errors;
 pub mod inputs;
+pub mod load_radio;
 use core::fmt::Display;
 use core::ops::Deref as _;
 use std::collections::HashMap;
@@ -165,7 +166,7 @@ impl RadioYumakoCommand {
     ) -> Result<(), crate::Error> {
         let playlist = Self::radio_to_playlist(conn, radio_schema, radio_items).await?;
         target
-            .export(playlist, username, token, client_name)
+            .export(playlist, username, token, Some(client_name))
             .await?;
 
         // match self.output {

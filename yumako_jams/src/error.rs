@@ -7,6 +7,7 @@ use thiserror::Error;
 
 use crate::models::radio_stream::radio_module::RadioModuleError;
 use crate::modules::error::StreamModuleError;
+use crate::modules::limiters::length_limiter::LengthLimiterError;
 
 #[derive(Error, Debug)]
 pub enum Error {
@@ -67,6 +68,8 @@ pub enum Error {
     //TODO: SNAFU error. Convert usage to use snafu as well.
     #[error(transparent)]
     RadioModuleError(#[from] RadioModuleError),
+    #[error(transparent)]
+    LengthLimiterError(#[from] LengthLimiterError),
 }
 
 impl Error {

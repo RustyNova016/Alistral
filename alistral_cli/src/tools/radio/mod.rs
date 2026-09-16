@@ -24,7 +24,7 @@ impl RadioExportTarget {
         playlist: PlaylistStub,
         username: Option<String>,
         token: Option<&str>,
-        client_name: &str,
+        client_name: Option<&str>,
     ) -> Result<(), crate::Error> {
         match self {
             Self::Listenbrainz => {
@@ -45,7 +45,11 @@ impl RadioExportTarget {
             }
             #[cfg(feature = "subsonic")]
             Self::Subsonic => {
-                let Some(client) = ALISTRAL_CLIENT.interzic.get_subsonic_client(client_name) else {
+                let client_name = client_name.unwrap();
+                let Some(client) = ALISTRAL_CLIENT
+                    .interzic
+                    .get_subsonic_client(client_name)
+                else {
                     use tracing::error;
 
                     error!(

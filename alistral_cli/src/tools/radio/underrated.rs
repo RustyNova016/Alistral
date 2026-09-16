@@ -79,7 +79,7 @@ pub async fn underrated_mix(
     };
 
     target
-        .export(playlist, Some(username), Some(token), client_name)
+        .export(playlist, Some(username), Some(token), Some(client_name))
         .await
         .expect_fatal("Couldn't send the playlist");
 

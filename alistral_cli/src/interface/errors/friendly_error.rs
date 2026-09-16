@@ -4,8 +4,8 @@ use alistral_core::cli::colors::AlistralColors as _;
 #[derive(Debug, snafu::Snafu, Clone)]
 #[snafu(visibility(pub(crate)))]
 pub struct FriendlyPanic {
-    title: String,
-    body: String,
+    pub title: String,
+    pub body: String,
 }
 
 impl FriendlyPanic {

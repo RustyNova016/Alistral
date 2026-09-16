@@ -20,3 +20,4 @@ pub mod radio;
 #[cfg(feature = "stats")]
 pub mod stats;
 pub mod unstable;
+pub mod yumako_jam;

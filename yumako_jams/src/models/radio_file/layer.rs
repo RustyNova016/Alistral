@@ -12,6 +12,7 @@ use crate::modules::filters::cooldown::CooldownFilter;
 use crate::modules::filters::listens::ListenFilter;
 use crate::modules::filters::timeout::TimeoutFilter;
 use crate::modules::joins::set_join::SetJoin;
+use crate::modules::limiters::length_limiter::LengthLimiterInputs;
 use crate::modules::listen_data::clear_listens::ClearListens;
 use crate::modules::listen_data::last_listens::LatestListens;
 use crate::modules::listen_data::listen_interval::ListenInterval;
@@ -61,6 +62,8 @@ impl Layer {
             "cooldown_filter" => RadioModule::<CooldownFilter>::from_layer(&self, variables)?
                 .into_stream(stream, client),
             "latest_listens" => RadioModule::<LatestListens>::from_layer(&self, variables)?
+                .into_stream(stream, client),
+            "length_limiter" => RadioModule::<LengthLimiterInputs>::from_layer(&self, variables)?
                 .into_stream(stream, client),
             "listen_filter" => RadioModule::<ListenFilter>::from_layer(&self, variables)?
                 .into_stream(stream, client),

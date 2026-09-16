@@ -41,20 +41,19 @@ impl RadioModule<CooldownFilter> {
                 let after_cooldown = last_listen_date + cooldown;
                 let now = Utc::now();
 
-                if after_cooldown <= now {
+                if now <= after_cooldown {
                     trace!(
-                        "[{}] Removing {}, in cooldown ({} < {after_cooldown})",
+                        "[{}] Removing {}, in cooldown (Now ({now}) < Cooldown ({after_cooldown}))",
                         self.id,
                         r.entity().get_mbid(),
-                        now
                     );
                     ready(false)
                 } else {
                     trace!(
-                        "[{}] keeping {} ({after_cooldown} < {})",
+                        "[{}] keeping {} (Now ({now}) > Cooldown ({after_cooldown}))",
                         self.id,
                         r.entity().get_mbid(),
-                        now
+
                     );
                     ready(true)
                 }

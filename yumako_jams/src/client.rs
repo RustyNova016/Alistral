@@ -10,10 +10,8 @@ pub struct YumakoClient {
 }
 
 impl YumakoClient {
-    /// Retrieve a reference to a `musicbrainz_db_lite` connection
-    // pub async fn get_db_lite_conn(&self) -> DBLitePoolResult {
-    //     self.alistral_core.musicbrainz_db.get_conn().await
-    // }
+    // Current version of yumako_jams
+    pub const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 
     /// Retrieve a reference to a raw `musicbrainz_db_lite` connection
     pub async fn get_db_lite_raw_conn(&self) -> Result<SqlitePoolConnection, GetConnectionError> {
