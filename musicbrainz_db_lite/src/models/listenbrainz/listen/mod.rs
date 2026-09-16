@@ -1,4 +1,3 @@
-pub mod listen_metadata;
 use chrono::{DateTime, TimeZone, Utc};
 use sea_query::enum_def;
 use sequelles::has_rowid::HasRowID;
@@ -15,8 +14,10 @@ use crate::utils::macros::hardlink_methods::impl_db_relation_methods;
 pub mod deletes;
 pub mod fetching;
 pub mod insert;
+pub mod listen_metadata;
 pub mod relations;
 pub mod selects;
+pub mod views;
 
 #[derive(Debug, PartialEq, Eq, Clone, sqlx::FromRow, Deserialize, Serialize, sequelles::Table)]
 #[enum_def(table_name = "listens")]

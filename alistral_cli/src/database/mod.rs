@@ -42,7 +42,7 @@ pub static DEBUG_DB_LOCATION: LazyLock<PathBuf> = LazyLock::new(|| {
 
 #[cfg(test)]
 pub static TEST_DB_LOCATION: LazyLock<PathBuf> = LazyLock::new(|| {
-    use core::str::FromStr;
+    use core::str::FromStr as _;
 
     use uuid::Uuid;
 

@@ -12,6 +12,8 @@ use crate::models::client::interzic_client::InterzicClientError;
 use crate::tools::bump::BumpCommandError;
 use crate::tools::cache::CacheCommandError;
 use crate::tools::daily::error::DailyCommandError;
+#[cfg(feature = "yumako_jams")]
+use crate::tools::yumako_jam::run::error::YumakoRunCommandError;
 
 #[derive(Error, Debug)]
 //#[expect(clippy::enum_variant_names)]
@@ -55,6 +57,18 @@ pub enum Error {
     #[error(transparent)]
     FatalError(#[from] FatalError),
 
+    #[error("Couldn't parse the arguments")]
+    YumakoArgumentParsingError(), //TODO: Impl error for lyn::Error
+
+    #[error(
+        "Couldn't read the data of a variable. \nVariable: {0}. \nProvided data: {1}\nError: {2}"
+    )]
+    YumakoArgumentDataDeserializingError(String, String, serde_json::Error),
+
+    #[cfg(feature = "interzic")]
+    #[error(transparent)]
+    YumakoError(#[from] yumako_jams::Error),
+
     #[cfg(feature = "interzic")]
     #[error(transparent)]
     InterzicClientError(#[from] InterzicClientError),
@@ -94,6 +108,10 @@ pub enum Error {
 
     #[error(transparent)]
     DailyCommandError(#[from] DailyCommandError),
+
+    #[cfg(feature = "yumako_jams")]
+    #[error(transparent)]
+    YumakoRunCommandError(#[from] YumakoRunCommandError),
 }
 
 impl GetFriendlyError for Error {
@@ -120,10 +138,16 @@ impl GetFriendlyError for Error {
             Self::UserSqlError(_) => None,
             Self::SQLx(_) => None,
             Self::MusicbrainzDBLite(_) => None,
+            #[cfg(feature = "interzic")]
+            Self::YumakoError(_) => None,
+            Self::YumakoArgumentDataDeserializingError(_, _, _) => None,
+            Self::YumakoArgumentParsingError() => None,
             Self::FriendlyPanic(val) => val.get_friendly_error(),
             Self::BumpCommandError(val) => val.get_friendly_error(),
             Self::CacheCommandError(val) => val.get_friendly_error(),
             Self::DailyCommandError(val) => val.get_friendly_error(),
+            #[cfg(feature = "yumako_jams")]
+            Self::YumakoRunCommandError(val) => val.get_friendly_error(),
         }
     }
 }

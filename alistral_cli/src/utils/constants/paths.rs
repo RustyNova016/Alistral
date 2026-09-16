@@ -37,3 +37,19 @@ pub static LOG_DIR: LazyLock<PathBuf> = LazyLock::new(|| {
 
     path
 });
+
+#[cfg(feature = "yumako_jams")]
+fn create_yumako_dir(path: &Path) -> PathBuf {
+    let mut path = path.to_path_buf();
+    path.push("yumako_jams");
+
+    if !fs::exists(&path).unwrap() {
+        fs::create_dir_all(&path).expect("Couldn't create config directory");
+    }
+
+    path
+}
+
+#[cfg(feature = "yumako_jams")]
+pub static YUMAKO_DIR: LazyLock<PathBuf> =
+    LazyLock::new(|| create_yumako_dir(get_basedirs().config_dir()));

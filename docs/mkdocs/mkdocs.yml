@@ -36,6 +36,15 @@ nav:
   - Alistral for noobs: noob_doc.md
   - Config: 
     - config/config_file.md
+  - Radios (Yumako Jams):
+    - radio.md
+    - Creating Radios:
+      - yumako_jams/creating_radios/intro.md
+      - yumako_jams/creating_radios/glossary.md
+      - yumako_jams/creating_radios/your_first_radio.md
+      - yumako_jams/creating_radios/your_second_radio.md
+      - yumako_jams/creating_radios/dealing_with_inputs.md
+      - yumako_jams/creating_radios/consuming_stream.md
 
 extra:
   social:
