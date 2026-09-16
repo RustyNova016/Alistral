@@ -2,10 +2,10 @@ use core::ops::Deref as _;
 use std::collections::HashMap;
 
 use serde_json::Value;
-use snafu::ResultExt;
+use snafu::ResultExt as _;
 use yumako_jams::radio_variables::RadioInputs;
 
-use crate::models::config::config_trait::ConfigFile;
+use crate::models::config::config_trait::ConfigFile as _;
 use crate::models::config::recording_timeout::RecordingTimeoutConfig;
 use crate::tools::yumako_jam::run::error::RadioInputsParseSnafu;
 use crate::tools::yumako_jam::run::error::YumakoRunCommandError;
@@ -24,7 +24,7 @@ pub(super) fn get_radio_inputs(args: &str) -> Result<RadioInputs, YumakoRunComma
 
     let mut data: HashMap<String, Value> = json5::from_str(&args).context(RadioInputsParseSnafu)?;
 
-    if data.get("username").is_none() {
+    if !data.contains_key("username") {
         data.insert(
             "username".to_string(),
             Value::from(UserInputParser::username_or_default(&None)),
@@ -35,7 +35,7 @@ pub(super) fn get_radio_inputs(args: &str) -> Result<RadioInputs, YumakoRunComma
     let config = RecordingTimeoutConfig::load().expect("Couldn't fetch the timeout config");
     let config = config.read_or_panic();
 
-    if data.get("timeouts").is_none() {
+    if !data.contains_key("timeouts") {
         data.insert(
             "timeouts".to_string(),
             serde_json::to_value(config.deref().deref())

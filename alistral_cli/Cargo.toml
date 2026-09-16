@@ -27,7 +27,7 @@ itertools = "0.15.0"
 rust_decimal = "1.41.0"
 rust_decimal_macros = "1.40.0"
 chrono = "0.4.44"
-serde = { version = "1.0.228", features = ["rc"] }
+serde = { version = "1.0.229", features = ["rc"] }
 serde_json = "1.0.149"
 extend = "1.2.0"
 directories = "6.0.0"
@@ -98,7 +98,7 @@ full = ["musicbrainz", "lookup", "stats", "radio", "youtube", "subsonic"]
 # Commands
 musicbrainz = ["symphonize"]
 lookup = ["legacy_ent_with_listen"]
-radio = ["interzic", "dep:yumako_jams"]
+radio = ["interzic", "yumako_jams"]
 stats = []
 
 # Parts 
@@ -211,7 +211,7 @@ useless_let_if_seq = "warn"
 [patch.crates-io]
 sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "04918eda92d0602852cc50bb761da990159b6ff4"}
 tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c8656a4eedb571177a8ffa3b9984e78"}
-musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "6f57831c54c4db93e82ed4855feee2ff16f64e2c"}
-listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "fd73fd764309edb504d58c5923cabed0927271e7" }
+musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "4e4e2b934940030027ede134e35dfd922ac6ca0e"}
+listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "5ba127b377c0acd2c3169e73a3f849371bcf595e" }
 submarine = { git = "https://github.com/eppixx/submarine", rev = "6a9b0a929bacff1fd89b7b0dddd44ff906f1d666" }
 zip = { git = "https://github.com/RustyNova016/zip2", rev=  "4ebae293241d41249f3dd2283e9cc98899d42e33" }

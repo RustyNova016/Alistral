@@ -13,7 +13,7 @@ pub struct LatestRecordingListensView {
 
 impl LatestRecordingListensView {
     pub async fn execute(
-        & self,
+        &self,
         conn: &mut sqlx::SqliteConnection,
     ) -> Result<Vec<JoinRelation<i64, Listen>>, crate::Error> {
         let recordings = serde_json::to_string(&self.recordings)?;

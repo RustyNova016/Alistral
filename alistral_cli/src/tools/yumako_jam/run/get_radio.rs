@@ -1,8 +1,8 @@
 use std::fs::File;
-use std::io::Read;
+use std::io::Read as _;
 use std::path::PathBuf;
 
-use snafu::ResultExt;
+use snafu::ResultExt as _;
 use yumako_jams::models::radio_file::radio::Radio;
 
 use crate::tools::yumako_jam::run::error::RadioFileParseSnafu;

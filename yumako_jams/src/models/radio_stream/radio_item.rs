@@ -36,7 +36,7 @@ impl RadioItem {
                     "[{layer_id}] Replacing the score of {} by {score}",
                     self.entity().get_mbid()
                 );
-                self.score = score
+                self.score = score;
             }
             ScoreMerging::Add => {
                 trace!(
@@ -45,7 +45,7 @@ impl RadioItem {
                     self.entity().get_mbid(),
                     self.score + score
                 );
-                self.score += score
+                self.score += score;
             }
             ScoreMerging::Sub => {
                 trace!(
@@ -54,7 +54,7 @@ impl RadioItem {
                     self.entity().get_mbid(),
                     self.score - score
                 );
-                self.score -= score
+                self.score -= score;
             }
             ScoreMerging::Multiply => {
                 trace!(
@@ -63,7 +63,7 @@ impl RadioItem {
                     self.entity().get_mbid(),
                     self.score * score
                 );
-                self.score *= score
+                self.score *= score;
             }
             ScoreMerging::Divide => {
                 trace!(
@@ -72,7 +72,7 @@ impl RadioItem {
                     self.entity().get_mbid(),
                     self.score / score
                 );
-                self.score /= score
+                self.score /= score;
             }
         }
     }

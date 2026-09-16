@@ -115,8 +115,7 @@ pub fn check_left_track(item: &RadioItem, others: &[RadioItem], op: JoinOperatio
 pub fn check_right_track(item: &RadioItem, others: &[String], op: JoinOperation) -> bool {
     match op {
         JoinOperation::Full => true,
-        JoinOperation::Inner => false,
-        JoinOperation::Left => false,
+        JoinOperation::Inner | JoinOperation::Left => false,
         JoinOperation::Outer => others.iter().all(|rec| rec != &item.entity().mbid),
         JoinOperation::Right => others.iter().all(|rec| rec != &item.entity().mbid),
     }

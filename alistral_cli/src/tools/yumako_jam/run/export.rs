@@ -1,11 +1,11 @@
 use interzic::models::messy_recording::MessyRecording;
 use interzic::models::playlist_stub::PlaylistStub;
-use itertools::Itertools;
+use itertools::Itertools as _;
 use musicbrainz_db_lite::Recording;
-use snafu::ResultExt;
+use snafu::ResultExt as _;
 use tracing::Span;
 use tracing::instrument;
-use tracing_indicatif::span_ext::IndicatifSpanExt;
+use tracing_indicatif::span_ext::IndicatifSpanExt as _;
 use yumako_jams::YumakoClient;
 use yumako_jams::models::radio_stream::radio_item::RadioItem;
 
@@ -14,8 +14,9 @@ use crate::models::cli::radio::RadioExportTarget;
 use crate::models::data_storage::DataStorage;
 use crate::tools::yumako_jam::run::error::PlaylistConvertSnafu;
 use crate::tools::yumako_jam::run::error::YumakoRunCommandError;
-use crate::utils::data_file::DataFile;
+use crate::utils::data_file::DataFile as _;
 
+#[expect(clippy::too_many_arguments, reason = "Interzic needs a full refactor")]
 pub(super) async fn export_radio(
     conn: &mut sqlx::SqliteConnection,
     radio_name: &str,

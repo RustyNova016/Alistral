@@ -18,7 +18,7 @@ debug = "line-tables-only"
 
 [patch.crates-io]
 #listenbrainz_rs = {path = "./listenbrainz_rs"}
-listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "fd73fd764309edb504d58c5923cabed0927271e7" }
+listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "5ba127b377c0acd2c3169e73a3f849371bcf595e" }
 
 #sequelles = {path = "./sequelles"}
 sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "04918eda92d0602852cc50bb761da990159b6ff4"}
@@ -27,7 +27,7 @@ sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "04918eda9
 tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c8656a4eedb571177a8ffa3b9984e78"}
 
 #musicbrainz_rs = {path = "./musicbrainz_rs"}
-musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "6f57831c54c4db93e82ed4855feee2ff16f64e2c"}
+musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "4e4e2b934940030027ede134e35dfd922ac6ca0e"}
 
 submarine = { git = "https://github.com/eppixx/submarine", rev = "6a9b0a929bacff1fd89b7b0dddd44ff906f1d666" }
 
@@ -53,7 +53,6 @@ manual_string_new = { level = "warn", priority = 1 }
 doc_markdown = { level = "warn", priority = 1 }
 uninlined_format_args = { level = "warn", priority = 1 }
 explicit_iter_loop = { level = "warn", priority = 1 }
-allow_attributes = { level = "warn", priority = 1 }
 suboptimal_flops= { level = "warn", priority = 1 }
 
 #unwrap_used = { level = "warn", priority = 1 } # Fix needed in separate PR
@@ -61,3 +60,4 @@ suboptimal_flops= { level = "warn", priority = 1 }
 # Won't apply... Yet
 must_use_candidate = { level = "allow", priority = 1 }
 map_unwrap_or = { level = "allow", priority = 1 }
+allow_attributes = { level = "allow", priority = 1 }
