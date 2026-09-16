@@ -40,7 +40,7 @@ impl RadioModule<ReleaseSeeder> {
                 );
             });
 
-            stream = stream.chain(stream2).boxed()
+            stream = stream.chain(stream2).boxed();
         }
 
         Ok(stream.boxed())
@@ -84,6 +84,10 @@ fn create_release_stream(client: &crate::YumakoClient, release_mbid: String) -> 
 }
 
 #[derive(Debug, snafu::Snafu)]
+#[allow(
+    clippy::large_enum_variant,
+    reason = "musicbrainz_db_lite::Error stinks and needs a full refactor"
+)]
 pub enum ReleaseSeederError {
     #[snafu(display("A database error happened while getting the artist with mbid {mbid}"))]
     DatabaseError {

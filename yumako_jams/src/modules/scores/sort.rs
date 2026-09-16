@@ -67,7 +67,7 @@ impl RadioModule<SortModule> {
                             item.entity().get_mbid(),
                             item.score
                         );
-                        emitter.emit(item).await
+                        emitter.emit(item).await;
                     }
                     None => break,
                 }
@@ -89,7 +89,7 @@ impl RadioModule<SortModule> {
                             item.entity().get_mbid(),
                             item.score
                         );
-                        emitter.emit(item).await
+                        emitter.emit(item).await;
                     }
                     None => break,
                 }

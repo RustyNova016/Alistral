@@ -1,5 +1,5 @@
-use futures::StreamExt;
-use snafu::ResultExt;
+use futures::StreamExt as _;
+use snafu::ResultExt as _;
 use tuillez::fatal_error::FatalError;
 use yumako_jams::RadioStream;
 use yumako_jams::models::radio_stream::radio_item::RadioItem;
@@ -58,7 +58,7 @@ impl YumakoRunCommand {
 
         let mut conn = ALISTRAL_CLIENT.get_conn().await;
         export_radio(
-            &mut *conn,
+            &mut conn,
             &radio_name,
             &radio_desc,
             tracks,
