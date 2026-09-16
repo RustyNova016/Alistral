@@ -1,7 +1,6 @@
 use std::sync::Arc;
 use std::sync::LazyLock;
 
-use ::yumako_jams::client::YumakoClient;
 use alistral_core::AlistralClient;
 use futures::executor::block_on;
 #[cfg(feature = "interzic")]
@@ -11,6 +10,8 @@ use musicbrainz_db_lite::listenbrainz_rs::ListenBrainzClient;
 #[cfg(feature = "musicbrainz")]
 use symphonize::SymphonyzeClient;
 use tuillez::fatal_error::IntoFatal as _;
+#[cfg(feature = "yumako_jams")]
+use yumako_jams::YumakoClient;
 
 use crate::models::config::Config;
 use crate::models::config::config_trait::ConfigFile as _;
@@ -21,7 +22,8 @@ pub mod interzic_client;
 pub mod listenbrainz_rs;
 pub mod mb_db;
 pub mod musicbrainz_rs;
-pub mod yumako_jams;
+#[cfg(feature = "yumako_jams")]
+pub mod yumako;
 
 pub static ALISTRAL_CLIENT: LazyLock<AlistralCliClient> =
     LazyLock::new(AlistralCliClient::create_blocking_or_fatal);
@@ -35,6 +37,7 @@ pub struct AlistralCliClient {
     pub musicbrainz_db: Arc<DBClient>,
     #[cfg(feature = "musicbrainz")]
     pub symphonize: Arc<SymphonyzeClient>,
+    #[cfg(feature = "yumako_jams")]
     pub yumako_jams: Arc<YumakoClient>,
 }
 
@@ -49,6 +52,7 @@ impl AlistralCliClient {
         let core = Self::create_core_client(musicbrainz_db.clone());
         #[cfg(feature = "musicbrainz")]
         let symphonize = Self::create_symphonize_client(musicbrainz_db.clone());
+        #[cfg(feature = "yumako_jams")]
         let yumako_jams = Self::create_yumako_jams_client(core.clone());
 
         Ok(Self {
@@ -60,6 +64,7 @@ impl AlistralCliClient {
             musicbrainz_db,
             #[cfg(feature = "musicbrainz")]
             symphonize,
+            #[cfg(feature = "yumako_jams")]
             yumako_jams,
         })
     }

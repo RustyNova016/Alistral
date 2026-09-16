@@ -67,7 +67,6 @@ dependencies = [
  "itertools 0.15.0",
  "json5",
  "listenbrainz",
- "lyn",
  "musicbrainz-db-lite",
  "rand 0.10.2",
  "regex",
@@ -2754,12 +2753,6 @@ dependencies = [
  "quote",
  "syn 1.0.109",
 ]
-
-[[package]]
-name = "lyn"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f08d9299a146aa1eb3c5451e6d9045708f232a43fd8d4436f69cf00fcb2a019c"
 
 [[package]]
 name = "lzma-rust2"

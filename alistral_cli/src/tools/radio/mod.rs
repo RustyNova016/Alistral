@@ -16,7 +16,6 @@ pub mod listen_rate;
 pub mod overdue;
 pub mod shared;
 pub mod underrated;
-pub mod yumako;
 
 impl RadioExportTarget {
     pub async fn export(
@@ -46,10 +45,7 @@ impl RadioExportTarget {
             #[cfg(feature = "subsonic")]
             Self::Subsonic => {
                 let client_name = client_name.unwrap();
-                let Some(client) = ALISTRAL_CLIENT
-                    .interzic
-                    .get_subsonic_client(client_name)
-                else {
+                let Some(client) = ALISTRAL_CLIENT.interzic.get_subsonic_client(client_name) else {
                     use tracing::error;
 
                     error!(

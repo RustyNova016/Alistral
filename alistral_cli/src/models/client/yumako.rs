@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use alistral_core::AlistralClient;
-use yumako_jams::client::YumakoClient;
+use yumako_jams::YumakoClient;
 
 use crate::models::client::AlistralCliClient;
 

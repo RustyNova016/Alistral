@@ -10,7 +10,7 @@ use serde::Serialize;
 use snafu::ResultExt;
 
 use crate::RadioStream;
-use crate::client::YumakoClient;
+use crate::YumakoClient;
 use crate::models::radio_file::error::RadioFileError;
 use crate::models::radio_file::error::RadioParsingSnafu;
 use crate::models::radio_file::layer::Layer;

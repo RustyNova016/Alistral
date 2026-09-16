@@ -55,7 +55,7 @@ impl RadioItem {
                     self.score - score
                 );
                 self.score -= score
-            },
+            }
             ScoreMerging::Multiply => {
                 trace!(
                     "[{layer_id}] Multiplying {score} to {} of {} => {}",
@@ -64,7 +64,7 @@ impl RadioItem {
                     self.score * score
                 );
                 self.score *= score
-            },
+            }
             ScoreMerging::Divide => {
                 trace!(
                     "[{layer_id}] Dividing {score} to {} of {} => {}",
@@ -73,7 +73,7 @@ impl RadioItem {
                     self.score / score
                 );
                 self.score /= score
-            },
+            }
         }
     }
 

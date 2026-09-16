@@ -32,12 +32,11 @@ use crate::tools::playlist::PlaylistCommand;
 #[cfg(feature = "stats")]
 use crate::tools::stats::StatsCommand;
 use crate::tools::unstable::UnstableCommand;
+#[cfg(feature = "yumako_jams")]
 use crate::tools::yumako_jam::YumakoCommand;
 
 pub mod common;
 pub mod config;
-#[cfg(feature = "radio")]
-pub mod parsers;
 #[cfg(feature = "radio")]
 pub mod radio;
 
@@ -145,6 +144,7 @@ pub enum Commands {
     Stats(StatsCommand),
 
     Unstable(UnstableCommand),
+    #[cfg(feature = "yumako_jams")]
     #[clap(aliases = &["yumako", "yumako_jam", "yumako_jams"])]
     YumakoJams(YumakoCommand),
 }
@@ -183,6 +183,7 @@ impl Commands {
             #[cfg(feature = "interzic")]
             Self::Playlist(val) => val.run().await?,
             Self::Unstable(val) => val.run().await,
+            #[cfg(feature = "yumako_jams")]
             Self::YumakoJams(val) => val.run().await?,
         }
 

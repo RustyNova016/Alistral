@@ -12,7 +12,7 @@ use serde::Serialize;
 use streamies::TryStreamies;
 
 use crate::RadioStream;
-use crate::client::YumakoClient;
+use crate::YumakoClient;
 use crate::models::radio_stream::radio_item::RadioItem;
 use crate::models::radio_stream::radio_module::LayerResult;
 use crate::models::radio_stream::radio_module::RadioModule;

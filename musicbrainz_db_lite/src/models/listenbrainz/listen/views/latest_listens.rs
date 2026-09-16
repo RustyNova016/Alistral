@@ -1,9 +1,5 @@
-use core::future::Future;
-
 use chrono::DateTime;
 use chrono::Utc;
-use sqlx::Acquire;
-use sqlx::Sqlite;
 
 use crate::models::listenbrainz::listen::Listen;
 use crate::utils::sqlx_utils::entity_relations::JoinRelation;
@@ -16,18 +12,13 @@ pub struct LatestRecordingListensView {
 }
 
 impl LatestRecordingListensView {
-    pub fn execute<'a, 'c, A>(
-        &'a self,
-        conn: A,
-    ) -> impl Future<Output = Result<Vec<JoinRelation<i64, Listen>>, crate::Error>> + Send + 'a
-    where
-        A: Acquire<'c, Database = Sqlite> + Send + 'a,
-    {
-        async {
-            let recordings = serde_json::to_string(&self.recordings)?;
+    pub async fn execute(
+        & self,
+        conn: &mut sqlx::SqliteConnection,
+    ) -> Result<Vec<JoinRelation<i64, Listen>>, crate::Error> {
+        let recordings = serde_json::to_string(&self.recordings)?;
 
-            let mut conn = conn.acquire().await?;
-            Ok(sqlx::query_as(
+        Ok(sqlx::query_as(
                 "
 SELECT
     recordings.id AS original_id,
@@ -72,6 +63,5 @@ WHERE
             .bind(&recordings)
             .fetch_all(&mut *conn)
             .await?)
-        }
     }
 }

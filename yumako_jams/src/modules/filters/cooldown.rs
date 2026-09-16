@@ -12,10 +12,9 @@ use tracing::trace;
 use tuillez::extensions::chrono_exts::DurationExt as _;
 
 use crate::RadioStream;
-use crate::client::YumakoClient;
+use crate::YumakoClient;
 use crate::models::radio_stream::radio_module::LayerResult;
 use crate::models::radio_stream::radio_module::RadioModule;
-
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct CooldownFilter {
@@ -53,7 +52,6 @@ impl RadioModule<CooldownFilter> {
                         "[{}] keeping {} (Now ({now}) > Cooldown ({after_cooldown}))",
                         self.id,
                         r.entity().get_mbid(),
-
                     );
                     ready(true)
                 }

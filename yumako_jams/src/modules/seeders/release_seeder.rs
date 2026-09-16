@@ -47,10 +47,7 @@ impl RadioModule<ReleaseSeeder> {
     }
 }
 
-fn create_release_stream(
-    client: &crate::YumakoClient,
-    release_mbid: String,
-) -> LayerResult<'_> {
+fn create_release_stream(client: &crate::YumakoClient, release_mbid: String) -> LayerResult<'_> {
     Ok(try_fn_stream(async move |emitter| {
         // Load the artist
         let release = Release::get_or_fetch_as_task(
