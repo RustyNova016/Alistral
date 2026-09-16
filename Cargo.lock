@@ -5557,7 +5557,7 @@ dependencies = [
  "chrono",
  "extend",
  "futures",
- "itertools 0.14.0",
+ "itertools 0.15.0",
  "json5",
  "musicbrainz-db-lite",
  "priority-queue",
