@@ -1,6 +1,6 @@
 # Listens
 
-Every track has its own collection of listens associated to it. 
+Every radio item has its own collection of listens associated to it. 
 The modules of this page allows modifying this collection to refine the interval of data wanted
 
 Listens cannot be duplicated. So if a module tries to add listen data already present, it won't add anything

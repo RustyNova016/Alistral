@@ -12,3 +12,5 @@ pub mod regex;
 pub mod user_inputs;
 #[cfg(feature = "musicbrainz")]
 pub mod whitelist_blacklist;
+#[cfg(feature = "yumako_jams")]
+pub mod yumako_jams;

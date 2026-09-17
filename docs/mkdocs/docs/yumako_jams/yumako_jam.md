@@ -1,4 +1,4 @@
-# Yumako jam
+# Yumako jams
 
 Yumako Jam is a playlist generation framework that allows creating "radios" from simple json schemas.
 It 

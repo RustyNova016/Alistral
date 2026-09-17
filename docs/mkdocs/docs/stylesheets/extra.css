@@ -4,7 +4,7 @@
 
 .md-header {
     background: linear-gradient(60deg,
-            rgb(12, 190, 36) 10%,
+            rgb(11, 139, 28) 35%,
             rgb(11, 38, 190) 90%);
     color: var(--md-default-bg-color)
 }

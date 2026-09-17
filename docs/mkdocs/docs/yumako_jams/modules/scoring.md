@@ -25,7 +25,7 @@ This is the main module of the scoring system. It sorts the tracks depending on 
 
 ### Stream Info
 
-- ⚠️ This [consume](../create/consuming_stream.md) the stream
+- ⚠️ This [consume](../creating_radios/consuming_stream.md) the stream
 
 ### Example
 
