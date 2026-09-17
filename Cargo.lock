@@ -60,7 +60,7 @@ dependencies = [
  "duplicate",
  "extend",
  "futures",
- "hotpath",
+ "hotpath 0.26.0",
  "indoc",
  "inquire",
  "interzic",
@@ -220,7 +220,7 @@ dependencies = [
  "blocking",
  "bon",
  "governor",
- "hotpath",
+ "hotpath 0.25.1",
  "serde_core",
  "serde_json",
  "snafu",
@@ -1936,11 +1936,9 @@ dependencies = [
  "arc-swap",
  "cfg-if",
  "crossbeam-channel",
- "futures-channel",
  "futures-core",
- "futures-util",
  "hdrhistogram",
- "hotpath-macros",
+ "hotpath-macros 0.25.1",
  "libc",
  "pin-project-lite",
  "quanta",
@@ -1948,10 +1946,32 @@ dependencies = [
  "serde",
  "serde_json",
  "tiny_http",
- "tokio",
+ "ureq",
+]
+
+[[package]]
+name = "hotpath"
+version = "0.26.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f37234f85a8d1bda6b84d486245dd0847c5b33cca10d5f3691375e66704de0f8"
+dependencies = [
+ "arc-swap",
+ "cfg-if",
+ "crossbeam-channel",
+ "futures-channel",
+ "futures-core",
+ "futures-sink",
+ "hdrhistogram",
+ "hotpath-macros 0.26.0",
+ "libc",
+ "pin-project-lite",
+ "quanta",
+ "regex-lite",
+ "serde",
+ "serde_json",
+ "tiny_http",
  "tracing",
  "tracing-subscriber",
- "ureq",
 ]
 
 [[package]]
@@ -1959,6 +1979,17 @@ name = "hotpath-macros"
 version = "0.25.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "846bde0d9600d98434e1aac376977d7718bfe3d2f5312a041b7c59a6a466c51a"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.119",
+]
+
+[[package]]
+name = "hotpath-macros"
+version = "0.26.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2ac39b5517f540cab511bdbd5a4dc8cfc62858d6cd26a095463c1d2acfb3f290"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2583,7 +2614,7 @@ dependencies = [
  "async-executor",
  "bon",
  "chrono",
- "hotpath",
+ "hotpath 0.25.1",
  "serde",
  "serde_json",
  "snafu",
@@ -2739,7 +2770,7 @@ dependencies = [
  "deadpool",
  "extend",
  "futures",
- "hotpath",
+ "hotpath 0.26.0",
  "itertools 0.15.0",
  "listenbrainz",
  "listenbrainz_rs",
@@ -2770,7 +2801,7 @@ dependencies = [
  "bon",
  "chrono",
  "glob",
- "hotpath",
+ "hotpath 0.25.1",
  "lucene_query_builder",
  "regex",
  "serde",
@@ -5442,7 +5473,6 @@ dependencies = [
  "json5",
  "musicbrainz-db-lite",
  "priority-queue",
- "reqwest",
  "rust_decimal",
  "serde",
  "serde_json",
