@@ -8,14 +8,14 @@ use crate::ALISTRAL_CLIENT;
 use crate::models::cli::radio::RadioExportTarget;
 use crate::tools::yumako_jam::run::arguments::get_radio_inputs;
 use crate::tools::yumako_jam::run::error::RadioCompilationSnafu;
+use crate::tools::yumako_jam::run::error::YumakoGetRadioSnafu;
 use crate::tools::yumako_jam::run::error::YumakoRunCommandError;
 use crate::tools::yumako_jam::run::export::export_radio;
-use crate::tools::yumako_jam::run::get_radio::get_radio;
+use crate::utils::yumako_jams::get_radio::get_radio;
 
 pub mod arguments;
 pub mod error;
 pub mod export;
-pub mod get_radio;
 
 #[derive(clap::Parser, Debug, Clone)]
 pub struct YumakoRunCommand {
@@ -44,7 +44,7 @@ pub struct YumakoRunCommand {
 
 impl YumakoRunCommand {
     pub async fn run(&self) -> Result<(), YumakoRunCommandError> {
-        let radio = get_radio(&self.radio_name)?;
+        let radio = get_radio(&self.radio_name).context(YumakoGetRadioSnafu)?;
         let inputs = get_radio_inputs(&self.arguments)?;
 
         let radio_name = radio.name.to_string();

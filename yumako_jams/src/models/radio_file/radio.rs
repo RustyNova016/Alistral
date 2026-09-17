@@ -14,7 +14,7 @@ use crate::YumakoClient;
 use crate::models::radio_file::error::RadioFileError;
 use crate::models::radio_file::error::RadioParsingSnafu;
 use crate::models::radio_file::layer::Layer;
-use crate::models::radio_file::radio_input::RadioInput;
+use crate::models::radio_file::radio_input::RadioVariable;
 use crate::models::radio_stream::radio_module::LayerResult;
 use crate::radio_variables::RadioInputs;
 
@@ -26,12 +26,12 @@ pub struct Radio {
     #[serde(default = "default_description")]
     pub description: String,
 
-    stack: Vec<Layer>,
-    inputs: HashMap<String, RadioInput>,
+    pub stack: Vec<Layer>,
+    pub inputs: HashMap<String, RadioVariable>,
 
-    download_url: Option<String>,
-    version: Option<String>,
-    yumako_version: Option<String>,
+    pub download_url: Option<String>,
+    pub version: Option<String>,
+    pub yumako_version: Option<String>,
 }
 
 impl Radio {

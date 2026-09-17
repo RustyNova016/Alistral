@@ -45,6 +45,16 @@ nav:
       - yumako_jams/creating_radios/your_second_radio.md
       - yumako_jams/creating_radios/dealing_with_inputs.md
       - yumako_jams/creating_radios/consuming_stream.md
+      - Modules:
+        - yumako_jams/modules/filters.md
+        - yumako_jams/modules/joins.md
+        - yumako_jams/modules/listens.md
+        - yumako_jams/modules/limiters.md
+        - yumako_jams/modules/mappers.md
+        - yumako_jams/modules/seeders.md
+        - yumako_jams/modules/scoring.md
+
+
 
 extra:
   social:

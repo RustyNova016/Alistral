@@ -5442,7 +5442,6 @@ dependencies = [
  "json5",
  "musicbrainz-db-lite",
  "priority-queue",
- "reqwest",
  "rust_decimal",
  "serde",
  "serde_json",
