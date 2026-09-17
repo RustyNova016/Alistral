@@ -1,6 +1,6 @@
 # Mappers
 
-Those modules turn a track into one or more other tracks.
+Those modules turn a radio item into one or more other radio items.
 
 ## Artist discography
 
@@ -13,10 +13,10 @@ They are returned in a random order
 
 ### Stream Info
 
-- ⚠️ This [consume](../create/consuming_stream.md) the stream
-- ⚠️ This turns the stream [infinite](../create/consuming_stream.md)
+- ⚠️ This [consume](../creating_radios/consuming_stream.md) the stream
+- ⚠️ This turns the stream [infinite](../creating_radios/consuming_stream.md)
 - ⚠️ The scores are reset to 0
-- ⚠️ Clear the listens
+- ⚠️ Clears the listens
 
 
 ### Example

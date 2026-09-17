@@ -1,27 +1,6 @@
-## And
+# Filters
 
-This filter takes in another radio, and only keep tracks that are both found in the current radio and the other one
-
-### Inputs
-
-- `radio_schema: Radio` (required): The schema of another radio. This will consume it entirely
-
-### Example
-
-```json
-{
-    "step_type": "and_filter",
-    "id": "and_filter",
-    "inputs": {
-        "radio_schema": {
-            "name": "Inner Radio!",
-            "stack": [
-                "..."
-            ],
-        }
-    }
-}
-```
+Remove radio items based on some conditions
 
 ## Cooldown
 
@@ -70,7 +49,7 @@ Setting a maximum of 0 only give unlistened tracks
 
 ## Timeouts
 
-Removes all the tracks that are "in timeout". 
+Removes all the tracks that the user put in timeout (using `config timeout` [🔗](../../CommandLineHelp.md#alistral-config-timeout))
 
 ### Inputs
 

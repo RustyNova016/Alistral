@@ -1,4 +1,4 @@
-# Limitters
+# Limiters
 
 Limiters are a type of filter that stops radio items after a certain condition is met. This allows making cutoffs on radios to not make it last a whole month
 

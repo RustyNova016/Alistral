@@ -12,7 +12,7 @@ This seeder provide all the recording's of an artist. The discography tracks are
 
 ### Stream Info
 
-- The stream is [finite](../create/consuming_stream.md)
+- The stream is [finite](../creating_radios/consuming_stream.md)
 - The scores are set to 0
 - No listens are added
 
@@ -38,7 +38,7 @@ This seeder provide all the tracks listened by an user
 
 ### Stream Info
 
-- The stream is [finite](../create/consuming_stream.md)
+- The stream is [finite](../creating_radios/consuming_stream.md)
 - The scores are set to 0
 - Adds all time listens
 
@@ -64,7 +64,7 @@ This seeder provide all the recording's of an artist
 
 ### Stream Info
 
-- The stream is [finite](../create/consuming_stream.md)
+- The stream is [finite](../creating_radios/consuming_stream.md)
 - The scores are set to 0
 - No listens are added
 

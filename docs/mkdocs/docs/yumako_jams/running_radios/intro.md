@@ -10,3 +10,8 @@ The inputs parameter is a a JSON5 string of the radio parameters, with the top l
 
 `listen_range: "Last90Days", duration: "25 hours"`
 
+To learn more about the inputs of a radio, you can use the `info` command:
+
+```bash
+alistral yumako_jams info <RADIO_NAME>
+```
