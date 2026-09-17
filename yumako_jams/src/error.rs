@@ -48,11 +48,6 @@ pub enum Error {
     #[error(transparent)]
     IOError(#[from] std::io::Error),
 
-    #[error(
-        "Couldn't parse the radio file. Make sure you have a proper schema.\nJSON Error: {0}\nTOML Error: {1}"
-    )]
-    RadioFileTypeError(serde_json::Error, toml::de::Error),
-
     #[error(transparent)]
     ListenFetchGetError(#[from] ListenFetchGetError),
 

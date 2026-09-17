@@ -9,22 +9,27 @@ alistral_core = { path = "../alistral_core" }
 musicbrainz-db-lite = { path = "../musicbrainz_db_lite" }
 tuillez = "0.1.0"
 
+# Async
 async-fn-stream = "0.3.2"
+streamies = "0.2.2"
 futures = "0.3.30"
+
+# Debug
+tracing = "0.1.44"
+
+# Macros
+extend = "1.2.0"
+thiserror = "2.0.20"
+snafu = "0.9.0"
+
+# Utils
+priority-queue = "2.3.0"
+rust_decimal = "1.36.0"
+itertools = "0.15.0"
 serde = "1.0.228"
 serde_json = "1.0.138"
-thiserror = "2.0.11"
-streamies = "0.2.2"
-chrono = "0.4.40"
-rust_decimal = "1.36.0"
-tracing = "0.1.41"
-extend = "1.2.0"
-itertools = "0.15.0"
-priority-queue = "2.3.0"
-toml = "1.0.0"
-reqwest = "0.13.0"
-snafu = "0.9.0"
 json5 = "1.3.1"
+chrono = "0.4.40"
 
 [lints.clippy]
 result_large_err = { level = "allow", priority = 1 }
