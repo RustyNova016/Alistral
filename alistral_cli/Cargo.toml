@@ -26,9 +26,9 @@ listenbrainz = { branch = "alistral_version", git = "https://github.com/RustyNov
 itertools = "0.15.0"
 rust_decimal = "1.41.0"
 rust_decimal_macros = "1.40.0"
-chrono = "0.4.44"
+chrono = "0.4.45"
 serde = { version = "1.0.229", features = ["rc"] }
-serde_json = "1.0.149"
+serde_json = "1.0.151"
 extend = "1.2.0"
 directories = "6.0.0"
 reqwest = { version = "0.13.0", features = ["json"] }
@@ -40,7 +40,7 @@ strsim = "0.11.1"
 url = "2.5.8"
 
 # Async
-futures = "0.3.32"
+futures = "0.3.34"
 tokio = { version = "1.52.1", features = ["rt", "rt-multi-thread", "parking_lot", "macros"] }
 streamies = "0.2.2"
 async-fn-stream = "0.3.2"
@@ -61,7 +61,7 @@ charchart = {version = "0.1.0", git = "https://github.com/RustyNova016/charchart
 
 # Error handling
 color-eyre = "0.6.5"
-thiserror = "2.0.18"
+thiserror = "2.0.20"
 snafu = { version = "0.9.0", features = ["rust_1_81", "backtrace"] }
 
 # Macros
