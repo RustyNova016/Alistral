@@ -1,4 +1,4 @@
-use alistral_core::cli::colors::AlistralColors;
+use alistral_core::cli::colors::AlistralColors as _;
 
 use crate::utils::yumako_jams::get_radio::YumakoGetRadioError;
 use crate::utils::yumako_jams::get_radio::get_radio;
@@ -36,12 +36,19 @@ impl YumakoInfoCommand {
 
         for variable in radio.inputs {
             if variable.1.hidden {
-                continue
+                continue;
             }
 
             println!("Name: {}", variable.0);
-            println!("Description: {}", variable.1.description.as_ref().unwrap_or(&String::new()));
-            println!("Default: {}", serde_json::to_string(&variable.1.default).expect("serde_json can always convert from Value"));
+            println!(
+                "Description: {}",
+                variable.1.description.as_ref().unwrap_or(&String::new())
+            );
+            println!(
+                "Default: {}",
+                serde_json::to_string(&variable.1.default)
+                    .expect("serde_json can always convert from Value")
+            );
             println!();
         }
 

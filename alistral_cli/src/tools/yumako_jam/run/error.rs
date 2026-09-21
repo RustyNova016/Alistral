@@ -4,6 +4,10 @@ use crate::utils::yumako_jams::get_radio::YumakoGetRadioError;
 
 #[derive(Debug, snafu::Snafu)]
 #[snafu(visibility(pub(super)))]
+#[expect(
+    clippy::enum_variant_names,
+    reason = "Snafu selectors would be too ambigious"
+)]
 pub enum YumakoRunCommandError {
     /// Error while getting the recording statistics
     YumakoGetRadioError {
@@ -58,7 +62,7 @@ impl GetFriendlyError for YumakoRunCommandError {
                     source
                 ),
             }),
-            
+
             Self::PlaylistConvertError { .. } => None,
         }
     }

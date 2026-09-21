@@ -37,6 +37,10 @@ fn get_radio_path(name: &str) -> Result<PathBuf, YumakoGetRadioError> {
 
 #[derive(Debug, snafu::Snafu)]
 #[snafu(visibility(pub(super)))]
+#[expect(
+    clippy::enum_variant_names,
+    reason = "Snafu selectors would be too ambigious"
+)]
 pub enum YumakoGetRadioError {
     /// Error while getting the recording statistics
     RadioNotFound {
