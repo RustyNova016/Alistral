@@ -1,5 +1,6 @@
-use musicbrainz_db_lite::models::musicbrainz::user::UserSqlError;
 use std::io;
+
+use musicbrainz_db_lite::models::musicbrainz::user::UserSqlError;
 use thiserror::Error;
 use tuillez::extensions::chrono_exts::TimeError;
 use tuillez::fatal_error::FatalError;
@@ -13,7 +14,7 @@ use crate::tools::bump::BumpCommandError;
 use crate::tools::cache::CacheCommandError;
 use crate::tools::daily::error::DailyCommandError;
 #[cfg(feature = "yumako_jams")]
-use crate::tools::yumako_jam::run::error::YumakoRunCommandError;
+use crate::tools::yumako_jam::YumakoCommandError;
 
 #[derive(Error, Debug)]
 //#[expect(clippy::enum_variant_names)]
@@ -111,7 +112,7 @@ pub enum Error {
 
     #[cfg(feature = "yumako_jams")]
     #[error(transparent)]
-    YumakoRunCommandError(#[from] YumakoRunCommandError),
+    YumakoCommandError(#[from] YumakoCommandError),
 }
 
 impl GetFriendlyError for Error {
@@ -147,7 +148,7 @@ impl GetFriendlyError for Error {
             Self::CacheCommandError(val) => val.get_friendly_error(),
             Self::DailyCommandError(val) => val.get_friendly_error(),
             #[cfg(feature = "yumako_jams")]
-            Self::YumakoRunCommandError(val) => val.get_friendly_error(),
+            Self::YumakoCommandError(val) => val.get_friendly_error(),
         }
     }
 }

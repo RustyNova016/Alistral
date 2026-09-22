@@ -1,32 +1,17 @@
-use std::path::PathBuf;
-
-use yumako_jams::models::radio_file::error::RadioFileError;
-
 use crate::interface::errors::friendly_error::FriendlyPanic;
 use crate::interface::errors::friendly_error::GetFriendlyError;
+use crate::utils::yumako_jams::get_radio::YumakoGetRadioError;
 
 #[derive(Debug, snafu::Snafu)]
 #[snafu(visibility(pub(super)))]
+#[expect(
+    clippy::enum_variant_names,
+    reason = "Snafu selectors would be too ambigious"
+)]
 pub enum YumakoRunCommandError {
     /// Error while getting the recording statistics
-    RadioNotFound {
-        path: PathBuf,
-
-        #[snafu(implicit)]
-        location: snafu::Location,
-    },
-
-    /// Couldn't read the radio file
-    RadioFileReadError {
-        source: std::io::Error,
-
-        #[snafu(implicit)]
-        location: snafu::Location,
-    },
-
-    /// Couldn't parse the radio file
-    RadioFileParseError {
-        source: RadioFileError,
+    YumakoGetRadioError {
+        source: YumakoGetRadioError,
 
         #[snafu(implicit)]
         location: snafu::Location,
@@ -60,21 +45,7 @@ pub enum YumakoRunCommandError {
 impl GetFriendlyError for YumakoRunCommandError {
     fn get_friendly_error(&self) -> Option<FriendlyPanic> {
         match self {
-            Self::RadioNotFound { path, .. } => Some(FriendlyPanic {
-                title: "Radio not found".to_string(),
-                body: format!(
-                    "Couldn't find the radio at `{}` (or .json5). Make sure it exists and there is no typos",
-                    path.display()
-                ),
-            }),
-
-            Self::RadioFileParseError { source, .. } => Some(FriendlyPanic {
-                title: "Radio not parsable".to_string(),
-                body: format!(
-                    "The radio file couldn't be parsed. Make sure it is correct json/json5 and that it matches the radio format\n\n-----\n\n{}",
-                    source
-                ),
-            }),
+            Self::YumakoGetRadioError { source, .. } => source.get_friendly_error(),
 
             Self::RadioInputsParseError { source, .. } => Some(FriendlyPanic {
                 title: "Inputs not parsable".to_string(),
@@ -92,7 +63,6 @@ impl GetFriendlyError for YumakoRunCommandError {
                 ),
             }),
 
-            Self::RadioFileReadError { .. } => None,
             Self::PlaylistConvertError { .. } => None,
         }
     }

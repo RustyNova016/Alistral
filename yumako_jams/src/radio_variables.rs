@@ -5,7 +5,7 @@ use serde::de::DeserializeOwned;
 use serde_json::Value;
 use tuillez::extensions::chrono_exts::DurationExt;
 
-use crate::models::radio_file::radio_input::RadioInput;
+use crate::models::radio_file::radio_input::RadioVariable;
 
 /// Represent all the variable of a radio
 #[derive(Clone, Debug, Default)]
@@ -20,7 +20,7 @@ impl RadioInputs {
 
     pub fn new_with_aliases(
         data: HashMap<String, Value>,
-        aliases: HashMap<String, RadioInput>,
+        aliases: HashMap<String, RadioVariable>,
     ) -> Self {
         let mut inner = HashMap::new();
 

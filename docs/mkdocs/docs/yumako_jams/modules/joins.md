@@ -5,10 +5,15 @@ Join modules allows joining two radios together
 ## join
 
 An sql like join. This supports the following types:
+
 - "full": Both the current and provided radio stream are merged
+
 - "inner": Only let items from the current stream in they exists in the other
+
 - "left": Only let items from the current stream if they don't exist in the other
+
 - "right": Only let items from the other stream if they aren't in the current stream
+
 - "outer": Only let items from the current stream and other stream if they aren't in both streams 
 
 ### Inputs
