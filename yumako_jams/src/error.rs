@@ -6,6 +6,7 @@ use musicbrainz_db_lite::models::listenbrainz::listen::selects::error::ListenFet
 use thiserror::Error;
 
 use crate::models::radio_stream::radio_module::RadioModuleError;
+use crate::models::radio_variables::error::RadioInputsError;
 use crate::modules::error::StreamModuleError;
 use crate::modules::limiters::length_limiter::LengthLimiterError;
 
@@ -16,14 +17,8 @@ pub enum Error {
     )]
     MissingVariableError(String),
 
-    #[error("Variable {0} has the wrong type. Expected `{1}`, got `{2}`")]
-    WrongVariableTypeError(String, String, String),
-
     #[error(transparent)]
     VariableTypeError(VariableTypeError),
-
-    #[error("Couldn't compile the radio due to incorrect variable: {0}. \nStep id: `{1}`")]
-    VariableReadError(serde_json::Error, String),
 
     #[error("Couldn't compile the radio due to incorrect variable: {0}. Hint: {1}")]
     VariableDecodeError(String, String),
@@ -31,16 +26,8 @@ pub enum Error {
     #[error("Couldn't deserialize the radio. Please check for errors in the schema: {0}")]
     RadioReadError(serde_json::Error),
 
-    #[error(
-        "A variable path isn't properly constructed. Expected format `step_id.input_name`, found: `{0}`"
-    )]
-    VariablePathError(String),
-
     #[error("Unknown step type `{0}`. Please check for typos")]
     UnknownStepTypeError(String),
-
-    #[error(transparent)]
-    AlistralCoreError(#[from] alistral_core::Error),
 
     #[error(transparent)]
     MBDBliteeError(#[from] musicbrainz_db_lite::Error),
@@ -65,6 +52,8 @@ pub enum Error {
     RadioModuleError(#[from] RadioModuleError),
     #[error(transparent)]
     LengthLimiterError(#[from] LengthLimiterError),
+    #[error(transparent)]
+    RadioInputsError(#[from] RadioInputsError),
 }
 
 impl Error {

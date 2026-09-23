@@ -9,6 +9,7 @@ use serde::Deserialize;
 use serde::Serialize;
 use snafu::ResultExt;
 
+use crate::RadioInputs;
 use crate::RadioStream;
 use crate::YumakoClient;
 use crate::models::radio_file::error::RadioFileError;
@@ -16,7 +17,6 @@ use crate::models::radio_file::error::RadioParsingSnafu;
 use crate::models::radio_file::layer::Layer;
 use crate::models::radio_file::radio_input::RadioVariable;
 use crate::models::radio_stream::radio_module::LayerResult;
-use crate::radio_variables::RadioInputs;
 
 /// The full radio declaration
 #[derive(Serialize, Deserialize, Clone)]
@@ -27,7 +27,8 @@ pub struct Radio {
     pub description: String,
 
     pub stack: Vec<Layer>,
-    pub inputs: HashMap<String, RadioVariable>,
+    #[serde(alias = "inputs")]
+    pub variables: HashMap<String, RadioVariable>,
 
     pub download_url: Option<String>,
     pub version: Option<String>,
@@ -35,12 +36,15 @@ pub struct Radio {
 }
 
 impl Radio {
-    pub fn to_stream(self, client: &YumakoClient, inputs: RadioInputs) -> LayerResult<'_> {
-        let variables = RadioInputs::new_with_aliases(inputs.into_hashmap(), self.inputs);
+    pub fn to_stream(self, client: &YumakoClient, mut inputs: RadioInputs) -> LayerResult<'_> {
+        // Normalise the inputs
+        inputs.map_input_variables(self.variables);
+        inputs.normalize_input_paths();
+
         let mut stream: RadioStream = stream::empty().boxed();
 
         for layer in self.stack {
-            stream = layer.create_step(client, stream, &variables)?;
+            stream = layer.create_step(client, stream, &inputs)?;
         }
 
         Ok(stream)
