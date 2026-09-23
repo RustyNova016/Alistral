@@ -1,18 +1,10 @@
 use async_fn_stream::TryStreamEmitter;
 use async_fn_stream::fn_stream;
-use chrono::Duration;
-use futures::FutureExt;
 use futures::StreamExt;
 use futures::TryStreamExt as _;
-use futures::future::BoxFuture;
 use futures::stream::BoxStream;
 use rust_decimal::Decimal;
-use tracing::instrument;
-use tuillez::pg_counted;
-use tuillez::pg_inc;
-use tuillez::tracing_indicatif::span_ext::IndicatifSpanExt;
 
-use crate::RadioInputs;
 use crate::models::radio_stream::radio_item::RadioItem;
 use crate::modules::scores::ScoreMerging;
 
@@ -68,27 +60,6 @@ pub impl<'a> RadioStream<'a> {
         .boxed()
     }
 
-    fn collect_with(
-        self,
-        min_count: u64,
-        min_duration: Duration,
-    ) -> BoxFuture<'a, Vec<RadioResult>> {
-        collect_with_inner(self, min_count, min_duration).boxed()
-    }
-
-    fn collect_with_args(
-        self,
-        args: RadioInputs,
-    ) -> Result<BoxFuture<'a, Vec<RadioResult>>, crate::Error> {
-        let min_count = args.get_count().transpose()?.unwrap_or(50);
-
-        let min_duration = args
-            .get_duration()
-            .transpose()?
-            .unwrap_or_else(Duration::zero);
-
-        Ok(collect_with_inner(self, min_count, min_duration).boxed())
-    }
 
     // fn try_filter_items<Fut, F>(self, f: F, layer_id: String)
     // where
@@ -106,51 +77,4 @@ pub impl<'a> RadioStream<'a> {
     //         }
     //     })
     // }
-}
-
-#[instrument(skip(this), fields(indicatif.pb_show = tracing::field::Empty))]
-async fn collect_with_inner(
-    mut this: RadioStream<'_>,
-    min_count: u64,
-    min_duration: Duration,
-) -> Vec<RadioResult> {
-    let mut out = Vec::new();
-    let mut prog = 0;
-    pg_counted!(100, "Collecting Radio");
-
-    while let Some(track) = this.next().await {
-        out.push(track);
-
-        let collected_duration = out
-            .iter()
-            .map(|r| match r {
-                Ok(r) => r.entity().length_as_duration().unwrap_or_default(),
-                Err(_) => Duration::zero(),
-            })
-            .sum::<Duration>();
-
-        let count_prog = (out.len() as u64 * 100)
-            .checked_div(min_count)
-            .unwrap_or(100);
-
-        let dur_prog = (collected_duration.num_seconds() * 100)
-            .checked_div(min_duration.num_seconds())
-            .unwrap_or(1) as u64;
-
-        let tot_prog = count_prog.min(dur_prog);
-
-        if tot_prog > prog {
-            pg_inc!(tot_prog - prog);
-            prog = tot_prog;
-        }
-
-        let has_minimum_count = min_count <= out.len() as u64;
-        let has_sufficient_duration = collected_duration >= min_duration;
-
-        if has_minimum_count && has_sufficient_duration {
-            return out;
-        }
-    }
-
-    out
 }

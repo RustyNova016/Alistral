@@ -1,16 +1,14 @@
-pub mod error;
 use std::collections::HashMap;
 
-use chrono::Duration;
 use serde::de::DeserializeOwned;
 use serde_json::Map;
 use serde_json::Value;
-use tuillez::extensions::chrono_exts::DurationExt;
 
 use crate::models::radio_file::radio_input::RadioVariable;
 use crate::models::radio_variables::error::LayerVariableNotObjectSnafu;
 use crate::models::radio_variables::error::RadioInputsError;
 
+pub mod error;
 pub mod normalize;
 
 /// Represent all the variable of a radio
@@ -67,32 +65,5 @@ impl RadioInputs {
                 err,
             ))),
         }
-    }
-
-    pub fn get_as_u64(&self, key: &str) -> Option<Result<u64, crate::Error>> {
-        self.get_as(key, "integer")
-    }
-
-    pub fn get_as_string(&self, key: &str) -> Option<Result<String, crate::Error>> {
-        self.get_as(key, "string")
-    }
-
-    pub fn get_count(&self) -> Option<Result<u64, crate::Error>> {
-        self.get_as_u64("count")
-    }
-
-    pub fn get_duration(&self) -> Option<Result<Duration, crate::Error>> {
-        self.get_as_string("duration").map(|res| {
-            res.and_then(|dur| {
-                Duration::from_human_string(&dur).map_err(|err| {
-                    crate::Error::new_variable_type_error(
-                        "duration".to_string(),
-                        "duration_string".to_string(),
-                        dur,
-                        err,
-                    )
-                })
-            })
-        })
     }
 }
