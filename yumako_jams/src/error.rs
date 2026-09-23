@@ -6,6 +6,7 @@ use musicbrainz_db_lite::models::listenbrainz::listen::selects::error::ListenFet
 use thiserror::Error;
 
 use crate::models::radio_stream::radio_module::RadioModuleError;
+use crate::models::radio_variables::error::RadioInputsError;
 use crate::modules::error::StreamModuleError;
 use crate::modules::limiters::length_limiter::LengthLimiterError;
 
@@ -65,6 +66,8 @@ pub enum Error {
     RadioModuleError(#[from] RadioModuleError),
     #[error(transparent)]
     LengthLimiterError(#[from] LengthLimiterError),
+    #[error(transparent)]
+    RadioInputsError(#[from] RadioInputsError),
 }
 
 impl Error {

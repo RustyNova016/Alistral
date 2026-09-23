@@ -34,7 +34,7 @@ impl YumakoInfoCommand {
         println!();
         println!("{}", "[Variables]".yumako_red());
 
-        for variable in radio.inputs {
+        for variable in radio.variables {
             if variable.1.hidden {
                 continue;
             }

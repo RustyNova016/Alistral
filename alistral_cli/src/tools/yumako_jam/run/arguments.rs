@@ -1,9 +1,9 @@
 use core::ops::Deref as _;
-use std::collections::HashMap;
 
+use serde_json::Map;
 use serde_json::Value;
 use snafu::ResultExt as _;
-use yumako_jams::radio_variables::RadioInputs;
+use yumako_jams::RadioInputs;
 
 use crate::models::config::config_trait::ConfigFile as _;
 use crate::models::config::recording_timeout::RecordingTimeoutConfig;
@@ -22,7 +22,7 @@ pub(super) fn get_radio_inputs(args: &str) -> Result<RadioInputs, YumakoRunComma
         args = format!("{args}}}");
     }
 
-    let mut data: HashMap<String, Value> = json5::from_str(&args).context(RadioInputsParseSnafu)?;
+    let mut data: Map<String, Value> = json5::from_str(&args).context(RadioInputsParseSnafu)?;
 
     if !data.contains_key("username") {
         data.insert(

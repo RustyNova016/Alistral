@@ -1,6 +1,5 @@
-use std::collections::HashMap;
-
 use serde::de::DeserializeOwned;
+use serde_json::Map;
 use serde_json::Value;
 use snafu::IntoError;
 use snafu::ResultExt;
@@ -22,9 +21,9 @@ where
     /// Create the radio module from the layer description, and the user inputs
     pub fn from_layer(
         layer: &Layer,
-        user_inputs: HashMap<String, Value>,
+        user_inputs: Map<String, Value>,
     ) -> Result<Self, RadioModuleError> {
-        // Retrieve the inputs set by default on the layer
+        // Retrieve the inputs set by default on the layer json
         let mut default_inputs = layer.inputs().to_owned();
 
         // Overwrite the inputs with the user inputs

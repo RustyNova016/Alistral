@@ -12,9 +12,9 @@ use tuillez::pg_counted;
 use tuillez::pg_inc;
 use tuillez::tracing_indicatif::span_ext::IndicatifSpanExt;
 
+use crate::RadioInputs;
 use crate::models::radio_stream::radio_item::RadioItem;
 use crate::modules::scores::ScoreMerging;
-use crate::radio_variables::RadioInputs;
 
 /// The stream output of the radio
 pub type RadioStream<'a> = BoxStream<'a, RadioResult>;

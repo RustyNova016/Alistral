@@ -1,4 +1,3 @@
-use std::collections::HashMap;
 
 use async_fn_stream::try_fn_stream;
 use futures::StreamExt;
@@ -10,6 +9,7 @@ use serde_json::Value;
 use streamies::Streamies;
 use tracing::trace;
 
+use crate::RadioInputs;
 use crate::RadioStream;
 use crate::YumakoClient;
 use crate::models::radio_file::radio::Radio;
@@ -17,11 +17,10 @@ use crate::models::radio_stream::radio_item::RadioItem;
 use crate::models::radio_stream::radio_module::LayerResult;
 use crate::models::radio_stream::radio_module::RadioModule;
 use crate::radio_stream::RadioStreamaExt;
-use crate::radio_variables::RadioInputs;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct SetJoin {
-    radio: HashMap<String, Value>,
+    radio: serde_json::Map<String, Value>,
     radio_schema: Radio,
     join_type: JoinOperation,
 }

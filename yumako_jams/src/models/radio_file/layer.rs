@@ -4,6 +4,7 @@ use serde::Deserialize;
 use serde::Serialize;
 use serde_json::Value;
 
+use crate::RadioInputs;
 use crate::RadioStream;
 use crate::YumakoClient;
 use crate::models::radio_stream::radio_module::LayerResult;
@@ -25,7 +26,6 @@ use crate::modules::scores::sort::SortModule;
 use crate::modules::seeders::artist_seeder::ArtistSeeder;
 use crate::modules::seeders::listen_seeder::ListenSeeder;
 use crate::modules::seeders::release_seeder::ReleaseSeeder;
-use crate::radio_variables::RadioInputs;
 
 /// A layer represent a step in the radio processing. It calls a module based on the step type
 #[derive(Serialize, Deserialize, Clone)]
