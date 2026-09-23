@@ -60,7 +60,6 @@ pub impl<'a> RadioStream<'a> {
         .boxed()
     }
 
-
     // fn try_filter_items<Fut, F>(self, f: F, layer_id: String)
     // where
     //     Fut: Future<Output = bool>,
