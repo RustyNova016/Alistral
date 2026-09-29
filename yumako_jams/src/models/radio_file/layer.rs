@@ -19,6 +19,7 @@ use crate::modules::listen_data::last_listens::LatestListens;
 use crate::modules::listen_data::listen_interval::ListenInterval;
 use crate::modules::mappers::artist_discography::ArtistDiscographyMapper;
 use crate::modules::scores::bump::BumpScore;
+use crate::modules::scores::listen_count::ListenCountScorerInputs;
 use crate::modules::scores::listenrate::ListenRateScorer;
 use crate::modules::scores::overdue_count::OverdueCountScorer;
 use crate::modules::scores::overdue_duration::OverdueDurationScorer;
@@ -71,7 +72,11 @@ impl Layer {
                 .into_stream(stream, client),
             "listen_seeder" => RadioModule::<ListenSeeder>::from_layer(&self, variables)?
                 .into_stream(stream, client),
-            "listenrate_scorer" => RadioModule::<ListenRateScorer>::from_layer(&self, variables)?
+            "listen_count_scorer" => {
+                RadioModule::<ListenCountScorerInputs>::from_layer(&self, variables)?
+                    .into_stream(stream, client)
+            }
+            "listen_rate_scorer" => RadioModule::<ListenRateScorer>::from_layer(&self, variables)?
                 .into_stream(stream, client),
             "join" => {
                 RadioModule::<SetJoin>::from_layer(&self, variables)?.into_stream(stream, client)

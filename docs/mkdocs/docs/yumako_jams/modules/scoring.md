@@ -63,6 +63,26 @@ However they still require linking the path of the step in the variable's target
 
 ## Listen rate scorer
 
+Set the score to the number of listens of the radio item
+
+### Inputs
+
+- `merge`
+
+### Example
+
+```json
+{
+    "step_type": "listen_count_scorer",
+    "id": "listen_count_scorer",
+    "inputs": {
+        "merge": "Add"
+    }
+}
+```
+
+## Listen rate scorer
+
 Set the score to the number of listens estimated to happen in a year
 
 ### Inputs
@@ -73,8 +93,8 @@ Set the score to the number of listens estimated to happen in a year
 
 ```json
 {
-    "step_type": "listenrate_scorer",
-    "id": "listenrate_scorer",
+    "step_type": "listen_rate_scorer",
+    "id": "listen_rate_scorer",
     "inputs": {
         "merge": "Add"
     }
