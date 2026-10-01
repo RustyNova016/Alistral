@@ -19,18 +19,6 @@ pub type RadioItemStream<'a> = BoxStream<'a, RadioItem>;
 
 #[extend::ext]
 pub impl<'a> RadioStream<'a> {
-    fn set_scores<F>(self, f: F, merge: ScoreMerging) -> RadioStream<'a>
-    where
-        F: Fn(&RadioItem) -> Decimal + Send + 'a,
-    {
-        self.map_ok(move |mut t| {
-            let score = f(&t);
-            t.set_score(score, merge);
-            t
-        })
-        .boxed()
-    }
-
     /// Combination of `map_ok` and `set_score` on the [`RadioItem`]s.
     fn map_scores<F>(self, f: F, merge: ScoreMerging, layer_id: String) -> RadioStream<'a>
     where

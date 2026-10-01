@@ -19,16 +19,6 @@ pub struct RadioItem {
 }
 
 impl RadioItem {
-    pub fn set_score(&mut self, score: Decimal, merge: ScoreMerging) {
-        match merge {
-            ScoreMerging::Replace => self.score = score,
-            ScoreMerging::Add => self.score += score,
-            ScoreMerging::Sub => self.score -= score,
-            ScoreMerging::Multiply => self.score *= score,
-            ScoreMerging::Divide => self.score /= score,
-        }
-    }
-
     pub fn update_score(&mut self, score: Decimal, merge: ScoreMerging, layer_id: &str) {
         match merge {
             ScoreMerging::Replace => {
