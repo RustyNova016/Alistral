@@ -2,6 +2,50 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.6.10] - 2026-10-01
+
+### 🚀 Features
+
+- Add overdue count to lookup
+- Yumako jam radio
+- Yumako info
+
+### 🐛 Bug Fixes
+
+- Clippy lints
+- Overdue count
+- Useless deps in yumako
+- This_error min dependency
+- Chrono min dependency
+- Chrono min dependency
+- Serde-json min dependency
+- Serde min dependency
+
+### 🚜 Refactor
+
+- Rework RadioModule
+- Migrate CooldownFilter
+- Removed old radio module
+- Modify yumako variables to allow unused variables
+- Remove now unused functions
+- Remove now unused errors
+
+### 📚 Documentation
+
+- Second proofread
+
+### ⚙️ Miscellaneous Tasks
+
+- Move json config to models
+- Move radio item to models
+- Finishing touches on yumako
+- PR review
+- Ci fixes
+- Remove zip pining
+- Ci fixes
+- Ci fixes
+- Release v0.6.10
+
 ## [0.6.9] - 2026-08-26
 
 ### 🚀 Features
