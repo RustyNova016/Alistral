@@ -22,8 +22,8 @@ pub struct YumakoRunCommand {
     /// The name of the radio
     radio_name: String,
 
-    /// The arguments of the radio
-    arguments: String,
+    /// The inputs of the radio
+    inputs: String,
 
     /// Where to send the radio
     #[clap(long)]
@@ -45,7 +45,7 @@ pub struct YumakoRunCommand {
 impl YumakoRunCommand {
     pub async fn run(&self) -> Result<(), YumakoRunCommandError> {
         let radio = get_radio(&self.radio_name).context(YumakoGetRadioSnafu)?;
-        let inputs = get_radio_inputs(&self.arguments)?;
+        let inputs = get_radio_inputs(&self.inputs)?;
 
         let radio_name = radio.name.to_string();
         let radio_desc = radio.description.to_string();

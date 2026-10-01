@@ -38,10 +38,12 @@ You can find a list of all the commands and their descriptions [here](./CommandL
 As fun exercises, try looking up a recording, or show your top artists by listen duration
 
 Answers: 
+
 - `lookup recording https://listenbrainz.org/track/b8429ebe-6aa4-4b62-be3f-7c145fac2be8`
+  
 - `stats tops artist --sort-by listen-duration`
 
-# I am so lost...
+## I am so lost...
 
 Still struggling? Feel free to send a message in the [forum thread](https://community.metabrainz.org/t/alistral-power-tools-for-listenbrainz/726412), a github discussion, or ask in the listenbrainz channel of the Metabrainz IRC/Matrix/Discord (DMs are fine, but I ignore short messages as it's 99% scammers. Treat your DM as it was an email!)
 

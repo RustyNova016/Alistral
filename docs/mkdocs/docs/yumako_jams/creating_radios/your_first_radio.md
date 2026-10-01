@@ -9,7 +9,7 @@ The base of a radio looks like this
     "name": "My Radio",
     "yumako_version": "0.1.0",
     "stack": [],
-    "inputs": {}
+    "variables": {}
 }
 ```
 
@@ -19,7 +19,7 @@ The base of a radio looks like this
 
 `stack` is the list of modules that are in the radio
 
-`inputs` handles variables. You can safely ignore it for now.
+`variables` handles variables. You can safely ignore it for now.
 
 
 ## Writting the radio
@@ -40,7 +40,7 @@ To get radio items, we first need a seeder module. It "seeds" the radio by makin
             }
         }
     ],
-    "inputs": {}
+    "variables": {}
 }
 ```
 

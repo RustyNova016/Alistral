@@ -22,11 +22,7 @@ But what happens if our basket contain infinite fruits? We are stuck endlessly f
 
 The answer is quite simple, don't use an infinite seeder with a consumer directly. Some modules can remove the infinite nature of seeder by either limiting the amount of tracks passing through, or only using a window of it
 
-TODO: Limiter modules
-
-Some consumers might also have a version that is non consuming
-
-TODO: Example
+See [Limiters](../modules/limiters.md)
 
 ## Surprise infinite seeders
 
