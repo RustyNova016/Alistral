@@ -60,7 +60,7 @@ dependencies = [
  "duplicate",
  "extend",
  "futures",
- "hotpath",
+ "hotpath 0.28.3",
  "indoc",
  "inquire",
  "interzic",
@@ -220,7 +220,7 @@ dependencies = [
  "blocking",
  "bon",
  "governor",
- "hotpath",
+ "hotpath 0.25.1",
  "serde_core",
  "serde_json",
  "snafu",
@@ -1936,11 +1936,9 @@ dependencies = [
  "arc-swap",
  "cfg-if",
  "crossbeam-channel",
- "futures-channel",
  "futures-core",
- "futures-util",
  "hdrhistogram",
- "hotpath-macros",
+ "hotpath-macros 0.25.1",
  "libc",
  "pin-project-lite",
  "quanta",
@@ -1948,17 +1946,58 @@ dependencies = [
  "serde",
  "serde_json",
  "tiny_http",
- "tokio",
- "tracing",
- "tracing-subscriber",
  "ureq",
 ]
+
+[[package]]
+name = "hotpath"
+version = "0.28.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d553ab03dfbae1d1104652719199823728bf30fb5511afc0764fb02d65a5656b"
+dependencies = [
+ "arc-swap",
+ "cfg-if",
+ "crossbeam-channel",
+ "futures-channel",
+ "futures-core",
+ "futures-sink",
+ "hdrhistogram",
+ "hotpath-drain",
+ "hotpath-macros 0.28.3",
+ "libc",
+ "pin-project-lite",
+ "quanta",
+ "regex-lite",
+ "serde",
+ "serde_json",
+ "time",
+ "tiny_http",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
+name = "hotpath-drain"
+version = "0.28.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "42349e85f9425bfe533e9c7aadf6dae93b51b2171ca92f308e9b401962ffeb0e"
 
 [[package]]
 name = "hotpath-macros"
 version = "0.25.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "846bde0d9600d98434e1aac376977d7718bfe3d2f5312a041b7c59a6a466c51a"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.119",
+]
+
+[[package]]
+name = "hotpath-macros"
+version = "0.28.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "05dde24c0cc623819d9466bce63175212d0ecbf450278404a33ab54290e35ed8"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2583,7 +2622,7 @@ dependencies = [
  "async-executor",
  "bon",
  "chrono",
- "hotpath",
+ "hotpath 0.25.1",
  "serde",
  "serde_json",
  "snafu",
@@ -2739,7 +2778,7 @@ dependencies = [
  "deadpool",
  "extend",
  "futures",
- "hotpath",
+ "hotpath 0.28.3",
  "itertools 0.15.0",
  "listenbrainz",
  "listenbrainz_rs",
@@ -2770,7 +2809,7 @@ dependencies = [
  "bon",
  "chrono",
  "glob",
- "hotpath",
+ "hotpath 0.25.1",
  "lucene_query_builder",
  "regex",
  "serde",
@@ -4436,7 +4475,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "32497e9a4c7b38532efcdebeef879707aa9f794296a4f0244f6f69e9bc8574bd"
 dependencies = [
  "fastrand",
- "getrandom 0.3.4",
+ "getrandom 0.4.3",
  "once_cell",
  "rustix",
  "windows-sys 0.61.2",
