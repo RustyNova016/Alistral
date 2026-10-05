@@ -29,9 +29,11 @@ use crate::tools::lookup::LookupCommand;
 use crate::tools::musicbrainz::MusicbrainzCommand;
 #[cfg(feature = "interzic")]
 use crate::tools::playlist::PlaylistCommand;
+use crate::tools::report::ReportCommand;
 #[cfg(feature = "stats")]
 use crate::tools::stats::StatsCommand;
 use crate::tools::unstable::UnstableCommand;
+use crate::tools::weekly::WeeklyCommand;
 #[cfg(feature = "yumako_jams")]
 use crate::tools::yumako_jam::YumakoCommand;
 
@@ -138,12 +140,17 @@ pub enum Commands {
     #[cfg(feature = "radio")]
     /// Generate radio playlists for you
     Radio(RadioCommand),
+        
+    /// Generate radio playlists for you
+    Report(ReportCommand),
 
     #[cfg(feature = "stats")]
     /// Shows top statistics for a specific target
     Stats(StatsCommand),
 
     Unstable(UnstableCommand),
+
+    Weekly(WeeklyCommand),
     #[cfg(feature = "yumako_jams")]
     #[clap(aliases = &["yumako", "yumako_jam", "yumako_jams"])]
     YumakoJams(YumakoCommand),
@@ -168,6 +175,7 @@ impl Commands {
 
             #[cfg(feature = "radio")]
             Self::Radio(val) => val.run().await?,
+            Self::Report(val) => val.run().await?,
 
             #[cfg(feature = "interzic")]
             Self::Interzic(val) => val.run().await?,
@@ -183,6 +191,7 @@ impl Commands {
             #[cfg(feature = "interzic")]
             Self::Playlist(val) => val.run().await?,
             Self::Unstable(val) => val.run().await,
+            Self::Weekly(val) => val.run().await?,
             #[cfg(feature = "yumako_jams")]
             Self::YumakoJams(val) => val.run().await?,
         }
