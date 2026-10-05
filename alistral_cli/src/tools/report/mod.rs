@@ -1,6 +1,10 @@
+use chrono::DateTime;
+use chrono::Local;
 use chrono::NaiveDate;
-use tracing::instrument;
-use tuillez::pg_counted;
+use chrono::Utc;
+use tracing::Instrument;
+use tracing::info_span;
+use tracing_indicatif::span_ext::IndicatifSpanExt;
 use tuillez::pg_inc;
 
 use crate::ALISTRAL_CLIENT;
@@ -40,23 +44,14 @@ pub struct ReportCommand {
 }
 
 impl ReportCommand {
-    #[instrument(skip(self), fields(indicatif.pb_show = tracing::field::Empty))]
     pub async fn run(&self) -> Result<(), ReportCommandError> {
         let start_time = UserInputParser::parse_naive_date(Some(self.start)).unwrap();
         let end_time = UserInputParser::parse_naive_date(Some(self.end)).unwrap();
         let period_duration = end_time - start_time;
         let previous_start_time = (start_time - period_duration).to_utc();
 
-        let username = UserInputParser::username_or_default(&self.username);
-        let stats = ALISTRAL_CLIENT.statistics_of_user(username.clone()).await;
-
-        let (current_stats, previous_stats) =
-            stats.comparison_split(start_time.to_utc(), end_time.to_utc());
-
         // === Create report ===
-        let mut sections = Vec::with_capacity(20);
-
-        if !self.lazy_fetching {
+        let span = if !self.lazy_fetching {
             println!("Welcome to your Alistral report!");
             println!();
             println!(
@@ -66,8 +61,36 @@ impl ReportCommand {
                 "If you are willing to wait between sections, you can rerun you command with the --lazy-fetching option"
             );
             println!();
-            pg_counted!(7, "Creating your report");
-        }
+
+            let span = info_span!("report", indicatif.pb_show = tracing::field::Empty);
+            span.pb_start();
+            span.pb_set_length(7);
+            span.pb_set_message("Creating your report");
+            span
+        } else {
+            info_span!("report")
+        };
+
+        self.create(start_time, end_time, previous_start_time)
+            .instrument(span)
+            .await
+            .unwrap();
+
+        Ok(())
+    }
+
+    async fn create(
+        &self,
+        start_time: DateTime<Local>,
+        end_time: DateTime<Local>,
+        previous_start_time: DateTime<Utc>,
+    ) -> Result<(), ()> {
+        let mut sections = Vec::with_capacity(20);
+        let username = UserInputParser::username_or_default(&self.username);
+        let stats = ALISTRAL_CLIENT.statistics_of_user(username.clone()).await;
+
+        let (current_stats, previous_stats) =
+            stats.comparison_split(start_time.to_utc(), end_time.to_utc());
 
         self.print_report(
             &mut sections,
