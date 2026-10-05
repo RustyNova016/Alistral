@@ -3,7 +3,11 @@ use chrono::NaiveDate;
 use crate::ALISTRAL_CLIENT;
 use crate::models::cli_components::reports::general_report::general_stats_report;
 use crate::models::cli_components::reports::new_discoveries::discoveries_report;
-use crate::models::cli_components::reports::recording_top::top_recordings_report;
+use crate::models::cli_components::reports::tops::top_artists_report;
+use crate::models::cli_components::reports::tops::top_label_report;
+use crate::models::cli_components::reports::tops::top_recordings_report;
+use crate::models::cli_components::reports::tops::top_releases_group_report;
+use crate::models::cli_components::reports::tops::top_releases_report;
 use crate::tools::report::error::ReportCommandError;
 use crate::utils::cli::await_next;
 use crate::utils::user_inputs::UserInputParser;
@@ -25,17 +29,16 @@ pub struct ReportCommand {
 
 impl ReportCommand {
     pub async fn run(&self) -> Result<(), ReportCommandError> {
-        let start_time = UserInputParser::parse_naive_date(Some(self.start))
-            .unwrap();
-        let end_time = UserInputParser::parse_naive_date(Some(self.end))
-            .unwrap();
+        let start_time = UserInputParser::parse_naive_date(Some(self.start)).unwrap();
+        let end_time = UserInputParser::parse_naive_date(Some(self.end)).unwrap();
         let period_duration = end_time - start_time;
         let previous_start_time = (start_time - period_duration).to_utc();
 
         let username = UserInputParser::username_or_default(&self.username);
         let stats = ALISTRAL_CLIENT.statistics_of_user(username.clone()).await;
 
-        let (current_stats, previous_stats) = stats.comparison_split(start_time.to_utc(), end_time.to_utc());
+        let (current_stats, previous_stats) =
+            stats.comparison_split(start_time.to_utc(), end_time.to_utc());
 
         self.print_report(
             general_stats_report(&current_stats, &previous_stats, start_time, end_time)
@@ -58,6 +61,30 @@ impl ReportCommand {
             )
             .await
             .unwrap(),
+        );
+
+        self.print_report(
+            top_artists_report(&current_stats, &previous_stats)
+                .await
+                .unwrap(),
+        );
+
+        self.print_report(
+            top_releases_report(&current_stats, &previous_stats)
+                .await
+                .unwrap(),
+        );
+
+        self.print_report(
+            top_releases_group_report(&current_stats, &previous_stats)
+                .await
+                .unwrap(),
+        );
+
+        self.print_report(
+            top_label_report(&current_stats, &previous_stats)
+                .await
+                .unwrap(),
         );
 
         Ok(())

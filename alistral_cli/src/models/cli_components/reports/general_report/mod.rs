@@ -1,12 +1,14 @@
 use core::fmt;
 use std::fmt::Write;
 
+use alistral_core::cli::colors::AlistralColors;
 use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use alistral_core::models::listen_statistics_data::ListenStatisticsData;
 use chrono::DateTime;
 use chrono::Local;
 use chrono::Utc;
+use rust_decimal::Decimal;
 
 use crate::models::cli_components::comp_arrow::ComparisonArrow;
 use crate::models::cli_components::formaters::mh_duration_formater::MHDurationFormater;
@@ -48,18 +50,33 @@ pub async fn general_stats_report(
     writeln!(
         out,
         "  - You made {} listens [{} {}]",
-        current_count,
+        current_count.alistral_green(),
         ComparisonArrow::greater_is_better(current_count, old_count),
-        old_count,
+        old_count.alistral_green(),
     )?;
     writeln!(
         out,
         "  - That's {} [{} {}]",
-        MHDurationFormater(current_dur),
+        MHDurationFormater(current_dur).alistral_green(),
         ComparisonArrow::greater_is_better(current_dur, old_dur),
-        MHDurationFormater(old_dur),
+        MHDurationFormater(old_dur).alistral_green(),
     );
-    writeln!(out)?;
+
+    let period_duration = end_time - start_time;
+    let current_percent = (Decimal::new(current_dur.unwrap_or_default().num_seconds(), 0)
+        / Decimal::new(period_duration.num_seconds(), 0))
+        * Decimal::ONE_HUNDRED;
+    let previous_percent = (Decimal::new(old_dur.unwrap_or_default().num_seconds(), 0)
+        / Decimal::new(period_duration.num_seconds(), 0))
+        * Decimal::ONE_HUNDRED;
+
+    writeln!(
+        out,
+        "  - Which is {}% of the whole period [{} {}%]",
+        current_percent.round_dp(2).alistral_green(),
+        ComparisonArrow::greater_is_better(current_percent, previous_percent),
+        previous_percent.round_dp(2).alistral_green(),
+    );
 
     Ok(out)
 }
