@@ -33,7 +33,6 @@ use crate::tools::report::ReportCommand;
 #[cfg(feature = "stats")]
 use crate::tools::stats::StatsCommand;
 use crate::tools::unstable::UnstableCommand;
-use crate::tools::weekly::WeeklyCommand;
 #[cfg(feature = "yumako_jams")]
 use crate::tools::yumako_jam::YumakoCommand;
 
@@ -150,7 +149,6 @@ pub enum Commands {
 
     Unstable(UnstableCommand),
 
-    Weekly(WeeklyCommand),
     #[cfg(feature = "yumako_jams")]
     #[clap(aliases = &["yumako", "yumako_jam", "yumako_jams"])]
     YumakoJams(YumakoCommand),
@@ -191,7 +189,6 @@ impl Commands {
             #[cfg(feature = "interzic")]
             Self::Playlist(val) => val.run().await?,
             Self::Unstable(val) => val.run().await,
-            Self::Weekly(val) => val.run().await?,
             #[cfg(feature = "yumako_jams")]
             Self::YumakoJams(val) => val.run().await?,
         }

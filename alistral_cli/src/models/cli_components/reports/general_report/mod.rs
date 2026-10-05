@@ -5,6 +5,7 @@ use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTi
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use alistral_core::models::listen_statistics_data::ListenStatisticsData;
 use chrono::DateTime;
+use chrono::Local;
 use chrono::Utc;
 
 use crate::models::cli_components::comp_arrow::ComparisonArrow;
@@ -14,8 +15,8 @@ use crate::models::cli_components::formaters::title::Title;
 pub async fn general_stats_report(
     current_stats: &ListenStatisticsData,
     previous_stats: &ListenStatisticsData,
-    start_time: DateTime<Utc>,
-    end_time: DateTime<Utc>,
+    start_time: DateTime<Local>,
+    end_time: DateTime<Local>,
 ) -> Result<String, fmt::Error> {
     let mut out = String::new();
 

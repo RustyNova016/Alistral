@@ -3,6 +3,7 @@ use chrono::NaiveDate;
 use crate::ALISTRAL_CLIENT;
 use crate::models::cli_components::reports::general_report::general_stats_report;
 use crate::models::cli_components::reports::new_discoveries::discoveries_report;
+use crate::models::cli_components::reports::recording_top::top_recordings_report;
 use crate::tools::report::error::ReportCommandError;
 use crate::utils::cli::await_next;
 use crate::utils::user_inputs::UserInputParser;
@@ -25,27 +26,34 @@ pub struct ReportCommand {
 impl ReportCommand {
     pub async fn run(&self) -> Result<(), ReportCommandError> {
         let start_time = UserInputParser::parse_naive_date(Some(self.start))
-            .unwrap()
-            .to_utc();
+            .unwrap();
         let end_time = UserInputParser::parse_naive_date(Some(self.end))
-            .unwrap()
-            .to_utc();
+            .unwrap();
         let period_duration = end_time - start_time;
         let previous_start_time = (start_time - period_duration).to_utc();
 
         let username = UserInputParser::username_or_default(&self.username);
         let stats = ALISTRAL_CLIENT.statistics_of_user(username.clone()).await;
 
-        let (current_stats, previous_stats) = stats.comparison_split(start_time, end_time);
+        let (current_stats, previous_stats) = stats.comparison_split(start_time.to_utc(), end_time.to_utc());
 
-        self.print_report(general_stats_report(&current_stats, &previous_stats, start_time, end_time).await.unwrap());
+        self.print_report(
+            general_stats_report(&current_stats, &previous_stats, start_time, end_time)
+                .await
+                .unwrap(),
+        );
+        self.print_report(
+            top_recordings_report(&current_stats, &previous_stats)
+                .await
+                .unwrap(),
+        );
         self.print_report(
             discoveries_report(
                 &stats,
                 &current_stats,
                 &previous_stats,
-                start_time,
-                end_time,
+                start_time.to_utc(),
+                end_time.to_utc(),
                 previous_start_time,
             )
             .await
