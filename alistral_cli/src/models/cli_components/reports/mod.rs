@@ -1,3 +1,4 @@
+pub mod recording_top;
 pub mod general_report;
 pub mod utils;
 pub mod new_discoveries;

@@ -1,5 +1,5 @@
 pub mod report;
-pub mod weekly;
+//pub mod weekly;
 pub mod bump;
 pub mod cache;
 pub mod compatibility;
