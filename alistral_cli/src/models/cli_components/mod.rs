@@ -1,3 +1,4 @@
+pub mod reports;
 #[cfg(any(feature = "stats", feature = "lookup"))]
 pub mod ask_continue;
 pub mod comp_arrow;
