@@ -2,9 +2,9 @@ use alistral_core::cli::colors::AlistralColors;
 use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
 use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime as _;
 use rust_decimal::Decimal;
-use tuillez::extensions::chrono_exts::DurationExt;
 
 use crate::models::cli_components::comp_arrow::ComparisonArrow;
+use crate::models::cli_components::formaters::human_duration::HumanDurationFormat;
 
 pub(super) fn discovery_duration(
     current_discoveries: &RecordingWithListensCollection,
@@ -33,15 +33,9 @@ pub(super) fn discovery_duration(
 
     format!(
         "Corresponding to {} [{} {}] ({}% of the total listened time [{} {}%])",
-        current_discovered_count
-            .to_humantime()
-            .unwrap()
-            .alistral_green(),
+        HumanDurationFormat::from(current_discovered_count).alistral_green(),
         ComparisonArrow::greater_is_better(current_discovered_count, previous_discovered_count),
-        previous_discovered_count
-            .to_humantime()
-            .unwrap()
-            .alistral_green(),
+        HumanDurationFormat::from(previous_discovered_count).alistral_green(),
         current_percent_discovered.alistral_green(),
         ComparisonArrow::greater_is_better(current_percent_discovered, previous_percent_discovered),
         previous_percent_discovered.alistral_green()

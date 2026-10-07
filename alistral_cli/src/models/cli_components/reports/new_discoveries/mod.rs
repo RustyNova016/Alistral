@@ -16,7 +16,6 @@ use crate::models::cli_components::reports::new_discoveries::discovered_counts::
 use crate::models::cli_components::reports::new_discoveries::discovered_duration::discovery_duration;
 use crate::models::cli_components::reports::new_discoveries::discovered_listens::discovery_listens;
 use crate::models::cli_components::reports::new_discoveries::no_discoveries_with_previous::no_discoveries_with_previous;
-use crate::models::cli_components::reports::utils::display_table::create_report_top_table;
 use crate::models::cli_components::tables::order_by::OrderTableByListenDuration;
 use crate::models::cli_components::tables::rows::top_listen_dur_count::TopListenDurCountRow;
 use crate::models::cli_components::tables::table::TopTable;

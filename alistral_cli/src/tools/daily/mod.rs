@@ -1,6 +1,5 @@
 use chrono::Local;
 use chrono::NaiveDate;
-use clap::Parser;
 
 use crate::ALISTRAL_CLIENT;
 use crate::tools::daily::daily_stats::daily_stats;
