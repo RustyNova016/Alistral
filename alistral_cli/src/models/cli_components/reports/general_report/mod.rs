@@ -11,6 +11,7 @@ use chrono::Utc;
 use rust_decimal::Decimal;
 
 use crate::models::cli_components::comp_arrow::ComparisonArrow;
+use crate::models::cli_components::formaters::human_duration::HumanDurationFormat;
 use crate::models::cli_components::formaters::mh_duration_formater::MHDurationFormater;
 use crate::models::cli_components::formaters::title::Title;
 
@@ -57,10 +58,10 @@ pub async fn general_stats_report(
     writeln!(
         out,
         "  - That's {} [{} {}]",
-        MHDurationFormater(current_dur).alistral_green(),
+        HumanDurationFormat::from(current_dur).alistral_green(),
         ComparisonArrow::greater_is_better(current_dur, old_dur),
-        MHDurationFormater(old_dur).alistral_green(),
-    );
+        HumanDurationFormat::from(old_dur).alistral_green(),
+    )?;
 
     let period_duration = end_time - start_time;
     let current_percent = (Decimal::new(current_dur.unwrap_or_default().num_seconds(), 0)
@@ -76,7 +77,7 @@ pub async fn general_stats_report(
         current_percent.round_dp(2).alistral_green(),
         ComparisonArrow::greater_is_better(current_percent, previous_percent),
         previous_percent.round_dp(2).alistral_green(),
-    );
+    )?;
 
     Ok(out)
 }
