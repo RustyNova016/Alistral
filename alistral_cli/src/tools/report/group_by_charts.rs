@@ -3,6 +3,7 @@ use alistral_core::models::listen_with_time::iterator::IntoListenWithDurationIte
 use itertools::Itertools;
 use tuillez::pg_inc;
 
+use crate::models::cli_components::reports::group_by_charts::days::group_by_day_report;
 use crate::models::cli_components::reports::group_by_charts::month::group_by_month_report;
 use crate::tools::report::ReportCommand;
 
@@ -32,6 +33,11 @@ impl ReportCommand {
         self.print_report(
             sections,
             group_by_month_report(&current_listens, &previous_listens),
+        );
+
+        self.print_report(
+            sections,
+            group_by_day_report(&current_listens, &previous_listens),
         );
     }
 }

@@ -1,4 +1,4 @@
-pub mod month;
+
 use alistral_core::models::listen_with_time::ListenWithDuration;
 use alistral_core::models::listen_with_time::ref_iterator::AsListenWithDurationIterator;
 use charchart::bar_graph::BarGraph;
@@ -7,6 +7,9 @@ use charchart::bar_graph::data::Data;
 use itertools::Itertools;
 
 use crate::models::cli_components::formaters::human_duration::HumanDurationFormat;
+
+pub mod month;
+pub mod days;
 
 pub fn group_by_report<F>(
     labels: &[(u32, &str)],
