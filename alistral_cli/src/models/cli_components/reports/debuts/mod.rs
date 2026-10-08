@@ -9,24 +9,27 @@ use chrono::DateTime;
 use chrono::Utc;
 use musicbrainz_db_lite::HasRowID;
 use musicbrainz_db_lite::models::musicbrainz::MusicbrainzEntity;
+use musicbrainz_db_lite::models::shared_traits::debuted_on::DebutedOn;
 
 use crate::datastructures::cli_formating::title::Heading1;
-use crate::models::cli_components::reports::new_discoveries::discovered_counts::discovery_counts;
-use crate::models::cli_components::reports::new_discoveries::discovered_duration::discovery_duration;
-use crate::models::cli_components::reports::new_discoveries::discovered_listens::discovery_listens;
-use crate::models::cli_components::reports::new_discoveries::no_discoveries_with_previous::no_discoveries_with_previous;
+use crate::models::cli_components::reports::debuts::debuted_counts::discovery_counts;
+use crate::models::cli_components::reports::debuts::debuted_duration::discovery_duration;
+use crate::models::cli_components::reports::debuts::debuted_listens::discovery_listens;
 use crate::models::cli_components::tables::TableSort;
 use crate::models::cli_components::tables::order_by::OrderTableByListenDuration;
 use crate::models::cli_components::tables::rows::TableRow;
 use crate::models::cli_components::tables::rows::top_listen_dur_count::TopListenDurCountRow;
 use crate::models::cli_components::tables::table::TopTable;
+use crate::models::client::AlistralCliClient;
 
-pub mod discovered_counts;
-pub mod discovered_duration;
-pub mod discovered_listens;
-pub mod no_discoveries_with_previous;
+pub mod debuted_counts;
+pub mod debuted_duration;
+pub mod debuted_listens;
+pub mod no_debuts_with_previous;
 
-pub async fn discoveries_report<Ent, Lis>(
+pub async fn debut_report<Ent, Lis>(
+    client: &AlistralCliClient,
+
     all_stats: &EntityWithListensCollection<Ent, Lis>,
     current_stats: &EntityWithListensCollection<Ent, Lis>,
     previous_stats: &EntityWithListensCollection<Ent, Lis>,
@@ -36,9 +39,10 @@ pub async fn discoveries_report<Ent, Lis>(
     previous_start_time: DateTime<Utc>,
 ) -> Result<String, ()>
 where
-    Ent: MusicbrainzEntity,
+    Ent: MusicbrainzEntity + DebutedOn,
     EntityWithListens<Ent, Lis>: Clone + ListenCollectionReadable + HasRowID + Mergable,
-    EntityWithListensCollection<Ent, Lis>: ListenCollectionReadable + IntoListenWithDurationIterator + Clone,
+    EntityWithListensCollection<Ent, Lis>:
+        ListenCollectionReadable + IntoListenWithDurationIterator + Clone,
     // Table Bounds
     TopListenDurCountRow<Ent>: TableRow + From<EntityWithListens<Ent, Lis>>,
     OrderTableByListenDuration: TableSort<TopListenDurCountRow<Ent>>,
@@ -47,28 +51,34 @@ where
     writeln!(
         out,
         "{}",
-        Heading1(format!("Discovered {} 🔎", Ent::entity_name()))
+        Heading1(format!("Debuted {} 🌱", Ent::entity_name()))
     )
     .unwrap();
     writeln!(out).unwrap();
 
     let current_discoveries =
-        get_discovered_recordings(all_stats, &current_stats, start_time, end_time);
-    let previous_discoveries =
-        get_discovered_recordings(all_stats, &previous_stats, previous_start_time, start_time);
+        get_debuted_entities(client, all_stats, &current_stats, start_time, end_time).await;
+    let previous_discoveries = get_debuted_entities(
+        client,
+        all_stats,
+        &previous_stats,
+        previous_start_time,
+        start_time,
+    )
+    .await;
 
     match (
         current_discoveries.is_empty(),
         previous_discoveries.is_empty(),
     ) {
         (true, true) => {
-            writeln!(out, "No new tracks have been discovered").unwrap();
+            writeln!(out, "No {} have debuted in this period", Ent::entity_name()).unwrap();
         }
         (true, false) => {
             writeln!(
                 out,
                 "{}",
-                no_discoveries_with_previous(&previous_discoveries)
+                no_debuts_with_previous::no_discoveries_with_previous(&previous_discoveries)
             )
             .unwrap();
         }
@@ -121,32 +131,33 @@ where
     Ok(out)
 }
 
-fn get_discovered_recordings<Ent, Lis>(
+async fn get_debuted_entities<Ent, Lis>(
+    client: &AlistralCliClient,
     all_stats: &EntityWithListensCollection<Ent, Lis>,
     timeframe_stats: &EntityWithListensCollection<Ent, Lis>,
     start_time: DateTime<Utc>,
     end_time: DateTime<Utc>,
 ) -> EntityWithListensCollection<Ent, Lis>
 where
+    Ent: DebutedOn,
     EntityWithListens<Ent, Lis>: Clone + ListenCollectionReadable + HasRowID + Mergable,
 {
-    let mut discovered = EntityWithListensCollection::new();
+    let mut out = EntityWithListensCollection::new();
 
-    for recording in all_stats.iter() {
-        let Some(date_discovered) = recording.oldest_listen_date() else {
+    for entity_stats in timeframe_stats.iter() {
+        let Some(debut_date) = entity_stats
+            .entity()
+            .debuted_on(&client.musicbrainz_db)
+            .await
+            .unwrap()
+        else {
             continue;
         };
 
-        if !(start_time <= date_discovered && date_discovered <= end_time) {
-            continue;
+        if start_time <= debut_date && debut_date <= end_time {
+            out.insert_or_merge_entity_stats(entity_stats.clone());
         }
-
-        let Some(new_recording) = timeframe_stats.get_by_id(recording.rowid()) else {
-            continue;
-        };
-
-        discovered.insert_or_merge_entity_stats(new_recording.clone())
     }
 
-    discovered
+    out
 }

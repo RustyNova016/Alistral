@@ -62,7 +62,7 @@ impl ReportCommand {
 
             let span = info_span!("report", indicatif.pb_show = tracing::field::Empty);
             span.pb_start();
-            span.pb_set_length(9);
+            span.pb_set_length(11);
             span.pb_set_message("Creating your report");
             span
         } else {
