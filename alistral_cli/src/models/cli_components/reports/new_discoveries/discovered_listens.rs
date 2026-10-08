@@ -1,17 +1,20 @@
 use alistral_core::cli::colors::AlistralColors;
-use alistral_core::datastructures::entity_with_listens::recording::collection::RecordingWithListensCollection;
+use alistral_core::datastructures::entity_with_listens::collection::EntityWithListensCollection;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use rust_decimal::Decimal;
 
 use crate::models::cli_components::comp_arrow::ComparisonArrow;
 
-pub(super) fn discovery_listens(
-    current_discoveries: &RecordingWithListensCollection,
-    previous_discoveries: &RecordingWithListensCollection,
+pub(super) fn discovery_listens<Ent, Lis>(
+    current_discoveries: &EntityWithListensCollection<Ent, Lis>,
+    previous_discoveries: &EntityWithListensCollection<Ent, Lis>,
 
-    current_recordings: &RecordingWithListensCollection,
-    previous_recordings: &RecordingWithListensCollection,
-) -> String {
+    current_recordings: &EntityWithListensCollection<Ent, Lis>,
+    previous_recordings: &EntityWithListensCollection<Ent, Lis>,
+) -> String
+where
+    EntityWithListensCollection<Ent, Lis>: ListenCollectionReadable,
+{
     let current_discovered_count = current_discoveries.listen_count();
     let previous_discovered_count = previous_discoveries.listen_count();
 
