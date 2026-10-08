@@ -6,37 +6,79 @@
       {
         "name": "id",
         "ordinal": 0,
-        "type_info": "Integer"
+        "type_info": "Integer",
+        "origin": {
+          "Table": {
+            "table": "works",
+            "name": "id"
+          }
+        }
       },
       {
         "name": "mbid",
         "ordinal": 1,
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "works",
+            "name": "mbid"
+          }
+        }
       },
       {
         "name": "title",
         "ordinal": 2,
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "works",
+            "name": "title"
+          }
+        }
       },
       {
         "name": "work_type",
         "ordinal": 3,
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "works",
+            "name": "work_type"
+          }
+        }
       },
       {
         "name": "disambiguation",
         "ordinal": 4,
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "works",
+            "name": "disambiguation"
+          }
+        }
       },
       {
         "name": "annotation",
         "ordinal": 5,
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "works",
+            "name": "annotation"
+          }
+        }
       },
       {
         "name": "full_update_date",
         "ordinal": 6,
-        "type_info": "Integer"
+        "type_info": "Integer",
+        "origin": {
+          "Table": {
+            "table": "works",
+            "name": "full_update_date"
+          }
+        }
       }
     ],
     "parameters": {

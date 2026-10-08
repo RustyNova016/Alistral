@@ -190,12 +190,23 @@ impl ImportListen {
             .unwrap();
         }
 
+                let listen_duration =  self.track_metadata
+            .additional_info
+            .get("duration")
+            .and_then(|dur| match dur {
+                serde_json::Value::Number(num) => num.as_i64(),
+                serde_json::Value::String(string) => string.parse::<i64>().ok(),
+                _ => None,
+            });
+
+
         let listen = Listen {
             id: 0,
             listened_at: self.listened_at,
             user: user_name.to_string(),
             recording_msid: self.track_metadata.recording_msid.clone(),
             data: Some(data),
+            duration: listen_duration
         };
 
         listen.upsert_listen(conn).await.unwrap();

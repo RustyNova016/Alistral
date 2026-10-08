@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "DELETE FROM listens WHERE LOWER(user) = LOWER(?)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": []
+  },
+  "hash": "a887c3a8161b4c15a4c18f8192d74971969b9d38b69c84c923ce729fc913ef2a"
+}

@@ -6,27 +6,57 @@
       {
         "name": "id",
         "ordinal": 0,
-        "type_info": "Integer"
+        "type_info": "Integer",
+        "origin": {
+          "Table": {
+            "table": "msid_mapping",
+            "name": "id"
+          }
+        }
       },
       {
         "name": "recording_msid",
         "ordinal": 1,
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "msid_mapping",
+            "name": "recording_msid"
+          }
+        }
       },
       {
         "name": "recording_mbid",
         "ordinal": 2,
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "msid_mapping",
+            "name": "recording_mbid"
+          }
+        }
       },
       {
         "name": "user",
         "ordinal": 3,
-        "type_info": "Integer"
+        "type_info": "Integer",
+        "origin": {
+          "Table": {
+            "table": "msid_mapping",
+            "name": "user"
+          }
+        }
       },
       {
         "name": "release_mbid",
         "ordinal": 4,
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "msid_mapping",
+            "name": "release_mbid"
+          }
+        }
       }
     ],
     "parameters": {

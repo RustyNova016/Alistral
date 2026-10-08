@@ -26,10 +26,12 @@ pub mod views;
 #[sequelles(insert, upsert, delete)]
 #[sequelles(primary_key(key_name = "pk", columns(id)))]
 pub struct Listen {
+    #[sequelles(auto_increment)]
     pub id: i64,
     pub listened_at: i64,
     pub user: String,
     pub recording_msid: String,
+    pub duration: Option<i64>,
     pub data: Option<String>,
 }
 
@@ -53,11 +55,12 @@ impl Listen {
         &self,
         conn: &mut sqlx::SqliteConnection,
     ) -> Result<Listen, SqlxError> {
-        sqlx::query_as("INSERT INTO listens VALUES (NULL, $1, $2, $3, $4) ON CONFLICT DO UPDATE SET `listened_at` = excluded.`listened_at`, `user` = excluded.`user`, `recording_msid` = excluded.`recording_msid`, `data` = excluded.`data` RETURNING *")
+        sqlx::query_as("INSERT INTO listens VALUES (NULL, $1, $2, $3, $4, $5) ON CONFLICT DO UPDATE SET `listened_at` = excluded.`listened_at`, `user` = excluded.`user`, `recording_msid` = excluded.`recording_msid`, `data` = excluded.`data`, `duration` = excluded.`duration` RETURNING *")
             .bind(self.listened_at)
             .bind(&self.user)
             .bind(&self.recording_msid)
             .bind(&self.data)
+            .bind(&self.duration)
             .fetch_one(&mut *conn)
             .await
             .context(SqlxSnafu)
@@ -111,6 +114,7 @@ mod test {
             listened_at: 100,
             recording_msid: "test".to_string(),
             user: "TestNova".to_string(),
+            duration: Some(256),
         };
 
         let db_listen = base_listen.upsert_listen(conn).await.unwrap();

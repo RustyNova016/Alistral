@@ -55,6 +55,16 @@ impl Listen {
             .context(SetUserMappingSnafu)?;
         }
 
+        let listen_duration = listen
+            .track_metadata
+            .additional_info
+            .get("duration")
+            .and_then(|dur| match dur {
+                serde_json::Value::Number(num) => num.as_i64(),
+                serde_json::Value::String(string) => string.parse::<i64>().ok(),
+                _ => None,
+            });
+
         let data = serde_json::to_string(&listen.track_metadata.additional_info)
             .expect("Crashing from serializing a serde::Value isn't possible");
 
@@ -64,6 +74,7 @@ impl Listen {
             user: listen.user_name.clone(),
             recording_msid: listen.recording_msid,
             data: Some(data),
+            duration: listen_duration,
         };
 
         listen_db
