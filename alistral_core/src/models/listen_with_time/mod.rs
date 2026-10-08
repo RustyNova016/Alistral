@@ -1,3 +1,4 @@
+pub mod ref_iterator;
 use chrono::TimeDelta;
 use musicbrainz_db_lite::HasRowID;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;

@@ -1,6 +1,7 @@
 use alistral_core::models::listen_statistics_data::ListenStatisticsData;
 use chrono::DateTime;
 use chrono::Local;
+use tuillez::pg_inc;
 
 use crate::ALISTRAL_CLIENT;
 use crate::models::cli_components::reports::debuts::debut_report;
@@ -22,8 +23,11 @@ impl ReportCommand {
         previous_start_time: DateTime<Local>,
     ) {
         let all_time_entity_stats = all_time_stats.recording_stats().await.unwrap();
+        pg_inc!();
         let current_entity_stats = current_stats.recording_stats().await.unwrap();
+        pg_inc!();
         let previous_entity_stats = previous_stats.recording_stats().await.unwrap();
+        pg_inc!();
 
         self.print_report(
             sections,

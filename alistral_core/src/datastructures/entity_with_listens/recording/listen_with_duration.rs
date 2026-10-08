@@ -3,6 +3,7 @@ use chrono::TimeDelta;
 use crate::datastructures::entity_with_listens::recording::RecordingWithListens;
 use crate::models::listen_with_time::ListenWithDuration;
 use crate::models::listen_with_time::iterator::IntoListenWithDurationIterator;
+use crate::models::listen_with_time::ref_iterator::AsListenWithDurationIterator;
 
 impl IntoListenWithDurationIterator for RecordingWithListens {
     fn into_listen_with_duration_iterator(self) -> impl Iterator<Item = ListenWithDuration> {
@@ -20,3 +21,4 @@ impl IntoListenWithDurationIterator for RecordingWithListens {
         })
     }
 }
+
