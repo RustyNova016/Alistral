@@ -14,7 +14,7 @@ use crate::datastructures::cli_formating::title::Heading1;
 use crate::models::cli_components::comp_arrow::ComparisonArrow;
 use crate::models::cli_components::reports::utils::display_table::create_report_top_table;
 
-pub(super) async fn generic_top_report<Ent, Lis>(
+pub async fn generic_top_report<Ent, Lis>(
     current_entity: &EntityWithListensCollection<Ent, Lis>,
     previous_entity: &EntityWithListensCollection<Ent, Lis>,
     // Settings

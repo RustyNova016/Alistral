@@ -1,3 +1,4 @@
+pub mod listens_with_duration;
 use itertools::Itertools as _;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 use musicbrainz_db_lite::models::listenbrainz::listen::relations::listen_recordings::ListenRecordingDBRel;
