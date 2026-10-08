@@ -1,3 +1,4 @@
+pub mod group_by_charts;
 use chrono::DateTime;
 use chrono::Local;
 use chrono::NaiveDate;
@@ -62,17 +63,26 @@ impl ReportCommand {
 
             let span = info_span!("report", indicatif.pb_show = tracing::field::Empty);
             span.pb_start();
-            span.pb_set_length(11);
+            span.pb_set_length(31);
             span.pb_set_message("Creating your report");
             span
         } else {
             info_span!("report")
         };
 
-        self.create(start_time, end_time, previous_start_time)
+        let sections = self.create(start_time, end_time, previous_start_time)
             .instrument(span)
             .await
             .unwrap();
+        
+        for section in sections {
+            println!("{section}");
+
+            if !self.no_wait {
+                println!("<Press enter to continue>");
+                await_next();
+            }
+        }
 
         Ok(())
     }
@@ -82,10 +92,11 @@ impl ReportCommand {
         start_time: DateTime<Local>,
         end_time: DateTime<Local>,
         previous_start_time: DateTime<Local>,
-    ) -> Result<(), ()> {
+    ) -> Result<Vec<String>, ()> {
         let mut sections = Vec::with_capacity(20);
         let username = UserInputParser::username_or_default(&self.username);
         let all_time_stats = ALISTRAL_CLIENT.statistics_of_user(username.clone()).await;
+        pg_inc!();
 
         let (current_stats, previous_stats) =
             all_time_stats.comparison_split(start_time.to_utc(), end_time.to_utc());
@@ -144,16 +155,11 @@ impl ReportCommand {
                 .unwrap(),
         );
 
-        for section in sections {
-            println!("{section}");
+        self.group_by_reports(&mut sections, &current_stats, &previous_stats)
+            .await;
 
-            if !self.no_wait {
-                println!("<Press enter to continue>");
-                await_next();
-            }
-        }
 
-        Ok(())
+        Ok(sections)
     }
 
     fn print_report(&self, sections: &mut Vec<String>, data: String) {
