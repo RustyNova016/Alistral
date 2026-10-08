@@ -2,7 +2,6 @@ use core::fmt::Write as _;
 
 use alistral_core::datastructures::entity_with_listens::EntityWithListens;
 use alistral_core::datastructures::entity_with_listens::collection::EntityWithListensCollection;
-use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use alistral_core::models::listen_with_time::iterator::IntoListenWithDurationIterator;
 use alistral_core::traits::mergable::Mergable;

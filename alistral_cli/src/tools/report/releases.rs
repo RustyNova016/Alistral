@@ -2,6 +2,8 @@ use alistral_core::models::listen_statistics_data::ListenStatisticsData;
 use chrono::DateTime;
 use chrono::Local;
 
+use crate::ALISTRAL_CLIENT;
+use crate::models::cli_components::reports::debuts::debut_report;
 use crate::models::cli_components::reports::new_discoveries::discoveries_report;
 use crate::models::cli_components::reports::tops::generic_report::generic_top_report;
 use crate::tools::report::ReportCommand;
@@ -34,6 +36,21 @@ impl ReportCommand {
                 all_time_entity_stats,
                 current_entity_stats,
                 previous_entity_stats,
+                start_time.to_utc(),
+                end_time.to_utc(),
+                previous_start_time.to_utc(),
+            )
+            .await
+            .unwrap(),
+        );
+
+        self.print_report(
+            sections,
+            debut_report(
+                &ALISTRAL_CLIENT,
+                &all_time_entity_stats,
+                &current_entity_stats,
+                &previous_entity_stats,
                 start_time.to_utc(),
                 end_time.to_utc(),
                 previous_start_time.to_utc(),
