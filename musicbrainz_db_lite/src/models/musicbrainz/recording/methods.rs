@@ -7,6 +7,7 @@ use chrono::Utc;
 use crate::DBClient;
 use crate::FetchAsComplete;
 use crate::models::musicbrainz::recording::Recording;
+use crate::models::shared_traits::debuted_on::DebutedOn;
 
 impl Recording {
     /// Return true if the recording is a remix.
@@ -40,6 +41,39 @@ impl Recording {
         &self,
         client: Arc<DBClient>,
     ) -> Result<Option<DateTime<Utc>>, crate::Error> {
+        if let Some(date) = self.first_release_date() {
+            return Ok(Some(date));
+        }
+
+        // Not found? Fetch as whole
+        let new = self.fetch_as_complete_as_task(client.clone()).await?;
+
+        if let Some(date) = new.first_release_date() {
+            return Ok(Some(date));
+        }
+
+        // Still not found? Find the earliest release
+        let releases = new.get_releases(&client).await?;
+        let mut min: Option<DateTime<Utc>> = None;
+        for release in releases {
+            let Some(date) = release.release_date() else {
+                continue;
+            };
+
+            match min {
+                Some(min_val) => min = Some(min_val.min(date)),
+                None => min = Some(date),
+            }
+        }
+
+        Ok(min)
+    }
+}
+
+impl DebutedOn for Recording {
+    type Error = crate::Error;
+
+    async fn debuted_on(&self, client: &Arc<DBClient>) -> Result<Option<DateTime<Utc>>, Self::Error>  {
         if let Some(date) = self.first_release_date() {
             return Ok(Some(date));
         }
