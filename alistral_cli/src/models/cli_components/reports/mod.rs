@@ -1,3 +1,4 @@
+pub mod all_time_changes;
 pub mod group_by_charts;
 pub mod debuts;
 pub mod general_report;
