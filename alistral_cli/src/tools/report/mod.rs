@@ -1,4 +1,5 @@
 pub mod group_by_charts;
+pub mod listen_data;
 use chrono::DateTime;
 use chrono::Local;
 use chrono::NaiveDate;
@@ -12,6 +13,7 @@ use crate::models::cli_components::reports::general_report::general_stats_report
 use crate::models::cli_components::reports::tops::top_label_report;
 use crate::models::cli_components::reports::tops::top_releases_group_report;
 use crate::tools::report::error::ReportCommandError;
+use crate::tools::report::listen_data::ReportListenData;
 use crate::utils::cli::await_next;
 use crate::utils::user_inputs::UserInputParser;
 
@@ -70,11 +72,12 @@ impl ReportCommand {
             info_span!("report")
         };
 
-        let sections = self.create(start_time, end_time, previous_start_time)
+        let sections = self
+            .create(start_time, end_time, previous_start_time)
             .instrument(span)
             .await
             .unwrap();
-        
+
         for section in sections {
             println!("{section}");
 
@@ -98,21 +101,27 @@ impl ReportCommand {
         let all_time_stats = ALISTRAL_CLIENT.statistics_of_user(username.clone()).await;
         pg_inc!();
 
-        let (current_stats, previous_stats) =
-            all_time_stats.comparison_split(start_time.to_utc(), end_time.to_utc());
+        let stats = ReportListenData::new(all_time_stats);
 
         self.print_report(
             &mut sections,
-            general_stats_report(&current_stats, &previous_stats, start_time, end_time)
-                .await
-                .unwrap(),
+            general_stats_report(
+                stats.current_stats(start_time.to_utc(), end_time.to_utc()),
+                stats.previous_stats(previous_start_time.to_utc(), start_time.to_utc()),
+                start_time,
+                end_time,
+            )
+            .await
+            .unwrap(),
         );
 
         self.recording_reports(
             &mut sections,
-            &all_time_stats,
-            &current_stats,
-            &previous_stats,
+            stats.all_time_stats(),
+            stats.current_stats(start_time.to_utc(), end_time.to_utc()),
+            stats.previous_stats(previous_start_time.to_utc(), start_time.to_utc()),
+            stats.current_all_time_stats(end_time.to_utc()),
+            stats.previous_all_time_stats(start_time.to_utc()),
             start_time,
             end_time,
             previous_start_time,
@@ -121,9 +130,9 @@ impl ReportCommand {
 
         self.artist_reports(
             &mut sections,
-            &all_time_stats,
-            &current_stats,
-            &previous_stats,
+            stats.all_time_stats(),
+            stats.current_stats(start_time.to_utc(), end_time.to_utc()),
+            stats.previous_stats(previous_start_time.to_utc(), start_time.to_utc()),
             start_time,
             end_time,
             previous_start_time,
@@ -132,9 +141,9 @@ impl ReportCommand {
 
         self.release_reports(
             &mut sections,
-            &all_time_stats,
-            &current_stats,
-            &previous_stats,
+            stats.all_time_stats(),
+            stats.current_stats(start_time.to_utc(), end_time.to_utc()),
+            stats.previous_stats(previous_start_time.to_utc(), start_time.to_utc()),
             start_time,
             end_time,
             previous_start_time,
@@ -143,21 +152,30 @@ impl ReportCommand {
 
         self.print_report(
             &mut sections,
-            top_releases_group_report(&current_stats, &previous_stats)
-                .await
-                .unwrap(),
+            top_releases_group_report(
+                stats.current_stats(start_time.to_utc(), end_time.to_utc()),
+                stats.previous_stats(previous_start_time.to_utc(), start_time.to_utc()),
+            )
+            .await
+            .unwrap(),
         );
 
         self.print_report(
             &mut sections,
-            top_label_report(&current_stats, &previous_stats)
-                .await
-                .unwrap(),
+            top_label_report(
+                stats.current_stats(start_time.to_utc(), end_time.to_utc()),
+                stats.previous_stats(previous_start_time.to_utc(), start_time.to_utc()),
+            )
+            .await
+            .unwrap(),
         );
 
-        self.group_by_reports(&mut sections, &current_stats, &previous_stats)
-            .await;
-
+        self.group_by_reports(
+            &mut sections,
+            stats.current_stats(start_time.to_utc(), end_time.to_utc()),
+            stats.previous_stats(previous_start_time.to_utc(), start_time.to_utc()),
+        )
+        .await;
 
         Ok(sections)
     }

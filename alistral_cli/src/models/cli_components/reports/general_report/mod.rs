@@ -7,12 +7,10 @@ use alistral_core::datastructures::listen_collection::traits::ListenCollectionRe
 use alistral_core::models::listen_statistics_data::ListenStatisticsData;
 use chrono::DateTime;
 use chrono::Local;
-use chrono::Utc;
 use rust_decimal::Decimal;
 
 use crate::models::cli_components::comp_arrow::ComparisonArrow;
 use crate::models::cli_components::formaters::human_duration::HumanDurationFormat;
-use crate::models::cli_components::formaters::mh_duration_formater::MHDurationFormater;
 use crate::models::cli_components::formaters::title::Title;
 
 pub async fn general_stats_report(
