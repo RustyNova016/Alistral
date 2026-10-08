@@ -18,6 +18,7 @@ pub mod entity_comparison;
 pub mod label;
 pub mod listen_timeframe;
 pub mod listens;
+pub mod listens_with_duration;
 pub mod messybrainz;
 pub mod recording;
 pub mod release;
@@ -63,7 +64,6 @@ where
 
 impl<Ent, Lis> ListenCollectionReadable for EntityWithListens<Ent, Lis>
 where
-    Ent: HasRowID,
     Lis: ListenCollectionReadable,
 {
     fn iter_listens(&self) -> impl Iterator<Item = &Listen> {

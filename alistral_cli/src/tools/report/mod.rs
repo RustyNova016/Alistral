@@ -1,7 +1,6 @@
 use chrono::DateTime;
 use chrono::Local;
 use chrono::NaiveDate;
-use chrono::Utc;
 use tracing::Instrument;
 use tracing::info_span;
 use tracing_indicatif::span_ext::IndicatifSpanExt;
@@ -9,17 +8,16 @@ use tuillez::pg_inc;
 
 use crate::ALISTRAL_CLIENT;
 use crate::models::cli_components::reports::general_report::general_stats_report;
-use crate::models::cli_components::reports::new_discoveries::discoveries_report;
-use crate::models::cli_components::reports::tops::top_artists_report;
 use crate::models::cli_components::reports::tops::top_label_report;
-use crate::models::cli_components::reports::tops::top_recordings_report;
 use crate::models::cli_components::reports::tops::top_releases_group_report;
-use crate::models::cli_components::reports::tops::top_releases_report;
 use crate::tools::report::error::ReportCommandError;
 use crate::utils::cli::await_next;
 use crate::utils::user_inputs::UserInputParser;
 
+pub mod artists;
 pub mod error;
+pub mod recordings;
+pub mod releases;
 
 /// A report full of stats on a given timeframe
 #[derive(clap::Parser, Debug, Clone)]
@@ -48,7 +46,7 @@ impl ReportCommand {
         let start_time = UserInputParser::parse_naive_date(Some(self.start)).unwrap();
         let end_time = UserInputParser::parse_naive_date(Some(self.end)).unwrap();
         let period_duration = end_time - start_time;
-        let previous_start_time = (start_time - period_duration).to_utc();
+        let previous_start_time = start_time - period_duration;
 
         // === Create report ===
         let span = if !self.lazy_fetching {
@@ -64,7 +62,7 @@ impl ReportCommand {
 
             let span = info_span!("report", indicatif.pb_show = tracing::field::Empty);
             span.pb_start();
-            span.pb_set_length(7);
+            span.pb_set_length(9);
             span.pb_set_message("Creating your report");
             span
         } else {
@@ -83,14 +81,14 @@ impl ReportCommand {
         &self,
         start_time: DateTime<Local>,
         end_time: DateTime<Local>,
-        previous_start_time: DateTime<Utc>,
+        previous_start_time: DateTime<Local>,
     ) -> Result<(), ()> {
         let mut sections = Vec::with_capacity(20);
         let username = UserInputParser::username_or_default(&self.username);
-        let stats = ALISTRAL_CLIENT.statistics_of_user(username.clone()).await;
+        let all_time_stats = ALISTRAL_CLIENT.statistics_of_user(username.clone()).await;
 
         let (current_stats, previous_stats) =
-            stats.comparison_split(start_time.to_utc(), end_time.to_utc());
+            all_time_stats.comparison_split(start_time.to_utc(), end_time.to_utc());
 
         self.print_report(
             &mut sections,
@@ -99,40 +97,38 @@ impl ReportCommand {
                 .unwrap(),
         );
 
-        self.print_report(
+        self.recording_reports(
             &mut sections,
-            top_recordings_report(&current_stats, &previous_stats)
-                .await
-                .unwrap(),
-        );
+            &all_time_stats,
+            &current_stats,
+            &previous_stats,
+            start_time,
+            end_time,
+            previous_start_time,
+        )
+        .await;
 
-        self.print_report(
+        self.artist_reports(
             &mut sections,
-            discoveries_report(
-                &stats,
-                &current_stats,
-                &previous_stats,
-                start_time.to_utc(),
-                end_time.to_utc(),
-                previous_start_time,
-            )
-            .await
-            .unwrap(),
-        );
+            &all_time_stats,
+            &current_stats,
+            &previous_stats,
+            start_time,
+            end_time,
+            previous_start_time,
+        )
+        .await;
 
-        self.print_report(
+        self.release_reports(
             &mut sections,
-            top_artists_report(&current_stats, &previous_stats)
-                .await
-                .unwrap(),
-        );
-
-        self.print_report(
-            &mut sections,
-            top_releases_report(&current_stats, &previous_stats)
-                .await
-                .unwrap(),
-        );
+            &all_time_stats,
+            &current_stats,
+            &previous_stats,
+            start_time,
+            end_time,
+            previous_start_time,
+        )
+        .await;
 
         self.print_report(
             &mut sections,
