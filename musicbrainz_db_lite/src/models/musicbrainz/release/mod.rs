@@ -1,14 +1,20 @@
+use std::sync::Arc;
+
+use chrono::DateTime;
+use chrono::Utc;
 use sequelles::has_rowid::HasRowID;
 use serde::Deserialize;
 use serde::Serialize;
 use sqlx::FromRow;
 
+use crate::DBClient;
 use crate::HasArtistCredits;
 use crate::HasMBID;
 use crate::MBIDRedirection;
 use crate::MBRelease;
 use crate::models::musicbrainz::MusicbrainzEntity;
 use crate::models::musicbrainz::relations::impl_relations::impl_relations;
+use crate::models::shared_traits::debuted_on::DebutedOn;
 use crate::models::shared_traits::has_genre::HasGenres;
 use crate::models::shared_traits::has_table::HasTable;
 use crate::models::shared_traits::has_tags::HasTags;
@@ -91,5 +97,16 @@ impl MBIDRedirection for Release {}
 impl MusicbrainzEntity for Release {
     fn entity_name() -> &'static str {
         "release"
+    }
+}
+
+impl DebutedOn for Release {
+    type Error = ();
+
+    async fn debuted_on(
+        &self,
+        _client: &Arc<DBClient>,
+    ) -> Result<Option<DateTime<Utc>>, Self::Error> {
+        Ok(self.date.and_then(|date| DateTime::from_timestamp(date, 0)))
     }
 }
