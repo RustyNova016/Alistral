@@ -39,8 +39,7 @@ impl ListenSeeder {
             .map(|date| date.timestamp())
             .unwrap_or(i64::MAX);
 
-        let listens: ListenCollection = sqlx::query_as!(
-            Listen,
+        let listens: Vec<Listen> = sqlx::query_as(
             "
             SELECT 
                 listens.*
@@ -62,13 +61,14 @@ impl ListenSeeder {
                 AND listens.listened_at <= ?
 
             ORDER BY msid_mapping.recording_mbid",
-            self.username,
-            min_listened_at,
-            max_listened_at,
         )
+        .bind(self.username.clone())
+        .bind(min_listened_at)
+        .bind(max_listened_at)
         .fetch_all(&mut *conn)
-        .await?
-        .into();
+        .await?;
+
+        let listens: ListenCollection = listens.into();
 
         let mut recordings = RecordingWithListensCollection::from_listencollection(
             &ALISTRAL_CLIENT.core,
@@ -97,8 +97,8 @@ impl ListenSeeder {
             .min_listened_at
             .map(|date| date.timestamp())
             .unwrap_or(0);
-        let listens: ListenCollection = sqlx::query_as!(
-            Listen,
+
+        let listens: Vec<Listen> = sqlx::query_as(
             "
             SELECT 
                 listens.*
@@ -115,12 +115,13 @@ impl ListenSeeder {
                 
                 -- After date
                 AND listens.listened_at >= ?",
-            self.username,
-            after_date
         )
+        .bind(self.username.clone())
+        .bind(after_date)
         .fetch_all(&mut *conn)
-        .await?
-        .into();
+        .await?;
+
+        let listens: ListenCollection = listens.into();
 
         let mapped = RecordingWithListensCollection::from_listencollection(
             &ALISTRAL_CLIENT.core,

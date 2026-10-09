@@ -190,7 +190,8 @@ impl ImportListen {
             .unwrap();
         }
 
-                let listen_duration =  self.track_metadata
+        let listen_duration = self
+            .track_metadata
             .additional_info
             .get("duration")
             .and_then(|dur| match dur {
@@ -199,14 +200,13 @@ impl ImportListen {
                 _ => None,
             });
 
-
         let listen = Listen {
             id: 0,
             listened_at: self.listened_at,
             user: user_name.to_string(),
             recording_msid: self.track_metadata.recording_msid.clone(),
             data: Some(data),
-            duration: listen_duration
+            duration: listen_duration,
         };
 
         listen.upsert_listen(conn).await.unwrap();

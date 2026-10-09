@@ -46,10 +46,7 @@ impl RecordingLookup {
     }
 
     pub async fn get_playtime_field(&self) -> String {
-        let now_data = self
-            .get_now_target_recording_stats()
-            .await
-            .total_duration();
+        let now_data = self.get_now_target_recording_stats().await.total_duration();
 
         let mut string = format!("Total playtime: {}", MHDurationFormater(Some(now_data)));
 

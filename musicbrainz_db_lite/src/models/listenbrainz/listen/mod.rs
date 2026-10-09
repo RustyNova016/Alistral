@@ -61,7 +61,7 @@ impl Listen {
             .bind(&self.user)
             .bind(&self.recording_msid)
             .bind(&self.data)
-            .bind(&self.duration)
+            .bind(self.duration)
             .fetch_one(&mut *conn)
             .await
             .context(SqlxSnafu)

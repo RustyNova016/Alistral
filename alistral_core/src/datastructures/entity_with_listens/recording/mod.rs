@@ -64,7 +64,6 @@ impl RecordingWithListens {
     }
 }
 
-
 impl RecordingWithListensCollection {
     pub fn get_by_mbid(&self, mbid: &str) -> Option<&RecordingWithListens> {
         self.0.values().find(|rec| rec.entity().get_mbid() == mbid)

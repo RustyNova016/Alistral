@@ -1,4 +1,3 @@
-
 use crate::datastructures::listen_collection::traits::ListenCollectionReadable;
 use crate::datastructures::ordering::Orderer;
 
