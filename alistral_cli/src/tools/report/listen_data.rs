@@ -12,6 +12,8 @@ pub(super) struct ReportListenData {
 
     current_all_time_stats: OnceCell<ListenStatisticsData>,
     previous_all_time_stats: OnceCell<ListenStatisticsData>,
+
+    
 }
 
 impl ReportListenData {

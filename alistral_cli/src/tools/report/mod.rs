@@ -1,3 +1,5 @@
+pub mod sections;
+pub mod section_types;
 pub mod group_by_charts;
 pub mod listen_data;
 use chrono::DateTime;
