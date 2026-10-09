@@ -1,6 +1,5 @@
 use alistral_core::datastructures::entity_with_listens::EntityWithListens;
 use alistral_core::datastructures::entity_with_listens::entity_comparison::EntityListensComparison;
-use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use convert_case::Casing as _;
 use musicbrainz_db_lite::HasRowID;
@@ -27,7 +26,7 @@ pub struct TopListenDurCountRow<Ent> {
 impl<Ent, Lis> From<EntityWithListens<Ent, Lis>> for TopListenDurCountRow<Ent>
 where
     Ent: Clone,
-    EntityWithListens<Ent, Lis>: ListenCollWithTime + ListenCollectionReadable,
+    EntityWithListens<Ent, Lis>: ListenCollectionReadable,
 {
     fn from(value: EntityWithListens<Ent, Lis>) -> Self {
         Self {
@@ -35,7 +34,7 @@ where
                 entity: value.entity().clone(),
             },
             listen_duration: ListenDurationCell(TopCell::new(
-                Some(value.get_time_listened().into()),
+                Some(value.total_duration().into()),
                 None,
             )),
             listen_counts: ListenCountCell(TopCell::new(Some(value.listen_count()), None)),
@@ -47,7 +46,7 @@ impl<Ent, Lis> From<EntityListensComparison<Ent, Lis>> for TopListenDurCountRow<
 where
     Ent: Clone,
     Lis: Default,
-    EntityWithListens<Ent, Lis>: ListenCollWithTime + Clone + ListenCollectionReadable,
+    EntityWithListens<Ent, Lis>: Clone + ListenCollectionReadable,
 {
     fn from(value: EntityListensComparison<Ent, Lis>) -> Self {
         Self {
@@ -58,10 +57,10 @@ where
             listen_duration: ListenDurationCell(TopCell::new(
                 value
                     .current_or_empty()
-                    .map(|cur| cur.get_time_listened().into()),
+                    .map(|cur| cur.total_duration().into()),
                 value
                     .previous_or_empty()
-                    .map(|prev| prev.get_time_listened().into()),
+                    .map(|prev| prev.total_duration().into()),
             )),
 
             listen_counts: ListenCountCell(TopCell::new(

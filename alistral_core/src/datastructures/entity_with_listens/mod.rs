@@ -22,7 +22,6 @@ pub mod messybrainz;
 pub mod recording;
 pub mod release;
 pub mod release_group;
-pub mod statistic_data;
 pub mod tags;
 pub mod trait_impl;
 pub mod traits;

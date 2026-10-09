@@ -1,7 +1,7 @@
 use core::fmt::Write as _;
 use std::sync::LazyLock;
 
-use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime as _;
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use charchart::bar_graph::BarGraph;
 use charchart::bar_graph::colors::Color;
 use charchart::bar_graph::data::Data;
@@ -41,8 +41,7 @@ impl YimReport {
                     .map(|stats| stats.to_owned())
                     .unwrap_or_default()
                     .to_owned()
-                    .get_time_listened()
-                    .unwrap_or_default()
+                    .total_duration()
             } else {
                 Default::default()
             };
@@ -67,8 +66,7 @@ impl YimReport {
                     .map(|stats| stats.to_owned())
                     .unwrap_or_default()
                     .to_owned()
-                    .get_time_listened()
-                    .unwrap_or_default()
+                    .total_duration()
             } else {
                 Default::default()
             };

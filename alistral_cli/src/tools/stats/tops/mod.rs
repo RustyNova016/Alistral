@@ -2,7 +2,6 @@ use core::fmt::Display;
 
 use alistral_core::datastructures::entity_with_listens::EntityWithListens;
 use alistral_core::datastructures::entity_with_listens::collection::EntityWithListensCollection;
-use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use clap::Parser;
 use clap::ValueEnum;
@@ -245,7 +244,6 @@ impl StatsTopCommand {
             + MusicbrainzEntity
             + FormatWithAsyncDyn<MusicbrainzFormater, Error = musicbrainz_db_lite::Error>,
         Lis: ListenCollectionReadable,
-        EntityWithListens<Ent, Lis>: ListenCollWithTime,
         TopListenCountsRow<Ent>: From<EntityWithListens<Ent, Lis>>,
     {
         let rows = data

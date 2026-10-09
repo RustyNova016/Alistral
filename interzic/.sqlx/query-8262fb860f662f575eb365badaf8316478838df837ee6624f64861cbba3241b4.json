@@ -6,27 +6,57 @@
       {
         "name": "artist_credit",
         "ordinal": 0,
-        "type_info": "Integer"
+        "type_info": "Integer",
+        "origin": {
+          "Table": {
+            "table": "artist_credits_item",
+            "name": "artist_credit"
+          }
+        }
       },
       {
         "name": "position",
         "ordinal": 1,
-        "type_info": "Integer"
+        "type_info": "Integer",
+        "origin": {
+          "Table": {
+            "table": "artist_credits_item",
+            "name": "position"
+          }
+        }
       },
       {
         "name": "name",
         "ordinal": 2,
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "artist_credits_item",
+            "name": "name"
+          }
+        }
       },
       {
         "name": "artist_gid",
         "ordinal": 3,
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "artist_credits_item",
+            "name": "artist_gid"
+          }
+        }
       },
       {
         "name": "join_phrase",
         "ordinal": 4,
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "artist_credits_item",
+            "name": "join_phrase"
+          }
+        }
       }
     ],
     "parameters": {

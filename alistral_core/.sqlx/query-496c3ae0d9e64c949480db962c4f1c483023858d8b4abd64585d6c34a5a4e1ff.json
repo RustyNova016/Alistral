@@ -6,52 +6,112 @@
       {
         "name": "id",
         "ordinal": 0,
-        "type_info": "Integer"
+        "type_info": "Integer",
+        "origin": {
+          "Table": {
+            "table": "recordings",
+            "name": "id"
+          }
+        }
       },
       {
         "name": "mbid",
         "ordinal": 1,
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recordings",
+            "name": "mbid"
+          }
+        }
       },
       {
         "name": "title",
         "ordinal": 2,
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recordings",
+            "name": "title"
+          }
+        }
       },
       {
         "name": "video",
         "ordinal": 3,
-        "type_info": "Integer"
+        "type_info": "Integer",
+        "origin": {
+          "Table": {
+            "table": "recordings",
+            "name": "video"
+          }
+        }
       },
       {
         "name": "length",
         "ordinal": 4,
-        "type_info": "Integer"
+        "type_info": "Integer",
+        "origin": {
+          "Table": {
+            "table": "recordings",
+            "name": "length"
+          }
+        }
       },
       {
         "name": "disambiguation",
         "ordinal": 5,
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recordings",
+            "name": "disambiguation"
+          }
+        }
       },
       {
         "name": "annotation",
         "ordinal": 6,
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recordings",
+            "name": "annotation"
+          }
+        }
       },
       {
         "name": "first_release_date",
         "ordinal": 7,
-        "type_info": "Integer"
+        "type_info": "Integer",
+        "origin": {
+          "Table": {
+            "table": "recordings",
+            "name": "first_release_date"
+          }
+        }
       },
       {
         "name": "full_update_date",
         "ordinal": 8,
-        "type_info": "Integer"
+        "type_info": "Integer",
+        "origin": {
+          "Table": {
+            "table": "recordings",
+            "name": "full_update_date"
+          }
+        }
       },
       {
         "name": "artist_credit",
         "ordinal": 9,
-        "type_info": "Integer"
+        "type_info": "Integer",
+        "origin": {
+          "Table": {
+            "table": "recordings",
+            "name": "artist_credit"
+          }
+        }
       }
     ],
     "parameters": {

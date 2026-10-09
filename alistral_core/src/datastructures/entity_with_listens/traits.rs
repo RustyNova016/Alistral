@@ -1,13 +1,5 @@
-use chrono::TimeDelta;
-
 use crate::datastructures::entity_with_listens::recording::RecordingWithListens;
 use crate::datastructures::listen_collection::ListenCollection;
-
-/// Trait for all the listen Collections that can return the total time listened
-pub trait ListenCollWithTime {
-    /// Return the total listens time all the listens in the collection
-    fn get_time_listened(&self) -> Option<TimeDelta>;
-}
 
 pub trait FromListenCollection
 where

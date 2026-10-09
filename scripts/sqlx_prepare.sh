@@ -11,7 +11,7 @@ for member in "${members[@]}"; do
     echo "Preparing ${member}"
     echo ""
 
-    cargo sqlx prepare
+    cargo sqlx prepare --all
     if [ $? -ne 0 ] 
     then
         exit 1

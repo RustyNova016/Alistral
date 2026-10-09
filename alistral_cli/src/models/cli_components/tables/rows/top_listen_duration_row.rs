@@ -1,6 +1,5 @@
 use alistral_core::datastructures::entity_with_listens::EntityWithListens;
 use alistral_core::datastructures::entity_with_listens::entity_comparison::EntityListensComparison;
-use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use convert_case::Casing as _;
 use musicbrainz_db_lite::HasRowID;
@@ -26,7 +25,6 @@ impl<Ent> TopListenDurationRow<Ent> {
         prev: Option<EntityWithListens<Ent, Lis>>,
     ) -> Self
     where
-        EntityWithListens<Ent, Lis>: ListenCollWithTime,
         Ent: HasRowID + Clone,
         Lis: ListenCollectionReadable,
     {
@@ -40,8 +38,8 @@ impl<Ent> TopListenDurationRow<Ent> {
                     .unwrap(),
             },
             listen_duration: ListenDurationCell(TopCell::new(
-                cur.map(|cur| cur.get_time_listened().into()),
-                prev.map(|prev| prev.get_time_listened().into()),
+                cur.map(|cur| cur.total_duration().into()),
+                prev.map(|prev| prev.total_duration().into()),
             )),
         }
     }
@@ -51,7 +49,7 @@ impl<Ent, Lis> From<EntityListensComparison<Ent, Lis>> for TopListenDurationRow<
 where
     Ent: Clone,
     Lis: Default,
-    EntityWithListens<Ent, Lis>: ListenCollWithTime + Clone,
+    EntityWithListens<Ent, Lis>: Clone + ListenCollectionReadable,
 {
     fn from(value: EntityListensComparison<Ent, Lis>) -> Self {
         Self {
@@ -61,10 +59,10 @@ where
             listen_duration: ListenDurationCell(TopCell::new(
                 value
                     .current_or_empty()
-                    .map(|cur| cur.get_time_listened().into()),
+                    .map(|cur| cur.total_duration().into()),
                 value
                     .previous_or_empty()
-                    .map(|prev| prev.get_time_listened().into()),
+                    .map(|prev| prev.total_duration().into()),
             )),
         }
     }
@@ -72,7 +70,6 @@ where
 
 impl<Ent, Lis> From<EntityWithListens<Ent, Lis>> for TopListenDurationRow<Ent>
 where
-    EntityWithListens<Ent, Lis>: ListenCollWithTime,
     Ent: HasRowID + Clone,
     Lis: ListenCollectionReadable,
 {

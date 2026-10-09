@@ -1,7 +1,6 @@
 use core::fmt::Write as _;
 
 use alistral_core::cli::colors::AlistralColors as _;
-use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime as _;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use rust_decimal::Decimal;
 use rust_decimal_macros::dec;
@@ -46,7 +45,7 @@ impl YimReport {
             .recording_stats()
             .await
             .unwrap()
-            .get_time_listened();
+            .total_duration();
 
         let previous = self
             .data
@@ -54,10 +53,10 @@ impl YimReport {
             .recording_stats()
             .await
             .unwrap()
-            .get_time_listened();
+            .total_duration();
 
         let secs_in_year = (self.year_end - self.year_start).num_seconds();
-        let sec_listened = current.map(|dur| dur.num_seconds()).unwrap_or(0);
+        let sec_listened = current.num_seconds();
         let year_percent =
             (Decimal::new(sec_listened, 0) / Decimal::new(secs_in_year, 0)) * dec!(100);
 

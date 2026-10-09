@@ -6,52 +6,112 @@
       {
         "name": "id",
         "ordinal": 0,
-        "type_info": "Integer"
+        "type_info": "Integer",
+        "origin": {
+          "Table": {
+            "table": "labels",
+            "name": "id"
+          }
+        }
       },
       {
         "name": "mbid",
         "ordinal": 1,
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "labels",
+            "name": "mbid"
+          }
+        }
       },
       {
         "name": "name",
         "ordinal": 2,
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "labels",
+            "name": "name"
+          }
+        }
       },
       {
         "name": "label_type",
         "ordinal": 3,
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "labels",
+            "name": "label_type"
+          }
+        }
       },
       {
         "name": "sort_name",
         "ordinal": 4,
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "labels",
+            "name": "sort_name"
+          }
+        }
       },
       {
         "name": "disambiguation",
         "ordinal": 5,
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "labels",
+            "name": "disambiguation"
+          }
+        }
       },
       {
         "name": "country",
         "ordinal": 6,
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "labels",
+            "name": "country"
+          }
+        }
       },
       {
         "name": "label_code",
         "ordinal": 7,
-        "type_info": "Integer"
+        "type_info": "Integer",
+        "origin": {
+          "Table": {
+            "table": "labels",
+            "name": "label_code"
+          }
+        }
       },
       {
         "name": "annotation",
         "ordinal": 8,
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "labels",
+            "name": "annotation"
+          }
+        }
       },
       {
         "name": "full_update_date",
         "ordinal": 9,
-        "type_info": "Integer"
+        "type_info": "Integer",
+        "origin": {
+          "Table": {
+            "table": "labels",
+            "name": "full_update_date"
+          }
+        }
       }
     ],
     "parameters": {

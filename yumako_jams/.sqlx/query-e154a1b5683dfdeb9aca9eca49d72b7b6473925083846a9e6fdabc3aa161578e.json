@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "UPDATE `tracks` SET recording = ? WHERE id = ?",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": []
+  },
+  "hash": "e154a1b5683dfdeb9aca9eca49d72b7b6473925083846a9e6fdabc3aa161578e"
+}

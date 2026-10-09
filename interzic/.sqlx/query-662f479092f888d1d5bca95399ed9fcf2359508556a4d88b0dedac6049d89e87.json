@@ -6,7 +6,13 @@
       {
         "name": "gid",
         "ordinal": 0,
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "recordings_gid_redirect",
+            "name": "gid"
+          }
+        }
       }
     ],
     "parameters": {

@@ -6,37 +6,79 @@
       {
         "name": "id",
         "ordinal": 0,
-        "type_info": "Integer"
+        "type_info": "Integer",
+        "origin": {
+          "Table": {
+            "table": "messybrainz_submission",
+            "name": "id"
+          }
+        }
       },
       {
         "name": "msid",
         "ordinal": 1,
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "messybrainz_submission",
+            "name": "msid"
+          }
+        }
       },
       {
         "name": "recording",
         "ordinal": 2,
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "messybrainz_submission",
+            "name": "recording"
+          }
+        }
       },
       {
         "name": "artist_credit",
         "ordinal": 3,
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "messybrainz_submission",
+            "name": "artist_credit"
+          }
+        }
       },
       {
         "name": "release",
         "ordinal": 4,
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "messybrainz_submission",
+            "name": "release"
+          }
+        }
       },
       {
         "name": "track_number",
         "ordinal": 5,
-        "type_info": "Text"
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "messybrainz_submission",
+            "name": "track_number"
+          }
+        }
       },
       {
         "name": "duration",
         "ordinal": 6,
-        "type_info": "Integer"
+        "type_info": "Integer",
+        "origin": {
+          "Table": {
+            "table": "messybrainz_submission",
+            "name": "duration"
+          }
+        }
       }
     ],
     "parameters": {

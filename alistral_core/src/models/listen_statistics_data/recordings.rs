@@ -21,6 +21,7 @@ impl ListenStatisticsData {
             self.listens.iter().cloned().collect_vec(),
         )
         .await?;
+        coll.set_listens_duration(false);
         Ok(coll)
     }
 }

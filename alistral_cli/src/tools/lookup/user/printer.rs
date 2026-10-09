@@ -1,6 +1,6 @@
 use core::fmt::Write as _;
 
-use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime as _;
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use alistral_core::models::listen_statistics_data::ListenStatisticsData;
 use chrono::DateTime;
 use chrono::Utc;
@@ -101,18 +101,18 @@ impl UserLookup {
 
     pub async fn get_listen_duration_field(&self) -> String {
         let now_data = self.now.recording_stats().await.unwrap();
-        let time = now_data.get_time_listened();
+        let time = now_data.total_duration();
 
-        let mut string = format!("Total playtime: {}", MHDurationFormater(time));
+        let mut string = format!("Total playtime: {}", MHDurationFormater(Some(time)));
 
         if let Some(before_data) = self.before.as_ref() {
             let before_data = before_data.recording_stats().await.unwrap();
-            let before_time = before_data.get_time_listened();
+            let before_time = before_data.total_duration();
 
             string = format!(
                 "{string} [{} {}]",
                 LookupCompArrow::comp_asc(time, before_time),
-                MHDurationFormater(before_time)
+                MHDurationFormater(Some(before_time))
             );
         }
 

@@ -1,4 +1,3 @@
-use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime as _;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use alistral_core::models::listen_statistics_data::ListenStatisticsData;
 use chrono::DateTime;
@@ -15,8 +14,8 @@ pub(super) async fn daily_stats(stats: &ListenStatisticsData, today: DateTime<Lo
     let current_count = current.listens().listen_count();
     let old_count = old.listens().listen_count();
 
-    let current_dur = current.recording_stats().await.unwrap().get_time_listened();
-    let old_dur = old.recording_stats().await.unwrap().get_time_listened();
+    let current_dur = current.recording_stats().await.unwrap().total_duration();
+    let old_dur = old.recording_stats().await.unwrap().total_duration();
 
     println!(
         "{}",
@@ -32,9 +31,9 @@ pub(super) async fn daily_stats(stats: &ListenStatisticsData, today: DateTime<Lo
     );
     println!(
         "  - That's {} [{} {}]",
-        MHDurationFormater(current_dur),
+        MHDurationFormater(Some(current_dur)),
         ComparisonArrow::greater_is_better(current_dur, old_dur),
-        MHDurationFormater(old_dur),
+        MHDurationFormater(Some(old_dur)),
     );
     println!();
 }
