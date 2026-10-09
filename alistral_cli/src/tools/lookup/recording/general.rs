@@ -1,4 +1,3 @@
-use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime as _;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 
 use crate::models::cli_components::formaters::mh_duration_formater::MHDurationFormater;
@@ -50,19 +49,19 @@ impl RecordingLookup {
         let now_data = self
             .get_now_target_recording_stats()
             .await
-            .get_time_listened();
+            .total_duration();
 
-        let mut string = format!("Total playtime: {}", MHDurationFormater(now_data));
+        let mut string = format!("Total playtime: {}", MHDurationFormater(Some(now_data)));
 
         if let Some(before_data) = self
             .get_before_target_recording_stats()
             .await
-            .map(|rec| rec.get_time_listened())
+            .map(|rec| rec.total_duration())
         {
             string = format!(
                 "{string} [{} {}]",
                 LookupCompArrow::comp_asc(now_data, before_data),
-                MHDurationFormater(before_data)
+                MHDurationFormater(Some(before_data))
             );
         }
 

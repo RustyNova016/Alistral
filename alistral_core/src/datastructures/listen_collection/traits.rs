@@ -1,5 +1,6 @@
 use chrono::DateTime;
 use chrono::Duration;
+use chrono::TimeDelta;
 use chrono::Utc;
 use itertools::Itertools;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
@@ -10,17 +11,27 @@ use super::ListenCollection;
 
 /// Trait implemented for all the entities that hold listens, and those listens can be read
 pub trait ListenCollectionReadable {
+    /// Iterate over all the listens. They may not be deduplicated
+    fn iter_listens(&self) -> impl Iterator<Item = &Listen>;
+
+    fn iter_unique_listens(&self) -> impl Iterator<Item = &Listen> {
+        self.iter_listens().unique_by(|l| l.id)
+    }
+
     /// Return the number of listens in the collection
     fn listen_count(&self) -> usize {
-        self.iter_listens().unique_by(|l| l.id).collect_vec().len()
+        self.iter_unique_listens().count()
+    }
+
+    fn total_duration(&self) -> TimeDelta {
+        self.iter_unique_listens()
+            .flat_map(|l| l.duration_as_timedelta())
+            .sum()
     }
 
     fn has_no_listens(&self) -> bool {
         self.listen_count() == 0
     }
-
-    /// Iterate over all the listens. They may not be deduplicated
-    fn iter_listens(&self) -> impl Iterator<Item = &Listen>;
 
     // --- Listen getters
 

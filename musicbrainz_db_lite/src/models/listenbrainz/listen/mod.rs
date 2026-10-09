@@ -15,6 +15,7 @@ pub mod deletes;
 pub mod fetching;
 pub mod insert;
 pub mod listen_metadata;
+pub mod methods;
 pub mod relations;
 pub mod selects;
 pub mod views;

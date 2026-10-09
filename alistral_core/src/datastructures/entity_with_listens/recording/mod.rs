@@ -1,6 +1,3 @@
-use core::ops::Mul;
-
-use chrono::Duration;
 use collection::RecordingWithListensCollection;
 use musicbrainz_db_lite::HasMBID;
 use musicbrainz_db_lite::HasRowID as _;
@@ -12,9 +9,9 @@ use crate::datastructures::listen_collection::ListenCollection;
 use crate::datastructures::listen_collection::traits::ListenCollectionReadable;
 
 use super::EntityWithListens;
-use super::traits::ListenCollWithTime;
 
 pub mod collection;
+pub mod durations;
 
 pub type RecordingWithListens = EntityWithListens<Recording, ListenCollection>;
 
@@ -67,13 +64,6 @@ impl RecordingWithListens {
     }
 }
 
-impl ListenCollWithTime for RecordingWithListens {
-    fn get_time_listened(&self) -> Option<Duration> {
-        self.entity
-            .length_as_duration()
-            .map(|dur| dur.mul(self.listen_count().try_into().unwrap()))
-    }
-}
 
 impl RecordingWithListensCollection {
     pub fn get_by_mbid(&self, mbid: &str) -> Option<&RecordingWithListens> {

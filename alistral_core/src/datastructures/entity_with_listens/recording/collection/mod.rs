@@ -11,11 +11,11 @@ use crate::database::fetching::recordings::prefetch_recordings_of_listens;
 use crate::datastructures::entity_with_listens::collection::EntityWithListensCollection;
 use crate::datastructures::entity_with_listens::recording::RecordingWithListens;
 use crate::datastructures::entity_with_listens::traits::IterRecordingWithListens;
-use crate::datastructures::entity_with_listens::traits::ListenCollWithTime;
 use crate::datastructures::listen_collection::ListenCollection;
 use crate::datastructures::listen_sorter::ListenSortingStrategy;
 
 //pub mod filter;
+pub mod duration;
 pub mod filter;
 pub mod sort;
 
@@ -79,15 +79,5 @@ impl ListenSortingStrategy<Recording, ListenCollection> for RecordingWithListenS
         listen: Listen,
     ) -> Result<(), crate::Error> {
         Self::sort_insert_listens(self, client, data, vec![listen]).await
-    }
-}
-
-impl ListenCollWithTime for RecordingWithListensCollection {
-    fn get_time_listened(&self) -> Option<chrono::Duration> {
-        Some(
-            self.iter_recording_with_listens()
-                .filter_map(|rec| rec.get_time_listened())
-                .sum(),
-        )
     }
 }

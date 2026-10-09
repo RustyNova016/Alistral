@@ -1,6 +1,3 @@
-pub mod find;
-pub mod group_by;
-pub mod trait_impl;
 use core::cmp::Reverse;
 use core::ops::Deref;
 
@@ -12,6 +9,10 @@ use serde::Serialize;
 use crate::datastructures::entity_with_listens::listen_timeframe::extract_timeframe::ExtractTimeframe;
 use crate::traits::mergable::Mergable;
 
+pub mod find;
+pub mod group_by;
+pub mod iterator;
+pub mod trait_impl;
 pub mod traits;
 
 #[derive(Debug, Clone, PartialEq, Eq, Default, Deserialize, Serialize)]
