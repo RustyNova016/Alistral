@@ -2,7 +2,6 @@ use core::fmt;
 use std::fmt::Write;
 
 use alistral_core::cli::colors::AlistralColors;
-use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use alistral_core::models::listen_statistics_data::ListenStatisticsData;
 use chrono::DateTime;
@@ -28,12 +27,12 @@ pub async fn general_stats_report(
         .recording_stats()
         .await
         .unwrap()
-        .get_time_listened();
+        .total_duration();
     let old_dur = previous_stats
         .recording_stats()
         .await
         .unwrap()
-        .get_time_listened();
+        .total_duration();
 
     writeln!(
         out,
@@ -62,10 +61,10 @@ pub async fn general_stats_report(
     )?;
 
     let period_duration = end_time - start_time;
-    let current_percent = (Decimal::new(current_dur.unwrap_or_default().num_seconds(), 0)
+    let current_percent = (Decimal::new(current_dur.num_seconds(), 0)
         / Decimal::new(period_duration.num_seconds(), 0))
         * Decimal::ONE_HUNDRED;
-    let previous_percent = (Decimal::new(old_dur.unwrap_or_default().num_seconds(), 0)
+    let previous_percent = (Decimal::new(old_dur.num_seconds(), 0)
         / Decimal::new(period_duration.num_seconds(), 0))
         * Decimal::ONE_HUNDRED;
 

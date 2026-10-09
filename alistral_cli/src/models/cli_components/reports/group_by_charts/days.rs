@@ -1,7 +1,7 @@
 use core::fmt::Write as _;
 
 use alistral_core::cli::colors::AlistralColors;
-use alistral_core::models::listen_with_time::ListenWithDuration;
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use chrono::Datelike;
 
 use crate::datastructures::cli_formating::title::Heading1;
@@ -18,8 +18,8 @@ const DAY_LABELS: [(u32, &'static str); 7] = [
 ];
 
 pub fn group_by_day_report(
-    current_listens: &[ListenWithDuration],
-    previous_listens: &[ListenWithDuration],
+    current_listens: impl ListenCollectionReadable,
+    previous_listens: impl ListenCollectionReadable,
 ) -> String {
     let mut out = String::new();
 
@@ -33,12 +33,11 @@ pub fn group_by_day_report(
         group_by_report(
             &DAY_LABELS,
             |listen| listen
-                .listen
                 .listened_at_as_datetime()
                 .weekday()
                 .number_from_monday(),
-            &current_listens,
-            &previous_listens,
+            current_listens,
+            previous_listens,
         ),
     )
     .unwrap();

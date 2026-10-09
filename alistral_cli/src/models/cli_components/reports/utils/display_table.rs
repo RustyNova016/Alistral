@@ -3,7 +3,6 @@ use std::fmt::Write;
 use alistral_core::datastructures::entity_with_listens::EntityWithListens;
 use alistral_core::datastructures::entity_with_listens::collection::EntityWithListensCollection;
 use alistral_core::datastructures::entity_with_listens::entity_comparison::EntityListensComparison;
-use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use itertools::Itertools;
 use musicbrainz_db_lite::HasRowID;
@@ -27,7 +26,7 @@ pub async fn create_report_top_table<Ent, Lis>(
         + Clone
         + FormatWithAsyncDyn<MusicbrainzFormater, Error = musicbrainz_db_lite::Error>,
     Lis: ListenCollectionReadable + Default,
-    EntityWithListens<Ent, Lis>: ListenCollWithTime + Clone,
+    EntityWithListens<Ent, Lis>: ListenCollectionReadable + Clone,
 {
     writeln!(out).unwrap();
     writeln!(out, "Here's the top 20 {}:", name).unwrap();
