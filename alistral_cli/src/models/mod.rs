@@ -1,3 +1,4 @@
+pub mod statistics_buckets;
 pub mod cli;
 pub mod cli_components;
 pub mod client;

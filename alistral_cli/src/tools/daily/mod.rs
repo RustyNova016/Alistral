@@ -1,6 +1,5 @@
 use chrono::Local;
 use chrono::NaiveDate;
-use clap::Parser;
 
 use crate::ALISTRAL_CLIENT;
 use crate::tools::daily::daily_stats::daily_stats;
@@ -14,7 +13,7 @@ pub mod fresh_releases;
 pub mod recording_birthdays;
 
 /// A combination of small statistics to run daily
-#[derive(Parser, Debug, Clone)]
+#[derive(clap::Parser, Debug, Clone)]
 pub struct DailyCommand {
     /// The date to use for the daily report.
     date: Option<NaiveDate>,

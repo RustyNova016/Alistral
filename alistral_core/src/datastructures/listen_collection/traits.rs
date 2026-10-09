@@ -174,3 +174,22 @@ impl ListenCollectionReadable for ListenCollection {
         self.data.iter()
     }
 }
+
+impl ListenCollectionReadable for &ListenCollection {
+    fn iter_listens(&self) -> impl Iterator<Item = &Listen> {
+        self.data.iter()
+    }
+}
+
+
+impl<'a> ListenCollectionReadable for Vec<&'a Listen> {
+    fn iter_listens(&self) -> impl Iterator<Item = &Listen> {
+        self.iter().map(|l| *l)
+    }
+}
+
+impl ListenCollectionReadable for Vec<Listen> {
+    fn iter_listens(&self) -> impl Iterator<Item = &Listen> {
+        self.iter()
+    }
+}
