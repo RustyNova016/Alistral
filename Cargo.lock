@@ -2783,6 +2783,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "nix"
+version = "0.31.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cf20d2fde8ff38632c426f1165ed7436270b44f199fc55284c38276f9db47c3d"
+dependencies = [
+ "bitflags 2.13.2",
+ "cfg-if",
+ "cfg_aliases",
+ "libc",
+]
+
+[[package]]
 name = "nom"
 version = "7.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4420,7 +4432,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "32497e9a4c7b38532efcdebeef879707aa9f794296a4f0244f6f69e9bc8574bd"
 dependencies = [
  "fastrand",
- "getrandom 0.4.3",
+ "getrandom 0.3.4",
  "once_cell",
  "rustix",
  "windows-sys 0.61.2",
@@ -5537,9 +5549,9 @@ dependencies = [
 
 [[package]]
 name = "zip"
-version = "9.0.0"
+version = "9.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "711e8c9646791c49b7eb799a19c4ae70a9b8372ddc6a1fa4778defd1e2aa5d5e"
+checksum = "e49ade69c4434c55dd651d36fe05f38e0578db948b773cbc01c48c4b5e560692"
 dependencies = [
  "aes",
  "bzip2",
@@ -5552,6 +5564,7 @@ dependencies = [
  "indexmap 2.14.2",
  "lzma-rust2",
  "memchr",
+ "nix",
  "pbkdf2",
  "ppmd-rust",
  "sha1",
