@@ -93,6 +93,11 @@ $ . ./alistral.fish
 
 This project is in beta. There's a lot of features I'd like to add, and need a lot of testing before 1.0. If you find a bug, or have a feature request, feel free to create (and spam) a new issue.
 
+# Contributing
+
+Feel free to contribute to this project! There's a lot to do and extra hands are always welcome. However this project is vibe code free, and I intend to keep it that way. I will refuse any contributions made by AI software 
+I will make an exception for changes having only one way to be written (Constructors, getters, etc...), but please prefer writting them yourself to save on electricity and keep your brainz working!
+
 # See also
 - [musicbrainz_rs](https://github.com/RustyNova016/musicbrainz_rs): API binding for Musicbrainz
 - [listenbrainz-rs](https://github.com/InputUsername/listenbrainz-rs): API bindings for listenbrainz
