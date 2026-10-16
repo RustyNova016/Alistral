@@ -1,7 +1,6 @@
 use core::cmp::Reverse;
 use core::fmt::Debug;
 use std::collections::HashMap;
-use std::collections::hash_map::IntoValues;
 
 use chrono::Utc;
 use futures::Stream;
@@ -21,35 +20,45 @@ use crate::traits::mergable::Mergable;
 use super::EntityWithListens;
 
 pub mod converters;
+pub mod listen_collection;
+/// Functions wrappers for the inner map
+pub mod map_functions;
 
 /// An indexed collection of [`EntityWithListens`]
 #[derive(Debug, Clone)]
 pub struct EntityWithListensCollection<Ent, Lis>(pub HashMap<i64, EntityWithListens<Ent, Lis>>);
+
+impl<Ent, Lis> EntityWithListensCollection<Ent, Lis> {
+    // --- Getters ---
+    pub fn get_by_id(&self, id: i64) -> Option<&EntityWithListens<Ent, Lis>> {
+        self.0.get(&id)
+    }
+
+    pub fn entity_count(&self) -> usize {
+        self.0.len()
+    }
+
+    /// Insert a EntityWithListens, and merge if it doesn't exists
+    pub fn insert_or_merge_entity_stats(&mut self, value: EntityWithListens<Ent, Lis>)
+    where
+        EntityWithListens<Ent, Lis>: Mergable + HasRowID,
+    {
+        match self.0.remove(&value.rowid()) {
+            Some(mut previous) => {
+                previous.merge(value);
+                self.0.insert(previous.rowid(), previous)
+            }
+            None => self.0.insert(value.rowid(), value),
+        };
+    }
+}
 
 impl<Ent, Lis> EntityWithListensCollection<Ent, Lis>
 where
     Ent: HasRowID,
     Lis: ListenCollectionReadable,
 {
-    pub fn new() -> Self {
-        Self(HashMap::new())
-    }
-
-    // --- Getters ---
-
-    pub fn get_by_id(&self, id: i64) -> Option<&EntityWithListens<Ent, Lis>> {
-        self.0.get(&id)
-    }
-
     // --- Iters ---
-
-    pub fn iter(&self) -> impl Iterator<Item = &EntityWithListens<Ent, Lis>> {
-        self.0.values()
-    }
-
-    pub fn iter_entities(&self) -> impl Iterator<Item = &Ent> {
-        self.0.values().map(|r| &r.entity)
-    }
 
     pub fn into_stream(self) -> impl Stream<Item = EntityWithListens<Ent, Lis>> {
         stream::iter(self)
@@ -65,17 +74,6 @@ where
         for entity in value.into_iter() {
             self.insert_or_merge_entity_stats(entity);
         }
-    }
-
-    /// Insert a EntityWithListens, and merge if it doesn't exists
-    pub fn insert_or_merge_entity_stats(&mut self, value: EntityWithListens<Ent, Lis>)
-    where
-        EntityWithListens<Ent, Lis>: Mergable + Clone,
-    {
-        self.0
-            .entry(value.rowid())
-            .and_modify(|val| val.merge(value.clone()))
-            .or_insert(value);
     }
 
     pub fn insert_or_merge_listen(&mut self, entity: Ent, listen: Listen)
@@ -197,34 +195,6 @@ where
     {
         Self::from_listens(client, listens.data, strat).await
     }
-
-    pub fn len(&self) -> usize {
-        self.0.len()
-    }
-
-    pub fn is_empty(&self) -> bool {
-        self.0.is_empty()
-    }
-}
-
-impl<Ent, Lis> Default for EntityWithListensCollection<Ent, Lis>
-where
-    Ent: HasRowID,
-    Lis: ListenCollectionReadable,
-{
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-impl<Ent, Lis> ListenCollectionReadable for EntityWithListensCollection<Ent, Lis>
-where
-    Ent: HasRowID,
-    Lis: ListenCollectionReadable,
-{
-    fn iter_listens(&self) -> impl Iterator<Item = &Listen> {
-        self.iter().flat_map(|lis| lis.iter_listens())
-    }
 }
 
 impl<Ent, Lis> Mergable for EntityWithListensCollection<Ent, Lis>
@@ -235,18 +205,6 @@ where
 {
     fn merge(&mut self, other: Self) {
         self.insert_or_merge(other)
-    }
-}
-
-impl<Ent, Lis> IntoIterator for EntityWithListensCollection<Ent, Lis>
-where
-    Ent: HasRowID,
-    Lis: ListenCollectionReadable,
-{
-    type Item = EntityWithListens<Ent, Lis>;
-    type IntoIter = IntoValues<i64, Self::Item>;
-    fn into_iter(self) -> Self::IntoIter {
-        self.0.into_values()
     }
 }
 

@@ -3,7 +3,6 @@ use musicbrainz_db_lite::HasRowID as _;
 use musicbrainz_db_lite::Release;
 use sequelles::JoinCollection;
 use sequelles::JoinRelation;
-use snafu::Backtrace;
 use snafu::ResultExt;
 use snafu::Snafu;
 use tracing::instrument;
@@ -83,6 +82,5 @@ impl Linker<ReleaseGroupWithReleasesCollection, ReleaseWithRecordingsCollection>
 #[derive(Debug, Snafu)]
 #[snafu(display("Couldn't link the artists to the recording statistics"))]
 pub struct ReleaseGroupStatsLinkingError {
-    backtrace: Backtrace,
     source: musicbrainz_db_lite::Error,
 }
