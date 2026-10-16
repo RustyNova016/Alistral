@@ -2,7 +2,6 @@ use std::fmt::Write;
 
 use alistral_core::datastructures::entity_with_listens::EntityWithListens;
 use alistral_core::datastructures::entity_with_listens::collection::EntityWithListensCollection;
-use alistral_core::datastructures::entity_with_listens::traits::ListenCollWithTime;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use musicbrainz_db_lite::HasRowID;
 use musicbrainz_db_lite::models::musicbrainz::MusicbrainzEntity;
@@ -23,7 +22,7 @@ where
         + Clone
         + FormatWithAsyncDyn<MusicbrainzFormater, Error = musicbrainz_db_lite::Error>,
     Lis: ListenCollectionReadable + Default,
-    EntityWithListens<Ent, Lis>: ListenCollWithTime + Clone,
+    EntityWithListens<Ent, Lis>: ListenCollectionReadable + Clone,
 {
     let mut out = String::new();
     writeln!(

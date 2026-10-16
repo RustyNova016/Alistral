@@ -5,9 +5,13 @@ impl RecordingWithListens {
     pub fn set_listens_duration(&mut self, overwrite: bool) {
         for listen in self.listens.iter_mut() {
             if overwrite {
-                listen.duration = self.entity.length.or(listen.duration)
+                listen.duration = self
+                    .entity
+                    .length
+                    .map(|dur| dur.div_euclid(1000))
+                    .or(listen.duration)
             } else {
-                listen.duration = listen.duration.or(self.entity.length)
+                listen.duration = listen.duration.or(self.entity.length.map(|dur| dur.div_euclid(1000)))
             }
         }
     }
