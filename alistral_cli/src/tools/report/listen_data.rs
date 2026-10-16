@@ -4,7 +4,7 @@ use alistral_core::models::listen_statistics_data::ListenStatisticsData;
 use chrono::DateTime;
 use chrono::Utc;
 
-pub(super) struct ReportListenData {
+pub struct ReportListenData {
     start_time: DateTime<Utc>,
     end_time: DateTime<Utc>,
     previous_start_time: DateTime<Utc>,

@@ -1,7 +1,34 @@
-use derive_more::FromStr;
+use chrono::DateTime;
+use chrono::Local;
+use spire_enum::prelude::delegate_impl;
+use spire_enum::prelude::delegated_enum;
 
-#[derive(FromStr, Debug, Eq, PartialEq, Clone, Copy)]
-#[from_str(rename_all = "snake_case")]
+use crate::tools::report::ReportListenData;
+
+pub(super) trait SectionTypeTrait {
+    async fn generate(
+        &self,
+        listens: &ReportListenData,
+
+        start_time: DateTime<Local>,
+        end_time: DateTime<Local>,
+        previous_start_time: DateTime<Local>,
+    ) -> String;
+}
+
+#[delegate_impl]
+impl SectionTypeTrait for SectionType {
+    async fn generate(
+        &self,
+        listens: &ReportListenData,
+
+        start_time: DateTime<Local>,
+        end_time: DateTime<Local>,
+        previous_start_time: DateTime<Local>,
+    ) -> String;
+}
+
+#[delegated_enum(extract_variants(derive(Debug, Eq, PartialEq, Clone, Copy, Default)))]
 pub enum SectionType {
     GeneralStats,
 
@@ -29,7 +56,7 @@ pub enum SectionType {
     AllTimeChangesRecordings,
     AllTimeChangesReleases,
     AllTimeChangesReleaseGroups,
-    
+
     // ---  Debuts ---
     DebutsRecordings,
     DebutsReleases,
