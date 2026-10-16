@@ -11,7 +11,9 @@ impl RecordingWithListens {
                     .map(|dur| dur.div_euclid(1000))
                     .or(listen.duration)
             } else {
-                listen.duration = listen.duration.or(self.entity.length.map(|dur| dur.div_euclid(1000)))
+                listen.duration = listen
+                    .duration
+                    .or(self.entity.length.map(|dur| dur.div_euclid(1000)))
             }
         }
     }

@@ -1,3 +1,4 @@
+pub mod section_list;
 use chrono::DateTime;
 use chrono::Local;
 use chrono::NaiveDate;
@@ -10,6 +11,7 @@ use crate::ALISTRAL_CLIENT;
 use crate::tools::report::error::ReportCommandError;
 use crate::tools::report::listen_data::ReportListenData;
 use crate::tools::report::section_types::SectionType;
+use crate::tools::report::section_types::SectionTypeTrait;
 use crate::utils::cli::await_next;
 use crate::utils::user_inputs::UserInputParser;
 
@@ -104,33 +106,32 @@ impl ReportCommand {
         );
 
         let todo = [
-            SectionType::GeneralStats,
-            SectionType::TopRecordings,
-            SectionType::DiscoveredRecordings,
-            SectionType::DebutsRecordings,
-            SectionType::AllTimeChangesRecordings,
-            SectionType::TopArtists,
-            SectionType::DiscoveredArtists,
-            SectionType::AllTimeChangesArtists,
-            SectionType::TopReleases,
-            SectionType::DiscoveredReleases,
-            SectionType::DebutsReleases,
-            SectionType::AllTimeChangesReleases,
-            SectionType::TopReleaseGroups,
-            SectionType::DiscoveredReleaseGroups,
-            SectionType::AllTimeChangesReleaseGroups,
-            SectionType::Toplabels,
-            SectionType::DiscoveredLabels,
-            SectionType::AllTimeChangesLabels,
-            SectionType::GroupByWeekDay,
-            SectionType::GroupByMonth,
+            SectionType::GeneralStats(Default::default()),
+            SectionType::TopRecordings(Default::default()),
+            SectionType::DiscoveredRecordings(Default::default()),
+            SectionType::DebutsRecordings(Default::default()),
+            SectionType::AllTimeChangesRecordings(Default::default()),
+            SectionType::TopArtists(Default::default()),
+            SectionType::DiscoveredArtists(Default::default()),
+            SectionType::AllTimeChangesArtists(Default::default()),
+            SectionType::TopReleases(Default::default()),
+            SectionType::DiscoveredReleases(Default::default()),
+            SectionType::DebutsReleases(Default::default()),
+            SectionType::AllTimeChangesReleases(Default::default()),
+            SectionType::TopReleaseGroups(Default::default()),
+            SectionType::DiscoveredReleaseGroups(Default::default()),
+            SectionType::AllTimeChangesReleaseGroups(Default::default()),
+            SectionType::Toplabels(Default::default()),
+            SectionType::DiscoveredLabels(Default::default()),
+            SectionType::AllTimeChangesLabels(Default::default()),
+            SectionType::GroupByWeekDay(Default::default()),
+            SectionType::GroupByMonth(Default::default()),
         ];
 
         for section_type in todo {
             self.print_report(
                 &mut sections,
-                self.generate_section(
-                    section_type,
+                section_type.generate(
                     &listens,
                     start_time,
                     end_time,

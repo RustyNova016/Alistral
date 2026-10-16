@@ -139,7 +139,7 @@ pub enum Commands {
     #[cfg(feature = "radio")]
     /// Generate radio playlists for you
     Radio(RadioCommand),
-        
+
     /// Generate radio playlists for you
     Report(ReportCommand),
 

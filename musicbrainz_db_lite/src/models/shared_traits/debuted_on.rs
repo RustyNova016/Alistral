@@ -13,5 +13,8 @@ pub trait DebutedOn {
     /// - Recordings / Release Groups / Work: it's the time they first released
     /// - Release: Release date
     /// - Artist / Label: the date of their first associated release
-    fn debuted_on(&self, client: &Arc<DBClient>) -> impl Future<Output = Result<Option<DateTime<Utc>>, Self::Error>> + Send;
+    fn debuted_on(
+        &self,
+        client: &Arc<DBClient>,
+    ) -> impl Future<Output = Result<Option<DateTime<Utc>>, Self::Error>> + Send;
 }
