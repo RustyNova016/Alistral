@@ -73,7 +73,10 @@ impl Recording {
 impl DebutedOn for Recording {
     type Error = crate::Error;
 
-    async fn debuted_on(&self, client: &Arc<DBClient>) -> Result<Option<DateTime<Utc>>, Self::Error>  {
+    async fn debuted_on(
+        &self,
+        client: &Arc<DBClient>,
+    ) -> Result<Option<DateTime<Utc>>, Self::Error> {
         if let Some(date) = self.first_release_date() {
             return Ok(Some(date));
         }
