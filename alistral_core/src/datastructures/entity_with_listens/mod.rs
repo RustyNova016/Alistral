@@ -18,7 +18,6 @@ pub mod entity_comparison;
 pub mod label;
 pub mod listen_timeframe;
 pub mod listens;
-pub mod listens_with_duration;
 pub mod messybrainz;
 pub mod recording;
 pub mod release;
