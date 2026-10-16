@@ -4,6 +4,7 @@ use spire_enum::prelude::delegate_impl;
 use spire_enum::prelude::delegated_enum;
 
 use crate::tools::report::ReportListenData;
+use crate::tools::report::sections::error::SectionsError;
 
 pub(super) trait SectionTypeTrait {
     async fn generate(
@@ -13,7 +14,7 @@ pub(super) trait SectionTypeTrait {
         start_time: DateTime<Local>,
         end_time: DateTime<Local>,
         previous_start_time: DateTime<Local>,
-    ) -> String;
+    ) -> Result<String, SectionsError>;
 }
 
 #[delegate_impl]
@@ -25,7 +26,7 @@ impl SectionTypeTrait for SectionType {
         start_time: DateTime<Local>,
         end_time: DateTime<Local>,
         previous_start_time: DateTime<Local>,
-    ) -> String;
+    ) -> Result<String, SectionsError>;
 }
 
 #[delegated_enum(extract_variants(derive(Debug, Eq, PartialEq, Clone, Copy, Default)))]
