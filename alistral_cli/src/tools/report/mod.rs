@@ -1,5 +1,3 @@
-pub mod group_by_charts;
-pub mod listen_data;
 use chrono::DateTime;
 use chrono::Local;
 use chrono::NaiveDate;
@@ -9,18 +7,16 @@ use tracing_indicatif::span_ext::IndicatifSpanExt;
 use tuillez::pg_inc;
 
 use crate::ALISTRAL_CLIENT;
-use crate::models::cli_components::reports::general_report::general_stats_report;
-use crate::models::cli_components::reports::tops::top_label_report;
-use crate::models::cli_components::reports::tops::top_releases_group_report;
 use crate::tools::report::error::ReportCommandError;
 use crate::tools::report::listen_data::ReportListenData;
+use crate::tools::report::section_types::SectionType;
 use crate::utils::cli::await_next;
 use crate::utils::user_inputs::UserInputParser;
 
-pub mod artists;
 pub mod error;
-pub mod recordings;
-pub mod releases;
+pub mod listen_data;
+pub mod section_types;
+pub mod sections;
 
 /// A report full of stats on a given timeframe
 #[derive(clap::Parser, Debug, Clone)]
@@ -73,7 +69,7 @@ impl ReportCommand {
         };
 
         let sections = self
-            .create(start_time, end_time, previous_start_time)
+            .create2(start_time, end_time, previous_start_time)
             .instrument(span)
             .await
             .unwrap();
@@ -90,7 +86,7 @@ impl ReportCommand {
         Ok(())
     }
 
-    async fn create(
+    async fn create2(
         &self,
         start_time: DateTime<Local>,
         end_time: DateTime<Local>,
@@ -99,83 +95,50 @@ impl ReportCommand {
         let mut sections = Vec::with_capacity(20);
         let username = UserInputParser::username_or_default(&self.username);
         let all_time_stats = ALISTRAL_CLIENT.statistics_of_user(username.clone()).await;
-        pg_inc!();
 
-        let stats = ReportListenData::new(all_time_stats);
-
-        self.print_report(
-            &mut sections,
-            general_stats_report(
-                stats.current_stats(start_time.to_utc(), end_time.to_utc()),
-                stats.previous_stats(previous_start_time.to_utc(), start_time.to_utc()),
-                start_time,
-                end_time,
-            )
-            .await
-            .unwrap(),
+        let listens = ReportListenData::new(
+            start_time.to_utc(),
+            end_time.to_utc(),
+            previous_start_time.to_utc(),
+            all_time_stats,
         );
 
-        self.recording_reports(
-            &mut sections,
-            stats.all_time_stats(),
-            stats.current_stats(start_time.to_utc(), end_time.to_utc()),
-            stats.previous_stats(previous_start_time.to_utc(), start_time.to_utc()),
-            stats.current_all_time_stats(end_time.to_utc()),
-            stats.previous_all_time_stats(start_time.to_utc()),
-            start_time,
-            end_time,
-            previous_start_time,
-        )
-        .await;
+        let todo = [
+            SectionType::GeneralStats,
+            SectionType::TopRecordings,
+            SectionType::DiscoveredRecordings,
+            SectionType::DebutsRecordings,
+            SectionType::AllTimeChangesRecordings,
+            SectionType::TopArtists,
+            SectionType::DiscoveredArtists,
+            SectionType::AllTimeChangesArtists,
+            SectionType::TopReleases,
+            SectionType::DiscoveredReleases,
+            SectionType::DebutsReleases,
+            SectionType::AllTimeChangesReleases,
+            SectionType::TopReleaseGroups,
+            SectionType::DiscoveredReleaseGroups,
+            SectionType::AllTimeChangesReleaseGroups,
+            SectionType::Toplabels,
+            SectionType::DiscoveredLabels,
+            SectionType::AllTimeChangesLabels,
+            SectionType::GroupByWeekDay,
+            SectionType::GroupByMonth,
+        ];
 
-        self.artist_reports(
-            &mut sections,
-            stats.all_time_stats(),
-            stats.current_stats(start_time.to_utc(), end_time.to_utc()),
-            stats.previous_stats(previous_start_time.to_utc(), start_time.to_utc()),
-            start_time,
-            end_time,
-            previous_start_time,
-        )
-        .await;
-
-        self.release_reports(
-            &mut sections,
-            stats.all_time_stats(),
-            stats.current_stats(start_time.to_utc(), end_time.to_utc()),
-            stats.previous_stats(previous_start_time.to_utc(), start_time.to_utc()),
-            start_time,
-            end_time,
-            previous_start_time,
-        )
-        .await;
-
-        self.print_report(
-            &mut sections,
-            top_releases_group_report(
-                stats.current_stats(start_time.to_utc(), end_time.to_utc()),
-                stats.previous_stats(previous_start_time.to_utc(), start_time.to_utc()),
-            )
-            .await
-            .unwrap(),
-        );
-
-        self.print_report(
-            &mut sections,
-            top_label_report(
-                stats.current_stats(start_time.to_utc(), end_time.to_utc()),
-                stats.previous_stats(previous_start_time.to_utc(), start_time.to_utc()),
-            )
-            .await
-            .unwrap(),
-        );
-
-        self.group_by_reports(
-            &mut sections,
-            stats.current_stats(start_time.to_utc(), end_time.to_utc()),
-            stats.previous_stats(previous_start_time.to_utc(), start_time.to_utc()),
-        )
-        .await;
+        for section_type in todo {
+            self.print_report(
+                &mut sections,
+                self.generate_section(
+                    section_type,
+                    &listens,
+                    start_time,
+                    end_time,
+                    previous_start_time,
+                )
+                .await,
+            );
+        }
 
         Ok(sections)
     }
