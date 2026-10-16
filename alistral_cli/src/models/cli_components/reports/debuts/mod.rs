@@ -40,8 +40,7 @@ pub async fn debut_report<Ent, Lis>(
 where
     Ent: MusicbrainzEntity + DebutedOn,
     EntityWithListens<Ent, Lis>: Clone + ListenCollectionReadable + HasRowID + Mergable,
-    EntityWithListensCollection<Ent, Lis>:
-        ListenCollectionReadable + Clone,
+    EntityWithListensCollection<Ent, Lis>: ListenCollectionReadable + Clone,
     // Table Bounds
     TopListenDurCountRow<Ent>: TableRow + From<EntityWithListens<Ent, Lis>>,
     OrderTableByListenDuration: TableSort<TopListenDurCountRow<Ent>>,
