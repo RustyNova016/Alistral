@@ -10,6 +10,7 @@ pub mod discovered_labels;
 pub mod discovered_recordings;
 pub mod discovered_release_groups;
 pub mod discovered_releases;
+pub mod error;
 pub mod general_stats;
 pub mod group_by_month;
 pub mod group_by_week_day;

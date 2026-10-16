@@ -1,10 +1,13 @@
 use chrono::DateTime;
 use chrono::Local;
+use snafu::ResultExt;
 use tuillez::pg_inc;
 
 use crate::models::cli_components::reports::tops::generic_report::generic_top_report;
 use crate::tools::report::ReportListenData;
 use crate::tools::report::section_types::TopReleases;
+use crate::tools::report::sections::error::ReleaseStatsSnafu;
+use crate::tools::report::sections::error::SectionsError;
 
 impl TopReleases {
     pub async fn generate(
@@ -14,11 +17,11 @@ impl TopReleases {
         _start_time: DateTime<Local>,
         _end_time: DateTime<Local>,
         _previous_start_time: DateTime<Local>,
-    ) -> String {
-        let current_entity = listens.current_stats().release_stats().await.unwrap();
+    ) -> Result<String, SectionsError> {
+        let current_entity = listens.current_stats().release_stats().await.context(ReleaseStatsSnafu)?;
         pg_inc!();
-        let previous_entity = listens.previous_stats().release_stats().await.unwrap();
+        let previous_entity = listens.previous_stats().release_stats().await.context(ReleaseStatsSnafu)?;
         pg_inc!();
-        generic_top_report(current_entity, previous_entity).await
+        Ok(generic_top_report(current_entity, previous_entity).await)
     }
 }

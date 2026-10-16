@@ -137,7 +137,7 @@ impl ReportCommand {
                     end_time,
                     previous_start_time,
                 )
-                .await,
+                .await.unwrap(),
             );
         }
 
