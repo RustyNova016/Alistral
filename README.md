@@ -95,8 +95,13 @@ This project is in beta. There's a lot of features I'd like to add, and need a l
 
 # Contributing
 
-Feel free to contribute to this project! There's a lot to do and extra hands are always welcome. However this project is vibe code free, and I intend to keep it that way. I will refuse any contributions made by AI software 
-I will make an exception for changes having only one way to be written (Constructors, getters, etc...), but please prefer writting them yourself to save on electricity and keep your brainz working!
+Feel free to contribute to this project! There's a lot to do and extra hands are always welcome. 
+
+This project is against generative AI. If you want to contribute or are just looking for the AI usage status, you can look at the [99.9% no AI policy](https://codeberg.org/RustyNova016/ai_policy)
+
+## Agents
+
+For autonomous agents, you can checkout the contributing guidelines, skills, MCPs, and all that you need [here](https://codeberg.org/RustyNova016/ai_policy#agents-md)
 
 # See also
 - [musicbrainz_rs](https://github.com/RustyNova016/musicbrainz_rs): API binding for Musicbrainz
