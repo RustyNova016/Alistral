@@ -18,7 +18,7 @@ impl DiscoveredRecordings {
         _end_time: DateTime<Local>,
         _previous_start_time: DateTime<Local>,
     ) -> Result<String, SectionsError> {
-        let all_stats = listens.current_stats().recording_stats().await.context(RecordingStatsSnafu)?;
+        let all_stats = listens.all_time_stats().recording_stats().await.context(RecordingStatsSnafu)?;
         pg_inc!();
         let current_entity = listens.current_stats().recording_stats().await.context(RecordingStatsSnafu)?;
         pg_inc!();

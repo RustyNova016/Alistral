@@ -18,7 +18,7 @@ impl DiscoveredReleaseGroups {
         _end_time: DateTime<Local>,
         _previous_start_time: DateTime<Local>,
     ) -> Result<String, SectionsError> {
-        let all_stats = listens.current_stats().release_group_stats().await.context(ReleaseGroupStatsSnafu)?;
+        let all_stats = listens.all_time_stats().release_group_stats().await.context(ReleaseGroupStatsSnafu)?;
         pg_inc!();
         let current_entity = listens.current_stats().release_group_stats().await.context(ReleaseGroupStatsSnafu)?;
         pg_inc!();
