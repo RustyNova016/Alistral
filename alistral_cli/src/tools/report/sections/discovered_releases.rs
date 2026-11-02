@@ -18,11 +18,23 @@ impl DiscoveredReleases {
         _end_time: DateTime<Local>,
         _previous_start_time: DateTime<Local>,
     ) -> Result<String, SectionsError> {
-        let all_stats = listens.current_stats().release_stats().await.context(ReleaseStatsSnafu)?;
+        let all_stats = listens
+            .all_time_stats()
+            .release_stats()
+            .await
+            .context(ReleaseStatsSnafu)?;
         pg_inc!();
-        let current_entity = listens.current_stats().release_stats().await.context(ReleaseStatsSnafu)?;
+        let current_entity = listens
+            .current_stats()
+            .release_stats()
+            .await
+            .context(ReleaseStatsSnafu)?;
         pg_inc!();
-        let previous_entity = listens.previous_stats().release_stats().await.context(ReleaseStatsSnafu)?;
+        let previous_entity = listens
+            .previous_stats()
+            .release_stats()
+            .await
+            .context(ReleaseStatsSnafu)?;
         pg_inc!();
 
         Ok(discoveries_report(

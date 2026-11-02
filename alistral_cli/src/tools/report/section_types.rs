@@ -61,4 +61,11 @@ pub enum SectionType {
     // ---  Debuts ---
     DebutsRecordings,
     DebutsReleases,
+
+    // --- Comebacks ---
+    ComebackArtists,
+    ComebackLabels,
+    ComebackRecordings,
+    ComebackReleases,
+    ComebackReleaseGroups,
 }

@@ -4,10 +4,13 @@ use alistral_core::models::listen_statistics_data::ListenStatisticsData;
 use chrono::DateTime;
 use chrono::Utc;
 
+use crate::models::timeframe::TimeFrame;
+
 pub struct ReportListenData {
     start_time: DateTime<Utc>,
     end_time: DateTime<Utc>,
     previous_start_time: DateTime<Utc>,
+    time_frame: TimeFrame,
 
     all_time_stats: ListenStatisticsData,
 
@@ -26,6 +29,7 @@ impl ReportListenData {
         all_time_stats: ListenStatisticsData,
     ) -> Self {
         ReportListenData {
+            time_frame: TimeFrame::new(start_time.clone(), end_time.clone()),
             end_time,
             previous_start_time,
             start_time,
@@ -35,6 +39,10 @@ impl ReportListenData {
             current_all_time_stats: OnceCell::new(),
             previous_all_time_stats: OnceCell::new(),
         }
+    }
+
+    pub fn time_frame(&self) -> &TimeFrame {
+        &self.time_frame
     }
 
     pub fn start_time(&self) -> DateTime<Utc> {

@@ -18,7 +18,7 @@ impl DiscoveredLabels {
         _end_time: DateTime<Local>,
         _previous_start_time: DateTime<Local>,
     ) -> Result<String, SectionsError> {
-        let all_stats = listens.current_stats().label_stats().await.context(LabelStatsSnafu)?;
+        let all_stats = listens.all_time_stats().label_stats().await.context(LabelStatsSnafu)?;
         pg_inc!();
         let current_entity = listens.current_stats().label_stats().await.context(LabelStatsSnafu)?;
         pg_inc!();
