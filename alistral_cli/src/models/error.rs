@@ -13,6 +13,7 @@ use crate::models::client::interzic_client::InterzicClientError;
 use crate::tools::bump::BumpCommandError;
 use crate::tools::cache::CacheCommandError;
 use crate::tools::daily::error::DailyCommandError;
+use crate::tools::report::error::ReportCommandError;
 #[cfg(feature = "yumako_jams")]
 use crate::tools::yumako_jam::YumakoCommandError;
 
@@ -113,6 +114,9 @@ pub enum Error {
     #[cfg(feature = "yumako_jams")]
     #[error(transparent)]
     YumakoCommandError(#[from] YumakoCommandError),
+
+    #[error(transparent)]
+    ReportCommandError(#[from] ReportCommandError),
 }
 
 impl GetFriendlyError for Error {
@@ -149,6 +153,7 @@ impl GetFriendlyError for Error {
             Self::DailyCommandError(val) => val.get_friendly_error(),
             #[cfg(feature = "yumako_jams")]
             Self::YumakoCommandError(val) => val.get_friendly_error(),
+            Self::ReportCommandError(val) => val.get_friendly_error(),
         }
     }
 }
