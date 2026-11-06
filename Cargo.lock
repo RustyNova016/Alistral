@@ -61,7 +61,7 @@ dependencies = [
  "duplicate",
  "extend",
  "futures",
- "hotpath",
+ "hotpath 0.31.1",
  "indoc",
  "inquire",
  "interzic",
@@ -221,7 +221,7 @@ dependencies = [
  "blocking",
  "bon",
  "governor",
- "hotpath",
+ "hotpath 0.25.1",
  "serde_core",
  "serde_json",
  "snafu",
@@ -1917,11 +1917,9 @@ dependencies = [
  "arc-swap",
  "cfg-if",
  "crossbeam-channel",
- "futures-channel",
  "futures-core",
- "futures-util",
  "hdrhistogram",
- "hotpath-macros",
+ "hotpath-macros 0.25.1",
  "libc",
  "pin-project-lite",
  "quanta",
@@ -1929,17 +1927,58 @@ dependencies = [
  "serde",
  "serde_json",
  "tiny_http",
- "tokio",
- "tracing",
- "tracing-subscriber",
  "ureq",
 ]
+
+[[package]]
+name = "hotpath"
+version = "0.31.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4039758c8bca06a34c475d17aaafc17ac1073ce2cecd8dba8c82e69edb300bbe"
+dependencies = [
+ "arc-swap",
+ "cfg-if",
+ "crossbeam-channel",
+ "futures-channel",
+ "futures-core",
+ "futures-sink",
+ "hdrhistogram",
+ "hotpath-drain",
+ "hotpath-macros 0.31.1",
+ "libc",
+ "pin-project-lite",
+ "quanta",
+ "regex-lite",
+ "serde",
+ "serde_json",
+ "time",
+ "tiny_http",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
+name = "hotpath-drain"
+version = "0.31.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bbba0a3badfb9ebf95f22dc6cdb4afcd0ff07b91a85fa3196fd1060576ea3065"
 
 [[package]]
 name = "hotpath-macros"
 version = "0.25.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "846bde0d9600d98434e1aac376977d7718bfe3d2f5312a041b7c59a6a466c51a"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.119",
+]
+
+[[package]]
+name = "hotpath-macros"
+version = "0.31.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7d980014875338771b00ac44f1c9e2ea1a10650aa68ce54226233bc767714361"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2566,7 +2605,7 @@ dependencies = [
  "async-executor",
  "bon",
  "chrono",
- "hotpath",
+ "hotpath 0.25.1",
  "serde",
  "serde_json",
  "snafu",
@@ -2719,7 +2758,7 @@ dependencies = [
  "deadpool",
  "extend",
  "futures",
- "hotpath",
+ "hotpath 0.31.1",
  "itertools 0.15.0",
  "listenbrainz",
  "listenbrainz_rs",
@@ -2750,7 +2789,7 @@ dependencies = [
  "bon",
  "chrono",
  "glob",
- "hotpath",
+ "hotpath 0.25.1",
  "lucene_query_builder",
  "regex",
  "serde",
