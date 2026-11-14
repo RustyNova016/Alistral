@@ -61,7 +61,7 @@ dependencies = [
  "duplicate",
  "extend",
  "futures",
- "hotpath",
+ "hotpath 0.31.3",
  "indoc",
  "inquire",
  "interzic",
@@ -221,7 +221,7 @@ dependencies = [
  "blocking",
  "bon",
  "governor",
- "hotpath",
+ "hotpath 0.25.1",
  "serde_core",
  "serde_json",
  "snafu",
@@ -1403,7 +1403,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "39cab71617ae0d63f51a36d69f866391735b51691dbda63cf6f96d042b63efeb"
 dependencies = [
  "libc",
- "windows-sys 0.52.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -1917,11 +1917,9 @@ dependencies = [
  "arc-swap",
  "cfg-if",
  "crossbeam-channel",
- "futures-channel",
  "futures-core",
- "futures-util",
  "hdrhistogram",
- "hotpath-macros",
+ "hotpath-macros 0.25.1",
  "libc",
  "pin-project-lite",
  "quanta",
@@ -1929,17 +1927,58 @@ dependencies = [
  "serde",
  "serde_json",
  "tiny_http",
- "tokio",
- "tracing",
- "tracing-subscriber",
  "ureq",
 ]
+
+[[package]]
+name = "hotpath"
+version = "0.31.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f41c413153d29c7665f7a1a21b1fed9816c9be794fc7e58f48d420ce3e60b403"
+dependencies = [
+ "arc-swap",
+ "cfg-if",
+ "crossbeam-channel",
+ "futures-channel",
+ "futures-core",
+ "futures-sink",
+ "hdrhistogram",
+ "hotpath-drain",
+ "hotpath-macros 0.31.3",
+ "libc",
+ "pin-project-lite",
+ "quanta",
+ "regex-lite",
+ "serde",
+ "serde_json",
+ "time",
+ "tiny_http",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
+name = "hotpath-drain"
+version = "0.31.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5d73ae7680baa16d0e1184401cd299628e437bcc00a62aea4ecc286c332cd639"
 
 [[package]]
 name = "hotpath-macros"
 version = "0.25.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "846bde0d9600d98434e1aac376977d7718bfe3d2f5312a041b7c59a6a466c51a"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.119",
+]
+
+[[package]]
+name = "hotpath-macros"
+version = "0.31.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "183e2530804a17d4aeef73a9d613a6977ad220cc11a1cd9312b9b6e52852ead4"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2566,7 +2605,7 @@ dependencies = [
  "async-executor",
  "bon",
  "chrono",
- "hotpath",
+ "hotpath 0.25.1",
  "serde",
  "serde_json",
  "snafu",
@@ -2719,7 +2758,7 @@ dependencies = [
  "deadpool",
  "extend",
  "futures",
- "hotpath",
+ "hotpath 0.31.3",
  "itertools 0.15.0",
  "listenbrainz",
  "listenbrainz_rs",
@@ -2750,7 +2789,7 @@ dependencies = [
  "bon",
  "chrono",
  "glob",
- "hotpath",
+ "hotpath 0.25.1",
  "lucene_query_builder",
  "regex",
  "serde",
@@ -3191,7 +3230,7 @@ dependencies = [
  "once_cell",
  "socket2",
  "tracing",
- "windows-sys 0.52.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -3500,7 +3539,7 @@ dependencies = [
  "errno",
  "libc",
  "linux-raw-sys",
- "windows-sys 0.52.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -3568,7 +3607,7 @@ dependencies = [
  "security-framework",
  "security-framework-sys",
  "webpki-root-certs",
- "windows-sys 0.52.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -4427,10 +4466,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "32497e9a4c7b38532efcdebeef879707aa9f794296a4f0244f6f69e9bc8574bd"
 dependencies = [
  "fastrand",
- "getrandom 0.3.4",
+ "getrandom 0.4.3",
  "once_cell",
  "rustix",
- "windows-sys 0.52.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -5206,7 +5245,7 @@ version = "0.1.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c2a7b1c03c876122aa43f3020e6c3c3ee5c05081c9a00739faf7503aeba10d22"
 dependencies = [
- "windows-sys 0.52.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
