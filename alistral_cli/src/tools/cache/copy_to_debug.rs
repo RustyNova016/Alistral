@@ -3,9 +3,8 @@ use std::fs;
 use clap::Parser;
 use snafu::ResultExt as _;
 
-use crate::database::DEBUG_DB_LOCATION;
-use crate::database::RELEASE_DB_LOCATION;
 use crate::interface::errors::friendly_error::GetFriendlyError;
+use crate::models::directories::DIRECTORIES;
 use crate::tools::cache::delete_database;
 
 /// Copy the release database to the debug one.
@@ -16,9 +15,9 @@ pub struct CacheCopyToDebugCommand;
 
 impl CacheCopyToDebugCommand {
     pub fn run(&self) -> Result<(), CacheCopyToDebugCommandError> {
-        delete_database(&DEBUG_DB_LOCATION).context(DeleteDatabaseSnafu)?;
+        delete_database(&DIRECTORIES.musicbrainz_debug_cache_path()).context(DeleteDatabaseSnafu)?;
 
-        fs::copy(&*RELEASE_DB_LOCATION, &*DEBUG_DB_LOCATION).context(CopySnafu)?;
+        fs::copy(DIRECTORIES.musicbrainz_release_cache_path(), &DIRECTORIES.musicbrainz_debug_cache_path()).context(CopySnafu)?;
 
         Ok(())
     }

@@ -1,9 +1,9 @@
 use clap::Parser;
 use snafu::ResultExt as _;
 
-use crate::database::DEBUG_DB_LOCATION;
-use crate::database::RELEASE_DB_LOCATION;
+
 use crate::interface::errors::friendly_error::GetFriendlyError;
+use crate::models::directories::DIRECTORIES;
 use crate::tools::cache::delete_database;
 
 /// Wipe the cache's data
@@ -23,11 +23,11 @@ pub struct CacheClearCommand {
 impl CacheClearCommand {
     pub fn run(&self) -> Result<(), CacheClearCommandError> {
         if self.main {
-            delete_database(&RELEASE_DB_LOCATION).context(DeleteDatabaseSnafu)?;
+            delete_database(&DIRECTORIES.musicbrainz_release_cache_path()).context(DeleteDatabaseSnafu)?;
         }
 
         if self.debug {
-            delete_database(&DEBUG_DB_LOCATION).context(DeleteDebugDatabaseSnafu)?;
+            delete_database(&DIRECTORIES.musicbrainz_debug_cache_path()).context(DeleteDebugDatabaseSnafu)?;
         }
 
         Ok(())
