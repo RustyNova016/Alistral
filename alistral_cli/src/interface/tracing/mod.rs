@@ -26,7 +26,7 @@ use tuillez::styles::COUNT_STYLE;
 
 use crate::interface::tracing::file_format::FileFormatter;
 use crate::models::cli::Cli;
-use crate::utils::constants::paths::LOG_DIR;
+use crate::models::directories::DIRECTORIES;
 
 pub fn init_tracer(cli: &Cli) -> WorkerGuard {
     // === Console and indicatif ===
@@ -80,12 +80,14 @@ where
 {
     let now = Local::now();
 
+    let log_dir = DIRECTORIES.alistral_logs();
+
     let file_appender = tracing_appender::rolling::Builder::new()
         .filename_suffix("log")
         .rotation(Rotation::NEVER)
         .max_log_files(100)
         .filename_prefix(format!("log-{}", now.format("%Y-%m-%d_%H-%M-%S")))
-        .build(&*LOG_DIR)
+        .build(log_dir)
         .expect("Couldn't create log file appender");
 
     let (non_blocking, guard) = tracing_appender::non_blocking(file_appender);

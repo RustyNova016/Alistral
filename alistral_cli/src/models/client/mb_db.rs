@@ -8,8 +8,8 @@ use musicbrainz_db_lite::listenbrainz_rs::ListenBrainzClient;
 use sqlx::Acquire as _;
 use sqlx::AssertSqlSafe;
 
-use crate::database::DB_LOCATION;
 use crate::models::client::AlistralCliClient;
+use crate::models::directories::DIRECTORIES;
 use crate::utils::env::temp_database;
 
 impl AlistralCliClient {
@@ -21,7 +21,7 @@ impl AlistralCliClient {
         let location = if temp_database() {
             PathBuf::from("./temp.db")
         } else {
-            DB_LOCATION.to_path_buf()
+            DIRECTORIES.musicbrainz_cache_path()
         };
 
         let musicbrainz_db = DBClient::from_path(location, musicbrainz_client, listenbrainz_client)

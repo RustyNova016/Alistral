@@ -1,9 +1,7 @@
-use std::fs;
-
-use directories::BaseDirs;
 use serde::Deserialize;
 use serde::Serialize;
 
+use crate::models::directories::DIRECTORIES;
 use crate::utils::data_file::DataFile;
 
 /// Storage for data other than configurations
@@ -30,12 +28,7 @@ impl Default for DataStorage {
 
 impl DataFile for DataStorage {
     fn path() -> std::path::PathBuf {
-        let mut path = BaseDirs::new()
-            .expect("Couldn't find standard directory. Is your system an oddball one?")
-            .data_local_dir()
-            .to_path_buf();
-        path.push("alistral");
-        fs::create_dir_all(&path).expect("Couldn't create config directory");
+        let mut path = DIRECTORIES.alistral_data_and_create();
         path.push("data_storage.txt");
         path
     }
