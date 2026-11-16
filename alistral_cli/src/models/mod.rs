@@ -1,4 +1,3 @@
-pub mod timeframe;
 pub mod cli;
 pub mod cli_components;
 pub mod client;
@@ -14,3 +13,4 @@ pub mod error;
 pub mod hour_min;
 #[cfg(any(feature = "stats", feature = "lookup"))]
 pub mod maybe_reversed;
+pub mod timeframe;

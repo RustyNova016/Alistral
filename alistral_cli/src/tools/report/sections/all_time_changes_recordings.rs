@@ -15,7 +15,7 @@ impl AllTimeChangesRecordings {
         listens: &ReportListenData,
 
         _start_time: DateTime<Local>,
-       _end_time: DateTime<Local>,
+        _end_time: DateTime<Local>,
         _previous_start_time: DateTime<Local>,
     ) -> Result<String, SectionsError> {
         let current_entity_all_time = listens

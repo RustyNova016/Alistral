@@ -1,5 +1,7 @@
 use chrono::DateTime;
 use chrono::Local;
+use serde::Deserialize;
+use serde::Serialize;
 use spire_enum::prelude::delegate_impl;
 use spire_enum::prelude::delegated_enum;
 
@@ -29,7 +31,39 @@ impl SectionTypeTrait for SectionType {
     ) -> Result<String, SectionsError>;
 }
 
-#[delegated_enum(extract_variants(derive(Debug, Eq, PartialEq, Clone, Copy, Default)))]
+// No docs
+#[cfg_attr(
+    not(feature = "docs"),
+    delegated_enum(extract_variants(derive(
+        Debug,
+        Eq,
+        PartialEq,
+        Clone,
+        Default,
+        Serialize,
+        Deserialize
+    )))
+)]
+#[cfg_attr(not(feature = "docs"), derive(Debug, Serialize, Deserialize, Clone))]
+// Doc mode
+#[cfg_attr(
+    feature = "docs",
+    delegated_enum(extract_variants(derive(
+        Debug,
+        Eq,
+        PartialEq,
+        Clone,
+        Default,
+        Serialize,
+        Deserialize,
+        schemars::JsonSchema
+    )))
+)]
+#[cfg_attr(
+    feature = "docs",
+    derive(Debug, Serialize, Deserialize, Clone, schemars::JsonSchema)
+)]
+#[serde(tag = "type")]
 pub enum SectionType {
     GeneralStats,
 

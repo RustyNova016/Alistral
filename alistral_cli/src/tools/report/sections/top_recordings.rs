@@ -18,9 +18,17 @@ impl TopRecordings {
         _end_time: DateTime<Local>,
         _previous_start_time: DateTime<Local>,
     ) -> Result<String, SectionsError> {
-        let current_entity = listens.current_stats().recording_stats().await.context(RecordingStatsSnafu)?;
+        let current_entity = listens
+            .current_stats()
+            .recording_stats()
+            .await
+            .context(RecordingStatsSnafu)?;
         pg_inc!();
-        let previous_entity = listens.previous_stats().recording_stats().await.context(RecordingStatsSnafu)?;
+        let previous_entity = listens
+            .previous_stats()
+            .recording_stats()
+            .await
+            .context(RecordingStatsSnafu)?;
         pg_inc!();
         Ok(generic_top_report(current_entity, previous_entity).await)
     }
