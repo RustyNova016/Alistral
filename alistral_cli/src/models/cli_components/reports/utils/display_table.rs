@@ -20,6 +20,8 @@ pub async fn create_report_top_table<Ent, Lis>(
     current_recordings: &EntityWithListensCollection<Ent, Lis>,
     previous_recordings: &EntityWithListensCollection<Ent, Lis>,
     name: &str,
+
+    settings: &ReportTableSettings,
 ) where
     Ent: HasRowID
         + MusicbrainzEntity
@@ -29,7 +31,7 @@ pub async fn create_report_top_table<Ent, Lis>(
     EntityWithListens<Ent, Lis>: ListenCollectionReadable + Clone,
 {
     writeln!(out).unwrap();
-    writeln!(out, "Here's the top 20 {}:", name).unwrap();
+    writeln!(out, "Here's the top {} {name}:", settings.row_count).unwrap();
 
     let join = current_recordings.0.hash_join(&previous_recordings.0);
     let stats = join
@@ -43,11 +45,23 @@ pub async fn create_report_top_table<Ent, Lis>(
         //if self.listen_counts {
         let table: TopTable<TopListenDurCountRow<Ent>, OrderTableByListenDuration> =
             TopTable::from_entity_listens_comps(stats, OrderTableByListenDuration, true);
-        table.format(20, 0).await
+        table.format(settings.row_count, 0).await
     }; //else {
     //     let table: TopTable<TopListenDurationRow<_>, OrderTableByListenDuration> =
     //         TopTable::from_entity_listens_comps(stats, OrderTableByListenDuration, true);
     //     table.format(20, 0).await
     // };
     writeln!(out, "{table_string}").unwrap();
+}
+
+#[derive(Debug, serde::Serialize, serde::Deserialize, Eq, PartialEq, Clone)]
+#[cfg_attr(feature = "docs", derive(schemars::JsonSchema))]
+pub struct ReportTableSettings {
+    row_count: usize,
+}
+
+impl Default for ReportTableSettings {
+    fn default() -> Self {
+        Self { row_count: 20 }
+    }
 }
