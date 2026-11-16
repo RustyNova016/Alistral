@@ -8,6 +8,7 @@ pub fn process_errors(error: &crate::Error) -> Option<String> {
     }
 }
 
+#[cfg(feature = "interzic")]
 fn process_listenbrainz_error(error: &listenbrainz::Error) -> Option<String> {
     match error {
         listenbrainz::Error::Api { error, .. } => {

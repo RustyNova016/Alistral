@@ -32,10 +32,10 @@ serde_json = "1.0.151"
 extend = "1.2.0"
 directories = "6.0.0"
 reqwest = { version = "0.13.0", features = ["json"] }
-rand = "0.10.1"
+rand = { version = "0.10.4", optional = true }
 regex = "1.12.3"
 sqlx = { version = "0.9.0", features = ["runtime-tokio", "macros"] }
-indoc = "2.0.7"
+indoc = { version = "2.0.8", optional = true }
 strsim = "0.11.1"
 url = "2.5.8"
 
@@ -57,7 +57,7 @@ clap_complete = "4.6.3"
 clap-markdown = "0.1.5"
 clap-verbosity-flag = { version = "3.0.3", default-features = false, features = ["tracing"] }
 inquire = "0.9.4"
-charchart = {version = "0.1.0", git = "https://github.com/RustyNova016/charchart", rev = "2fab66f30cabb2cbe7c3246a1051e79be15b8f6d"}
+charchart = {version = "0.1.0", optional = true, git = "https://github.com/RustyNova016/charchart", rev = "2fab66f30cabb2cbe7c3246a1051e79be15b8f6d"}
 
 # Error handling
 color-eyre = "0.6.5"
@@ -83,12 +83,15 @@ hotpath = { version = "0.25.0", optional = true, features = ["futures", "sqlx"] 
 # Other
 zip = "9.0.0"
 sequelles = "0.2.0"
-comfy-table = { version = "7.2.2", features = ["custom_styling"] }
-duplicate = "2.0.1"
-uuid = { version = "1.23.4", features = ["v7"] }
-convert_case = "0.12.0"
+comfy-table = { version = "7.2.2", optional = true, features = ["custom_styling"] }
+duplicate = { version = "2.0.1", optional = true }
+convert_case = {version = "0.12.0", optional = true}
 schemars = { version = "1.2.2", optional = true, features = ["chrono04", "rust_decimal1"] }
-json5 = "1.3.1"
+json5 = { version = "1.3.7", optional = true }
+
+
+[dev-dependencies]
+uuid = { version = "1.23.4", features = ["v7"] }
 
 
 [features]
@@ -97,9 +100,9 @@ full = ["musicbrainz", "lookup", "stats", "radio", "subsonic"]
 
 # Commands
 musicbrainz = ["symphonize"]
-lookup = ["legacy_ent_with_listen"]
-radio = ["interzic", "yumako_jams"]
-stats = []
+lookup = ["legacy_ent_with_listen", "convert_case", "indoc", "comfy-table"]
+radio = ["interzic", "yumako_jams", "rand", "json5"]
+stats = ["convert_case", "comfy-table", "duplicate"]
 
 # Parts 
 legacy_ent_with_listen = []
@@ -118,6 +121,11 @@ backtrace = []
 
 # Documentation
 docs = ["dep:schemars"]
+indoc = ["dep:indoc"]
+comfy-table = ["dep:comfy-table"]
+rand = ["dep:rand"]
+json5 = ["dep:json5"]
+duplicate = ["dep:duplicate"]
 
 # =========
 #   Lints
