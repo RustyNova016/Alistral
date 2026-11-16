@@ -18,11 +18,23 @@ impl DiscoveredArtists {
         _end_time: DateTime<Local>,
         _previous_start_time: DateTime<Local>,
     ) -> Result<String, SectionsError> {
-        let all_stats = listens.all_time_stats().artists_stats().await.context(ArtistStatsSnafu)?;
+        let all_stats = listens
+            .all_time_stats()
+            .artists_stats()
+            .await
+            .context(ArtistStatsSnafu)?;
         pg_inc!();
-        let current_entity = listens.current_stats().artists_stats().await.context(ArtistStatsSnafu)?;
+        let current_entity = listens
+            .current_stats()
+            .artists_stats()
+            .await
+            .context(ArtistStatsSnafu)?;
         pg_inc!();
-        let previous_entity = listens.previous_stats().artists_stats().await.context(ArtistStatsSnafu)?;
+        let previous_entity = listens
+            .previous_stats()
+            .artists_stats()
+            .await
+            .context(ArtistStatsSnafu)?;
         pg_inc!();
 
         Ok(discoveries_report(

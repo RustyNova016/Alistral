@@ -19,7 +19,11 @@ impl DebutsReleases {
         end_time: DateTime<Local>,
         previous_start_time: DateTime<Local>,
     ) -> Result<String, SectionsError> {
-        let all_time_entity_stats = listens.all_time_stats().release_stats().await.context(ReleaseStatsSnafu)?;
+        let all_time_entity_stats = listens
+            .all_time_stats()
+            .release_stats()
+            .await
+            .context(ReleaseStatsSnafu)?;
         pg_inc!();
         let current_entity_stats = listens
             .current_all_time_stats()

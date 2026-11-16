@@ -1,16 +1,17 @@
-pub mod section_list;
 use chrono::DateTime;
 use chrono::Local;
 use chrono::NaiveDate;
+use snafu::OptionExt;
 use tracing::Instrument;
 use tracing::info_span;
 use tracing_indicatif::span_ext::IndicatifSpanExt;
 use tuillez::pg_inc;
 
 use crate::ALISTRAL_CLIENT;
+use crate::models::config::commands::reports::ReportConfig;
 use crate::tools::report::error::ReportCommandError;
+use crate::tools::report::error::UnknownPresetSnafu;
 use crate::tools::report::listen_data::ReportListenData;
-use crate::tools::report::section_types::SectionType;
 use crate::tools::report::section_types::SectionTypeTrait;
 use crate::utils::cli::await_next;
 use crate::utils::user_inputs::UserInputParser;
@@ -40,6 +41,10 @@ pub struct ReportCommand {
     /// Disable the "Press enter to continue prompts"
     #[arg(long)]
     no_wait: bool,
+
+    /// Use this display preset
+    #[arg(long)]
+    preset: Option<String>,
 }
 
 impl ReportCommand {
@@ -73,8 +78,7 @@ impl ReportCommand {
         let sections = self
             .create2(start_time, end_time, previous_start_time)
             .instrument(span)
-            .await
-            .unwrap();
+            .await?;
 
         for section in sections {
             println!("{section}");
@@ -93,7 +97,7 @@ impl ReportCommand {
         start_time: DateTime<Local>,
         end_time: DateTime<Local>,
         previous_start_time: DateTime<Local>,
-    ) -> Result<Vec<String>, ()> {
+    ) -> Result<Vec<String>, ReportCommandError> {
         let mut sections = Vec::with_capacity(20);
         let username = UserInputParser::username_or_default(&self.username);
         let all_time_stats = ALISTRAL_CLIENT.statistics_of_user(username.clone()).await;
@@ -105,44 +109,27 @@ impl ReportCommand {
             all_time_stats,
         );
 
-        let todo = [
-            SectionType::GeneralStats(Default::default()),
-            SectionType::TopRecordings(Default::default()),
-            SectionType::DiscoveredRecordings(Default::default()),
-            SectionType::ComebackRecordings(Default::default()),
-            SectionType::DebutsRecordings(Default::default()),
-            SectionType::AllTimeChangesRecordings(Default::default()),
-            SectionType::TopArtists(Default::default()),
-            SectionType::DiscoveredArtists(Default::default()),
-            SectionType::ComebackArtists(Default::default()),
-            SectionType::AllTimeChangesArtists(Default::default()),
-            SectionType::TopReleases(Default::default()),
-            SectionType::DiscoveredReleases(Default::default()),
-            SectionType::ComebackReleases(Default::default()),
-            SectionType::DebutsReleases(Default::default()),
-            SectionType::AllTimeChangesReleases(Default::default()),
-            SectionType::TopReleaseGroups(Default::default()),
-            SectionType::ComebackReleaseGroups(Default::default()),
-            SectionType::DiscoveredReleaseGroups(Default::default()),
-            SectionType::AllTimeChangesReleaseGroups(Default::default()),
-            SectionType::Toplabels(Default::default()),
-            SectionType::ComebackLabels(Default::default()),
-            SectionType::DiscoveredLabels(Default::default()),
-            SectionType::AllTimeChangesLabels(Default::default()),
-            SectionType::GroupByWeekDay(Default::default()),
-            SectionType::GroupByMonth(Default::default()),
-        ];
+        let preset = match &self.preset {
+            None => ReportConfig::get_default_preset(),
+            Some(preset) => ALISTRAL_CLIENT
+                .config
+                .commands
+                .as_ref()
+                .and_then(|cmds| cmds.reports())
+                .and_then(|report_conf| report_conf.get_preset(&preset))
+                .context(UnknownPresetSnafu {
+                    preset: preset.to_string(),
+                })?
+                .clone(),
+        };
 
-        for section_type in todo {
+        for section_type in preset.sections {
             self.print_report(
                 &mut sections,
-                section_type.generate(
-                    &listens,
-                    start_time,
-                    end_time,
-                    previous_start_time,
-                )
-                .await.unwrap(),
+                section_type
+                    .generate(&listens, start_time, end_time, previous_start_time)
+                    .await
+                    .unwrap(),
             );
         }
 

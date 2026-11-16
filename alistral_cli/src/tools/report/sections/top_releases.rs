@@ -18,9 +18,17 @@ impl TopReleases {
         _end_time: DateTime<Local>,
         _previous_start_time: DateTime<Local>,
     ) -> Result<String, SectionsError> {
-        let current_entity = listens.current_stats().release_stats().await.context(ReleaseStatsSnafu)?;
+        let current_entity = listens
+            .current_stats()
+            .release_stats()
+            .await
+            .context(ReleaseStatsSnafu)?;
         pg_inc!();
-        let previous_entity = listens.previous_stats().release_stats().await.context(ReleaseStatsSnafu)?;
+        let previous_entity = listens
+            .previous_stats()
+            .release_stats()
+            .await
+            .context(ReleaseStatsSnafu)?;
         pg_inc!();
         Ok(generic_top_report(current_entity, previous_entity).await)
     }
