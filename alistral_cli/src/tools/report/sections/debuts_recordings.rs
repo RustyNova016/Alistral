@@ -19,7 +19,11 @@ impl DebutsRecordings {
         end_time: DateTime<Local>,
         previous_start_time: DateTime<Local>,
     ) -> Result<String, SectionsError> {
-        let all_time_entity_stats = listens.all_time_stats().recording_stats().await.context(RecordingStatsSnafu)?;
+        let all_time_entity_stats = listens
+            .all_time_stats()
+            .recording_stats()
+            .await
+            .context(RecordingStatsSnafu)?;
         pg_inc!();
         let current_entity_stats = listens
             .current_all_time_stats()

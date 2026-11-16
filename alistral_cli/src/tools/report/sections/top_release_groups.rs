@@ -18,7 +18,11 @@ impl TopReleaseGroups {
         _end_time: DateTime<Local>,
         _previous_start_time: DateTime<Local>,
     ) -> Result<String, SectionsError> {
-        let current_entity = listens.current_stats().release_group_stats().await.context(ReleaseGroupStatsSnafu)?;
+        let current_entity = listens
+            .current_stats()
+            .release_group_stats()
+            .await
+            .context(ReleaseGroupStatsSnafu)?;
         pg_inc!();
         let previous_entity = listens
             .previous_stats()

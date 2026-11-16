@@ -18,11 +18,23 @@ impl DiscoveredLabels {
         _end_time: DateTime<Local>,
         _previous_start_time: DateTime<Local>,
     ) -> Result<String, SectionsError> {
-        let all_stats = listens.all_time_stats().label_stats().await.context(LabelStatsSnafu)?;
+        let all_stats = listens
+            .all_time_stats()
+            .label_stats()
+            .await
+            .context(LabelStatsSnafu)?;
         pg_inc!();
-        let current_entity = listens.current_stats().label_stats().await.context(LabelStatsSnafu)?;
+        let current_entity = listens
+            .current_stats()
+            .label_stats()
+            .await
+            .context(LabelStatsSnafu)?;
         pg_inc!();
-        let previous_entity = listens.previous_stats().label_stats().await.context(LabelStatsSnafu)?;
+        let previous_entity = listens
+            .previous_stats()
+            .label_stats()
+            .await
+            .context(LabelStatsSnafu)?;
         pg_inc!();
 
         Ok(discoveries_report(
