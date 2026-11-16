@@ -24,24 +24,6 @@ pub static LISTENBRAINZ_FMT: LazyLock<MusicbrainzFormater> =
         client: ALISTRAL_CLIENT.musicbrainz_db.clone(),
     });
 
-#[cfg(all(feature = "youtube", feature = "interzic"))]
-pub static YT_SECRET_FILE: LazyLock<PathBuf> = LazyLock::new(|| {
-    let mut path = CONFIG_DIR.clone();
-
-    path.push("youtube_credentials.json");
-
-    path
-});
-
-#[cfg(all(feature = "youtube", feature = "interzic"))]
-pub static TOKENCACHE: LazyLock<PathBuf> = LazyLock::new(|| {
-    let mut path = CONFIG_DIR.clone();
-
-    path.push("youtube_tokens.json");
-
-    path
-});
-
 #[cfg(feature = "interzic")]
 pub static INTERZIC_DB: LazyLock<PathBuf> = LazyLock::new(|| {
     let mut path = CONFIG_DIR.clone();

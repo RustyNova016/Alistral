@@ -6,16 +6,13 @@ use musicbrainz_db_lite::DBClient;
 use musicbrainz_rs::client::MusicBrainzClient;
 
 use crate::client::builder::ClientBuilder;
-#[cfg(feature = "youtube")]
-use crate::client::youtube_client::YoutubeClient;
+
 #[cfg(feature = "subsonic")]
 use crate::models::services::subsonic::SubsonicClient;
 
 pub mod builder;
 #[cfg(feature = "subsonic")]
 pub mod subsonic;
-#[cfg(feature = "youtube")]
-pub mod youtube_client;
 
 pub struct InterzicClient {
     pub database_client: sqlx::SqlitePool,
@@ -23,9 +20,6 @@ pub struct InterzicClient {
     musicbrainz_client: Option<Arc<MusicBrainzClient>>,
     musicbrainz_db_lite_client: Option<Arc<DBClient>>,
     listenbrainz_client: Option<Arc<listenbrainz::raw::Client>>,
-
-    #[cfg(feature = "youtube")]
-    youtube_client: Option<Arc<YoutubeClient>>,
 
     #[cfg(feature = "subsonic")]
     subsonic_clients: HashMap<String, SubsonicClient>,

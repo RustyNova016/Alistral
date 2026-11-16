@@ -1,8 +1,6 @@
 use interzic::models::messy_recording::MessyRecording;
 use interzic::models::playlist_stub::PlaylistStub;
 use interzic::models::services::listenbrainz::Listenbrainz;
-#[cfg(feature = "youtube")]
-use interzic::models::services::youtube::Youtube;
 use musicbrainz_db_lite::models::musicbrainz::recording::Recording;
 use tracing::Span;
 use tracing::instrument;
@@ -36,11 +34,6 @@ impl RadioExportTarget {
                     token.ok_or(crate::Error::MissingPlaylistUserData("token".to_string()))?,
                 )
                 .await?;
-            }
-            #[cfg(feature = "youtube")]
-            Self::Youtube => {
-                let _playlist_id =
-                    Youtube::create_playlist(&ALISTRAL_CLIENT.interzic, playlist, username).await?;
             }
             #[cfg(feature = "subsonic")]
             Self::Subsonic => {

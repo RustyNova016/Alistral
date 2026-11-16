@@ -25,12 +25,12 @@ pub struct PlaylistConvertCommand {
 }
 
 impl PlaylistConvertCommand {
-    #[cfg(not(any(feature = "youtube", feature = "subsonic")))]
+    #[cfg(not(any(feature = "subsonic")))]
     pub async fn run(&self) -> Result<(), crate::Error> {
         Ok(())
     }
 
-    #[cfg(any(feature = "youtube", feature = "subsonic"))]
+    #[cfg(feature = "subsonic")]
     pub async fn run(&self) -> Result<(), crate::Error> {
         #[cfg(feature = "subsonic")]
         let client_name = self.instance.to_lowercase();
@@ -48,14 +48,6 @@ impl PlaylistConvertCommand {
             .expect_fatal("Couldn't save the playlist's recording")?;
 
         match self.target {
-            #[cfg(feature = "youtube")]
-            PlaylistTarget::Youtube => {
-                use interzic::models::services::youtube::Youtube;
-
-                Youtube::create_playlist(&ALISTRAL_CLIENT.interzic, playlist, self.user.clone())
-                    .await
-                    .expect_fatal("Couldn't send the playlist to youtube")?;
-            }
             #[cfg(feature = "subsonic")]
             PlaylistTarget::Subsonic => {
                 let Some(client) = ALISTRAL_CLIENT.interzic.get_subsonic_client(&client_name)
