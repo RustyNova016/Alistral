@@ -1,7 +1,6 @@
 use clap::Parser;
 use interzic::models::messy_recording::MessyRecording;
-#[cfg(feature = "youtube")]
-use interzic::models::services::youtube::Youtube;
+
 use tuillez::fatal_error::FatalError;
 use tuillez::fatal_error::IntoFatal as _;
 use tuillez::fatal_error::OptIntoFatal as _;
@@ -76,19 +75,6 @@ impl OverwriteCommand {
             .await?;
 
         match self.target {
-            #[cfg(feature = "youtube")]
-            InterzicMappingTarget::Youtube => {
-                Youtube::save_ext_id(
-                    &ALISTRAL_CLIENT.interzic,
-                    Youtube::extract_id_from_text(&self.id).expect_fatal(
-                        "Couldn't parse the youtube id from the input. Check if it's correct",
-                    )?,
-                    recording.id,
-                    Some(self.user.to_string()),
-                )
-                .await?;
-            }
-
             #[cfg(feature = "subsonic")]
             InterzicMappingTarget::Subsonic => {
                 let sub = ALISTRAL_CLIENT.get_subsonic_instance(&self.instance)?;

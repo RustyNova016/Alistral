@@ -1,8 +1,7 @@
 use clap::Parser;
 use clap::ValueEnum;
 use interzic::models::messy_recording::MessyRecording;
-#[cfg(feature = "youtube")]
-use interzic::models::services::youtube::Youtube;
+
 use tuillez::fatal_error::FatalError;
 use tuillez::fatal_error::IntoFatal as _;
 use tuillez::fatal_error::OptIntoFatal as _;
@@ -43,9 +42,6 @@ pub struct GetMappingCommand {
 
 #[derive(ValueEnum, Clone, Debug)]
 pub enum InterzicMappingTarget {
-    #[cfg(feature = "youtube")]
-    Youtube,
-
     #[cfg(feature = "subsonic")]
     Subsonic,
 }
@@ -84,21 +80,6 @@ impl GetMappingCommand {
             .await?;
 
         match self.target {
-            #[cfg(feature = "youtube")]
-            InterzicMappingTarget::Youtube => {
-                let id = Youtube::get_id_or_query(
-                    &ALISTRAL_CLIENT.interzic,
-                    &recording,
-                    self.user.clone(),
-                )
-                .await?;
-
-                match id {
-                    None => println!("Couldn't find a mapping for the recording"),
-                    Some(id) => println!("Mapped to video: https://youtu.be/{id}",),
-                }
-            }
-
             #[cfg(feature = "subsonic")]
             InterzicMappingTarget::Subsonic => {
                 let sub = ALISTRAL_CLIENT.get_subsonic_instance(&self.instance)?;

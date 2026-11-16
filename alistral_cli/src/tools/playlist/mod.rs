@@ -38,8 +38,6 @@ pub enum PlaylistOrigin {
 
 #[derive(ValueEnum, Clone, Debug)]
 pub enum PlaylistTarget {
-    #[cfg(feature = "youtube")]
-    Youtube,
     #[cfg(feature = "subsonic")]
     Subsonic,
 }

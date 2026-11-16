@@ -34,9 +34,6 @@ impl AlistralCliClient {
         client.set_listenbrainz_client(Arc::new(listenbrainz::raw::Client::default()));
         client.set_musicbrainz_db_lite_client(musicbrainz_db);
 
-        #[cfg(feature = "youtube")]
-        set_youtube(&mut client).await;
-
         #[cfg(feature = "subsonic")]
         set_subsonic(&mut client).await;
 
@@ -70,20 +67,6 @@ pub enum InterzicClientError {
         #[cfg(feature = "backtrace")]
         backtrace: snafu::Backtrace,
     },
-}
-
-#[cfg(feature = "youtube")]
-async fn set_youtube(client: &mut InterzicClient) {
-    use crate::utils::constants::YT_SECRET_FILE;
-
-    if YT_SECRET_FILE.exists() {
-        use crate::utils::constants::TOKENCACHE;
-
-        client
-            .set_youtube_client(&YT_SECRET_FILE, &TOKENCACHE)
-            .await
-            .expect("Couldn't create the youtube client");
-    }
 }
 
 #[cfg(feature = "subsonic")]
