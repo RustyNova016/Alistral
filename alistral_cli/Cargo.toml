@@ -101,7 +101,7 @@ full = ["musicbrainz", "lookup", "stats", "radio", "subsonic"]
 
 # Commands
 musicbrainz = ["symphonize"]
-lookup = ["legacy_ent_with_listen", "convert_case", "indoc", "comfy-table"]
+lookup = ["legacy_ent_with_listen", "convert_case", "indoc", "comfy-table", "charchart"]
 radio = ["interzic", "yumako_jams", "rand", "json5"]
 stats = ["convert_case", "comfy-table", "duplicate"]
 
