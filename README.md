@@ -2,7 +2,7 @@
 
 [![CI builder](https://github.com/RustyNova016/alistral/actions/workflows/rust.yml/badge.svg)](https://github.com/RustyNova016/alistral/actions/workflows/rust.yml)
 
-A collection of CLI based tools for Listenbrainz.
+A collection of CLI based tools for Listenbrainz. Generate 
 
 # Installing
 
