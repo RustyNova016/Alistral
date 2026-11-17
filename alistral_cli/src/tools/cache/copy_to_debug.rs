@@ -20,7 +20,7 @@ impl CacheCopyToDebugCommand {
 
         fs::copy(
             DIRECTORIES.musicbrainz_release_cache_path(),
-            &DIRECTORIES.musicbrainz_debug_cache_path(),
+            DIRECTORIES.musicbrainz_debug_cache_path(),
         )
         .context(CopySnafu)?;
 

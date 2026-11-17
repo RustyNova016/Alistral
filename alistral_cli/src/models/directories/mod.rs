@@ -1,5 +1,4 @@
-pub mod interzic_data;
-use core::str::FromStr;
+use core::str::FromStr as _;
 use std::env;
 use std::path::PathBuf;
 use std::sync::LazyLock;
@@ -8,12 +7,16 @@ use directories::BaseDirs;
 
 pub mod alistral_cache;
 pub mod alistral_config;
+#[cfg(feature = "radio")]
 pub mod alistral_data;
 pub mod alistral_logs;
 pub mod database_path;
+#[cfg(feature = "interzic")]
+pub mod interzic_data;
+#[cfg(feature = "radio")]
 pub mod yumako_jams_config;
 
-pub const DIRECTORIES: LazyLock<Directories> = LazyLock::new(|| Directories::load());
+pub static DIRECTORIES: LazyLock<Directories> = LazyLock::new(Directories::load);
 
 pub struct Directories {
     //state_directory: PathBuf,

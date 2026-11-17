@@ -4,12 +4,14 @@ use std::path::PathBuf;
 use crate::models::directories::Directories;
 
 impl Directories {
+    #[cfg(feature = "radio")]
     pub fn alistral_data_and_create(&self) -> PathBuf {
         let dir = self.alistral_data();
         create_dir_all(&dir).unwrap();
         dir
     }
 
+    #[cfg(feature = "radio")]
     pub fn alistral_data(&self) -> PathBuf {
         if let Some(path) = Self::get_env("ALISTRAL_DATA_PATH") {
             return path;

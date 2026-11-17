@@ -20,6 +20,7 @@ impl Directories {
         self.alistral_debug_cache().join("musicbrainz_cache.db")
     }
 
+    #[cfg(feature = "interzic")]
     pub fn interzic_database_path(&self) -> PathBuf {
         self.interzic_data_and_create().join("interzic_data.db")
     }
