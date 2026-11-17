@@ -9,12 +9,14 @@ use musicbrainz_db_lite::models::musicbrainz::MusicbrainzFormater;
 use tuillez::formatter::FormatWithAsyncDyn;
 
 use crate::datastructures::cli_formating::title::Heading1;
+use crate::models::cli_components::reports::utils::display_table::ReportTableSettings;
 use crate::models::cli_components::reports::utils::display_table::create_report_top_table;
 
 pub async fn all_time_changes<Ent, Lis>(
     current_all_time: &EntityWithListensCollection<Ent, Lis>,
     previous_all_time: &EntityWithListensCollection<Ent, Lis>,
     // Settings
+    table_settings: &ReportTableSettings
 ) -> String
 where
     Ent: HasRowID
@@ -44,6 +46,7 @@ where
             current_all_time,
             previous_all_time,
             &format!("{}s", Ent::entity_name()),
+            table_settings,
         )
         .await;
     }

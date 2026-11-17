@@ -11,6 +11,7 @@ use tuillez::formatter::FormatWithAsyncDyn;
 
 use crate::datastructures::cli_formating::title::Heading1;
 use crate::models::cli_components::comp_arrow::ComparisonArrow;
+use crate::models::cli_components::reports::utils::display_table::ReportTableSettings;
 use crate::models::cli_components::reports::utils::display_table::create_report_top_table;
 
 pub async fn generic_top_report<Ent, Lis>(
@@ -56,6 +57,7 @@ where
             current_entity,
             previous_entity,
             &format!("{}s", Ent::entity_name()),
+            &ReportTableSettings::default(),
         )
         .await;
     }

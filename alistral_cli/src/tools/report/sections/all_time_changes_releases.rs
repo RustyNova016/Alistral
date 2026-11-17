@@ -30,6 +30,6 @@ impl AllTimeChangesReleases {
             .await
             .context(ReleaseStatsSnafu)?;
         pg_inc!();
-        Ok(all_time_changes(current_entity_all_time, previous_entity_all_time).await)
+        Ok(all_time_changes(current_entity_all_time, previous_entity_all_time, &self.table_settings).await)
     }
 }
