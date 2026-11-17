@@ -29,7 +29,6 @@ pub mod no_debuts_with_previous;
 pub async fn debut_report<Ent, Lis>(
     client: &AlistralCliClient,
 
-    all_stats: &EntityWithListensCollection<Ent, Lis>,
     current_stats: &EntityWithListensCollection<Ent, Lis>,
     previous_stats: &EntityWithListensCollection<Ent, Lis>,
 
@@ -55,15 +54,9 @@ where
     writeln!(out).unwrap();
 
     let current_discoveries =
-        get_debuted_entities(client, all_stats, &current_stats, start_time, end_time).await;
-    let previous_discoveries = get_debuted_entities(
-        client,
-        all_stats,
-        &previous_stats,
-        previous_start_time,
-        start_time,
-    )
-    .await;
+        get_debuted_entities(client, &current_stats, start_time, end_time).await;
+    let previous_discoveries =
+        get_debuted_entities(client, &previous_stats, previous_start_time, start_time).await;
 
     match (
         current_discoveries.is_empty(),
@@ -131,7 +124,6 @@ where
 
 async fn get_debuted_entities<Ent, Lis>(
     client: &AlistralCliClient,
-    all_stats: &EntityWithListensCollection<Ent, Lis>,
     timeframe_stats: &EntityWithListensCollection<Ent, Lis>,
     start_time: DateTime<Utc>,
     end_time: DateTime<Utc>,

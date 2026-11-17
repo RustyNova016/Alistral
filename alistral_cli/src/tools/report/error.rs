@@ -1,5 +1,6 @@
 use crate::interface::errors::friendly_error::FriendlyPanic;
 use crate::interface::errors::friendly_error::GetFriendlyError;
+use crate::tools::report::sections::error::SectionsError;
 
 #[derive(Debug, snafu::Snafu)]
 #[snafu(visibility(pub(super)))]
@@ -13,6 +14,13 @@ pub enum ReportCommandError {
     #[snafu(display("Unknown preset: {preset}"))]
     UnknownPreset {
         preset: String,
+        #[snafu(implicit)]
+        location: snafu::Location,
+    },
+
+    /// Error while processing a section
+    SectionsError {
+        source: SectionsError,
         #[snafu(implicit)]
         location: snafu::Location,
     },
@@ -30,6 +38,8 @@ impl GetFriendlyError for ReportCommandError {
                 title: "Unknown preset".to_string(),
                 body: format!("Preset {} is not in the configuration file", preset),
             }),
+
+            Self::SectionsError { source, .. } => source.get_friendly_error(),
         }
     }
 }

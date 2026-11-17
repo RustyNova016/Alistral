@@ -5,6 +5,7 @@ use serde::Serialize;
 use spire_enum::prelude::delegate_impl;
 use spire_enum::prelude::delegated_enum;
 
+use crate::models::cli_components::reports::utils::display_table::ReportTableSettings;
 use crate::tools::report::ReportListenData;
 use crate::tools::report::sections::error::SectionsError;
 
@@ -72,34 +73,99 @@ pub enum SectionType {
     GroupByMonth,
 
     // --- Tops ---
-    TopArtists,
-    Toplabels,
-    TopRecordings,
-    TopReleases,
-    TopReleaseGroups,
+    TopArtists {
+        table_settings: ReportTableSettings,
+    },
+    Toplabels {
+        #[serde(default)]
+        table_settings: ReportTableSettings,
+    },
+    TopRecordings {
+        #[serde(default)]
+        table_settings: ReportTableSettings,
+    },
+    TopReleases {
+        #[serde(default)]
+        table_settings: ReportTableSettings,
+    },
+    TopReleaseGroups {
+        #[serde(default)]
+        table_settings: ReportTableSettings,
+    },
 
     // --- Discoveries ---
-    DiscoveredArtists,
-    DiscoveredLabels,
-    DiscoveredRecordings,
-    DiscoveredReleases,
-    DiscoveredReleaseGroups,
+    DiscoveredArtists {
+        #[serde(default)]
+        table_settings: ReportTableSettings,
+    },
+    DiscoveredLabels {
+        #[serde(default)]
+        table_settings: ReportTableSettings,
+    },
+    DiscoveredRecordings {
+        #[serde(default)]
+        table_settings: ReportTableSettings,
+    },
+    DiscoveredReleases {
+        #[serde(default)]
+        table_settings: ReportTableSettings,
+    },
+    DiscoveredReleaseGroups {
+        #[serde(default)]
+        table_settings: ReportTableSettings,
+    },
 
     // --- All time changes ---
-    AllTimeChangesArtists,
-    AllTimeChangesLabels,
-    AllTimeChangesRecordings,
-    AllTimeChangesReleases,
-    AllTimeChangesReleaseGroups,
+    AllTimeChangesArtists {
+        #[serde(default)]
+        table_settings: ReportTableSettings,
+    },
+    AllTimeChangesLabels {
+        #[serde(default)]
+        table_settings: ReportTableSettings,
+    },
+    AllTimeChangesRecordings {
+        #[serde(default)]
+        table_settings: ReportTableSettings,
+    },
+    AllTimeChangesReleases {
+        #[serde(default)]
+        table_settings: ReportTableSettings,
+    },
+    AllTimeChangesReleaseGroups {
+        #[serde(default)]
+        table_settings: ReportTableSettings,
+    },
 
     // ---  Debuts ---
-    DebutsRecordings,
-    DebutsReleases,
+    DebutsRecordings {
+        #[serde(default)]
+        table_settings: ReportTableSettings,
+    },
+    DebutsReleases {
+        #[serde(default)]
+        table_settings: ReportTableSettings,
+    },
 
     // --- Comebacks ---
-    ComebackArtists,
-    ComebackLabels,
-    ComebackRecordings,
-    ComebackReleases,
-    ComebackReleaseGroups,
+    ComebackArtists {
+        #[serde(default)]
+        table_settings: ReportTableSettings,
+    },
+    ComebackLabels {
+        #[serde(default)]
+        table_settings: ReportTableSettings,
+    },
+    ComebackRecordings {
+        #[serde(default)]
+        table_settings: ReportTableSettings,
+    },
+    ComebackReleases {
+        #[serde(default)]
+        table_settings: ReportTableSettings,
+    },
+    ComebackReleaseGroups {
+        #[serde(default)]
+        table_settings: ReportTableSettings,
+    },
 }

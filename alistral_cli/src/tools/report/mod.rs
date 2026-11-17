@@ -2,6 +2,7 @@ use chrono::DateTime;
 use chrono::Local;
 use chrono::NaiveDate;
 use snafu::OptionExt;
+use snafu::ResultExt;
 use tracing::Instrument;
 use tracing::info_span;
 use tracing_indicatif::span_ext::IndicatifSpanExt;
@@ -10,6 +11,7 @@ use tuillez::pg_inc;
 use crate::ALISTRAL_CLIENT;
 use crate::models::config::commands::reports::ReportConfig;
 use crate::tools::report::error::ReportCommandError;
+use crate::tools::report::error::SectionsSnafu;
 use crate::tools::report::error::UnknownPresetSnafu;
 use crate::tools::report::listen_data::ReportListenData;
 use crate::tools::report::section_types::SectionTypeTrait;
@@ -129,7 +131,7 @@ impl ReportCommand {
                 section_type
                     .generate(&listens, start_time, end_time, previous_start_time)
                     .await
-                    .unwrap(),
+                    .context(SectionsSnafu)?,
             );
         }
 

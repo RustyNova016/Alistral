@@ -5,9 +5,7 @@ use tuillez::pg_inc;
 
 use crate::models::cli_components::reports::top_comeback::top_comeback_entities;
 use crate::tools::report::ReportListenData;
-use crate::tools::report::section_types::ComebackArtists;
 use crate::tools::report::section_types::ComebackLabels;
-use crate::tools::report::sections::error::ArtistStatsSnafu;
 use crate::tools::report::sections::error::LabelStatsSnafu;
 use crate::tools::report::sections::error::SectionsError;
 
