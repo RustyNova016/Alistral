@@ -6,7 +6,7 @@ A collection of CLI based tools for Listenbrainz.
 
 # Installing
 
-Check out the guide [here](https://rustynova016.github.io/Alistral/installing.html)
+See the guide [here](https://rustynova016.github.io/Alistral/installing.html)
 
 # Usage
 
