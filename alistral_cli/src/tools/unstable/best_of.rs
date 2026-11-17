@@ -3,7 +3,7 @@ use core::cmp::Reverse;
 use alistral_core::cli::progress_bar::global_progress_bar::PG_FETCHING;
 use alistral_core::datastructures::entity_with_listens::release::collection::ReleaseWithListensCollection;
 use chrono::Utc;
-use color_eyre::owo_colors::OwoColorize;
+use tuillez::OwoColorize;
 use itertools::Itertools;
 
 use crate::database::listenbrainz::listens::ListenFetchQuery;

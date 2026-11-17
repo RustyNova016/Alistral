@@ -10,7 +10,21 @@ use clap_complete::generate;
 use clap_verbosity_flag::InfoLevel;
 use clap_verbosity_flag::Verbosity;
 use config::ConfigCli;
+use snafu::ResultExt as _;
 
+use crate::models::cli::error::BumpCommandSnafu;
+use crate::models::cli::error::CLIError;
+use crate::models::cli::error::CacheCommandSnafu;
+use crate::models::cli::error::ConfigCommandSnafu;
+use crate::models::cli::error::DailyCommandSnafu;
+#[cfg(feature = "interzic")]
+use crate::models::cli::error::InterzicCommandSnafu;
+#[cfg(feature = "interzic")]
+use crate::models::cli::error::PlaylistCommandSnafu;
+#[cfg(feature = "radio")]
+use crate::models::cli::error::RadioCommandSnafu;
+#[cfg(feature = "yumako_jams")]
+use crate::models::cli::error::YumakoCommandSnafu;
 #[cfg(feature = "radio")]
 use crate::models::cli::radio::RadioCommand;
 use crate::tools::bump::BumpCommand;
@@ -37,6 +51,7 @@ use crate::tools::yumako_jam::YumakoCommand;
 
 pub mod common;
 pub mod config;
+pub mod error;
 #[cfg(feature = "radio")]
 pub mod radio;
 
@@ -62,7 +77,7 @@ pub struct Cli {
 }
 
 impl Cli {
-    pub async fn run(&self) -> Result<bool, crate::Error> {
+    pub async fn run(&self) -> Result<bool, CLIError> {
         // Invoked as: `$ my-app --markdown-help`
         if self.markdown_help {
             clap_markdown::print_help_markdown::<Self>();
@@ -150,16 +165,16 @@ pub enum Commands {
 }
 
 impl Commands {
-    pub async fn run(&self) -> Result<(), crate::Error> {
+    pub async fn run(&self) -> Result<(), CLIError> {
         match self {
-            Self::Bump(val) => val.run().await?,
-            Self::BumpDown(val) => val.run().await?,
-            Self::Cache(val) => val.run().await?,
+            Self::Bump(val) => val.run().await.context(BumpCommandSnafu)?,
+            Self::BumpDown(val) => val.run().await.context(BumpCommandSnafu)?,
+            Self::Cache(val) => val.run().await.context(CacheCommandSnafu)?,
             Self::Compatibility { user_a, user_b } => {
                 compatibility_command(user_a, user_b).await;
             }
-            Self::Config(val) => val.command.run().await?,
-            Self::Daily(val) => val.run().await?,
+            Self::Config(val) => val.command.run().await.context(ConfigCommandSnafu)?,
+            Self::Daily(val) => val.run().await.context(DailyCommandSnafu)?,
             #[cfg(feature = "docs")]
             Self::Docs(val) => val.run().await,
 
@@ -167,10 +182,10 @@ impl Commands {
             Self::Stats(val) => val.run().await,
 
             #[cfg(feature = "radio")]
-            Self::Radio(val) => val.run().await?,
+            Self::Radio(val) => val.run().await.context(RadioCommandSnafu)?,
 
             #[cfg(feature = "interzic")]
-            Self::Interzic(val) => val.run().await?,
+            Self::Interzic(val) => val.run().await.context(InterzicCommandSnafu)?,
 
             Self::Listens(val) => val.run().await,
 
@@ -181,10 +196,10 @@ impl Commands {
             Self::Musicbrainz(val) => val.run().await,
 
             #[cfg(feature = "interzic")]
-            Self::Playlist(val) => val.run().await?,
+            Self::Playlist(val) => val.run().await.context(PlaylistCommandSnafu)?,
             Self::Unstable(val) => val.run().await,
             #[cfg(feature = "yumako_jams")]
-            Self::YumakoJams(val) => val.run().await?,
+            Self::YumakoJams(val) => val.run().await.context(YumakoCommandSnafu)?,
         }
 
         Ok(())
