@@ -84,6 +84,7 @@ dependencies = [
  "strsim 0.11.1",
  "strum_macros",
  "symphonize",
+ "systemd-directories",
  "thiserror",
  "tokio",
  "tracing",
@@ -4154,6 +4155,12 @@ dependencies = [
  "core-foundation-sys",
  "libc",
 ]
+
+[[package]]
+name = "systemd-directories"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d5469e2e28839738d6549f9eed6b48af8c11eb8d720b308ec01fd3c105c9f394"
 
 [[package]]
 name = "tempfile"
