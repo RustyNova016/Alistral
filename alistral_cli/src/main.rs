@@ -1,8 +1,10 @@
 // Apparently I nest my functions too much :P
 #![recursion_limit = "256"]
 
+use std::process::ExitCode;
+
 use clap::Parser as _;
-use tuillez::fatal_error::FatalError;
+use tracing::error;
 
 use crate::interface::errors::friendly_error::GetFriendlyError as _;
 use crate::interface::tracing::init_tracer;
@@ -22,31 +24,33 @@ pub(crate) mod utils;
 pub use crate::models::client::ALISTRAL_CLIENT;
 pub use crate::models::error::Error;
 
-//pub(crate) type ColEyreVal<T> = color_eyre::Result<T>;
-pub(crate) type ColEyre = color_eyre::Result<()>;
-
 #[tokio::main]
-async fn main() -> ColEyre {
-    color_eyre::install()?;
+async fn main() -> ExitCode {
     let cli = Cli::parse();
     let _worker_guard = init_tracer(&cli);
     //console_subscriber::init();
 
     match cli.run().await {
-        Result::Ok(clean) => {
+        Ok(clean) => {
             if clean {
                 ALISTRAL_CLIENT.clean_up_mb_db().await;
             }
+
+            ExitCode::SUCCESS
         }
 
         Err(err) => {
             if let Some(err) = err.get_friendly_error() {
                 err.print_no_panic();
             } else {
-                FatalError::from(err).panic()
+                let help = err.get_help();
+                error!("{}", snafu::Report::from_error(err));
+                if let Some(help) = help {
+                    error!("{help}");
+                }
             }
+
+            ExitCode::FAILURE
         }
     }
-
-    Ok(())
 }
