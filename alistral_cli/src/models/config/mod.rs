@@ -1,5 +1,3 @@
-pub mod commands;
-pub mod ratelimit;
 use bumps::BumpList;
 use clap::CommandFactory as _;
 use config_guard::ConfigGuard;
@@ -19,6 +17,7 @@ use crate::models::config::musicbrainz_server::MusicbrainzServer;
 use super::cli::Cli;
 
 pub mod bumps;
+pub mod commands;
 pub mod config_guard;
 pub mod config_trait;
 pub mod global_config;
@@ -26,6 +25,7 @@ pub mod interzic;
 pub mod listen_config;
 pub mod mapper;
 pub mod musicbrainz_server;
+pub mod ratelimit;
 pub mod recording_timeout;
 pub mod whitelisted_wrong_mappings;
 

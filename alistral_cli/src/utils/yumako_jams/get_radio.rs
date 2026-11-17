@@ -8,7 +8,7 @@ use yumako_jams::models::radio_file::radio::Radio;
 
 use crate::interface::errors::friendly_error::FriendlyPanic;
 use crate::interface::errors::friendly_error::GetFriendlyError;
-use crate::utils::constants::paths::YUMAKO_DIR;
+use crate::models::directories::DIRECTORIES;
 
 pub fn get_radio(name: &str) -> Result<Radio, YumakoGetRadioError> {
     let path = get_radio_path(name)?;
@@ -22,12 +22,12 @@ pub fn get_radio(name: &str) -> Result<Radio, YumakoGetRadioError> {
 }
 
 fn get_radio_path(name: &str) -> Result<PathBuf, YumakoGetRadioError> {
-    let path = YUMAKO_DIR.join(format!("{name}.json5"));
+    let path = DIRECTORIES.yumako_jams_config().join(format!("{name}.json5"));
     if path.exists() {
         return Ok(path);
     }
 
-    let path = YUMAKO_DIR.join(format!("{name}.json"));
+    let path = DIRECTORIES.yumako_jams_config().join(format!("{name}.json"));
     if path.exists() {
         return Ok(path);
     }

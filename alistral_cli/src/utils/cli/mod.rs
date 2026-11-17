@@ -3,8 +3,6 @@ use std::io;
 use crate::utils::regex::get_raw_mbid_from_url;
 use crate::utils::user_inputs::UserInputParser;
 
-pub mod formating;
-
 /// Block the current trhead until the user press enter
 pub fn await_next() {
     let buf = &mut String::new();

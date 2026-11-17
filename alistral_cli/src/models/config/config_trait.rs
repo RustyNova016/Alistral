@@ -1,11 +1,11 @@
-use std::fs;
 use std::fs::File;
 use std::io;
 use std::path::PathBuf;
 
-use directories::BaseDirs;
 use serde::Serialize;
 use serde::de::DeserializeOwned;
+
+use crate::models::directories::DIRECTORIES;
 
 use super::config_guard::ConfigGuard;
 
@@ -13,23 +13,7 @@ pub trait ConfigFile: Serialize + DeserializeOwned + Default {
     fn file_name() -> &'static str;
 
     fn path_to_config() -> PathBuf {
-        let mut path = BaseDirs::new()
-            .expect("Couldn't find standard directory. Is your system an oddball one?")
-            .config_dir()
-            .to_path_buf();
-        path.push("alistral");
-        fs::create_dir_all(&path).expect("Couldn't create config directory");
-        path.push(Self::file_name());
-        path
-    }
-
-    fn path_to_config_legacy() -> PathBuf {
-        let mut path = BaseDirs::new()
-            .expect("Couldn't find standard directory. Is your system an oddball one?")
-            .config_dir()
-            .to_path_buf();
-        path.push("listenbrainz_cli_tools");
-        fs::create_dir_all(&path).expect("Couldn't create config directory");
+        let mut path = DIRECTORIES.alistral_config_and_create();
         path.push(Self::file_name());
         path
     }
@@ -55,15 +39,7 @@ pub trait ConfigFile: Serialize + DeserializeOwned + Default {
         match File::open(Self::path_to_config().as_path()) {
             Ok(reader) => Ok(Some(reader)),
             Err(err) => match err.kind() {
-                io::ErrorKind::NotFound => {
-                    match File::open(Self::path_to_config_legacy().as_path()) {
-                        Ok(reader) => Ok(Some(reader)),
-                        Err(err) => match err.kind() {
-                            io::ErrorKind::NotFound => Ok(None),
-                            _ => Err(err),
-                        },
-                    }
-                }
+                io::ErrorKind::NotFound => Ok(None),
                 _ => Err(err),
             },
         }

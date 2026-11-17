@@ -7,7 +7,7 @@ use musicbrainz_db_lite::MusicBrainzClient;
 use snafu::OptionExt as _;
 
 use crate::models::client::AlistralCliClient;
-use crate::utils::constants::INTERZIC_DB;
+use crate::models::directories::DIRECTORIES;
 
 impl AlistralCliClient {
     pub(super) async fn create_interzic(
@@ -16,11 +16,11 @@ impl AlistralCliClient {
     ) -> Arc<InterzicClient> {
         let mut builder = InterzicClient::new_builder();
         builder
-            .create_database_if_missing(&INTERZIC_DB)
+            .create_database_if_missing(&DIRECTORIES.interzic_database_path())
             .expect("Couldn't create interzic database");
 
         builder
-            .read_database(INTERZIC_DB.clone().to_str().unwrap())
+            .read_database(DIRECTORIES.interzic_database_path().to_str().unwrap())
             .expect("Couldn't connect to interzic database");
 
         builder
