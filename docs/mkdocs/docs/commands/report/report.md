@@ -54,3 +54,10 @@ Then run with the selected preset
 # Yearly report for 2025
 alistral report 2025-01-01 2026-01-01 --preset quick_tops
 ```
+
+You can find the list of sections [here](./sections.md). To add a section to your preset, add a json object with the type being the name of the section:
+```json
+{
+    "type": "AllTimeChangesReleaseGroups",
+}
+```
