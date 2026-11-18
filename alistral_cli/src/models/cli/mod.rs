@@ -23,6 +23,7 @@ use crate::models::cli::error::InterzicCommandSnafu;
 use crate::models::cli::error::PlaylistCommandSnafu;
 #[cfg(feature = "radio")]
 use crate::models::cli::error::RadioCommandSnafu;
+use crate::models::cli::error::ReportCommandSnafu;
 #[cfg(feature = "yumako_jams")]
 use crate::models::cli::error::YumakoCommandSnafu;
 #[cfg(feature = "radio")]
@@ -188,7 +189,7 @@ impl Commands {
 
             #[cfg(feature = "radio")]
             Self::Radio(val) => val.run().await.context(RadioCommandSnafu)?,
-            Self::Report(val) => val.run().await?,
+            Self::Report(val) => val.run().await.context(ReportCommandSnafu)?,
 
             #[cfg(feature = "interzic")]
             Self::Interzic(val) => val.run().await.context(InterzicCommandSnafu)?,

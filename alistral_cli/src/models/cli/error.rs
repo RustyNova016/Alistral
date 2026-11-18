@@ -7,6 +7,7 @@ use crate::interface::errors::friendly_error::GetFriendlyError;
 use crate::tools::bump::BumpCommandError;
 use crate::tools::cache::CacheCommandError;
 use crate::tools::daily::error::DailyCommandError;
+use crate::tools::report::error::ReportCommandError;
 #[cfg(feature = "yumako_jams")]
 use crate::tools::yumako_jam::YumakoCommandError;
 
@@ -78,6 +79,14 @@ pub enum CLIError {
         location: snafu::Location,
     },
 
+    /// Error while running the `report` command
+    ReportCommandError {
+        source: ReportCommandError,
+
+        #[snafu(implicit)]
+        location: snafu::Location,
+    },
+
     /// Error while running the `yumako-jams` command
     #[cfg(feature = "yumako_jams")]
     YumakoCommandError {
@@ -101,6 +110,7 @@ impl GetFriendlyError for CLIError {
             Self::PlaylistCommandError { .. } => None,
             #[cfg(feature = "radio")]
             Self::RadioCommandError { source, .. } => source.get_friendly_error(),
+            Self::ReportCommandError { source, .. } => source.get_friendly_error(),
             #[cfg(feature = "yumako_jams")]
             Self::YumakoCommandError { source, .. } => source.get_friendly_error(),
         }
