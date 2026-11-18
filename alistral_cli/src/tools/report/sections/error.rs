@@ -9,6 +9,10 @@ use crate::interface::errors::friendly_error::GetFriendlyError;
 
 #[derive(Debug, snafu::Snafu)]
 #[snafu(visibility(pub(super)))]
+#[expect(
+    clippy::enum_variant_names,
+    reason = "Error passthough keeps its error name"
+)]
 pub enum SectionsError {
     /// Error while getting the artist statistics
     ArtistStatsError {

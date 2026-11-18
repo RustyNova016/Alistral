@@ -44,7 +44,6 @@ futures = "0.3.34"
 tokio = { version = "1.52.1", features = ["rt", "rt-multi-thread", "parking_lot", "macros"] }
 streamies = "0.2.2"
 async-fn-stream = "0.3.2"
-async-once-cell = "0.5.4"
 
 # Cli
 clap = { version = "4.6.1", features = [
@@ -83,7 +82,6 @@ hotpath = { version = "0.25.0", optional = true, features = ["futures", "sqlx"] 
 zip = "9.0.0"
 sequelles = "0.2.0"
 comfy-table = { version = "7.2.2", optional = true, features = ["custom_styling"] }
-duplicate = { version = "2.0.1", optional = true }
 convert_case = {version = "0.12.0", optional = true}
 schemars = { version = "1.2.2", optional = true, features = ["chrono04", "rust_decimal1"] }
 json5 = { version = "1.3.7", optional = true }
@@ -95,14 +93,15 @@ uuid = { version = "1.23.4", features = ["v7"] }
 
 
 [features]
-default = ["lookup"]
+default = []
 full = ["musicbrainz", "lookup", "stats", "radio", "subsonic"]
 
 # Commands
 musicbrainz = ["symphonize"]
 lookup = ["legacy_ent_with_listen", "convert_case", "indoc", "comfy-table", "charchart"]
 radio = ["interzic", "yumako_jams", "rand", "json5"]
-stats = ["convert_case", "comfy-table", "duplicate"]
+stats = ["convert_case", "comfy-table"]
+report = ["convert_case", "comfy-table", "charchart"]
 
 # Parts 
 legacy_ent_with_listen = []
@@ -125,7 +124,6 @@ indoc = ["dep:indoc"]
 comfy-table = ["dep:comfy-table"]
 rand = ["dep:rand"]
 json5 = ["dep:json5"]
-duplicate = ["dep:duplicate"]
 
 # =========
 #   Lints

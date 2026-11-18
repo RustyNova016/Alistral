@@ -1,6 +1,6 @@
 use chrono::DateTime;
 use chrono::Local;
-use snafu::ResultExt;
+use snafu::ResultExt as _;
 use tuillez::pg_inc;
 
 use crate::models::cli_components::reports::new_discoveries::discoveries_report;

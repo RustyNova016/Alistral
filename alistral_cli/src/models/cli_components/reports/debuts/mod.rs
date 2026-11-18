@@ -54,9 +54,9 @@ where
     writeln!(out).unwrap();
 
     let current_discoveries =
-        get_debuted_entities(client, &current_stats, start_time, end_time).await;
+        get_debuted_entities(client, current_stats, start_time, end_time).await;
     let previous_discoveries =
-        get_debuted_entities(client, &previous_stats, previous_start_time, start_time).await;
+        get_debuted_entities(client, previous_stats, previous_start_time, start_time).await;
 
     match (
         current_discoveries.is_empty(),
@@ -80,8 +80,8 @@ where
                 discovery_counts(
                     &current_discoveries,
                     &previous_discoveries,
-                    &current_stats,
-                    &previous_stats
+                    current_stats,
+                    previous_stats
                 )
             )
             .unwrap();
@@ -91,8 +91,8 @@ where
                 discovery_listens(
                     &current_discoveries,
                     &previous_discoveries,
-                    &current_stats,
-                    &previous_stats
+                    current_stats,
+                    previous_stats
                 )
             )
             .unwrap();
@@ -107,7 +107,7 @@ where
                 )
             )
             .unwrap();
-            writeln!(out, "").unwrap();
+            writeln!(out).unwrap();
 
             let table: TopTable<TopListenDurCountRow<_>, OrderTableByListenDuration> =
                 TopTable::from_entity_listens(

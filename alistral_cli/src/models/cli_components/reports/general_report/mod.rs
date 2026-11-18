@@ -1,8 +1,8 @@
 use core::fmt;
-use std::fmt::Write;
+use core::fmt::Write as _;
 
-use alistral_core::cli::colors::AlistralColors;
-use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
+use alistral_core::cli::colors::AlistralColors as _;
+use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable as _;
 use alistral_core::models::listen_statistics_data::ListenStatisticsData;
 use chrono::DateTime;
 use chrono::Local;

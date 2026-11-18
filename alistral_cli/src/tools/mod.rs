@@ -1,5 +1,3 @@
-pub mod report;
-//pub mod weekly;
 pub mod bump;
 pub mod cache;
 pub mod compatibility;
@@ -19,6 +17,8 @@ pub mod musicbrainz;
 pub mod playlist;
 #[cfg(feature = "radio")]
 pub mod radio;
+#[cfg(feature = "report")]
+pub mod report;
 #[cfg(feature = "stats")]
 pub mod stats;
 pub mod unstable;

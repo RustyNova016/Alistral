@@ -1,6 +1,6 @@
 use chrono::DateTime;
 use chrono::Local;
-use snafu::ResultExt;
+use snafu::ResultExt as _;
 use tuillez::pg_inc;
 
 use crate::ALISTRAL_CLIENT;
@@ -34,8 +34,8 @@ impl DebutsRecordings {
 
         Ok(debut_report(
             &ALISTRAL_CLIENT,
-            &current_entity_stats,
-            &previous_entity_stats,
+            current_entity_stats,
+            previous_entity_stats,
             start_time.to_utc(),
             end_time.to_utc(),
             previous_start_time.to_utc(),

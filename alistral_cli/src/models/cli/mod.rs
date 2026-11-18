@@ -23,6 +23,7 @@ use crate::models::cli::error::InterzicCommandSnafu;
 use crate::models::cli::error::PlaylistCommandSnafu;
 #[cfg(feature = "radio")]
 use crate::models::cli::error::RadioCommandSnafu;
+#[cfg(feature = "report")]
 use crate::models::cli::error::ReportCommandSnafu;
 #[cfg(feature = "yumako_jams")]
 use crate::models::cli::error::YumakoCommandSnafu;
@@ -44,6 +45,7 @@ use crate::tools::lookup::LookupCommand;
 use crate::tools::musicbrainz::MusicbrainzCommand;
 #[cfg(feature = "interzic")]
 use crate::tools::playlist::PlaylistCommand;
+#[cfg(feature = "report")]
 use crate::tools::report::ReportCommand;
 #[cfg(feature = "stats")]
 use crate::tools::stats::StatsCommand;
@@ -156,6 +158,7 @@ pub enum Commands {
     /// Generate radio playlists for you
     Radio(RadioCommand),
 
+    #[cfg(feature = "report")]
     /// Generate radio playlists for you
     Report(ReportCommand),
 
@@ -189,6 +192,7 @@ impl Commands {
 
             #[cfg(feature = "radio")]
             Self::Radio(val) => val.run().await.context(RadioCommandSnafu)?,
+            #[cfg(feature = "report")]
             Self::Report(val) => val.run().await.context(ReportCommandSnafu)?,
 
             #[cfg(feature = "interzic")]

@@ -29,7 +29,7 @@ impl ReportListenData {
         all_time_stats: ListenStatisticsData,
     ) -> Self {
         ReportListenData {
-            time_frame: TimeFrame::new(start_time.clone(), end_time.clone()),
+            time_frame: TimeFrame::new(start_time, end_time),
             end_time,
             previous_start_time,
             start_time,

@@ -1,10 +1,10 @@
-use std::fmt::Write;
+use core::fmt::Write as _;
 
 use alistral_core::datastructures::entity_with_listens::EntityWithListens;
 use alistral_core::datastructures::entity_with_listens::collection::EntityWithListensCollection;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
 use alistral_core::traits::mergable::Mergable;
-use convert_case::Casing;
+use convert_case::Casing as _;
 use musicbrainz_db_lite::HasRowID;
 use musicbrainz_db_lite::models::musicbrainz::MusicbrainzEntity;
 
@@ -70,8 +70,8 @@ where
                 comeback_counts(
                     &current_comebacks,
                     &previous_comebacks,
-                    &current_stats,
-                    &previous_stats
+                    current_stats,
+                    previous_stats
                 )
             )
             .unwrap();
@@ -81,8 +81,8 @@ where
                 comeback_listens(
                     &current_comebacks,
                     &previous_comebacks,
-                    &current_stats,
-                    &previous_stats
+                    current_stats,
+                    previous_stats
                 )
             )
             .unwrap();
@@ -97,7 +97,7 @@ where
                 )
             )
             .unwrap();
-            writeln!(out, "").unwrap();
+            writeln!(out).unwrap();
 
             let table: TopTable<TopListenDurCountRow<_>, OrderTableByListenDuration> =
                 TopTable::from_entity_listens(current_comebacks, OrderTableByListenDuration, true);

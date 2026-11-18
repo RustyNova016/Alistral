@@ -1,7 +1,7 @@
 use core::fmt::Display;
 
 use chrono::TimeDelta;
-use tuillez::extensions::chrono_exts::DurationExt;
+use tuillez::extensions::chrono_exts::DurationExt as _;
 
 pub struct HumanDurationFormat(pub TimeDelta);
 
@@ -18,7 +18,7 @@ impl From<Option<TimeDelta>> for HumanDurationFormat {
 }
 
 impl Display for HumanDurationFormat {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let seconds = self.0.num_seconds();
         let truncated = TimeDelta::new(seconds, 0).unwrap();
 

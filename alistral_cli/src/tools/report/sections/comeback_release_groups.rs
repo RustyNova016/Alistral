@@ -1,6 +1,6 @@
 use chrono::DateTime;
 use chrono::Local;
-use snafu::ResultExt;
+use snafu::ResultExt as _;
 use tuillez::pg_inc;
 
 use crate::models::cli_components::reports::top_comeback::top_comeback_entities;

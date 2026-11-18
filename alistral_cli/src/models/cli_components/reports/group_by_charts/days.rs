@@ -1,13 +1,13 @@
 use core::fmt::Write as _;
 
-use alistral_core::cli::colors::AlistralColors;
+use alistral_core::cli::colors::AlistralColors as _;
 use alistral_core::datastructures::listen_collection::traits::ListenCollectionReadable;
-use chrono::Datelike;
+use chrono::Datelike as _;
 
 use crate::datastructures::cli_formating::title::Heading1;
 use crate::models::cli_components::reports::group_by_charts::group_by_report;
 
-const DAY_LABELS: [(u32, &'static str); 7] = [
+const DAY_LABELS: [(u32, &str); 7] = [
     (1, "Mon"),
     (2, "Tue"),
     (3, "Wed"),

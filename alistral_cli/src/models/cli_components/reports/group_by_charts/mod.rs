@@ -2,7 +2,7 @@ use alistral_core::datastructures::listen_collection::traits::ListenCollectionRe
 use charchart::bar_graph::BarGraph;
 use charchart::bar_graph::colors::Color;
 use charchart::bar_graph::data::Data;
-use itertools::Itertools;
+use itertools::Itertools as _;
 use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 
 use crate::models::cli_components::formaters::human_duration::HumanDurationFormat;
@@ -21,10 +21,10 @@ where
 {
     let mut current = current_listens
         .iter_unique_listens()
-        .into_group_map_by(|listen| group_by_function(*listen));
+        .into_group_map_by(|listen| group_by_function(listen));
     let mut previous = previous_listens
         .iter_unique_listens()
-        .into_group_map_by(|listen| group_by_function(*listen));
+        .into_group_map_by(|listen| group_by_function(listen));
 
     let mut bars = Vec::with_capacity(labels.len());
     for (num, label) in labels {

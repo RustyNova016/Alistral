@@ -1,11 +1,11 @@
 use chrono::DateTime;
 use chrono::Local;
 use chrono::NaiveDate;
-use snafu::OptionExt;
-use snafu::ResultExt;
-use tracing::Instrument;
+use snafu::OptionExt as _;
+use snafu::ResultExt as _;
+use tracing::Instrument as _;
 use tracing::info_span;
-use tracing_indicatif::span_ext::IndicatifSpanExt;
+use tracing_indicatif::span_ext::IndicatifSpanExt as _;
 use tuillez::pg_inc;
 
 use crate::ALISTRAL_CLIENT;
@@ -14,7 +14,7 @@ use crate::tools::report::error::ReportCommandError;
 use crate::tools::report::error::SectionsSnafu;
 use crate::tools::report::error::UnknownPresetSnafu;
 use crate::tools::report::listen_data::ReportListenData;
-use crate::tools::report::section_types::SectionTypeTrait;
+use crate::tools::report::section_types::SectionTypeTrait as _;
 use crate::utils::cli::await_next;
 use crate::utils::user_inputs::UserInputParser;
 
@@ -118,7 +118,7 @@ impl ReportCommand {
                 .commands
                 .as_ref()
                 .and_then(|cmds| cmds.reports())
-                .and_then(|report_conf| report_conf.get_preset(&preset))
+                .and_then(|report_conf| report_conf.get_preset(preset))
                 .context(UnknownPresetSnafu {
                     preset: preset.to_string(),
                 })?

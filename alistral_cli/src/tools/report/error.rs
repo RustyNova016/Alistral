@@ -20,7 +20,8 @@ pub enum ReportCommandError {
 
     /// Error while processing a section
     SectionsError {
-        source: SectionsError,
+        #[snafu(source(from(SectionsError, Box::new)))]
+        source: Box<SectionsError>,
         #[snafu(implicit)]
         location: snafu::Location,
     },
