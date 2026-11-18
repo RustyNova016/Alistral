@@ -60,7 +60,6 @@ inquire = "0.9.4"
 charchart = {version = "0.1.0", optional = true, git = "https://github.com/RustyNova016/charchart", rev = "2fab66f30cabb2cbe7c3246a1051e79be15b8f6d"}
 
 # Error handling
-color-eyre = "0.6.5"
 thiserror = "2.0.20"
 snafu = { version = "0.9.0", features = ["rust_1_81", "backtrace"] }
 
