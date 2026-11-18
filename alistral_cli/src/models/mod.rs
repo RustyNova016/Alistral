@@ -9,8 +9,6 @@ pub mod data_storage;
 pub mod datastructures;
 pub mod directories;
 pub mod error;
-#[cfg(feature = "stats")]
-pub mod hour_min;
 #[cfg(any(feature = "stats", feature = "lookup"))]
 pub mod maybe_reversed;
 pub mod timeframe;
