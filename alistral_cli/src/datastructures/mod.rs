@@ -1,3 +1,4 @@
+#[cfg(feature = "report")]
 pub mod cli_formating;
 #[cfg(feature = "legacy_ent_with_listen")]
 pub mod entity_with_listens;

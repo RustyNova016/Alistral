@@ -34,6 +34,10 @@ nav:
   - Install: install.md
   - CLI Help: CommandLineHelp.md
   - Alistral for noobs: noob_doc.md
+  - Commands:
+    - Report:
+      - commands/report/report.md
+      - commands/report/sections.md
   - Config: 
     - config/config_file.md
   - Radios (Yumako Jams):

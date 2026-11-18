@@ -1,4 +1,2 @@
-#[cfg(any(feature = "stats", feature = "lookup"))]
+#[cfg(any(feature = "stats", feature = "lookup", feature = "report"))]
 pub mod human_time;
-#[cfg(feature = "stats")]
-pub mod minute_time;
