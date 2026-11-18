@@ -32,7 +32,7 @@ impl DebutsReleases {
             .context(ReleaseStatsSnafu)?;
         pg_inc!();
 
-        Ok(debut_report(
+        let text = debut_report(
             &ALISTRAL_CLIENT,
             current_entity_stats,
             previous_entity_stats,
@@ -41,6 +41,14 @@ impl DebutsReleases {
             previous_start_time.to_utc(),
         )
         .await
-        .unwrap())
+        .unwrap();
+
+        pg_inc!();
+
+        Ok(text)
+    }
+
+    pub fn loading_steps(&self) -> u64 {
+        3
     }
 }

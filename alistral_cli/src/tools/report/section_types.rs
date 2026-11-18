@@ -18,6 +18,8 @@ pub(super) trait SectionTypeTrait {
         end_time: DateTime<Local>,
         previous_start_time: DateTime<Local>,
     ) -> Result<String, SectionsError>;
+
+    fn loading_steps(&self) -> u64;
 }
 
 #[delegate_impl]
@@ -30,6 +32,8 @@ impl SectionTypeTrait for SectionType {
         end_time: DateTime<Local>,
         previous_start_time: DateTime<Local>,
     ) -> Result<String, SectionsError>;
+
+    fn loading_steps(&self) -> u64;
 }
 
 // No docs

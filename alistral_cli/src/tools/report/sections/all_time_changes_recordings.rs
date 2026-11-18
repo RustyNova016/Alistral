@@ -30,11 +30,20 @@ impl AllTimeChangesRecordings {
             .await
             .context(RecordingStatsSnafu)?;
         pg_inc!();
-        Ok(all_time_changes(
+
+        let text = all_time_changes(
             current_entity_all_time,
             previous_entity_all_time,
             &self.table_settings,
         )
-        .await)
+        .await;
+
+        pg_inc!();
+
+        Ok(text)
+    }
+
+    pub fn loading_steps(&self) -> u64 {
+        3
     }
 }

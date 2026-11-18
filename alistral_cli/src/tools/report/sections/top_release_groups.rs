@@ -30,6 +30,15 @@ impl TopReleaseGroups {
             .await
             .context(ReleaseGroupStatsSnafu)?;
         pg_inc!();
-        Ok(generic_top_report(current_entity, previous_entity).await)
+
+        let text = generic_top_report(current_entity, previous_entity).await;
+
+        pg_inc!();
+
+        Ok(text)
+    }
+
+    pub fn loading_steps(&self) -> u64 {
+        3
     }
 }

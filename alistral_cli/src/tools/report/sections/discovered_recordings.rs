@@ -37,7 +37,7 @@ impl DiscoveredRecordings {
             .context(RecordingStatsSnafu)?;
         pg_inc!();
 
-        Ok(discoveries_report(
+        let text = discoveries_report(
             all_stats,
             current_entity,
             previous_entity,
@@ -46,6 +46,14 @@ impl DiscoveredRecordings {
             listens.previous_start_time(),
         )
         .await
-        .unwrap())
+        .unwrap();
+
+        pg_inc!();
+
+        Ok(text)
+    }
+
+    pub fn loading_steps(&self) -> u64 {
+        4
     }
 }

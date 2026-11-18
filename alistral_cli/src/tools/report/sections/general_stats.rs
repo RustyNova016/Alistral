@@ -1,5 +1,6 @@
 use chrono::DateTime;
 use chrono::Local;
+use tuillez::pg_inc;
 
 use crate::models::cli_components::reports::general_report::general_stats_report;
 use crate::tools::report::ReportListenData;
@@ -15,13 +16,21 @@ impl GeneralStats {
         end_time: DateTime<Local>,
         _previous_start_time: DateTime<Local>,
     ) -> Result<String, SectionsError> {
-        Ok(general_stats_report(
+        let text = general_stats_report(
             listens.current_stats(),
             listens.previous_stats(),
             start_time,
             end_time,
         )
         .await
-        .unwrap())
+        .unwrap();
+
+        pg_inc!();
+
+        Ok(text)
+    }
+
+    pub fn loading_steps(&self) -> u64 {
+        1
     }
 }

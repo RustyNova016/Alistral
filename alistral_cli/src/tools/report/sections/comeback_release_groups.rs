@@ -37,13 +37,21 @@ impl ComebackReleaseGroups {
             .context(ReleaseGroupStatsSnafu)?;
         pg_inc!();
 
-        Ok(top_comeback_entities(
+        let text = top_comeback_entities(
             all_stats,
             current_entity,
             previous_entity,
             listens.time_frame(),
         )
         .await
-        .unwrap())
+        .unwrap();
+
+        pg_inc!();
+
+        Ok(text)
+    }
+
+    pub fn loading_steps(&self) -> u64 {
+        4
     }
 }

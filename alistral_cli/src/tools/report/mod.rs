@@ -10,6 +10,7 @@ use tuillez::pg_inc;
 
 use crate::ALISTRAL_CLIENT;
 use crate::models::config::commands::reports::ReportConfig;
+use crate::models::config::commands::reports::ReportPreset;
 use crate::tools::report::error::ReportCommandError;
 use crate::tools::report::error::SectionsSnafu;
 use crate::tools::report::error::UnknownPresetSnafu;
@@ -56,6 +57,8 @@ impl ReportCommand {
         let period_duration = end_time - start_time;
         let previous_start_time = start_time - period_duration;
 
+        let preset = self.get_preset()?;
+
         // === Create report ===
         let span = if !self.lazy_fetching {
             println!("Welcome to your Alistral report!");
@@ -70,7 +73,7 @@ impl ReportCommand {
 
             let span = info_span!("report", indicatif.pb_show = tracing::field::Empty);
             span.pb_start();
-            span.pb_set_length(32);
+            span.pb_set_length(preset.sections.iter().map(|sec| sec.loading_steps()).sum());
             span.pb_set_message("Creating your report");
             span
         } else {
@@ -78,7 +81,7 @@ impl ReportCommand {
         };
 
         let sections = self
-            .create2(start_time, end_time, previous_start_time)
+            .create(start_time, end_time, previous_start_time, &preset)
             .instrument(span)
             .await?;
 
@@ -94,11 +97,28 @@ impl ReportCommand {
         Ok(())
     }
 
-    async fn create2(
+    fn get_preset(&self) -> Result<ReportPreset, ReportCommandError> {
+        match &self.preset {
+            None => Ok(ReportConfig::get_default_preset()),
+            Some(preset) => ALISTRAL_CLIENT
+                .config
+                .commands
+                .as_ref()
+                .and_then(|cmds| cmds.reports())
+                .and_then(|report_conf| report_conf.get_preset(preset))
+                .cloned()
+                .context(UnknownPresetSnafu {
+                    preset: preset.to_string(),
+                }),
+        }
+    }
+
+    async fn create(
         &self,
         start_time: DateTime<Local>,
         end_time: DateTime<Local>,
         previous_start_time: DateTime<Local>,
+        preset: &ReportPreset,
     ) -> Result<Vec<String>, ReportCommandError> {
         let mut sections = Vec::with_capacity(20);
         let username = UserInputParser::username_or_default(&self.username);
@@ -111,21 +131,7 @@ impl ReportCommand {
             all_time_stats,
         );
 
-        let preset = match &self.preset {
-            None => ReportConfig::get_default_preset(),
-            Some(preset) => ALISTRAL_CLIENT
-                .config
-                .commands
-                .as_ref()
-                .and_then(|cmds| cmds.reports())
-                .and_then(|report_conf| report_conf.get_preset(preset))
-                .context(UnknownPresetSnafu {
-                    preset: preset.to_string(),
-                })?
-                .clone(),
-        };
-
-        for section_type in preset.sections {
+        for section_type in &preset.sections {
             self.print_report(
                 &mut sections,
                 section_type
