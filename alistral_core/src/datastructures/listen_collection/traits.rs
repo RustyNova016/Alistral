@@ -181,9 +181,9 @@ impl ListenCollectionReadable for &ListenCollection {
     }
 }
 
-impl<'a> ListenCollectionReadable for Vec<&'a Listen> {
+impl ListenCollectionReadable for Vec<&Listen> {
     fn iter_listens(&self) -> impl Iterator<Item = &Listen> {
-        self.iter().map(|l| *l)
+        self.iter().copied()
     }
 }
 

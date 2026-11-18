@@ -89,7 +89,7 @@ impl DebutedOn for Recording {
         }
 
         // Still not found? Find the earliest release
-        let releases = new.get_releases(&client).await?;
+        let releases = new.get_releases(client).await?;
         let mut min: Option<DateTime<Utc>> = None;
         for release in releases {
             let Some(date) = release.release_date() else {
