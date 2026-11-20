@@ -19,6 +19,7 @@ pub struct DailyCommand {
     date: Option<NaiveDate>,
 
     /// Name of the user to provide a daily report
+    #[clap(long)]
     username: Option<String>,
 }
 

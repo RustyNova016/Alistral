@@ -31,6 +31,7 @@ pub struct ListenImportDumpCommand {
     pub path: String,
 
     /// Name of the user to import those listens for
+    #[clap(long)]
     pub username: Option<String>,
 }
 
@@ -218,7 +219,7 @@ impl ImportListen {
 #[cfg(test)]
 mod tests {
     use crate::ALISTRAL_CLIENT;
-    use crate::tools::listens::import::ListenImportDumpCommand;
+    use crate::tools::listens::import_dump::ListenImportDumpCommand;
     use musicbrainz_db_lite::models::listenbrainz::listen::Listen;
 
     #[sqlx::test]

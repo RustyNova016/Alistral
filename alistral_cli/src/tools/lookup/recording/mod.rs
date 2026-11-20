@@ -20,6 +20,7 @@ pub(super) struct LookupRecordingCommand {
     id: String,
 
     /// Get the data of this user
+    #[clap(long)]
     username: Option<String>,
 
     /// Time period to use for the statistics.
