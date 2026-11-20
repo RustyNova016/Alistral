@@ -20,9 +20,11 @@ pub struct ListenRemapMsidCommand {
     new_id: String,
 
     /// Your username
+    #[clap(long)]
     username: Option<String>,
 
     /// Your account token
+    #[clap(long)]
     token: Option<String>,
 }
 

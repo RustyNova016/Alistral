@@ -25,7 +25,6 @@ This document contains the help content for the `alistral` command-line program.
 * [`alistral interzic`↴](#alistral-interzic)
 * [`alistral interzic add-subsonic`↴](#alistral-interzic-add-subsonic)
 * [`alistral interzic get-mapping`↴](#alistral-interzic-get-mapping)
-* [`alistral interzic reload`↴](#alistral-interzic-reload)
 * [`alistral interzic reverse-mapping`↴](#alistral-interzic-reverse-mapping)
 * [`alistral interzic overwrite`↴](#alistral-interzic-overwrite)
 * [`alistral listens`↴](#alistral-listens)
@@ -50,12 +49,14 @@ This document contains the help content for the `alistral` command-line program.
 * [`alistral radio rate`↴](#alistral-radio-rate)
 * [`alistral radio overdue`↴](#alistral-radio-overdue)
 * [`alistral radio shared`↴](#alistral-radio-shared)
-* [`alistral sex`↴](#alistral-sex)
+* [`alistral report`↴](#alistral-report)
 * [`alistral stats`↴](#alistral-stats)
 * [`alistral stats top`↴](#alistral-stats-top)
-* [`alistral stats yim`↴](#alistral-stats-yim)
 * [`alistral unstable`↴](#alistral-unstable)
 * [`alistral unstable duplicates`↴](#alistral-unstable-duplicates)
+* [`alistral yumako-jams`↴](#alistral-yumako-jams)
+* [`alistral yumako-jams info`↴](#alistral-yumako-jams-info)
+* [`alistral yumako-jams run`↴](#alistral-yumako-jams-run)
 
 ## `alistral`
 
@@ -78,9 +79,10 @@ A CLI app containing a set of useful tools for Listenbrainz
 * `musicbrainz` — Commands for musicbrainz stuff
 * `playlist` — Interact with playlists
 * `radio` — Generate radio playlists for you
-* `sex` — 
+* `report` — Generate radio playlists for you
 * `stats` — Shows top statistics for a specific target
 * `unstable` — A CLI app containing a set of useful tools for Listenbrainz
+* `yumako-jams` — 
 
 ###### **Options:**
 
@@ -301,12 +303,15 @@ Set the default username
 
 Daily report
 
-**Usage:** `alistral daily [DATE] [USERNAME]`
+**Usage:** `alistral daily [OPTIONS] [DATE]`
 
 ###### **Arguments:**
 
 * `<DATE>` — The date to use for the daily report
-* `<USERNAME>` — Name of the user to provide a daily report
+
+###### **Options:**
+
+* `--username <USERNAME>` — Name of the user to provide a daily report
 
 
 
@@ -340,7 +345,6 @@ A CLI app containing a set of useful tools for Listenbrainz
 
 * `add-subsonic` — Add a subsonic client
 * `get-mapping` — Fetch the id of a recording on an external service
-* `reload` — Reload recording data from Musicbrainz
 * `reverse-mapping` — Get the recording mapped to this id
 * `overwrite` — Overwrite a mapping for an user
 
@@ -371,7 +375,7 @@ Fetch the id of a recording on an external service
 
 * `<TARGET>` — Get the mapping of which service?
 
-  Possible values: `youtube`, `subsonic`
+  Possible values: `subsonic`
 
 
 ###### **Options:**
@@ -385,18 +389,6 @@ Fetch the id of a recording on an external service
 
 
 
-## `alistral interzic reload`
-
-Reload recording data from Musicbrainz
-
-**Usage:** `alistral interzic reload [MBID]`
-
-###### **Arguments:**
-
-* `<MBID>` — Reload only this mbid
-
-
-
 ## `alistral interzic reverse-mapping`
 
 Get the recording mapped to this id
@@ -407,7 +399,7 @@ Get the recording mapped to this id
 
 * `<SOURCE>` — Get the mapping of which service?
 
-  Possible values: `youtube`, `subsonic`
+  Possible values: `subsonic`
 
 * `<ID>` — The id on the external service
 * `<USER>` — Search the mapping of this user
@@ -428,7 +420,7 @@ Overwrite a mapping for an user
 
 * `<TARGET>` — Set the mapping of this service
 
-  Possible values: `youtube`, `subsonic`
+  Possible values: `subsonic`
 
 * `<USER>` — Set the mapping of this user
 * `<ID>` — The id on the external service
@@ -483,22 +475,25 @@ Allows to load an exported dump of you listens. This is may not be any faster th
 
 You can get a listen dump [here](https://listenbrainz.org/settings/export/)
 
-**Usage:** `alistral listens import-dump <PATH> [USERNAME]`
+**Usage:** `alistral listens import-dump [OPTIONS] <PATH>`
 
 ###### **Arguments:**
 
 * `<PATH>` — Path to the dump file
-* `<USERNAME>` — Name of the user to import those listens for
+
+###### **Options:**
+
+* `--username <USERNAME>` — Name of the user to import those listens for
 
 
 
 ## `alistral listens reload`
 
-**Usage:** `alistral listens reload [USERNAME]`
+**Usage:** `alistral listens reload [OPTIONS]`
 
-###### **Arguments:**
+###### **Options:**
 
-* `<USERNAME>` — Reload the listens of this user
+* `--username <USERNAME>` — Reload the listens of this user
 
 
 
@@ -506,14 +501,17 @@ You can get a listen dump [here](https://listenbrainz.org/settings/export/)
 
 Changes all the listens of a recording into another. Useful if LB mapped to a recording you never listened
 
-**Usage:** `alistral listens remap-msid <ORIGINAL_ID> <NEW_ID> [USERNAME] [TOKEN]`
+**Usage:** `alistral listens remap-msid [OPTIONS] <ORIGINAL_ID> <NEW_ID>`
 
 ###### **Arguments:**
 
 * `<ORIGINAL_ID>` — The MBID of the recording
 * `<NEW_ID>` — The MBID of the recorind to replace it with
-* `<USERNAME>` — Your username
-* `<TOKEN>` — Your account token
+
+###### **Options:**
+
+* `--username <USERNAME>` — Your username
+* `--token <TOKEN>` — Your account token
 
 
 
@@ -554,14 +552,11 @@ Total: 8 unlinked recordings
 
 > This also means that the same recording can be shown twice in the list. > For example: "Panic - Dion Timer" won't have the same MSID as "Panic by Dion Timmer", even if they are the same recording.
 
-**Usage:** `alistral listens unlinked [OPTIONS] [USERNAME]`
-
-###### **Arguments:**
-
-* `<USERNAME>` — Name of the user to fetch unlinked listen from
+**Usage:** `alistral listens unlinked [OPTIONS]`
 
 ###### **Options:**
 
+* `--username <USERNAME>` — Name of the user to fetch unlinked listen from
 * `-s`, `--sort <SORT>` — Sort the listens by type
 
   Possible values:
@@ -579,11 +574,11 @@ Total: 8 unlinked recordings
 
 Try to find listens that have mapped to the wrong recordings
 
-**Usage:** `alistral listens wrong-mapping [USERNAME]`
+**Usage:** `alistral listens wrong-mapping [OPTIONS]`
 
-###### **Arguments:**
+###### **Options:**
 
-* `<USERNAME>` — Your username
+* `--username <USERNAME>` — Your username
 
 
 
@@ -627,15 +622,15 @@ Get detailled information about an entity
 
 ## `alistral lookup recording`
 
-**Usage:** `alistral lookup recording [OPTIONS] <ID> [USERNAME]`
+**Usage:** `alistral lookup recording [OPTIONS] <ID>`
 
 ###### **Arguments:**
 
 * `<ID>` — The id of the entity (Accept URLs)
-* `<USERNAME>` — Get the data of this user
 
 ###### **Options:**
 
+* `--username <USERNAME>` — Get the data of this user
 * `-t`, `--timeframe <TIMEFRAME>` — Time period to use for the statistics
 
   Possible values:
@@ -729,7 +724,7 @@ Convert a playlist from one service to another
 * `<ID>` — The id of the playlist on the external service
 * `<TARGET>` — Convert to this service
 
-  Possible values: `youtube`, `subsonic`
+  Possible values: `subsonic`
 
 * `<USER>` — Use the mapping of this user
 
@@ -774,7 +769,7 @@ Generate radio playlists for you
 
   Default value: `listenbrainz`
 
-  Possible values: `listenbrainz`, `youtube`, `subsonic`
+  Possible values: `listenbrainz`, `subsonic`
 
 * `--instance <INSTANCE>` — The name of the subsonic/listenbrainz instance to send the playlist to
 
@@ -784,17 +779,14 @@ Generate radio playlists for you
 
 Randomly adds recordings from artists you already listened to
 
-**Usage:** `alistral radio circles [OPTIONS] [USERNAME] [TOKEN]`
-
-###### **Arguments:**
-
-* `<USERNAME>` — Name of the user to fetch listens from
-* `<TOKEN>` — Your user token.
-
-   You can find it at <https://listenbrainz.org/settings/>. If it's set in the config file, you can ignore this argument
+**Usage:** `alistral radio circles [OPTIONS]`
 
 ###### **Options:**
 
+* `--username <USERNAME>` — Name of the user to fetch listens from
+* `--token <TOKEN>` — Your user token.
+
+   You can find it at <https://listenbrainz.org/settings/>. If it's set in the config file, you can ignore this argument
 * `--unlistened` — Use this flag to only get unlistened recordings. This is great for exploration playlists
 
 
@@ -807,14 +799,11 @@ This radio will create a playlist containing all the tracks that you listen to, 
 
 > The mix is made by calculating a score for each listen. This score is composed of two values: > - The rank in the user's top 1000 recording of all time (First place get 100 points, second get 999.9, etc...) > - The percentage of the recording's listens being from the user (Made with this formula: (user listens / worldwide listens) *100)
 
-**Usage:** `alistral radio underrated [OPTIONS] [USERNAME]`
-
-###### **Arguments:**
-
-* `<USERNAME>` — Name of the user to fetch listens from
+**Usage:** `alistral radio underrated [OPTIONS]`
 
 ###### **Options:**
 
+* `--username <USERNAME>` — Name of the user to fetch listens from
 * `-t`, `--token <TOKEN>` — Your user token.
 
    You can find it at <https://listenbrainz.org/settings/>. If it's set in the config file, you can ignore this argument
@@ -827,14 +816,11 @@ Generate playlists depending on the listen rate of recordings
 
 This algorythm bases itself on your listen rate of recording to get more forgotten tracks. It takes the recordings with the lowest listen rates, and put them into a playlist
 
-**Usage:** `alistral radio rate [OPTIONS] [USERNAME]`
-
-###### **Arguments:**
-
-* `<USERNAME>` — Name of the user to fetch listens from
+**Usage:** `alistral radio rate [OPTIONS]`
 
 ###### **Options:**
 
+* `--username <USERNAME>` — Name of the user to fetch listens from
 * `-t`, `--token <TOKEN>` — Your user token.
 
    You can find it at <https://listenbrainz.org/settings/>. If it's set in the config file, you can ignore this argument
@@ -851,14 +837,11 @@ Generate playlists based on recording that the user should have listened to by n
 
 Similar to listen rates, this algorithm calculate the average time between listens, and estimate when the next listen will happen. It then put together a playlist made out of recordings you should have listened by now.
 
-**Usage:** `alistral radio overdue [OPTIONS] [USERNAME]`
-
-###### **Arguments:**
-
-* `<USERNAME>` — Name of the user to fetch listens from
+**Usage:** `alistral radio overdue [OPTIONS]`
 
 ###### **Options:**
 
+* `--username <USERNAME>` — Name of the user to fetch listens from
 * `-t`, `--token <TOKEN>` — Your user token.
 
    You can find it at <https://listenbrainz.org/settings/>. If it's set in the config file, you can ignore this argument
@@ -902,9 +885,23 @@ Generate playlists based on the listened recordings of two users
 
 
 
-## `alistral sex`
+## `alistral report`
 
-**Usage:** `alistral sex`
+Generate radio playlists for you
+
+**Usage:** `alistral report [OPTIONS] <START> <END>`
+
+###### **Arguments:**
+
+* `<START>` — The date to use for the weekly report based on the previous 7 days (The day you specify doesn't count)
+* `<END>`
+
+###### **Options:**
+
+* `-u`, `--username <USERNAME>` — Name of the user to provide a daily report
+* `--lazy-fetching` — Enable lazy fetching. Instead of calculating all the stats at once, this calculate the stats when needed to display the next section. This allows progressively seeing the data without waiting for everything to compile
+* `--no-wait` — Disable the "Press enter to continue prompts"
+* `--preset <PRESET>` — Use this display preset
 
 
 
@@ -917,7 +914,6 @@ Shows top statistics for a specific target
 ###### **Subcommands:**
 
 * `top` — Retrieve the top listened entities
-* `yim` — A recap of the year's statistics
 
 
 
@@ -951,23 +947,6 @@ Retrieve the top listened entities
 
 
 
-## `alistral stats yim`
-
-A recap of the year's statistics
-
-**Usage:** `alistral stats yim [OPTIONS] [YEAR] [USERNAME]`
-
-###### **Arguments:**
-
-* `<YEAR>` — What year to target
-* `<USERNAME>` — Name of the user
-
-###### **Options:**
-
-* `--listen-counts` — Show the listen counts of the entities as well
-
-
-
 ## `alistral unstable`
 
 A CLI app containing a set of useful tools for Listenbrainz
@@ -984,11 +963,55 @@ A CLI app containing a set of useful tools for Listenbrainz
 
 Remove duplicate multiscrobbler listens
 
-**Usage:** `alistral unstable duplicates [USERNAME]`
+**Usage:** `alistral unstable duplicates [OPTIONS]`
+
+###### **Options:**
+
+* `--username <USERNAME>` — Reload the listens of this user
+
+
+
+## `alistral yumako-jams`
+
+**Usage:** `alistral yumako-jams <COMMAND>`
+
+###### **Subcommands:**
+
+* `info` — Show the info of a radio
+* `run` — 
+
+
+
+## `alistral yumako-jams info`
+
+Show the info of a radio
+
+**Usage:** `alistral yumako-jams info <RADIO_NAME>`
 
 ###### **Arguments:**
 
-* `<USERNAME>` — Reload the listens of this user
+* `<RADIO_NAME>` — The name of the radio
+
+
+
+## `alistral yumako-jams run`
+
+**Usage:** `alistral yumako-jams run [OPTIONS] --target <TARGET> <RADIO_NAME> <INPUTS>`
+
+###### **Arguments:**
+
+* `<RADIO_NAME>` — The name of the radio
+* `<INPUTS>` — The inputs of the radio
+
+###### **Options:**
+
+* `--target <TARGET>` — Where to send the radio
+
+  Possible values: `listenbrainz`, `subsonic`
+
+* `--instance <INSTANCE>` — If applicable, the instance of the targeted service
+* `--username <USERNAME>` — The username of the user
+* `--token <TOKEN>` — The token of the user
 
 
 

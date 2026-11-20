@@ -7,6 +7,7 @@ use crate::utils::user_inputs::UserInputParser;
 #[derive(Parser, Debug, Clone)]
 pub struct ListenReloadCommand {
     /// Reload the listens of this user
+    #[clap(long)]
     pub username: Option<String>,
 }
 

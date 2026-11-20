@@ -2,7 +2,7 @@ use clap::Parser;
 use clap::Subcommand;
 
 use crate::tools::listens::clear::ListensClearCommand;
-use crate::tools::listens::import::ListenImportDumpCommand;
+use crate::tools::listens::import_dump::ListenImportDumpCommand;
 use crate::tools::listens::reload::ListenReloadCommand;
 use crate::tools::listens::remap_msid::ListenRemapMsidCommand;
 use crate::tools::listens::submit::ListenSubmitCommand;
@@ -10,7 +10,7 @@ use crate::tools::listens::unlinked::ListenUnlinkedCommand;
 use crate::tools::listens::wrong_mapping::ListenWrongMappingCommand;
 
 pub mod clear;
-pub mod import;
+pub mod import_dump;
 pub mod reload;
 pub mod remap_msid;
 pub mod submit;

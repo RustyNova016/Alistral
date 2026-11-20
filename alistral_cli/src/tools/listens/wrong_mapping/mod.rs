@@ -16,6 +16,7 @@ pub mod display;
 #[derive(Parser, Debug, Clone)]
 pub struct ListenWrongMappingCommand {
     /// Your username
+    #[clap(long)]
     username: Option<String>,
 }
 

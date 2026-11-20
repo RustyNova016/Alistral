@@ -95,12 +95,14 @@ pub enum RadioSubcommands {
     /// Randomly adds recordings from artists you already listened to
     Circles {
         /// Name of the user to fetch listens from
+        #[clap(long)]
         username: Option<String>,
 
         /// Your user token.
         ///
         /// You can find it at <https://listenbrainz.org/settings/>.
         /// If it's set in the config file, you can ignore this argument
+        #[clap(long)]
         token: Option<String>,
 
         /// Use this flag to only get unlistened recordings. This is great for exploration playlists
@@ -117,6 +119,7 @@ pub enum RadioSubcommands {
     ///> - The percentage of the recording's listens being from the user (Made with this formula: (user listens / worldwide listens) *100)
     Underrated {
         /// Name of the user to fetch listens from
+        #[clap(long)]
         username: Option<String>,
         /// Your user token.
         ///
@@ -132,6 +135,7 @@ pub enum RadioSubcommands {
     /// It takes the recordings with the lowest listen rates, and put them into a playlist
     Rate {
         /// Name of the user to fetch listens from
+        #[clap(long)]
         username: Option<String>,
 
         /// Your user token.
@@ -156,6 +160,7 @@ pub enum RadioSubcommands {
     /// It then put together a playlist made out of recordings you should have listened by now.
     Overdue {
         /// Name of the user to fetch listens from
+        #[clap(long)]
         username: Option<String>,
 
         /// Your user token.

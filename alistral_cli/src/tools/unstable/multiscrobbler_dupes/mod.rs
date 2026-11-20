@@ -13,6 +13,7 @@ use crate::utils::user_inputs::UserInputParser;
 #[derive(Parser, Debug, Clone)]
 pub struct UnstableMSDupesCommand {
     /// Reload the listens of this user
+    #[clap(long)]
     pub username: Option<String>,
 }
 

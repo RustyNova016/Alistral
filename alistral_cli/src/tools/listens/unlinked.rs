@@ -37,6 +37,7 @@ use crate::utils::user_inputs::UserInputParser;
 #[derive(Parser, Debug, Clone)]
 pub struct ListenUnlinkedCommand {
     /// Name of the user to fetch unlinked listen from
+    #[clap(long)]
     username: Option<String>,
 
     /// Sort the listens by type
