@@ -18,7 +18,7 @@ futures = "0.3.34"
 streamies = "0.2.2"
 
 # Databasing
-sequelles = { version = "0.2.0", features = ["chrono"] }
+sequelles = { git = "https://github.com/RustyNova016/sequelles", rev = "04918eda92d0602852cc50bb761da990159b6ff4", features = ["chrono"] }
 sqlx = { version = "0.9.0", features = ["runtime-tokio", "macros"] }
 
 # Macros
@@ -29,7 +29,7 @@ snafu = { version = "0.9.0", features = ["rust_1_81"] }
 # Tracing
 tracing-indicatif = "0.3.14"
 tracing = "0.1.43"
-tuillez = "0.1.0"
+tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c8656a4eedb571177a8ffa3b9984e78"}
 
 # Other 
 rust_decimal = "1.36.0"

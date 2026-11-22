@@ -7,7 +7,7 @@ rust-version = "1.94.0"
 [dependencies]
 alistral_core = { path = "../alistral_core" }
 musicbrainz-db-lite = { path = "../musicbrainz_db_lite" }
-tuillez = "0.1.0"
+tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c8656a4eedb571177a8ffa3b9984e78"}
 
 # Async
 async-fn-stream = "0.3.2"

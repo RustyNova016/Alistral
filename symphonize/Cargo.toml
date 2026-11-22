@@ -6,7 +6,7 @@ rust-version = "1.94.0"
 
 [dependencies]
 musicbrainz-db-lite = { path = "../musicbrainz_db_lite" }
-tuillez = "0.1.0"
+tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c8656a4eedb571177a8ffa3b9984e78"}
 
 thiserror = "2.0.18"
 sqlx = "0.9.0"
