@@ -73,14 +73,14 @@ tracing = "0.1.44"
 tracing-subscriber = "0.3.23"
 tracing-appender = "0.2.5"
 tracing-indicatif = "0.3.14"
-tuillez = "0.1.0"
+tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c8656a4eedb571177a8ffa3b9984e78"}
 
 # Debuging
 hotpath = { version = "0.25.0", optional = true, features = ["futures", "sqlx"] }
 
 # Other
 zip = "9.0.0"
-sequelles = "0.2.0"
+sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "04918eda92d0602852cc50bb761da990159b6ff4"}
 comfy-table = { version = "7.2.2", optional = true, features = ["custom_styling"] }
 convert_case = {version = "0.12.0", optional = true}
 schemars = { version = "1.2.2", optional = true, features = ["chrono04", "rust_decimal1"] }
@@ -212,10 +212,3 @@ unnecessary_literal_bound = "warn"
 unnecessary_wraps = "warn"
 unneeded_field_pattern = "warn"
 useless_let_if_seq = "warn"
-
-[patch.crates-io]
-sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "04918eda92d0602852cc50bb761da990159b6ff4"}
-tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c8656a4eedb571177a8ffa3b9984e78"}
-musicbrainz_rs = {git = "https://github.com/RustyNova016/musicbrainz_rs", rev = "4e4e2b934940030027ede134e35dfd922ac6ca0e"}
-listenbrainz_rs = { git = "https://github.com/RustyNova016/listenbrainz_rs", rev = "5ba127b377c0acd2c3169e73a3f849371bcf595e" }
-submarine = { git = "https://github.com/eppixx/submarine", rev = "6a9b0a929bacff1fd89b7b0dddd44ff906f1d666" }
