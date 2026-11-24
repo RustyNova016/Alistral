@@ -39,6 +39,8 @@ pub fn init_tracer(cli: &Cli) -> WorkerGuard {
         .with_target("musicbrainz_db_lite", Level::TRACE)
         .with_target("interzic", Level::TRACE)
         .with_target("symphonize", Level::DEBUG)
+        .with_target("api_bindium", Level::DEBUG)
+        .with_target("sequelles", Level::TRACE)
         .with_target("yumako_jams", Level::TRACE);
 
     // spawn the console server in the background,
@@ -101,6 +103,9 @@ where
         .with_target("musicbrainz_rs_nova", Level::TRACE)
         .with_target("musicbrainz_rs", Level::TRACE)
         .with_target("yumako_jams", Level::TRACE)
+        .with_target("api_bindium", Level::TRACE)
+        .with_target("sequelles", Level::TRACE)
+        .with_target("sqlx::query", Level::WARN)
         .with_target("sqlx_core", Level::INFO);
 
     (
