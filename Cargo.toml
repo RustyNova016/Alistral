@@ -5,11 +5,7 @@ members = [
     "interzic", 
     "musicbrainz_db_lite", 
     "symphonize",
-    #"tuillez"
-    #"sequelles",
-    #"listenbrainz_rs"
     "yumako_jams"
-    #"musicbrainz_rs"
 ]
 resolver = "3"
 

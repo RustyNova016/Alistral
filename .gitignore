@@ -15,8 +15,6 @@ temp.db
 
 # Workspace ignores
 /listenbrainz_rs
-/musicbrainz_rs
-/sequelles
 /tuillez
 
 # Docs

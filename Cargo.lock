@@ -224,6 +224,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "api_bindium"
+version = "0.5.3"
+source = "git+https://github.com/RustyNova016/api_bindium?rev=f162762bf660491c1b65a5051a32df457eb782a0#f162762bf660491c1b65a5051a32df457eb782a0"
+dependencies = [
+ "async-io",
+ "blocking",
+ "bon",
+ "governor",
+ "hotpath",
+ "serde_core",
+ "serde_json",
+ "snafu",
+ "tracing",
+ "ureq",
+ "url-escape",
+]
+
+[[package]]
 name = "arc-swap"
 version = "1.9.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2290,7 +2308,7 @@ name = "listenbrainz_rs"
 version = "0.1.0"
 source = "git+https://github.com/RustyNova016/listenbrainz_rs?rev=5ba127b377c0acd2c3169e73a3f849371bcf595e#5ba127b377c0acd2c3169e73a3f849371bcf595e"
 dependencies = [
- "api_bindium",
+ "api_bindium 0.5.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "async-executor",
  "bon",
  "chrono",
@@ -2472,9 +2490,9 @@ dependencies = [
 [[package]]
 name = "musicbrainz_rs"
 version = "0.14.0"
-source = "git+https://github.com/RustyNova016/musicbrainz_rs?rev=4e4e2b934940030027ede134e35dfd922ac6ca0e#4e4e2b934940030027ede134e35dfd922ac6ca0e"
+source = "git+https://github.com/RustyNova016/musicbrainz_rs?rev=c7dcc7cd730108b090f994d9bbb757619a561df9#c7dcc7cd730108b090f994d9bbb757619a561df9"
 dependencies = [
- "api_bindium",
+ "api_bindium 0.5.3 (git+https://github.com/RustyNova016/api_bindium?rev=f162762bf660491c1b65a5051a32df457eb782a0)",
  "bon",
  "chrono",
  "glob",
@@ -3709,7 +3727,7 @@ version = "0.9.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "287f59010008f0d7cf5e3b03196d666c1acc46c8d3e9cf34c28a1a7157601e72"
 dependencies = [
- "heck 0.4.1",
+ "heck 0.5.0",
  "proc-macro2",
  "quote",
  "syn 2.0.119",

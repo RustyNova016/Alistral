@@ -25,7 +25,7 @@ impl Linker<ReleaseGroupWithReleasesCollection, ReleaseWithRecordingsCollection>
         data: &mut ReleaseGroupWithReleasesCollection,
         item: ReleaseWithRecordingsCollection,
     ) -> Self::Returned {
-        pg_spinner!("Compiling artist listen data");
+        pg_spinner!("Compiling release group listen data");
 
         //TODO(perf): Don't clone the recordings, but keep `fetch_all_releases_bulk` Send
         let releases = item.iter_entities().cloned().collect_vec();
