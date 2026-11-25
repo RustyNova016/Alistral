@@ -25,6 +25,14 @@ pub enum ReportCommandError {
         #[snafu(implicit)]
         location: snafu::Location,
     },
+
+    /// Couldn't parse the time interval
+    IntervalError {
+        interval: String,
+
+        #[snafu(implicit)]
+        location: snafu::Location,
+    },
 }
 
 impl GetFriendlyError for ReportCommandError {
@@ -38,6 +46,11 @@ impl GetFriendlyError for ReportCommandError {
             Self::UnknownPreset { preset, .. } => Some(FriendlyPanic {
                 title: "Unknown preset".to_string(),
                 body: format!("Preset {} is not in the configuration file", preset),
+            }),
+
+            Self::IntervalError { interval, .. } => Some(FriendlyPanic {
+                title: "Unknown interval".to_string(),
+                body: format!("Interval `{}` is not a proper interval string", interval),
             }),
 
             Self::SectionsError { source, .. } => source.get_friendly_error(),
