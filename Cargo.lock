@@ -2564,7 +2564,7 @@ dependencies = [
 [[package]]
 name = "musicbrainz_rs"
 version = "0.14.0"
-source = "git+https://github.com/RustyNova016/musicbrainz_rs?rev=c7dcc7cd730108b090f994d9bbb757619a561df9#c7dcc7cd730108b090f994d9bbb757619a561df9"
+source = "git+https://github.com/RustyNova016/musicbrainz_rs?rev=808ebd4a868a4af9c5d23d9b5689df724f3ceff0#808ebd4a868a4af9c5d23d9b5689df724f3ceff0"
 dependencies = [
  "api_bindium 0.5.3 (git+https://github.com/RustyNova016/api_bindium?rev=f162762bf660491c1b65a5051a32df457eb782a0)",
  "bon",
