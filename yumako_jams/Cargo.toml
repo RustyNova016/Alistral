@@ -11,7 +11,7 @@ tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c865
 
 # Async
 async-fn-stream = "0.3.2"
-streamies = "0.2.2"
+streamies = "0.3.0"
 futures = "0.3.34"
 
 # Debug
