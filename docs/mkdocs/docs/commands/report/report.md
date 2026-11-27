@@ -1,9 +1,15 @@
 # Reports
-Reports are a powerful dashboard to have a view of your statistics over a given period. This takes in a start date, and en end date:
+Reports are a powerful dashboard to have a view of your statistics over a given period. You can provide any interval using plain language that follows the [alien_time parsing rules](https://docs.rs/alien_time/0.1.0/alien_time/intervals/fn.parse_human_interval.html) (Use quotes around multiple words):
 
 ```bash
 # Yearly report for 2025
-alistral report 2025-01-01 2026-01-01
+alistral report "2025"
+
+# Last month's report
+alistral report "last month"
+
+# Sliding yearly report
+alistral report "last 365 days"
 ```
 
 ## Speedup

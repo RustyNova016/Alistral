@@ -1,6 +1,8 @@
+use alien_time::parse_human_interval;
 use chrono::DateTime;
 use chrono::Local;
-use chrono::NaiveDate;
+use jiff::ZonedDateTime;
+use jiff_chrono_conversions::ToChrono as _;
 use snafu::OptionExt as _;
 use snafu::ResultExt as _;
 use tracing::Instrument as _;
@@ -11,6 +13,7 @@ use tuillez::pg_inc;
 use crate::ALISTRAL_CLIENT;
 use crate::models::config::commands::reports::ReportConfig;
 use crate::models::config::commands::reports::ReportPreset;
+use crate::tools::report::error::IntervalSnafu;
 use crate::tools::report::error::ReportCommandError;
 use crate::tools::report::error::SectionsSnafu;
 use crate::tools::report::error::UnknownPresetSnafu;
@@ -28,9 +31,7 @@ pub mod sections;
 #[derive(clap::Parser, Debug, Clone)]
 pub struct ReportCommand {
     /// The date to use for the weekly report based on the previous 7 days (The day you specify doesn't count)
-    start: NaiveDate,
-
-    end: NaiveDate,
+    time_interval: String,
 
     /// Name of the user to provide a daily report
     #[arg(short, long)]
@@ -52,8 +53,15 @@ pub struct ReportCommand {
 
 impl ReportCommand {
     pub async fn run(&self) -> Result<(), ReportCommandError> {
-        let start_time = UserInputParser::parse_naive_date(Some(self.start)).unwrap();
-        let end_time = UserInputParser::parse_naive_date(Some(self.end)).unwrap();
+        let (start_time, end_time) =
+            parse_human_interval(&self.time_interval, ZonedDateTime::now()).context(
+                IntervalSnafu {
+                    interval: self.time_interval.to_owned(),
+                },
+            )?;
+
+        let start_time = start_time.to_chrono().with_timezone(&Local);
+        let end_time = end_time.to_chrono().with_timezone(&Local);
         let period_duration = end_time - start_time;
         let previous_start_time = start_time - period_duration;
 
