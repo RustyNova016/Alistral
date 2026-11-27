@@ -2380,7 +2380,7 @@ dependencies = [
 [[package]]
 name = "listenbrainz_rs"
 version = "0.1.0"
-source = "git+https://github.com/RustyNova016/listenbrainz_rs?rev=5ba127b377c0acd2c3169e73a3f849371bcf595e#5ba127b377c0acd2c3169e73a3f849371bcf595e"
+source = "git+https://github.com/RustyNova016/listenbrainz_rs?rev=802e597399e6191f57d63483d1bc66b7244eb6a6#802e597399e6191f57d63483d1bc66b7244eb6a6"
 dependencies = [
  "api_bindium 0.5.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "async-executor",
