@@ -25,7 +25,7 @@ tokio = { version = "1.47.0", features = [] }
 async-fn-stream = "0.3.0"
 
 # Database
-sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "04918eda92d0602852cc50bb761da990159b6ff4", features = ["sqlite", "error_struct"] }
+sequelles = {git = "https://github.com/RustyNova016/sequelles", rev = "9aedde63e58cb9d7cd56bf3371524ede878257bd", features = ["sqlite", "error_struct"] }
 sqlx = { version = "0.9.0", features = ["runtime-tokio", "macros", "sqlite"] }
 sea-query = { version = "1.0.1", default-features = false, features = ["backend-sqlite", "derive"] }
 deadpool = "0.13.0"
