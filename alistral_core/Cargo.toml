@@ -15,7 +15,7 @@ chrono = "0.4.45"
 # Async 
 async-once-cell = "0.5.4"
 futures = "0.3.34"
-streamies = "0.2.2"
+streamies = "0.3.0"
 
 # Databasing
 sequelles = { git = "https://github.com/RustyNova016/sequelles", rev = "04918eda92d0602852cc50bb761da990159b6ff4", features = ["chrono"] }
