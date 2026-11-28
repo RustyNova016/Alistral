@@ -77,7 +77,7 @@ tracing-indicatif = "0.3.14"
 tuillez = {git = "https://github.com/RustyNova016/tuillez", rev = "debb79bf8c8656a4eedb571177a8ffa3b9984e78"}
 
 # Debuging
-hotpath = { version = "0.25.0", optional = true, features = ["futures", "sqlx"] }
+hotpath = { version = "0.33.0", optional = true, features = ["futures", "sqlx"] }
 
 # Other
 zip = "9.0.0"
